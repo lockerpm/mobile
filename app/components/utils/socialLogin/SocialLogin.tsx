@@ -20,6 +20,7 @@ interface Props {
 export const SocialLogin = ({ onLoggedIn }: Props) => {
   const navigation = useNavigation() as any
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
+  const { translate } = useHelper()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLogin()
 
   const SOCIAL_LOGIN: {
@@ -131,7 +132,10 @@ export const SocialLogin = ({ onLoggedIn }: Props) => {
         }}
       />
 
-      <Text text="Or login with" style={{ textAlign: 'center', marginVertical: 16 }} />
+      <Text
+        text={translate('common.social_login')}
+        style={{ textAlign: 'center', marginVertical: 16 }}
+      />
 
       <SocialLoginFlexLayout />
     </View>

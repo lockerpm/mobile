@@ -48,10 +48,10 @@ public class LockerAutoFillService extends AutofillService {
     public void onFillRequest(@NonNull FillRequest request, @NonNull CancellationSignal cancellationSignal,
             @NonNull FillCallback callback) {
         Log.d(TAG, "onFillRequest()");
-
         // Find fillable fields
         AssistStructure structure = Utils.getLatestAssistStructure(request);
         Parser.Result parseResult = new Parser(structure).Parse();
+
         ArrayList<Field> fields = (ArrayList<Field>) parseResult.getFillable();
         String domain = parseResult.getDomain();
 

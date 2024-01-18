@@ -65,6 +65,7 @@ export const HomeTabScreen = observer(() => {
 
   // ------------------------ EFFECT ----------------------------
   useEffect(() => {
+    handleShowFaceIDSuggest()
     if (
       !uiStore.isShowedPopupMarketing &&
       !user.isLifeTimeFamilyPlan &&
@@ -154,16 +155,6 @@ export const HomeTabScreen = observer(() => {
     }
     BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
   }, [isSelecting])
-
-  // Mounted
-  useEffect(() => {
-    handleShowFaceIDSuggest()
-    if (uiStore.deepLinkAction === 'add') {
-      if (['add', 'save'].includes(uiStore.deepLinkAction)) {
-        navigation.navigate('passwords__edit', { mode: 'add' })
-      }
-    }
-  }, [])
 
   useEffect(() => {
     if (!isLoading) {

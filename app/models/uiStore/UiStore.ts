@@ -1,6 +1,7 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from 'mobx-state-tree'
 import { withSetPropAction } from '../helpers/withSetPropAction'
 import { omit } from 'ramda'
+import { AndroidAutofillServiceData } from 'app/utils/autofillHelper'
 /**
  * Model description here for TypeScript hints.
  */
@@ -16,18 +17,11 @@ export const UiStoreModel = types
     inAppNotiUnreadCount: types.maybeNull(types.number),
 
     // Cache
+    isAndroidAutofillService: types.maybeNull(types.boolean),
+    androidAutofillServiceData: types.maybeNull(types.frozen<AndroidAutofillServiceData>()),
     isDeeplinkShares: types.maybeNull(types.boolean),
     isDeeplinkEmergencyAccess: types.maybeNull(types.boolean),
-    isFromAutoFillItem: types.maybeNull(types.boolean),
-    isOnSaveLogin: types.maybeNull(types.boolean),
-    isFromAutoFill: types.maybeNull(types.boolean),
     selectedCountry: types.maybeNull(types.string),
-    deepLinkAction: types.maybeNull(types.string),
-    deepLinkUrl: types.maybeNull(types.string),
-    saveLogin: types.maybeNull(
-      types.frozen<{ domain: string; username: string; password: string }>()
-    ),
-    saveLastId: types.maybeNull(types.string),
     isOffline: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
     isPerformOverlayTask: types.maybeNull(types.boolean),
@@ -86,10 +80,6 @@ export const UiStoreModel = types
       self.selectedCountry = countryCode
     },
 
-    setIsFromAutoFill(val: boolean) {
-      self.isFromAutoFill = val
-    },
-
     setIsDeeplinkEmergencyAccess(val: boolean) {
       self.isDeeplinkEmergencyAccess = val
     },
@@ -98,33 +88,17 @@ export const UiStoreModel = types
       self.isDeeplinkShares = val
     },
 
-    setIsOnSaveLogin(val: boolean) {
-      self.isOnSaveLogin = val
-    },
-
-    setIsFromAutoFillItem(val: boolean) {
-      self.isFromAutoFillItem = val
-    },
-
-    setDeepLinkAction(action: 'fill' | 'save' | 'fill_item', data?: any) {
-      self.deepLinkAction = action
-      if (action === 'fill') {
-        self.deepLinkUrl = data || ''
-      } else if (action === 'fill_item') {
-        self.saveLastId = data || ''
-      } else {
-        self.saveLogin = data
-      }
-    },
-
-    clearDeepLink() {
-      self.deepLinkAction = null
-      self.deepLinkUrl = null
-      self.saveLogin = null
+    setIsAndroidAutofillService(val: boolean) {
+      self.isAndroidAutofillService = val
     },
 
     setLockResendOtpResetPasswordTime(val: number) {
       self.lockResendOtpResetPasswordTime = val
+    },
+
+    setAndroidAutofillServiceData(isAutofillService: boolean, data: AndroidAutofillServiceData) {
+      self.isAndroidAutofillService = isAutofillService
+      self.androidAutofillServiceData = data
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .postProcessSnapshot(
@@ -132,18 +106,14 @@ export const UiStoreModel = types
       'isSelecting',
       'isOffline',
       'isPerformOverlayTask',
-      'isFromAutoFillItem',
-      'isOnSaveLogin',
       'selectedCountry',
-      'deepLinkAction',
-      'deepLinkUrl',
-      'saveLogin',
-      'saveLastId',
       'hasNoMasterPwItem',
       'isDeeplinkShares',
       'isDeeplinkEmergencyAccess',
       'isShowedPopupMarketing',
       'isStartFromPasswordLess',
+      'isAndroidAutofillService',
+      'androidAutofillServiceData',
     ])
   )
 

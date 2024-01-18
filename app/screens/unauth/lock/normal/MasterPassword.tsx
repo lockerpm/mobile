@@ -44,8 +44,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
 
   // ---------------------- METHODS -------------------------
 
-  const isAutofillAnroid =
-    uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
+  const isAutofillAnroid = uiStore.isAndroidAutofillService
 
   const showInvitation = (() => {
     if (enterpeiseInvitations.length === 0) return false

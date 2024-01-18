@@ -10,6 +10,7 @@ import {
   SubdomainData,
   TrustedContact,
 } from 'app/static/types'
+import { AndroidAutofillServiceData } from 'app/utils/autofillHelper'
 import { CipherView } from 'core/models/view/cipherView'
 import { CollectionView } from 'core/models/view/collectionView'
 import { SendView } from 'core/models/view/sendView'
@@ -156,6 +157,7 @@ export type PrimaryParamList = {
     mode: 'add' | 'edit' | 'clone'
     initialUrl?: string
     collection?: CollectionView
+    androidAutofillSavedData?: AndroidAutofillServiceData
   }
   passwords_2fa_setup: {
     mode: 'add' | 'edit' | 'clone'
@@ -220,7 +222,7 @@ export type PrimaryParamList = {
   import: undefined
   export: undefined
   autofill: {
-    mode: 'all' | 'item'
+    data: AndroidAutofillServiceData
   }
   notificationSettings: undefined
   emailNotiSettings: undefined

@@ -139,7 +139,8 @@
     "dob": "Date of birth",
     "nationality": "Nationality",
     "invalid_date": "Invalid date",
-    "required_text": "This field is required"
+    "required_text": "This field is required",
+    "social_login": "Or login with"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
