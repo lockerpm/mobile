@@ -1,6 +1,6 @@
-import { StorageService } from "../../../../core/abstractions"
-import { StorageServiceOptions } from "../../../../core/abstractions/storage.service"
-import { load, has, remove, save } from "../../../utils/storage"
+import { StorageService } from 'core/abstractions'
+import { StorageServiceOptions } from 'core/abstractions/storage.service'
+import { load, has, remove, save } from 'app/utils/storage'
 
 export class MobileStorageService implements StorageService {
   get<T>(key: string, options?: StorageServiceOptions): Promise<T> {
