@@ -1,24 +1,23 @@
-import React, { useState } from "react"
-import { View } from "react-native"
-import { observer } from "mobx-react-lite"
-import { Text } from "app/components/cores"
-import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
-import { useStores } from "app/models"
-import { CipherView } from "core/models/view"
-import { AccountRoleText } from "app/static/types"
-import { DeleteConfirmModal } from "../browse/trash/DeleteConfirmModal"
-import { ActionItem, ActionSheet } from "app/components/ciphers"
-import { CipherType } from "core/enums"
-import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
-import { IS_IOS } from "app/config/constants"
+import React, { useState } from 'react'
+import { View } from 'react-native'
+import { observer } from 'mobx-react-lite'
+import { Text } from 'app/components/cores'
+import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
+import { useTheme } from 'app/services/context'
+import { useStores } from 'app/models'
+import { CipherView } from 'core/models/view'
+import { AccountRoleText } from 'app/static/types'
+import { DeleteConfirmModal } from '../browse/trash/DeleteConfirmModal'
+import { ActionItem, ActionSheet } from 'app/components/ciphers'
+import { CipherType } from 'core/enums'
+import { BROWSE_ITEMS } from 'app/navigators/navigators.route'
+import { CipherIconImage } from 'app/components/ciphers/cipherList/CipherIconImage'
+import { IS_IOS } from 'app/config/constants'
 
 interface Props {
   isOpen?: boolean
   onClose?: () => void
   navigation: any
-  onLoadingChange?: (val: boolean) => void
 }
 
 /**
@@ -29,7 +28,7 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
 
   const { translate } = useHelper()
   const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [nextModal, setNextModal] = useState<"trashConfirm" | null>(null)
+  const [nextModal, setNextModal] = useState<'trashConfirm' | null>(null)
 
   const { colors } = useTheme()
   const { getTeam, copyToClipboard } = useHelper()
@@ -55,7 +54,7 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
     }
     return {
       img,
-      path: "passwords",
+      path: 'passwords',
     }
   })()
 
@@ -68,7 +67,7 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
   const handleActionSheetClose = () => {
     onClose()
     switch (nextModal) {
-      case "trashConfirm":
+      case 'trashConfirm':
         setShowConfirmModal(true)
         break
     }
@@ -83,8 +82,8 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
-        title={translate("trash.to_trash")}
-        desc={translate("trash.to_trash_desc")}
+        title={translate('trash.to_trash')}
+        desc={translate('trash.to_trash_desc')}
         btnText="OK"
       />
 
@@ -93,8 +92,8 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
         isOpen={isOpen}
         onClose={handleActionSheetClose}
         header={
-          <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View style={{ width: '100%', paddingHorizontal: 20, marginBottom: 10 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <CipherIconImage
                 defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
                 source={cipherMapper.img}
@@ -116,14 +115,14 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
         }
       >
         <ActionItem
-          name={translate("password.copy_username")}
+          name={translate('password.copy_username')}
           icon="copy"
           action={() => copyToClipboard(selectedCipher.login.username)}
           disabled={!selectedCipher.login.username}
         />
 
         <ActionItem
-          name={translate("password.copy_password")}
+          name={translate('password.copy_password')}
           icon="copy"
           action={() => copyToClipboard(selectedCipher.login.password)}
           disabled={!selectedCipher.login.password || !selectedCipher.viewPassword}
@@ -131,21 +130,21 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
 
         <ActionItem
           disabled={!editable || (uiStore.isOffline && !!selectedCipher.organizationId)}
-          name={translate("common.edit")}
+          name={translate('common.edit')}
           icon="edit"
           action={() => {
             onClose()
-            navigation.navigate(`${cipherMapper.path}__edit`, { mode: "edit" })
+            navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'edit' })
           }}
         />
 
         <ActionItem
           disabled={!editable || (uiStore.isOffline && !!selectedCipher.organizationId)}
-          name={translate("trash.to_trash")}
+          name={translate('trash.to_trash')}
           icon="trash"
           color={colors.error}
           action={() => {
-            setNextModal("trashConfirm")
+            setNextModal('trashConfirm')
             onClose()
           }}
         />

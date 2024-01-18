@@ -1,29 +1,26 @@
-import React, { FC, useEffect, useState } from "react"
-import { Alert, Linking, Platform, View } from "react-native"
+import React, { FC, useEffect, useState } from 'react'
+import { Alert, Linking, View } from 'react-native'
 
-import VersionCheck from "react-native-version-check"
-import dynamicLinks from "@react-native-firebase/dynamic-links"
-import NetInfo from "@react-native-community/netinfo"
-import DeviceInfo from "react-native-device-info"
-import JailMonkey from "jail-monkey"
+import VersionCheck from 'react-native-version-check'
+import dynamicLinks from '@react-native-firebase/dynamic-links'
+import NetInfo from '@react-native-community/netinfo'
+import DeviceInfo from 'react-native-device-info'
+import JailMonkey from 'jail-monkey'
 
-import { useStores } from "app/models"
-import { load, StorageKey } from "app/utils/storage"
-import { Logger } from "app/utils/utils"
-import { useAuthentication, useHelper } from "app/services/hook"
-import { Text } from "app/components/cores"
-import { Loading } from "app/components/utils"
-import { observer } from "mobx-react-lite"
-import { LoginMethod } from "app/static/types"
-import { RootStackScreenProps } from "app/navigators/navigators.types"
-import { useTheme } from "app/services/context"
+import { useStores } from 'app/models'
+import { Logger } from 'app/utils/utils'
+import { useAuthentication, useHelper } from 'app/services/hook'
+import { Text } from 'app/components/cores'
+import { Loading } from 'app/components/utils'
+import { observer } from 'mobx-react-lite'
+import { LoginMethod } from 'app/static/types'
+import { RootStackScreenProps } from 'app/navigators/navigators.types'
+import { useTheme } from 'app/services/context'
 
-const IS_IOS = Platform.OS === "ios"
-
-export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => {
+export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => {
   const { translate } = useHelper()
   const { colors } = useTheme()
-  const { user, cipherStore, uiStore } = useStores()
+  const { user, cipherStore } = useStores()
   const navigation = props.navigation
 
   const { boostrapPushNotifier } = useHelper()
@@ -45,56 +42,10 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
   // Create master pass or unlock
   const goLockOrCreatePassword = () => {
     if (user.is_pwd_manager) {
-      navigation.navigate("lock", { type: LoginMethod.PASSWORD })
+      navigation.navigate('lock', { type: LoginMethod.PASSWORD })
     } else {
-      navigation.navigate("createMasterPassword")
+      navigation.navigate('createMasterPassword')
     }
-  }
-
-  // Check if open from autofill to select a list
-  const checkAutoFill = async () => {
-    if (IS_IOS) return false
-
-    const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL)
-    if (autoFillData && autoFillData.enabled) {
-      uiStore.setDeepLinkAction("fill", autoFillData.domain || "")
-      uiStore.setIsFromAutoFill(true)
-      return true
-    }
-    uiStore.setIsFromAutoFill(false)
-    return false
-  }
-
-  // Check if open from autofill to select a SINGLE item
-  const checkAutoFillItem = async () => {
-    if (IS_IOS) return false
-
-    const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL_ITEM)
-    if (autoFillData && autoFillData.enabled) {
-      uiStore.setDeepLinkAction("fill_item", autoFillData.id || "")
-      uiStore.setIsFromAutoFillItem(true)
-      return true
-    }
-    uiStore.setIsFromAutoFillItem(false)
-    return false
-  }
-
-  // Check if open from autofill to save new item
-  const checkOnSaveLogin = async () => {
-    if (IS_IOS) return false
-
-    const loginData = await load(StorageKey.APP_FROM_AUTOFILL_ON_SAVE_REQUEST)
-    if (loginData && loginData.enabled) {
-      uiStore.setDeepLinkAction("save", {
-        domain: loginData.domain,
-        username: loginData.username,
-        password: loginData.password,
-      })
-      uiStore.setIsOnSaveLogin(true)
-      return true
-    }
-    uiStore.setIsOnSaveLogin(false)
-    return false
   }
 
   const checkAppUpdate = () => {
@@ -103,22 +54,22 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
         .then(async (res) => {
           const showAlert = () => {
             Alert.alert(
-              translate("alert.update.title"),
-              translate("alert.update.content", { version: res.latestVersion }),
+              translate('alert.update.title'),
+              translate('alert.update.content', { version: res.latestVersion }),
               [
                 {
-                  text: translate("alert.update.later"),
-                  style: "cancel",
+                  text: translate('alert.update.later'),
+                  style: 'cancel',
                   onPress: () => null,
                 },
                 {
-                  text: translate("alert.update.now"),
-                  style: "destructive",
+                  text: translate('alert.update.now'),
+                  style: 'destructive',
                   onPress: async () => {
                     Linking.openURL(res.storeUrl) // open store if update is needed.
                   },
                 },
-              ],
+              ]
             )
           }
 
@@ -161,15 +112,6 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
       await boostrapPushNotifier()
     }
 
-    // Check autofill
-    const isAutoFill = await checkAutoFill()
-
-    // Check autofillItem
-    const isAutoFillItem = await checkAutoFillItem()
-
-    // Check savePassword
-    const isOnSaveLogin = await checkOnSaveLogin()
-
     checkAppUpdate()
 
     // Check dynamic link
@@ -186,26 +128,26 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
 
     // Logged in?
     if (!user.isLoggedIn) {
-      if (!user.introShown && !isAutoFill && !isOnSaveLogin && !isAutoFillItem) {
+      if (!user.introShown) {
         user.setIntroShown(true)
-        navigation.navigate("intro")
+        navigation.navigate('intro')
       } else {
-        navigation.navigate("onBoarding")
+        navigation.navigate('onBoarding')
       }
       return
     }
 
     // Network connected? || Is autofill?
-    if (!connectionState.isConnected || isAutoFill || isOnSaveLogin || isAutoFillItem) {
+    if (!connectionState.isConnected) {
       goLockOrCreatePassword()
       return
     }
 
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-    if (["ok"].includes(userRes.kind) && ["ok", "unauthorized"].includes(userPwRes.kind)) {
+    if (['ok'].includes(userRes.kind) && ['ok', 'unauthorized'].includes(userPwRes.kind)) {
       goLockOrCreatePassword()
     } else {
-      navigation.navigate("login")
+      navigation.navigate('login')
     }
   }
   // ------------------ EFFECTS ---------------------
@@ -223,16 +165,16 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
         <View
           style={{
             flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             paddingHorizontal: 20,
             paddingVertical: 16,
           }}
         >
           <Text
-            text={translate("error.rooted_device")}
+            text={translate('error.rooted_device')}
             style={{
-              textAlign: "center",
+              textAlign: 'center',
             }}
           />
         </View>

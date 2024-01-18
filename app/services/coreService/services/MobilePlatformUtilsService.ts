@@ -1,19 +1,19 @@
-import { PlatformUtilsService } from "../../../../core/abstractions"
-import { DeviceType } from "../../../../core/enums"
-import { Platform, Linking, Alert, PermissionsAndroid } from "react-native"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { PlatformUtilsService } from 'core/abstractions'
+import { DeviceType } from 'core/enums'
+import { Platform, Linking, Alert } from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import DeviceInfo from 'react-native-device-info'
 import Toast from 'react-native-toast-message'
 import RNFS from 'react-native-fs'
-import { Logger } from "../../../utils/utils"
-
+import { Logger } from '../../../utils/utils'
 
 export class MobilePlatformUtilsService implements PlatformUtilsService {
   identityClientId: string
 
   authenticateBiometric(): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
+    return new Promise<boolean>((resolve) => {
       ReactNativeBiometrics.simplePrompt({ promptMessage: 'Authenticate' })
         .then((resultObject) => {
           const { success } = resultObject
@@ -30,11 +30,11 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
   }
 
   getApplicationVersion(): Promise<string> {
-    return Promise.resolve(DeviceInfo.getVersion());
+    return Promise.resolve(DeviceInfo.getVersion())
   }
 
   getDefaultSystemTheme(): Promise<'light' | 'dark'> {
-    return Promise.resolve('light');
+    return Promise.resolve('light')
   }
 
   getDevice(): DeviceType {
@@ -53,47 +53,47 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
   }
 
   isChrome(): boolean {
-    return false;
+    return false
   }
 
   isDev(): boolean {
-    return __DEV__;
+    return __DEV__
   }
 
   isEdge(): boolean {
-    return false;
+    return false
   }
 
   isFirefox(): boolean {
-    return false;
+    return false
   }
 
   isIE(): boolean {
-    return false;
+    return false
   }
 
   isMacAppStore(): boolean {
-    return false;
+    return false
   }
 
   isOpera(): boolean {
-    return false;
+    return false
   }
 
   isSafari(): boolean {
-    return false;
+    return false
   }
 
   isSelfHost(): boolean {
-    return false;
+    return false
   }
 
   isViewOpen(): Promise<boolean> {
-    return Promise.resolve(false);
+    return Promise.resolve(false)
   }
 
   isVivaldi(): boolean {
-    return false;
+    return false
   }
 
   launchUri(uri: string, options: any): void {
@@ -107,15 +107,15 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
   }
 
   lockTimeout(): number {
-    return 0;
+    return 0
   }
 
-  onDefaultSystemThemeChange(callback: (theme: ("light" | "dark")) => unknown): unknown {
-    return undefined;
+  onDefaultSystemThemeChange(callback: (theme: 'light' | 'dark') => unknown): unknown {
+    return undefined
   }
 
   readFromClipboard(options: any): Promise<string> {
-    return Promise.resolve(Clipboard.getString());
+    return Promise.resolve(Clipboard.getString())
   }
 
   async saveFile(blobData: any, blobOptions: any, fileName: string): Promise<boolean> {
@@ -123,12 +123,6 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
       let path: string
 
       if (Platform.OS === 'android') {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-        )
-        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-          return false
-        }
         path = `${RNFS.ExternalStorageDirectoryPath}/Download/${fileName}`
       } else {
         path = `${RNFS.DocumentDirectoryPath}/${fileName}`
@@ -141,55 +135,67 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
     }
   }
 
-  showDialog(body: string, title: string | undefined, confirmText: string | undefined, cancelText: string | undefined, type: string | undefined, bodyIsHtml: boolean | undefined): Promise<boolean> {
+  showDialog(
+    body: string,
+    title: string | undefined,
+    confirmText: string | undefined,
+    cancelText: string | undefined,
+    type: string | undefined,
+    bodyIsHtml: boolean | undefined
+  ): Promise<boolean> {
     return new Promise((resolve) => {
-      Alert.alert(
-        title,
-        body,
-        [
-          {
-            text: confirmText,
-            onPress: () => resolve(true)
-          },
-          {
-            text: cancelText,
-            style: "cancel",
-            onPress: () => resolve(false)
-          }
-        ]
-      )
+      Alert.alert(title, body, [
+        {
+          text: confirmText,
+          onPress: () => resolve(true),
+        },
+        {
+          text: cancelText,
+          style: 'cancel',
+          onPress: () => resolve(false),
+        },
+      ])
     })
   }
 
-  showPasswordDialog(title: string, body: string, passwordValidation: (value: string) => Promise<boolean>): Promise<boolean> {
-    return Promise.resolve(false);
+  showPasswordDialog(
+    title: string,
+    body: string,
+    passwordValidation: (value: string) => Promise<boolean>
+  ): Promise<boolean> {
+    return Promise.resolve(false)
   }
 
-  showToast(type: "error" | "success" | "warning" | "info", title: string, text: string | string[], options: any): void {
+  showToast(
+    type: 'error' | 'success' | 'warning' | 'info',
+    title: string,
+    text: string | string[],
+    options: any
+  ): void {
     Toast.show({
       type,
       text1: title,
-      text2: text.toString()
+      text2: text.toString(),
     })
   }
 
   supportsBiometric(): Promise<boolean> {
-    return new Promise<boolean>((resolve => {
+    return new Promise<boolean>((resolve) => {
       ReactNativeBiometrics.isSensorAvailable().then(({ available }) => {
         resolve(available)
       })
-    }))
+    })
   }
 
   supportsDuo(): boolean {
-    return false;
+    return false
   }
 
   supportsSecureStorage(): boolean {
-    return true;
+    return true
   }
 
   supportsWebAuthn(win: Window): boolean {
-    return false;
+    return false
   }
 }

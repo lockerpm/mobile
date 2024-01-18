@@ -3,13 +3,10 @@ import { MMKV } from 'react-native-mmkv'
 
 const storage = new MMKV()
 
-
 export enum StorageKey {
-  APP_FROM_AUTOFILL = 'app__from_autofill',
-  APP_FROM_AUTOFILL_ITEM = "app__from_autofill_item",
-  APP_FROM_AUTOFILL_ON_SAVE_REQUEST = 'app__on_save_request',
   APP_CURRENT_USER = 'app__current_user',
-  PUSH_NOTI_DATA = 'push_noti_data'
+  PUSH_NOTI_DATA = 'push_noti_data',
+  ANDROID_AUTOFILL_SERVICE_DATA = 'android_autofill_service_data',
 }
 
 export type PushNotiData = {
@@ -84,7 +81,7 @@ export async function save(key: string, value: any): Promise<boolean> {
 export async function remove(key: string): Promise<void> {
   try {
     await Promise.resolve(storage.delete(key))
-  } catch { }
+  } catch {}
 }
 
 /**
@@ -94,7 +91,7 @@ export async function clear(): Promise<void> {
   try {
     // await AsyncStorage.clear()
     await Promise.resolve(storage.clearAll())
-  } catch { }
+  } catch {}
 }
 
 /**

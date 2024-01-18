@@ -139,7 +139,8 @@
     "dob": "Date of birth",
     "nationality": "Nationality",
     "invalid_date": "Invalid date",
-    "required_text": "This field is required"
+    "required_text": "This field is required",
+    "social_login": "Or login with"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
@@ -867,8 +868,8 @@
       "note_2": "Add you to their groups",
       "note_3": "Apply password policies to your account"
     },
-    "data": "All your vault data remains the same. {{mame}} can’t see your data or your Password.",
-    "request_access": "You have to Request access from {{mame}} in order to continue using your Locker account.",
+    "data": "All your vault data remains the same. {{name}} can’t see your data or your Master Password.",
+    "request_access": "You have to Request access from {{name}} in order to continue using your Locker account.",
     "domain": {
       "join_org": "Join Organization",
       "managed_by": "This account is managed by: "

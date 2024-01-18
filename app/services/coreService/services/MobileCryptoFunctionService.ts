@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-async-promise-executor */
 import * as crypto from 'crypto'
 import * as forge from 'node-forge'
-import { CryptoFunctionService } from '../../../../core/abstractions/cryptoFunction.service'
-import { SymmetricCryptoKey } from '../../../../core/models/domain'
-import { DecryptParameters } from '../../../../core/models/domain/decryptParameters'
-import { Utils } from '../../../../core/misc/utils'
+import { CryptoFunctionService } from 'core/abstractions/cryptoFunction.service'
+import { SymmetricCryptoKey } from 'core/models/domain'
+import { DecryptParameters } from 'core/models/domain/decryptParameters'
+import { Utils } from 'core/misc/utils'
 import RNSimpleCrypto from 'react-native-simple-crypto'
 import { NativeModules } from 'react-native'
 import { IS_IOS } from '../../../config/constants'
@@ -111,6 +113,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
       default:
         // Default
         const hash = crypto.createHash(algorithm)
+
         hash.update(nodeValue)
         return Promise.resolve(this.toArrayBuffer(hash.digest()))
     }

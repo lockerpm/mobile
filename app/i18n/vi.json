@@ -139,7 +139,8 @@
     "dob": "Ngày sinh",
     "nationality": "Quốc tịch",
     "invalid_date": "Ngày không hợp lệ",
-    "required_text": "Không được để trống"
+    "required_text": "Không được để trống",
+    "social_login": "Hoặc đăng nhập với"
   },
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."

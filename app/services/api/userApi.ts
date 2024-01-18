@@ -21,6 +21,7 @@ import {
   UpdateFCMRequest,
   UserInvitations,
   NotificationSettingData,
+  MarketingContent,
 } from 'app/static/types'
 import { CipherResponse } from 'core/models/response/cipherResponse'
 import { PolicyType } from 'app/static/types/enum'
@@ -886,6 +887,30 @@ class UserApi {
       }
 
       return { kind: 'ok' }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: 'bad-data' }
+    }
+  }
+
+  // marketing
+  async fetchMarketingContent(
+    token: string,
+    language: string
+  ): Promise<{ kind: 'ok'; data: MarketingContent } | GeneralApiProblem> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/cystack_platform/pm/marketing/banner?language=${language}`
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: 'ok', data: response.data }
     } catch (e) {
       Logger.error(e.message)
       return { kind: 'bad-data' }

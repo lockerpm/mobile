@@ -1,5 +1,5 @@
-import React from "react"
-import { NativeModules, Platform } from "react-native"
+import React from 'react'
+import { NativeModules, Platform } from 'react-native'
 import {
   CryptoService,
   PasswordGenerationService,
@@ -17,13 +17,13 @@ import {
   SyncService,
   ContainerService,
   AuditService,
-} from "../../../core/services"
-import { PolicyService } from "../../../core/services/policy.service"
-import { FileUploadService } from "../../../core/services/fileUpload.service"
-import { SearchService } from "../../../core/services/search.service"
-import { SendService } from "../../../core/services/send.service"
-import { ExportService } from "../../../core/services/export.service"
-import { ImportService } from "../../../core/services/import.service"
+} from 'core/services'
+import { PolicyService } from 'core/services/policy.service'
+import { FileUploadService } from 'core/services/fileUpload.service'
+import { SearchService } from 'core/services/search.service'
+import { SendService } from 'core/services/send.service'
+import { ExportService } from 'core/services/export.service'
+import { ImportService } from 'core/services/import.service'
 import {
   MobileStorageService,
   SecureStorageService,
@@ -31,15 +31,15 @@ import {
   MobilePlatformUtilsService,
   MobileLogService,
   MobileMessagingService,
-} from "./services"
-import en from "../../i18n/en.json"
-import vi from "../../i18n/vi.json"
+} from './services'
+import en from 'app/i18n/en.json'
+import vi from 'app/i18n/vi.json'
 
 const { createContext, useContext } = React
 
-const localesDirectory = "../../i18n"
+const localesDirectory = 'app/i18n'
 const deviceLanguage =
-  Platform.OS === "ios"
+  Platform.OS === 'ios'
     ? NativeModules.SettingsManager.settings.AppleLocale ||
       NativeModules.SettingsManager.settings.AppleLanguages[0] // iOS 13
     : NativeModules.I18nManager.localeIdentifier
@@ -53,7 +53,7 @@ const logService = new MobileLogService()
 const messagingService = new MobileMessagingService()
 const i18nService = new I18nService(deviceLanguage, localesDirectory, (formattedLocale: string) => {
   return new Promise((resolve) => {
-    const localeJson = formattedLocale.toLowerCase() === "vi" ? vi : en
+    const localeJson = formattedLocale.toLowerCase() === 'vi' ? vi : en
     resolve(localeJson)
   })
 })
@@ -67,14 +67,14 @@ const cryptoService = new CryptoService(
   secureStorageService,
   cryptoFunctionService,
   platformUtilsService,
-  logService,
+  logService
 )
 const passwordGenerationService = new PasswordGenerationService(
   cryptoService,
   storageService,
-  policyService,
+  policyService
 )
-const apiService = new ApiService(tokenService, platformUtilsService, (expired: boolean) => {
+const apiService = new ApiService(tokenService, platformUtilsService, (_: boolean) => {
   return new Promise((resolve) => {
     resolve(null)
   })
@@ -90,7 +90,7 @@ const cipherService = new CipherService(
   fileUploadService,
   storageService,
   i18nService,
-  () => searchService,
+  () => searchService
 )
 const searchService = new SearchService(cipherService, logService, i18nService)
 const folderService = new FolderService(
@@ -99,13 +99,13 @@ const folderService = new FolderService(
   apiService,
   storageService,
   i18nService,
-  cipherService,
+  cipherService
 )
 const collectionService = new CollectionService(
   cryptoService,
   userService,
   storageService,
-  i18nService,
+  i18nService
 )
 const vaultTimeoutService = new VaultTimeoutService(
   cipherService,
@@ -123,7 +123,7 @@ const vaultTimeoutService = new VaultTimeoutService(
   },
   () => {
     return Promise.resolve(null)
-  },
+  }
 )
 const authService = new AuthService(
   cryptoService,
@@ -135,7 +135,7 @@ const authService = new AuthService(
   platformUtilsService,
   messagingService,
   vaultTimeoutService,
-  logService,
+  logService
 )
 const sendService = new SendService(
   cryptoService,
@@ -143,7 +143,7 @@ const sendService = new SendService(
   userService,
   storageService,
   i18nService,
-  cryptoFunctionService,
+  cryptoFunctionService
 )
 const syncService = new SyncService(
   userService,
@@ -157,11 +157,11 @@ const syncService = new SyncService(
   messagingService,
   policyService,
   sendService,
-  (expired: boolean) => {
+  (_: boolean) => {
     return new Promise((resolve) => {
       resolve(null)
     })
-  },
+  }
 )
 const containerService = new ContainerService(cryptoService)
 containerService.attachToGlobal(global)
@@ -174,7 +174,7 @@ const importService = new ImportService(
   i18nService,
   collectionService,
   platformUtilsService,
-  cryptoService,
+  cryptoService
 )
 
 // All services to be used

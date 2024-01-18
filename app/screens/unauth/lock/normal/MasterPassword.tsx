@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react"
-import { Alert, BackHandler, View, Image, TouchableOpacity } from "react-native"
-import { useAuthentication, useHelper } from "app/services/hook"
-import { useStores } from "app/models"
-import { EnterpriseInvitation } from "app/static/types"
-import { BiometricsType } from "../lock.types"
-import { useNavigation } from "@react-navigation/native"
-import { useTheme } from "app/services/context"
-import { useCoreService } from "app/services/coreService"
-import { Logo, Button, Screen, Text, TextInput, Header, Icon } from "app/components/cores"
-import { EnterpriseInvitationModal } from "./EnterpriseInvitationModal"
+import React, { useEffect, useState } from 'react'
+import { Alert, BackHandler, View, Image, TouchableOpacity } from 'react-native'
+import { useAuthentication, useHelper } from 'app/services/hook'
+import { useStores } from 'app/models'
+import { EnterpriseInvitation } from 'app/static/types'
+import { BiometricsType } from '../lock.types'
+import { useNavigation } from '@react-navigation/native'
+import { useTheme } from 'app/services/context'
+import { useCoreService } from 'app/services/coreService'
+import { Logo, Button, Screen, Text, TextInput, Header, Icon } from 'app/components/cores'
+import { EnterpriseInvitationModal } from './EnterpriseInvitationModal'
 
 interface Props {
   biometryType: BiometricsType
@@ -27,22 +27,20 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
   // ---------------------- PARAMS -------------------------
 
   const [isValidForBiometric, setIsValidForBiometric] = useState(false)
-  const [masterPassword, setMasterPassword] = useState("")
+  const [masterPassword, setMasterPassword] = useState('')
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isBioUnlocking, setIsBioUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
 
   // enterprise invitaion param
-  const [isShowedInvitationPopup, setIsShowedInvitaionPopup] = useState(false)
   const [isShowInvitation, setIsShowInvitation] = useState(false)
 
   const [enterpeiseInvitations, setEnterpriseInvitations] = useState<EnterpriseInvitation[]>([])
 
   // ---------------------- METHODS -------------------------
 
-  const isAutofillAnroid =
-    uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
+  const isAutofillAnroid = uiStore.isAndroidAutofillService
 
   const showInvitation = (() => {
     if (enterpeiseInvitations.length === 0) return false
@@ -64,36 +62,34 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
   }
 
   const handleUnlock = async () => {
-    if (showInvitation) {
-      setIsShowInvitation(true)
-      return
-    }
     if (masterPassword) {
       setIsError(false)
       setIsUnlocking(true)
       const res = await sessionLogin(masterPassword, user.email)
       setIsUnlocking(false)
-      if (res.kind === "ok") {
-        setMasterPassword("")
-        navigation.navigate("mainStack", { screen: "start" })
-      } else if (res.kind === "unauthorized") {
-        navigation.navigate("login", { type: "individual" })
-      } else if (res.kind === "enterprise-lock") {
-        Alert.alert("", translate("alert.enterprise_lock"), [
+      if (res.kind === 'ok') {
+        setMasterPassword('')
+        navigation.replace('mainStack', { screen: 'start' })
+      } else if (res.kind === 'unauthorized') {
+        navigation.replace('login', { type: 'individual' })
+      } else if (res.kind === 'enterprise-lock') {
+        Alert.alert('', translate('alert.enterprise_lock'), [
           {
-            text: translate("common.ok"),
-            style: "cancel",
+            text: translate('common.ok'),
+            style: 'cancel',
             onPress: () => null,
           },
         ])
-      } else if (res.kind === "enterprise-system-lock") {
-        Alert.alert("", translate("alert.enterprise_system_lock"), [
+      } else if (res.kind === 'enterprise-system-lock') {
+        Alert.alert('', translate('alert.enterprise_system_lock'), [
           {
-            text: translate("common.ok"),
-            style: "cancel",
+            text: translate('common.ok'),
+            style: 'cancel',
             onPress: () => null,
           },
         ])
+      } else if (res.kind === 'enterprise-belongs') {
+        await fetchEnterpriseInvitation()
       } else {
         setIsError(true)
       }
@@ -113,9 +109,9 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
     setIsBioUnlocking(true)
     const res = await biometricLogin(user.email)
     setIsBioUnlocking(false)
-    if (res.kind === "ok") {
-      setMasterPassword("")
-      navigation.navigate("mainStack", { screen: "start" })
+    if (res.kind === 'ok') {
+      setMasterPassword('')
+      navigation.replace('mainStack', { screen: 'start' })
     }
   }
 
@@ -123,8 +119,8 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
     setIsSendingHint(true)
     const res = await user.sendPasswordHint(user.email)
     setIsSendingHint(false)
-    if (res.kind === "ok") {
-      notify("success", translate("lock.hint_sent"), 5000)
+    if (res.kind === 'ok') {
+      notify('success', translate('lock.hint_sent'), 5000)
     } else {
       notifyApiError(res)
     }
@@ -133,17 +129,12 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
   const fetchEnterpriseInvitation = async () => {
     const res = await enterpriseStore.invitations()
     setEnterpriseInvitations(res)
+    if (enterpeiseInvitations.length >= 0 && enterpeiseInvitations.some((e) => e.domain !== null)) {
+      setIsShowInvitation(true)
+    }
   }
 
   // -------------- EFFECT ------------------
-
-  // enterprise invitations
-  useEffect(() => {
-    if (isShowedInvitationPopup) {
-      fetchEnterpriseInvitation()
-      setIsShowedInvitaionPopup(false)
-    }
-  }, [isShowedInvitationPopup])
 
   useEffect(() => {
     checkKey()
@@ -151,7 +142,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
   }, [])
 
   useEffect(() => {
-    navigation.addListener("focus", () => {
+    navigation.addListener('focus', () => {
       if (user.isBiometricUnlock) {
         handleUnlockBiometric()
       }
@@ -163,7 +154,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
     <Screen
       preset="auto"
       padding
-      safeAreaEdges={["bottom"]}
+      safeAreaEdges={['bottom']}
       header={
         <Header
           RightActionComponent={
@@ -171,13 +162,13 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
               <Text
                 preset="bold"
                 color={colors.primary}
-                text={translate("common.cancel").toUpperCase()}
+                text={translate('common.cancel').toUpperCase()}
                 onPress={() => BackHandler.exitApp()}
                 style={{ paddingHorizontal: 20 }}
               />
             ) : (
               <Text
-                text={translate("common.logout").toUpperCase()}
+                text={translate('common.logout').toUpperCase()}
                 preset="bold"
                 color={colors.primary}
                 onPress={handleLogout}
@@ -189,42 +180,41 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
       }
       contentContainerStyle={{
         flex: 1,
-        justifyContent: "space-between",
+        justifyContent: 'space-between',
       }}
     >
       <EnterpriseInvitationModal
         isOpen={isShowInvitation}
         enterpeiseInvitations={enterpeiseInvitations}
         onClose={() => {
-          setIsShowedInvitaionPopup(true)
           setIsShowInvitation(false)
         }}
       />
 
       <View>
         <Logo
-          preset={"default"}
-          style={{ height: 80, width: 70, marginBottom: 25, alignSelf: "center" }}
+          preset={'default'}
+          style={{ height: 80, width: 70, marginBottom: 25, alignSelf: 'center' }}
         />
 
         <Text
           preset="bold"
           size="xl"
-          style={{ marginBottom: 10, textAlign: "center" }}
-          tx={"lock.title"}
+          style={{ marginBottom: 10, textAlign: 'center' }}
+          tx={'lock.title'}
         />
 
-        <Text style={{ textAlign: "center" }} tx={"lock.desc"} />
+        <Text style={{ textAlign: 'center' }} tx={'lock.desc'} />
 
         {/* Current user */}
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: 'center' }}>
           <View
             style={{
               marginVertical: 16,
               borderRadius: 20,
               backgroundColor: colors.block,
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               padding: 4,
             }}
           >
@@ -255,7 +245,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
           isPassword
           animated
           isError={isError}
-          label={translate("common.master_pass")}
+          label={translate('common.master_pass')}
           onChangeText={setMasterPassword}
           value={masterPassword}
           onSubmitEditing={handleUnlock}
@@ -264,7 +254,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
         <Button
           loading={isUnlocking}
           disabled={isUnlocking || !masterPassword}
-          text={translate("common.unlock")}
+          text={translate('common.unlock')}
           onPress={handleUnlock}
           style={{
             marginTop: 20,
@@ -275,28 +265,28 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
           disabled={isBioUnlocking}
           onPress={() => {
             if (!user.isBiometricUnlock) {
-              notify("error", translate("error.biometric_not_enable"))
+              notify('error', translate('error.biometric_not_enable'))
               return
             }
             if (!isValidForBiometric) {
-              notify("info", translate("error.not_valid_for_biometric"))
+              notify('info', translate('error.not_valid_for_biometric'))
               return
             }
             handleUnlockBiometric()
           }}
           style={{
-            width: "100%",
+            width: '100%',
             marginVertical: 25,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
             }}
           >
-            <Icon icon={biometryType === BiometricsType.FaceID ? "face-id" : "fingerprint"} />
+            <Icon icon={biometryType === BiometricsType.FaceID ? 'face-id' : 'fingerprint'} />
             <Text
               // @ts-ignore
               text={translate(`common.${biometryType}_unlocking`)}
@@ -307,7 +297,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
       <Button
         preset="teriatary"
         disabled={isSendingHint}
-        text={translate("lock.get_hint")}
+        text={translate('lock.get_hint')}
         onPress={handleGetHint}
       />
     </Screen>

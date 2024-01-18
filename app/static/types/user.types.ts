@@ -215,3 +215,12 @@ export type OnpremisePreloginPayload = {
   code?: string
   identifier?: string
 }
+
+export type MarketingContent = {
+  id: string
+  image: string
+  language: string
+  link: string
+  status: string
+  text: string
+}
