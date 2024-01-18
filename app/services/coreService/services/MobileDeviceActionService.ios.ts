@@ -1,17 +1,15 @@
-import { DeviceActionService as DeviceActionServiceAbstraction } from "../../../../core/abstractions"
-import { DeviceType } from "../../../../core/enums";
-import { CipherView } from "../../../../core/models/view";
+import { DeviceActionService as DeviceActionServiceAbstraction } from 'core/abstractions'
+import { DeviceType } from 'core/enums'
+import { CipherView } from 'core/models/view'
 
 import { Platform } from 'react-native'
 
-
 export class DeviceActionService implements DeviceActionServiceAbstraction {
-
   // --------- Requirements for autofill -------------
 
   systemMajorVersion() {
     return parseInt(Platform.Version.toString())
-  };
+  }
 
   openAutofillSettings: () => void
   disableAutofillService: () => void
@@ -35,7 +33,17 @@ export class DeviceActionService implements DeviceActionServiceAbstraction {
   canOpenFile: (fileName: string) => boolean
   clearCacheAsync: () => Promise<void>
   selectFileAsync: () => Promise<void>
-  displayPromptAync: (title: string, description: string, text: string, okButtonText: string, cancelButtonText: string, numericKeyboard: boolean, autofocus: boolean, password: boolean) => Promise<string>
+  displayPromptAync: (
+    title: string,
+    description: string,
+    text: string,
+    okButtonText: string,
+    cancelButtonText: string,
+    numericKeyboard: boolean,
+    autofocus: boolean,
+    password: boolean
+  ) => Promise<string>
+
   rateApp: () => void
   supportsFaceBiometric: () => boolean
   supportsFaceBiometricAsync: () => Promise<boolean>
@@ -43,8 +51,20 @@ export class DeviceActionService implements DeviceActionServiceAbstraction {
   supportsCamera: () => boolean
   supportsAutofillService: () => boolean
   systemModel: () => string
-  displayAlertAsync: (title: string, message: string, cancel: string, buttons: string[]) => Promise<string>
-  displayActionSheetAsync: (title: string, cancel: string, destruction: string, buttons: string[]) => Promise<string>
+  displayAlertAsync: (
+    title: string,
+    message: string,
+    cancel: string,
+    buttons: string[]
+  ) => Promise<string>
+
+  displayActionSheetAsync: (
+    title: string,
+    cancel: string,
+    destruction: string,
+    buttons: string[]
+  ) => Promise<string>
+
   autofill: (cipher: CipherView) => void
   closeAutofill: () => void
   background: () => void

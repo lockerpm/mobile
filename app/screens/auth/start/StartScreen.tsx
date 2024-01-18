@@ -1,19 +1,20 @@
-import React, { FC, useEffect, useState } from "react"
-import { useStores } from "app/models"
-import NetInfo from "@react-native-community/netinfo"
-import { useCipherData, useHelper } from "app/services/hook"
-import { Loading } from "app/components/utils"
-import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import React, { FC, useEffect, useState } from 'react'
+import { useStores } from 'app/models'
+import NetInfo from '@react-native-community/netinfo'
+import { useCipherData, useHelper } from 'app/services/hook'
+import { Loading } from 'app/components/utils'
+import { observer } from 'mobx-react-lite'
+import { AppStackScreenProps } from 'app/navigators/navigators.types'
+import { AndroidAutofillServiceType } from 'app/utils/autofillHelper'
 
-export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) => {
+export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) => {
   const { user, uiStore, enterpriseStore } = useStores()
   const { isBiometricAvailable, boostrapPushNotifier, parsePushNotiData, translate } = useHelper()
   const { loadFolders, loadCollections, loadOrganizations } = useCipherData()
   const navigation = props.navigation
   // ------------------------- PARAMS ----------------------------
 
-  const [msg, setMsg] = useState("")
+  const [msg, setMsg] = useState('')
 
   // ------------------------- METHODS ----------------------------
 
@@ -39,10 +40,10 @@ export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) =>
     }
 
     // Load folders and collections
-    setMsg(translate("start.decrypting"))
+    setMsg(translate('start.decrypting'))
     Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
 
-    setMsg("")
+    setMsg('')
 
     // Parse push noti data
     const navigationRequest = await parsePushNotiData()
@@ -58,7 +59,7 @@ export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) =>
       return
     }
 
-    if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
+    if (!uiStore.isAndroidAutofillService) {
       if (
         (!user.biometricIntroShown || uiStore.isStartFromPasswordLess) &&
         !user.isBiometricUnlock
@@ -66,37 +67,37 @@ export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) =>
         uiStore.setStartFromPasswordLess(false)
         const available = await isBiometricAvailable()
         if (available) {
-          navigation.navigate("biometricUnlockIntro")
+          navigation.navigate('biometricUnlockIntro')
           return
         }
       }
     }
-    // navigation.navigate("autofill")
 
-    // Done -> navigate
+    // // Done -> navigate
+    if (uiStore.isAndroidAutofillService) {
+      const data = uiStore.androidAutofillServiceData
+      if (data.type === AndroidAutofillServiceType.SAVE_REQUEST) {
+        navigation.navigate('passwords__edit', { mode: 'add', androidAutofillSavedData: data })
+      } else {
+        navigation.navigate('autofill', { data })
+      }
+      return
+    }
+
     if (uiStore.isDeeplinkEmergencyAccess) {
       uiStore.setIsDeeplinkEmergencyAccess(false)
-      navigation?.navigate("mainTab", { screen: "menuTab" })
-      navigation.navigate("emergencyAccess")
+      navigation?.navigate('mainTab', { screen: 'menuTab' })
+      navigation.navigate('emergencyAccess')
     } else if (uiStore.isDeeplinkShares) {
       uiStore.setIsDeeplinkShares(false)
-      navigation?.navigate("mainTab", { screen: "browseTab" })
+      navigation?.navigate('mainTab', { screen: 'browseTab' })
 
       // @ts-ignore TODO
-      navigation?.navigate("mainTab", { screen: "browseTab", params: { screen: "shares" } })
-    } else if (uiStore.isFromAutoFill) {
-      uiStore.setIsFromAutoFill(false)
-      navigation.navigate("autofill")
-    } else if (uiStore.isFromAutoFillItem) {
-      uiStore.setIsFromAutoFillItem(false)
-      navigation.navigate("autofill", { mode: "item" })
-    } else if (uiStore.isOnSaveLogin) {
-      // uiStore.setIsOnSaveLogin(false)
-      navigation.navigate("passwords__edit", { mode: "add" })
+      navigation?.navigate('mainTab', { screen: 'browseTab', params: { screen: 'shares' } })
     } else if (enterpriseStore.isEnterpriseInvitations) {
-      navigation.navigate("enterpriseInvited")
+      navigation.navigate('enterpriseInvited')
     } else {
-      navigation.navigate("mainTab", { screen: user.defaultTab })
+      navigation.navigate('mainTab', { screen: user.defaultTab })
     }
   }
 
@@ -104,7 +105,7 @@ export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) =>
 
   // Always move forward
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", mounted)
+    const unsubscribe = navigation.addListener('focus', mounted)
     return unsubscribe
   }, [navigation])
 

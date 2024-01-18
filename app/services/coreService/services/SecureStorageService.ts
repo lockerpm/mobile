@@ -1,6 +1,6 @@
-import { StorageService } from "../../../../core/abstractions"
-import { StorageServiceOptions } from "../../../../core/abstractions/storage.service"
-import { hasSecure, loadSecure, removeSecure, saveSecure } from "../../../utils/storage"
+import { StorageService } from 'core/abstractions'
+import { StorageServiceOptions } from 'core/abstractions/storage.service'
+import { hasSecure, loadSecure, removeSecure, saveSecure } from 'app/utils/storage'
 
 export class SecureStorageService implements StorageService {
   get<T>(key: string, options?: StorageServiceOptions): Promise<T> {

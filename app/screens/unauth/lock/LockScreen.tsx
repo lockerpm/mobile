@@ -1,20 +1,20 @@
-import React, { FC, useEffect, useState } from "react"
-import { Alert, BackHandler, Platform, View } from "react-native"
-import { useStores } from "app/models"
-import { useAuthentication, useHelper } from "app/services/hook"
-import { RootStackScreenProps } from "app/navigators/navigators.types"
-import ReactNativeBiometrics from "react-native-biometrics"
-import { BiometricsType } from "./lock.types"
-import { LoginMethod } from "app/static/types/enum"
+import React, { FC, useEffect, useState } from 'react'
+import { Alert, BackHandler, Platform, View } from 'react-native'
+import { useStores } from 'app/models'
+import { useAuthentication, useHelper } from 'app/services/hook'
+import { RootStackScreenProps } from 'app/navigators/navigators.types'
+import ReactNativeBiometrics from 'react-native-biometrics'
+import { BiometricsType } from './lock.types'
+import { LoginMethod } from 'app/static/types/enum'
 
-import { LockByMasterPassword } from "./normal/MasterPassword"
-import { BusinessLockByPasswordless } from "./business/BusinessPasswordless"
-import { observer } from "mobx-react-lite"
-import { CommonActions } from "@react-navigation/native"
+import { LockByMasterPassword } from './normal/MasterPassword'
+import { BusinessLockByPasswordless } from './business/BusinessPasswordless'
+import { observer } from 'mobx-react-lite'
+import { CommonActions } from '@react-navigation/native'
 
-const IS_IOS = Platform.OS === "ios"
+const IS_IOS = Platform.OS === 'ios'
 
-export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => {
+export const LockScreen: FC<RootStackScreenProps<'lock'>> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
@@ -31,8 +31,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
 
   // ---------------------- COMPUTED -------------------------
 
-  const isAutofillAnroid =
-    uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
+  const isAutofillAnroid = uiStore.isAndroidAutofillService
 
   // ---------------------- METHODS -------------------------
 
@@ -53,10 +52,10 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
   const fetchBusinessLoginMethod = async () => {
     if (route.params.type !== LoginMethod.PASSWORDLESS) {
       const res = await user.preloginMethod(userEmail)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         setLogMethod(res.data.login_method)
       }
-    } 
+    }
   }
 
   const handleLogout = async () => {
@@ -64,8 +63,8 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{ name: "init" }],
-      }),
+        routes: [{ name: 'init' }],
+      })
     )
   }
 
@@ -80,7 +79,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
   // Handle back press
   useEffect(() => {
     const handleBack = (e) => {
-      if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
+      if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
         navigation.dispatch(e.data.action)
         return
       }
@@ -90,21 +89,21 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
         BackHandler.exitApp()
         return
       }
-      Alert.alert(translate("alert.logout") + userEmail + "?", "", [
+      Alert.alert(translate('alert.logout') + userEmail + '?', '', [
         {
-          text: translate("common.cancel"),
-          style: "cancel",
+          text: translate('common.cancel'),
+          style: 'cancel',
         },
         {
-          text: translate("common.logout"),
-          style: "destructive",
+          text: translate('common.logout'),
+          style: 'destructive',
           onPress: handleLogout,
         },
       ])
     }
-    navigation.addListener("beforeRemove", handleBack)
+    navigation.addListener('beforeRemove', handleBack)
     return () => {
-      navigation.removeListener("beforeRemove", handleBack)
+      navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])
 

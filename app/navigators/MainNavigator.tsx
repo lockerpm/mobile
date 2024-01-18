@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useRef } from "react"
-import { AppState } from "react-native"
-import { createStackNavigator } from "@react-navigation/stack"
-import { useNavigation } from "@react-navigation/native"
-import { MainTabNavigator } from "./MainTabNavigator"
-import { ToolsNavigator } from "./tools/ToolNavigator"
-import UserInactivity from "react-native-user-inactivity"
-import InAppReview from "react-native-in-app-review"
-import { useStores } from "../models"
-import { IS_IOS, WS_URL } from "../config/constants"
-import { AppTimeoutType, SocketEvent, SocketEventType, TimeoutActionType } from "app/static/types"
+import React, { useEffect, useState, useRef } from 'react'
+import { AppState } from 'react-native'
+import { createStackNavigator } from '@react-navigation/stack'
+import { useNavigation } from '@react-navigation/native'
+import { MainTabNavigator } from './MainTabNavigator'
+import { ToolsNavigator } from './tools/ToolNavigator'
+import UserInactivity from 'react-native-user-inactivity'
+import InAppReview from 'react-native-in-app-review'
+import { useStores } from '../models'
+import { IS_IOS, WS_URL } from '../config/constants'
+import { AppTimeoutType, SocketEvent, SocketEventType, TimeoutActionType } from 'app/static/types'
 
 import {
   StartScreen,
@@ -56,12 +56,12 @@ import {
   QuickSharesScreen,
   Password2FASetupScreen,
   QuickSharesDetailScreen,
-} from "../screens"
-import { useAuthentication, useCipherData, useHelper } from "app/services/hook"
-import { Logger } from "app/utils/utils"
-import { AppEventType, EventBus } from "app/utils/eventBus"
-import { observer } from "mobx-react-lite"
-import { PrimaryParamList } from "./navigators.types"
+} from '../screens'
+import { useAuthentication, useCipherData, useHelper } from 'app/services/hook'
+import { Logger } from 'app/utils/utils'
+import { AppEventType, EventBus } from 'app/utils/eventBus'
+import { observer } from 'mobx-react-lite'
+import { PrimaryParamList } from './navigators.types'
 
 const Stack = createStackNavigator<PrimaryParamList>()
 
@@ -98,10 +98,10 @@ export const MainNavigator = observer(() => {
     // Check if sync is needed
     const lastUpdateRes = await cipherStore.getLastUpdate()
     let bumpTimestamp = 0
-    if (lastUpdateRes.kind === "unauthorized") {
+    if (lastUpdateRes.kind === 'unauthorized') {
       return
     }
-    if (lastUpdateRes.kind === "ok") {
+    if (lastUpdateRes.kind === 'ok') {
       bumpTimestamp =
         (lastUpdateRes.data.revision_date - new Date().getTimezoneOffset() * 60) * 1000
       if (bumpTimestamp <= cipherStore.lastSync) {
@@ -111,8 +111,8 @@ export const MainNavigator = observer(() => {
 
     // Send request
     const syncRes = await startSyncProcess(bumpTimestamp)
-    if (!syncRes || syncRes.kind !== "ok") {
-      notify("error", translate("error.sync_failed"))
+    if (!syncRes || syncRes.kind !== 'ok') {
+      notify('error', translate('error.sync_failed'))
       return
     }
 
@@ -169,7 +169,7 @@ export const MainNavigator = observer(() => {
     Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
-    if (nextAppState !== "active") {
+    if (nextAppState !== 'active') {
       appIsActive = false
       activeHandling.current = false
       return
@@ -196,7 +196,7 @@ export const MainNavigator = observer(() => {
             navigation.navigate("onBoarding")
           } else {
             await lock()
-            navigation.navigate("lock")
+            navigation.navigate('lock')
           }
 
           activeHandling.current = false
@@ -224,7 +224,7 @@ export const MainNavigator = observer(() => {
         navigation.navigate("onBoarding")
       } else {
         await lock()
-        navigation.navigate("lock")
+        navigation.navigate('lock')
       }
     }
   }
@@ -233,12 +233,12 @@ export const MainNavigator = observer(() => {
     // Note: using undocumented param (https://stackoverflow.com/questions/37246446/sending-cookies-with-react-native-websockets)
     const ws = new WebSocket(`${WS_URL}?token=${user.apiToken}`, [])
     ws.onopen = () => {
-      Logger.debug("SOCKET OPEN")
+      Logger.debug('SOCKET OPEN')
     }
 
     ws.onmessage = async (e) => {
       const data = JSON.parse(e.data)
-      Logger.debug("WEBSOCKET EVENT: " + data.event)
+      Logger.debug('WEBSOCKET EVENT: ' + data.event)
 
       switch (data.event) {
         // SYNC
@@ -249,7 +249,7 @@ export const MainNavigator = observer(() => {
                 Promise.all(
                   data.data.ids.map(async (id) => {
                     syncSingleCipher(id)
-                  }),
+                  })
                 )
               } else {
                 const cipherId = data.data.id
@@ -308,7 +308,7 @@ export const MainNavigator = observer(() => {
 
   // Check device screen on/off
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", _handleAppStateChange)
+    const subscription = AppState.addEventListener('change', _handleAppStateChange)
 
     return () => {
       subscription.remove()
@@ -352,7 +352,7 @@ export const MainNavigator = observer(() => {
   // Outdated data warning
   useEffect(() => {
     const listener = EventBus.createListener(AppEventType.TEMP_ID_DECTECTED, () => {
-      navigation.navigate("dataOutdated")
+      navigation.navigate('dataOutdated')
     })
     return () => {
       EventBus.removeListener(listener)
@@ -373,10 +373,10 @@ export const MainNavigator = observer(() => {
   useEffect(() => {
     const listener = EventBus.createListener(AppEventType.DECRYPT_ALL_STATUS, (status) => {
       switch (status) {
-        case "started":
+        case 'started':
           cipherStore.setIsBatchDecrypting(true)
           break
-        case "ended":
+        case 'ended':
           cipherStore.setIsBatchDecrypting(false)
           syncAutofillData()
           setBatchDecryptionEnded(true)
@@ -426,7 +426,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen
           name="authenticator__edit"
           component={AuthenticatorEditScreen}
-          initialParams={{ mode: "add" }}
+          initialParams={{ mode: 'add' }}
         />
 
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
@@ -446,7 +446,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen
           name="passwords__edit"
           component={PasswordEditScreen}
-          initialParams={{ mode: "add" }}
+          initialParams={{ mode: 'add' }}
         />
         <Stack.Screen name="passwords_2fa_setup" component={Password2FASetupScreen} />
 
@@ -454,25 +454,25 @@ export const MainNavigator = observer(() => {
         <Stack.Screen
           name="notes__edit"
           component={NoteEditScreen}
-          initialParams={{ mode: "add" }}
+          initialParams={{ mode: 'add' }}
         />
         <Stack.Screen name="cards__info" component={CardInfoScreen} />
         <Stack.Screen
           name="cards__edit"
           component={CardEditScreen}
-          initialParams={{ mode: "add" }}
+          initialParams={{ mode: 'add' }}
         />
         <Stack.Screen name="identities__info" component={IdentityInfoScreen} />
         <Stack.Screen
           name="identities__edit"
           component={IdentityEditScreen}
-          initialParams={{ mode: "add" }}
+          initialParams={{ mode: 'add' }}
         />
 
         <Stack.Screen
           name="folders__select"
           component={FolderSelectScreen}
-          initialParams={{ mode: "add" }}
+          initialParams={{ mode: 'add' }}
         />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
         <Stack.Screen name="shareFolder" component={FolderSharedUsersManagementScreen} />
@@ -481,7 +481,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen
           name="cryptoWallets__edit"
           component={CryptoWalletEditScreen}
-          initialParams={{ mode: "add" }}
+          initialParams={{ mode: 'add' }}
         />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
@@ -493,7 +493,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="emailNotiSettings" component={PushEmailSettingsScreen} />
         <Stack.Screen name="deviceNotiSettings" component={PushNotificationSettingsScreen} />
 
-        <Stack.Screen name="autofill" component={AutoFillScreen} initialParams={{ mode: "all" }} />
+        <Stack.Screen name="autofill" component={AutoFillScreen} />
 
         <Stack.Screen name="emergencyAccess" component={EmergencyAccessScreen} />
         <Stack.Screen name="yourTrustedContact" component={YourTrustedContactScreen} />
