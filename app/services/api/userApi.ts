@@ -866,30 +866,6 @@ class UserApi {
       return { kind: "bad-data" }
     }
   }
-
-  // marketing
-  async fetchMarketingContent(
-    token: string,
-    language: string
-  ): Promise<{ kind: 'ok'; data: MarketingContent } | GeneralApiProblem> {
-    try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/marketing/banner?language=${language}`
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: 'ok', data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
 }
 
 export const userApi = new UserApi()
