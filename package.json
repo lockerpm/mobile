@@ -208,7 +208,7 @@
     "postinstall-prepare": "1.0.1",
     "prettier": "2.8.8",
     "query-string": "^7.0.1",
-    "react-devtools-core": "4.24.7",
+    "react-devtools-core": "4.28.4",
     "react-dom": "18.2.0",
     "react-native-web": "~0.18.7",
     "react-test-renderer": "18.2.0",
