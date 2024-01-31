@@ -107,3 +107,20 @@ export const colorsDark = {
   background: '#000000',
   block: paletteDark.neutral9,
 }
+
+/**  @see https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4 */
+const transparencyForHex = {
+  80: 'CC',
+  75: 'BF',
+  50: '80',
+  40: '66',
+  20: '33',
+  10: '1A',
+}
+
+export const colorTransparency = (
+  hexColor: string,
+  transparency: keyof typeof transparencyForHex
+) => {
+  return hexColor + transparencyForHex[transparency]
+}
