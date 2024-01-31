@@ -33,8 +33,9 @@ import { NotifeeNotificationData, PushNotifier } from "app/utils/pushNotificatio
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { StorageKey, save } from "app/utils/storage"
 import { Logger } from "app/utils/utils"
-import { Header } from "app/components/cores"
+import { Icon } from "app/components/cores"
 import { RootParamList } from "./navigators.types"
+import { colorTransparency } from "app/theme"
 
 const IS_IOS = Platform.OS === "ios"
 
@@ -212,20 +213,22 @@ const RootStack = observer((props: Props) => {
             style={{
               left: 0,
               right: 0,
-              top: IS_IOS ? insets.top : 0,
+              bottom: 0,
               paddingVertical: 12,
               paddingHorizontal: 16,
-              backgroundColor: colors.background,
+              paddingBottom: 16 + insets.bottom,
+              backgroundColor: colorTransparency(colors.primaryText, 80),
               position: "absolute",
               borderBottomColor: colors.border,
               borderBottomWidth: 0.5,
             }}
           >
-            <Header
-              leftIcon="arrow-left"
-              onLeftPress={() => {
+            <Icon
+              icon="arrow-left"
+              onPress={() => {
                 setUpdateBlogUrl("")
               }}
+              color={colors.white}
             />
           </View>
         </View>
