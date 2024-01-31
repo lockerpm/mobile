@@ -55,7 +55,7 @@
     "language": "Language",
     "length": "Length",
     "lock": "Lock",
-    "login": "Login",
+    "login": "Log in",
     "logout": "Log Out",
     "male": "Male",
     "master_pass": "Password",
@@ -347,7 +347,9 @@
     "has_account": "Already have an account?",
     "title": "Your Digital Vault",
     "usb": "Connect the security key to your phone via charging port",
-    "nfc": "Hold the security key close to the back (or top) of your phone to connect"
+    "nfc": "Hold the security key close to the back (or top) of your phone to connect",
+    "guest_mode": "Guest Mode? ",
+    "continue_login": "Continue to log in"
   },
   "login": {
     "title": "Sign in to your account",

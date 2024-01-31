@@ -348,7 +348,9 @@
     "has_account": "Đã có tài khoản?",
     "title": "Your Digital Vault",
     "usb": "Kết nối khóa bảo mật với điện thoại qua cổng sạc của máy",
-    "nfc": "Đặt khóa bảo mật gần mặt sau (hoặc phía trên) của điện thoại để kết nối"
+    "nfc": "Đặt khóa bảo mật gần mặt sau (hoặc phía trên) của điện thoại để kết nối",
+    "guest_mode": "Không phải người dùng Vin? ",
+    "continue_login": "Đăng nhập tại đây"
   },
   "login": {
     "title": "Đăng nhập tài khoản",

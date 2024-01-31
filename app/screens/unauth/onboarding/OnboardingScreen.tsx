@@ -15,7 +15,7 @@ const { VinCssSsoLoginModule } = NativeModules
 const IS_ANDROID = Platform.OS === "android"
 
 export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer((props) => {
-  const { isDark } = useTheme()
+  const { isDark, colors } = useTheme()
   const { user } = useStores()
   const { translate, notifyApiError, notify } = useHelper()
 
@@ -129,6 +129,23 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
         text={translate("common.login")}
         onPress={loginOnPress}
       />
+       <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginVertical: 12,
+          }}
+        >
+          <Text
+            tx='onBoarding.guest_mode'
+          />
+          <Text
+            color={colors.primary}
+            tx='onBoarding.continue_login'
+            onPress={() =>  props.navigation.navigate("login")}
+          />
+        </View>
     </View>
   )
 
