@@ -490,7 +490,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        '/cystack_platform/pm/notifcation/settings',
+        '/cystack_platform/pm/notification/settings',
         { type: 'notification' }
       )
 
@@ -516,7 +516,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/notifcation/settings/${categoryId}`,
+        `/cystack_platform/pm/notification/settings/${categoryId}`,
         { mail, notification }
       )
 
