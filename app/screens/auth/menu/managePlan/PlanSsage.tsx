@@ -72,7 +72,7 @@ const ItemStorage = (props: PlanStorageProps) => {
           }}
           progressColor={backgroundColor}
           // @ts-ignore
-          progress={isUnlimited ? 0 : (cipherCount / limits) * 100}
+          progress={isUnlimited ? 0 : Math.min((cipherCount / limits) * 100, 100)}
         />
       )}
     </View>
