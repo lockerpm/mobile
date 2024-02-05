@@ -143,7 +143,7 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
           <Text
             color={colors.primary}
             tx='onBoarding.continue_login'
-            onPress={() =>  props.navigation.navigate("login")}
+            onPress={() =>  props.navigation.navigate("login", {isGuestMode: true})}
           />
         </View>
     </View>

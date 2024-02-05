@@ -17,7 +17,9 @@ export type RootParamList = {
     type?: LoginMethod
     email?: string
   }
-  login: undefined
+  login: {
+    isGuestMode?: boolean
+  }
   forgotPassword: undefined
   signup: undefined
   createMasterPassword: undefined

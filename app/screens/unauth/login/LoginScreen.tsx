@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react"
 import { View } from "react-native"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
-import { Screen, Text, TextInput, Button, Logo, Icon } from "app/components/cores"
+import { Screen, Text, TextInput, Button, Logo, Icon, Header } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { useAuthentication, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
@@ -11,6 +11,7 @@ import { useTheme } from "app/services/context"
 
 export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) => {
   const navigation = props.navigation
+  const { isGuestMode = false } = props.route.params || {}
   const { user, uiStore } = useStores()
   const { translate } = useHelper()
   const { sessionLogin } = useAuthentication()
@@ -18,7 +19,9 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
 
   // ------------------------------ PARAMS -------------------------------
 
-  const [lockMethod, setLogMethod] = useState<LoginMethod | null>(null)
+  const [lockMethod, setLogMethod] = useState<LoginMethod | null>(
+    isGuestMode ? LoginMethod.PASSWORD : null,
+  )
 
   const [isError, setIsError] = useState(false)
 
@@ -68,8 +71,9 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
     <Screen
       preset="auto"
       padding
-      safeAreaEdges={["top", "bottom"]}
+      safeAreaEdges={["bottom"]}
       contentContainerStyle={{ flex: 1 }}
+      header={<Header leftIcon="arrow-left" onLeftPress={() => navigation.navigate('onBoarding')} />}
     >
       <View
         style={{
@@ -78,7 +82,7 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
         }}
       >
         {/* <LoginForm  /> */}
-        <View style={{ marginTop: 56 }}>
+        <View style={{ marginTop: 26 }}>
           <Logo
             preset={"default"}
             style={{ height: 80, width: 70, marginBottom: 10, alignSelf: "center" }}
@@ -122,30 +126,32 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
                 }}
               />
 
-              <Button
-                preset="secondary"
-                disabled={loginLoading }
-                onPress={() => {
-                  uiStore.setIsFromPassword(true)
-                  navigation.navigate('lock', {
-                    email: username,
-                    type: LoginMethod.PASSWORDLESS
-                  })
-                }}
-              >
-                <>
-                  <Icon icon="qr-code" color={colors.primary} />
-                  <Text
-                    color={colors.primary}
-                    preset="bold"
-                    text={translate("lock.qr_lock")}
-                    style={{
-                      padding: 4,
-                      marginLeft: 4,
-                    }}
-                  />
-                </>
-              </Button>
+              {!isGuestMode && (
+                <Button
+                  preset="secondary"
+                  disabled={loginLoading}
+                  onPress={() => {
+                    uiStore.setIsFromPassword(true)
+                    navigation.navigate("lock", {
+                      email: username,
+                      type: LoginMethod.PASSWORDLESS,
+                    })
+                  }}
+                >
+                  <>
+                    <Icon icon="qr-code" color={colors.primary} />
+                    <Text
+                      color={colors.primary}
+                      preset="bold"
+                      text={translate("lock.qr_lock")}
+                      style={{
+                        padding: 4,
+                        marginLeft: 4,
+                      }}
+                    />
+                  </>
+                </Button>
+              )}
             </Animated.View>
           )}
 
