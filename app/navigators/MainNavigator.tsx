@@ -51,7 +51,6 @@ import {
   TakeoverEAScreen,
   // @ts-ignore
   AutofillServiceScreen,
-  EnterpriseInvitedScreen,
   NormalSharesScreen,
   QuickSharesScreen,
   Password2FASetupScreen,
@@ -403,7 +402,6 @@ export const MainNavigator = observer(() => {
       >
         <Stack.Screen name="start" component={StartScreen} />
 
-        <Stack.Screen name="enterpriseInvited" component={EnterpriseInvitedScreen} />
         <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
 
         <Stack.Screen name="dataOutdated" component={DataOutdatedScreen} />

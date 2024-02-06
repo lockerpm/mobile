@@ -8,7 +8,7 @@ import { AppStackScreenProps } from 'app/navigators/navigators.types'
 import { AndroidAutofillServiceType } from 'app/utils/autofillHelper'
 
 export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) => {
-  const { user, uiStore, enterpriseStore } = useStores()
+  const { user, uiStore } = useStores()
   const { isBiometricAvailable, boostrapPushNotifier, parsePushNotiData, translate } = useHelper()
   const { loadFolders, loadCollections, loadOrganizations } = useCipherData()
   const navigation = props.navigation
@@ -94,8 +94,6 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) =>
 
       // @ts-ignore TODO
       navigation?.navigate('mainTab', { screen: 'browseTab', params: { screen: 'shares' } })
-    } else if (enterpriseStore.isEnterpriseInvitations) {
-      navigation.navigate('enterpriseInvited')
     } else {
       navigation.navigate('mainTab', { screen: user.defaultTab })
     }

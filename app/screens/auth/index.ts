@@ -6,7 +6,6 @@ export * from './menu'
 export * from './tools'
 
 export * from './start/StartScreen'
-export * from './enterpriseInvited/EnterpriseInvitedScreen'
 export * from './shareCipher/NormalSharesScreen'
 export * from './shareCipher/QuickSharesScreen'
 

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react"
+import React, {  useEffect, useState } from "react"
 import { Text, Screen, Button, Icon } from "app/components/cores"
 import { ColorValue, ImageSourcePropType, TouchableOpacity, View, Image } from "react-native"
 import { EnterpriseInvitation } from "app/static/types"
@@ -6,16 +6,16 @@ import { useStores } from "app/models"
 import { useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
 import { useHelper } from "app/services/hook"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { useNavigation } from "@react-navigation/native"
 
 const ASSETS = {
   user: require("assets/images/intro/user.png"),
   org: require("assets/images/intro/organization.png"),
 }
 
-export const EnterpriseInvitedScreen: FC<AppStackScreenProps<"enterpriseInvited">> = observer(
-  (props) => {
-    const navigation = props.navigation
+export const EnterpriseInvitedScreen = observer(
+  () => {
+    const navigation = useNavigation() as any
     const { enterpriseStore, user } = useStores()
     const { translate } = useHelper()
     const { colors } = useTheme()
@@ -82,7 +82,7 @@ export const EnterpriseInvitedScreen: FC<AppStackScreenProps<"enterpriseInvited"
     )
 
     return (
-      <Screen safeAreaEdges={["top", "bottom"]} padding footer={footer}>
+      <Screen safeAreaEdges={["top", "bottom"]} padding footerPadding footer={footer}>
         <View style={{ alignItems: "flex-end" }}>
           <TouchableOpacity
             onPress={onNext}
