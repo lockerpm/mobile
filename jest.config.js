@@ -1,13 +1,25 @@
-const { defaults: tsjPreset } = require('ts-jest/presets')
+const { defaults: tsjPreset } = require("ts-jest/presets")
 
-/** @type {import('@jest/types').Config.ProjectConfig} */
 module.exports = {
   ...tsjPreset,
-  transformIgnorePatterns: [
-    '<rootDir>/node_modules/(react-clone-referenced-element|@react-native-community|react-navigation|@react-navigation/.*|@unimodules/.*|native-base|react-native-code-push)',
-    'jest-runner',
-  ],
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.maestro/', '@react-native'],
-  testEnvironment: 'jsdom',
-  setupFiles: ['<rootDir>/test/setup.ts'],
+  preset: "react-native",
+  roots: ["<rootDir>"],
+  globals: {
+    "ts-jest": {
+      tsConfig: "tsconfig.test.json",
+    },
+  },
+  moduleFileExtensions: ["js", "ts", "tsx", "json"],
+  testPathIgnorePatterns: ["node_modules", "detox"],
+  moduleNameMapper: {
+    "^app(.*)$": "<rootDir>/app/$1",
+    "^assets(.*)$": "<rootDir>/assets/$1",
+    "^test(.*)$": "<rootDir>/test/$1",
+  },
+  testEnvironment: "jsdom",
+  transform: {
+    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+  },
+
+  setupFiles: ["<rootDir>/test/setup.ts"],
 }
