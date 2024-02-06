@@ -170,7 +170,7 @@
     "wrong_username_or_password": "The password is not valid",
     "account_not_activated": "This account is not activated yet! Please check your email and follow the instructions (we will resend after 1 day).",
     "something_went_wrong": "Something went wrong",
-    "sync_failed": "Synchronize data failed",
+    "sync_failed": "Data synchronization failed",
     "token_expired": "Session token expired",
     "no_associated_account": "There's no account associated with this email or username. Try another or create a new account.",
     "invalid_authorization_code": "The authorization code is not valid",
@@ -188,7 +188,7 @@
     "duplicate_folder_name": "Duplicated folder name! Please choose another name!",
     "not_allowed_to_see_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
     "not_allowed_to_copy_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
-    "not_available_for_free": "This feature is not available for free account!",
+    "not_available_for_free": "This feature is not available for a free account!",
     "could_not_complete": "The operation couldn't be completed. Please try again",
     "relay_add": "Failed to add",
     "relay_save": "Failed to save",
@@ -273,7 +273,7 @@
       "your_subdomain": "Your subdomain",
       "desc": {
         "one": "Custom sub-domain allows you to create custom email domain",
-        "two": "You can create one (editable) subdomain"
+        "two": "You can create one editable subdomain"
       },
       "manage": "Manage",
       "title": "Manage Subdomain",
@@ -299,7 +299,7 @@
   },
   "emergency_access": {
     "title": "Emergency Access",
-    "des": "This feature grants other Locker account owner(s) the ability to access to your vault in some emergency situations",
+    "des": "This feature grants other Locker account owner(s) the ability to access to your vault in emergency situations",
     "label": "{{pending}} pending requests",
     "view": "View",
     "takeover": "Take over",
@@ -326,7 +326,7 @@
     },
     "view_vault": "View their vault",
     "takeover_vault": "Take over their vault",
-    "free_guild": "You are in Free plan. Upgrade to Premium to add Emergency Contact",
+    "free_guild": "You are in Free plan. Upgrade to Premium to add an Emergency Contact",
     "reset_master_pw": "Reset their Locker Master Password",
     "reset_pw": "Reset their Locker Password",
     "reset_master_pw_user": "Reset Master Password for {{name}}",
@@ -399,7 +399,7 @@
     }
   },
   "lock": {
-    "master_pass_changed": "Master password changed. Please login using new password",
+    "master_pass_changed": "Master password changed. Please login using the new password",
     "hint_sent": "Master Password hint sent. Please check your email for instructions",
     "title": "Welcome Back!",
     "desc": "Enter your Master Password to Log In",
@@ -424,7 +424,7 @@
     "save_device": "Remember this device"
   },
   "forgot_password": {
-    "title": "Forgot Password ?",
+    "title": "Forgot Password?",
     "request": "Request",
     "username_or_email": "Enter your username or email address",
     "select_method": "Select a verification method:",
@@ -436,7 +436,7 @@
     "set_new_password": "Set new password",
     "new_password": "New password",
     "confirm_new_password": "Confirm new password",
-    "password_updated": "Your password has been updated. Please login using the new password."
+    "password_updated": "Your password has been updated. Please log in using the new password."
   },
   "signup": {
     "title": "Sign up for a free account",
@@ -447,7 +447,7 @@
     "terms": "terms",
     "conditions": "conditions",
     "signup_successful": "A confirmation email has been sent to your address (check your SPAM folder as well)",
-    "update_pw_successful": "Update success"
+    "update_pw_successful": "Update successfully"
   },
   "start": {
     "synching": "Synchronizing...",
@@ -492,11 +492,11 @@
     "folder_existed": "A folder with this name has already existed",
     "delete_modal": {
       "title": "Delete Folder",
-      "desc": "After folder deleted, all items will be moved to trash. Are you sure you want to delete the folder?",
+      "desc": "Once the folder is deleted, all items will be moved to trash. Are you sure you want to delete the folder?",
       "btn": "OK"
     },
     "empty": {
-      "title": "Organize items in Folder",
+      "title": "Organize items in Folders",
       "desc": "Keep passwords and other items in groups",
       "btn": "Add Folder"
     }
@@ -528,59 +528,7 @@
       "btn": "Add Identity"
     }
   },
-  "driver_license": {
-    "no": "No",
-    "class": "Class",
-    "valid_until": "Valid until",
-    "vehicle_class": "Vehicle class",
-    "beginning_date": "Beginning date",
-    "issued_by": "Issued by"
-  },
-  "citizen_id": {
-    "id_no": "ID no",
-    "sex": "Sex",
-    "place_of_origin": "Place of origin",
-    "place_of_residence": "Place of residence",
-    "expiry_date": "Expiry date",
-    "personal_id": "Personal identification",
-    "date_of_issue": "Date of issue",
-    "issued_by": "Issued by"
-  },
-  "passport": {
-    "passport_id": "Passport ID",
-    "type": "Type",
-    "code": "Code",
-    "sex": "Sex",
-    "id_number": "ID number",
-    "date_of_issue": "Date of issue",
-    "date_of_expiry": "Date of expiry",
-    "place_of_issue": "Place of issue"
-  },
-  "wireless_router": {
-    "device_name": "Device name",
-    "router_ip_address": "Router IP address",
-    "wifi_ssid": "Wifi SSID",
-    "wifi_pw": "Wifi password",
-    "admin_username": "Admin ID",
-    "admin_password": "Admin password"
-  },
-  "server": {
-    "host": "Host (IP/domain)",
-    "public_key": "Public key",
-    "private_key": "Private Key"
-  },
-  "API": {
-    "url": "URL",
-    "method": "Method",
-    "header": "Header",
-    "body_data": "Body Data",
-    "response": "Response"
-  },
-  "database": {
-    "host": "Host (IP/domain)",
-    "port": "Port",
-    "default": "Default database"
-  },
+
   "note": {
     "copy_note": "Copy Notes",
     "empty": {
@@ -618,7 +566,7 @@
     "shared_folder": "Shared folder",
     "encrypted_content": "Encrypted Content",
     "share_folder": {
-      "error_share_item": "Folders with shared items can’t be shared. Remove or stop shared items and try again",
+      "error_share_item": "Folders with shared items can’t be shared. Remove or stop sharing the items and try again",
       "manage_user": "Manage Share",
       "share_with": "This item has been shared with",
       "select_member": "Shared this item with",
@@ -630,11 +578,11 @@
       "remove": "Remove from folder",
       "no_shared_users": "Hasn't been shared with any users yet",
       "success": {
-        "shared": "Share success",
-        "add_member": "Add member success",
-        "remove_member": "Remove member success",
-        "stop": "Stop share success",
-        "add_items": "Add items success"
+        "shared": "Share successfully",
+        "add_member": "Add member successfully",
+        "remove_member": "Remove member successfully",
+        "stop": "Stop share successfully",
+        "add_items": "Add items successfully"
       }
     },
     "empty": {
@@ -689,8 +637,8 @@
       "btn": "Add Item"
     },
     "enable_autofill": {
-      "title": "Don’t miss a magic of autofill",
-      "content": "Let’s enable Autofill to see the magic of login",
+      "title": "Don’t miss the magic of autofill",
+      "content": "Let’s enable Autofill to see the magic of automatic login",
       "btn": "Enable Autofill"
     }
   },
@@ -713,7 +661,7 @@
   "menu": {
     "product_of": "A product of ",
     "versoin": "Version ",
-    "invite_noti": "Upgrade to Family Plan and invite your friends joining Locker!",
+    "invite_noti": "Upgrade to Family Plan and invite your friends to join Locker!",
     "fingerprint": "Fingerprint",
     "plan": "Manage Plan",
     "expired_time": "Expired",
@@ -742,7 +690,7 @@
     "invalid_key": "Invalid key",
     "empty": {
       "title": "Secure your account",
-      "desc": "Add an additional layer of security when signing in",
+      "desc": "Add an additional layer of security when signing in online accounts.",
       "btn": "Get Started"
     },
     "secret_key": "Secret key",
@@ -791,7 +739,7 @@
     "delete_account_warning": "Proceed below to delete your account and all associated data.",
     "delete_account_success": "Your Locker account has been deleted!",
     "delete_all_items": "Delete all account items",
-    "delete_all_items_warning": "Proceed below to delete all items and folders in your vault. Items that belong to an organization that you share with will not be deleted.",
+    "delete_all_items_warning": "Proceed below to delete all items and folders in your vault. Items belonging to an organization that you share with will not be deleted.",
     "delete_all_items_success": "Your vault has been purged!",
     "on_app_close": "On app close",
     "on_screen_off": "On screen off",
@@ -809,7 +757,7 @@
   "autofill_service": {
     "activated": {
       "title": "Auto-fill activated!",
-      "content": "Now you can login to applications and websites faster"
+      "content": "Now you can log in to applications and websites faster"
     },
     "ios": {
       "desc": "To enable password autofill on your device, follow these instructions:",
@@ -971,12 +919,12 @@
       "share_password": "Share Passwords"
     },
     "free": {
-      "button": "Go Premium for unlimited storage"
+      "button": "Increase unlimited with Premium"
     }
   },
   "invite_member": {
     "header": "Manage member",
-    "info_upgrade": "Upgrade to Family Plan and invite your friends joining Locker!",
+    "info_upgrade": "Upgrade to Family Plan and invite your friends to join Locker!",
     "add_noti": "Add members successfully ",
     "delete_noti": "Delete member successfully",
     "confirm": "Are you sure you want to remove this user from Family Plan?",
