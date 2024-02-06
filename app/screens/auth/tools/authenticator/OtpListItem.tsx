@@ -1,11 +1,11 @@
-import React, { memo, useState } from 'react'
-import { TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
-import { Checkbox } from 'react-native-ui-lib'
-import isEqual from 'lodash/isEqual'
-import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import { Text, Icon } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { getTOTP, parseOTPUri } from 'app/utils/totp'
+import React, { memo, useState } from "react"
+import { TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
+import { Checkbox } from "react-native-ui-lib"
+import isEqual from "lodash/isEqual"
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer"
+import { Text, Icon } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { getTOTP, parseOTPUri } from "app/utils/totp"
 
 type Prop = {
   item: any
@@ -15,21 +15,21 @@ type Prop = {
   isSelected: boolean
   drag: () => void
 }
+// Calculate remaining time
+const getRemainingTime = (period: number) => {
+  // Better late 1 sec than early
+  return period + 1 - (Math.floor(new Date().getTime() / 1000) % period)
+}
 
 export const OtpListItem = memo(
   (props: Prop) => {
     const { item, isSelecting, toggleItemSelection, openActionMenu, isSelected, drag } = props
     const { colors } = useTheme()
-
     const otpData = parseOTPUri(item.notes)
 
+    const [key, setKey] = useState(0)
+    const [initTime, setInitTime] = useState(getRemainingTime(otpData.period))
     const [otp, setOtp] = useState(getTOTP(otpData))
-
-    // Calculate remaining time
-    const getRemainingTime = (period: number) => {
-      // Better late 1 sec than early
-      return period + 1 - (Math.floor(new Date().getTime() / 1000) % period)
-    }
 
     return (
       <TouchableOpacity
@@ -57,9 +57,9 @@ export const OtpListItem = memo(
       >
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
           {/* Drag anchor */}
@@ -83,7 +83,7 @@ export const OtpListItem = memo(
 
           {/* Content */}
           <View style={{ flex: 1 }}>
-            <View style={{ marginRight: 12, flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ marginRight: 12, flexDirection: "row", alignItems: "center" }}>
               <View style={{ flex: 1 }}>
                 <Text preset="bold" text={item.name} numberOfLines={1} ellipsizeMode="tail" />
               </View>
@@ -116,17 +116,28 @@ export const OtpListItem = memo(
             />
           ) : (
             <CountdownCircleTimer
+              key={key}
               onComplete={() => {
-                setOtp(getTOTP(otpData))
                 return {
-                  shouldRepeat: true
+                  shouldRepeat: true,
+                }
+              }}
+              onUpdate={(remainingTime: number) => {
+                if (remainingTime < 5) {
+                  const newOtp = getTOTP(otpData)
+
+                  if (otp !== newOtp) {
+                    setOtp(getTOTP(otpData))
+                    setInitTime(getRemainingTime(otpData.period))
+                    setKey((prev) => prev + 1)
+                  }
                 }
               }}
               size={25}
               isPlaying
               duration={30}
               colors={colors.primary}
-              initialRemainingTime={getRemainingTime(otpData.period)}
+              initialRemainingTime={initTime}
               strokeWidth={4}
             />
           )}
@@ -136,7 +147,7 @@ export const OtpListItem = memo(
     )
   },
   (prev, next) => {
-    const whitelist = ['toggleItemSelection', 'openActionMenu', 'drag']
+    const whitelist = ["toggleItemSelection", "openActionMenu", "drag"]
     const prevProps = Object.keys(prev)
     const nextProps = Object.keys(next)
     if (!isEqual(prevProps, nextProps)) {
