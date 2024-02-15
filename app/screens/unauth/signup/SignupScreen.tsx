@@ -95,7 +95,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer((props)
   const handleRegisterWebauth = async (
     email: string,
     fullname: string,
-    withSecurityKey?: boolean,
+    withSecurityKey?: boolean
   ) => {
     const resPassKeyOptions = await user.registerPasskeyOptions({
       email,
@@ -105,7 +105,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer((props)
     if (resPassKeyOptions.kind === "ok") {
       try {
         const requestJson: PasskeyRegistrationRequest = credentialCreationOptions(
-          resPassKeyOptions.data,
+          resPassKeyOptions.data
         )
 
         // @ts-ignore
@@ -197,7 +197,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer((props)
         </Text>
       </View>
     ),
-    [],
+    []
   )
   return (
     <Screen preset="auto" contentContainerStyle={{ paddingBottom: 20 }}>
@@ -270,19 +270,22 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer((props)
           onChangeText={setFullname}
         />
 
-        <TextInput
-          animated
-          isRequired
-          editable={false}
-          label={translate("common.country")}
-          value={countries[country] ? countries[country].country_name : ""}
-          style={{
-            color: colors.primaryText,
-          }}
-          onTouchStart={() => {
+        <TouchableOpacity
+          onPress={() => {
             setShowContryPicker(true)
           }}
-        />
+        >
+          <TextInput
+            animated
+            isRequired
+            editable={false}
+            label={translate("common.country")}
+            value={countries[country] ? countries[country].country_name : ""}
+            style={{
+              color: colors.primaryText,
+            }}
+          />
+        </TouchableOpacity>
 
         <TermAndConditions agreed={agreed} setAgreed={setAgreed} />
 

@@ -6,6 +6,7 @@ import { View, Modal, TouchableWithoutFeedback, Image, Keyboard } from "react-na
 import { TouchableHighlight, Text, Icon } from "../../cores"
 import { useTheme } from "app/services/context"
 import { SearchBar } from "../searchBar/SearchBar"
+import { gestureHandlerRootHOC } from "react-native-gesture-handler"
 
 export type CountryCode = keyof typeof Countries
 
@@ -107,53 +108,57 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
     }
   }, [isOpen])
 
+  const Content = gestureHandlerRootHOC(() => (
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
+      <BottomSheet
+        index={-1}
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        onClose={onClose}
+        onChange={onSheetChange}
+        enablePanDownToClose
+        backdropComponent={() => (
+          <TouchableWithoutFeedback onPress={closeSheet} style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: colors.transparentModal }} />
+          </TouchableWithoutFeedback>
+        )}
+      >
+        <SearchBar
+          value={search}
+          onChangeText={setSearch}
+          containerStyle={{ marginVertical: 8, marginHorizontal: 16 }}
+          onFocus={showFullSheet}
+        />
+        <BottomSheetFlatList
+          data={items.filter(
+            (i) =>
+              !search.trim() ||
+              i.country_name.toUpperCase().includes(search.toUpperCase()) ||
+              i.country_code.includes(search.toUpperCase())
+          )}
+          keyboardShouldPersistTaps="never"
+          keyExtractor={(item) => item.country_code}
+          renderItem={renderItem}
+          contentContainerStyle={{
+            backgroundColor: colors.background,
+          }}
+          getItemLayout={(data, index) => ({
+            length: 52.2,
+            offset: 52.2 * index,
+            index,
+          })}
+        />
+      </BottomSheet>
+    </View>
+  ))
+
   return (
     <Modal transparent animationType="fade" visible={isOpen}>
-      <View
-        style={{
-          flex: 1,
-        }}
-      >
-        <BottomSheet
-          index={-1}
-          ref={sheetRef}
-          snapPoints={snapPoints}
-          onClose={onClose}
-          onChange={onSheetChange}
-          enablePanDownToClose
-          backdropComponent={() => (
-            <TouchableWithoutFeedback onPress={closeSheet} style={{ flex: 1 }}>
-              <View style={{ flex: 1, backgroundColor: colors.transparentModal }} />
-            </TouchableWithoutFeedback>
-          )}
-        >
-          <SearchBar
-            value={search}
-            onChangeText={setSearch}
-            containerStyle={{ marginVertical: 8, marginHorizontal: 16 }}
-            onFocus={showFullSheet}
-          />
-          <BottomSheetFlatList
-            data={items.filter(
-              (i) =>
-                !search.trim() ||
-                i.country_name.toUpperCase().includes(search.toUpperCase()) ||
-                i.country_code.includes(search.toUpperCase()),
-            )}
-            keyboardShouldPersistTaps="never"
-            keyExtractor={(item) => item.country_code}
-            renderItem={renderItem}
-            contentContainerStyle={{
-              backgroundColor: colors.background,
-            }}
-            getItemLayout={(data, index) => ({
-              length: 52.2,
-              offset: 52.2 * index,
-              index,
-            })}
-          />
-        </BottomSheet>
-      </View>
+      <Content />
     </Modal>
   )
 }
