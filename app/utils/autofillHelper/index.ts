@@ -1,5 +1,5 @@
 /* eslint-disable n/no-callback-literal */
-import { NativeModules, Platform } from 'react-native'
+import { NativeModules, Platform } from "react-native"
 const { RNAutofillServiceIos, RNAutofillServiceAndroid } = NativeModules
 
 export enum AndroidAutofillServiceType {
@@ -19,11 +19,11 @@ export type AndroidAutofillServiceData = {
 export const AutofillServiceEnabled: (
   callback: (a: boolean, androidNotSupport?: boolean) => void
 ) => void = (callback) => {
-  if (Platform.OS === 'ios') {
+  if (Platform.OS === "ios") {
     return RNAutofillServiceIos.isAutofillServiceActived(callback)
   }
 
-  if (Platform.OS === 'android') {
+  if (Platform.OS === "android") {
     // @ts-ignore
     if (Platform.Version < 26) {
       // AutofillManager class added in API level 26
@@ -38,14 +38,8 @@ export const AutofillServiceEnabled: (
 }
 
 export const parseSearchText = (bundle: string) => {
-  if (!bundle) return ''
-  const meaninglessSearch = ['com', 'net', 'app', 'package', 'io', 'www']
-  const _sp = bundle.split('.')
-  let result = ''
-  _sp.forEach((pt) => {
-    if (!meaninglessSearch.includes(pt)) {
-      result += pt + ' '
-    }
-  })
-  return result
+  if (!bundle) return ""
+  const meaninglessSearch = ["com", "net", "app", "package", "io", "www"]
+  const _sp = bundle.split(".")
+  return _sp.filter((e) => !meaninglessSearch.includes(e)).join(".")
 }

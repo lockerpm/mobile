@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import React, { useCallback, useState } from "react"
 import Countries from "app/static/countries.json"
 import Flags from "app/static/flags.json"
-import { View, Modal, TouchableWithoutFeedback, Image, Keyboard } from "react-native"
-import { TouchableHighlight, Text, Icon } from "../../cores"
+import { View, Image, Keyboard, FlatList } from "react-native"
+import { TouchableHighlight, Text, Icon, Screen, Header } from "../../cores"
 import { useTheme } from "app/services/context"
 import { SearchBar } from "../searchBar/SearchBar"
-import { gestureHandlerRootHOC } from "react-native-gesture-handler"
+import Modal from "react-native-modal"
 
 export type CountryCode = keyof typeof Countries
 
@@ -42,30 +41,9 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
     }
   })
 
-  // ref
-  const sheetRef = useRef<BottomSheet>(null)
-
-  // variables
-  const snapPoints = useMemo(() => ["45%", "90%"], [])
-
-  const showSheet = useCallback(() => {
-    sheetRef.current?.snapToIndex(0)
-  }, [])
-
-  const showFullSheet = useCallback(() => {
-    sheetRef.current?.snapToIndex(1)
-  }, [])
-
   const closeSheet = useCallback(() => {
-    sheetRef.current?.close()
     Keyboard.dismiss()
     setTimeout(onClose, 200)
-  }, [])
-
-  const onSheetChange = useCallback((index: number) => {
-    if (index === 0) {
-      Keyboard.dismiss()
-    }
   }, [])
 
   const handleSelect = (code: CountryCode) => {
@@ -102,38 +80,31 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
     </TouchableHighlight>
   )
 
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(showSheet, 200)
-    }
-  }, [isOpen])
-
-  const Content = gestureHandlerRootHOC(() => (
-    <View
+  return (
+    <Modal
+      animationIn="slideInUp"
+      isVisible={isOpen}
+      onBackdropPress={onClose}
+      statusBarTranslucent
       style={{
-        flex: 1,
+        margin: 0,
+      }}
+      onModalHide={() => {
+        setSearch("")
       }}
     >
-      <BottomSheet
-        index={-1}
-        ref={sheetRef}
-        snapPoints={snapPoints}
-        onClose={onClose}
-        onChange={onSheetChange}
-        enablePanDownToClose
-        backdropComponent={() => (
-          <TouchableWithoutFeedback onPress={closeSheet} style={{ flex: 1 }}>
-            <View style={{ flex: 1, backgroundColor: colors.transparentModal }} />
-          </TouchableWithoutFeedback>
-        )}
+      <Screen
+        header={<Header leftIcon="x" onLeftPress={onClose} />}
+        contentContainerStyle={{
+          flex: 1,
+        }}
       >
         <SearchBar
           value={search}
           onChangeText={setSearch}
           containerStyle={{ marginVertical: 8, marginHorizontal: 16 }}
-          onFocus={showFullSheet}
         />
-        <BottomSheetFlatList
+        <FlatList
           data={items.filter(
             (i) =>
               !search.trim() ||
@@ -152,13 +123,7 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
             index,
           })}
         />
-      </BottomSheet>
-    </View>
-  ))
-
-  return (
-    <Modal transparent animationType="fade" visible={isOpen}>
-      <Content />
+      </Screen>
     </Modal>
   )
 }
