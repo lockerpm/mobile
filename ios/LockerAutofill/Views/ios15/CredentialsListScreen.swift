@@ -16,21 +16,37 @@ struct CredentialsListScreen: View {
   
   @State private var searchText = ""
   
+  var searchCredentials: [AutofillData] {
+    if searchText.isEmpty {
+      return credentials
+    } else {
+      let search = searchText.lowercased()
+      return credentials.filter {
+        $0.name.lowercased().contains(search)
+         || $0.uri.lowercased().contains(search)
+          || $0.username.lowercased().contains(search)
+      }
+    }
+  }
+  
   var body: some View {
     NavigationView{
       List {
-        ForEach(credentials, id: \.id) { credential in
-          CredentialItem(item: credential)
+        if !searchText.isEmpty && searchCredentials.isEmpty {
+          Text("Oops, looks like there's no data...")
+        } else {
+          ForEach(searchCredentials, id: \.id) { credential in
+             CredentialRow(item: credential)
+          }
         }
-      }
-      .onAppear{
+      } .onAppear{
         self.searchText = uri
       }
       .searchable(text: $searchText)
+      .autocapitalization(.none)
       .navigationTitle("Login List")
       .navigationBarTitleDisplayMode(.inline)
     }
-    
   }
 }
 
