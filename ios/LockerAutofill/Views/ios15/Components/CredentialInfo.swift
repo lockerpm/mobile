@@ -39,23 +39,27 @@ struct CredentialInfo: View {
           } label: {
               HStack {
                   Text(text)
+                  .multilineTextAlignment(.leading)
+                  .padding(.trailing, 40)
                   Spacer()
-                  if copied {
-                      Text("Copied")
-                          .foregroundStyle(.secondary)
-                          .transition(.opacity)
-                  } else {
-                      Image(systemName: "doc.on.doc.fill")
-                          .foregroundStyle(.secondary)
-                  }
+              }
+              .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
+              .background(RoundedRectangle(cornerRadius: 8).stroke(Color("border"), lineWidth: 1))
+              .overlay(alignment: .trailing){
+                if copied {
+                    Text("Copied")
+                        .foregroundStyle(.secondary)
+                        .transition(.opacity)
+                        .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
+                } else {
+                    Image(systemName: "doc.on.doc.fill")
+                        .foregroundStyle(.secondary)
+                        .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
                   
+                }
               }
               .foregroundColor(.primary)
-              .padding(.vertical, 12)
-              .padding(.horizontal, 16)
-              .background(RoundedRectangle(cornerRadius: 8).stroke(Color("border"), lineWidth: 1))
           }
-         
       }
       .padding(.top, -12)
   

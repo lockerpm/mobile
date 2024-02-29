@@ -32,12 +32,8 @@ class CredentialProviderController: ASCredentialProviderViewController {
 //    if (user.faceIdEnabled){
 //      authenService.biometricAuthentication(
 //        view: self,
-//        onSuccess: {
-//          self.navigateCredentialsList()
-//        },
-//        onFailed: {
-//          self.navigateLockScreen()
-//        }
+//        onSuccess: self.navigateCredentialsList,
+//        onFailed: self.navigateLockScreen
 //      )
 //    }
 //    else {
@@ -55,17 +51,15 @@ class CredentialProviderController: ASCredentialProviderViewController {
     if serviceIdentifiers.count > 0 {
       self.serviceIdentifier = serviceIdentifiers[0].identifier
       if serviceIdentifiers[0].type == .URL {
-        user.URI = URL(string: serviceIdentifier)?.host ?? ""
+        user.setUri(uri: URL(string: serviceIdentifier)?.host ?? "", isDomain: false)
       }
       else {
-        // domain
-        user.URI = serviceIdentifier
+        user.setUri(uri: serviceIdentifier, isDomain: true)
         self.serviceIdentifier = "https://" +  serviceIdentifier
       }
     } else {
       user.URI = ""
     }
-    
   }
   
   /**
@@ -101,8 +95,20 @@ class CredentialProviderController: ASCredentialProviderViewController {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
   }
   
+  private func loginLocker(){
+    if (!user.loginedLocker){
+      noti(contex: self, title: "Authentication", message:  "You must to login Locker befor using autofill service", completion: cancel)
+      quickTypeBar.removeAllCredentialIdentities() // remove all credentials in store
+    }
+  }
+}
+
+/**
+  Navigation
+ */
+extension CredentialProviderController {
   private func navigateCredentialsList() {
-    let credentialsListView = CredentialsListScreen(credentials: user.credentials, cancel: {self.cancel()}, onSelect: loginSelected, uri: user.URI)
+    let credentialsListView = CredentialsListScreen(credentials: user.credentials, cancel: cancel, onSelect: loginSelected, uri: user.URI)
     
     self.navigateView(view: credentialsListView)
   }
@@ -114,11 +120,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
       } else {
         self.completeRequest(user: self.quickBarCredential.username, password: self.quickBarCredential.password, otp: self.quickBarCredential.otp)
       }
-    }, navigateCredentialsList: {
-      self.navigateCredentialsList()
-    }, cancel: {
-      self.cancel()
-    })
+    }, onSelect: loginSelected, cancel: cancel)
     
     self.navigateView(view: lockView)
   }
@@ -129,7 +131,20 @@ class CredentialProviderController: ASCredentialProviderViewController {
     hostingController.isModalInPresentation = true
     self.present(hostingController, animated: true)
   }
+}
+
+/**
+ Autofill Actions
+ */
+extension CredentialProviderController {
+  func cancel() {
+    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
+  }
   
+  func loginSelected(data: AutofillData) {
+    quickTypeBar.replaceCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, username: data.username, userID: data.id)
+    completeRequest(user: data.username, password: data.password, otp: data.otp)
+  }
   
   private func completeRequest(user: String, password: String, otp: String){
     let passwordCredential = ASPasswordCredential(user: user, password: password)
@@ -141,24 +156,4 @@ class CredentialProviderController: ASCredentialProviderViewController {
     }
     self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
   }
-  
-  private func loginLocker(){
-    if (!user.loginedLocker){
-      noti(contex: self, title: "Authentication", message:  "You must to login Locker befor using autofill service", completion: cancel)
-      quickTypeBar.removeAllCredentialIdentities() // remove all credentials in store
-    }
-  }
-  
-  /*
-   Close service and return to app view
-   */
-  func cancel() {
-    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
-  }
-  
-  func loginSelected(data: AutofillData) {
-    quickTypeBar.replaceCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, username: data.username, userID: data.id)
-    completeRequest(user: data.username, password: data.password, otp: data.otp)
-  }
 }
-

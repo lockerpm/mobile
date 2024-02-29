@@ -39,23 +39,35 @@ class AutofillDataModel {
   }
 
   private func fetchAutofillData(text: String) {
-    var passwords: [String: [[String: Any]]] = [:]
+    var passwords:  [[String: Any]] = []
     let jsonData = Data(text.utf8)
     do {
       if let autofillData = try JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as? [String: Any] {
         if let passwordList = autofillData["passwords"] as? [[String: Any]] {
-          passwords["passwords"] = passwordList
-        }
-        if let deleteList = autofillData["deleted"] as? [[String: Any]] {
-          passwords["deleted"] = deleteList
-        }
-        if let authen = autofillData["authen"] as? [String: String] {
-          user.email = authen["email"]!
-          user.hashMassterPass = authen["hashPass"]!
-          user.avatar = authen["avatar"]
+          passwords = passwordList
         }
         if let faceIdEnabled = autofillData["faceIdEnabled"] as? Bool {
           user.faceIdEnabled = faceIdEnabled
+        }
+        if let language = autofillData["language"] as? String {
+          user.language = language
+        }
+        if let isDarkTheme  = autofillData["isDarkTheme"] as? Bool {
+          user.isDarkTheme = isDarkTheme
+        }
+        
+        if let email = autofillData["email"] as? String {
+          user.email = email
+        }
+        if let hashPass = autofillData["hashPass"] as? String {
+          user.hashMassterPass = hashPass
+        }
+        if let avatar  = autofillData["avatar"] as? String {
+          user.avatar = avatar
+        }
+        
+        if let isLoggedInPw  = autofillData["isLoggedInPw"] as? Bool {
+          user.isLoggedInPw = isLoggedInPw
         }
       }
       else {

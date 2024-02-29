@@ -40,6 +40,29 @@ struct AuthenService {
     }
   }
   
+  func biometricAuthentication(onSuccess: @escaping () -> Void, onFailed: @escaping () -> Void) {
+    let context = LAContext()
+    var error: NSError? = nil
+    
+    // check for device support biometric authen
+    if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+      let reason = translate("Please authorize with Touch Id")
+      
+      context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics,
+                             localizedReason: reason) {success, authenError in
+        DispatchQueue.main.async {
+          guard success, authenError == nil else {
+            //failed, can not use biometric for auth
+            onFailed()
+            return
+          }
+          //success
+          onSuccess()
+        }
+      }
+    }
+  }
+  
   func makeKeyHash(masterPassword: String, email: String) -> String{
     let key =  pbkdf2SHA256(password: masterPassword, salt: email, keyByteCount: KEY_BYTE_COUNT, rounds: DEFAULT_ROUNDS) ?? ""
 

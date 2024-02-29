@@ -16,9 +16,13 @@ class User {
   var hashMassterPass: String!
   var avatar: String!
   var URI: String!
+  var autofillMobileApp: Bool = false
   var credentials: [AutofillData] = []
+  var language: String = "vi"
+  var isDarkTheme: Bool = false
+  var isLoggedInPw: Bool = false
   
-  public func getAutofillDataById(id: String?) -> AutofillData? {
+  func getAutofillDataById(id: String?) -> AutofillData? {
     if id == nil {
       return nil
     }
@@ -29,13 +33,16 @@ class User {
     return nil
   }
   
-  func setAutofillData(_ passwords: [String: [[String: Any]]]){
-    // reset data
+  func setUri(uri: String, isDomain: Bool) {
+    self.URI = uri
+    self.autofillMobileApp = isDomain
+  }
+  
+  func setAutofillData(_ passwords: [[String: Any]]){
     self.credentials = []
   
-    if passwords["passwords"] != nil {
-      for (index, item) in passwords["passwords"]!.enumerated() {
-
+    if !passwords.isEmpty {
+      for (index, item) in passwords.enumerated() {
         let credential = AutofillData(fillID: index,
                                       name: (item["name"] as? String)!,
                                       id: (item["id"] as? String)!,

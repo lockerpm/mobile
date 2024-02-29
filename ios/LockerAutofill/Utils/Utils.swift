@@ -8,6 +8,14 @@
 import Foundation
 import UIKit
 
+func parseDomain(domain: String) -> [String] {
+  let meaninglessSearch = ["com", "net", "app", "package", "www"]
+  let words: [String] = domain.components(separatedBy: ".").filter{ word in
+      (word.count >= 3 && !meaninglessSearch.contains(word))
+    }
+  // Remove meaning less word, length < 3
+  return []
+}
 
 func getStringInfo(key: String) -> String {
   let a = Bundle.main.object(forInfoDictionaryKey: key) as? String

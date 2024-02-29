@@ -15,6 +15,8 @@ struct CredentialsListScreen: View {
   
   
   @State private var searchText = ""
+  @State private var isShowItemDetailId = -1
+  
   
   var searchCredentials: [AutofillData] {
     if searchText.isEmpty {
@@ -33,10 +35,14 @@ struct CredentialsListScreen: View {
     NavigationView{
       List {
         if !searchText.isEmpty && searchCredentials.isEmpty {
-          Text("Oops, looks like there's no data...")
+          Text("Oops, looks like there's no data match '\(searchText)'")
         } else {
           ForEach(searchCredentials, id: \.id) { credential in
-             CredentialRow(item: credential)
+              Button {
+                onSelect(credential)
+              } label: {
+                CredentialItem(item: credential, isShowDetailId: $isShowItemDetailId)
+            }
           }
         }
       } .onAppear{
@@ -45,8 +51,17 @@ struct CredentialsListScreen: View {
       .searchable(text: $searchText)
       .autocapitalization(.none)
       .navigationTitle("Login List")
+      .toolbar {
+        ToolbarItem(placement: .navigationBarLeading) {
+          Button("Cancel") {
+            cancel()
+          }
+        }
+      }
       .navigationBarTitleDisplayMode(.inline)
     }
+    .navigationBarHidden(true)
+    .navigationBarBackButtonHidden()
   }
 }
 

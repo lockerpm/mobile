@@ -12,7 +12,7 @@ struct MasterPasswordInput: View {
     @FocusState private var focusedField: Bool
     @State private var isSecure: Bool = true
     
-    var titleKey = "User name (email address)"
+    var titleKey = "Master password"
     var body: some View {
         HStack {
             Group{
@@ -21,11 +21,15 @@ struct MasterPasswordInput: View {
                    
                }else{
                    TextField(titleKey, text: $masterPassword)
+                  
                }
-           }
+            }
             .focused($focusedField)
             .textInputAutocapitalization(.never)
             .disableAutocorrection(true)
+            .onAppear {
+              focusedField = true
+            }
            
             Button(action: {
                 isSecure.toggle()
