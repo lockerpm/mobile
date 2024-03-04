@@ -76,6 +76,7 @@ class AutofillDataModel {
     } catch {
       print(error.localizedDescription)
     }
+    print(passwords)
     user.setAutofillData(passwords)
   }
 }

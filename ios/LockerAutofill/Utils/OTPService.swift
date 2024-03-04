@@ -28,13 +28,10 @@ struct OTPService {
     return queryItems?.filter({$0.name == query}).first?.value ?? ""
   }
 
-  func getOTPFromUri(uri: String) -> String {
-    if uri.isEmpty {
-      return ""
-    }
+  func getOTPFromUri(uri: String) -> TOTP {
     if !uri.contains("/") {
-      let totp = TOTP(secret: Data(base32Decode(uri)!), digits: 6, timeInterval: 30, algorithm: .sha1)
-      return totp?.generate(time: Date()) ?? ""
+      let totp = TOTP(secret: Data(base32Decode(uri)!), digits: 6, timeInterval: 30, algorithm: .sha1)!
+      return totp
     }
     
     let secret: String = getQueryParamValue(uri: uri, query: "secret")
@@ -42,9 +39,9 @@ struct OTPService {
     let timeInterval: Int = Int(getQueryParamValue(uri: uri, query: "period")) ?? 30
     let digits: Int = Int(getQueryParamValue(uri: uri, query: "digits")) ?? 6
     
-    let totp = TOTP(secret: Data(base32Decode(secret)!), digits: digits, timeInterval: timeInterval, algorithm: algorithm)
-    
-    return totp?.generate(time: Date()) ?? ""
+    let totp = TOTP(secret: Data(base32Decode(secret)!), digits: digits, timeInterval: timeInterval, algorithm: algorithm)!
+  
+    return totp
   }
 
 }

@@ -13,13 +13,13 @@ import UIKit
 let authenService = AuthenService()
 
 struct AuthenService {
-  func biometricAuthentication(view: UIViewController, onSuccess: @escaping () -> Void, onFailed: @escaping () -> Void) {
+  func biometricAuthentication(view: UIViewController, onSuccess: @escaping () -> Void, onFailed: @escaping () -> Void, notSupported: @escaping () -> Void ) {
     let context = LAContext()
     var error: NSError? = nil
     
     // check for device support biometric authen
     if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-      let reason = translate("Please authorize with Touch Id")
+      let reason = i.translate("utils.touchID")
       
       context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics,
                              localizedReason: reason) {success, authenError in
@@ -35,7 +35,7 @@ struct AuthenService {
       }
     } else {
       // can not use biometric for auth
-      noti(contex: view, title: translate("Biometry is Unvaliable"), message: translate("Your device is not configured for biometric authentication"),  completion: onFailed)
+      noti(contex: view, title: i.translate("utils.disableBiometric"), message: i.translate("utils.unconfigBiometric"),  completion: notSupported)
       
     }
   }
@@ -46,7 +46,7 @@ struct AuthenService {
     
     // check for device support biometric authen
     if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-      let reason = translate("Please authorize with Touch Id")
+      let reason = i.translate("utils.touchID")
       
       context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics,
                              localizedReason: reason) {success, authenError in

@@ -38,6 +38,8 @@ class User {
     self.autofillMobileApp = isDomain
   }
   
+
+  
   func setAutofillData(_ passwords: [[String: Any]]){
     self.credentials = []
   

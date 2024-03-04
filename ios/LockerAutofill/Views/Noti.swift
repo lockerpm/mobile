@@ -10,7 +10,7 @@ import UIKit
 
 func noti(contex: UIViewController ,title: String, message: String, completion: (() -> Void)? = nil) -> Void {
   let log = {() -> () in print(message)}
-  let alert = UIAlertController(title: translate(title), message: translate(message), preferredStyle: UIAlertController.Style.alert)
+  let alert = UIAlertController(title: i.translate(title), message: i.translate(message), preferredStyle: UIAlertController.Style.alert)
   
   alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action: UIAlertAction!) in
     (completion ?? log)()

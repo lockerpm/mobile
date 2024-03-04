@@ -21,9 +21,10 @@
 		7C1F2A402B8C7FA10003B7EF /* MasterPasswordInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A3F2B8C7FA10003B7EF /* MasterPasswordInput.swift */; };
 		7C1F2A662B8CB7330003B7EF /* CredentialInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A652B8CB7330003B7EF /* CredentialInfo.swift */; };
 		7C1F2A682B9026370003B7EF /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7C1F2A672B9026370003B7EF /* CachedAsyncImage */; };
-		7C1F2A6A2B907B150003B7EF /* CredentialDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A692B907B140003B7EF /* CredentialDetail.swift */; };
 		7C1F2A6C2B907BDA0003B7EF /* PasswordImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A6B2B907BDA0003B7EF /* PasswordImage.swift */; };
 		7C1F2A6E2B90873A0003B7EF /* CredentialItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A6D2B90873A0003B7EF /* CredentialItem.swift */; };
+		7C1F2A772B91BB940003B7EF /* TOTPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A762B91BB940003B7EF /* TOTPView.swift */; };
+		7C1F2A792B91CB000003B7EF /* en.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C1F2A782B91CB000003B7EF /* en.strings */; };
 		7C3914012B870A2800213EEB /* CredentialsQuickTypeBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3914002B870A2800213EEB /* CredentialsQuickTypeBar.swift */; };
 		7C3914052B87149900213EEB /* OTPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3914042B87149900213EEB /* OTPService.swift */; };
 		7C3914072B872A5900213EEB /* AuthenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3914062B872A5900213EEB /* AuthenService.swift */; };
@@ -40,7 +41,7 @@
 		7C973A492A93055500875FBA /* LockerAutofill.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7C973A3C2A93055500875FBA /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7C973A512A93068F00875FBA /* AutofillData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A502A93068F00875FBA /* AutofillData.swift */; };
 		7C973A532A9306A700875FBA /* AutofillDataKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A522A9306A700875FBA /* AutofillDataKeychain.swift */; };
-		7C973A5B2A93075E00875FBA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A572A93075E00875FBA /* Localizable.strings */; };
+		7C973A5B2A93075E00875FBA /* vi.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A572A93075E00875FBA /* vi.strings */; };
 		7C973A5D2A93075E00875FBA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A592A93075E00875FBA /* Utils.swift */; };
 		7CEB31E22A9309D9007F6051 /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CEB31E12A9309D9007F6051 /* assets.xcassets */; };
 		7CEB31E92A931B50007F6051 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEB31E82A931B50007F6051 /* KeychainAccess */; };
@@ -121,9 +122,10 @@
 		7C1F2A3D2B8C7F990003B7EF /* UserAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatar.swift; sourceTree = "<group>"; };
 		7C1F2A3F2B8C7FA10003B7EF /* MasterPasswordInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterPasswordInput.swift; sourceTree = "<group>"; };
 		7C1F2A652B8CB7330003B7EF /* CredentialInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialInfo.swift; sourceTree = "<group>"; };
-		7C1F2A692B907B140003B7EF /* CredentialDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialDetail.swift; sourceTree = "<group>"; };
 		7C1F2A6B2B907BDA0003B7EF /* PasswordImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordImage.swift; sourceTree = "<group>"; };
 		7C1F2A6D2B90873A0003B7EF /* CredentialItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialItem.swift; sourceTree = "<group>"; };
+		7C1F2A762B91BB940003B7EF /* TOTPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOTPView.swift; sourceTree = "<group>"; };
+		7C1F2A782B91CB000003B7EF /* en.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = en.strings; sourceTree = "<group>"; };
 		7C3914002B870A2800213EEB /* CredentialsQuickTypeBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsQuickTypeBar.swift; sourceTree = "<group>"; };
 		7C3914042B87149900213EEB /* OTPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPService.swift; sourceTree = "<group>"; };
 		7C3914062B872A5900213EEB /* AuthenService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenService.swift; sourceTree = "<group>"; };
@@ -144,7 +146,7 @@
 		7C973A502A93068F00875FBA /* AutofillData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillData.swift; sourceTree = "<group>"; };
 		7C973A522A9306A700875FBA /* AutofillDataKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillDataKeychain.swift; sourceTree = "<group>"; };
 		7C973A552A93072700875FBA /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
-		7C973A572A93075E00875FBA /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		7C973A572A93075E00875FBA /* vi.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = vi.strings; sourceTree = "<group>"; };
 		7C973A592A93075E00875FBA /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		7CEB31E12A9309D9007F6051 /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7CEB31EF2A932780007F6051 /* RSAUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAUtils.swift; sourceTree = "<group>"; };
@@ -276,6 +278,7 @@
 				7C1F2A652B8CB7330003B7EF /* CredentialInfo.swift */,
 				7C1F2A6B2B907BDA0003B7EF /* PasswordImage.swift */,
 				7C1F2A6D2B90873A0003B7EF /* CredentialItem.swift */,
+				7C1F2A762B91BB940003B7EF /* TOTPView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -286,22 +289,15 @@
 				7C1F2A3C2B8C7F820003B7EF /* Components */,
 				7C3914102B87338E00213EEB /* LockScreen.swift */,
 				7C3914122B8737DC00213EEB /* CredentialsListScreen.swift */,
-				7C1F2A692B907B140003B7EF /* CredentialDetail.swift */,
 			);
 			path = ios15;
-			sourceTree = "<group>";
-		};
-		7C1F2A422B8C87DC0003B7EF /* ios13 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ios13;
 			sourceTree = "<group>";
 		};
 		7C3914082B872B6700213EEB /* Localize */ = {
 			isa = PBXGroup;
 			children = (
-				7C973A572A93075E00875FBA /* Localizable.strings */,
+				7C973A572A93075E00875FBA /* vi.strings */,
+				7C1F2A782B91CB000003B7EF /* en.strings */,
 				7C3914092B872CB800213EEB /* translate.swift */,
 			);
 			path = Localize;
@@ -357,7 +353,6 @@
 		7C973A5F2A93078B00875FBA /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				7C1F2A422B8C87DC0003B7EF /* ios13 */,
 				7C1F2A412B8C87C80003B7EF /* ios15 */,
 				7C39140B2B872CFE00213EEB /* Noti.swift */,
 			);
@@ -610,8 +605,9 @@
 			files = (
 				7CEB31EC2A932665007F6051 /* Config.xcconfig in Resources */,
 				7C973A442A93055500875FBA /* MainInterface.storyboard in Resources */,
-				7C973A5B2A93075E00875FBA /* Localizable.strings in Resources */,
+				7C973A5B2A93075E00875FBA /* vi.strings in Resources */,
 				7CEB31E22A9309D9007F6051 /* assets.xcassets in Resources */,
+				7C1F2A792B91CB000003B7EF /* en.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,7 +825,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C1F2A6A2B907B150003B7EF /* CredentialDetail.swift in Sources */,
 				7C1F2A3E2B8C7F990003B7EF /* UserAvatar.swift in Sources */,
 				7C1F2A6C2B907BDA0003B7EF /* PasswordImage.swift in Sources */,
 				7C3914132B8737DC00213EEB /* CredentialsListScreen.swift in Sources */,
@@ -839,6 +834,7 @@
 				7C1F2A662B8CB7330003B7EF /* CredentialInfo.swift in Sources */,
 				7C973A532A9306A700875FBA /* AutofillDataKeychain.swift in Sources */,
 				7C973A412A93055500875FBA /* CredentialProviderViewController.swift in Sources */,
+				7C1F2A772B91BB940003B7EF /* TOTPView.swift in Sources */,
 				7C1F2A6E2B90873A0003B7EF /* CredentialItem.swift in Sources */,
 				7C973A512A93068F00875FBA /* AutofillData.swift in Sources */,
 				7C39140F2B87321900213EEB /* User.swift in Sources */,
@@ -942,7 +938,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 163;
+				CURRENT_PROJECT_VERSION = 165;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
@@ -954,7 +950,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.50;
+				MARKETING_VERSION = 1.51;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -982,7 +978,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 163;
+				CURRENT_PROJECT_VERSION = 165;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -993,7 +989,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.50;
+				MARKETING_VERSION = 1.51;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

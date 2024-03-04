@@ -24,21 +24,31 @@ class CredentialProviderController: ASCredentialProviderViewController {
     super.init(coder: coder)
     self.user = User()
     self.dataModel = AutofillDataModel(self.user)
+    i.locale = user.language
   }
   
   override func viewDidAppear(_ animated: Bool) {
-    self.view.backgroundColor = UIColor(named: "background")
-    self.navigateCredentialsList()
-//    if (user.faceIdEnabled){
-//      authenService.biometricAuthentication(
-//        view: self,
-//        onSuccess: self.navigateCredentialsList,
-//        onFailed: self.navigateLockScreen
-//      )
-//    }
-//    else {
-//      self.navigateLockScreen()
-//    }
+//    self.view.backgroundColor = UIColor(named: "background")
+    if (user.faceIdEnabled){
+      authenService.biometricAuthentication(
+        view: self,
+        onSuccess: {
+          if (self.quickBarCredential == nil) {
+            self.navigateCredentialsList()
+          } else {
+            self.loginSelected(data: self.quickBarCredential)
+          }
+        },
+        onFailed: self.navigateLockScreen,
+        notSupported: {
+          self.user.faceIdEnabled = false
+          self.navigateLockScreen()
+        }
+      )
+    }
+    else {
+      self.navigateLockScreen()
+    }
   }
  
   /*
@@ -97,7 +107,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   
   private func loginLocker(){
     if (!user.loginedLocker){
-      noti(contex: self, title: "Authentication", message:  "You must to login Locker befor using autofill service", completion: cancel)
+      noti(contex: self, title: "noti.authen", message:  "noti.loginLocker", completion: cancel)
       quickTypeBar.removeAllCredentialIdentities() // remove all credentials in store
     }
   }
@@ -114,13 +124,7 @@ extension CredentialProviderController {
   }
   
   private func navigateLockScreen() {
-    let lockView = LockScreen(user: self.user, quickBar: self.quickBar, autofillQuickTypeBar: {
-      if (self.quickBarCredential == nil) {
-          self.navigateCredentialsList()
-      } else {
-        self.completeRequest(user: self.quickBarCredential.username, password: self.quickBarCredential.password, otp: self.quickBarCredential.otp)
-      }
-    }, onSelect: loginSelected, cancel: cancel)
+    let lockView = LockScreen(user: self.user, quickBar: self.quickBar, onSelect: loginSelected, cancel: cancel, quickBarCredential: self.quickBarCredential)
     
     self.navigateView(view: lockView)
   }
@@ -149,7 +153,7 @@ extension CredentialProviderController {
   private func completeRequest(user: String, password: String, otp: String){
     let passwordCredential = ASPasswordCredential(user: user, password: password)
     if (!otp.isEmpty) {
-      let otpString = otpService.getOTPFromUri(uri: otp)
+      let otpString = otpService.getOTPFromUri(uri: otp).generate(time: Date()) ?? ""
       if (!otpString.isEmpty) {
         UIPasteboard.general.string = otpString
       }

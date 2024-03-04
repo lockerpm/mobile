@@ -7,22 +7,30 @@
 
 import Foundation
 
+var i = Localized()
 
-func translate(_ key: String) -> String {
-  return key.locolized()
+struct Localized {
+  var locale: String!
+  func translate(_ key: String) -> String {
+    return key.localized(self.locale ?? "en")
+  }
 }
 
 extension String {
-  func locolized() -> String {
-    let locale = NSLocale.current.languageCode
+  func localized(_ locale: String) -> String {
     if ( locale == "vi") {
       return NSLocalizedString(
         self,
-        tableName: "Localizable",
+        tableName: "vi",
         bundle: .main,
         value: self,
         comment: self)
     }
-    return self
+    return NSLocalizedString(
+      self,
+      tableName: "en",
+      bundle: .main,
+      value: self,
+      comment: self)
   }
 }

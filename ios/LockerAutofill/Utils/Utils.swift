@@ -8,14 +8,38 @@
 import Foundation
 import UIKit
 
-func parseDomain(domain: String) -> [String] {
+
+func parseDomain(of domain: String) -> [String] {
   let meaninglessSearch = ["com", "net", "app", "package", "www"]
-  let words: [String] = domain.components(separatedBy: ".").filter{ word in
-      (word.count >= 3 && !meaninglessSearch.contains(word))
-    }
+  
   // Remove meaning less word, length < 3
-  return []
+  let words: [String] = domain.components(separatedBy: ".").filter{ word in
+    (word.count >= 3 && !meaninglessSearch.contains(word))
+  }
+  
+  if words.isEmpty {
+      return []
+  }
+  
+  var result: [[String]] = []
+  for start in 0..<words.count {
+    for end in start+1...words.count {
+      let subarray = Array(words[start..<end])
+      result.append(subarray)
+    }
+  }
+  
+  // sort to move search Domain to top of array
+  let searchDomain = words.joined(separator: ".")
+  return result.map {$0.joined(separator: ".")}.sorted{ (first, second) -> Bool in
+    if first == searchDomain {
+      return true
+    } else {
+      return first < second
+    }
+  }
 }
+
 
 func getStringInfo(key: String) -> String {
   let a = Bundle.main.object(forInfoDictionaryKey: key) as? String

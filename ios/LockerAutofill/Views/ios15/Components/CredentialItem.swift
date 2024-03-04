@@ -12,7 +12,7 @@ struct CredentialItem: View {
   @Binding var isShowDetailId: Int
   
   var isShowDetail: Bool {
-    isShowDetailId == item.fillID
+      isShowDetailId == item.fillID
   }
   
   var body: some View {
@@ -27,24 +27,20 @@ struct CredentialItem: View {
              .foregroundStyle(.secondary)
          }
          Spacer()
-        
-        
-        Image(systemName: "ellipsis")
+
+        Image(systemName: isShowDetail ? "chevron.down" : "chevron.right")
+          .onTapGesture {
+              if isShowDetail {
+                isShowDetailId = -1
+              } else {
+                isShowDetailId = item.fillID
+              }
+          }
+          .foregroundColor(.secondary)
           .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 0))
-         .onTapGesture {
-           if isShowDetail {
-             isShowDetailId = -1
-           } else {
-             isShowDetailId = item.fillID
-           }
-         }
        }
     }
     
-    if isShowDetail {
-      CredentialInfo(label: "Username or email", text: item.username, isCopydable: true)
-      CredentialInfo(label: "Password", text: item.password, isCopydable: true)
-      CredentialInfo(label: "Url", text: item.uri, isCopydable: false)
-    }
+  
   }
 }
