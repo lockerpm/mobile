@@ -37,9 +37,26 @@ export const AutofillServiceEnabled: (
   return RNAutofillServiceAndroid.isAutofillServiceActived(callback)
 }
 
-export const parseSearchText = (bundle: string) => {
-  if (!bundle) return ""
-  const meaninglessSearch = ["com", "net", "app", "package", "io", "www"]
-  const _sp = bundle.trim().split(".")
-  return _sp.filter((e) => !meaninglessSearch.includes(e)).join(" ")
+export const parseSearchText: (bundle: string) => string[] = (bundle) => {
+  if (!bundle) return []
+  const meaninglessSearch = ["com", "net", "app", "package", "www"]
+  const words: string[] = bundle
+    .trim()
+    .split(".")
+    .filter((word) => word.length >= 3 && !meaninglessSearch.includes(word))
+
+  if (words.length === 0) return []
+
+  const results: string[] = []
+  for (let i = 0; i < words.length; i++) {
+    for (let j = i + 1; j <= words.length; j++) {
+      const subarray = words.slice(i, j).join(".")
+      results.push(subarray)
+    }
+  }
+  results.sort((a, b) => {
+    return a.length > b.length ? -1 : 1
+  })
+
+  return results
 }

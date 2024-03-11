@@ -20,7 +20,7 @@ export interface SearchBarProps extends TextInputProps {
 }
 
 export const SearchBar = (props: SearchBarProps) => {
-  const { containerStyle, label, ...textInputProps } = props
+  const { containerStyle, label, value, onChangeText, ...textInputProps } = props
   const { colors } = useTheme()
 
   const CONTAINER: StyleProp<ViewStyle> = [
@@ -41,8 +41,8 @@ export const SearchBar = (props: SearchBarProps) => {
         <Icon
           testID="searchBar.icon"
           icon="magnifying-glass"
-          size={16}
-          color={colors.primaryText}
+          size={20}
+          color={colors.secondaryText}
         />
       )}
       <Text text={label} color={colors.primaryText} />
@@ -58,8 +58,21 @@ export const SearchBar = (props: SearchBarProps) => {
           fontSize: 16,
           color: colors.primaryText,
         }}
+        value={value}
+        onChangeText={onChangeText}
         {...textInputProps}
       />
+      {!!value && (
+        <Icon
+          filled
+          icon="x-circle"
+          size={20}
+          color={colors.secondaryText}
+          onPress={() => {
+            onChangeText && onChangeText("")
+          }}
+        />
+      )}
     </View>
   )
 }

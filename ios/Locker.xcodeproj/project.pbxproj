@@ -283,16 +283,6 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		7C1F2A412B8C87C80003B7EF /* ios15 */ = {
-			isa = PBXGroup;
-			children = (
-				7C1F2A3C2B8C7F820003B7EF /* Components */,
-				7C3914102B87338E00213EEB /* LockScreen.swift */,
-				7C3914122B8737DC00213EEB /* CredentialsListScreen.swift */,
-			);
-			path = ios15;
-			sourceTree = "<group>";
-		};
 		7C3914082B872B6700213EEB /* Localize */ = {
 			isa = PBXGroup;
 			children = (
@@ -353,7 +343,9 @@
 		7C973A5F2A93078B00875FBA /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				7C1F2A412B8C87C80003B7EF /* ios15 */,
+				7C1F2A3C2B8C7F820003B7EF /* Components */,
+				7C3914102B87338E00213EEB /* LockScreen.swift */,
+				7C3914122B8737DC00213EEB /* CredentialsListScreen.swift */,
 				7C39140B2B872CFE00213EEB /* Noti.swift */,
 			);
 			path = Views;

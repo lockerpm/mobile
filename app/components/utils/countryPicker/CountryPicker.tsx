@@ -30,7 +30,6 @@ interface Props {
 
 export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) => {
   const { colors } = useTheme()
-
   const [search, setSearch] = useState("")
 
   const items = Object.keys(Countries).map((code) => {
@@ -85,7 +84,6 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
       animationIn="slideInUp"
       isVisible={isOpen}
       onBackdropPress={onClose}
-      statusBarTranslucent
       style={{
         margin: 0,
       }}
@@ -94,6 +92,7 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
       }}
     >
       <Screen
+        safeAreaEdges={["top"]}
         header={<Header leftIcon="x" onLeftPress={onClose} />}
         contentContainerStyle={{
           flex: 1,

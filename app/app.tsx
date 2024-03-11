@@ -3,41 +3,40 @@ if (__DEV__) {
   // Load Reactotron configuration in development. We don't want to
   // include this in our production bundle, so we are using `if (__DEV__)`
   // to only execute this in development.
-  require('./devtools/ReactotronConfig.ts')
+  require("./devtools/ReactotronConfig.ts")
 }
-import './i18n'
-import './utils/ignoreWarnings'
-import React, { ComponentType, useRef } from 'react'
-import { NavigationContainerRef } from '@react-navigation/native'
-import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context'
-import { useInitialRootStore } from './models'
+import "./i18n"
+import "./utils/ignoreWarnings"
+import React, { ComponentType, useRef } from "react"
+import { NavigationContainerRef } from "@react-navigation/native"
+import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
+import { useInitialRootStore } from "./models"
 import {
   useBackButtonHandler,
   RootNavigator,
   canExit,
   setRootNavigation,
   useNavigationPersistence,
-} from './navigators'
-import * as storage from './utils/storage'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { StyleSheet } from 'react-native'
-import * as Tracking from './utils/tracking'
-import * as Sentry from '@sentry/react-native'
-import SystemNavigationBar from 'react-native-system-navigation-bar'
+} from "./navigators"
+import * as storage from "./utils/storage"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { StyleSheet } from "react-native"
+import * as Tracking from "./utils/tracking"
+import * as Sentry from "@sentry/react-native"
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
-import { enableScreens } from 'react-native-screens'
-import { ApiResponse } from 'apisauce'
-import { getGeneralApiProblem } from './services/api/apiProblem'
-import { Settings } from 'react-native-fbsdk-next'
-import { Logger } from 'app/utils/utils'
-import { AppEventType, EventBus } from './utils/eventBus'
-import { api } from './services/api'
-import { ThemeContextProvider } from './services/context/useTheme'
-import CombineContext from './services/context/useCombineContext'
-import { IS_IOS } from './config/constants'
-import { AndroidAutofillServiceType } from './utils/autofillHelper'
+import { enableScreens } from "react-native-screens"
+import { ApiResponse } from "apisauce"
+import { getGeneralApiProblem } from "./services/api/apiProblem"
+import { Settings } from "react-native-fbsdk-next"
+import { Logger } from "app/utils/utils"
+import { AppEventType, EventBus } from "./utils/eventBus"
+import { api } from "./services/api"
+import { ThemeContextProvider } from "./services/context/useTheme"
+import CombineContext from "./services/context/useCombineContext"
+import { IS_IOS } from "./config/constants"
+import { AndroidAutofillServiceType } from "./utils/autofillHelper"
 
 enableScreens()
 Settings.initializeSDK()
@@ -46,7 +45,7 @@ Tracking.initAppFlyer()
 
 // setup({ storekitMode: 'STOREKIT2_MODE' });
 
-export const NAVIGATION_PERSISTENCE_KEY = 'NAVIGATION_STATE'
+export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 export interface RootProp extends JSX.IntrinsicAttributes {
   lastFill?: number
@@ -99,9 +98,9 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
     }
 
     if (problem) {
-      if (problem.kind === 'unauthorized') {
-        const ignoredUrls = ['/users/logout', '/sso/auth']
-        const ignoredRoute = ['init', 'intro', 'onBoarding', 'login', 'forgotPassword', 'signup']
+      if (problem.kind === "unauthorized") {
+        const ignoredUrls = ["/users/logout", "/sso/auth"]
+        const ignoredRoute = ["init", "intro", "onBoarding", "login", "forgotPassword", "signup"]
         const currentRoute = navigationRef.current.getCurrentRoute()
 
         if (
@@ -119,7 +118,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
           // Close all modals before navigate
           EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
           if (navigationRef.current) {
-            navigationRef.current.navigate('init')
+            navigationRef.current.navigate("init")
           }
         }
       }
@@ -128,7 +127,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
   const monitorApiRequest = (request) => async () => {
     Logger.debug(
       `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
-        request.params ? JSON.stringify(request.params) : ''
+        request.params ? JSON.stringify(request.params) : ""
       }`
     )
   }
@@ -164,8 +163,6 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
     }
   }
 
-  SystemNavigationBar.fullScreen(false)
-  SystemNavigationBar.setNavigationColor('transparent')
   // otherwise, we're ready to render the app
   return (
     <GestureHandlerRootView style={$style.container}>
