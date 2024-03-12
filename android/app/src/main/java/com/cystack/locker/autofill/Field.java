@@ -5,10 +5,7 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.autofill.AutofillId;
-import android.view.View;
 import androidx.annotation.RequiresApi;
-
-import java.io.Serializable;
 
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -17,20 +14,29 @@ public class Field implements Parcelable {
     public static final int FILL_TYPE_EMAIL = 1;
     public static final int FILL_TYPE_USERNAME = 2;
     public static final int FILL_TYPE_PASSWORD = 3;
+    public static final int FILL_TYPE_UNKNOW= 4;
 
     public int fillType = FILL_TYPE_NONE;
     public AutofillId autofillId;
     public String hint;
+    public String idHint;
     public String[] hints;
+
+    public String idEntry;
     public String entry;
     public String text;
+
     public int inputType;
     public int autofillType;
 
     public Field(AssistStructure.ViewNode node) {
         this.autofillId = node.getAutofillId();
         this.hint = node.getHint();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            this.idHint = node.getHintIdEntry();
+        }
         this.entry = node.getIdEntry();
+        this.idEntry = node.getIdEntry();
         if (node.getText() != null) {
             this.text = node.getText().toString();
         }
@@ -43,8 +49,10 @@ public class Field implements Parcelable {
         fillType = in.readInt();
         autofillId = in.readParcelable(AutofillId.class.getClassLoader());
         hint = in.readString();
+        idHint = in.readString();
         hints = in.createStringArray();
         entry = in.readString();
+        idEntry = in.readString();
         text = in.readString();
         inputType = in.readInt();
         autofillType = in.readInt();
@@ -72,8 +80,10 @@ public class Field implements Parcelable {
         dest.writeInt(fillType);
         dest.writeParcelable(autofillId, flags);
         dest.writeString(hint);
+        dest.writeString(idHint);
         dest.writeStringArray(hints);
         dest.writeString(entry);
+        dest.writeString(idEntry);
         dest.writeString(text);
         dest.writeInt(inputType);
         dest.writeInt(autofillType);

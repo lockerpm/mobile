@@ -68,7 +68,9 @@ public class Parser {
         boolean isInputTag = node.getHtmlInfo() != null && node.getHtmlInfo().getTag().equals("input");
 
         if (isEditText || isInputTag || haveAutofillHints) {
+            Field a = new  Field(node);
             fieldParser.addField(new Field(node));
+            Log.d(TAG + "---", a.toString());
         }
         for (int i = 0; i < node.getChildCount(); i++)
         {

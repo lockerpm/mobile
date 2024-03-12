@@ -1,14 +1,10 @@
 package com.cystack.locker.autofill.parser;
 
-import android.app.assist.AssistStructure;
 import android.os.Build;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.autofill.AutofillId;
 
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
@@ -36,32 +32,39 @@ public class FieldParser {
                     "tìm kiếm"
             )
     );
-    public HashSet<String> passwordTerms = new HashSet<String>(
+    private HashSet<String> passwordTerms = new HashSet<String>(
             Arrays.asList("password",
                     "pswd",
-                    "pw",
+                    "pwd",
                     "mật Khẩu",
+                    "pass",
                     "Mật "
+            )
+    );
+
+    public HashSet<String> usernameTerms = new HashSet<String>(
+            Arrays.asList("username",
+                    "login",
+                    "id",
+                    "tên đăng nhập"
+            )
+    );
+    public HashSet<String> emailTerms = new HashSet<String>(
+            Arrays.asList("email",
+                    "address"
             )
     );
 
 
     @Nullable
     public List<Field> getFillableItem(){
-        // add some heuristics
         if (fillable.size() == 0) {
+            Log.d(TAG, "Not found any fill-able field");
             return null;
         }
-
-        if (fields.size() == 1) {
-            if (fields.get(0).fillType != Field.FILL_TYPE_PASSWORD) {
-                return null;
-            } else
-                return fields;
-        }
-
-        return parseLoginField(fillable);
+        return fillable;
     }
+
     
     public void addField(Field field){
         if (field.autofillType != View.AUTOFILL_TYPE_NONE) {
@@ -69,6 +72,7 @@ public class FieldParser {
         }
     }
     public void parser() {
+        List<Field> unknowType = new ArrayList<>();
         for (Field field: fields){
             // parse by hint
             String hint = parseHint(field);
@@ -86,24 +90,43 @@ public class FieldParser {
                 }
                 fillable.add(field);
                 autofillIds.add(field.autofillId.toString());
-            }
-
-            // parse inputType
-            boolean isPasswordField = parseInputType(field);
-            if (isPasswordField){
-                if (!autofillIds.contains(field.autofillId.toString())){
-                    field.fillType = Field.FILL_TYPE_PASSWORD;
-                    fillable.add(field);
+            } else {
+                // parse inputType
+                boolean isPasswordField = parseInputType(field);
+                if (isPasswordField) {
+                    if (!autofillIds.contains(field.autofillId.toString())) {
+                        field.fillType = Field.FILL_TYPE_PASSWORD;
+                        fillable.add(field);
+                    }
+                } else {
+                    field.fillType = Field.FILL_TYPE_UNKNOW;
+                    unknowType.add(field);
                 }
+            }
+        }
+        // If there is only 1 fillable item in the list and the type is Fill.FILL_TYPE PASSWORD
+        // and if there is only 1 item in the list the type is unknown
+        // Then make item default type Field.FILL_TYPE_USERNAME;
+        if (fillable.size() == 1 && fillable.get(0).fillType == Field.FILL_TYPE_PASSWORD) {
+            if (unknowType.size() == 1) {
+                Field field = unknowType.get(0);
+                field.fillType = Field.FILL_TYPE_USERNAME;
+                fillable.add(field);
             }
         }
     }
 
+    /**
+     * Analyze login patterns by finding username and password fields in the field list
+     * @param fields
+     * @return
+     */
     private List<Field> parseLoginField(List<Field> fields) {
         int size = fields.size();
         List<Field> loginField = new ArrayList<>();
         for (int i = 0 ; i < size; i++ ){
             int fillType = fields.get(i).fillType;
+            Log.d(TAG, "field type "+ fillType);
             if (fillType == Field.FILL_TYPE_EMAIL || fillType == Field.FILL_TYPE_USERNAME) {
                 loginField.add(fields.get(i));
                 if ( i == size - 1) {
@@ -118,7 +141,7 @@ public class FieldParser {
                 }
           }
         }
-        return null;
+        return loginField;
     }
 
     private boolean parseInputType(Field field) {
@@ -128,11 +151,9 @@ public class FieldParser {
         if ((type & InputType.TYPE_TEXT_VARIATION_PASSWORD) == InputType.TYPE_TEXT_VARIATION_PASSWORD){
             if ((type & InputType.TYPE_TEXT_FLAG_MULTI_LINE) == InputType.TYPE_TEXT_FLAG_MULTI_LINE) {
                 inputTypePassword = false;
-
             } else {
                 inputTypePassword = true;
             }
-
         }
         if ((type & InputType.TYPE_NUMBER_VARIATION_PASSWORD) == InputType.TYPE_NUMBER_VARIATION_PASSWORD){
             inputTypePassword = true;
@@ -144,7 +165,7 @@ public class FieldParser {
             inputTypePassword = true;
         }
 
-        Log.d("pass field ", String.valueOf(inputTypePassword));
+        Log.d("inputTypePassword", String.valueOf(inputTypePassword));
         return inputTypePassword && !valueContainsAnyTerms(field.hint, ignoreSearchTerms)
                 && !valueContainsAnyTerms(field.entry, ignoreSearchTerms);
     }
@@ -160,49 +181,29 @@ public class FieldParser {
                 if (hint != null) return hint;
             }
         }
-
-        // Then try some basic heuristics based on other node properties
-        // using hint
-        hint = inferHint(field.hint);
-        if (hint != null) {
-            return hint;
-        }
-
-        //using resourceId
-        hint = inferHint(field.entry);
-        if (hint != null) {
-            return hint;
-        }
-
-        // using text
-        hint = inferHint(field.text);
-        if (hint != null) {
-            return hint;
+        String[] moreHeuristics = new String[] {field.hint, field.idHint, field.entry, field.idEntry, field.text};
+        for (String fieldHint: moreHeuristics) {
+            hint = inferHint(fieldHint);
+            if (hint != null) return hint;
         }
         return null;
     }
 
-
-
     @Nullable
     protected String inferHint(@Nullable String actualHint) {
-
-        if (actualHint == null) return null;
+        if (Utils.isNullOrWhiteSpace(actualHint)) return null;
         Log.d(TAG, actualHint);
-        Log.d(TAG, "mật khẩu");
         String hint = actualHint.toLowerCase();
         if (hint.contains("label") || hint.contains("container")) {
             return null;
         }
-        if (hint.contains("password") || hint.contains("mật khẩu")) return View.AUTOFILL_HINT_PASSWORD;
-        if (hint.contains("username")
-                || (hint.contains("login") && hint.contains("id")) || hint.contains("tên đăng nhập"))
+        if (valueContainsAnyTerms(hint, passwordTerms)) return View.AUTOFILL_HINT_PASSWORD;
+        if (valueContainsAnyTerms(hint, usernameTerms))
             return View.AUTOFILL_HINT_USERNAME;
-        if (hint.contains("email")) return View.AUTOFILL_HINT_EMAIL_ADDRESS;
+        if (valueContainsAnyTerms(hint, emailTerms)) return View.AUTOFILL_HINT_EMAIL_ADDRESS;
 
         return null;
     }
-
 
     private boolean valueContainsAnyTerms(String value, HashSet<String> terms)
     {
