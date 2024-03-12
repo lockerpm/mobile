@@ -1,7 +1,7 @@
-import { Icon, IconTypes, Text } from 'app/components/cores'
-import { PremiumTag } from 'app/components/utils'
-import * as React from 'react'
-import { ColorValue, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { Icon, IconTypes, Text } from "app/components/cores"
+import { PremiumTag } from "app/components/utils"
+import * as React from "react"
+import { ColorValue, StyleProp, TouchableOpacity, View, ViewStyle } from "react-native"
 
 export interface ActionItemProps {
   /**
@@ -49,16 +49,16 @@ export const ActionItem = (props: ActionItemProps) => {
     >
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          width: '100%',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%",
         }}
       >
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
           <Text text={name} color={color} style={{ marginRight: 8 }} />

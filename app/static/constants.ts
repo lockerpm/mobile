@@ -1,9 +1,9 @@
 // PERMISSIONS
-export const TEAM_COLLECTION_EDITOR = ['owner', 'admin']
-export const TEAM_CIPHER_EDITOR = ['owner', 'admin', 'manager']
+export const TEAM_COLLECTION_EDITOR = ["owner", "admin"]
+export const TEAM_CIPHER_EDITOR = ["owner", "admin", "manager"]
 
 // DATA
-export const TEMP_PREFIX = 'tmp__'
+export const TEMP_PREFIX = "tmp__"
 export const MAX_MULTIPLE_SHARE_COUNT = 20
 export const IMPORT_BATCH_SIZE = 1000
 export const BACKGROUND_DECRYPT_FIRST_BATCH_SIZE = 50
@@ -22,10 +22,11 @@ export const FREE_PLAN_LIMIT = {
   LOGIN: 100,
   PAYMENT_CARD: 5,
   NOTE: 50,
+  OTP: 10,
 }
 
 export const GEN = {
-  MALE: 't',
-  FEMALE: 'f',
-  OTHER: 'o'
+  MALE: "t",
+  FEMALE: "f",
+  OTHER: "o",
 }
