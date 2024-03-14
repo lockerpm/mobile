@@ -72,6 +72,7 @@ public class FieldParser {
         }
     }
     public void parser() {
+        Log.d(TAG, "find fields size: " + fields.size());
         List<Field> unknowType = new ArrayList<>();
         for (Field field: fields){
             // parse by hint
@@ -104,6 +105,7 @@ public class FieldParser {
                 }
             }
         }
+        Log.d(TAG, "unknowType fields size: " + unknowType.size());
         // If there is only 1 fillable item in the list and the type is Fill.FILL_TYPE PASSWORD
         // and if there is only 1 item in the list the type is unknown
         // Then make item default type Field.FILL_TYPE_USERNAME;

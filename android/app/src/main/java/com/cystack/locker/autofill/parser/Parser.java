@@ -61,16 +61,14 @@ public class Parser {
 
     private void ParseNode(AssistStructure.ViewNode node){
         setPackageAndDomain(node);
-
+        Log.d(TAG + "---", node.getClassName());
         // First try the explicit autofill hints...
         boolean haveAutofillHints = node.getAutofillHints() != null && node.getAutofillHints().length > 0;
         boolean isEditText = node.getClassName() != null && (node.getClassName().contains("EditText") || node.getClassName().contains("AutoCompleteTextView"));
         boolean isInputTag = node.getHtmlInfo() != null && node.getHtmlInfo().getTag().equals("input");
 
         if (isEditText || isInputTag || haveAutofillHints) {
-            Field a = new  Field(node);
             fieldParser.addField(new Field(node));
-            Log.d(TAG + "---", a.toString());
         }
         for (int i = 0; i < node.getChildCount(); i++)
         {

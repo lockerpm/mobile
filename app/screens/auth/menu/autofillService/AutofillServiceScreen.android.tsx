@@ -205,15 +205,13 @@ export const AutofillServiceScreen = observer(() => {
       safeAreaEdges={["bottom"]}
       preset="auto"
       header={
-        !enabled ? (
-          <Header
-            leftIcon="arrow-left"
-            onLeftPress={() => {
-              navigation.goBack()
-            }}
-            title={translate("settings.autofill_service")}
-          />
-        ) : null
+        <Header
+          leftIcon="arrow-left"
+          onLeftPress={() => {
+            navigation.goBack()
+          }}
+          title={translate("settings.autofill_service")}
+        />
       }
       footer={
         <Button
