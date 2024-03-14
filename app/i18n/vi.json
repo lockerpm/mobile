@@ -741,6 +741,7 @@
     "defaultTab": "Màn hình mặc định"
   },
   "autofill_service": {
+    "searchFor": "Tìm kiếm theo: ",
     "activated": {
       "title": "Tự động điền đã được kích hoạt",
       "content": "Bạn có thể đăng nhập vào các ứng dụng và website một cách nhanh chóng và linh hoạt"

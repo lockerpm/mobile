@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import { View } from 'react-native'
+import React, { useState } from "react"
+import { View } from "react-native"
 
-import { Text, Icon } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { SearchBar } from 'app/components/utils'
+import { Text, Icon } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { SearchBar } from "app/components/utils"
 
-import { DeleteConfirmModal } from '../../browse/trash/DeleteConfirmModal'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { ShareModal } from 'app/components/ciphers'
+import { DeleteConfirmModal } from "../../browse/trash/DeleteConfirmModal"
+import { useCipherData, useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { ShareModal } from "app/components/ciphers"
 
 interface Props {
   openSort: () => void
@@ -55,8 +55,8 @@ export const AuthenticatorHeader = (props: Props) => {
   const renderHeaderRight = () => (
     <View
       style={{
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
       }}
     >
       <Icon
@@ -73,9 +73,9 @@ export const AuthenticatorHeader = (props: Props) => {
   const renderHeaderSelectRight = () => (
     <View
       style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
       }}
     >
       <Icon
@@ -117,7 +117,7 @@ export const AuthenticatorHeader = (props: Props) => {
 
   // Select left
   const renderHeaderSelectLeft = () => (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View style={{ flexDirection: "row", alignItems: "center" }}>
       <Icon
         icon="x"
         size={24}
@@ -131,8 +131,8 @@ export const AuthenticatorHeader = (props: Props) => {
         size="xl"
         text={
           selectedItems.length
-            ? `${selectedItems.length} ${translate('common.selected')}`
-            : translate('common.select')
+            ? `${selectedItems.length} ${translate("common.selected")}`
+            : translate("common.select")
         }
         style={{
           marginLeft: 8,
@@ -147,15 +147,15 @@ export const AuthenticatorHeader = (props: Props) => {
     setIsLoading(true)
     const res = await toTrashCiphers(selectedItems)
     setIsLoading(false)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setIsSelecting(false)
       setSelectedItems([])
     }
   }
 
   const handleMoveFolder = () => {
-    navigation.navigate('folders__select', {
-      mode: 'move',
+    navigation.navigate("folders__select", {
+      mode: "move",
       initialId: null,
       cipherIds: selectedItems,
     })
@@ -174,16 +174,16 @@ export const AuthenticatorHeader = (props: Props) => {
       <View
         style={{
           height: 56,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
           paddingHorizontal: 20,
         }}
       >
         {isSelecting ? (
           renderHeaderSelectLeft()
         ) : (
-          <View style={{ height: 56, justifyContent: 'center' }}>
+          <View style={{ height: 56, justifyContent: "center" }}>
             <Text preset="bold" size="xxl" weight="semibold" text={header} />
           </View>
         )}
@@ -201,8 +201,8 @@ export const AuthenticatorHeader = (props: Props) => {
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
-        title={translate('trash.to_trash')}
-        desc={translate('trash.to_trash_desc')}
+        title={translate("trash.to_trash")}
+        desc={translate("trash.to_trash_desc")}
         btnText="OK"
       />
 

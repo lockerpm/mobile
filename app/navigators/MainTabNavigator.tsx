@@ -1,18 +1,17 @@
-import React, { useCallback } from 'react'
-import { TouchableOpacity, View } from 'react-native'
-import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTheme } from 'app/services/context'
-import { fontSize } from '../theme'
-import { useStores } from '../models'
-import { Icon, Text } from 'app/components/cores'
-import { BrowseNavigator } from './browse/BrowseNavigator'
-import { MenuNavigator } from './menu/MenuNavigator'
-import { HomeTabScreen, ToolsListScreen, AuthenticatorScreen } from '../screens'
-import { SharingStatus } from 'app/static/types'
-import { observer } from 'mobx-react-lite'
-import { useHelper } from 'app/services/hook'
-import { TabsParamList } from './navigators.types'
+import React, { useCallback } from "react"
+import { StyleProp, TouchableOpacity, View, ViewStyle } from "react-native"
+import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useTheme } from "app/services/context"
+import { useStores } from "../models"
+import { Icon, Text } from "app/components/cores"
+import { BrowseNavigator } from "./browse/BrowseNavigator"
+import { MenuNavigator } from "./menu/MenuNavigator"
+import { HomeTabScreen, ToolsListScreen, AuthenticatorScreen } from "../screens"
+import { SharingStatus } from "app/static/types"
+import { observer } from "mobx-react-lite"
+import { useHelper } from "app/services/hook"
+import { TabsParamList } from "./navigators.types"
 
 const Tab = createBottomTabNavigator<TabsParamList>()
 
@@ -24,13 +23,13 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
 
   const mappings = {
     homeTab: {
-      label: translate('common.home'),
-      icon: 'home',
+      label: translate("common.home"),
+      icon: "home",
       notiCount: 0,
     },
     browseTab: {
-      label: translate('common.browse'),
-      icon: 'browser',
+      label: translate("common.browse"),
+      icon: "browser",
       notiCount:
         cipherStore.sharingInvitations.length +
         cipherStore.myShares.reduce((total, s) => {
@@ -38,18 +37,18 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
         }, 0),
     },
     authenticatorTab: {
-      label: 'OTP',
-      icon: 'authenticator',
+      label: "OTP",
+      icon: "authenticator",
       notiCount: 0,
     },
     toolsTab: {
-      label: translate('common.tools'),
-      icon: 'tools',
+      label: translate("common.tools"),
+      icon: "tools",
       notiCount: 0,
     },
     menuTab: {
-      label: translate('common.menu'),
-      icon: 'menu',
+      label: translate("common.menu"),
+      icon: "menu",
       notiCount: user.invitations.length,
     },
   }
@@ -60,6 +59,11 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
     cipherStore.isSynchingOffline ||
     cipherStore.isBatchDecrypting
 
+  const $centerStyle: StyleProp<ViewStyle> = {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  }
   return uiStore.isSelecting ? null : (
     <View
       style={{ paddingBottom: insets.bottom, backgroundColor: colors.background, paddingTop: 8 }}
@@ -69,54 +73,43 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
         <View
           style={{
             backgroundColor: colors.background,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
             paddingVertical: 4,
           }}
         >
           {uiStore.isOffline ? (
-            <>
+            <View style={$centerStyle}>
               <Icon icon="wifi-slash" size={16} color={colors.white} />
               <Text
+                size="small"
                 style={{
-                  fontSize: fontSize.small,
-                  color: colors.white,
                   marginLeft: 5,
                 }}
-                text={translate('navigator.is_offline')}
+                text={translate("navigator.is_offline")}
               />
-            </>
+            </View>
           ) : cipherStore.isBatchDecrypting ? (
-            <>
-              <Text
-                style={{
-                  fontSize: fontSize.small,
-                  color: colors.white,
-                  marginLeft: 5,
-                }}
-                text={translate('start.decrypting')}
-              />
-            </>
+            <Text size="small" text={translate("start.decrypting")} />
           ) : (
-            <>
+            <View style={$centerStyle}>
               <Icon icon="arrows-clockwise" size={18} color={colors.white} />
               <Text
+                size="small"
                 style={{
-                  fontSize: fontSize.small,
-                  color: colors.white,
                   marginLeft: 5,
                 }}
-                text={translate('start.synching')}
+                text={translate("start.synching")}
               />
-            </>
+            </View>
           )}
         </View>
       )}
       {/* Status bar end */}
 
       {/* Tab items */}
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: "row" }}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key]
 
@@ -128,7 +121,7 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
 
           const onPress = () => {
             const event = navigation.emit({
-              type: 'tabPress',
+              type: "tabPress",
               target: route.key,
               canPreventDefault: true,
             })
@@ -142,7 +135,7 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
 
           const onLongPress = () => {
             navigation.emit({
-              type: 'tabLongPress',
+              type: "tabLongPress",
               target: route.key,
             })
           }
@@ -155,8 +148,8 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
               onLongPress={onLongPress}
               style={{
                 flex: 1,
-                alignItems: 'center',
-                flexDirection: 'column',
+                alignItems: "center",
+                flexDirection: "column",
               }}
             >
               <Icon
@@ -173,16 +166,16 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
                     borderRadius: 20,
                     minWidth: 17,
                     height: 17,
-                    position: 'absolute',
+                    position: "absolute",
                     top: 3,
                     right: 20,
                   }}
                 >
                   <Text
-                    text={notiCount >= 100 ? '99+' : notiCount.toString()}
+                    text={notiCount >= 100 ? "99+" : notiCount.toString()}
                     style={{
                       fontSize: 12,
-                      textAlign: 'center',
+                      textAlign: "center",
                       color: colors.white,
                       lineHeight: 17,
                     }}

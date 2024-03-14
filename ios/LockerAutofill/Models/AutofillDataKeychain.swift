@@ -11,66 +11,23 @@ import StoreKit
 
 
 class AutofillDataModel {
-  private let KEYCHAIN_SERVICE: String = Utils.GetStringInfo(key: "SHARED_KEYCHAIN_SERVICE")
-  private let KEYCHAIN_ACCESS_GROUP: String = Utils.GetStringInfo(key: "SHARED_KEYCHAIN_ACCESS_GROUP")
+  private let KEYCHAIN_SERVICE: String = getStringInfo(key: "SHARED_KEYCHAIN_SERVICE")
+  private let KEYCHAIN_ACCESS_GROUP: String = getStringInfo(key: "SHARED_KEYCHAIN_ACCESS_GROUP")
   private let KEYCHAIN_PROPS: String = "autofill"
   private var keychainData: String!
+  private var user: User
   
-  // Data used by autofill service
-  private(set) var faceIdEnabled: Bool = false
-  private(set) var loginedLocker: Bool = false
-  private(set) var email: String!
-  private(set) var hashMassterPass: String!
-  private(set) var userAvatar: String!
-  private(set) var URI: String!
-  private(set) var credentials: [AutofillData] = []
-
-  init(){
+  init(_ user: User){
     let keychain = Keychain(service: KEYCHAIN_SERVICE, accessGroup: KEYCHAIN_ACCESS_GROUP)
     keychainData = try! keychain.get(KEYCHAIN_PROPS)
+    self.user = user
     if (keychainData != nil) {
-      self.loginedLocker = true;
-    }
-  }
-
-  public func fetchAutofillData(identifier: String) {
-    self.URI = identifier
-    fetchAutofillData(text: keychainData)
-  }
-  
-  public func getAutofillDataById(id: String?) -> AutofillData? {
-    if id == nil {
-      return nil
-    }
-    if let autofillData = credentials.first(where: {$0.id == id}){
-      return autofillData
+      self.user.loginedLocker = true;
     }
     
-//    if let autofillData = otherCredentials.first(where: {$0.id == id}){
-//      return autofillData
-//    }
-    return nil
+    fetchAutofillData(text: keychainData)
   }
-  
-  private func setAutofillData(_ passwords: [String: [[String: Any]]]){
-    // reset data
-    self.credentials = []
-  
-    if passwords["passwords"] != nil {
-      for (index, item) in passwords["passwords"]!.enumerated() {
-
-        let credential = AutofillData(fillID: index,
-                                      name: (item["name"] as? String)!,
-                                      id: (item["id"] as? String)!,
-                                      uri: (item["uri"] as? String)!,
-                                      username: (item["username"] as? String)!,
-                                      password: (item["password"] as? String)!,
-                                      isOwner: (item["isOwner"] as? Bool)!,
-                                      otp: (item["otp"] as? String)!)
-        self.credentials.append(credential)
-      }
-    }
-  }
+    
 
   private func dictToJson(dictionary: [String: [[String: Any]]]) -> String{
     if let theJSONData = try? JSONSerialization.data(
@@ -82,23 +39,35 @@ class AutofillDataModel {
   }
 
   private func fetchAutofillData(text: String) {
-    var passwords: [String: [[String: Any]]] = [:]
+    var passwords:  [[String: Any]] = []
     let jsonData = Data(text.utf8)
     do {
       if let autofillData = try JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as? [String: Any] {
         if let passwordList = autofillData["passwords"] as? [[String: Any]] {
-          passwords["passwords"] = passwordList
-        }
-        if let deleteList = autofillData["deleted"] as? [[String: Any]] {
-          passwords["deleted"] = deleteList
-        }
-        if let authen = autofillData["authen"] as? [String: String] {
-          self.email = authen["email"]!
-          self.hashMassterPass = authen["hashPass"]!
-          self.userAvatar = authen["avatar"]
+          passwords = passwordList
         }
         if let faceIdEnabled = autofillData["faceIdEnabled"] as? Bool {
-          self.faceIdEnabled = faceIdEnabled
+          user.faceIdEnabled = faceIdEnabled
+        }
+        if let language = autofillData["language"] as? String {
+          user.language = language
+        }
+        if let isDarkTheme  = autofillData["isDarkTheme"] as? Bool {
+          user.isDarkTheme = isDarkTheme
+        }
+        
+        if let email = autofillData["email"] as? String {
+          user.email = email
+        }
+        if let hashPass = autofillData["hashPass"] as? String {
+          user.hashMassterPass = hashPass
+        }
+        if let avatar  = autofillData["avatar"] as? String {
+          user.avatar = avatar
+        }
+        
+        if let isLoggedInPw  = autofillData["isLoggedInPw"] as? Bool {
+          user.isLoggedInPw = isLoggedInPw
         }
       }
       else {
@@ -107,6 +76,7 @@ class AutofillDataModel {
     } catch {
       print(error.localizedDescription)
     }
-    setAutofillData(passwords)
+    print(passwords)
+    user.setAutofillData(passwords)
   }
 }

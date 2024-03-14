@@ -63,6 +63,30 @@ export const SettingsScreen = observer(() => {
     }
   }
 
+  const updateAutofillLanguage = async (language: "vi" | "en") => {
+    if (!IS_IOS) {
+      return
+    }
+    const credentials = await loadShared()
+    if (credentials && credentials.password) {
+      const sharedData: AutofillDataType = JSON.parse(credentials.password)
+      sharedData.language = language
+      await saveShared("autofill", JSON.stringify(sharedData))
+    }
+  }
+
+  const updateAutofillDarkTheme = async (enabled: boolean) => {
+    if (!IS_IOS) {
+      return
+    }
+    const credentials = await loadShared()
+    if (credentials && credentials.password) {
+      const sharedData: AutofillDataType = JSON.parse(credentials.password)
+      sharedData.isDarkTheme = enabled
+      await saveShared("autofill", JSON.stringify(sharedData))
+    }
+  }
+
   const syncDataManually = async () => {
     const res = await startSyncProcess(Date.now())
     // @ts-ignore
@@ -102,9 +126,10 @@ export const SettingsScreen = observer(() => {
   const settings = {
     language: {
       value: user.language || "en",
-      onChange: (lang: string) => {
+      onChange: (lang: "vi" | "en") => {
         user.setLanguage(lang)
         user.changeLanguage()
+        updateAutofillLanguage(lang)
       },
       options: [
         {
@@ -122,6 +147,7 @@ export const SettingsScreen = observer(() => {
       onChange: (theme: string) => {
         uiStore.setIsDark(theme === "dark")
         setIsDark(theme === "dark")
+        updateAutofillDarkTheme(theme === "dark")
       },
       options: [
         {

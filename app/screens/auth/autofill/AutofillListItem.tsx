@@ -1,7 +1,7 @@
 import React, { memo } from "react"
 import { NativeModules, TouchableOpacity, View } from "react-native"
 import isEqual from "lodash/isEqual"
-import { Icon, Text, Toggle } from "app/components/cores"
+import { Icon, Text } from "app/components/cores"
 import { useCipherHelper, useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { CipherView } from "core/models/view"
@@ -14,15 +14,12 @@ const { RNAutofillServiceAndroid } = NativeModules
 
 type Prop = {
   item: any
-  isSelecting: boolean
-  toggleItemSelection: (id: string) => void
   openActionMenu: (val: any) => void
-  isSelected: boolean
 }
 
 export const AutofillListItem = memo(
   (props: Prop) => {
-    const { item, isSelecting, toggleItemSelection, openActionMenu, isSelected } = props
+    const { item, openActionMenu } = props
     const { colors } = useTheme()
     const { copyToClipboard } = useHelper()
     const { getCipherDescription } = useCipherHelper()
@@ -33,24 +30,19 @@ export const AutofillListItem = memo(
         item.login.username,
         item.login.password,
         item.name,
-        item.login.uri,
+        item.login.uri
       )
     }
 
     return (
       <TouchableOpacity
         onPress={() => {
-          if (isSelecting) {
-            toggleItemSelection(item.id)
-          } else {
-            selectForAutoFill(item)
-            if (item.login.hasTotp) {
-              const otp = getTOTP(parseOTPUri(item.login.totp))
-              copyToClipboard(otp)
-            }
+          selectForAutoFill(item)
+          if (item.login.hasTotp) {
+            const otp = getTOTP(parseOTPUri(item.login.totp))
+            copyToClipboard(otp)
           }
         }}
-        onLongPress={() => toggleItemSelection(item.id)}
         style={{
           borderBottomColor: colors.border,
           borderBottomWidth: 0.5,
@@ -88,17 +80,12 @@ export const AutofillListItem = memo(
 
           {item.notSync && <Icon icon="wifi-slash" size={22} containerStyle={{ marginLeft: 10 }} />}
 
-          {isSelecting ? (
-            <Toggle
-              variant="checkbox"
-              value={isSelected}
-              onValueChange={() => {
-                toggleItemSelection(item)
-              }}
-            />
-          ) : (
-            <Icon icon="dots-three" size={18} onPress={() => openActionMenu(item)} />
-          )}
+          <Icon
+            icon="dots-three"
+            size={18}
+            onPress={() => openActionMenu(item)}
+            containerStyle={{ marginLeft: 10 }}
+          />
         </View>
       </TouchableOpacity>
     )
@@ -117,5 +104,5 @@ export const AutofillListItem = memo(
       return val && isEqual(prev[key], next[key])
     }, true)
     return isPropsEqual
-  },
+  }
 )
