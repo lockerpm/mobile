@@ -31,12 +31,17 @@ public class AutofillDataKeychain {
    private final CipherStorage cipherStorage;
 
     // Data used by autofill service
-    public  boolean faceIdEnabled = false;
-    public  boolean loginedLocker = false;
+
     public String email;
-    public String hashMassterPass;
-    public String userAvatar;
-    public ArrayList<AutofillItem> credentials = new ArrayList<>();
+    public String hashPass;
+    public String avatar;
+    public  boolean faceIdEnabled = false;
+    public  boolean isLoggedInPw = false;
+
+    public String language = "en";
+    public boolean isDarkTheme = false;
+
+    public ArrayList<AutofillItem> passwords = new ArrayList<>();
     // public ArrayList<AutofillItem> otherCredentials = new ArrayList<>();
 
 
@@ -47,16 +52,17 @@ public class AutofillDataKeychain {
     }
 
     /**
+     * Deprecated
      * For a given domain name, attempt to find matching AutoFill credentials
      * @return - List of matching Username/Passwords in the form of the AutofillData class.
      */
     public void getAutoFillEntriesForDomain() {
         try {
             String itemString = getAutoFillItems();
+            Log.d(TAG, itemString);
             if (itemString == null){
                 return;
             }
-            loginedLocker = true;
             JSONObject jsonObject = new JSONObject(itemString);
             JSONArray jsonArray  = jsonObject.getJSONArray("passwords");
             List<Object> itemList = toList(jsonArray);
@@ -69,18 +75,19 @@ public class AutofillDataKeychain {
                     String name = (String) map.get("name");
                     String id = (String) map.get("id");
 
-                    credentials.add(new AutofillItem(id, username, password, name, uri));
-                }
-            }
+                    this.passwords.add(new AutofillItem(id, username, password, name, uri));
+                };
+            };
+            this.email = jsonObject.getString("email");
+            this.hashPass = jsonObject.getString("hashPass");
+            this.avatar = jsonObject.getString("avatar");
+            this.language = jsonObject.getString("language");
+            this.faceIdEnabled = jsonObject.getBoolean("faceIdEnabled");
+            this.isLoggedInPw = jsonObject.getBoolean("isLoggedInPw");
+            this.isDarkTheme = jsonObject.getBoolean("isDarkTheme");
 
-            JSONObject authen = jsonObject.getJSONObject("authen");
-            email = authen.getString("email");
-            hashMassterPass = authen.getString("hashPass");
-            userAvatar = authen.getString("avatar");
-            faceIdEnabled = jsonObject.getBoolean("faceIdEnabled");        
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
-
         }
     }
     private String getAutoFillItems() throws Exception {
@@ -90,7 +97,6 @@ public class AutofillDataKeychain {
             return "[]";
         }
 
-    
         CipherStorage.DecryptionResult decryptionResult = cipherStorage.decrypt(service, resultSet.username, resultSet.password, SecurityLevel.ANY);
         return decryptionResult.password;
     }

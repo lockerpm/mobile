@@ -26,7 +26,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService {
-    private static final String TAG = "Locker_Service";
+    private static final String TAG = "LockerAutoFillService";
     private boolean readyToStart = false;
 
     @Override
@@ -36,9 +36,9 @@ public class LockerAutoFillService extends AutofillService {
 
         ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
         AutofillDataKeychain keyStore = new AutofillDataKeychain(reactContext);
-        if (keyStore.loginedLocker) {
+        if (keyStore.isLoggedInPw) {
             this.readyToStart = true;
-            Utils.InitCredentialsStore(getBaseContext(), keyStore.email, keyStore.hashMassterPass);
+            Utils.InitCredentialsStore(getBaseContext(), keyStore.email, keyStore.hashPass);
         } else {
             Utils.RemoveAllCredential();
         }

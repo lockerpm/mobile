@@ -8,158 +8,156 @@
 import UIKit
 import LocalAuthentication
 import AuthenticationServices
+import SwiftUI
 
 
 class CredentialProviderController: ASCredentialProviderViewController {
-  private var dataModel: AutofillDataModel = AutofillDataModel()
+  private var user : User!
+  private var dataModel: AutofillDataModel!
   private var serviceIdentifier: String = ""
   private var quickBar: Bool = false
   private var quickBarCredential: AutofillData!
-  
+
   @IBOutlet weak var logo: UIImageView!
   
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+    self.user = User()
+    self.dataModel = AutofillDataModel(self.user)
+    i.locale = user.language
+  }
   
   override func viewDidAppear(_ animated: Bool) {
-   if (self.dataModel.faceIdEnabled){
-      Utils.BiometricAuthentication(
+//    self.view.backgroundColor = UIColor(named: "background")
+    if (user.faceIdEnabled){
+      authenService.biometricAuthentication(
         view: self,
-        onSuccess: quickBar ? quickBarAuthenSuccess : performLoginListScreen,
-        onFailed: performVerifyPasswordScreen
+        onSuccess: {
+          if (self.quickBarCredential == nil) {
+            self.navigateCredentialsList()
+          } else {
+            self.loginSelected(data: self.quickBarCredential)
+          }
+        },
+        onFailed: self.navigateLockScreen,
+        notSupported: {
+          self.user.faceIdEnabled = false
+          self.navigateLockScreen()
+        }
       )
     }
     else {
-      performVerifyPasswordScreen()
+      self.navigateLockScreen()
     }
   }
-  
+ 
+  /*
+   Prepare your UI to list available credentials for the user to choose from. The items in
+   'serviceIdentifiers' describe the service the user is logging in to, so your extension can
+   prioritize the most relevant credentials in the list.
+  */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     loginLocker()
     if serviceIdentifiers.count > 0 {
       self.serviceIdentifier = serviceIdentifiers[0].identifier
       if serviceIdentifiers[0].type == .URL {
-        self.dataModel.fetchAutofillData(identifier:  URL(string: serviceIdentifier)?.host ?? "")
+        user.setUri(uri: URL(string: serviceIdentifier)?.host ?? "", isDomain: false)
       }
       else {
-        // domain
-        self.dataModel.fetchAutofillData(identifier: serviceIdentifier)
+        user.setUri(uri: serviceIdentifier, isDomain: true)
         self.serviceIdentifier = "https://" +  serviceIdentifier
       }
     } else {
-      self.dataModel.fetchAutofillData(identifier: "")
+      user.URI = ""
     }
-    
   }
   
+  /**
+   Implement this method if provideCredentialWithoutUserInteraction(for:) can fail with
+   ASExtensionError.userInteractionRequired. In this case, the system may present your extension's
+   UI and call this method. Show appropriate UI for authenticating the user then provide the password
+   by completing the extension request with the associated ASPasswordCredential.
+   */
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
     loginLocker()
     
     self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
     self.quickBar = true
-  
-    self.dataModel.fetchAutofillData(identifier: URL(string: serviceIdentifier)?.host ?? serviceIdentifier)
-    if let credential = self.dataModel.getAutofillDataById(id: credentialIdentity.recordIdentifier!)  {
+    user.URI = URL(string: serviceIdentifier)?.host ?? serviceIdentifier
+
+    if let credential = user.getAutofillDataById(id: credentialIdentity.recordIdentifier!)  {
       self.quickBarCredential = credential
     } else {
-      AutofillHelpers.RemoveCredentialIdentities(credentialIdentity)
+      quickTypeBar.removeCredentialIdentities(credentialIdentity)
     }
     loadView()
   }
-
+  
+  /**
+   Implement this method if your extension supports showing credentials in the QuickType bar.
+   When the user selects a credential from your app, this method will be called with the
+   ASPasswordCredentialIdentity your app has previously saved to the ASCredentialIdentityStore.
+   Provide the password by completing the extension request with the associated ASPasswordCredential.
+   If using the credential would require showing custom UI for authenticating the user, cancel
+   the request with error code ASExtensionError.userInteractionRequired.
+   */
   override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
   }
-
-
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-  {
-    if (self.dataModel.loginedLocker){
-      if segue.identifier == "loginListSegue"
-      {
-        let loginListView = (segue.destination as! UINavigationController).topViewController as! LoginListViewController
-        loginListView.delegate = self
-        loginListView.credentials = self.dataModel.credentials
-        
-      } else if segue.identifier == "verifyMasterPasswordSegue" {
-        let verifyMasterPasswordScreen = segue.destination as! VerifyMasterPasswordViewController
-        verifyMasterPasswordScreen.delegate = self
-      }
+  
+  private func loginLocker(){
+    if (!user.loginedLocker){
+      noti(contex: self, title: "noti.authen", message:  "noti.loginLocker", completion: cancel)
+      quickTypeBar.removeAllCredentialIdentities() // remove all credentials in store
     }
   }
-  private func performVerifyPasswordScreen(){
-     performSegue(withIdentifier: "verifyMasterPasswordSegue", sender: self)
+}
+
+/**
+  Navigation
+ */
+extension CredentialProviderController {
+  private func navigateCredentialsList() {
+    let credentialsListView = CredentialsListScreen(credentials: user.credentials, cancel: cancel, onSelect: loginSelected, uri: user.URI)
+    
+    self.navigateView(view: credentialsListView)
   }
   
-  private func performLoginListScreen(){
-      performSegue(withIdentifier: "loginListSegue", sender: self)
+  private func navigateLockScreen() {
+    let lockView = LockScreen(user: self.user, quickBar: self.quickBar, onSelect: loginSelected, cancel: cancel, quickBarCredential: self.quickBarCredential)
+    
+    self.navigateView(view: lockView)
+  }
+
+  private func navigateView(view: some View) -> Void {
+    let hostingController = UIHostingController(rootView: view)
+    hostingController.modalPresentationStyle = .fullScreen
+    hostingController.isModalInPresentation = true
+    self.present(hostingController, animated: true)
+  }
+}
+
+/**
+ Autofill Actions
+ */
+extension CredentialProviderController {
+  func cancel() {
+    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
+  }
+  
+  func loginSelected(data: AutofillData) {
+    quickTypeBar.replaceCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, username: data.username, userID: data.id)
+    completeRequest(user: data.username, password: data.password, otp: data.otp)
   }
   
   private func completeRequest(user: String, password: String, otp: String){
     let passwordCredential = ASPasswordCredential(user: user, password: password)
     if (!otp.isEmpty) {
-      let otpString = Utils.GetOTPFromUri(uri: otp)
+      let otpString = otpService.getOTPFromUri(uri: otp).generate(time: Date()) ?? ""
       if (!otpString.isEmpty) {
         UIPasteboard.general.string = otpString
       }
     }
     self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
-  }
-  
-  private func loginLocker(){
-    if (!self.dataModel.loginedLocker){
-      Utils.Noti(contex: self, title: "Authentication", message:  "You must to login Locker befor using autofill service", completion: cancel)
-      AutofillHelpers.RemoveAllCredentialIdentities() // remove all credentials in store
-    }
-  }
-  
-  func cancel() {
-    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
-  }
-}
-
-
-extension CredentialProviderController: VerifyMasterPasswordDelegate {
-  var userAvatar: String! {
-    return self.dataModel.userAvatar
-  }
-  var userEmail: String! {
-    return self.dataModel.email
-  }
-  
-  var hassMasterPass: String! {
-    return self.dataModel.hashMassterPass
-  }
-  
-  var authenQuickBar: Bool {
-    return self.quickBar
-  }
-  
-  var faceidEnabled: Bool {
-    return self.dataModel.faceIdEnabled
-  }
-  
-  func authenSuccess() {
-    performLoginListScreen()
-  }
-  
-  func quickBarAuthenSuccess() {
-    if (self.quickBarCredential == nil) {
-      performLoginListScreen()
-    } else {
-      completeRequest(user: quickBarCredential.username, password: quickBarCredential.password, otp: quickBarCredential.otp)
-    }
-  }
-}
-
-
-extension CredentialProviderController: LoginListControllerDelegate {
-  
-  var uri: String {
-    return self.dataModel.URI
-  }
-  
-  func loginSelected(data: AutofillData) {
-    AutofillHelpers.ReplaceCredentialIdentities(identifier: self.serviceIdentifier, type: 1, user: data.username, recordIdentifier: data.id)
-  
-    completeRequest(user: data.username, password: data.password, otp: data.otp)
   }
 }

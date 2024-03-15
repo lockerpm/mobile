@@ -90,7 +90,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer((props)
         </Text>
       </View>
     ),
-    [],
+    []
   )
   return (
     <Screen preset="auto" contentContainerStyle={{ paddingBottom: 20 }}>

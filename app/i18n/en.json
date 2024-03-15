@@ -694,6 +694,7 @@
     "defaultTab": "Start Screen"
   },
   "autofill_service": {
+    "searchFor": "Search for: ",
     "activated": {
       "title": "Auto-fill activated!",
       "content": "Now you can log in to applications and websites faster"

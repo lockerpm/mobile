@@ -2,8 +2,6 @@ import * as ReactNativeKeychain from "react-native-keychain"
 import { SHARED_KEYCHAIN_ACCESS_GROUP, SHARED_KEYCHAIN_SERVICE } from "../config/constants"
 import { Logger } from "./utils"
 
-
-
 export type AutofillDataType = {
   passwords: {
     id: string
@@ -14,17 +12,14 @@ export type AutofillDataType = {
     isOwner: boolean
     otp?: string
   }[]
-  deleted: {
-    id: string
-  }[]
-  authen: {
-    email: string
-    hashPass: string
-    avatar: string
-  }
+  email: string
+  hashPass: string
+  avatar: string
   faceIdEnabled: boolean
+  language: string
+  isDarkTheme: boolean
+  isLoggedInPw: boolean
 }
-
 
 /**
  * Saves some credentials securely.
@@ -52,11 +47,11 @@ export async function saveShared(username: string, password: string) {
   try {
     await ReactNativeKeychain.setGenericPassword(username, password, {
       service: SHARED_KEYCHAIN_SERVICE,
-      accessGroup: SHARED_KEYCHAIN_ACCESS_GROUP
+      accessGroup: SHARED_KEYCHAIN_ACCESS_GROUP,
     })
     return true
   } catch (e) {
-    Logger.error('saveShared: ' + e)
+    Logger.error("saveShared: " + e)
     return false
   }
 }
@@ -65,11 +60,11 @@ export async function loadShared() {
   try {
     const res = await ReactNativeKeychain.getGenericPassword({
       service: SHARED_KEYCHAIN_SERVICE,
-      accessGroup: SHARED_KEYCHAIN_ACCESS_GROUP
+      accessGroup: SHARED_KEYCHAIN_ACCESS_GROUP,
     })
     return res
   } catch (e) {
-    Logger.error('loadShared: ' + e)
+    Logger.error("loadShared: " + e)
     return false
   }
 }

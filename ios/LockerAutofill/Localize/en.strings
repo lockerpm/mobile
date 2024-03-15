@@ -1,0 +1,32 @@
+
+"c.cancel" = "Cancel";
+"c.copied" = "Copied";
+
+// utils
+"utils.touchID" = "Please authorize with Touch Id";
+"utils.disableBiometric" = "Biometry is Unvaliable";
+"utils.unconfigBiometric" = "Your device is not configured for biometric authentication";
+"utils.disableFaceID" = "Face ID is Not Available";
+
+// noti
+"noti.authen" = "Authentication";
+"noti.loginLocker" = "You must to login Locker befor using autofill service";
+
+// CredentialsListScreen
+"list.title" = "Login List";
+"list.noDataSearch" = "Oops! Looks like there's no data matching ";
+"list.suggestSearch" = "You can search by the following text(s)";
+
+//Lock screen
+"lock.title" = "Verify Master Password";
+"lock.btn" = "Unlock";
+"lock.faceid" = "Unlock with Face ID/Touch ID";
+
+
+// totp view
+"totp.desc" = "(The OTP will be auto copied to clipboard if you log in with this item)";
+"totp.update" = "The OTP will update in ";
+
+// credential
+"item.username" = "Username or email";
+"item.password" = "Password";

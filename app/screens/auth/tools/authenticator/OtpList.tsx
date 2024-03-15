@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from 'react'
-import { View } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import orderBy from 'lodash/orderBy'
-import sortBy from 'lodash/sortBy'
-import { AuthenticatorAction } from './AuthenticatorAction'
-import DraggableFlatList from 'react-native-draggable-flatlist'
-import { OtpListItem } from './OtpListItem'
-import { Text } from 'app/components/cores'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { CipherView } from 'core/models/view'
-import { CipherType } from 'core/enums'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
+import React, { useState, useEffect } from "react"
+import { View } from "react-native"
+import { observer } from "mobx-react-lite"
+import orderBy from "lodash/orderBy"
+import sortBy from "lodash/sortBy"
+import { AuthenticatorAction } from "./AuthenticatorAction"
+import DraggableFlatList from "react-native-draggable-flatlist"
+import { OtpListItem } from "./OtpListItem"
+import { Text } from "app/components/cores"
+import { useCipherData, useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { CipherView } from "core/models/view"
+import { CipherType } from "core/enums"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
 
 interface Props {
   navigation: any
@@ -55,7 +55,7 @@ export const OtpList = observer((props: Props) => {
   const [selectedOtp, setSelectedOtp] = useState(new CipherView())
   const [isActionOpen, setIsActionOpen] = useState(false)
   const [ciphers, setCiphers] = useState([])
-  const [checkedItem, setCheckedItem] = useState('')
+  const [checkedItem, setCheckedItem] = useState("")
 
   // ------------------------ EFFECT ----------------------------
 
@@ -104,7 +104,7 @@ export const OtpList = observer((props: Props) => {
       res =
         orderBy(
           res,
-          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
           [order]
         ) || []
     }
@@ -139,7 +139,7 @@ export const OtpList = observer((props: Props) => {
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
       if (selected.length === MAX_CIPHER_SELECTION) {
-        notify('error', translate('error.cannot_select_more', { count: MAX_CIPHER_SELECTION }))
+        notify("error", translate("error.cannot_select_more", { count: MAX_CIPHER_SELECTION }))
         return
       }
       selected.push(id)
@@ -184,7 +184,7 @@ export const OtpList = observer((props: Props) => {
 
       {/* Cipher list */}
       <DraggableFlatList
-        style={{ paddingHorizontal: 20, height: '100%' }}
+        style={{ paddingHorizontal: 20, height: "100%" }}
         data={ciphers}
         keyExtractor={(item) => item.id.toString()}
         onDragEnd={handleChangeOrder}
@@ -198,9 +198,9 @@ export const OtpList = observer((props: Props) => {
   ) : (
     <View style={{ paddingHorizontal: 20 }}>
       <Text
-        text={translate('error.no_results_found') + ` '${searchText}'`}
+        text={translate("error.no_results_found") + ` '${searchText}'`}
         style={{
-          textAlign: 'center',
+          textAlign: "center",
         }}
       />
     </View>
