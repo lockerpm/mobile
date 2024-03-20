@@ -46,6 +46,8 @@
 		7C973A532A9306A700875FBA /* AutofillDataKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A522A9306A700875FBA /* AutofillDataKeychain.swift */; };
 		7C973A5B2A93075E00875FBA /* vi.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A572A93075E00875FBA /* vi.strings */; };
 		7C973A5D2A93075E00875FBA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A592A93075E00875FBA /* Utils.swift */; };
+		7CCAB9CF2BAAE622006D7FB7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7CCAB9CE2BAAE622006D7FB7 /* PrivacyInfo.xcprivacy */; };
+		7CCAB9D12BAAF01B006D7FB7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7CCAB9D02BAAF01B006D7FB7 /* PrivacyInfo.xcprivacy */; };
 		7CEB31E22A9309D9007F6051 /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CEB31E12A9309D9007F6051 /* assets.xcassets */; };
 		7CEB31E92A931B50007F6051 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEB31E82A931B50007F6051 /* KeychainAccess */; };
 		7CEB31EB2A931B5A007F6051 /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEB31EA2A931B5A007F6051 /* SwiftOTP */; };
@@ -150,6 +152,8 @@
 		7C973A552A93072700875FBA /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
 		7C973A572A93075E00875FBA /* vi.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = vi.strings; sourceTree = "<group>"; };
 		7C973A592A93075E00875FBA /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		7CCAB9CE2BAAE622006D7FB7 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		7CCAB9D02BAAF01B006D7FB7 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		7CEB31E12A9309D9007F6051 /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7CEB31EF2A932780007F6051 /* RSAUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAUtils.swift; sourceTree = "<group>"; };
 		7CEB31F02A932780007F6051 /* RCTCryptoServiceIos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTCryptoServiceIos.m; sourceTree = "<group>"; };
@@ -231,6 +235,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				BE406F552862D73000A81E39 /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				7CCAB9CE2BAAE622006D7FB7 /* PrivacyInfo.xcprivacy */,
 			);
 			name = Locker;
 			sourceTree = "<group>";
@@ -312,6 +317,7 @@
 				7C973A422A93055500875FBA /* MainInterface.storyboard */,
 				7C973A4E2A9305EC00875FBA /* Config.xcconfig */,
 				7CEB31E12A9309D9007F6051 /* assets.xcassets */,
+				7CCAB9D02BAAF01B006D7FB7 /* PrivacyInfo.xcprivacy */,
 			);
 			path = LockerAutofill;
 			sourceTree = "<group>";
@@ -577,6 +583,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CCAB9CF2BAAE622006D7FB7 /* PrivacyInfo.xcprivacy in Resources */,
 				BE406F562862D73000A81E39 /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				4D1804180C27433DAC77EA9B /* Inter-Medium.ttf in Resources */,
@@ -589,6 +596,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CCAB9D12BAAF01B006D7FB7 /* PrivacyInfo.xcprivacy in Resources */,
 				7CEB31EC2A932665007F6051 /* Config.xcconfig in Resources */,
 				7C973A442A93055500875FBA /* MainInterface.storyboard in Resources */,
 				7C973A5B2A93075E00875FBA /* vi.strings in Resources */,
