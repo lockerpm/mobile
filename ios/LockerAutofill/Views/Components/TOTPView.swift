@@ -17,22 +17,22 @@ struct TOTPView: View {
   @State private var otp: String = ""
   @State private var updateIn: String = "0"
   @State private var copied = false {
-     didSet {
-         if copied == true {
-             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                 withAnimation {
-                     copied = false
-                 }
-             }
-         }
-     }
- }
+    didSet {
+      if copied == true {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+          withAnimation {
+            copied = false
+          }
+        }
+      }
+    }
+  }
   
   var body: some View {
     VStack(alignment: .leading) {
       Button {
-          UIPasteboard.general.string = otp
-          self.copied = true
+        UIPasteboard.general.string = otp
+        self.copied = true
       } label: {
         HStack{
           VStack(alignment: .leading){
@@ -44,13 +44,13 @@ struct TOTPView: View {
           Spacer()
           if copied {
             Text(i.translate("c.copied"))
-                  .foregroundStyle(.secondary)
-                  .transition(.opacity)
-                  .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 0))
+              .foregroundStyle(.secondary)
+              .transition(.opacity)
+              .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 0))
           } else {
-              Image(systemName: "doc.on.doc.fill")
-                  .foregroundStyle(.secondary)
-                  .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 0))
+            Image(systemName: "doc.on.doc.fill")
+              .foregroundStyle(.secondary)
+              .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 0))
             
           }
         }

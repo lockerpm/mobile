@@ -1,19 +1,19 @@
 // import zxcvbn from 'zxcvbn';
-import { EncString } from '../models/domain/encString'
-import { GeneratedPasswordHistory } from '../models/domain/generatedPasswordHistory'
-import { PasswordGeneratorPolicyOptions } from '../models/domain/passwordGeneratorPolicyOptions'
-import { Policy } from '../models/domain/policy'
+import { EncString } from "../models/domain/encString"
+import { GeneratedPasswordHistory } from "../models/domain/generatedPasswordHistory"
+import { PasswordGeneratorPolicyOptions } from "../models/domain/passwordGeneratorPolicyOptions"
+import { Policy } from "../models/domain/policy"
 
-import { CryptoService } from '../abstractions/crypto.service'
-import { PasswordGenerationService as PasswordGenerationServiceAbstraction } from '../abstractions/passwordGeneration.service'
-import { PolicyService } from '../abstractions/policy.service'
-import { StorageService } from '../abstractions/storage.service'
+import { CryptoService } from "../abstractions/crypto.service"
+import { PasswordGenerationService as PasswordGenerationServiceAbstraction } from "../abstractions/passwordGeneration.service"
+import { PolicyService } from "../abstractions/policy.service"
+import { StorageService } from "../abstractions/storage.service"
 
-import { EEFLongWordList } from '../misc/wordlist'
+import { EEFLongWordList } from "../misc/wordlist"
 
-import { PolicyType } from '../enums/policyType'
+import { PolicyType } from "../enums/policyType"
 
-const zxcvbn = require('zxcvbn')
+const zxcvbn = require("zxcvbn")
 
 const DefaultOptions = {
   length: 14,
@@ -26,16 +26,16 @@ const DefaultOptions = {
   minLowercase: 0,
   special: false,
   minSpecial: 1,
-  type: 'password',
+  type: "password",
   numWords: 3,
-  wordSeparator: '-',
+  wordSeparator: "-",
   capitalize: false,
   includeNumber: false,
 }
 
 const Keys = {
-  options: 'passwordGenerationOptions',
-  history: 'generatedPasswordHistory',
+  options: "passwordGenerationOptions",
+  history: "generatedPasswordHistory",
 }
 
 const MaxPasswordsInHistory = 100
@@ -54,7 +54,7 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
     // overload defaults with given options
     const o = Object.assign({}, DefaultOptions, options)
 
-    if (o.type === 'passphrase') {
+    if (o.type === "passphrase") {
       return this.generatePassphrase(options)
     }
 
@@ -69,80 +69,80 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
     const positions: string[] = []
     if (o.lowercase && o.minLowercase > 0) {
       for (let i = 0; i < o.minLowercase; i++) {
-        positions.push('l')
+        positions.push("l")
       }
     }
     if (o.uppercase && o.minUppercase > 0) {
       for (let i = 0; i < o.minUppercase; i++) {
-        positions.push('u')
+        positions.push("u")
       }
     }
     if (o.number && o.minNumber > 0) {
       for (let i = 0; i < o.minNumber; i++) {
-        positions.push('n')
+        positions.push("n")
       }
     }
     if (o.special && o.minSpecial > 0) {
       for (let i = 0; i < o.minSpecial; i++) {
-        positions.push('s')
+        positions.push("s")
       }
     }
     while (positions.length < o.length) {
-      positions.push('a')
+      positions.push("a")
     }
 
     // shuffle
     await this.shuffleArray(positions)
 
     // build out the char sets
-    let allCharSet = ''
+    let allCharSet = ""
 
-    let lowercaseCharSet = 'abcdefghijkmnopqrstuvwxyz'
+    let lowercaseCharSet = "abcdefghijkmnopqrstuvwxyz"
     if (o.ambiguous) {
-      lowercaseCharSet += 'l'
+      lowercaseCharSet += "l"
     }
     if (o.lowercase) {
       allCharSet += lowercaseCharSet
     }
 
-    let uppercaseCharSet = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
+    let uppercaseCharSet = "ABCDEFGHJKLMNPQRSTUVWXYZ"
     if (o.ambiguous) {
-      uppercaseCharSet += 'IO'
+      uppercaseCharSet += "IO"
     }
     if (o.uppercase) {
       allCharSet += uppercaseCharSet
     }
 
-    let numberCharSet = '23456789'
+    let numberCharSet = "23456789"
     if (o.ambiguous) {
-      numberCharSet += '01'
+      numberCharSet += "01"
     }
     if (o.number) {
       allCharSet += numberCharSet
     }
 
-    const specialCharSet = '!@#$%^&*'
+    const specialCharSet = "!@#$%^&*"
     if (o.special) {
       allCharSet += specialCharSet
     }
 
-    let password = ''
+    let password = ""
     for (let i = 0; i < o.length; i++) {
       let positionChars: string
       switch (positions[i]) {
-        case 'l':
+        case "l":
           positionChars = lowercaseCharSet
           break
-        case 'u':
+        case "u":
           positionChars = uppercaseCharSet
           break
-        case 'n':
+        case "n":
           positionChars = numberCharSet
           break
-        case 's':
+        case "s":
           positionChars = specialCharSet
           break
-        case 'a':
+        case "a":
           positionChars = allCharSet
           break
         default:
@@ -163,7 +163,7 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
       o.numWords = DefaultOptions.numWords
     }
     if (o.wordSeparator == null || o.wordSeparator.length === 0 || o.wordSeparator.length > 1) {
-      o.wordSeparator = ' '
+      o.wordSeparator = " "
     }
     if (o.capitalize == null) {
       o.capitalize = false
@@ -255,8 +255,8 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
 
       // Force default type if password/passphrase selected via policy
       if (
-        enforcedPolicyOptions.defaultType === 'password' ||
-        enforcedPolicyOptions.defaultType === 'passphrase'
+        enforcedPolicyOptions.defaultType === "password" ||
+        enforcedPolicyOptions.defaultType === "passphrase"
       ) {
         options.type = enforcedPolicyOptions.defaultType
       }
@@ -288,7 +288,7 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
       }
 
       // Password wins in multi-org collisions
-      if (currentPolicy.data.defaultType != null && enforcedOptions.defaultType !== 'password') {
+      if (currentPolicy.data.defaultType != null && enforcedOptions.defaultType !== "password") {
         enforcedOptions.defaultType = currentPolicy.data.defaultType
       }
 
@@ -401,7 +401,7 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
     if (password == null || password.length === 0) {
       return null
     }
-    let globalUserInputs = ['CyStack', 'Cy', 'Sttack']
+    let globalUserInputs = ["CyStack", "Cy", "Sttack"]
     if (userInputs != null && userInputs.length > 0) {
       globalUserInputs = globalUserInputs.concat(userInputs)
     }

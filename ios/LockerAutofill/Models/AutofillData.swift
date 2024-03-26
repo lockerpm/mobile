@@ -6,15 +6,15 @@
 //
 
 import Foundation
-
-struct AutofillData {
-  var fillID: Int
-  var name: String
-  var id: String
-  var uri: String
-  var username: String
-  var password: String
-  var isOwner: Bool
-  var otp: String
-}
-
+//
+//struct AutofillData {
+//  var fillID: Int
+//  var name: String
+//  var id: String
+//  var uri: String
+//  var username: String
+//  var password: String
+//  var isOwner: Bool
+//  var otp: String
+//}
+//

@@ -38,23 +38,50 @@ class User {
     self.autofillMobileApp = isDomain
   }
   
-
-  
-  func setAutofillData(_ passwords: [[String: Any]]){
+  func setAutofillData(_ data: KeychainData){
     self.credentials = []
-  
+    
+    let passwords = data.passwords
+
+    
     if !passwords.isEmpty {
       for (index, item) in passwords.enumerated() {
         let credential = AutofillData(fillID: index,
-                                      name: (item["name"] as? String)!,
-                                      id: (item["id"] as? String)!,
-                                      uri: (item["uri"] as? String)!,
-                                      username: (item["username"] as? String)!,
-                                      password: (item["password"] as? String)!,
-                                      isOwner: (item["isOwner"] as? Bool)!,
-                                      otp: (item["otp"] as? String)!)
+                                      id: item.id,
+                                      name: item.name,
+                                      uri: item.uri ,
+                                      username: item.username,
+                                      password: item.password,
+                                      isOwner: item.isOwner,
+                                      otp: item.otp )
         self.credentials.append(credential)
       }
     }
+    print(passwords.count)
+    if let tempPasswords = data.tempPasswords {
+      print(tempPasswords)
+      for (index, item) in tempPasswords.enumerated() {
+        let credential = AutofillData(fillID: passwords.count + index,
+                                      id: "tempPassword" + String(index),
+                                      name: item.name,
+                                      uri: item.uri ,
+                                      username: item.username,
+                                      password: item.password,
+                                      isOwner: true,
+                                      otp: "" )
+        self.credentials.append(credential)
+      }
+    }
+    print(self.credentials.count)
+  }
+  
+  func syncLocker(_ data: KeychainData) {
+    self.setAutofillData(data)
+    self.faceIdEnabled = data.faceIdEnabled
+    self.email = data.email
+    self.language = data.language
+    self.hashMassterPass = data.hashPass
+    self.avatar = data.avatar
+    self.isLoggedInPw = data.isLoggedInPw
   }
 }

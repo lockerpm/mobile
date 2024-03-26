@@ -12,7 +12,7 @@ import SwiftUI
 
 
 class CredentialProviderController: ASCredentialProviderViewController {
-  private var user : User!
+  internal var user: User!
   private var dataModel: AutofillDataModel!
   private var serviceIdentifier: String = ""
   private var quickBar: Bool = false
@@ -29,26 +29,27 @@ class CredentialProviderController: ASCredentialProviderViewController {
   
   override func viewDidAppear(_ animated: Bool) {
 //    self.view.backgroundColor = UIColor(named: "background")
-    if (user.faceIdEnabled){
-      authenService.biometricAuthentication(
-        view: self,
-        onSuccess: {
-          if (self.quickBarCredential == nil) {
-            self.navigateCredentialsList()
-          } else {
-            self.loginSelected(data: self.quickBarCredential)
-          }
-        },
-        onFailed: self.navigateLockScreen,
-        notSupported: {
-          self.user.faceIdEnabled = false
-          self.navigateLockScreen()
-        }
-      )
-    }
-    else {
-      self.navigateLockScreen()
-    }
+    self.navigateCredentialsList()
+//    if (user.faceIdEnabled){
+//      authenService.biometricAuthentication(
+//        view: self,
+//        onSuccess: {
+//          if (self.quickBarCredential == nil) {
+//            self.navigateCredentialsList()
+//          } else {
+//            self.loginSelected(data: self.quickBarCredential)
+//          }
+//        },
+//        onFailed: self.navigateLockScreen,
+//        notSupported: {
+//          self.user.faceIdEnabled = false
+//          self.navigateLockScreen()
+//        }
+//      )
+//    }
+//    else {
+//      self.navigateLockScreen()
+//    }
   }
  
   /*
@@ -118,13 +119,12 @@ class CredentialProviderController: ASCredentialProviderViewController {
  */
 extension CredentialProviderController {
   private func navigateCredentialsList() {
-    let credentialsListView = CredentialsListScreen(credentials: user.credentials, cancel: cancel, onSelect: loginSelected, uri: user.URI)
-    
+    let credentialsListView = CredentialsListScreen(afd: self)
     self.navigateView(view: credentialsListView)
   }
   
   private func navigateLockScreen() {
-    let lockView = LockScreen(user: self.user, quickBar: self.quickBar, onSelect: loginSelected, cancel: cancel, quickBarCredential: self.quickBarCredential)
+    let lockView = LockScreen(afd: self, quickBar: self.quickBar, quickBarCredential: self.quickBarCredential)
     
     self.navigateView(view: lockView)
   }
@@ -140,7 +140,16 @@ extension CredentialProviderController {
 /**
  Autofill Actions
  */
-extension CredentialProviderController {
+extension CredentialProviderController: AutofillScreenDelegate {
+  func passwordSelected(password: String) {
+    completeRequest(user: "", password: password, otp: "")
+  }
+  
+  func createLoginItem(item: TempLoginItem) {
+    dataModel.saveAutofillData(tempItem: item)
+    completeRequest(user: item.username, password: item.password, otp: "")
+  }
+  
   func cancel() {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
   }

@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct LockScreen: View {
-  var user: User
+  var afd: AutofillScreenDelegate // autofill delegate
   var quickBar: Bool
-  var onSelect: (_ data: AutofillData) -> Void
-  var cancel: () -> Void
   var quickBarCredential: AutofillData!
   
   @State private var masterPassword: String = ""
@@ -26,11 +24,11 @@ struct LockScreen: View {
           .fontWeight(.medium)
           .padding(.bottom, 4)
         
-        UserAvatar(imageUri: user.avatar, email: user.email ?? "")
+        UserAvatar(imageUri: afd.user.avatar, email: afd.user.email ?? "")
         
         MasterPasswordInput(masterPassword: $masterPassword)
         
-        NavigationLink(destination:  CredentialsListScreen(credentials: user.credentials, cancel: self.cancel, onSelect: onSelect, uri: user.URI), isActive: $isShowCredentialsList) {
+        NavigationLink(destination:  CredentialsListScreen(afd: self.afd), isActive: $isShowCredentialsList) {
           Button {
             passwordAuthen()
           } label: {
@@ -43,8 +41,8 @@ struct LockScreen: View {
           .opacity(masterPassword.isEmpty ? 0.5 : 1)
         }
         .disabled(masterPassword.isEmpty)
-       
-        if user.faceIdEnabled{
+        
+        if afd.user.faceIdEnabled{
           Button {
             biometricAuthen()
           } label: {
@@ -57,10 +55,10 @@ struct LockScreen: View {
         Spacer()
       }
       .padding()
-//      .background(Color("background"))
+      //      .background(Color("background"))
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
-          Button(i.translate("c.cancel"), action: cancel)
+          Button(i.translate("c.cancel"), action: afd.cancel)
         }
       }
       .navigationBarTitleDisplayMode(.inline)
@@ -68,27 +66,27 @@ struct LockScreen: View {
   }
   
   private func passwordAuthen() {
-    let hash = authenService.makeKeyHash(masterPassword: masterPassword, email: user.email)
-    if hash == user.hashMassterPass {
+    let hash = authenService.makeKeyHash(masterPassword: masterPassword, email: afd.user.email)
+    if hash == afd.user.hashMassterPass {
       authenSuccess()
     } else {
-      cancel()
+      afd.cancel()
     }
   }
   
   private func biometricAuthen() {
-      authenService.biometricAuthentication(onSuccess: {
-        authenSuccess()
-      }, onFailed: cancel)
+    authenService.biometricAuthentication(onSuccess: {
+      authenSuccess()
+    }, onFailed: afd.cancel)
   }
   
   private func authenSuccess() {
     if (self.quickBarCredential == nil) {
       self.isShowCredentialsList = true
     } else {
-      onSelect(self.quickBarCredential)
+      afd.loginSelected(data: self.quickBarCredential)
     }
-
+    
   }
 }
 

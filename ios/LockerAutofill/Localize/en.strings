@@ -30,3 +30,21 @@
 // credential
 "item.username" = "Username or email";
 "item.password" = "Password";
+
+// password generator
+"pw.length"  = "Length: ";
+"pw.special" = "Use symbols (@!$%*)";
+"pw.ambiguous" = "Avoid ambiguous characters";
+"pw.useBtn" = "Use password";
+"pw.generator" = "Generate strong password";
+
+// create password
+"create.title" = "Create Login";
+"create.cancel" = "Cancel";
+"create.save" = "Save and autofill";
+"create.name" = "Name (*)";
+"create.info" = "Login Details";
+"create.username" = "Email or Username";
+"create.password" = "Password";
+"create.web" = "Website";
+"create.noti" = "This item will be created and saved locally. It will be synced to the Locker server when you unlock the Locker app.";

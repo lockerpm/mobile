@@ -12,6 +12,12 @@ export type AutofillDataType = {
     isOwner: boolean
     otp?: string
   }[]
+  tempPasswords?: {
+    username: string
+    password: string
+    name: string
+    uri: string
+  }[]
   email: string
   hashPass: string
   avatar: string

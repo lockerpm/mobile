@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct CredentialsListScreen: View {
-  var credentials: [AutofillData]
-  var cancel: () -> Void
-  var onSelect: (_ data: AutofillData) -> Void
-  var uri: String
-  
+  var afd: AutofillScreenDelegate // autofill delegate
   
   @State private var searchText = ""
   @State private var isShowItemDetailId = -1
   
+  @State private var isShowCreatePassword = false
+  @State private var isShowPasswordGenerator = false
+  @State private var isInitSearch = false
+  
   // if user search for domain or url with no result. show suggest search text for best resutl
   var suggestSearchs: [String] {
-    parseDomain(of: uri)
+    parseDomain(of: afd.user.URI)
   }
   
   var initSearch: String {
@@ -32,10 +32,10 @@ struct CredentialsListScreen: View {
   
   var searchCredentials: [AutofillData] {
     if searchText.isEmpty {
-      return credentials
+      return afd.user.credentials
     } else {
       let search = searchText.lowercased()
-      return credentials.filter {
+      return afd.user.credentials.filter {
         $0.name.lowercased().contains(search)
         || $0.uri.lowercased().contains(search)
         || $0.username.lowercased().contains(search)
@@ -63,7 +63,7 @@ struct CredentialsListScreen: View {
         } else {
           ForEach(searchCredentials, id: \.id) { credential in
             Button {
-              onSelect(credential)
+              afd.loginSelected(data: credential)
             } label: {
               CredentialItem(item: credential, isShowDetailId: $isShowItemDetailId)
             }
@@ -79,7 +79,10 @@ struct CredentialsListScreen: View {
           }
         }
       } .onAppear{
-        self.searchText = initSearch
+        if !isInitSearch {
+          self.isInitSearch = true
+          self.searchText = initSearch
+        }
       }
       .searchable(text: $searchText)
       .autocapitalization(.none)
@@ -87,7 +90,32 @@ struct CredentialsListScreen: View {
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
           Button(i.translate("c.cancel")) {
-            cancel()
+            afd.cancel()
+          }
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+          Button {
+            isShowPasswordGenerator = true
+          } label: {
+            Image(systemName: "ellipsis.rectangle.fill")
+          }
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+          NavigationLink(
+            destination:  CreateCipherScreen(
+              initWebsite: initSearch,
+              goBack: {
+                isShowCreatePassword = false
+              },
+              saveAndFill: afd.createLoginItem
+            ), 
+            isActive: $isShowCreatePassword
+          ) {
+            Button {
+              isShowCreatePassword = true
+            } label: {
+              Image(systemName: "plus")
+            }
           }
         }
       }
@@ -95,6 +123,11 @@ struct CredentialsListScreen: View {
     }
     .navigationBarHidden(true)
     .navigationBarBackButtonHidden()
+    .halfSheet(showSheet: $isShowPasswordGenerator) {
+      StrongPasswordGenerator(usePassword: {password in
+        afd.passwordSelected(password: password)
+      })
+    }
   }
 }
 

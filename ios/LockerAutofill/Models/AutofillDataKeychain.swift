@@ -16,9 +16,11 @@ class AutofillDataModel {
   private let KEYCHAIN_PROPS: String = "autofill"
   private var keychainData: String!
   private var user: User
+  private var decodeData: KeychainData = KeychainData(passwords: [], email: "", hashPass: "", avatar: "", faceIdEnabled: false, language: "", isDarkTheme: false, isLoggedInPw: false)
+  private var keychain = Keychain()
   
   init(_ user: User){
-    let keychain = Keychain(service: KEYCHAIN_SERVICE, accessGroup: KEYCHAIN_ACCESS_GROUP)
+    keychain = Keychain(service: KEYCHAIN_SERVICE, accessGroup: KEYCHAIN_ACCESS_GROUP)
     keychainData = try! keychain.get(KEYCHAIN_PROPS)
     self.user = user
     if (keychainData != nil) {
@@ -27,56 +29,43 @@ class AutofillDataModel {
     
     fetchAutofillData(text: keychainData)
   }
-    
+  
+  func saveAutofillData(tempItem: TempLoginItem) {
+    do {
+      if (self.decodeData.tempPasswords != nil) {
+        self.decodeData.tempPasswords?.append(tempItem)
+      } else {
+        self.decodeData.tempPasswords = Array([tempItem])
+      }
 
+
+      let jsonEncoder = JSONEncoder()
+      let jsonData = try jsonEncoder.encode(self.decodeData)
+      let json = String(data: jsonData, encoding: String.Encoding.utf8)
+      print(json)
+      try keychain.set( json!, key: KEYCHAIN_PROPS)
+    }  catch {
+      fatalError("Couldn't encode jsonData to save\(error)")
+    }
+  }
+    
   private func dictToJson(dictionary: [String: [[String: Any]]]) -> String{
     if let theJSONData = try? JSONSerialization.data(
-        withJSONObject: dictionary,
-        options: []) {
-        return String(data: theJSONData, encoding: .ascii)!
+      withJSONObject: dictionary,
+      options: []) {
+      return String(data: theJSONData, encoding: .ascii)!
     }
     return ""
   }
-
+  
   private func fetchAutofillData(text: String) {
-    var passwords:  [[String: Any]] = []
     let jsonData = Data(text.utf8)
     do {
-      if let autofillData = try JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as? [String: Any] {
-        if let passwordList = autofillData["passwords"] as? [[String: Any]] {
-          passwords = passwordList
-        }
-        if let faceIdEnabled = autofillData["faceIdEnabled"] as? Bool {
-          user.faceIdEnabled = faceIdEnabled
-        }
-        if let language = autofillData["language"] as? String {
-          user.language = language
-        }
-        if let isDarkTheme  = autofillData["isDarkTheme"] as? Bool {
-          user.isDarkTheme = isDarkTheme
-        }
-        
-        if let email = autofillData["email"] as? String {
-          user.email = email
-        }
-        if let hashPass = autofillData["hashPass"] as? String {
-          user.hashMassterPass = hashPass
-        }
-        if let avatar  = autofillData["avatar"] as? String {
-          user.avatar = avatar
-        }
-        
-        if let isLoggedInPw  = autofillData["isLoggedInPw"] as? Bool {
-          user.isLoggedInPw = isLoggedInPw
-        }
-      }
-      else {
-        print("JSONSerialization failed")
-      }
+      let decoder = JSONDecoder()
+      decodeData = try decoder.decode(KeychainData.self, from: jsonData)
+      user.syncLocker(decodeData)
     } catch {
-      print(error.localizedDescription)
+      print("Couldn't parse jsonData as \(KeychainData.self):\n\(error)")
     }
-    print(passwords)
-    user.setAutofillData(passwords)
   }
 }

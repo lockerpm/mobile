@@ -32,3 +32,20 @@
 "item.username" = "Tên đăng nhập hoặc email";
 "item.password" = "Mật khẩu";
 
+// password generator
+"pw.length"  = "Độ dài: ";
+"pw.special" = "Kí tự đặc biệt (@!$%*)";
+"pw.ambiguous" = "Tránh các kí tự dễ nhầm lẫn";
+"pw.useBtn" = "Sử dụng mật khẩu";
+"pw.generator" = "Tạo mật khẩu mạnh";
+
+// create password
+"create.title" = "Tạo mật khẩu";
+"create.cancel" = "Huỷ";
+"create.save" = "Lưu và tự động điền";
+"create.name" = "Tên (*)";
+"create.info" = "Thông tin chi tiết";
+"create.username" = "Email / Tên người dùng";
+"create.password" = "Mật khẩu";
+"create.web" = "Địa chỉ web";
+"create.noti" = "Mục này sẽ được tạo và lưu cục bộ. Nó sẽ được đồng bộ hóa với máy chủ Locker khi bạn mở khóa ứng dụng Locker.";

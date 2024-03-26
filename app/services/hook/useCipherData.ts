@@ -412,7 +412,6 @@ export function useCipherData() {
       avatar: user.avatar,
       isLoggedInPw: true,
     }
-
     await saveShared("autofill", JSON.stringify(sharedData))
   }
 
@@ -445,9 +444,10 @@ export function useCipherData() {
       const sharedData: AutofillDataType = JSON.parse(credentials.password)
 
       // Create passwords
-      if (sharedData.passwords) {
-        for (const cipher of sharedData.passwords) {
-          if (!cipher.id) {
+      if (sharedData.tempPasswords && sharedData.tempPasswords.length > 0) {
+        console.log(sharedData.tempPasswords)
+
+        for (const cipher of sharedData.tempPasswords) {
             const payload = newCipher(CipherType.Login)
             const data = new LoginView()
             data.username = cipher.username
@@ -464,7 +464,6 @@ export function useCipherData() {
               collectionIds: [],
             })
             hasUpdate = true
-          }
         }
       }
 
