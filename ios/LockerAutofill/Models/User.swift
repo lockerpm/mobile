@@ -57,9 +57,7 @@ class User {
         self.credentials.append(credential)
       }
     }
-    print(passwords.count)
     if let tempPasswords = data.tempPasswords {
-      print(tempPasswords)
       for (index, item) in tempPasswords.enumerated() {
         let credential = AutofillData(fillID: passwords.count + index,
                                       id: "tempPassword" + String(index),
@@ -72,7 +70,6 @@ class User {
         self.credentials.append(credential)
       }
     }
-    print(self.credentials.count)
   }
   
   func syncLocker(_ data: KeychainData) {

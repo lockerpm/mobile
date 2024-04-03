@@ -14,7 +14,7 @@ struct CredentialsListScreen: View {
   @State private var isShowItemDetailId = -1
   
   @State private var isShowCreatePassword = false
-  @State private var isShowPasswordGenerator = false
+  @State private var isShowPasswordGenerator = 0
   @State private var isInitSearch = false
   
   // if user search for domain or url with no result. show suggest search text for best resutl
@@ -48,10 +48,10 @@ struct CredentialsListScreen: View {
       List {
         if !searchText.isEmpty && searchCredentials.isEmpty {
           Text(i.translate("list.noDataSearch") +  "'\(searchText)'")
-            .foregroundStyle(.secondary)
+            .foregroundStyle(Color.label)
           if searchText == initSearch &&  suggestSearchs.count > 1{
             Text(i.translate("list.suggestSearch") )
-              .foregroundStyle(.secondary)
+              .foregroundStyle(Color.label)
             ForEach(suggestSearchs[1..<suggestSearchs.count], id: \.self) { searchText in
               Button {
                 self.searchText = searchText
@@ -84,6 +84,7 @@ struct CredentialsListScreen: View {
           self.searchText = initSearch
         }
       }
+      .foregroundStyle(Color.title)
       .searchable(text: $searchText)
       .autocapitalization(.none)
       .navigationTitle(i.translate("list.title"))
@@ -95,7 +96,7 @@ struct CredentialsListScreen: View {
         }
         ToolbarItem(placement: .navigationBarTrailing) {
           Button {
-            isShowPasswordGenerator = true
+            isShowPasswordGenerator = 1
           } label: {
             Image(systemName: "ellipsis.rectangle.fill")
           }
@@ -126,8 +127,10 @@ struct CredentialsListScreen: View {
     .halfSheet(showSheet: $isShowPasswordGenerator) {
       StrongPasswordGenerator(usePassword: {password in
         afd.passwordSelected(password: password)
+        isShowPasswordGenerator = 2
       })
     }
+    .background(Color.background)
   }
 }
 

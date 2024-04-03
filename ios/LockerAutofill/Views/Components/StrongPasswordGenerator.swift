@@ -52,12 +52,12 @@ struct StrongPasswordGenerator: View {
                     UIPasteboard.general.string = password
                 } label: {
                     Image(systemName: "doc.on.doc")
-                        .foregroundColor(.secondary)
+                     .foregroundColor(Color.label)
                 }
               
             }
             .padding()
-            .background(Color(uiColor: .secondarySystemGroupedBackground))
+            .background(Color.block)
             .cornerRadius(15)
             
             
@@ -98,10 +98,21 @@ struct StrongPasswordGenerator: View {
                 }
             }
             .padding()
-            .background(Color(uiColor: .secondarySystemGroupedBackground))
+            .background(Color.block)
             .cornerRadius(15)
             
             Spacer()
+          HStack {
+            Button {
+              generatePassword()
+            } label: {
+              Text(i.translate("pw.regenerate"))
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.plain)
+            .padding(.vertical, 10)
+            .background(RoundedRectangle(cornerRadius: 12).stroke(Color("border"), lineWidth:  1))
+            
             Button {
               usePassword(password)
             } label: {
@@ -112,12 +123,15 @@ struct StrongPasswordGenerator: View {
             .padding(.vertical, 10)
             .background(RoundedRectangle(cornerRadius: 12).fill(Color("primary")))
             .opacity(password.isEmpty ? 0.5 : 1)
+          }
+           
         }
         .padding()
-        .background()
         .onAppear {
             generatePassword()
         }
+        .foregroundColor(Color.title)
+        .background(Color.background)
     }
     
     func generatePassword() {

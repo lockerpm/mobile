@@ -5,7 +5,7 @@ import SwiftUI
 extension View {
   //binding show bariable...
   func halfSheet<Content: View>(
-    showSheet: Binding<Bool>,
+    showSheet: Binding<Int>,
     @ViewBuilder content: @escaping () -> Content,
     onDismiss: @escaping () -> Void = {}
   ) -> some View {
@@ -21,8 +21,9 @@ struct HalfSheetHelper<Content: View>: UIViewControllerRepresentable {
   
   var sheetView: Content
   let controller: UIViewController = UIViewController()
-  @Binding var showSheet: Bool
+  @Binding var showSheet: Int
   var onDismiss: () -> Void = {}
+
   
   func makeCoordinator() -> Coordinator {
     Coordinator(parent: self)
@@ -34,10 +35,12 @@ struct HalfSheetHelper<Content: View>: UIViewControllerRepresentable {
   }
 
   func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-    if showSheet {
+    if showSheet == 1 {
       let sheetController = CustomHostingController(rootView: sheetView)
       sheetController.presentationController?.delegate = context.coordinator
       uiViewController.present(sheetController, animated: true)
+    } else if showSheet == 2 {
+      uiViewController.dismiss(animated: true)
     }
   }
   
@@ -51,7 +54,7 @@ struct HalfSheetHelper<Content: View>: UIViewControllerRepresentable {
     }
     
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
-      parent.showSheet = false
+      parent.showSheet = 0
     }
   }
 }

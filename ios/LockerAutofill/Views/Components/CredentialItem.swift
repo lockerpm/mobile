@@ -24,7 +24,7 @@ struct CredentialItem: View {
            Text(item.name)
            Text(item.username)
              .font(.subheadline)
-             .foregroundStyle(.secondary)
+             .foregroundStyle(Color.label)
          }
          Spacer()
 
@@ -36,7 +36,7 @@ struct CredentialItem: View {
                 isShowDetailId = item.fillID
               }
           }
-          .foregroundColor(.secondary)
+          .foregroundColor(Color.label)
           .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 0))
        }
     }

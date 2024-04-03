@@ -13,7 +13,7 @@ struct CreateCipherScreen: View {
   var saveAndFill: (_ item: TempLoginItem) -> Void
   
   @FocusState var focusedField: FocusedField?
-  @State private var isShowPasswordGenerator = false
+  @State private var isShowPasswordGenerator = 0
   @State private var itemName: String = ""
   @State private var userName: String = ""
   @State private var passowrd: String = ""
@@ -50,7 +50,7 @@ struct CreateCipherScreen: View {
             TextInput(isPassword: true, titleKey: i.translate("create.password"), textField: FocusedField.password, value: $passowrd)
             
             Button {
-              isShowPasswordGenerator = true
+              isShowPasswordGenerator = 1
             } label: {
               HStack() {
                 Label(i.translate("pw.generator"), systemImage: "repeat")
@@ -66,7 +66,7 @@ struct CreateCipherScreen: View {
           self.webUrl = initWebsite
         }
         .padding()
-        .background(Color(uiColor: .secondarySystemGroupedBackground))
+        .background(Color.background)
         .cornerRadius(15)
         .padding()
       }
@@ -84,11 +84,13 @@ struct CreateCipherScreen: View {
           .frame(maxWidth: .infinity)
           .foregroundStyle(.white)
       }
+      .disabled(disableSave)
       .padding(.vertical, 10)
       .background(RoundedRectangle(cornerRadius: 12).fill(Color("primary")))
       .opacity(disableSave  ? 0.5 : 1)
       .padding()
     }
+ 
     .navigationTitle(i.translate("create.title"))
     .navigationBarBackButtonHidden()
     .toolbar {
@@ -101,8 +103,10 @@ struct CreateCipherScreen: View {
     .halfSheet(showSheet: $isShowPasswordGenerator) {
       StrongPasswordGenerator(usePassword: {strongPW in
         self.passowrd = strongPW
+        isShowPasswordGenerator = 2
       })
     }
+    .background(Color.block)
   }
   
   func onSaveButtonPress() {

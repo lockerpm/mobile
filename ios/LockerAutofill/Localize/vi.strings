@@ -38,6 +38,7 @@
 "pw.ambiguous" = "Tránh các kí tự dễ nhầm lẫn";
 "pw.useBtn" = "Sử dụng mật khẩu";
 "pw.generator" = "Tạo mật khẩu mạnh";
+"pw.regenerate" = "Tạo lại";
 
 // create password
 "create.title" = "Tạo mật khẩu";

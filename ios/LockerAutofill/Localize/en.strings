@@ -37,6 +37,7 @@
 "pw.ambiguous" = "Avoid ambiguous characters";
 "pw.useBtn" = "Use password";
 "pw.generator" = "Generate strong password";
+"pw.regenerate" = "Regenerate";
 
 // create password
 "create.title" = "Create Login";

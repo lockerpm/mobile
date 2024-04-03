@@ -23,6 +23,7 @@ struct LockScreen: View {
         Text(i.translate("lock.title"))
           .fontWeight(.medium)
           .padding(.bottom, 4)
+          .foregroundColor(Color.title)
         
         UserAvatar(imageUri: afd.user.avatar, email: afd.user.email ?? "")
         
@@ -37,7 +38,7 @@ struct LockScreen: View {
               .foregroundStyle(.white)
           }
           .padding(.vertical, 10)
-          .background(RoundedRectangle(cornerRadius: 12).fill(Color("primary")))
+          .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary))
           .opacity(masterPassword.isEmpty ? 0.5 : 1)
         }
         .disabled(masterPassword.isEmpty)
@@ -47,6 +48,7 @@ struct LockScreen: View {
             biometricAuthen()
           } label: {
             Label(i.translate("lock.faceid") , systemImage: "faceid")
+              .foregroundStyle(Color.label)
           }
           .buttonStyle(.plain)
           .padding(.top, 16)
@@ -55,7 +57,6 @@ struct LockScreen: View {
         Spacer()
       }
       .padding()
-      //      .background(Color("background"))
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
           Button(i.translate("c.cancel"), action: afd.cancel)
@@ -63,6 +64,7 @@ struct LockScreen: View {
       }
       .navigationBarTitleDisplayMode(.inline)
     }
+    .background(Color.background)
   }
   
   private func passwordAuthen() {

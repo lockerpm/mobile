@@ -28,7 +28,7 @@ struct CredentialInfo: View {
     VStack(alignment: .leading) {
       Text(label)
         .font(.subheadline)
-        .foregroundStyle(.secondary)
+        .foregroundStyle(Color.label)
         .padding(.trailing, 4)
         .zIndex(/*@START_MENU_TOKEN@*/1.0/*@END_MENU_TOKEN@*/)
       
@@ -44,12 +44,12 @@ struct CredentialInfo: View {
       .overlay(alignment: .trailing){
         if copied {
           Text(i.translate("c.copied"))
-            .foregroundStyle(.secondary)
+            .foregroundStyle(Color.label)
             .transition(.opacity)
             .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
         } else {
           Image(systemName: "doc.on.doc.fill")
-            .foregroundStyle(.secondary)
+            .foregroundStyle(Color.label)
             .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
           
         }
@@ -58,7 +58,7 @@ struct CredentialInfo: View {
         UIPasteboard.general.string = text
         self.copied = true
       }
-      .foregroundColor(.primary)
+      .foregroundColor(Color.title)
     }
     
   }

@@ -28,28 +28,28 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   override func viewDidAppear(_ animated: Bool) {
-//    self.view.backgroundColor = UIColor(named: "background")
-    self.navigateCredentialsList()
-//    if (user.faceIdEnabled){
-//      authenService.biometricAuthentication(
-//        view: self,
-//        onSuccess: {
-//          if (self.quickBarCredential == nil) {
-//            self.navigateCredentialsList()
-//          } else {
-//            self.loginSelected(data: self.quickBarCredential)
-//          }
-//        },
-//        onFailed: self.navigateLockScreen,
-//        notSupported: {
-//          self.user.faceIdEnabled = false
-//          self.navigateLockScreen()
-//        }
-//      )
-//    }
-//    else {
-//      self.navigateLockScreen()
-//    }
+    self.view.backgroundColor = UIColor(named: "background")
+//    self.overrideUserInterfaceStyle = .dark
+    if (user.faceIdEnabled){
+      authenService.biometricAuthentication(
+        view: self,
+        onSuccess: {
+          if (self.quickBarCredential == nil) {
+            self.navigateCredentialsList()
+          } else {
+            self.loginSelected(data: self.quickBarCredential)
+          }
+        },
+        onFailed: self.navigateLockScreen,
+        notSupported: {
+          self.user.faceIdEnabled = false
+          self.navigateLockScreen()
+        }
+      )
+    }
+    else {
+      self.navigateLockScreen()
+    }
   }
  
   /*

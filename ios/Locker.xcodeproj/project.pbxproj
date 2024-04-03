@@ -50,6 +50,7 @@
 		7CCABA7C2BB13796006D7FB7 /* TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCABA7B2BB13796006D7FB7 /* TextInput.swift */; };
 		7CCABA7E2BB170EE006D7FB7 /* KeychainData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCABA7D2BB170EE006D7FB7 /* KeychainData.swift */; };
 		7CCABA802BB188BA006D7FB7 /* AutofillScreenDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCABA7F2BB188BA006D7FB7 /* AutofillScreenDelegate.swift */; };
+		7CCE43192BB5880A0004028E /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCE43182BB5880A0004028E /* Theme.swift */; };
 		7CEB31E22A9309D9007F6051 /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CEB31E12A9309D9007F6051 /* assets.xcassets */; };
 		7CEB31E92A931B50007F6051 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEB31E82A931B50007F6051 /* KeychainAccess */; };
 		7CEB31EB2A931B5A007F6051 /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEB31EA2A931B5A007F6051 /* SwiftOTP */; };
@@ -162,6 +163,7 @@
 		7CCABA7B2BB13796006D7FB7 /* TextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInput.swift; sourceTree = "<group>"; };
 		7CCABA7D2BB170EE006D7FB7 /* KeychainData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainData.swift; sourceTree = "<group>"; };
 		7CCABA7F2BB188BA006D7FB7 /* AutofillScreenDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillScreenDelegate.swift; sourceTree = "<group>"; };
+		7CCE43182BB5880A0004028E /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		7CEB31E12A9309D9007F6051 /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7CEB31EF2A932780007F6051 /* RSAUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAUtils.swift; sourceTree = "<group>"; };
 		7CEB31F02A932780007F6051 /* RCTCryptoServiceIos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTCryptoServiceIos.m; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 			isa = PBXGroup;
 			children = (
 				7C973A592A93075E00875FBA /* Utils.swift */,
+				7CCE43182BB5880A0004028E /* Theme.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -863,6 +866,7 @@
 				7C1F2A6E2B90873A0003B7EF /* CredentialItem.swift in Sources */,
 				7C973A512A93068F00875FBA /* AutofillData.swift in Sources */,
 				7C39140F2B87321900213EEB /* User.swift in Sources */,
+				7CCE43192BB5880A0004028E /* Theme.swift in Sources */,
 				7C3914012B870A2800213EEB /* CredentialsQuickTypeBar.swift in Sources */,
 				7CCABA762BB12095006D7FB7 /* Sheet.swift in Sources */,
 				7C3914072B872A5900213EEB /* AuthenService.swift in Sources */,
@@ -966,7 +970,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 166;
+				CURRENT_PROJECT_VERSION = 170;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
@@ -1006,7 +1010,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 166;
+				CURRENT_PROJECT_VERSION = 170;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;

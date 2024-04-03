@@ -35,7 +35,7 @@ struct MasterPasswordInput: View {
                 isSecure.toggle()
             }, label: {
                 Image(systemName: !isSecure ? "eye.slash" : "eye" )
-                    .foregroundStyle(.gray)
+                .foregroundStyle(Color.label)
             })
         }
         .padding(12)
