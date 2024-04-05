@@ -163,8 +163,8 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
   // -------------- EFFECT ------------------
 
   useEffect(() => {
-    checkKey()
-    fetchEnterpriseInvitation()
+      checkKey()
+      fetchEnterpriseInvitation()
   }, [])
 
   useEffect(() => {

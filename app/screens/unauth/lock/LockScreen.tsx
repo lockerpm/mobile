@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useEffect,  useState } from "react"
 import { Alert, BackHandler, Platform } from "react-native"
 import { useStores } from "app/models"
 import { api } from "app/services/api"
@@ -26,12 +26,8 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
 
   // ---------------------- PARAMS -------------------------
 
-  // const [lockMethod, setLogMethod] = useState<LoginMethod>(LoginMethod.PASSWORD)
-  // const [biometryType, setBiometryType] = useState<BiometricsType>(BiometricsType.Biometrics)
-
-  const lockMethod = LoginMethod.PASSWORD
-  const biometryType = BiometricsType.FaceID
-
+  const [lockMethod, setLogMethod] = useState<LoginMethod>(LoginMethod.PASSWORD)
+  const [biometryType, setBiometryType] = useState<BiometricsType>(BiometricsType.Biometrics)
   // ---------------------- COMPUTED -------------------------
 
   const isAutofillAnroid = uiStore.isAndroidAutofillService
@@ -43,12 +39,12 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
     const { biometryType } = await ReactNativeBiometrics.isSensorAvailable()
 
     if (biometryType === ReactNativeBiometrics.TouchID) {
-      // setBiometryType(BiometricsType.TouchID)
+      setBiometryType(BiometricsType.TouchID)
       return
     }
 
     if (biometryType === ReactNativeBiometrics.FaceID) {
-      // setBiometryType(BiometricsType.FaceID)
+      setBiometryType(BiometricsType.FaceID)
     }
   }
 
@@ -56,7 +52,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
     if (route.params.type === LockType.Individual) {
       const res = await user.businessLoginMethod()
       if (res.kind === "ok") {
-        // setLogMethod(res.data.login_method)
+        setLogMethod(res.data.login_method)
       }
     }
   }
@@ -65,7 +61,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
     // Om Premise setup
     if (route.params.type === LockType.OnPremise) {
       if (route.params.data.login_method !== LoginMethod.PASSWORD) {
-        // setLogMethod(LoginMethod.PASSWORDLESS)
+        setLogMethod(LoginMethod.PASSWORDLESS)
         user.setPasswordlessLogin(true)
       }
 
@@ -80,48 +76,46 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
 
   const handleLogout = async () => {
     await logout()
-    navigation.replace("login")
+    navigation.navigate("login")
+  }
+
+  const handleBack = (e) => {
+    if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
+      navigation.dispatch(e.data.action)
+      return
+    }
+    e.preventDefault()
+
+    if (!IS_IOS && isAutofillAnroid) {
+      BackHandler.exitApp()
+      return
+    }
+    Alert.alert(translate("alert.logout") + user.email + "?", "", [
+      {
+        text: translate("common.cancel"),
+        style: "cancel",
+      },
+      {
+        text: translate("common.logout"),
+        style: "destructive",
+        onPress: handleLogout,
+      },
+    ])
   }
 
   // -------------- EFFECT ------------------
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-    console.log(123123123)
-    detectbiometryType()
-    fetchBusinessLoginMethod()
-    fetchLockType()
+      detectbiometryType()
+      fetchBusinessLoginMethod()
+      fetchLockType()
   }, [])
 
   // Handle back press
   useEffect(() => {
-    const handleBack = (e) => {
-      if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
-        navigation.dispatch(e.data.action)
-        return
-      }
-      e.preventDefault()
-
-      if (!IS_IOS && isAutofillAnroid) {
-        BackHandler.exitApp()
-        return
-      }
-      Alert.alert(translate("alert.logout") + user.email + "?", "", [
-        {
-          text: translate("common.cancel"),
-          style: "cancel",
-        },
-        {
-          text: translate("common.logout"),
-          style: "destructive",
-          onPress: handleLogout,
-        },
-      ])
-    }
-    navigation.addListener("beforeRemove", handleBack)
-    return () => {
-      navigation.removeListener("beforeRemove", handleBack)
-    }
+    const unsubscribe = navigation.addListener("beforeRemove", handleBack)
+    return unsubscribe
   }, [navigation])
 
   // ---------------------- RENDER -------------------------
@@ -148,5 +142,4 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
   }
   return <BusinessLockByPasswordless {...commonProps} />
 
-  // return <View style={{ flex: 1 }}>{renderContent()}</View>
 })

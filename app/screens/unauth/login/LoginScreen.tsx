@@ -33,9 +33,9 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
     if (userRes.kind === "ok" && userPwRes.kind === "ok") {
       if (user.is_pwd_manager) {
-        navigation.replace("lock")
+        navigation.navigate("lock")
       } else {
-        navigation.replace("createMasterPassword")
+        navigation.navigate("createMasterPassword")
       }
     } else {
       notify("error", translate("passkey.error.login_failed"))
@@ -69,7 +69,6 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
     }
 
     navigation.addListener("beforeRemove", handleBack)
-
     return () => {
       navigation.removeListener("beforeRemove", handleBack)
     }
