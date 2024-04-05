@@ -113,11 +113,14 @@ export const EditAliasModal = (props: Props) => {
           }}
         >
           <TextInput
+            autoComplete="off"
+            autoCorrect={false}
             value={newAddress}
             onChangeText={(text: string) => {
               setNewAddress(text)
               if (updateError !== "") setUpdateError("")
             }}
+            
             placeholder={"... "}
             placeholderTextColor={colors.secondaryText}
             selectionColor={colors.primary}
