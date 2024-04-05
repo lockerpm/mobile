@@ -1,5 +1,5 @@
-import { observer } from 'mobx-react-lite'
-import React, { ComponentType } from 'react'
+import { observer } from "mobx-react-lite"
+import React, { ComponentType } from "react"
 import {
   Pressable,
   PressableProps,
@@ -11,13 +11,13 @@ import {
   ViewStyle,
   ActivityIndicator,
   ColorValue,
-} from 'react-native'
-import { spacing } from '../../../theme'
-import { Text, TextProps } from '../text/Text'
-import { useTheme } from 'app/services/context'
-import { Icon, IconProps, IconTypes } from '../icon/Icon'
+} from "react-native"
+import { spacing } from "../../../theme"
+import { Text, TextProps } from "../text/Text"
+import { useTheme } from "app/services/context"
+import { Icon, IconProps, IconTypes } from "../icon/Icon"
 
-type Presets = 'primary' | 'secondary' | 'teriatary'
+type Presets = "primary" | "secondary" | "teriatary"
 type Sizes = keyof typeof $sizeStyles
 
 export interface ButtonAccessoryProps {
@@ -42,7 +42,7 @@ export interface ButtonProps extends PressableProps {
   /**
    * The text to display if not using `tx` or nested components.
    */
-  text?: TextProps['text']
+  text?: TextProps["text"]
   /**
    * An optional style override useful for padding & margin.
    */
@@ -104,7 +104,7 @@ export const Button = observer((props: ButtonProps) => {
     text,
     disabled,
     loading,
-    size = 'medium',
+    size = "medium",
     style: $viewStyleOverride,
     pressedStyle: $pressedViewStyleOverride,
     textStyle: $textStyleOverride,
@@ -178,7 +178,7 @@ export const Button = observer((props: ButtonProps) => {
 
   // Button Loading
   const $loadingStyle: Record<Presets, StyleProp<ViewStyle>> = {
-    primary: { opacity: 0.8 },
+    primary: { backgroundColor: colors.primary },
     secondary: { backgroundColor: colors.background },
     teriatary: { backgroundColor: teriataryBackground },
   }
@@ -189,7 +189,7 @@ export const Button = observer((props: ButtonProps) => {
     teriatary: colors.primary,
   }
 
-  const preset: Presets = $viewPresets[props.preset] ? props.preset : 'primary'
+  const preset: Presets = $viewPresets[props.preset] ? props.preset : "primary"
 
   function $viewStyle({ pressed }) {
     return [
@@ -197,7 +197,7 @@ export const Button = observer((props: ButtonProps) => {
       $sizeStyles[size],
       !!disabled && $disabledViewStyle[preset],
       !!pressed && [$pressedViewPresets[preset], $pressedViewStyleOverride],
-      $viewStyleOverride,
+      // $viewStyleOverride,
     ]
   }
   function $textStyle({ pressed }) {
@@ -226,25 +226,26 @@ export const Button = observer((props: ButtonProps) => {
   }
 
   return (
-    <Pressable disabled={disabled} style={$viewStyle} accessibilityRole="button" {...rest}>
-      {(state) => (
-        <>
-          <LeftIcon state={state} />
+    <View style={$viewStyleOverride}>
+      <Pressable disabled={disabled} style={$viewStyle} accessibilityRole="button" {...rest}>
+        {(state) => (
+          <>
+            <LeftIcon state={state} />
 
-          <Text preset="bold" text={text} style={$textStyle(state)} />
+            <Text preset="bold" text={text} style={$textStyle(state)} />
 
-          {children}
+            {children}
 
-          <RightIcon state={state} />
-
-          {loading && (
-            <View style={[$baseLoadingStyle, $loadingStyle[preset], $sizeStyles[size]]}>
-              <ActivityIndicator size={17} color={$activityColor[preset]} />
-            </View>
-          )}
-        </>
+            <RightIcon state={state} />
+          </>
+        )}
+      </Pressable>
+      {loading && (
+        <View style={[$baseLoadingStyle, $loadingStyle[preset], $sizeStyles[size]]}>
+          <ActivityIndicator size={17} color={$activityColor[preset]} />
+        </View>
       )}
-    </Pressable>
+    </View>
   )
 })
 
@@ -252,17 +253,17 @@ const $baseViewStyle: ViewStyle = {
   paddingHorizontal: 12,
   minHeight: 28,
   borderRadius: 8,
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexDirection: 'row',
-  overflow: 'hidden',
+  justifyContent: "center",
+  alignItems: "center",
+  flexDirection: "row",
+  overflow: "hidden",
   paddingVertical: 12,
 }
 
 const $baseTextStyle: TextStyle = {
   fontSize: 16,
   lineHeight: 20,
-  textAlign: 'center',
+  textAlign: "center",
   flexShrink: 1,
   flexGrow: 0,
   zIndex: 2,

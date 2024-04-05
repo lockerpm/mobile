@@ -331,7 +331,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer((props)
           />
         )}
 
-        <SocialLogin onLoggedIn={onLoggedIn} />
+        <SocialLogin onLoggedIn={onLoggedIn} setIsLoading={setIsLoading} />
 
         <Footer />
 

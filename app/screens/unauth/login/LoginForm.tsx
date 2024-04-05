@@ -11,6 +11,8 @@ import Animated, { FadeInUp } from "react-native-reanimated"
 import { useTheme } from "app/services/context"
 
 type Props = {
+  isLoading: boolean
+  setIsLoading: (val: boolean) => void
   nextStep: (username: string, password: string, methods: { type: string; data: any }[]) => void
   onLoggedIn: (newUser: boolean, token: string) => Promise<void>
   handleForgot: () => void
@@ -24,7 +26,13 @@ enum METHOD {
 
 const IS_IOS = Platform.OS === "ios"
 
-export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
+export const LoginForm = ({
+  nextStep,
+  onLoggedIn,
+  handleForgot,
+  isLoading,
+  setIsLoading,
+}: Props) => {
   const { user } = useStores()
   const { colors } = useTheme()
   const { notify, notifyApiError, setApiTokens, translate } = useHelper()
@@ -114,7 +122,7 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
     if (resAuthPasskeyOptions.kind === "ok") {
       try {
         const authRequest: PasskeyAuthenticationRequest = credentialAuthOptions(
-          resAuthPasskeyOptions.data,
+          resAuthPasskeyOptions.data
         )
         // Call the `authenticate` method with the retrieved request in JSON format
         // A native overlay will be displayed
@@ -254,7 +262,7 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
               </TouchableOpacity>
             </View>
             <Button
-              loading={loginMethodLoading === METHOD.PASSWORD}
+              loading={loginMethodLoading === METHOD.PASSWORD || isLoading}
               disabled={loginMethodLoading !== METHOD.NONE || !(username && password)}
               text={translate("common.login")}
               onPress={handleLogin}
@@ -268,6 +276,7 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
 
         {loginMethod !== METHOD.PASSWORD && (
           <Button
+            loading={isLoading}
             disabled={!username}
             text={translate("common.continue")}
             onPress={getLoginMethod}
@@ -280,7 +289,7 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
         {showExtraPasskeyLogin && (
           <Button
             preset="secondary"
-            loading={loginMethodLoading === METHOD.PASSKEY}
+            loading={loginMethodLoading === METHOD.PASSKEY || isLoading}
             disabled={loginMethodLoading !== METHOD.NONE || !username}
             text={translate("passkey.login_passkey")}
             onPress={() => {
@@ -297,7 +306,7 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
           />
         )}
 
-        <SocialLogin onLoggedIn={onLoggedIn} />
+        <SocialLogin setIsLoading={setIsLoading} onLoggedIn={onLoggedIn} />
       </View>
     </View>
   )

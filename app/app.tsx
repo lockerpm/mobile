@@ -18,6 +18,7 @@ import {
   setRootNavigation,
   useNavigationPersistence,
 } from "./navigators"
+import RNBootSplash from "react-native-bootsplash"
 import * as storage from "./utils/storage"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
@@ -55,7 +56,6 @@ export interface RootProp extends JSX.IntrinsicAttributes {
   lastUserPasswordID?: string
   username?: string
   password?: string
-  hideSplashScreen: () => Promise<void>
 }
 
 const App: ComponentType<RootProp> = (props: RootProp) => {
@@ -74,7 +74,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
     // Slightly delaying splash screen hiding for better UX; can be customized or removed as needed,
     // Note: (vanilla Android) The splash-screen will not appear if you launch your app via the terminal or Android Studio. Kill the app and launch it normally by tapping on the launcher icon. https://stackoverflow.com/a/69831106
     // Note: (vanilla iOS) You might notice the splash-screen logo change size. This happens in debug/development mode. Try building the app for release.
-    setTimeout(props.hideSplashScreen, 500)
+    setTimeout(RNBootSplash.hide, 500)
   })
 
   // Before we show the app, we have to wait for our state to be ready.
@@ -91,7 +91,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
 
     if (problem) {
       Logger.debug(
-        `URL:${response.config.baseURL}${response.config.url} - Status: ${
+        `URL:${response.config?.baseURL}${response.config?.url} - Status: ${
           response.status
         } - Message: ${JSON.stringify(response.data)}`
       )
@@ -101,13 +101,13 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
       if (problem.kind === "unauthorized") {
         const ignoredUrls = ["/users/logout", "/sso/auth"]
         const ignoredRoute = ["init", "intro", "onBoarding", "login", "forgotPassword", "signup"]
-        const currentRoute = navigationRef.current.getCurrentRoute()
+        const currentRoute = navigationRef.current?.getCurrentRoute()
 
         if (
-          !ignoredUrls.includes(response.config.url) &&
-          !ignoredRoute.includes(currentRoute.name)
+          !ignoredUrls.includes(response.config?.url || "") &&
+          !ignoredRoute.includes(currentRoute?.name || "")
         ) {
-          rootStore.user.setApiToken(null)
+          rootStore.user.setApiToken("")
           rootStore.user.setLoggedIn(false)
           rootStore.user.setLoggedInPw(false)
           rootStore.cipherStore.lock()
@@ -124,7 +124,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
       }
     }
   }
-  const monitorApiRequest = (request) => async () => {
+  const monitorApiRequest = (request: any) => async () => {
     Logger.debug(
       `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
         request.params ? JSON.stringify(request.params) : ""
@@ -141,10 +141,10 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
       lastFill = 0,
       autofill = 0,
       savePassword = 0,
-      domain,
-      lastUserPasswordID,
-      username,
-      password,
+      domain = "",
+      lastUserPasswordID = "",
+      username = "",
+      password = "",
     } = props
 
     if (autofill || lastFill || savePassword) {
@@ -159,7 +159,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
         password,
       })
     } else {
-      rootStore.uiStore.setAndroidAutofillServiceData(null, null)
+      rootStore.uiStore.setAndroidAutofillServiceData(false)
     }
   }
 

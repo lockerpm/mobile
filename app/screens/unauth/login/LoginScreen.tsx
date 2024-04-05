@@ -25,6 +25,7 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
     methods: [],
   })
   const [isShow2FASheet, setIsShow2FASheet] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   // ------------------------------ METHODS -------------------------------
 
@@ -39,6 +40,7 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
     } else {
       notify("error", translate("passkey.error.login_failed"))
     }
+    setIsLoading(false)
   }
 
   const nextStep = (username: string, password: string, methods: { type: string; data: any }[]) => {
@@ -91,7 +93,13 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
         onLoggedIn={onLoggedIn}
       />
 
-      <LoginForm handleForgot={handleForgot} onLoggedIn={onLoggedIn} nextStep={nextStep} />
+      <LoginForm
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+        handleForgot={handleForgot}
+        onLoggedIn={onLoggedIn}
+        nextStep={nextStep}
+      />
 
       <View
         style={{
