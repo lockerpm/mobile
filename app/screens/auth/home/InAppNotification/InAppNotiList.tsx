@@ -42,7 +42,7 @@ export const InAppListNotificationScreen: FC<AppStackScreenProps<"app_list_noti"
             paddingHorizontal: 20,
           }}
           keyExtractor={(_, index) => String(index)}
-          renderItem={({ item }) => <NotiListItem lang={user.language} {...item} />}
+          renderItem={({ item }) => <NotiListItem lang={user.language === "zh" ? "en" : user.language} {...item} />}
         />
       </Screen>
     )

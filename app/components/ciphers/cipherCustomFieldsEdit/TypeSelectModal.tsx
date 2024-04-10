@@ -39,7 +39,7 @@ export const TypeSelectModal = (props: Props) => {
       header={<View style={{ width: '100%', paddingHorizontal: 20, marginBottom: 10 }}>
         <Text
           preset="bold"
-          text={'Add new field'}
+          tx="common.add_new_field"
         />
       </View>}
     >

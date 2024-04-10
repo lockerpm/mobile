@@ -12,7 +12,7 @@ struct MasterPasswordInput: View {
     @FocusState private var focusedField: Bool
     @State private var isSecure: Bool = true
     
-    var titleKey = "Master password"
+    var titleKey = i.translate("lock.mp")
     var body: some View {
         HStack {
             Group{
