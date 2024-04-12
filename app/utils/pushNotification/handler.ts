@@ -170,7 +170,8 @@ export const handleTipTrick = async (data: string | object) => {
   const tipTrickdata: TipTrickData = parseDataType(data)
   const { language } = await _getCurrentUser()
   // const isVn = language === 'vi'
-  const text = tipTrickdata.data.title[language]
+  const text = tipTrickdata.data.title[language] || tipTrickdata.data.title.en
+  const link = tipTrickdata.data.metadata.link[language] ||  tipTrickdata.data.metadata.link.en
 
   notify({
     id: `new_feature`,
@@ -178,7 +179,7 @@ export const handleTipTrick = async (data: string | object) => {
     body: text,
     data: {
       type: PushEvent.TIP_TRICK,
-      url: tipTrickdata.data.metadata.link[language],
+      url: link,
     },
   })
 }

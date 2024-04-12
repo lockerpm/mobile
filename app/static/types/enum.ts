@@ -102,6 +102,7 @@ export enum NotificationCategory {
   DATA_BREACH = 'data_breach',
   PW_TIPS = 'password_tip_trick',
   MARKETING = 'marketing',
+  PAYMENT = 'payment',
   OTHER = 'other',
 }
 

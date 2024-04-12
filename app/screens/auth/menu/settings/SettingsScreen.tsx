@@ -346,7 +346,7 @@ export const SettingsScreen = observer(() => {
           disabled={uiStore.isOffline || cipherStore.isSynching}
           name={translate("settings.sync_now")}
           onPress={syncDataManually}
-          RightAccessory={<Text text={moment(cipherStore.lastSync).fromNow()} />}
+          // RightAccessory={<Text text={moment(cipherStore.lastSync).fromNow()} />}
         />
         <SettingsItem
           name={translate("settings.import")}

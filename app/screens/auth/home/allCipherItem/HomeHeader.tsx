@@ -72,7 +72,7 @@ export const HomeHeader = (props: Props) => {
   // Check online/offline interval
   useEffect(() => {
     fetchInAppNotification()
-    const interval = setInterval(fetchInAppNotification, 1000 * 30)
+    const interval = setInterval(fetchInAppNotification, 1000 * 120)
     return () => {
       clearInterval(interval)
     }

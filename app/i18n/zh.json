@@ -24,6 +24,7 @@
     "create": "建立",
     "crypto_asset": "加密資產備份",
     "crypto_wallet": "加密資產備份",
+    "cryptoWallet": "加密钱包",
     "custom_fields": "自訂欄位",
     "data": "資料",
     "date": "日期",
@@ -1133,6 +1134,49 @@
       "ble": "透過 BLE 驗證",
       "usb": "透過 USB 驗證",
       "nfc": "透過 NFC 驗證"
+    }
+  },
+  "app_noti": {
+    "item_sharing": {
+      "100001": "{{recipient_name}} has accepted the item you share",
+      "100002": "{{recipient_name}} has rejected  the item you share",
+      "100003": "{{owner_name}} has shared a {{cipher_type}} with you",
+      "100004": "A user has registered a Locker account via your sharing request. Please confirm your sharing request",
+      "100006": "{{owner_name}} has confirmed to share a {{cipher_type}} with you"
+    },
+    "member_to_group_share": {
+      "100005": "{{member_joined_text_en}} group {{group_name}} that you shared your items with. Click to confirm sharing so they can see shared items."
+    },
+    "payment": {
+      "100007":  "Your invoice {{payment_id}} was paid successfully",
+      "100008": "Locker couldn't proceed payment on your account. Your account was downgraded"
+    },
+    "emergency_access": {
+      "100009": "The user {{grantor_name}} ({{grantor_email}}) has invited you as his/her Emergency Contact",
+      "100010": "The user {{grantee_name}} ({{grantee_email}}) has accepted your invitation. Please confirm his/her identity as your new Emergency Access",
+      "100011":  "User {{grantee_name}} ({{grantee_email}}) has accepted your Emergency Contact invitation",
+      "100012": "User {{grantee_name}} ({{grantee_email}}) has declined your Emergency Contact invitation",
+      "100013": "You are now Emergency Contact of the user {{grantor_name}} ({{grantor_email}})",
+      "100014": "User {{grantee_name}} ({{grantee_email}}) has requested to {{request}} your vault items",
+      "100015":  "User {{grantor_name}} ({{grantor_email}}) has accepted your Emergency Request",
+      "100016": "User {{grantor_name}} ({{grantor_email}}) has declined your Emergency Request"
+    }
+  },
+  "push_noti": {
+    "item_sharing": {
+      "new_share": "您有一个新共享 {{typeName}}",
+      "new_shares": "您有 {{count}} 个新共享项目。 打开储物柜接受或拒绝.",
+      "confirm": "请确认您的共享请求",
+      "accept": "{{recipientName}} 已接受您共享的 {{typeName}}",
+      "reject": "{{recipientName}} 已拒绝您的 {{typeName}} 份额"
+    },
+    "emergency_access": {
+      "invite": "{{user}} 邀请您成为紧急访问联系人",
+      "accept_invite": "{{user}} 已接受您的紧急访问邀请",
+      "reject_invite": "{{user}} 已拒绝您的紧急访问邀请",
+      "request": "{{user}} 已请求 {{type}} 您的 Locker 帐户",
+      "accept_request": "{{user}} 批准了您对 {{type}} 他们的 Locker 帐户的请求",
+      "reject_request": "{{user}} 拒绝了您对 {{type}} 他们的 Locker 帐户的请求"
     }
   }
 }
