@@ -1148,7 +1148,7 @@
       "100006": "{{owner_name}} has confirmed to share a {{cipher_type}} with you"
     },
     "member_to_group_share": {
-      "100005": "{{member_joined_text_en}} group {{group_name}} that you shared your items with. Click to confirm sharing so they can see shared items."
+      "100005": "{{member_joined_text}} group {{group_name}} that you shared your items with. Click to confirm sharing so they can see shared items."
     },
     "payment": {
       "100007":  "Your invoice {{payment_id}} was paid successfully",

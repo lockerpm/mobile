@@ -1193,7 +1193,7 @@
       "100006": "{{owner_email}} vừa xác nhận chia sẻ một {{cipher_type}} với bạn"
     },
     "member_to_group_share": {
-      "100005": "{{member_joined_text_vi}} nhóm {{group_name}} mà bạn đã chia sẻ item. Vui lòng xác nhận để họ có thể sử dụng item được chia sẻ."
+      "100005": "{{member_joined_text}} nhóm {{group_name}} mà bạn đã chia sẻ item. Vui lòng xác nhận để họ có thể sử dụng item được chia sẻ."
     },
     "payment": {
       "100007": "Hóa đơn {{payment_id}} đã được thanh toán thành công",
