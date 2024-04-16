@@ -24,6 +24,7 @@
     "create": "Create",
     "crypto_asset": "Crypto Backups",
     "crypto_wallet": "Crypto Backups",
+    "cryptoWallet": "Crypto Wallet",
     "custom_fields": "Custom Fields",
     "data": "Data",
     "date": "Date",
@@ -1136,6 +1137,49 @@
       "ble": "Authentication via BLE",
       "usb": "Authentication via USB",
       "nfc": "Authentication via NFC"
+    }
+  },
+  "app_noti": {
+    "item_sharing": {
+      "100001": "{{recipient_name}} has accepted the item you share",
+      "100002": "{{recipient_name}} has rejected  the item you share",
+      "100003": "{{owner_name}} has shared a {{cipher_type}} with you",
+      "100004": "A user has registered a Locker account via your sharing request. Please confirm your sharing request",
+      "100006": "{{owner_name}} has confirmed to share a {{cipher_type}} with you"
+    },
+    "member_to_group_share": {
+      "100005": "{{member_joined_text}} group {{group_name}} that you shared your items with. Click to confirm sharing so they can see shared items."
+    },
+    "payment": {
+      "100007":  "Your invoice {{payment_id}} was paid successfully",
+      "100008": "Locker couldn't proceed payment on your account. Your account was downgraded"
+    },
+    "emergency_access": {
+      "100009": "The user {{grantor_name}} ({{grantor_email}}) has invited you as his/her Emergency Contact",
+      "100010": "The user {{grantee_name}} ({{grantee_email}}) has accepted your invitation. Please confirm his/her identity as your new Emergency Access",
+      "100011":  "User {{grantee_name}} ({{grantee_email}}) has accepted your Emergency Contact invitation",
+      "100012": "User {{grantee_name}} ({{grantee_email}}) has declined your Emergency Contact invitation",
+      "100013": "You are now Emergency Contact of the user {{grantor_name}} ({{grantor_email}})",
+      "100014": "User {{grantee_name}} ({{grantee_email}}) has requested to {{request}} your vault items",
+      "100015":  "User {{grantor_name}} ({{grantor_email}}) has accepted your Emergency Request",
+      "100016": "User {{grantor_name}} ({{grantor_email}}) has declined your Emergency Request"
+    }
+  },
+  "push_noti": {
+    "item_sharing": {
+      "new_share": "You have a new shared {{typeName}}",
+      "new_shares": "You have {{count}} new shared items. Open Locker to accept or reject.",
+      "confirm": "Please confirm your sharing request",
+      "accept": "{{recipientName}} has accepted the {{typeName}} you share",
+      "reject": "{{recipientName}} has rejected the {{typeName}} you share"
+    },
+    "emergency_access": {
+      "invite": "{{user}} has invited you to be emergency access contact",
+      "accept_invite": "{{user}} has accepted your emergency access invitation",
+      "reject_invite": "{{user}}  has rejected your emergency access invitation",
+      "request": "{{user}} has requested to {{type}} your Locker account",
+      "accept_request": "{{user}} approved your request to {{type}} their Locker account",
+      "reject_request": "{{user}} has rejected your request to {{type}} their Locker account"
     }
   }
 }

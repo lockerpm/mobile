@@ -78,6 +78,7 @@ export const UserModel = types
 
     // User settings
     language: types.optional(types.string, 'en'),
+    customerLanguage: types.optional(types.string, 'en'),
     isBiometricUnlockList: types.array(types.string), // store user email
     appTimeout: types.optional(types.number, AppTimeoutType.APP_CLOSE),
     appTimeoutAction: types.optional(types.string, TimeoutActionType.LOCK),
@@ -184,6 +185,7 @@ export const UserModel = types
     },
     setLanguage: (lang: string) => {
       self.language = lang
+      self.customerLanguage = lang
       setLang(lang)
       switch (lang) {
         case 'vi':
@@ -304,7 +306,9 @@ export const UserModel = types
           if (self.isMobileLangChange) {
             await userApi.setUserLanguage(self.apiToken, self.language)
           } else {
-            self.setLanguage(res.user.language)
+
+            // TODO disable now
+            // self.setLanguage(res.user.customerLanguage)
           }
         }
         self.saveUser(res.user)

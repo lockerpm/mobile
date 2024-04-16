@@ -32,6 +32,7 @@ export interface SelectProps {
     props: PickerItemProps & { isSelected: boolean },
     itemLabel: string,
   ) => React.ReactNode
+  footer?: React.ReactNode
 }
 
 /**
@@ -55,6 +56,7 @@ export const Select = (props: SelectProps) => {
     multiple,
     showSearch,
     searchPlaceholder = translate("common.search"),
+    footer,
   } = props
 
   const defaultOption = {
@@ -136,6 +138,7 @@ export const Select = (props: SelectProps) => {
         </View>
       )}
     >
+     
       {options.map((option) => (
         <Picker.Item
           key={option.value}
@@ -152,6 +155,13 @@ export const Select = (props: SelectProps) => {
           renderItem={renderItem}
         />
       ))}
+      {
+        !!footer && (
+          <View>
+            {footer}
+          </View>
+        )
+      }
     </Picker>
   )
 }

@@ -1,4 +1,3 @@
-import { CipherType } from '../../../core/enums'
 import { load, StorageKey } from '../storage'
 import {
   ConfirmShareData,
@@ -10,6 +9,7 @@ import {
 } from './types'
 import { Logger } from '../utils'
 import { notify } from './notify'
+import { Localize } from './Localize'
 
 const parseDataType = (data: string | object) => {
   try {
@@ -21,11 +21,12 @@ const parseDataType = (data: string | object) => {
   }
 }
 
+
 // New share
 export const handleNewShare = async (data: string | object) => {
   const shareData: NewShareData = parseDataType(data)
   const { pwd_user_id, language } = await _getCurrentUser()
-  const isVn = language === 'vi'
+  const i = new Localize(language)
 
   // Only noti current user
   if (!pwd_user_id || !shareData.pwd_user_ids.map((i) => i.toString()).includes(pwd_user_id)) {
@@ -35,42 +36,18 @@ export const handleNewShare = async (data: string | object) => {
   if (shareData.count) {
     notify({
       id: `share_new`,
-      title: isVn ? 'Locker' : 'Locker',
-      body: isVn
-        ? `Bạn đã được chia sẻ ${shareData.count} mục. Vào Locker để chấp nhận hoặc từ chối.`
-        : `You have ${shareData.count} new shared items. Open Locker to accept or reject.`,
+      title: 'Locker',
+      body: i.handleNewShares(shareData.count),
       data: {
         type: PushEvent.SHARE_NEW,
       },
     })
     return
   }
-
-  let typeName = isVn ? 'mục' : 'item'
-  switch (shareData.share_type) {
-    case CipherType.Card:
-      typeName = isVn ? 'thẻ tín dụng' : 'card'
-      break
-    case CipherType.CryptoWallet:
-      typeName = isVn ? 'ví crypto' : 'crypto wallet'
-      break
-    case CipherType.Identity:
-      typeName = isVn ? 'danh tính' : 'identity'
-      break
-    case CipherType.Login:
-      typeName = isVn ? 'mật khẩu' : 'password'
-      break
-    case CipherType.SecureNote:
-      typeName = isVn ? 'ghi chú' : 'note'
-      break
-    default:
-      typeName = isVn ? 'mục' : 'item'
-  }
-
   notify({
     id: `share_new`,
-    title: isVn ? 'Locker' : 'Locker',
-    body: isVn ? `Bạn đã được chia sẻ một ${typeName}` : `You have a new shared ${typeName}`,
+    title: 'Locker',
+    body: i.handleNewShares(shareData.share_type),
     data: {
       type: PushEvent.SHARE_NEW,
     },
@@ -80,7 +57,7 @@ export const handleNewShare = async (data: string | object) => {
 export const handleConfirmShare = async (data: string | object) => {
   const shareData: ConfirmShareData = parseDataType(data)
   const { pwd_user_id, language } = await _getCurrentUser()
-  const isVn = language === 'vi'
+  const i = new Localize(language)
 
   // Only noti current user
   if (!shareData.pwd_user_ids.map((i) => i.toString()).includes(pwd_user_id)) {
@@ -89,10 +66,8 @@ export const handleConfirmShare = async (data: string | object) => {
 
   notify({
     id: `share_confirm`,
-    title: isVn ? 'Locker' : 'Locker',
-    body: isVn
-      ? `Vui lòng xác nhận yêu cầu chia sẻ của bạn`
-      : `Please confirm your sharing request`,
+    title:  'Locker',
+    body: i.confirmShare(),
     data: {
       type: PushEvent.SHARE_CONFIRM,
     },
@@ -103,36 +78,13 @@ export const handleConfirmShare = async (data: string | object) => {
 export const handleResponseShare = async (data: string | object, accepted: boolean) => {
   const shareData: ResponseShareData = parseDataType(data)
   const { language } = await _getCurrentUser()
-  const isVn = language === 'vi'
-
-  let typeName = isVn ? 'mục' : 'item'
-  switch (shareData.share_type) {
-    case CipherType.Card:
-      typeName = isVn ? 'thẻ tín dụng' : 'card'
-      break
-    case CipherType.CryptoWallet:
-      typeName = isVn ? 'ví crypto' : 'crypto wallet'
-      break
-    case CipherType.Identity:
-      typeName = isVn ? 'danh tính' : 'identity'
-      break
-    case CipherType.Login:
-      typeName = isVn ? 'mật khẩu' : 'password'
-      break
-    case CipherType.SecureNote:
-      typeName = isVn ? 'ghi chú' : 'note'
-      break
-    default:
-      typeName = isVn ? 'mục' : 'item'
-  }
+  const i = new Localize(language)
 
   if (accepted) {
     notify({
       id: `share_accepted`,
-      title: isVn ? 'Locker' : 'Locker',
-      body: isVn
-        ? `${shareData.recipient_name} đã chấp nhận ${typeName} bạn chia sẻ`
-        : `${shareData.recipient_name} has accepted the ${typeName} you share`,
+      title:  'Locker',
+      body: i.acceptShare(shareData.recipient_name, shareData.share_type),
       data: {
         type: PushEvent.SHARE_ACCEPT,
       },
@@ -140,10 +92,8 @@ export const handleResponseShare = async (data: string | object, accepted: boole
   } else {
     notify({
       id: `share_rejected`,
-      title: isVn ? 'Locker' : 'Locker',
-      body: isVn
-        ? `${shareData.recipient_name} đã từ chối ${typeName} bạn chia sẻ`
-        : `${shareData.recipient_name} has rejected the ${typeName} you share`,
+      title:  'Locker',
+      body: i.rejectShare(shareData.recipient_name, shareData.share_type),
       data: {
         type: PushEvent.SHARE_REJECT,
       },
@@ -154,16 +104,14 @@ export const handleResponseShare = async (data: string | object, accepted: boole
 export const handleInviteEA = async (data: string | object) => {
   const eaData: EmergencyAccessData = parseDataType(data)
   const { language } = await _getCurrentUser()
-  const isVn = language === 'vi'
+  const i = new Localize(language)
 
   const user = eaData.grantee_name || eaData.grantor_name
 
   notify({
     id: `emergency_access_notification`,
     title: 'Locker',
-    body: isVn
-      ? `${user} đã thêm bạn làm Liên hệ khẩn cấp`
-      : `${user} has invited you to be emergency access contact`,
+    body: i.inviteEA(user),
     data: {
       type: PushEvent.EMERGENCY_INVITE,
     },
@@ -173,21 +121,13 @@ export const handleInviteEA = async (data: string | object) => {
 export const handleIviteResponseEA = async (data: string | object, response: boolean) => {
   const eaData: EmergencyAccessData = parseDataType(data)
   const { language } = await _getCurrentUser()
-  const isVn = language === 'vi'
+  const i = new Localize(language)
 
   const user = eaData.grantee_name
-
-  const acceptText = isVn
-    ? `${user} đã chấp nhận trở thành Liên hệ khẩn cấp của bạn`
-    : `${user} has accepted your emergency access invitation`
-  const rejectText = isVn
-    ? `${user} đã từ chối trở thành Liên hệ khẩn cấp của bạn`
-    : `${user} has rejected your emergency access invitation`
-
   notify({
     id: `emergency_access_notification`,
     title: 'Locker',
-    body: response ? acceptText : rejectText,
+    body: i.iviteResponseEA(user, response),
     data: {
       type: PushEvent.EMERGENCY_ACCEPT_INVITATION,
     },
@@ -197,19 +137,14 @@ export const handleIviteResponseEA = async (data: string | object, response: boo
 export const handleRequestEA = async (data: string | object) => {
   const eaData: EmergencyAccessData = parseDataType(data)
   const { language } = await _getCurrentUser()
-  const isVn = language === 'vi'
+  const i = new Localize(language)
 
-  const view = isVn ? 'Xem' : 'View'
-  const takeOver = isVn ? 'Chiếm quyền' : 'Takeover'
   const user = eaData.grantee_name
-  const type = eaData.type.toLowerCase() === 'view' ? view : takeOver
 
   notify({
     id: `emergency_access_notification`,
     title: 'Locker',
-    body: isVn
-      ? `${user} đã yêu cầu ${type} tài khoản Locker của bạn ${type}`
-      : `${user} has requested to ${type} your Locker account`,
+    body: i.requestEA(user, eaData.type.toLowerCase() === 'view'),
     data: {
       type: PushEvent.EMERGENCY_INITIATE,
     },
@@ -219,24 +154,12 @@ export const handleRequestEA = async (data: string | object) => {
 export const handleRequestEAResponseEA = async (data: string | object, response: boolean) => {
   const eaData: EmergencyAccessData = parseDataType(data)
   const { language } = await _getCurrentUser()
-  const isVn = language === 'vi'
-
-  const view = isVn ? 'Xem' : 'View'
-  const takeOver = isVn ? 'Chiếm quyền' : 'Takeover'
-  const type = eaData.type.toLowerCase() === 'view' ? view : takeOver
+  const i = new Localize(language)
   const user = eaData.grantor_name
-
-  const acceptText = isVn
-    ? `${user} đã chấp nhận yêu cầu ${type} tài khoản Locker của bạn`
-    : `${user} approved your request to ${type} their Locker account`
-  const rejectText = isVn
-    ? `${user} đã từ chối yêu cầu ${type} tài khoản Locker của bạn`
-    : `${user} has rejected your request to ${type} their Locker account`
-
   notify({
     id: `emergency_access_notification`,
     title: 'Locker',
-    body: response ? acceptText : rejectText,
+    body: i.requestResponseEA(user, response, eaData.type.toLowerCase() === 'view'),
     data: {
       type: PushEvent.EMERGENCY_APPROVE_REQUEST,
     },
@@ -247,7 +170,8 @@ export const handleTipTrick = async (data: string | object) => {
   const tipTrickdata: TipTrickData = parseDataType(data)
   const { language } = await _getCurrentUser()
   // const isVn = language === 'vi'
-  const text = tipTrickdata.data.title[language]
+  const text = tipTrickdata.data.title[language] || tipTrickdata.data.title.en
+  const link = tipTrickdata.data.metadata.link[language] ||  tipTrickdata.data.metadata.link.en
 
   notify({
     id: `new_feature`,
@@ -255,7 +179,7 @@ export const handleTipTrick = async (data: string | object) => {
     body: text,
     data: {
       type: PushEvent.TIP_TRICK,
-      url: tipTrickdata.data.metadata.link[language],
+      url: link,
     },
   })
 }

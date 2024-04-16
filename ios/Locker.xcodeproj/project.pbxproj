@@ -35,6 +35,7 @@
 		7C3914132B8737DC00213EEB /* CredentialsListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3914122B8737DC00213EEB /* CredentialsListScreen.swift */; };
 		7C8FB3752ADD298800DA5BCE /* VinCSSFido2ClientSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */; };
 		7C8FB3762ADD298900DA5BCE /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7C9379E82BC6741E00157962 /* zh.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C9379E72BC6741E00157962 /* zh.strings */; };
 		7C973A3E2A93055500875FBA /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C973A3D2A93055500875FBA /* AuthenticationServices.framework */; };
 		7C973A412A93055500875FBA /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A402A93055500875FBA /* CredentialProviderViewController.swift */; };
 		7C973A442A93055500875FBA /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A422A93055500875FBA /* MainInterface.storyboard */; };
@@ -142,6 +143,7 @@
 		7C39140E2B87321900213EEB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7C3914102B87338E00213EEB /* LockScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreen.swift; sourceTree = "<group>"; };
 		7C3914122B8737DC00213EEB /* CredentialsListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsListScreen.swift; sourceTree = "<group>"; };
+		7C9379E72BC6741E00157962 /* zh.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = zh.strings; sourceTree = "<group>"; };
 		7C973A362A93019C00875FBA /* Locker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Locker.entitlements; path = Locker/Locker.entitlements; sourceTree = "<group>"; };
 		7C973A372A9304CA00875FBA /* Locker-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Locker-Bridging-Header.h"; sourceTree = "<group>"; };
 		7C973A3C2A93055500875FBA /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -307,6 +309,7 @@
 			children = (
 				7C973A572A93075E00875FBA /* vi.strings */,
 				7C1F2A782B91CB000003B7EF /* en.strings */,
+				7C9379E72BC6741E00157962 /* zh.strings */,
 				7C3914092B872CB800213EEB /* translate.swift */,
 			);
 			path = Localize;
@@ -627,6 +630,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C9379E82BC6741E00157962 /* zh.strings in Resources */,
 				7CEB31EC2A932665007F6051 /* Config.xcconfig in Resources */,
 				7C973A442A93055500875FBA /* MainInterface.storyboard in Resources */,
 				7C973A5B2A93075E00875FBA /* vi.strings in Resources */,
@@ -970,7 +974,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 171;
+				CURRENT_PROJECT_VERSION = 172;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
@@ -1010,7 +1014,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 171;
+				CURRENT_PROJECT_VERSION = 172;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;

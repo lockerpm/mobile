@@ -30,6 +30,8 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) =>
     }
   }
 
+  console.log(user.fcmToken, user.pwd_user_id)
+
   const mounted = async () => {
     const connectionState = await NetInfo.fetch()
     // Sync

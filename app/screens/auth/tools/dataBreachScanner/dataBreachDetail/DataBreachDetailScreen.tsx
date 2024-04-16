@@ -36,7 +36,9 @@ export const DataBreachDetailScreen = observer(() => {
       }}
     >
       {data && (
-        <View>
+        <View   style={{
+          flex: 1,
+        }}> 
           {/* Logo */}
           <View style={{ justifyContent: 'center' }}>
             <View

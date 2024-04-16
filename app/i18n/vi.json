@@ -24,6 +24,7 @@
     "create": "Tạo",
     "crypto_asset": "Tài sản crypto",
     "crypto_wallet": "Sao lưu ví Crypto",
+    "cryptoWallet": "Ví Crypto",
     "custom_fields": "Trường tuỳ chỉnh",
     "data": "Dữ liệu",
     "date": "Ngày",
@@ -1181,6 +1182,49 @@
       "ble": "Xác thực thông qua BLE",
       "usb": "Xác thực thông qua USB",
       "nfc": "Xác thực thông qua NFC"
+    }
+  },
+  "app_noti": {
+    "item_sharing": {
+      "100001": "{{recipient_name}} đã chấp nhận item bạn chia sẻ",
+      "100002": "{{recipient_name}} đã từ chối item bạn chia sẻ",
+      "100003": "{{owner_name}} vừa chia sẻ một {{cipher_type}} với bạn",
+      "100004": "Một user vừa đăng ký tài khoản quả yêu cầu chia sẻ của bạn. Vui lòng xác nhận lại để họ có thể sử dụng item",
+      "100006": "{{owner_email}} vừa xác nhận chia sẻ một {{cipher_type}} với bạn"
+    },
+    "member_to_group_share": {
+      "100005": "{{member_joined_text}} nhóm {{group_name}} mà bạn đã chia sẻ item. Vui lòng xác nhận để họ có thể sử dụng item được chia sẻ."
+    },
+    "payment": {
+      "100007": "Hóa đơn {{payment_id}} đã được thanh toán thành công",
+      "100008": "Locker không thể tiến hành thanh toán. Tài khoản của bạn đã bị hạ cấp gói"
+    },
+    "emergency_access": {
+      "100009": "Người dùng {{grantor_name}} ({{grantor_email}}) vừa mời bạn làm Liên hệ khẩn cấp của anh/cô ấy",
+      "100010": "Người dùng {{grantee_name}} ({{grantee_email}}) vừa chấp nhận lời mời của bạn. Vui lòng xác nhận lại danh tính Liên hệ khẩn cấp của bạn",
+      "100011": "Người dùng {{grantee_name}} ({{grantee_email}}) đã chấp nhận trở thành Liên hệ khẩn cấp của bạn",
+      "100012": "Người dùng {{grantee_name}} ({{grantee_email}}) đã từ chối trở thành Liên hệ khẩn cấp của bạn",
+      "100013": "Bạn đã trở thành Liên hệ khẩn cấp của user {{grantor_name}} ({{grantor_email}})",
+      "100014": "Người dùng {{grantee_name}} ({{grantee_email}}) vừa yêu cầu quyền {{request}} vault của bạn",
+      "100015": "Người dùng {{grantor_name}} ({{grantor_email}}) vừa chấp nhận Liên hệ khẩn cấp của bạn",
+      "100016": "Người dùng {{grantor_name}} ({{grantor_email}}) vừa từ chối Liên hệ khẩn cấp của bạn"
+    }
+  },
+  "push_noti": {
+    "item_sharing": {
+      "new_share": "Bạn đã được chia sẻ một {{typeName}}",
+      "new_shares": "Bạn đã được chia sẻ {{count}} mục. Vào Locker để chấp nhận hoặc từ chối.",
+      "confirm": "Vui lòng xác nhận yêu cầu chia sẻ của bạn",
+      "accept": "{{recipientName}} đã chấp nhận {{typeName}} bạn chia sẻ",
+      "reject": "{{recipientName}} đã từ chối {{typeName}} bạn chia sẻ"
+    },
+    "emergency_access": {
+      "invite": "{{user}} đã thêm bạn làm Liên hệ khẩn cấp",
+      "accept_invite": "{{user}} đã chấp nhận trở thành Liên hệ khẩn cấp của bạn",
+      "reject_invite": "{{user}} đã từ chối trở thành Liên hệ khẩn cấp của bạn",
+      "request": "{{user}} đã yêu cầu {{type}} tài khoản Locker của bạn",
+      "accept_request": "{{user}} đã chấp nhận yêu cầu {{type}} tài khoản Locker của bạn",
+      "reject_request": "{{user}} đã từ chối yêu cầu {{type}} tài khoản Locker của bạn"
     }
   }
 }

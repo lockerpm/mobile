@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import moment from "moment"
 import React, { useEffect } from "react"
-import { Linking, Platform } from "react-native"
+import { Linking, Platform, TouchableOpacity} from "react-native"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "app/models"
@@ -63,7 +63,7 @@ export const SettingsScreen = observer(() => {
     }
   }
 
-  const updateAutofillLanguage = async (language: "vi" | "en") => {
+  const updateAutofillLanguage = async (language: "vi" | "en" | 'zh') => {
     if (!IS_IOS) {
       return
     }
@@ -126,9 +126,11 @@ export const SettingsScreen = observer(() => {
   const settings = {
     language: {
       value: user.language || "en",
-      onChange: (lang: "vi" | "en") => {
+      onChange: (lang: "vi" | "en" |'zh') => {
         user.setLanguage(lang)
-        user.changeLanguage()
+        if(lang !== 'zh') {
+          user.changeLanguage()
+        }
         updateAutofillLanguage(lang)
       },
       options: [
@@ -139,6 +141,10 @@ export const SettingsScreen = observer(() => {
         {
           label: "English",
           value: "en",
+        },
+        {
+          label: "繁體中文",
+          value: "zh",
         },
       ],
     },
@@ -263,6 +269,23 @@ export const SettingsScreen = observer(() => {
               RightAccessory={<Text text={label} />}
             />
           )}
+          footer={
+            <TouchableOpacity style={{
+              marginTop: 12,
+              paddingVertical: 8,
+              paddingHorizontal: 16
+            }}
+              onPress={() => {
+                Linking.openURL(
+                  `https://cystack.notion.site/Locker-Translation-Guide-bb4e4fc4c23d4bbc994375035b124829`
+                )
+              }}
+            >
+              <Text text="Don't find your language?" style={{
+                textAlign: "center",
+              }} color={colors.link}/>
+            </TouchableOpacity>
+          }
         />
 
         <Select
@@ -323,7 +346,7 @@ export const SettingsScreen = observer(() => {
           disabled={uiStore.isOffline || cipherStore.isSynching}
           name={translate("settings.sync_now")}
           onPress={syncDataManually}
-          RightAccessory={<Text text={moment(cipherStore.lastSync).fromNow()} />}
+          // RightAccessory={<Text text={moment(cipherStore.lastSync).fromNow()} />}
         />
         <SettingsItem
           name={translate("settings.import")}

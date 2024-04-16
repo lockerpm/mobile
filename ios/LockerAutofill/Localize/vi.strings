@@ -19,6 +19,7 @@
 "list.suggestSearch" = "Tìm kiếm theo: ";
 
 //Lock screen
+"lock.mp" = "Master Password";
 "lock.title" = "Xác thực Master Password";
 "lock.btn" = "Mở khoá";
 "lock.faceid" = "Mở khoá với Face ID/Touch ID";

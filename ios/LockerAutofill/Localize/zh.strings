@@ -1,0 +1,52 @@
+
+"c.cancel" = "取消";
+"c.copied" = "已复制";
+
+// utils
+"utils.touchID" = "以 Face ID/Touch ID 解鎖";
+"utils.disableBiometric" = "不支援 Face ID 解鎖";
+"utils.unconfigBiometric" = "未啟用 Face ID 解鎖";
+"utils.disableFaceID" = "不支援 Face ID 解鎖";
+
+// noti
+"noti.authen" = "用户认证";
+"noti.loginLocker" = "使用自动填充服务之前，您必须先登录Locker";
+
+// CredentialsListScreen
+"list.title" = "登录列表";
+"list.noDataSearch" = "哎呀！ 好像没有数据匹配 ";
+"list.suggestSearch" = "您可以通过以下文字进行搜索";
+
+//Lock screen
+"lock.mp" = "主密码";
+"lock.title" = "验证主密码";
+"lock.btn" = "解鎖";
+"lock.faceid" = "使用 Face ID 解鎖";
+
+
+// totp view
+"totp.desc" = "（如果您使用此项目登录，OTP将自动复制到剪贴板）";
+"totp.update" = "OTP 稍后更新 ";
+
+// credential
+"item.username" = "用户名或电子邮件";
+"item.password" = "密碼";
+
+// password generator
+"pw.length"  = "长度: ";
+"pw.special" = "使用符號 (@!$%*)";
+"pw.ambiguous" = "避免容易混淆的字元";
+"pw.useBtn" = "使用密碼";
+"pw.generator" = "密碼產生器";
+"pw.regenerate" = "再生";
+
+// create password
+"create.title" = "创建登录名";
+"create.cancel" = "取消";
+"create.save" = "保存并自动填充";
+"create.name" = "姓名 (*)";
+"create.info" = "登录详细信息";
+"create.username" = "用户名或电子邮件";
+"create.password" = "密碼";
+"create.web" = "网站";
+"create.noti" = "这些项目将在本地创建并保存。 当您解锁 Locker 应用程序时，它会同步到 Locker 服务器。";

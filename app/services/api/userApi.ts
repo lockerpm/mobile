@@ -183,7 +183,7 @@ class UserApi {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.put('/me', { language })
+      const response: ApiResponse<any> = await this.api.apisauce.put('/me', { customer_language: language })
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)

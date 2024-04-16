@@ -159,15 +159,122 @@ export type NotificationSettingData = {
   notification: boolean
 }
 
+export type AppNotificationCodeWithMetadata = {
+  100002:{
+    recipient_name: string
+  }
+  100001: {
+    recipient_name: string
+  }
+  100003: {
+    owner_name: string,
+    cipher_type: string,
+  }
+  100004: null
+  100005: {
+    member_joined_text_vi: string,
+    member_joined_text_en: string,
+    member_joined_text: string,
+    sharing_id: string,
+    emails: string,
+    group_id: string,
+    group_name: string,
+  },
+  100006: {
+    owner_name: string,
+    owner_email: string,
+    cipher_type: string,
+  }
+  100007: {
+    team_id: string,
+    payment_id: string
+  }
+  100008: {
+    team_id: string,
+    payment_id: string
+  },
+  100009: {
+    grantee_name: string,
+    grantee_email: string
+    request: string
+  }
+  100010: {
+    grantee_name: string,
+    grantee_email: string
+    request: string
+  },
+  100011: {
+    grantee_name: string,
+    grantee_email: string
+    request: string
+  }
+  100012: {
+    grantee_name: string,
+    grantee_email: string
+    request: string
+  }
+  100013: {
+    grantee_name: string,
+    grantee_email: string
+    request: string
+  }
+  100014: {
+    grantee_name: string,
+    grantee_email: string
+    request: string
+  }
+  100015: {
+    grantee_name: string,
+    grantee_email: string
+    request: string
+  }
+  100016: {
+    grantee_name: string,
+    grantee_email: string
+    request: string
+  }
+  100017: {
+    link: {
+      vi: string
+      en: string
+    },
+    title: string
+  }
+}
+
+
 export type AppNotification = {
   count: number
   unread_count: number
   results: {
     description: any
     id: string
+    notification_code: keyof AppNotificationCodeWithMetadata
     metadata: {
       is_grantee?: boolean
       is_grantor?: boolean
+      
+      // v2
+      grantee_name?: string,
+      grantee_email?: string
+      link?: {
+        vi: string
+        en: string
+      },
+      title?: string
+      team_id?: string,
+      payment_id?: string
+      owner_name?: string,
+      owner_email?: string,
+      cipher_type?: string,
+      member_joined_text_vi?: string,
+      member_joined_text_en?: string,
+      member_joined_text?: string,
+      sharing_id?: string,
+      emails?: string,
+      group_id?: string,
+      group_name?: string,
+      recipient_name?: string
     }
     publish_time: number
     read: boolean
@@ -178,6 +285,7 @@ export type AppNotification = {
     type: NotificationCategory
   }[]
 }
+
 
 export type TrustedContact = {
   avatar: string
