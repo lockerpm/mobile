@@ -15,7 +15,6 @@ import { CipherView, LoginUriView, LoginView } from 'core/models/view'
 import { Logger, delay, getUrlParameterByName } from 'app/utils/utils'
 import { saveShared } from 'app/utils/keychain'
 import { StorageKey, remove, removeSecure } from 'app/utils/storage'
-import Intercom from '@intercom/intercom-react-native'
 import { setCookiesFromUrl } from 'app/utils/analytics'
 
 export function useAuthentication() {
@@ -591,7 +590,6 @@ export function useAuthentication() {
       await user.logout()
       await clearAllData()
       await logoutAllServices()
-      await Intercom.logout()
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       Logger.error('logout: ' + e)

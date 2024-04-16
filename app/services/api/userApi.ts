@@ -26,6 +26,7 @@ import {
   UserInvitations,
   NotificationSettingData,
   MarketingContent,
+  ChatWootUser,
 } from 'app/static/types'
 import { CipherResponse } from 'core/models/response/cipherResponse'
 import { PolicyType } from 'app/static/types/enum'
@@ -1116,6 +1117,28 @@ class UserApi {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `/cystack_platform/pm/marketing/banner?language=${language}`
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: 'ok', data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: 'bad-data' }
+    }
+  }
+
+  async getChatWootIdHash(
+    token: string,
+  ): Promise<{ kind: 'ok'; data: ChatWootUser } | GeneralApiProblem> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/cystack_platform/pm/users/me/chatwoot`
       )
 
       // the typical ways to die when calling an api

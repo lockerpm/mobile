@@ -10,7 +10,6 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
-import com.intercom.reactnative.IntercomModule;
 
 import java.util.List;
 
@@ -62,7 +61,5 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
-
-    IntercomModule.initialize(this, "android_sdk-eda6d60b34b45b5d8e992cf479b8516e39c2d20e", "hjus3ol6");
   }
 }

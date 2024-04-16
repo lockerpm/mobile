@@ -693,6 +693,10 @@ export const UserModel = types
       const res = await userApi.fetchMarketingContent(self.apiToken, self.language)
       return res
     },
+    getChatWootIdHash: async () => {
+      const res = await userApi.getChatWootIdHash(self.apiToken)
+      return res
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     purchaseValidation: async (

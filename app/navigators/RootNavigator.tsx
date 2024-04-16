@@ -10,7 +10,6 @@ import NetInfo from "@react-native-community/netinfo"
 import { DefaultTheme, NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import Intercom, { Visibility } from "@intercom/intercom-react-native"
 import Toast, { BaseToastProps } from "react-native-toast-message"
 import dynamicLinks from "@react-native-firebase/dynamic-links"
 import WebView from "react-native-webview"
@@ -108,7 +107,6 @@ const RootStack = observer((props: Props) => {
   // ------------------- EFFECTS -------------------
 
   useEffect(() => {
-    Intercom.setInAppMessageVisibility(Visibility.GONE)
     setIsDark(uiStore.isDark)
   }, [])
 

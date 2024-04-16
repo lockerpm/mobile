@@ -276,3 +276,15 @@ export type MarketingContent = {
   status: string
   text: string
 }
+
+export type ChatWootUser = {
+  country_code: string,
+  email: string, 
+  is_locker: boolean, 
+  language_override: string, 
+  name: string, 
+  phone: string, 
+  signed_up_at: number, 
+  type: string, 
+  user_hash: string
+}

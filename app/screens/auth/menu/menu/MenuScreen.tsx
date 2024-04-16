@@ -1,17 +1,18 @@
 import moment from "moment"
 import React, { useState, useEffect } from "react"
 import { View, TextStyle, Dimensions } from "react-native"
-import Intercom, { IntercomEvents } from "@intercom/intercom-react-native"
 import { useNavigation, CommonActions } from "@react-navigation/native"
 import { useStores } from "app/models"
 import { useTheme } from "app/services/context"
 import { useAuthentication, useHelper } from "app/services/hook"
-import { PlanType } from "app/static/types"
+import { ChatWootUser, PlanType } from "app/static/types"
 import { Screen, Text, TabHeader } from "app/components/cores"
 import { MenuItem, MenuItemContainer, MenuItemProps } from "app/components/utils"
 import { getVersion } from "react-native-device-info"
 import { ReferFriendMenuItem } from "./ReferFriendMenuItem"
 import { observer } from "mobx-react-lite"
+import ChatWootWidget from '@chatwoot/react-native-widget';
+import { CHATWOOT_BASE_URL, CHATWOOT_WEBSITE_TOKEN } from "app/config/constants"
 
 export const MenuScreen = observer(() => {
   const navigation = useNavigation() as any
@@ -26,15 +27,11 @@ export const MenuScreen = observer(() => {
 
   const [showFingerprint, setShowFingerprint] = useState(false)
   const [referLink, setReferLink] = useState<string>(null)
+  const [showChatWootWidget, toggleChatWootWidget] = useState(false);
+  const [chatwootUser, setChatwoodUser] = useState<ChatWootUser>(null)
 
-  // Intercom service
-  const [unreadConversationCount, setUnreadConversationCount] = useState<number>(0)
 
   // -------------------METHODS-----------------------
-  const getUnreadConversationCount = async () => {
-    const res = await Intercom.getUnreadConversationCount()
-    setUnreadConversationCount(res)
-  }
 
   const getReferralsLink = async () => {
     const res = await user.getReferLink()
@@ -45,28 +42,25 @@ export const MenuScreen = observer(() => {
     }
   }
 
+  const getChatWoodIdHash = async () => {
+    const res = await user.getChatWootIdHash()
+    if (res.kind === "ok") {
+      setChatwoodUser(res.data)
+    } else {
+      notifyApiError(res)
+    }
+  }
+
+
   // -------------------EFFECT-----------------------
 
   useEffect(() => {
+    getChatWoodIdHash()
     if (!user.onPremiseUser) {
       getReferralsLink()
-    } else {
-      // user.getEnterprise()
-    }
+    } 
   }, [])
 
-  useEffect(() => {
-    getUnreadConversationCount()
-    const countListener = Intercom.addEventListener(
-      IntercomEvents.IntercomUnreadCountDidChange,
-      (response) => {
-        setUnreadConversationCount(response.count as number)
-      },
-    )
-    return () => {
-      countListener.remove()
-    }
-  }, [])
 
   // ------------------COMPUTED------------------------
 
@@ -263,34 +257,33 @@ export const MenuScreen = observer(() => {
         <MenuItem
           icon={"headset"}
           name={translate("menu.fingerprint")}
-          onPress={() => Intercom.displayMessenger()}
+          onPress={() => toggleChatWootWidget(true)}
           content={
             <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
               <Text text={translate("common.customer_service")} style={{ paddingHorizontal: 10 }} />
-              {unreadConversationCount > 0 && (
-                <View
-                  style={{
-                    backgroundColor: colors.error,
-                    borderRadius: 20,
-                    minWidth: 17,
-                    height: 17,
-                  }}
-                >
-                  <Text
-                    text={unreadConversationCount.toString()}
-                    style={{
-                      fontSize: 12,
-                      textAlign: "center",
-                      color: colors.white,
-                      lineHeight: 17,
-                    }}
-                  />
-                </View>
-              )}
             </View>
           }
         />
       </MenuItemContainer>
+
+      {
+        showChatWootWidget&& 
+          <ChatWootWidget
+            websiteToken={CHATWOOT_WEBSITE_TOKEN}
+            locale={chatwootUser?.language_override}
+            baseUrl={CHATWOOT_BASE_URL}
+            closeModal={() => toggleChatWootWidget(false)}
+            isModalVisible={showChatWootWidget}
+            user={ {
+              identifier: chatwootUser?.email || user.email,
+              name: chatwootUser?.name || user.full_name,
+              avatar_url: user.avatar,
+              email: chatwootUser?.email || user.email,
+              identifier_hash: chatwootUser?.user_hash || '',
+            }}
+            customAttributes={{ pricingPlan: user.pwd_user_type !== "enterprise" ? user.plan  : "enterprise"}}
+          />
+      }
 
       <MenuItemContainer>
         {items2.map((item, index) => (
