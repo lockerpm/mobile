@@ -94,12 +94,12 @@ export const PrivateRelay: FC<ToolsStackScreenProps<"privateRelay">> = observer(
     : ` (${ramdomEmailAlias.length})`
   const data = [
     {
-      title: "Edited email alias",
+      title: translate('private_relay.editable'),
       data: [alias[0]],
       edited: true,
     },
     {
-      title: `Random email alias ${suffixitle}`,
+      title: translate('private_relay.random', {number: suffixitle }),
       data: ramdomEmailAlias,
       edited: false,
     },

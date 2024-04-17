@@ -258,6 +258,8 @@
     },
     "copy": "Copy alias",
     "edit": "Edit alias address",
+    "editable": "Editable email alias",
+    "random": "Random email alias {{number}}",
     "edit_modal": {
       "titel": "Edit Alias Address",
       "current": "Current Address",
@@ -585,6 +587,11 @@
         "stop": "Stop share successfully",
         "add_items": "Add items successfully"
       }
+    },
+    "status": {
+      "invited" : "invited",
+      "accepted" : "accepted",
+      "confirmed": "confirmed"
     },
     "empty": {
       "title": "Securely share items",

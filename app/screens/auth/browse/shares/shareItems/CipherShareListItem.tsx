@@ -96,7 +96,7 @@ export const CipherShareListItem = memo(
                       text={
                         item.status === SharingStatus.ACCEPTED
                           ? translate("shares.wait_confirm")
-                          : item.status.toUpperCase()
+                          : translate(`shares.status.${item.status}`)
                       }
                       style={{
                         fontWeight: "bold",

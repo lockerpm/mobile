@@ -258,6 +258,8 @@
     },
     "copy": "複製別名",
     "edit": "編輯別名地址",
+    "editable": "可编辑的电子邮件别名",
+    "random": "随机电子邮件别名 {{number}}",
     "edit_modal": {
       "titel": "編輯別名地址",
       "current": "目前地址",
@@ -583,6 +585,11 @@
         "stop": "成功停止共享",
         "add_items": "新增項目成功"
       }
+    },
+    "status": {
+      "invited" : "受邀",
+      "accepted" : "接受",
+      "confirmed": "确认"
     },
     "empty": {
       "title": "安全地共享項目",

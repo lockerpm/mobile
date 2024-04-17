@@ -106,7 +106,7 @@ export const SharedUsers = (props: Props) => {
             >
               <Text
                 preset="bold"
-                text={item.status.toUpperCase()}
+                tx={`shares.status.${item.status.toLowerCase()}`}
                 size="base"
                 style={{
                   color: colors.background,

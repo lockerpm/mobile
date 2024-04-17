@@ -258,6 +258,8 @@
     },
     "copy": "Sao chép email",
     "edit": "Sửa địa chỉ email",
+    "editable": "Địa chỉ email có thể chính sửa",
+    "random": "Địa chỉ email được tạo ngẫu nhiên {{number}}",
     "edit_modal": {
       "titel": "Thay đổi địa chỉ email",
       "current": "Email hiện tại",
@@ -636,6 +638,11 @@
         "stop": "Stop share success",
         "add_items": "Add items success"
       }
+    },
+    "status": {
+      "invited" : "Đã mời",
+      "accepted" : "Chấp nhận",
+      "confirmed": "Xác nhận"
     },
     "empty": {
       "title": "Chia sẻ tài nguyên một cách an toàn",

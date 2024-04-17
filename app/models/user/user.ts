@@ -30,13 +30,13 @@ import {
 } from 'app/static/types/enum'
 import { omit } from 'ramda'
 import { StorageKey, remove, save } from 'app/utils/storage'
-import moment from 'moment'
 import { userApi } from 'app/services/api/userApi'
 import { AppEventType, EventBus } from 'app/utils/eventBus'
 import { idApi } from 'app/services/api/idApi'
 import { toolApi } from 'app/services/api/toolApi'
 import DeviceInfo from 'react-native-device-info'
 import { setLang } from 'app/i18n'
+import { momentRelativeTime } from 'app/utils/utils'
 
 /**
  * Model description here for TypeScript hints.
@@ -187,49 +187,7 @@ export const UserModel = types
       self.language = lang
       self.customerLanguage = lang
       setLang(lang)
-      switch (lang) {
-        case 'vi':
-          moment.locale('vi', {
-            months:
-              'tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12'.split(
-                '_'
-              ),
-            monthsShort: 'Th01_Th02_Th03_Th04_Th05_Th06_Th07_Th08_Th09_Th10_Th11_Th12'.split('_'),
-            relativeTime: {
-              future: '%s tới',
-              past: '%s trước',
-              s: 'Vài giây',
-              m: '1 phút',
-              mm: '%d phút',
-              h: '1 giờ',
-              hh: '%d giờ',
-              d: '1 ngày',
-              dd: '%d ngày',
-              M: '1 tháng',
-              MM: '%d tháng',
-              y: '1 năm',
-              yy: '%d năm',
-            },
-            longDateFormat: {
-              LT: 'HH:mm',
-              LTS: 'HH:mm:ss',
-              L: 'DD/MM/YYYY',
-              LL: 'D MMMM [năm] YYYY',
-              LLL: 'D MMMM [năm] YYYY HH:mm',
-              LLLL: 'dddd, D MMMM [năm] YYYY HH:mm',
-              l: 'DD/M/YYYY',
-              ll: 'D MMM YYYY',
-              lll: 'D MMM YYYY HH:mm',
-              llll: 'ddd, D MMM YYYY HH:mm',
-            },
-            week: {
-              dow: 1, // Monday is the first day of the week.
-            },
-          })
-          break
-        default:
-          moment.locale('en')
-      }
+      momentRelativeTime(lang)
       save(StorageKey.APP_CURRENT_USER, {
         language: lang,
         pwd_user_id: self.pwd_user_id,

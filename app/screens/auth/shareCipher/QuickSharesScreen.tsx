@@ -643,7 +643,7 @@ const QuickSharesInfo = ({
         {emails.map((e) => (
           <Text key={e} text={e} />
         ))}
-        {emails?.length === 0 && <Text text={"Anyone"} />}
+        {emails?.length === 0 && <Text tx={'quick_shares.config.anyone'} />}
       </View>
 
       {!!expirationDate && (
