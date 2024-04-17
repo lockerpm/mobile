@@ -17,7 +17,7 @@ import { CHATWOOT_BASE_URL, CHATWOOT_WEBSITE_TOKEN } from "app/config/constants"
 export const MenuScreen = observer(() => {
   const navigation = useNavigation() as any
   const { user } = useStores()
-  const { colors } = useTheme()
+  const { colors, isDark } = useTheme()
   const { notifyApiError, translate } = useHelper()
   const { lock, logout } = useAuthentication()
 
@@ -269,6 +269,7 @@ export const MenuScreen = observer(() => {
       {
         showChatWootWidget&& 
           <ChatWootWidget
+            colorScheme={isDark ? "dark" : "light"}
             websiteToken={CHATWOOT_WEBSITE_TOKEN}
             locale={chatwootUser?.language_override}
             baseUrl={CHATWOOT_BASE_URL}

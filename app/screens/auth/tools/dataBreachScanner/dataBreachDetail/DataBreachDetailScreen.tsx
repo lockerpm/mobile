@@ -31,14 +31,9 @@ export const DataBreachDetailScreen = observer(() => {
           onLeftPress={() => navigation.goBack()}
         />
       }
-      contentContainerStyle={{
-        flex: 1,
-      }}
     >
       {data && (
-        <View   style={{
-          flex: 1,
-        }}> 
+        <View  > 
           {/* Logo */}
           <View style={{ justifyContent: 'center' }}>
             <View
