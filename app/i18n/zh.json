@@ -24,7 +24,7 @@
     "create": "建立",
     "crypto_asset": "加密資產備份",
     "crypto_wallet": "加密資產備份",
-    "cryptoWallet": "加密钱包",
+    "cryptoWallet": "加密貨幣錢包",
     "custom_fields": "自訂欄位",
     "data": "資料",
     "date": "日期",
@@ -258,8 +258,8 @@
     },
     "copy": "複製別名",
     "edit": "編輯別名地址",
-    "editable": "可编辑的电子邮件别名",
-    "random": "随机电子邮件别名 {{number}}",
+    "editable": "可編輯電子郵件別名",
+    "random": "隨機電子郵件別名 {{number}}",
     "edit_modal": {
       "titel": "編輯別名地址",
       "current": "目前地址",
@@ -329,7 +329,7 @@
     },
     "view_vault": "查看他的保險庫",
     "takeover_vault": "接管他們的保險庫",
-    "free_guild": "目前為免費方案，立即升級高級方案來新增緊急聯絡人",
+    "free_guild": "目前為免費方案，立即升級至 Premium 來新增緊急聯絡人",
     "reset_master_pw": "重設他們的 Locker 主密碼",
     "reset_pw": "重設他們的 Locker 密碼",
     "reset_master_pw_user": "替 {{name}} 重設主密碼",
@@ -587,9 +587,9 @@
       }
     },
     "status": {
-      "invited" : "受邀",
-      "accepted" : "接受",
-      "confirmed": "确认"
+      "invited": "已邀請",
+      "accepted": "已接受",
+      "confirmed": "已確認"
     },
     "empty": {
       "title": "安全地共享項目",
@@ -745,7 +745,7 @@
     "delete_account_warning": "請點下方以刪除您的帳戶和所有相關資料。",
     "delete_account_success": "您的 Locker 帳戶已刪除！",
     "delete_all_items": "刪除所有帳戶項目",
-    "delete_all_items_warning": "請點下方以刪除您保險庫中的所有項目和資料夾。屬於您和其他公司／群組分享之組織的項目並不會被刪除。",
+    "delete_all_items_warning": "請點下方以刪除您保險庫中的所有項目和資料夾。屬於您和其他公司/群組分享之組織的項目並不會被刪除。",
     "delete_all_items_success": "您的保險庫已被清除！",
     "on_app_close": "應用程式關閉時",
     "on_screen_off": "螢幕關閉時",
@@ -761,6 +761,7 @@
     "defaultTab": "起始畫面"
   },
   "autofill_service": {
+    "searchFor": "搜尋：",
     "activated": {
       "title": "自動填寫已啟動！",
       "content": "現在您可以更快速地登入應用程式和網站"
@@ -1145,45 +1146,45 @@
   },
   "app_noti": {
     "item_sharing": {
-      "100001": "{{recipient_name}} has accepted the item you share",
-      "100002": "{{recipient_name}} has rejected  the item you share",
-      "100003": "{{owner_name}} has shared a {{cipher_type}} with you",
-      "100004": "A user has registered a Locker account via your sharing request. Please confirm your sharing request",
-      "100006": "{{owner_name}} has confirmed to share a {{cipher_type}} with you"
+      "100001": "{{recipient_name}} 已接受您分享的項目",
+      "100002": "{{recipient_name}} 已拒絕您分享的項目",
+      "100003": "{{owner_name}} 已與您分享一個 {{cipher_type}} 項目",
+      "100004": "有使用者透過您建立的共享邀請註冊了 Locker 帳戶。請確認您的分享請求。",
+      "100006": "{{owner_name}} 已確認與您共享一個 {{cipher_type}} 項目"
     },
     "member_to_group_share": {
-      "100005": "{{member_joined_text}} group {{group_name}} that you shared your items with. Click to confirm sharing so they can see shared items."
+      "100005": "{{member_joined_text}} 群組 {{group_name}} (您之前的分享目標)。點擊確認共享，讓他們可以看到共享項目。"
     },
     "payment": {
-      "100007":  "Your invoice {{payment_id}} was paid successfully",
-      "100008": "Locker couldn't proceed payment on your account. Your account was downgraded"
+      "100007": "您的帳單 {{payment_id}} 付款成功",
+      "100008": "Locker 無法處理您的帳戶付款，帳戶已降級"
     },
     "emergency_access": {
-      "100009": "The user {{grantor_name}} ({{grantor_email}}) has invited you as his/her Emergency Contact",
-      "100010": "The user {{grantee_name}} ({{grantee_email}}) has accepted your invitation. Please confirm his/her identity as your new Emergency Access",
-      "100011":  "User {{grantee_name}} ({{grantee_email}}) has accepted your Emergency Contact invitation",
-      "100012": "User {{grantee_name}} ({{grantee_email}}) has declined your Emergency Contact invitation",
-      "100013": "You are now Emergency Contact of the user {{grantor_name}} ({{grantor_email}})",
-      "100014": "User {{grantee_name}} ({{grantee_email}}) has requested to {{request}} your vault items",
-      "100015":  "User {{grantor_name}} ({{grantor_email}}) has accepted your Emergency Request",
-      "100016": "User {{grantor_name}} ({{grantor_email}}) has declined your Emergency Request"
+      "100009": "使用者 {{grantor_name}} ({{grantor_email}}) 邀請您成為緊急聯絡人",
+      "100010": "使用者 {{grantee_name}} ({{grantee_email}}) 接受了您的邀請。請確認他們的身分，並設定為您的緊急聯絡人。",
+      "100011": "使用者 {{grantee_name}} ({{grantee_email}}) 接受了您的緊急聯絡人邀請",
+      "100012": "使用者 {{grantee_name}} ({{grantee_email}}) 拒絕了您的緊急聯絡人邀請",
+      "100013": "您已成為使用者 {{grantor_name}} ({{grantor_email}}) 的緊急聯絡人",
+      "100014": "使用者 {{grantee_name}} ({{grantee_email}}) 申請 {{request}} 您的保存庫項目",
+      "100015": "使用者 {{grantor_name}} ({{grantor_email}})  接受了您的緊急申請",
+      "100016": "使用者 {{grantor_name}} ({{grantor_email}}) 拒絕了您的緊急申請"
     }
   },
   "push_noti": {
     "item_sharing": {
-      "new_share": "您有一个新共享 {{typeName}}",
-      "new_shares": "您有 {{count}} 个新共享项目。 打开储物柜接受或拒绝.",
-      "confirm": "请确认您的共享请求",
+      "new_share": "您收到一個新的共享 {{typeName}} 項目",
+      "new_shares": "您收到了 {{count}} 個新的共享項目，開啟 Locker 來同意或拒絕。",
+      "confirm": "請確認您的共享請求",
       "accept": "{{recipientName}} 已接受您共享的 {{typeName}}",
-      "reject": "{{recipientName}} 已拒绝您的 {{typeName}} 份额"
+      "reject": "{{recipientName}} 已拒絕您共享的 {{typeName}}"
     },
     "emergency_access": {
-      "invite": "{{user}} 邀请您成为紧急访问联系人",
-      "accept_invite": "{{user}} 已接受您的紧急访问邀请",
-      "reject_invite": "{{user}} 已拒绝您的紧急访问邀请",
-      "request": "{{user}} 已请求 {{type}} 您的 Locker 帐户",
-      "accept_request": "{{user}} 批准了您对 {{type}} 他们的 Locker 帐户的请求",
-      "reject_request": "{{user}} 拒绝了您对 {{type}} 他们的 Locker 帐户的请求"
+      "invite": "{{user}} 邀請您成為緊急聯絡人",
+      "accept_invite": "{{user}} 已接受您的緊急聯絡人邀請",
+      "reject_invite": "{{user}} 已拒絕您的緊急聯絡人邀請",
+      "request": "{{user}} 申請要 {{type}} 您的 Locker 帳戶",
+      "accept_request": "{{user}} 同意了您要 {{type}} 他們 Locker 帳戶的申請",
+      "reject_request": "{{user}} 拒絕了您要 {{type}} 他們 Locker 帳戶的申請"
     }
   }
 }
