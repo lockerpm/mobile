@@ -445,8 +445,6 @@ export function useCipherData() {
 
       // Create passwords
       if (sharedData.tempPasswords && sharedData.tempPasswords.length > 0) {
-        console.log(sharedData.tempPasswords)
-
         for (const cipher of sharedData.tempPasswords) {
             const payload = newCipher(CipherType.Login)
             const data = new LoginView()

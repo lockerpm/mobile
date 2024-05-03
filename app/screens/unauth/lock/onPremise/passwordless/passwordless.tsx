@@ -73,9 +73,7 @@ export const OnPremiseLockByPasswordless = ({ handleLogout, biometryType }: Prop
         goNext={() => {
           scrollTo(1)
         }}
-        goBack={() => {
-          navigation.goBack()
-        }}
+        goBack={handleLogout}
       />
       <PasswordlessQrScan
         otp={otp}

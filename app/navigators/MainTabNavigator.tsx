@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator<TabsParamList>()
 
 const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) => {
   const { colors } = useTheme()
-  const { user, uiStore, cipherStore } = useStores()
+  const {  uiStore, cipherStore } = useStores()
   const { translate } = useHelper()
   const insets = useSafeAreaInsets()
 
@@ -49,7 +49,7 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
     menuTab: {
       label: translate("common.menu"),
       icon: "menu",
-      notiCount: user.invitations.length,
+      notiCount: 0,
     },
   }
 

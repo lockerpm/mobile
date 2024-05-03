@@ -78,6 +78,24 @@ export const CipherShareListItem = memo(
 
                 {/* Sharing status */}
                 {item.status && (
+                  <View style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}>
+                  {
+                    item.status === SharingStatus.ACCEPTED && (
+                      <View style={{
+                        marginRight: 4, borderRadius: 15,
+                        width: 20,
+                        height: 20,
+                        backgroundColor: colors.error,
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}>
+                        <Text text="1" size="small" color={colors.white} preset="bold" />
+                      </View>
+                    )
+                  }
                   <View
                     style={{
                       paddingHorizontal: 10,
@@ -96,13 +114,16 @@ export const CipherShareListItem = memo(
                       text={
                         item.status === SharingStatus.ACCEPTED
                           ? translate("shares.wait_confirm")
-                          : translate(`shares.status.${item.status}`)
+                          // @ts-ignore
+                          : translate(`shares.status.${item.status.toLowerCase()}`)
                       }
                       style={{
                         fontWeight: "bold",
                         color: colors.background,
                       }}
                     />
+                  </View>
+                
                   </View>
                 )}
                 {/* Sharing status */}

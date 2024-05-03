@@ -9,6 +9,7 @@ import { Header, Screen, Text, Button } from "app/components/cores"
 import { AddUserShareFolderModal } from "./ShareUserModal"
 import { SharedUsers } from "./SharedUser"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { ConfirmShareModal } from "./ConfirmShareModal"
 
 export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFolder">> = observer(
   (props) => {
@@ -21,13 +22,16 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFol
     const collection: CollectionView = collectionStore.collections.find(
       (c) => c.id === route.params.collectionId,
     )
+
     // ----------------------- PARAMS -----------------------
 
     const [reload, setReload] = useState<boolean>(true)
     const [sharedUsers, setSharedUsers] = useState<SharedMemberType[]>([])
     const [showSelectUserModal, setShowSelectUserModal] = useState(false)
-
+    const [selectedMember, setSelectedMember] = useState<SharedMemberType>(null)
     const [sharedGroups, setSharedGroups] = useState<SharedGroupType[]>([])
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
+
 
     const data = (() => {
       const data = []
@@ -62,6 +66,7 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFol
         return share.members?.length + share.groups?.length
       }
       return 0
+
     }
 
     const onRemove = async (collection: CollectionView, id: string, isGroup?: boolean) => {
@@ -73,6 +78,14 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFol
         }
       }
     }
+
+        // Handle action menu open
+    const openShowConfirmModal = (item: SharedMemberType) => {
+      setSelectedMember(item)
+      setShowConfirmModal(true)
+    }
+
+ 
 
     // ----------------------- EFFECT -----------------------
     useEffect(() => {
@@ -93,6 +106,16 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFol
         }
         contentContainerStyle={{ flex: 1 }}
       >
+        <ConfirmShareModal
+          isOpen={showConfirmModal}
+          onClose={() => {
+            setShowConfirmModal(false)
+            setReload((prev) => !prev)
+          }}
+          member={selectedMember}
+          organizationId={collection.organizationId}
+        />
+
         <AddUserShareFolderModal
           isOpen={showSelectUserModal}
           folder={collection}
@@ -130,6 +153,7 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFol
           )}
           renderItem={({ item }) => (
             <SharedUsers
+              setShowConfirmModal={openShowConfirmModal}
               reload={reload}
               setReload={setReload}
               item={item}

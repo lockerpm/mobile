@@ -31,9 +31,7 @@ export const SharesScreen = observer(() => {
     {
       path: 'quickShareItems',
       name: translate('quick_shares.share_option.quick.tl'),
-      notiCount: cipherStore.myShares.reduce((total, s) => {
-        return total + s.members.filter((m) => m.status === SharingStatus.ACCEPTED).length
-      }, 0),
+      notiCount: 0,
     },
   ]
 

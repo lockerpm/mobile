@@ -135,14 +135,13 @@ export const CipherShareList = observer((props: Props) => {
             break
         }
 
-        data.description = `${translate("shares.shared_with")} ${m.full_name} - ${shareType}`
+        data.description =  `${translate("shares.shared_with")} ${m.full_name || m.email} - ${shareType}`
         data.status = m.status
         data.member = m
 
         // @ts-ignore
         res.push({ ...data })
       })
-
       share.groups.forEach((group) => {
         let shareType = ""
         switch (group.role) {
@@ -155,7 +154,7 @@ export const CipherShareList = observer((props: Props) => {
             break
         }
 
-        data.description = `${translate("shares.shared_with")} ${group.name} - ${shareType}`
+        data.description =  `${translate("shares.shared_with")} ${group.name} - ${shareType}`
         // data.status = m.status
         data.group = group
 
@@ -198,6 +197,7 @@ export const CipherShareList = observer((props: Props) => {
   // Handle action menu open
   const openShowConfirmModal = (item: CipherShareType) => {
     cipherStore.setSelectedCipher(item)
+
     if (item.member) {
       setSelectedMember(item.member)
     }
@@ -218,6 +218,7 @@ export const CipherShareList = observer((props: Props) => {
     const cipherInfo = getCipherInfo(item)
     navigation.navigate(`${cipherInfo.path}__info`)
   }
+
 
   const sharesCollection = collectionStore.collections.filter((i) => {
     // Computed

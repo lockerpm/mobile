@@ -13,6 +13,7 @@ import { OnPremiseLockByPasswordless } from "./onPremise/passwordless/passwordle
 import { OnPremiseLockMasterPassword } from "./onPremise/masterPassword/OnPremiseMasterPassword"
 import { observer } from "mobx-react-lite"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
+import { CommonActions } from "@react-navigation/native"
 
 const IS_IOS = Platform.OS === "ios"
 
@@ -75,8 +76,16 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
   }
 
   const handleLogout = async () => {
+    // await logout()
+    // navigation.navigate("login")
     await logout()
-    navigation.navigate("login")
+
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "init" }],
+      }),
+    )
   }
 
   const handleBack = (e) => {

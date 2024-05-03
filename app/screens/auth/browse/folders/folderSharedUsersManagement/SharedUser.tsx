@@ -5,19 +5,20 @@ import { AccountRoleText, SharedGroupType, SharedMemberType, SharingStatus } fro
 import { CollectionView } from "core/models/view/collectionView"
 import React, { useState } from "react"
 import { View, Image, TouchableOpacity } from "react-native"
-import { Text } from "app/components/cores"
+import { Text, Icon } from "app/components/cores"
 import { ActionItem, ActionSheet } from "app/components/ciphers"
 
 interface Props {
   reload: boolean
   setReload: (val: boolean) => void
+  setShowConfirmModal: (val: any) => void
   item?: (SharedMemberType | SharedGroupType) & { type: string }
   collection: CollectionView
   onRemove: (collection: CollectionView, id: string, isGroup?: boolean) => void
 }
 
 export const SharedUsers = (props: Props) => {
-  const { item, collection, reload, setReload, onRemove } = props
+  const { item, collection, reload, setReload, onRemove, setShowConfirmModal } = props
 
   const { colors } = useTheme()
   const { translate } = useHelper()
@@ -54,13 +55,15 @@ export const SharedUsers = (props: Props) => {
 
   // ----------------------- RENDER -----------------------
   return (
+    <View style={{
+      borderBottomColor: colors.block,
+      borderBottomWidth: 1,
+      marginBottom: 15,
+    }}> 
     <View
       style={{
-        borderBottomColor: colors.block,
-        borderBottomWidth: 1,
         width: "100%",
         flexDirection: "row",
-        marginBottom: 15,
         paddingVertical: 14,
         justifyContent: "flex-start",
       }}
@@ -72,6 +75,7 @@ export const SharedUsers = (props: Props) => {
       />
 
       <TouchableOpacity
+        disabled={item.status === SharingStatus.ACCEPTED}
         style={{ flex: 1, justifyContent: "center" }}
         onPress={() => setShowSheetModal(true)}
       >
@@ -104,7 +108,12 @@ export const SharedUsers = (props: Props) => {
             >
               <Text
                 size="small"
-                tx={`shares.status.${item.status.toLowerCase()}`}
+                text={
+                  item.status === SharingStatus.ACCEPTED
+                    ? translate("shares.wait_confirm")
+                    // @ts-ignore
+                    : translate(`shares.status.${item.status.toLowerCase()}`)
+                }
                 style={{
                   fontWeight: "bold",
                   color: colors.background,
@@ -113,7 +122,10 @@ export const SharedUsers = (props: Props) => {
             </View>
           )}
         </View>
+      
       </TouchableOpacity>
+
+     
 
       <ActionSheet
         isOpen={showSheetModal}
@@ -166,5 +178,49 @@ export const SharedUsers = (props: Props) => {
         />
       </ActionSheet>
     </View>
+    {item?.status === SharingStatus.ACCEPTED && (
+      <View
+        style={{
+          flexDirection: "row",
+          marginVertical: 8,
+        }}
+      >
+        <Text
+          text={translate("shares.confirm")}
+          style={{
+            flex: 2,
+            fontSize: 14,
+          }}
+        />
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              setShowConfirmModal(item)
+            }}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              borderRadius: 8,
+              borderColor: colors.primary,
+              borderWidth: 1,
+              padding: 8,
+              paddingHorizontal: 16,
+            }}
+          >
+            <Icon icon="check" color={colors.primary} size={24} />
+            <Text
+              text={translate("common.confirm")}
+              style={{
+                marginLeft: 8,
+                color: colors.primary,
+                fontSize: 14,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    )}
+    </View>
+
   )
 }

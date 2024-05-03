@@ -58,7 +58,7 @@ export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
     })
   }, [])
 
-  const Test = useCallback(
+  const Otp = useCallback(
     () => (
       <OtpPasswordlessGenerator
         otp={otp}
@@ -66,10 +66,7 @@ export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
         goNext={() => {
           scrollTo(1)
         }}
-        goBack={() => {
-          handleLogout()
-          navigation.goBack()
-        }}
+        goBack={handleLogout}
       />
     ),
     [otp],
@@ -86,7 +83,7 @@ export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
       decelerationRate="fast"
       scrollEventThrottle={16}
     >
-      <Test />
+      <Otp />
       <BusinessPasswordlessQrScan
         otp={otp}
         goBack={() => {
