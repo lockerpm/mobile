@@ -176,9 +176,17 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
   // ------------------ EFFECTS ---------------------
 
   // NOTE: dont change this effect to navigation onFocus or it will mess up handleDynamicLink
-  useEffect(() => {
-    mounted()
-  }, [])
+  // useEffect(() => {
+  //   mounted()
+  // }, [])
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      mounted()
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
   // ------------------ RENDER ---------------------
 

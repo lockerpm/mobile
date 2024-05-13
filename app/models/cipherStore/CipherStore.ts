@@ -13,6 +13,7 @@ import {
   ShareCipherData,
   ShareMultipleCiphersData,
   SharingInvitationType,
+  SharingStatus,
   StopShareCipherData,
 } from 'app/static/types'
 import { CipherView } from 'core/models/view/cipherView'
@@ -58,6 +59,9 @@ export const CipherStoreModel = types
     get cipherView() {
       return self.selectedCipher || new CipherView()
     },
+    get sharingInvitationsIgnoreAccept() {
+      return self.sharingInvitations.filter((i) => i.status !== SharingStatus.ACCEPTED)
+    }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     setApiToken: (token: string) => {
@@ -393,7 +397,6 @@ export const CipherStoreModel = types
       'isSynchingAutofill',
       'isBatchDecrypting',
       'organizations',
-      'lastUpdate',
     ])
   )
 

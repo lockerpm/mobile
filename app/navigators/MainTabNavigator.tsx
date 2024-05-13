@@ -31,7 +31,7 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
       label: translate("common.browse"),
       icon: "browser",
       notiCount:
-        cipherStore.sharingInvitations.length +
+        cipherStore.sharingInvitationsIgnoreAccept.length +
         cipherStore.myShares.reduce((total, s) => {
           return total + s.members.filter((m) => m.status === SharingStatus.ACCEPTED).length
         }, 0),

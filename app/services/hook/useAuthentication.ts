@@ -111,8 +111,8 @@ export function useAuthentication() {
     }
 
     if (res.data.has_no_master_pw_item && createMasterPasswordItem !== undefined) {
-      uiStore.setHasNoMasterPwItem(true)
       await createMasterPasswordItem()
+      uiStore.setHasNoMasterPwItem(true)
     }
     return { kind: 'ok' }
   }

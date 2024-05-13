@@ -356,10 +356,14 @@ export const MainNavigator = observer(() => {
     if (batchDecryptionEnded) {
       if (!uiStore.isOffline && user.isLoggedInPw) {
         handleSync()
-        handleUserDataSync()
+        // handleUserDataSync()
       }
     }
   }, [uiStore.isOffline, user.isLoggedInPw, batchDecryptionEnded])
+
+  useEffect(() => {
+    handleUserDataSync()
+  }, [])
 
   // Recalculate password health on password update
   useEffect(() => {

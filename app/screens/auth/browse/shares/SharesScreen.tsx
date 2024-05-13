@@ -19,7 +19,7 @@ export const SharesScreen = observer(() => {
     {
       path: 'sharedItems',
       name: translate('shares.shared_items'),
-      notiCount: cipherStore.sharingInvitations.length,
+      notiCount: cipherStore.sharingInvitationsIgnoreAccept.length,
     },
     {
       path: 'shareItems',

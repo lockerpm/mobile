@@ -16,7 +16,7 @@ import { FolderAction } from '../../folders/FolderAction'
 import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CollectionView } from 'core/models/view/collectionView'
-import { AccountRole, AccountRoleText } from 'app/static/types'
+import { AccountRole, AccountRoleText, SharingStatus } from 'app/static/types'
 import { Organization } from 'core/models/domain/organization'
 import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
@@ -79,7 +79,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
 
   const organizations = cipherStore.organizations
 
-  const pendingCiphers = cipherStore.sharingInvitations.map((i) => {
+  const pendingCiphers = cipherStore.sharingInvitationsIgnoreAccept.map((i) => {
     const cipher: CipherSharedType = newCipher(i.cipher_type)
     const cipherInfo = getCipherInfo(cipher)
 
@@ -118,19 +118,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       shareRole === AccountRole.MEMBER
     return isMember && i.name?.includes(searchText.toLowerCase())
   })
-
-  // ------------------------ EFFECTS ----------------------------
-
-  useEffect(() => {
-    loadData()
-  }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
-
-  useEffect(() => {
-    if (checkedItem) {
-      toggleItemSelection(checkedItem)
-      setCheckedItem(null)
-    }
-  }, [checkedItem, selectedItems])
 
   // ------------------------ METHODS ----------------------------
 
@@ -246,6 +233,22 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     }
     setSelectedItems(selected)
   }
+
+
+  // ------------------------ EFFECTS ----------------------------
+
+  useEffect(() => {
+    loadData()
+  }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
+
+  useEffect(() => {
+    if (checkedItem) {
+      toggleItemSelection(checkedItem)
+      setCheckedItem(null)
+    }
+  }, [checkedItem, selectedItems])
+
+
 
   const DATA = [
     {

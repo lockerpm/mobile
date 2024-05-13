@@ -18,7 +18,7 @@ export const BrowseListScreen = observer(() => {
   const { translate } = useHelper()
 
   const shareNotiCount =
-    cipherStore.sharingInvitations.length +
+    cipherStore.sharingInvitationsIgnoreAccept.length +
     cipherStore.myShares.reduce((total, s) => {
       return total + s.members.filter((m) => m.status === SharingStatus.ACCEPTED).length
     }, 0)

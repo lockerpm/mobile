@@ -206,9 +206,7 @@ export function useCipherData() {
         const pageSize = 300
         let page = 1
         let cipherIds: string[] = []
-
         cipherStore.setIsSynching(true)
-
         // Sync api
         let res = await cipherStore.syncData(page, pageSize)
         if (res.kind !== "ok") {
