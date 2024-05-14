@@ -79,7 +79,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
 
   const organizations = cipherStore.organizations
 
-  const pendingCiphers = cipherStore.sharingInvitationsIgnoreAccept.map((i) => {
+  const pendingCiphers = cipherStore.sharingInvitations.map((i) => {
     const cipher: CipherSharedType = newCipher(i.cipher_type)
     const cipherInfo = getCipherInfo(cipher)
 
@@ -88,7 +88,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     cipher.organizationId = i.team.id
     cipher.name = `(${translate('shares.encrypted_content')})`
     cipher.imgLogo = cipherInfo.img
-
+    cipher.isAccepted = i.status === SharingStatus.ACCEPTED
     let shareType = ''
     if (i.role === AccountRoleText.MEMBER) {
       // if (i.hide_passwords) {
@@ -104,6 +104,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     cipher.description = `${i.team.name} - ${shareType}`
     return cipher
   })
+  
 
   const allCiphers = !!searchText.trim() || isSelecting ? ciphers : [...pendingCiphers, ...ciphers]
 
@@ -260,7 +261,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       data: [...allCiphers.filter((c) => !c.collectionIds?.length)],
     },
   ]
-
   // ------------------------ RENDER ----------------------------
 
   return allCiphers.length ? (

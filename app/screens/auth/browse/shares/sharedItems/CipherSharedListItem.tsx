@@ -30,6 +30,7 @@ export type CipherSharedType = CipherView & {
   imgLogo?: any
   svg?: any
   notSync?: boolean
+  isAccepted?: boolean
 }
 
 export const CipherSharedListItem = memo(
@@ -57,7 +58,6 @@ export const CipherSharedListItem = memo(
       }
       return org ? `${org.name} - ${shareType}` : ""
     }
-
     return (
       <TouchableOpacity
         onPress={() => {
@@ -94,7 +94,7 @@ export const CipherSharedListItem = memo(
               </View>
 
               {/* Pending status */}
-              {item.isShared && (
+              {(item.isShared || item.isAccepted) && (
                 <View
                   style={{
                     paddingHorizontal: 10,
@@ -104,7 +104,7 @@ export const CipherSharedListItem = memo(
                   }}
                 >
                   <Text
-                    text={translate("common.pending")}
+                    text={item.isAccepted? translate("shares.wait_confirm") :translate("common.pending")}
                     preset="bold"
                     size="small"
                     color={colors.background}

@@ -53,7 +53,6 @@ export const PendingSharedAction = (props: Props) => {
     await rejectShareInvitation(selectedCipher.id)
     onLoadingChange(false)
   }
-
   // Render
 
   return (
