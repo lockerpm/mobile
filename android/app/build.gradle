@@ -71,7 +71,7 @@ react {
 }
 
 ext {
-  hermesEnabled = false
+  hermesEnabled = true
 }
 
 /**
@@ -121,7 +121,7 @@ android {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4178
+        versionCode 4180
         versionName "1.54"
 
         manifestPlaceholders = [

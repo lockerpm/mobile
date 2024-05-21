@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC,  useState } from 'react'
 import { Alert, Linking, View } from 'react-native'
 
 import VersionCheck from 'react-native-version-check'
@@ -11,7 +11,7 @@ import { IS_PROD } from 'app/config/constants'
 import { Logger } from 'app/utils/utils'
 import { useAuthentication, useHelper } from 'app/services/hook'
 import { Text } from 'app/components/cores'
-import { Loading } from 'app/components/utils'
+import {  MotionLoading } from 'app/components/utils'
 import { LockType } from '../lock/lock.types'
 import { observer } from 'mobx-react-lite'
 import { RootStackScreenProps } from 'app/navigators/navigators.types'
@@ -43,12 +43,12 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
   const goLockOrCreatePassword = () => {
     if (user.is_pwd_manager) {
       if (user.onPremiseUser) {
-        navigation.navigate('lock', { type: LockType.OnPremise })
+        navigation.replace('lock', { type: LockType.OnPremise })
       } else {
-        navigation.navigate('lock', { type: LockType.Individual })
+        navigation.replace('lock', { type: LockType.Individual })
       }
     } else {
-      navigation.navigate('createMasterPassword')
+      navigation.replace('createMasterPassword')
     }
   }
 
@@ -134,9 +134,9 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
     if (!user.isLoggedIn) {
       if (!user.introShown) {
         user.setIntroShown(true)
-        navigation.navigate('intro')
+        navigation.replace('intro')
       } else {
-        navigation.navigate('onBoarding')
+        navigation.replace('onBoarding')
       }
       return
     }
@@ -151,13 +151,13 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
       const res = await user.onPremisePreLogin({ email: user.email })
       if (res.kind === 'ok') {
         if (res.data[0].activated) {
-          navigation.navigate('lock', {
+          navigation.replace('lock', {
             type: LockType.OnPremise,
             data: res.data[0],
             email: user.email,
           })
         } else {
-          navigation.navigate('login')
+          navigation.replace('login')
         }
         return
       }
@@ -170,7 +170,7 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
     ) {
       goLockOrCreatePassword()
     } else {
-      navigation.navigate('login')
+      navigation.replace('login')
     }
   }
   // ------------------ EFFECTS ---------------------
@@ -210,7 +210,7 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
           />
         </View>
       )}
-      {!isRooted && <Loading />}
+      {!isRooted && <MotionLoading />}
     </View>
   )
 })

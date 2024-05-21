@@ -10,11 +10,14 @@ import App from "./app/app.tsx"
 import { AppRegistry } from "react-native"
 import { PushNotifier } from "./app/utils/pushNotification"
 
-PushNotifier.setupBackgroundHandler()
 
+
+PushNotifier.setupBackgroundHandler()
 function IgniteApp(props) {
   return <App {...props} />
 }
 
 AppRegistry.registerComponent("Locker", () => IgniteApp)
+
+
 export default App
