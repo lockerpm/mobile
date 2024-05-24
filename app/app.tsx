@@ -18,10 +18,8 @@ import {
   setRootNavigation,
   useNavigationPersistence,
 } from "./navigators"
-import RNBootSplash from "react-native-bootsplash"
 import * as storage from "./utils/storage"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { StyleSheet } from "react-native"
 import * as Tracking from "./utils/tracking"
 import * as Sentry from "@sentry/react-native"
 // This puts screens in a native ViewController or Activity. If you want fully native
@@ -42,7 +40,7 @@ import { AndroidAutofillServiceType } from "./utils/autofillHelper"
 enableScreens()
 Settings.initializeSDK()
 Tracking.initSentry()
-Tracking.initAppFlyer()
+// Tracking.initAppFlyer()
 
 // setup({ storekitMode: 'STOREKIT2_MODE' });
 
@@ -56,6 +54,7 @@ export interface RootProp extends JSX.IntrinsicAttributes {
   lastUserPasswordID?: string
   username?: string
   password?: string
+  hideSplashScreen?: () => void
 }
 
 const App: ComponentType<RootProp> = (props: RootProp) => {
@@ -74,7 +73,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
     // Slightly delaying splash screen hiding for better UX; can be customized or removed as needed,
     // Note: (vanilla Android) The splash-screen will not appear if you launch your app via the terminal or Android Studio. Kill the app and launch it normally by tapping on the launcher icon. https://stackoverflow.com/a/69831106
     // Note: (vanilla iOS) You might notice the splash-screen logo change size. This happens in debug/development mode. Try building the app for release.
-    setTimeout(RNBootSplash.hide, 500)
+    setTimeout(props.hideSplashScreen, 400)
   })
 
   // Before we show the app, we have to wait for our state to be ready.
@@ -165,7 +164,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
 
   // otherwise, we're ready to render the app
   return (
-    <GestureHandlerRootView style={$style.container}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <CombineContext
           childProps={{
@@ -183,11 +182,5 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
     </GestureHandlerRootView>
   )
 }
-
-const $style = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-})
 
 export default __DEV__ ? App : Sentry.wrap(App)

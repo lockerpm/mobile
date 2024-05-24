@@ -9,12 +9,11 @@ import React from "react"
 import App from "./app/app.tsx"
 import { AppRegistry } from "react-native"
 import { PushNotifier } from "./app/utils/pushNotification"
-
-
+import BootSplash from "react-native-bootsplash";
 
 PushNotifier.setupBackgroundHandler()
 function IgniteApp(props) {
-  return <App {...props} />
+  return <App {...props} hideSplashScreen={BootSplash.hide}/>
 }
 
 AppRegistry.registerComponent("Locker", () => IgniteApp)
