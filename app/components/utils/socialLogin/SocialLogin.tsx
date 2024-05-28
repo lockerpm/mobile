@@ -31,16 +31,6 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading }: Props) => {
       handler: () => void
     }
   } = {
-    facebook: {
-      icon: "facebook",
-      handler: () => {
-        setIsLoading(true)
-        return facebookLogin({
-          setIsLoading,
-          onLoggedIn,
-        })
-      },
-    },
     google: {
       icon: "google",
       handler: () => {
@@ -62,7 +52,16 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading }: Props) => {
         })
       },
     },
-
+    facebook: {
+      icon: "facebook",
+      handler: () => {
+        setIsLoading(true)
+        return facebookLogin({
+          setIsLoading,
+          onLoggedIn,
+        })
+      },
+    },
     github: {
       icon: "github",
       handler: () => {
