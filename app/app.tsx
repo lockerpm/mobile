@@ -134,6 +134,8 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
   api.apisauce.addMonitor(monitorApiResponse)
   // api.apisauce.addAsyncRequestTransform(monitorApiRequest)
 
+  console.log(props)
+
   // if app start from android autofill service. navigate to autofill screen
   if (!IS_IOS) {
     const {

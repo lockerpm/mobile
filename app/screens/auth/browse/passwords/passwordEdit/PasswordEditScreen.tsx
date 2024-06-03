@@ -15,6 +15,7 @@ import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
 import { PasswordOtp } from './Otp'
 import { BROWSE_ITEMS } from 'app/navigators/navigators.route'
 import { AppStackScreenProps } from 'app/navigators/navigators.types'
+import { CommonActions } from '@react-navigation/native'
 
 export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = observer((props) => {
   const navigation = props.navigation
@@ -26,7 +27,7 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
   const { translate } = useHelper()
   const { createCipher, updateCipher } = useCipherData()
   const { getPasswordStrength, newCipher, checkPasswordPolicy } = useCipherHelper()
-  const { cipherStore, user, collectionStore } = useStores()
+  const { cipherStore, user, collectionStore, uiStore } = useStores()
 
   // ----------------- COMPUTED ------------------
   const selectedCollection: CollectionView = route.params.collection
@@ -142,6 +143,13 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
   // Go back
   const handleBack = () => {
     if (onSaveFillService) {
+      uiStore.setAndroidAutofillServiceData(false, null)
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'init' }],
+        })
+      )
       BackHandler.exitApp()
     } else {
       navigation.goBack()

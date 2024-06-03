@@ -1,6 +1,5 @@
 import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging'
 import notifee, { EventType, Event } from '@notifee/react-native'
-import { IS_IOS } from '../../config/constants'
 import { Logger } from '../utils'
 import { NotifeeNotificationData, PushEvent } from './types'
 import { load, save, StorageKey } from '../storage'
@@ -14,6 +13,7 @@ import {
   handleRequestEAResponseEA,
   handleTipTrick,
 } from './handler'
+import { Platform } from 'react-native'
 
 export class PushNotifier {
   // Request permission
@@ -28,7 +28,7 @@ export class PushNotifier {
 
   // Get FCM token
   static async getToken() {
-    if (!IS_IOS) {
+    if (Platform.OS === 'android') {
       await messaging().registerDeviceForRemoteMessages()
     }
     const token = await messaging().getToken()
