@@ -1,0 +1,53 @@
+
+
+"c.cancel" = "Huỷ";
+"c.copied"= "Đã sao chép";
+
+// utils
+"utils.touchID" = "Xác thực bằng vân tay";
+"utils.disableBiometric" = "Xác thực bằng sinh trắc học không khả dụng";
+"utils.unconfigBiometric" = "Thiết bị của bạn chưa cấu hình để sử dụng sinh trắc học";
+"utils.disableFaceID" = "Xác thực bằng nhận dạng khuôn mặt không khả dụng";
+
+// noti
+"noti.authen" = "Xác thực người dùng dịch vụ";
+"noti.loginLocker" = "Đăng nhập vào Locker trước khi sử dụng dịch vụ tự động điền";
+
+// CredentialsListScreen
+"list.title" = "Danh sách mật khẩu";
+"list.noDataSearch" = "Oops! Không tìm thấy dữ liệu phù hợp ";
+"list.suggestSearch" = "Tìm kiếm theo: ";
+
+//Lock screen
+"lock.mp" = "Master Password";
+"lock.title" = "Xác thực Master Password";
+"lock.btn" = "Mở khoá";
+"lock.faceid" = "Mở khoá với Face ID/Touch ID";
+
+
+// totp view
+"totp.desc" = "(OTP sẽ được sao chép tự động khi bạn tự động điền)";
+"totp.update" = "Giá trị OTP sẽ được cập nhật sau ";
+
+// credential
+"item.username" = "Tên đăng nhập hoặc email";
+"item.password" = "Mật khẩu";
+
+// password generator
+"pw.length"  = "Độ dài: ";
+"pw.special" = "Kí tự đặc biệt (@!$%*)";
+"pw.ambiguous" = "Tránh các kí tự dễ nhầm lẫn";
+"pw.useBtn" = "Sử dụng mật khẩu";
+"pw.generator" = "Tạo mật khẩu mạnh";
+"pw.regenerate" = "Tạo lại";
+
+// create password
+"create.title" = "Tạo mật khẩu";
+"create.cancel" = "Huỷ";
+"create.save" = "Lưu và tự động điền";
+"create.name" = "Tên (*)";
+"create.info" = "Thông tin chi tiết";
+"create.username" = "Email / Tên người dùng";
+"create.password" = "Mật khẩu";
+"create.web" = "Địa chỉ web";
+"create.noti" = "Mục này sẽ được tạo và lưu cục bộ. Nó sẽ được đồng bộ hóa với máy chủ Locker khi bạn mở khóa ứng dụng Locker.";

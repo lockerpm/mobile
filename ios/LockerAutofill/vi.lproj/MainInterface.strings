@@ -1,47 +1,45 @@
 
-/* Class = "UIBarButtonItem"; title = "Cancel"; ObjectID = "1mO-wz-8ct"; */
-"1mO-wz-8ct.title" = "Huỷ";
+/* Class = "UIButton"; configuration.title = " Unlock with Face ID/Touch ID"; ObjectID = "314-LN-7ic"; */
+"314-LN-7ic.configuration.title" = " Mở khoá bằng Face ID/Touch ID";
 
-/* Class = "UILabel"; text = "Verify Master Password"; ObjectID = "BHt-Az-rZe"; */
-"BHt-Az-rZe.text" = "Xác thực mật khẩu chính";
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "314-LN-7ic"; */
+"314-LN-7ic.normalTitle" = " Mở khoá bằng Face ID/Touch ID";
 
-/* Class = "UILabel"; text = "Label"; ObjectID = "F76-pU-sgw"; */
-"F76-pU-sgw.text" = "Label";
+/* Class = "UISearchBar"; 7Hg-tT-hcc.scopeButtonTitles[0] = "Title"; ObjectID = "7Hg-tT-hcc"; */
+"7Hg-tT-hcc.scopeButtonTitles[0]" = "Title";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "IPd-gT-lCD"; */
-"IPd-gT-lCD.normalTitle" = "Button";
+/* Class = "UISearchBar"; 7Hg-tT-hcc.scopeButtonTitles[1] = "Title"; ObjectID = "7Hg-tT-hcc"; */
+"7Hg-tT-hcc.scopeButtonTitles[1]" = "Title";
 
-/* Class = "UIButton"; configuration.title = "Unlock"; ObjectID = "Iqt-pY-FVh"; */
-"Iqt-pY-FVh.configuration.title" = "Mở khoá";
+/* Class = "UIBarButtonItem"; title = "Cancel"; ObjectID = "9HW-uz-U66"; */
+"9HW-uz-U66.title" = "Huỷ";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Iqt-pY-FVh"; */
-"Iqt-pY-FVh.normalTitle" = "Mở khoá";
+/* Class = "UILabel"; text = "Verify Master Password"; ObjectID = "CdV-R9-W9l"; */
+"CdV-R9-W9l.text" = "Xác thực mật khẩu chính";
 
-/* Class = "UILabel"; text = "Verify your Master Password to unlock"; ObjectID = "RW4-xA-kRE"; */
-"RW4-xA-kRE.text" = "Nhập mật khẩu chính để mở khoá";
+/* Class = "UIButton"; configuration.title = "Unlock"; ObjectID = "I52-ga-KLY"; */
+"I52-ga-KLY.configuration.title" = "Mở khoá";
 
-/* Class = "UISearchBar"; UJx-sW-kG0.scopeButtonTitles[0] = "Title"; ObjectID = "UJx-sW-kG0"; */
-"UJx-sW-kG0.scopeButtonTitles[0]" = "Title";
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "I52-ga-KLY"; */
+"I52-ga-KLY.normalTitle" = "Mở khoá";
 
-/* Class = "UISearchBar"; UJx-sW-kG0.scopeButtonTitles[1] = "Title"; ObjectID = "UJx-sW-kG0"; */
-"UJx-sW-kG0.scopeButtonTitles[1]" = "Title";
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "ODF-fV-c96"; */
+"ODF-fV-c96.normalTitle" = "Button";
 
-/* Class = "UIButton"; configuration.title = " Unlock with Face ID/Touch ID"; ObjectID = "VAo-LQ-WML"; */
-"VAo-LQ-WML.configuration.title" = " Mở khoá bằng Face ID/Touch ID";
+/* Class = "UIButton"; configuration.title = "Cancel"; ObjectID = "Yjt-a8-RKp"; */
+"Yjt-a8-RKp.configuration.title" = "Huỷ";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "VAo-LQ-WML"; */
-"VAo-LQ-WML.normalTitle" = " Mở khoá bằng Face ID/Touch ID";
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Yjt-a8-RKp"; */
+"Yjt-a8-RKp.normalTitle" = "Huỷ";
 
-/* Class = "UINavigationItem"; title = "Login List"; ObjectID = "djK-6Z-utw"; */
-"djK-6Z-utw.title" = "Danh sách mật khẩu";
+/* Class = "UILabel"; text = "Verify your Master Password to unlock"; ObjectID = "bT0-7Z-hW5"; */
+"bT0-7Z-hW5.text" = "Nhập mật khẩu chính để mở khoá";
 
-/* Class = "UIButton"; configuration.title = "Cancel"; ObjectID = "rs5-wt-k7J"; */
-"rs5-wt-k7J.configuration.title" = "Cancel";
+/* Class = "UILabel"; text = "Label"; ObjectID = "ebM-gT-HNl"; */
+"ebM-gT-HNl.text" = "Label";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "rs5-wt-k7J"; */
-"rs5-wt-k7J.normalTitle" = "Huỷ";
+/* Class = "UILabel"; text = "Label"; ObjectID = "fmG-jG-AB8"; */
+"fmG-jG-AB8.text" = "Label";
 
-/* Class = "UILabel"; text = "Label"; ObjectID = "zdC-rG-Xmh"; */
-"zdC-rG-Xmh.text" = "Label";
-
-
+/* Class = "UINavigationItem"; title = "Login List"; ObjectID = "sUB-ay-zik"; */
+"sUB-ay-zik.title" = "Danh sách mật khẩu";

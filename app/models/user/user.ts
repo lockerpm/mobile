@@ -1,36 +1,42 @@
-import { Instance, SnapshotOut, types, cast } from 'mobx-state-tree'
-import { setLang } from '../../i18n'
+/* eslint-disable camelcase */
+import { Instance, SnapshotIn, SnapshotOut, cast, types } from 'mobx-state-tree'
+import { withSetPropAction } from '../helpers/withSetPropAction'
 import {
-  ChangePasswordData,
-  RegisterLockerData,
-  SessionLoginData,
+  AuthPasskeyRequest,
+  ChangePasswordRequest,
+  Enterprise,
   LoginData,
-  RegisterData,
-  SocialLoginData,
   NotificationSettingData,
-  SessionOtpLoginData,
-  RegisterPasskeyData,
-  RegisterPasskeyOptionData,
-  AuthPasskeyData,
-} from '../../services/api'
-import { UserApi } from '../../services/api/user-api'
-import { save, StorageKey, remove } from '../../utils/storage'
-import { withEnvironment } from '../extensions/with-environment'
-import DeviceInfo from 'react-native-device-info'
-import moment from 'moment'
+  OnpremisePreloginPayload,
+  RegisterLockerRequest,
+  RegisterPasskeyOptionRequest,
+  RegisterPasskeyRequest,
+  RegisterRequest,
+  SessionLoginRequest,
+  SessionOtpLoginRequest,
+  SocialLoginRequest,
+  UserInvitations,
+  UserSubscripePlan,
+  UserTeam,
+} from 'app/static/types'
+import {
+  AccountType,
+  AppTimeoutType,
+  EmergencyAccessType,
+  PlanType,
+  PlanTypeDuration,
+  PolicyType,
+  TimeoutActionType,
+} from 'app/static/types/enum'
 import { omit } from 'ramda'
-import { AppEventType, EventBus } from '../../utils/event-bus'
-import { AccountType, EmergencyAccessType, PlanType, PolicyType } from '../../config/types'
-import { Enterprise, UserTeam } from '../../config/types/api'
-
-export enum AppTimeoutType {
-  SCREEN_OFF = -1,
-  APP_CLOSE = 0,
-}
-export enum TimeoutActionType {
-  LOCK = 'lock',
-  LOGOUT = 'logout',
-}
+import { StorageKey, remove, save } from 'app/utils/storage'
+import { userApi } from 'app/services/api/userApi'
+import { AppEventType, EventBus } from 'app/utils/eventBus'
+import { idApi } from 'app/services/api/idApi'
+import { toolApi } from 'app/services/api/toolApi'
+import DeviceInfo from 'react-native-device-info'
+import { setLang } from 'app/i18n'
+import { momentRelativeTime } from 'app/utils/utils'
 
 /**
  * Model description here for TypeScript hints.
@@ -60,18 +66,8 @@ export const UserModel = types
     // Others data
     enterprise: types.maybeNull(types.frozen<Enterprise>()),
     teams: types.array(types.frozen<UserTeam>()),
-    plan: types.maybeNull(
-      types.frozen<{
-        name: string
-        alias: PlanType
-        is_family: boolean
-        cancel_at_period_end: boolean
-        duration: 'monthly' | 'yearly'
-        next_billing_time: number
-        payment_method: string
-      }>()
-    ),
-    invitations: types.array(types.frozen()),
+    plan: types.maybeNull(types.frozen<UserSubscripePlan>()),
+    invitations: types.array(types.frozen<UserInvitations>()),
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
 
@@ -82,7 +78,7 @@ export const UserModel = types
 
     // User settings
     language: types.optional(types.string, 'en'),
-    // isBiometricUnlock: types.maybeNull(types.boolean),
+    customerLanguage: types.optional(types.string, 'en'),
     isBiometricUnlockList: types.array(types.string), // store user email
     appTimeout: types.optional(types.number, AppTimeoutType.APP_CLOSE),
     appTimeoutAction: types.optional(types.string, TimeoutActionType.LOCK),
@@ -93,22 +89,22 @@ export const UserModel = types
     // cache
     isMobileLangChange: types.maybeNull(types.boolean),
   })
-  .extend(withEnvironment)
+  .actions(withSetPropAction)
   .views((self) => ({
     get isFreePlan() {
-      return self.plan && self.plan.alias === PlanType.FREE
+      return self.plan?.alias === PlanType.FREE
     },
     get isFamilyPlan() {
-      return self.plan && self.plan.alias === PlanType.FAMILY
+      return self.plan?.alias === PlanType.FAMILY
     },
     get isLifeTimePremiumPlan() {
-      return self.plan && self.plan.alias === PlanType.LIFETIME_PREMIUM
+      return self.plan?.alias === PlanType.LIFETIME_PREMIUM
     },
     get isLifeTimeFamilyPlan() {
-      return self.plan && self.plan.alias === PlanType.LIFETIME_FAMILY
+      return self.plan?.alias === PlanType.LIFETIME_FAMILY
     },
     get isShowPremiumFeature() {
-      return self.plan && self.plan.alias === PlanType.PREMIUM
+      return self.plan?.alias === PlanType.PREMIUM
     },
     get isEnterprise() {
       return self.pwd_user_type === 'enterprise' && self.enterprise
@@ -116,9 +112,8 @@ export const UserModel = types
     get isBiometricUnlock() {
       return self.isBiometricUnlockList.includes(self.email)
     },
-  }))
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    // Token
     setApiToken: (token: string) => {
       self.apiToken = token
     },
@@ -128,7 +123,6 @@ export const UserModel = types
     setOnPremaiseEmail: (email: string) => {
       self.email = email
     },
-    // Info
     setOnPremiseUser: (val: boolean) => {
       self.onPremiseUser = val
     },
@@ -138,14 +132,14 @@ export const UserModel = types
     setOnPremiseLastBaseUrl: (baseUrl: string) => {
       self.onPremiseLastBaseUrl = baseUrl
     },
-    saveUser: (userSnapshot: UserSnapshot) => {
+    saveUser: (userSnapshot: UserSnapshotIn) => {
       self.isLoggedIn = true
       self.email = userSnapshot.email
       self.username = userSnapshot.username
       self.full_name = userSnapshot.full_name
       self.avatar = userSnapshot.avatar
     },
-    saveUserPw: (userSnapshot: UserSnapshot) => {
+    saveUserPw: (userSnapshot: UserSnapshotIn) => {
       self.pwd_user_id = userSnapshot.pwd_user_id
       self.is_pwd_manager = userSnapshot.is_pwd_manager
       self.default_team_id = userSnapshot.default_team_id
@@ -158,32 +152,6 @@ export const UserModel = types
     saveEnterprise: (enterprise: Enterprise[]) => {
       self.enterprise = enterprise[0]
     },
-    clearUser: () => {
-      self.isLoggedIn = false
-      self.isLoggedInPw = false
-      self.apiToken = ''
-      self.email = ''
-      self.username = ''
-      self.full_name = ''
-      self.avatar = ''
-      self.pwd_user_id = ''
-      self.is_pwd_manager = false
-      self.default_team_id = ''
-      self.teams = cast([])
-      self.enterprise = null
-      self.invitations = cast([])
-      self.plan = null
-      self.fingerprint = ''
-      self.onPremiseUser = false
-      self.onPremiseLastBaseUrl = ''
-      remove(StorageKey.APP_CURRENT_USER)
-    },
-    clearSettings: () => {
-      self.appTimeout = AppTimeoutType.APP_CLOSE
-      self.appTimeoutAction = TimeoutActionType.LOCK
-      self.defaultTab = 'homeTab'
-      self.disablePushNotifications = false
-    },
     setLoggedIn: (isLoggedIn: boolean) => {
       self.isLoggedIn = isLoggedIn
     },
@@ -193,24 +161,13 @@ export const UserModel = types
     setFingerprint: (fingerprint: string) => {
       self.fingerprint = fingerprint
     },
-
-    // Others data
     setTeams: (teams: UserTeam[]) => {
       self.teams = cast(teams)
     },
-    setPlan: (plan: {
-      name: string
-      alias: PlanType
-      is_family: boolean
-      cancel_at_period_end: boolean
-      duration: 'monthly' | 'yearly'
-      next_billing_time: any
-      payment_method: string
-    }) => {
+    setPlan: (plan: UserSubscripePlan) => {
       self.plan = cast(plan)
     },
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    setInvitations: (invitations: object[]) => {
+    setInvitations: (invitations: any[]) => {
       self.invitations = cast(invitations)
     },
     setIntroShown: (val: boolean) => {
@@ -228,49 +185,9 @@ export const UserModel = types
     },
     setLanguage: (lang: string) => {
       self.language = lang
+      self.customerLanguage = lang
       setLang(lang)
-      switch (lang) {
-        case 'vi':
-          moment.locale('vi', {
-            months: 'tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12'.split(
-              '_'
-            ),
-            monthsShort: 'Th01_Th02_Th03_Th04_Th05_Th06_Th07_Th08_Th09_Th10_Th11_Th12'.split('_'),
-            relativeTime: {
-              future: '%s tới',
-              past: '%s trước',
-              s: 'Vài giây',
-              m: '1 phút',
-              mm: '%d phút',
-              h: '1 giờ',
-              hh: '%d giờ',
-              d: '1 ngày',
-              dd: '%d ngày',
-              M: '1 tháng',
-              MM: '%d tháng',
-              y: '1 năm',
-              yy: '%d năm',
-            },
-            longDateFormat: {
-              LT: 'HH:mm',
-              LTS: 'HH:mm:ss',
-              L: 'DD/MM/YYYY',
-              LL: 'D MMMM [năm] YYYY',
-              LLL: 'D MMMM [năm] YYYY HH:mm',
-              LLLL: 'dddd, D MMMM [năm] YYYY HH:mm',
-              l: 'DD/M/YYYY',
-              ll: 'D MMM YYYY',
-              lll: 'D MMM YYYY HH:mm',
-              llll: 'ddd, D MMM YYYY HH:mm',
-            },
-            week: {
-              dow: 1, // Monday is the first day of the week.
-            },
-          })
-          break
-        default:
-          moment.locale('en')
-      }
+      momentRelativeTime(lang)
       save(StorageKey.APP_CURRENT_USER, {
         language: lang,
         pwd_user_id: self.pwd_user_id,
@@ -301,12 +218,42 @@ export const UserModel = types
     setNotificationSettings: (val: NotificationSettingData[]) => {
       self.notificationSettings = val
     },
-  }))
+    clearUser: () => {
+      self.apiToken = ''
+
+      // ID
+      self.isLoggedIn = false
+      self.email = ''
+      self.username = ''
+      self.full_name = ''
+      self.avatar = ''
+
+      // PM
+      self.isLoggedInPw = false
+      self.pwd_user_id = ''
+      self.pwd_user_type = ''
+      self.is_pwd_manager = false
+      self.default_team_id = ''
+
+      self.teams = cast([])
+      self.enterprise = null
+      self.invitations = cast([])
+      self.plan = null
+      self.fingerprint = ''
+      self.onPremiseUser = false
+      self.onPremiseLastBaseUrl = ''
+      remove(StorageKey.APP_CURRENT_USER)
+    },
+    clearSettings: () => {
+      self.appTimeout = AppTimeoutType.APP_CLOSE
+      self.appTimeoutAction = TimeoutActionType.LOCK
+      self.defaultTab = 'homeTab'
+      self.disablePushNotifications = false
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     // -------------------- ID ------------------------
-
     getUser: async (options?: { customToken?: string; dontSetData?: boolean }) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser(options?.customToken || self.apiToken)
       if (res.kind === 'ok' && !options?.dontSetData) {
         if (self.email && res.user.email !== self.email) {
@@ -317,65 +264,57 @@ export const UserModel = types
           if (self.isMobileLangChange) {
             await userApi.setUserLanguage(self.apiToken, self.language)
           } else {
-            self.setLanguage(res.user.language)
+
+            // TODO disable now
+            // self.setLanguage(res.user.customerLanguage)
           }
         }
         self.saveUser(res.user)
       }
       return res
     },
-
     sendOtpEmail: async (username: string, password: string, request_code: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.sendOtpEmail({ username, password, request_code })
+      const res = await idApi.sendOtpEmail({ username, password, request_code })
       return res
     },
 
     recoverAccount: async (username: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.recoverAccount({ username })
+      const res = await idApi.recoverAccount({ username })
       return res
     },
 
     resetPassword: async (username: string, method: string, request_code?: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.resetPassword({ username, method, request_code })
+      const res = await idApi.resetPassword({ username, method, request_code })
       return res
     },
 
     resetPasswordWithCode: async (username: string, code: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.resetPasswordWithCode({ username, code })
+      const res = await idApi.resetPasswordWithCode({ username, code })
       return res
     },
 
     setNewPassword: async (new_password: string, token: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.setNewPassword({ new_password, token })
+      const res = await idApi.setNewPassword({ new_password, token })
       return res
     },
 
     setSocialPassword: async (new_password: string, token: string, username?: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.setPassword({ new_password, token, username })
+      const res = await idApi.setPassword({ new_password, token, username })
       return res
     },
 
     webAuthListCredentials: async (paging: number) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.webAuthListCredentials(self.apiToken, paging)
+      const res = await idApi.webAuthListCredentials(self.apiToken, paging)
       return res
     },
 
     loginMethod: async (username: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.loginMethod(username)
+      const res = await idApi.loginMethod(username)
       return res
     },
 
     login: async (payload: LoginData, isOtp?: boolean) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.login(payload, self.deviceId, isOtp)
+      const res = await idApi.login(payload, self.deviceId, isOtp)
       if (res.kind === 'ok') {
         if (res.data.token) {
           const pmRes = await userApi.getPMToken(
@@ -397,9 +336,8 @@ export const UserModel = types
       return res
     },
 
-    authPasskey: async (payload: AuthPasskeyData) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.authPasskey(payload)
+    authPasskey: async (payload: AuthPasskeyRequest) => {
+      const res = await idApi.authPasskey(payload, self.deviceId)
       if (res.kind === 'ok') {
         if (res.data.token) {
           const pmRes = await userApi.getPMToken(
@@ -421,19 +359,16 @@ export const UserModel = types
       return res
     },
     authPasskeyOptions: async (username: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.authPasskeyOptions(username)
+      const res = await idApi.authPasskeyOptions(username)
       return res
     },
 
-    socialLogin: async (payload: SocialLoginData) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.socialLogin(payload, self.deviceId)
+    socialLogin: async (payload: SocialLoginRequest) => {
+      const res = await idApi.socialLogin(payload, self.deviceId)
       return res
     },
 
     getPMToken: async (token: string) => {
-      const userApi = new UserApi(self.environment.api)
       const pmRes = await userApi.getPMToken(
         token,
         {
@@ -451,78 +386,50 @@ export const UserModel = types
       return pmRes
     },
 
-    register: async (payload: RegisterData) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.register(payload)
+    register: async (payload: RegisterRequest) => {
+      const res = await idApi.register(payload)
       return res
     },
 
-    registerPasskeyOptions: async (payload: RegisterPasskeyOptionData) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.registerPasskeyOptions(payload)
+    registerPasskeyOptions: async (payload: RegisterPasskeyOptionRequest) => {
+      const res = await idApi.registerPasskeyOptions(payload)
       return res
     },
 
-    registerPasskey: async (payload: RegisterPasskeyData) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.registerPasskey(payload)
+    registerPasskey: async (payload: RegisterPasskeyRequest) => {
+      const res = await idApi.registerPasskey(payload)
       return res
     },
 
     logout: async () => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.logout(self.apiToken)
+      const res = await idApi.logout(self.apiToken)
       self.clearUser()
       self.clearSettings()
       return res
     },
 
     deauthorizeSessions: async (hashedPassword: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.deauthorizeSessions(self.apiToken, hashedPassword)
       return res
     },
 
     purgeAccount: async (hashedPassword: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.purgeAccount(self.apiToken, hashedPassword)
       return res
     },
 
     deleteAccount: async (hashedPassword: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.deleteAccount(self.apiToken, hashedPassword)
       return res
     },
 
     // -------------------- LOCKER ------------------------
-
-    // enablePasskeyOptions: async (algorithms: string[]) => {
-    //   const userApi = new UserApi(self.environment.api)
-    //   const res = await userApi.enablePasskeyOptions(self.apiToken, algorithms)
-    //   return res
-    // },
-
-    // enablePasskey: async (payload: PasskeyRegistrationResult) => {
-    //   const userApi = new UserApi(self.environment.api)
-    //   const res = await userApi.enablePasskey(self.apiToken, payload)
-    //   return res
-    // },
-
-    disablePasskey: async (credentialsId: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.disablePasskey(self.apiToken, credentialsId)
-      return res
-    },
-
     sendPasswordHint: async (email: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.sendMasterPasswordHint(self.apiToken, { email })
       return res
     },
 
     getInvitations: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getInvitations(self.apiToken)
       if (res.kind === 'ok') {
         self.setInvitations(res.data)
@@ -531,19 +438,16 @@ export const UserModel = types
     },
 
     invitationRespond: async (id: string, status: 'accept' | 'reject') => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.invitationRespond(self.apiToken, id, status)
       return res
     },
 
     getUserPw: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUserPw(self.apiToken)
       if (res.kind === 'ok') {
         self.saveUserPw(res.user)
         if (res.user.pwd_user_type === AccountType.ENTERPRISE && !self.onPremiseUser) {
-          const _userApi = new UserApi(self.environment.api)
-          const _res = await _userApi.getEnterprise(self.apiToken)
+          const _res = await userApi.getEnterprise(self.apiToken)
           if (_res.kind === 'ok') {
             self.saveEnterprise(_res.data)
           }
@@ -551,66 +455,50 @@ export const UserModel = types
       }
       return res
     },
-
     getEnterprise: async () => {
-      const _userApi = new UserApi(self.environment.api)
-      const _res = await _userApi.getEnterprise(self.apiToken)
+      const _res = await userApi.getEnterprise(self.apiToken)
       if (_res.kind === 'ok') {
         self.saveEnterprise(_res.data)
       }
     },
 
-    sessionLogin: async (payload: SessionLoginData) => {
-      const userApi = new UserApi(self.environment.api)
-
+    sessionLogin: async (payload: SessionLoginRequest) => {
       const res = await userApi.sessionLogin(self.apiToken, payload)
       if (res.kind === 'ok') {
         self.setLoggedInPw(true)
       }
       return res
     },
-
-    sessionOtpLogin: async (payload: SessionOtpLoginData) => {
-      const userApi = new UserApi(self.environment.api)
-
+    sessionOtpLogin: async (payload: SessionOtpLoginRequest) => {
       const res = await userApi.sessionOtpLogin(self.apiToken, payload)
       if (res.kind === 'ok') {
         self.setLoggedInPw(true)
       }
       return res
     },
-
-    registerLocker: async (payload: RegisterLockerData) => {
-      const userApi = new UserApi(self.environment.api)
+    registerLocker: async (payload: RegisterLockerRequest) => {
       const res = await userApi.registerLocker(self.apiToken, payload)
       return res
     },
 
-    changeMasterPassword: async (payload: ChangePasswordData) => {
-      const userApi = new UserApi(self.environment.api)
+    changeMasterPassword: async (payload: ChangePasswordRequest) => {
       const res = await userApi.changeMasterPassword(self.apiToken, payload)
       return res
     },
-
     changeLanguage: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.setUserLanguage(self.apiToken, self.language)
       return res
     },
-
     lock: () => {
       self.setLoggedInPw(false)
     },
-
     loadTeams: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getTeams(self.apiToken)
       if (res.kind === 'ok') {
         self.setTeams(res.teams)
       }
       return res
     },
-
     loadPlan: async () => {
       if (self.pwd_user_type === 'enterprise') {
         self.setPlan({
@@ -618,89 +506,66 @@ export const UserModel = types
           is_family: false,
           alias: PlanType.PREMIUM,
           cancel_at_period_end: false,
-          duration: 'monthly',
+          duration: PlanTypeDuration.MONTHLY,
           next_billing_time: 0,
           payment_method: 'mobile',
         })
         return null
       }
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getPlan(self.apiToken)
       if (res.kind === 'ok') {
         self.setPlan(res.data)
       }
       return res
     },
-
     getTeamPolicies: async (organizationId: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getTeamPolicies(self.apiToken, organizationId)
       return res
     },
-
     getTeamPolicy: async (organizationId: string, policyType: PolicyType) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getTeamPolicy(self.apiToken, organizationId, policyType)
       return res
     },
-
     feedback: async (description: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.sendFeedback(self.apiToken, {
         type: 'feedback',
         description,
       })
       return res
     },
-
     updateFCM: async (token: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.updateFCM(self.apiToken, {
         fcm_id: token,
-        device_identifier: DeviceInfo.getUniqueId(),
+        device_identifier: await DeviceInfo.getUniqueId(),
       })
       return res
     },
-
     getBillingDocuments: async (page: number) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getBillingDocuments(self.apiToken, page)
       return res
     },
-
     getFamilyMember: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getFamilyMember(self.apiToken)
       return res
     },
-
     addFamilyMember: async (memberEmails: string[]) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.addFamilyMember(self.apiToken, memberEmails)
       return res
     },
-
     removeFamilyMember: async (memberID: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.removeFamilyMember(self.apiToken, memberID)
       return res
     },
-
     getReferLink: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getReferLink(self.apiToken)
       return res
     },
-
     getTrialEligible: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getTrialEligible(self.apiToken)
       return res
     },
-
     // NOTIFICATION SETTING
     getNotificationSettings: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getNotificationSettings(self.apiToken)
       if (res.kind === 'ok') {
         self.setNotificationSettings(res.data)
@@ -708,40 +573,31 @@ export const UserModel = types
       return res
     },
     updateNotiSettings: async (categoryId: string, mail: boolean, notification: boolean) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.updateNotiSettings(self.apiToken, categoryId, mail, notification)
       return res
     },
     fetchInAppNoti: async () => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.fetchInAppNoti(self.apiToken)
+      const res = await toolApi.fetchInAppNoti(self.apiToken)
       return res
     },
-
     markReadInAppNoti: async (id: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.markReadInappNoti(self.apiToken, id)
+      const res = await toolApi.markReadInappNoti(self.apiToken, id)
       return res
     },
-
     // EMERGENCY ACCESS
     inviteEA: async (email: string, key: string, type: EmergencyAccessType, waitTime: number) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAInvite(self.apiToken, email, key, type, waitTime)
       return res
     },
     trustedEA: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EATrusted(self.apiToken)
       return res
     },
     grantedEA: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAGranted(self.apiToken)
       return res
     },
     yourTrustedActionEA: async (id: string, action: 'reject' | 'approve' | 'reinvite') => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAyourTrustedAction(self.apiToken, id, action)
       if (res.kind === 'ok') {
         return true
@@ -749,7 +605,6 @@ export const UserModel = types
       return false
     },
     trustedYouActionEA: async (id: string, action: 'accept' | 'initiate') => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EATrustedYouAction(self.apiToken, id, action)
       if (res.kind === 'ok') {
         return true
@@ -757,55 +612,60 @@ export const UserModel = types
       return false
     },
     takeoverEA: async (id: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EATakeover(self.apiToken, id)
       return res
     },
     passwordEA: async (id: string, payload: any) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAPassword(self.apiToken, id, payload)
       return res
     },
     lockerPasswordEA: async (id: string, newPass: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EALockerPassword(self.apiToken, id, newPass)
       return res
     },
     viewEA: async (id: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAView(self.apiToken, id)
       return res
     },
     removeEA: async (id: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EARemove(self.apiToken, id)
       if (res.kind === 'ok') {
         return true
       }
       return false
     },
-
     // business
     businessLoginMethod: async () => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.businessLoginMethod()
+      const res = await idApi.businessLoginMethod()
       return res
     },
     // On Premise
     // user is on premise
-    onPremisePreLogin: async (email: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.onPremisePreLogin(email)
+    onPremisePreLogin: async (payload: OnpremisePreloginPayload) => {
+      const res = await idApi.onPremisePreLogin(payload)
       return res
     },
-  }))
+    onPremiseIdentifier: async (identifier: string) => {
+      const res = await idApi.onPremiseIdentifier(identifier)
+      return res
+    },
+
+    // Marketing
+    fetchMarketingContent: async () => {
+      const res = await userApi.fetchMarketingContent(self.apiToken, self.language)
+      return res
+    },
+    getChatWootIdHash: async () => {
+      const res = await userApi.getChatWootIdHash(self.apiToken)
+      return res
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     purchaseValidation: async (
       receipt?: string,
       subscriptionId?: string,
       originalTransactionIdentifierIOS?: string
     ) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.purchaseValidation(
         self.apiToken,
         receipt,
@@ -817,16 +677,7 @@ export const UserModel = types
   }))
   .postProcessSnapshot(omit(['isLoggedInPw', 'isMobileLangChange', 'isPasswordlessLogin']))
 
-/**
- * Un-comment the following to omit model attributes from your snapshots (and from async storage).
- * Useful for sensitive data like passwords, or transitive state like whether a modal is open.
-
- * Note that you'll need to import `omit` from ramda, which is already included in the project!
- *  .postProcessSnapshot(omit(["password", "socialSecurityNumber", "creditCardNumber"]))
- */
-
-type UserType = Instance<typeof UserModel>
-export interface User extends UserType {}
-type UserSnapshotType = SnapshotOut<typeof UserModel>
-export interface UserSnapshot extends UserSnapshotType {}
+export interface User extends Instance<typeof UserModel> {}
+export interface UserSnapshotOut extends SnapshotOut<typeof UserModel> {}
+export interface UserSnapshotIn extends SnapshotIn<typeof UserModel> {}
 export const createUserDefaultModel = () => types.optional(UserModel, {})

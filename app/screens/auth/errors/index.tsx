@@ -1,1 +1,1 @@
-export * from './data-outdated/data-outdated-screen'
+export * from './dataOutdated/DataOutdatedScreen'

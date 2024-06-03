@@ -62,7 +62,7 @@ export class KeeperJsonImporter extends BaseImporter implements Importer {
 
       if (item.shared_folder != null) {
         this.processFolder(result, item.shared_folder);
-        return;
+
       }
     });
   }

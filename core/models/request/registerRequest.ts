@@ -21,7 +21,7 @@ export class RegisterRequest {
         this.name = name;
         this.email = email;
         this.masterPasswordHash = masterPasswordHash;
-        this.masterPasswordHint = masterPasswordHint ? masterPasswordHint : null;
+        this.masterPasswordHint = masterPasswordHint || null;
         this.key = key;
         this.kdf = kdf;
         this.kdfIterations = kdfIterations;

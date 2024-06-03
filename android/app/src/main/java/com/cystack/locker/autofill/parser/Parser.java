@@ -61,7 +61,7 @@ public class Parser {
 
     private void ParseNode(AssistStructure.ViewNode node){
         setPackageAndDomain(node);
-
+        Log.d(TAG + "---", node.getClassName());
         // First try the explicit autofill hints...
         boolean haveAutofillHints = node.getAutofillHints() != null && node.getAutofillHints().length > 0;
         boolean isEditText = node.getClassName() != null && (node.getClassName().contains("EditText") || node.getClassName().contains("AutoCompleteTextView"));

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1300"
+   LastUpgradeVersion = "1500"
    wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CA53478E27181AB400BA4901"
+               BlueprintIdentifier = "7C973A3B2A93055500875FBA"
                BuildableName = "LockerAutofill.appex"
                BlueprintName = "LockerAutofill"
                ReferencedContainer = "container:Locker.xcodeproj">
@@ -41,16 +41,13 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <Testables>
-      </Testables>
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldAutocreateTestPlan = "YES">
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = ""
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
-      language = "vi"
-      region = "VN"
       launchStyle = "0"
       askForAppToLaunch = "Yes"
       useCustomWorkingDirectory = "NO"
@@ -61,8 +58,8 @@
       launchAutomaticallySubstyle = "2">
       <RemoteRunnable
          runnableDebuggingMode = "1"
-         BundleIdentifier = "io.metamask.MetaMask"
-         RemotePath = "/var/containers/Bundle/Application/BA607D00-227C-4858-B24F-E001C62ED638/MetaMask.app">
+         BundleIdentifier = "com.apple.mobilesafari"
+         RemotePath = "/Library/Developer/CoreSimulator/Volumes/iOS_21A328/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 17.0.simruntime/Contents/Resources/RuntimeRoot/Applications/MobileSafari.app">
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference
@@ -73,13 +70,6 @@
             ReferencedContainer = "container:Locker.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "APP_ID_PREFIX"
-            value = "W7S57TNBH5"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -87,6 +77,7 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES"
+      askForAppToLaunch = "Yes"
       launchAutomaticallySubstyle = "2">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">

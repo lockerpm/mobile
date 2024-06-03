@@ -24,6 +24,7 @@ public class RNPacketsManager implements ReactPackage {
         modules.add(new RNCryptoServiceAndroid(reactContext));
         modules.add(new RNAutofillServiceAndroid(reactContext));
         modules.add(new RNManufacturerSettingsAndroid(reactContext));
+        modules.add(new RNVinCssSsoLogin(reactContext));
         return modules;
     }
 

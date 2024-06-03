@@ -52,7 +52,7 @@ export class BitwardenCsvImporter extends BaseImporter implements Importer {
             }
 
             const cipher = new CipherView();
-            cipher.favorite = !this.organization && this.getValueOrDefault(value.favorite, '0') !== '0' ? true : false;
+            cipher.favorite = !!(!this.organization && this.getValueOrDefault(value.favorite, '0') !== '0');
             cipher.type = CipherType.Login;
             cipher.notes = this.getValueOrDefault(value.notes);
             cipher.name = this.getValueOrDefault(value.name, '--');

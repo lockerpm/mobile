@@ -16,8 +16,8 @@ import { EncString } from '../models/domain/encString';
 
 export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     pinProtectedKey: EncString = null;
-    biometricLocked: boolean = true;
-    everBeenUnlocked: boolean = false;
+    biometricLocked = true;
+    everBeenUnlocked = false;
 
     private inited = false;
 

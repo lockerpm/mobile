@@ -1,2 +1,2 @@
 export * from "./storage"
-export * from "./secure-storage"
+export * from "./secureStorage"

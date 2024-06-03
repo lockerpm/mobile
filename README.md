@@ -17,7 +17,7 @@ git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 ### Android/iOS Development
 
-See the  [React native environment setup](https://reactnative.dev/docs/0.71/environment-setup) page to set up an Android and iOS development environment.
+See the [React native environment setup](https://reactnative.dev/docs/0.71/environment-setup) page to set up an Android and iOS development environment.
 
 ### Environment variables
 
@@ -33,9 +33,7 @@ yarn ios | yarn android
 ```
 
 ## Contributing
+
 Contributions to the Locker Mobile project are welcome! If you find any issues or want to suggest improvements, please feel free to open an issue or submit a pull request.
 
 Before contributing, please review the [Contribution Guidelines](https://github.com/lockerpm/.github/blob/main/CONTRIBUTING.md).
-
-## License
-The Locker Mobile is open-source and released under the [GPLv3](./LICENSE) License. Feel free to use, modify, and distribute the code as per the terms of the license.

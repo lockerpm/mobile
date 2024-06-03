@@ -83,6 +83,7 @@ web-build/
 # Configurations
 app/config/env.*.js
 !env.js
+yarn.lock
 
 # Env
 .env
@@ -94,3 +95,4 @@ android/app/my-upload-key.keystore
 android/app/google-services.json
 
 /ios/Firebase/
+/vendor

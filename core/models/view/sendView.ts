@@ -15,11 +15,11 @@ export class SendView implements View {
   cryptoKey: SymmetricCryptoKey
   password: string
   maxAccessCount?: number
-  accessCount: number = 0
+  accessCount = 0
   eachEmailAccessCount?: number
   expirationDate: Date
-  disabled: boolean = false
-  requireOtp: boolean = false
+  disabled = false
+  requireOtp = false
   cipherId: string
   cipher: CipherView
   emails: string[]

@@ -8,15 +8,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import { withPause } from "react-native-redash"
-import { AutoImage as Image } from "../../../../components"
 
 const SCREEN_WIDTH = Dimensions.get("screen").width
 
 const SCREEN_IMAGE = {
-  SECURITY: require("../../../../../assets/img/onboard/security.png"),
-  OTP: require("../../../../../assets/img/onboard/otp.png"),
-  AUTOFILL: require("../../../../../assets/img/onboard/autofill.png"),
-  SYNC: require("../../../../../assets/img/onboard/sync.png"),
+  SECURITY: require("assets/images/onboard/security.png"),
+  OTP: require("assets/images/onboard/otp.png"),
+  AUTOFILL: require("assets/images/onboard/autofill.png"),
+  SYNC: require("assets/images/onboard/sync.png"),
 }
 
 interface Props {

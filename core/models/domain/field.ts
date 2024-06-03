@@ -13,7 +13,7 @@ export class Field extends Domain {
     value: EncString;
     type: FieldType;
 
-    constructor(obj?: FieldData, alreadyEncrypted: boolean = false) {
+    constructor(obj?: FieldData, alreadyEncrypted = false) {
         super();
         if (obj == null) {
             return;

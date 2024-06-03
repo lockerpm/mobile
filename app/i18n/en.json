@@ -24,6 +24,7 @@
     "create": "Create",
     "crypto_asset": "Crypto Backups",
     "crypto_wallet": "Crypto Backups",
+    "cryptoWallet": "Crypto Wallet",
     "custom_fields": "Custom Fields",
     "data": "Data",
     "date": "Date",
@@ -33,19 +34,22 @@
     "decline": "Decline",
     "edit": "Edit",
     "email": "Email",
+    "enable": "Enable",
     "enterprise": "Enterprise",
     "enter_master_pass": "Enter master password",
     "expired": "Expired",
-    "faceid_unlocking": "Unlock with Face ID",
+    "faceID_unlocking": "Unlock with Face ID",
     "female": "Female",
     "folder": "Folder",
     "folders": "Folders",
     "fullname": "Full name",
     "generate": "Generate",
     "get_start": "Get started",
+    "group": "Group",
     "help": "Help",
     "home": "Home",
     "identity": "Identities",
+    "instruction": "Instruction",
     "item": "item",
     "item_name": "Item Name",
     "items": "items",
@@ -83,6 +87,7 @@
     "passwords": "Passwords",
     "password_not_match": "Passwords don't match",
     "phone": "Phone",
+    "pending": "Pending",
     "push_notifications": "Push Notifications",
     "regenerate": "Regenerate",
     "reject": "Reject",
@@ -97,6 +102,7 @@
     "selected": "Selected",
     "settings": "Settings",
     "security": "Security",
+    "show_more": "More info",
     "share": "Share",
     "show_password": "Show password",
     "sign_up": "Sign up",
@@ -109,7 +115,7 @@
     "text": "Text",
     "trash": "Trash",
     "tools": "Tools",
-    "touchid_unlocking": "Unlock with Touch ID",
+    "touchID_unlocking": "Unlock with Touch ID",
     "unlock": "Unlock",
     "upgrade": "Upgrade",
     "upgrade_now": "Upgrade now",
@@ -133,7 +139,9 @@
     "database": "Database",
     "dob": "Date of birth",
     "nationality": "Nationality",
-    "invalid_date": "Invalid date"
+    "invalid_date": "Invalid date",
+    "required_text": "This field is required",
+    "social_login": "Or login with"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
@@ -163,7 +171,7 @@
     "wrong_username_or_password": "The password is not valid",
     "account_not_activated": "This account is not activated yet! Please check your email and follow the instructions (we will resend after 1 day).",
     "something_went_wrong": "Something went wrong",
-    "sync_failed": "Synchronize data failed",
+    "sync_failed": "Data synchronization failed",
     "token_expired": "Session token expired",
     "no_associated_account": "There's no account associated with this email or username. Try another or create a new account.",
     "invalid_authorization_code": "The authorization code is not valid",
@@ -181,7 +189,7 @@
     "duplicate_folder_name": "Duplicated folder name! Please choose another name!",
     "not_allowed_to_see_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
     "not_allowed_to_copy_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
-    "not_available_for_free": "This feature is not available for free account!",
+    "not_available_for_free": "This feature is not available for a free account!",
     "could_not_complete": "The operation couldn't be completed. Please try again",
     "relay_add": "Failed to add",
     "relay_save": "Failed to save",
@@ -250,6 +258,8 @@
     },
     "copy": "Copy alias",
     "edit": "Edit alias address",
+    "editable": "Editable email alias",
+    "random": "Random email alias {{number}}",
     "edit_modal": {
       "titel": "Edit Alias Address",
       "current": "Current Address",
@@ -266,7 +276,7 @@
       "your_subdomain": "Your subdomain",
       "desc": {
         "one": "Custom sub-domain allows you to create custom email domain",
-        "two": "You can create one (editable) subdomain"
+        "two": "You can create one editable subdomain"
       },
       "manage": "Manage",
       "title": "Manage Subdomain",
@@ -284,16 +294,15 @@
     "no_subdomain": "Create your own subdomain",
     "config_modal": {
       "title": "Configuration",
-      "enable":  "Forward all emails to your root email address",
+      "enable": "Forward all emails to your root email address",
       "block": "Block all upcoming emails",
       "block_spam": "Block spam and promotion emails only",
       "note": "*When you make changes to these settings, the statistics for this alias address will be reset."
     }
-
   },
   "emergency_access": {
     "title": "Emergency Access",
-    "des": "This feature grants other Locker account owner(s) the ability to access to your vault in some emergency situations",
+    "des": "This feature grants other Locker account owner(s) the ability to access to your vault in emergency situations",
     "label": "{{pending}} pending requests",
     "view": "View",
     "takeover": "Take over",
@@ -320,7 +329,7 @@
     },
     "view_vault": "View their vault",
     "takeover_vault": "Take over their vault",
-    "free_guild": "You are in Free plan. Upgrade to Premium to add Emergency Contact",
+    "free_guild": "You are in Free plan. Upgrade to Premium to add an Emergency Contact",
     "reset_master_pw": "Reset their Locker Master Password",
     "reset_pw": "Reset their Locker Password",
     "reset_master_pw_user": "Reset Master Password for {{name}}",
@@ -367,7 +376,7 @@
     "btn": "Create Password",
     "note": "Note: Locker cannot view, store, or re-issue Master Password in case you forget or lose it."
   },
-  "confirm_create_master_pass" : {
+  "confirm_create_master_pass": {
     "title": "Important",
     "desc": "By processing, you understand that Locker CANNOT see, retrieve, or re-issue your Master Password in case you forget it. Your Master Password is only yours to keep.",
     "link": "You can learn more about Master Password here.",
@@ -393,7 +402,7 @@
     }
   },
   "lock": {
-    "master_pass_changed": "Master password changed. Please login using new password",
+    "master_pass_changed": "Master password changed. Please login using the new password",
     "hint_sent": "Master Password hint sent. Please check your email for instructions",
     "title": "Welcome Back!",
     "desc": "Enter your Master Password to Log In",
@@ -418,7 +427,7 @@
     "save_device": "Remember this device"
   },
   "forgot_password": {
-    "title": "Forgot Password ?",
+    "title": "Forgot Password?",
     "request": "Request",
     "username_or_email": "Enter your username or email address",
     "select_method": "Select a verification method:",
@@ -430,7 +439,7 @@
     "set_new_password": "Set new password",
     "new_password": "New password",
     "confirm_new_password": "Confirm new password",
-    "password_updated": "Your password has been updated. Please login using the new password."
+    "password_updated": "Your password has been updated. Please log in using the new password."
   },
   "signup": {
     "title": "Sign up for a free account",
@@ -441,7 +450,7 @@
     "terms": "terms",
     "conditions": "conditions",
     "signup_successful": "A confirmation email has been sent to your address (check your SPAM folder as well)",
-    "update_pw_successful": "Update success"
+    "update_pw_successful": "Update successfully"
   },
   "start": {
     "synching": "Synchronizing...",
@@ -452,6 +461,7 @@
   "biometric_intro": {
     "title": "Unlock your vault with Face ID/Touch ID",
     "desc": "Use face recognition or fingerprint to protect your passwords",
+    "suggest": "Use Face ID/Touch ID to easy unlock your vault",
     "use_btn": "Use Face ID/Touch ID",
     "later_btn": "I'll do it later"
   },
@@ -485,11 +495,11 @@
     "folder_existed": "A folder with this name has already existed",
     "delete_modal": {
       "title": "Delete Folder",
-      "desc": "After folder deleted, all items will be moved to trash. Are you sure you want to delete the folder?",
+      "desc": "Once the folder is deleted, all items will be moved to trash. Are you sure you want to delete the folder?",
       "btn": "OK"
     },
     "empty": {
-      "title": "Organize items in Folder",
+      "title": "Organize items in Folders",
       "desc": "Keep passwords and other items in groups",
       "btn": "Add Folder"
     }
@@ -521,59 +531,7 @@
       "btn": "Add Identity"
     }
   },
-  "driver_license": {
-    "no": "No",
-    "class": "Class",
-    "valid_until": "Valid until",
-    "vehicle_class": "Vehicle class",
-    "beginning_date": "Beginning date",
-    "issued_by": "Issued by"
-  },
-  "citizen_id": {
-    "id_no": "ID no",
-    "sex": "Sex",
-    "place_of_origin": "Place of origin",
-    "place_of_residence": "Place of residence",
-    "expiry_date": "Expiry date",
-    "personal_id": "Personal identification",
-    "date_of_issue": "Date of issue",
-    "issued_by": "Issued by"
-  },
-  "passport": {
-    "passport_id": "Passport ID",
-    "type": "Type",
-    "code": "Code",
-    "sex": "Sex",
-    "id_number": "ID number",
-    "date_of_issue": "Date of issue",
-    "date_of_expiry": "Date of expiry",
-    "place_of_issue": "Place of issue"
-  },
-  "wireless_router": {
-    "device_name": "Device name",
-    "router_ip_address": "Router IP address",
-    "wifi_ssid": "Wifi SSID",
-    "wifi_pw": "Wifi password",
-    "admin_username": "Admin ID",
-    "admin_password": "Admin password"
-  },
-  "server": {
-    "host": "Host (IP/domain)",
-    "public_key": "Public key",
-    "private_key": "Private Key"
-  },
-  "API": {
-    "url": "URL",
-    "method": "Method",
-    "header": "Header",
-    "body_data": "Body Data",
-    "response": "Response"
-  },
-  "database": {
-    "host": "Host (IP/domain)",
-    "port": "Port",
-    "default": "Default database"
-  },
+
   "note": {
     "copy_note": "Copy Notes",
     "empty": {
@@ -611,7 +569,7 @@
     "shared_folder": "Shared folder",
     "encrypted_content": "Encrypted Content",
     "share_folder": {
-      "error_share_item": "Folders with shared items can’t be shared. Remove or stop shared items and try again",
+      "error_share_item": "Folders with shared items can’t be shared. Remove or stop sharing the items and try again",
       "manage_user": "Manage Share",
       "share_with": "This item has been shared with",
       "select_member": "Shared this item with",
@@ -623,12 +581,17 @@
       "remove": "Remove from folder",
       "no_shared_users": "Hasn't been shared with any users yet",
       "success": {
-        "shared": "Share success",
-        "add_member": "Add member success",
-        "remove_member": "Remove member success",
-        "stop": "Stop share success",
-        "add_items": "Add items success"
+        "shared": "Share successfully",
+        "add_member": "Add member successfully",
+        "remove_member": "Remove member successfully",
+        "stop": "Stop share successfully",
+        "add_items": "Add items successfully"
       }
+    },
+    "status": {
+      "invited" : "invited",
+      "accepted" : "accepted",
+      "confirmed": "confirmed"
     },
     "empty": {
       "title": "Securely share items",
@@ -656,7 +619,7 @@
     },
     "suggestion": "Users or groups in Enterprise",
     "confirm": "A user has registered a Locker account via your sharing request. Please confirm your sharing request",
-    "wait_confirm" : "Waiting for confirmation"
+    "wait_confirm": "Waiting for confirmation"
   },
   "trash": {
     "delete_item": "Delete Item",
@@ -682,8 +645,8 @@
       "btn": "Add Item"
     },
     "enable_autofill": {
-      "title": "Don’t miss a magic of autofill",
-      "content": "Let’s enable Autofill to see the magic of login",
+      "title": "Don’t miss the magic of autofill",
+      "content": "Let’s enable Autofill to see the magic of automatic login",
       "btn": "Enable Autofill"
     }
   },
@@ -706,7 +669,7 @@
   "menu": {
     "product_of": "A product of ",
     "versoin": "Version ",
-    "invite_noti": "Upgrade to Family Plan and invite your friends joining Locker!",
+    "invite_noti": "Upgrade to Family Plan and invite your friends to join Locker!",
     "fingerprint": "Fingerprint",
     "plan": "Manage Plan",
     "expired_time": "Expired",
@@ -735,7 +698,7 @@
     "invalid_key": "Invalid key",
     "empty": {
       "title": "Secure your account",
-      "desc": "Add an additional layer of security when signing in",
+      "desc": "Add an additional layer of security when signing in online accounts.",
       "btn": "Get Started"
     },
     "secret_key": "Secret key",
@@ -784,7 +747,7 @@
     "delete_account_warning": "Proceed below to delete your account and all associated data.",
     "delete_account_success": "Your Locker account has been deleted!",
     "delete_all_items": "Delete all account items",
-    "delete_all_items_warning": "Proceed below to delete all items and folders in your vault. Items that belong to an organization that you share with will not be deleted.",
+    "delete_all_items_warning": "Proceed below to delete all items and folders in your vault. Items belonging to an organization that you share with will not be deleted.",
     "delete_all_items_success": "Your vault has been purged!",
     "on_app_close": "On app close",
     "on_screen_off": "On screen off",
@@ -800,9 +763,10 @@
     "defaultTab": "Start Screen"
   },
   "autofill_service": {
+    "searchFor": "Search for: ",
     "activated": {
       "title": "Auto-fill activated!",
-      "content": "Now you can login to applications and websites faster"
+      "content": "Now you can log in to applications and websites faster"
     },
     "ios": {
       "desc": "To enable password autofill on your device, follow these instructions:",
@@ -969,7 +933,7 @@
   },
   "invite_member": {
     "header": "Manage member",
-    "info_upgrade": "Upgrade to Family Plan and invite your friends joining Locker!",
+    "info_upgrade": "Upgrade to Family Plan and invite your friends to join Locker!",
     "add_noti": "Add members successfully ",
     "delete_noti": "Delete member successfully",
     "confirm": "Are you sure you want to remove this user from Family Plan?",
@@ -1056,8 +1020,8 @@
       "note_2": "Add you to their groups",
       "note_3": "Apply password policies to your account"
     },
-    "data" : "All your vault data remains the same. {{mame}} can’t see your data or your Master Password.",
-    "request_access": "You have to Request access from {{mame}} in order to continue using your Locker account.",
+    "data": "All your vault data remains the same. {{name}} can’t see your data or your Master Password.",
+    "request_access": "You have to Request access from {{name}} in order to continue using your Locker account.",
     "domain": {
       "join_org": "Join Organization",
       "managed_by": "This account is managed by: "
@@ -1087,9 +1051,9 @@
     "more_step": "One more step",
     "point_camera": "Point your camera to the QR Code on Desktop App to confirm Login"
   },
-  "quick_shares" :{
+  "quick_shares": {
     "share_option": {
-      "title" : "Choose your sharing option",
+      "title": "Choose your sharing option",
       "normal": {
         "tl": "In-app shares",
         "dec": "Share with Locker users or a group of users. They can view or edit your item."
@@ -1100,9 +1064,9 @@
       }
     },
     "title": "Get shareable link",
-    "get_link":  "Get Link to Share",
+    "get_link": "Get Link to Share",
     "copy_link": "Copy Link",
-    "config" : {
+    "config": {
       "title": "General access",
       "anyone": "Anyone with the link",
       "invited": "Only invited people",
@@ -1111,7 +1075,7 @@
       "expired": {
         "tl": "Link expires after",
         "1h": "1 hour",
-        "24h":  "24 hours",
+        "24h": "24 hours",
         "7d": "7 days",
         "14d": "14 days",
         "30d": "30 days",
@@ -1120,7 +1084,7 @@
       "or": "or",
       "access_options": {
         "unlimited": "Unlimited access",
-        "time":  "Times access"
+        "time": "Times access"
       }
     },
     "receiver": "Receiver",
@@ -1131,7 +1095,7 @@
       "copy": "Copy link",
       "stop": "Stop sharing"
     },
-    "detail" : {
+    "detail": {
       "anyone": "Anyone",
       "tl": "Quick share details",
       "share_time": "Sharing time",
@@ -1145,6 +1109,7 @@
   "passkey": {
     "error": {
       "user_cancel": "The user cancelled the request.",
+      "no_credential": "No viable credential is available for the the user.",
       "login_failed": "Failed to log in with passkey."
     },
     "sign_up": {
@@ -1152,7 +1117,7 @@
       "signup_passkey": "Sign up with passkey",
       "signup_password": "Sign up with password",
       "passkey_options": "Choose an option to save your passkey for “Locker”",
-      "keychain" : {
+      "keychain": {
         "title": "iCloud Keychain",
         "label": "Synced across your Apple devices"
       },
@@ -1164,5 +1129,64 @@
     "login_passkey_setting": "Login with passkeys",
     "login_passkey": "Log in with passkey",
     "login_passkey_options": "Choose an option in which you've stored your passkey for Locker"
+  },
+  "sso": {
+    "id": {
+      "title": "Sign in to your company",
+      "identifier": "Enter your SSO Identifier",
+      "sso_info": "Don't know your SSO Identifier? ",
+      "enter_email": "Enter your email",
+      "create_sso": "Looking to create an SSO Identifier instead?",
+      "contact_at": "Contact us at ",
+      "contact": "contact@locker.io"
+    },
+    "email": {
+      "ble": "Authentication via BLE",
+      "usb": "Authentication via USB",
+      "nfc": "Authentication via NFC"
+    }
+  },
+  "app_noti": {
+    "item_sharing": {
+      "100001": "{{recipient_name}} has accepted the item you share",
+      "100002": "{{recipient_name}} has rejected  the item you share",
+      "100003": "{{owner_name}} has shared a {{cipher_type}} with you",
+      "100004": "A user has registered a Locker account via your sharing request. Please confirm your sharing request",
+      "100006": "{{owner_name}} has confirmed to share a {{cipher_type}} with you"
+    },
+    "member_to_group_share": {
+      "100005": "{{member_joined_text}} group {{group_name}} that you shared your items with. Click to confirm sharing so they can see shared items."
+    },
+    "payment": {
+      "100007":  "Your invoice {{payment_id}} was paid successfully",
+      "100008": "Locker couldn't proceed payment on your account. Your account was downgraded"
+    },
+    "emergency_access": {
+      "100009": "The user {{grantor_name}} ({{grantor_email}}) has invited you as his/her Emergency Contact",
+      "100010": "The user {{grantee_name}} ({{grantee_email}}) has accepted your invitation. Please confirm his/her identity as your new Emergency Access",
+      "100011":  "User {{grantee_name}} ({{grantee_email}}) has accepted your Emergency Contact invitation",
+      "100012": "User {{grantee_name}} ({{grantee_email}}) has declined your Emergency Contact invitation",
+      "100013": "You are now Emergency Contact of the user {{grantor_name}} ({{grantor_email}})",
+      "100014": "User {{grantee_name}} ({{grantee_email}}) has requested to {{request}} your vault items",
+      "100015":  "User {{grantor_name}} ({{grantor_email}}) has accepted your Emergency Request",
+      "100016": "User {{grantor_name}} ({{grantor_email}}) has declined your Emergency Request"
+    }
+  },
+  "push_noti": {
+    "item_sharing": {
+      "new_share": "You have a new shared {{typeName}}",
+      "new_shares": "You have {{count}} new shared items. Open Locker to accept or reject.",
+      "confirm": "Please confirm your sharing request",
+      "accept": "{{recipientName}} has accepted the {{typeName}} you share",
+      "reject": "{{recipientName}} has rejected the {{typeName}} you share"
+    },
+    "emergency_access": {
+      "invite": "{{user}} has invited you to be emergency access contact",
+      "accept_invite": "{{user}} has accepted your emergency access invitation",
+      "reject_invite": "{{user}}  has rejected your emergency access invitation",
+      "request": "{{user}} has requested to {{type}} your Locker account",
+      "accept_request": "{{user}} approved your request to {{type}} their Locker account",
+      "reject_request": "{{user}} has rejected your request to {{type}} their Locker account"
+    }
   }
 }

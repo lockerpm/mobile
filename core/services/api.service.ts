@@ -137,15 +137,14 @@ import { TwoFactorDuoResponse } from '../models/response/twoFactorDuoResponse';
 import { TwoFactorEmailResponse } from '../models/response/twoFactorEmailResponse';
 import { TwoFactorProviderResponse } from '../models/response/twoFactorProviderResponse';
 import { TwoFactorRecoverResponse } from '../models/response/twoFactorRescoverResponse';
-import { TwoFactorWebAuthnResponse } from '../models/response/twoFactorWebAuthnResponse';
-import { ChallengeResponse } from '../models/response/twoFactorWebAuthnResponse';
+import { TwoFactorWebAuthnResponse, ChallengeResponse } from '../models/response/twoFactorWebAuthnResponse';
 import { TwoFactorYubiKeyResponse } from '../models/response/twoFactorYubiKeyResponse';
 import { UserKeyResponse } from '../models/response/userKeyResponse';
 
 import { SendAccessView } from '../models/view/sendAccessView';
 
 export class ApiService implements ApiServiceAbstraction {
-    urlsSet: boolean = false;
+    urlsSet = false;
     apiBaseUrl: string;
     identityBaseUrl: string;
     eventsBaseUrl: string;
@@ -200,7 +199,7 @@ export class ApiService implements ApiServiceAbstraction {
             body: this.qsStringify(request.toIdentityToken(request.clientId ?? this.platformUtilsService.identityClientId)),
             credentials: this.getCredentials(),
             cache: 'no-store',
-            headers: headers,
+            headers,
             method: 'POST',
         }));
 
@@ -835,7 +834,7 @@ export class ApiService implements ApiServiceAbstraction {
     }
 
     async postOrganizationUserBulkConfirm(organizationId: string, request: OrganizationUserBulkConfirmRequest): Promise<ListResponse<OrganizationUserBulkResponse>> {
-        const r = await this.send('POST',  '/organizations/' + organizationId + '/users/confirm', request, true, true);
+        const r = await this.send('POST', '/organizations/' + organizationId + '/users/confirm', request, true, true);
         return new ListResponse(r, OrganizationUserBulkResponse);
     }
 
@@ -1263,7 +1262,7 @@ export class ApiService implements ApiServiceAbstraction {
             credentials: this.getCredentials(),
             method: 'POST',
             body: JSON.stringify(request),
-            headers: headers,
+            headers,
         }));
         if (response.status !== 200) {
             return Promise.reject('Event post failed.');
@@ -1335,7 +1334,7 @@ export class ApiService implements ApiServiceAbstraction {
         const response = await this.fetch(new Request(this.identityBaseUrl + path, {
             cache: 'no-store',
             credentials: this.getCredentials(),
-            headers: headers,
+            headers,
             method: 'GET',
         }));
 
@@ -1370,7 +1369,7 @@ export class ApiService implements ApiServiceAbstraction {
             }),
             cache: 'no-store',
             credentials: this.getCredentials(),
-            headers: headers,
+            headers,
             method: 'POST',
         }));
 
@@ -1398,7 +1397,7 @@ export class ApiService implements ApiServiceAbstraction {
         const requestInit: RequestInit = {
             cache: 'no-store',
             credentials: this.getCredentials(),
-            method: method,
+            method,
         };
 
         if (authed) {

@@ -44,6 +44,7 @@ export class LoginUriView implements View {
     get uri(): string {
         return this._uri;
     }
+
     set uri(value: string) {
         this._uri = value;
         this._domain = null;

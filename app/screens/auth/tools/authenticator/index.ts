@@ -1,3 +1,3 @@
-export * from './authenticator-screen'
-export * from './qr-scanner/qr-scanner-screen'
-export * from './authenticator-edit/authenticator-edit-screen'
+export * from './AuthenticatorScreen'
+export * from './qrScanner/QrScannerScreen'
+export * from './authenticatorEdit/AuthenticatorEditScreen'

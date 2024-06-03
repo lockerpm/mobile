@@ -164,7 +164,7 @@ export class ImportService implements ImportServiceAbstraction {
     private collectionService: CollectionService,
     private platformUtilsService: PlatformUtilsService,
     private cryptoService: CryptoService,
-  ) {}
+  ) { }
 
   getImportOptions(): ImportOption[] {
     return this.featuredImportOptions.concat(this.regularImportOptions)

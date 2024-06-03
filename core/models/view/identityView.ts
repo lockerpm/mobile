@@ -35,6 +35,7 @@ export class IdentityView implements View {
     get firstName(): string {
         return this._firstName;
     }
+
     set firstName(value: string) {
         this._firstName = value;
         this._subTitle = null;
@@ -43,6 +44,7 @@ export class IdentityView implements View {
     get lastName(): string {
         return this._lastName;
     }
+
     set lastName(value: string) {
         this._lastName = value;
         this._subTitle = null;

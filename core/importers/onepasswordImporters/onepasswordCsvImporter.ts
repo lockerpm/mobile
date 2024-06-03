@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import { ImportResult } from '../../models/domain/importResult';
 import { BaseImporter } from '../baseImporter';
 import { Importer } from '../importer';

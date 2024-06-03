@@ -140,7 +140,7 @@ export class TokenService implements TokenServiceAbstraction {
         return d;
     }
 
-    tokenSecondsRemaining(offsetSeconds: number = 0): number {
+    tokenSecondsRemaining(offsetSeconds = 0): number {
         const d = this.getTokenExpirationDate();
         if (d == null) {
             return 0;
@@ -150,7 +150,7 @@ export class TokenService implements TokenServiceAbstraction {
         return Math.round(msRemaining / 1000);
     }
 
-    tokenNeedsRefresh(minutes: number = 5): boolean {
+    tokenNeedsRefresh(minutes = 5): boolean {
         const sRemaining = this.tokenSecondsRemaining();
         return sRemaining < (60 * minutes);
     }

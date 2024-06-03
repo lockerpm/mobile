@@ -1,9 +1,8 @@
-import { getUrlParameterByName } from '../helpers'
+import { getUrlParameterByName, Logger } from '../utils'
 import CookieManager from '@react-native-cookies/cookies'
 import moment from 'moment'
 import analytics from '@react-native-firebase/analytics'
 import DeviceInfo from 'react-native-device-info'
-import { Logger } from '../logger'
 
 const WHITELIST_HOSTS = ['https://locker.io', 'https://id.locker.io', 'https://staging.locker.io']
 const COOKIES_URL = 'https://locker.io'
@@ -13,7 +12,7 @@ export const setCookiesFromUrl = (url: string) => {
   if (!url || !WHITELIST_HOSTS.some((host) => url.startsWith(host))) {
     return
   }
-  const values = TAGS.map((t) => '')
+  const values = new Array<string>(TAGS.length)
   let hasChange = false
   TAGS.forEach((t, index) => {
     const val = getUrlParameterByName(t, url)
@@ -70,28 +69,4 @@ export const logCreateMasterPwEvent = async () => {
     ...cookies,
     device_identifier,
   })
-}
-
-// TODO: cause error, ignore for now
-export const logPurchase = async (params: {
-  itemId: string
-  currency: string
-  price: string
-  itemName: string
-}) => {
-  // const { itemId, currency, price, itemName } = params
-  // let priceNumber = 0
-  // try {
-  //   priceNumber = parseFloat(price.toString())
-  // } catch (error) {}
-  // const cookies = await getUtmCookies()
-  // await analytics().logPurchase({
-  //   ...cookies,
-  //   value: priceNumber || undefined,
-  //   currency: currency,
-  //   items: [{
-  //     item_id: itemId,
-  //     item_name: itemName
-  //   }]
-  // })
 }

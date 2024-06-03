@@ -21,8 +21,8 @@ export class OnePasswordMacCsvImporter extends OnePasswordCsvImporter implements
             case 'Login':
             case 'Secure Note':
                 IgnoredProperties.push('type');
-            default:
                 break;
+            default:
         }
     }
 }

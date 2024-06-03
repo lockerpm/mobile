@@ -1,14 +1,18 @@
-export * from "./start/start-screen"
-export * from "./autofill/autofill-screen"
-export * from "./switch-device/switch-device-screen"
-export * from "./biometric-unlock-intro/biometric-unlock-intro-screen"
-export * from "./home"
-export * from "./browse"
-export * from "./tools"
-export * from "./menu"
-export * from "./errors"
-export * from "./welcome-premium/welcome-premium-screen"
-export * from "./enterprise-invited"
+// Tested
+export * from './biometricUnlockIntro/BiometricUnlockIntroScreen'
 
-export * from './share-cipher/normal-shares-screen'
-export * from './share-cipher/quick-shares-screen'
+// Testing
+export * from './menu'
+export * from './tools'
+
+export * from './welcomePremium/WelcomePremiumScreen'
+export * from './start/StartScreen'
+export * from './enterpriseInvited/EnterpriseInvitedScreen'
+export * from './shareCipher/NormalSharesScreen'
+export * from './shareCipher/QuickSharesScreen'
+
+export * from './home'
+export * from './browse'
+
+export * from './errors'
+export * from './autofill/AutofillScreen'

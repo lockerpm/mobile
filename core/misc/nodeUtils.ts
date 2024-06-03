@@ -14,9 +14,10 @@ export class NodeUtils {
             return dir;
         }, initialDir);
     }
+
     static readFirstLine(fileName: string) {
         return new Promise<string>((resolve, reject) => {
-            const readStream = fs.createReadStream(fileName, {encoding: 'utf8'});
+            const readStream = fs.createReadStream(fileName, { encoding: 'utf8' });
             const readInterface = readline.createInterface(readStream);
             readInterface
                 .on('line', line => {

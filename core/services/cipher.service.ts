@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-constructor */
 import { CipherType } from '../enums/cipherType';
 import { FieldType } from '../enums/fieldType';
 import { UriMatchType } from '../enums/uriMatchType';
@@ -54,9 +55,8 @@ import { ConstantsService } from './constants.service';
 import { sequentialize } from '../misc/sequentialize';
 import { Utils } from '../misc/utils';
 import _ from 'lodash'
-import { AppEventType, EventBus } from '../../app/utils/event-bus';
-import { BACKGROUND_DECRYPT_BATCH_SIZE, BACKGROUND_DECRYPT_FIRST_BATCH_SIZE, BACKGROUND_DECRYPT_REINDEX_EVERY } from '../../app/config/constants';
-import { DurationTest } from '../../app/utils/testing/duration';
+import { BACKGROUND_DECRYPT_BATCH_SIZE, BACKGROUND_DECRYPT_FIRST_BATCH_SIZE, BACKGROUND_DECRYPT_REINDEX_EVERY } from 'app/static/constants';
+import { AppEventType, EventBus } from 'app/utils/eventBus';
 
 const Keys = {
     ciphersPrefix: 'ciphers_',
@@ -83,6 +83,7 @@ export class CipherService implements CipherServiceAbstraction {
     get decryptedCipherCache() {
         return this._decryptedCipherCache;
     }
+
     set decryptedCipherCache(value: CipherView[]) {
         this._decryptedCipherCache = value;
         if (this.searchService != null) {
@@ -307,7 +308,7 @@ export class CipherService implements CipherServiceAbstraction {
     }
 
     // CS
-    private async backgroundCiphersDecrypt(startingPage: number = 1) {
+    private async backgroundCiphersDecrypt(startingPage = 1) {
         const ciphers = await this.getAll();
         const length = ciphers.length
         let page = startingPage
@@ -398,7 +399,7 @@ export class CipherService implements CipherServiceAbstraction {
         return this.decryptedCipherCache;
     }
 
-    async getAllDecryptedForGrouping(groupingId: string, folder: boolean = true): Promise<CipherView[]> {
+    async getAllDecryptedForGrouping(groupingId: string, folder = true): Promise<CipherView[]> {
         const ciphers = await this.getAllDecrypted() || [];
 
         return ciphers.filter(cipher => {
@@ -531,11 +532,11 @@ export class CipherService implements CipherServiceAbstraction {
         }
     }
 
-    async getLastUsedForUrl(url: string, autofillOnPageLoad: boolean = false): Promise<CipherView> {
+    async getLastUsedForUrl(url: string, autofillOnPageLoad = false): Promise<CipherView> {
         return this.getCipherForUrl(url, true, false, autofillOnPageLoad);
     }
 
-    async getLastLaunchedForUrl(url: string, autofillOnPageLoad: boolean = false): Promise<CipherView> {
+    async getLastLaunchedForUrl(url: string, autofillOnPageLoad = false): Promise<CipherView> {
         return this.getCipherForUrl(url, false, true, autofillOnPageLoad);
     }
 
@@ -811,7 +812,7 @@ export class CipherService implements CipherServiceAbstraction {
         const userId = await this.userService.getUserId();
         const key = Keys.ciphersPrefix + userId;
         const data: { [id: string]: CipherData; } = await this.storageService.get(key) || {};
-        for (let id in ciphers) {
+        for (const id in ciphers) {
             data[id] = ciphers[id]
         }
         await this.storageService.save(key, data);
@@ -1039,7 +1040,7 @@ export class CipherService implements CipherServiceAbstraction {
 
     async restoreWithServer(id: string): Promise<any> {
         const response = await this.apiService.putRestoreCipher(id);
-        await this.restore({ id: id, revisionDate: response.revisionDate });
+        await this.restore({ id, revisionDate: response.revisionDate });
     }
 
     async restoreManyWithServer(ids: string[]): Promise<any> {
@@ -1237,8 +1238,8 @@ export class CipherService implements CipherServiceAbstraction {
             return
         }
         const promises: Promise<CipherView>[] = []
-        for (let cipher of ciphers) {
-            if (!!cipher) {
+        for (const cipher of ciphers) {
+            if (cipher) {
                 const c = new Cipher(cipher, false)
                 promises.push(c.decrypt())
             }
@@ -1250,7 +1251,7 @@ export class CipherService implements CipherServiceAbstraction {
     // CS
     csUpdateDecryptedCache(ciphers: CipherView[]) {
         const decCiphers = this.decryptedCipherCache ? [...this.decryptedCipherCache] : [];
-        for (let cipher of ciphers) {
+        for (const cipher of ciphers) {
             const cachedIndex = decCiphers.findIndex(c => c.id === cipher.id);
             if (cachedIndex >= 0) {
                 decCiphers[cachedIndex] = cipher;

@@ -17,6 +17,7 @@ export class AzureFileUploadService {
             return await this.azureUploadBlocks(url, data, renewalCallback);
         }
     }
+
     private async azureUploadBlob(url: string, data: EncArrayBuffer) {
         const urlObject = Utils.getUrl(url);
         const headers = new Headers({
@@ -30,7 +31,7 @@ export class AzureFileUploadService {
             body: data.buffer,
             cache: 'no-store',
             method: 'PUT',
-            headers: headers,
+            headers,
         });
 
         const blobResponse = await fetch(request);
@@ -39,6 +40,7 @@ export class AzureFileUploadService {
             throw new Error(`Failed to create Azure blob: ${blobResponse.status}`);
         }
     }
+
     private async azureUploadBlocks(url: string, data: EncArrayBuffer, renewalCallback: () => Promise<string>) {
         const baseUrl = Utils.getUrl(url);
         const blockSize = this.getMaxBlockSize(baseUrl.searchParams.get('sv'));
@@ -50,67 +52,64 @@ export class AzureFileUploadService {
             throw new Error(`Cannot upload file, exceeds maximum size of ${blockSize * MAX_BLOCKS_PER_BLOB}`);
         }
 
-        try {
-            while (blockIndex < numBlocks) {
-                url = await this.renewUrlIfNecessary(url, renewalCallback);
-                const blockUrl = Utils.getUrl(url);
-                const blockId = this.encodedBlockId(blockIndex);
-                blockUrl.searchParams.append('comp', 'block');
-                blockUrl.searchParams.append('blockid', blockId);
-                const start = blockIndex * blockSize;
-                const blockData = data.buffer.slice(start, start + blockSize);
-                const blockHeaders = new Headers({
-                    'x-ms-date': new Date().toUTCString(),
-                    'x-ms-version': blockUrl.searchParams.get('sv'),
-                    'Content-Length': blockData.byteLength.toString(),
-                });
-
-                const blockRequest = new Request(blockUrl.toString(), {
-                    body: blockData,
-                    cache: 'no-store',
-                    method: 'PUT',
-                    headers: blockHeaders,
-                });
-
-                const blockResponse = await fetch(blockRequest);
-
-                if (blockResponse.status !== 201) {
-                    const message = `Unsuccessful block PUT. Received status ${blockResponse.status}`;
-                    this.logService.error(message + '\n' + await blockResponse.json());
-                    throw new Error(message);
-                }
-
-                blocksStaged.push(blockId);
-                blockIndex++;
-            }
-
+        while (blockIndex < numBlocks) {
             url = await this.renewUrlIfNecessary(url, renewalCallback);
-            const blockListUrl = Utils.getUrl(url);
-            const blockListXml = this.blockListXml(blocksStaged);
-            blockListUrl.searchParams.append('comp', 'blocklist');
-            const headers = new Headers({
+            const blockUrl = Utils.getUrl(url);
+            const blockId = this.encodedBlockId(blockIndex);
+            blockUrl.searchParams.append('comp', 'block');
+            blockUrl.searchParams.append('blockid', blockId);
+            const start = blockIndex * blockSize;
+            const blockData = data.buffer.slice(start, start + blockSize);
+            const blockHeaders = new Headers({
                 'x-ms-date': new Date().toUTCString(),
-                'x-ms-version': blockListUrl.searchParams.get('sv'),
-                'Content-Length': blockListXml.length.toString(),
+                'x-ms-version': blockUrl.searchParams.get('sv'),
+                'Content-Length': blockData.byteLength.toString(),
             });
 
-            const request = new Request(blockListUrl.toString(), {
-                body: blockListXml,
+            const blockRequest = new Request(blockUrl.toString(), {
+                body: blockData,
                 cache: 'no-store',
                 method: 'PUT',
-                headers: headers,
+                headers: blockHeaders,
             });
 
-            const response = await fetch(request);
+            const blockResponse = await fetch(blockRequest);
 
-            if (response.status !== 201) {
-                const message = `Unsuccessful block list PUT. Received status ${response.status}`;
-                this.logService.error(message + '\n' + await response.json());
+            if (blockResponse.status !== 201) {
+                const message = `Unsuccessful block PUT. Received status ${blockResponse.status}`;
+                this.logService.error(message + '\n' + await blockResponse.json());
                 throw new Error(message);
             }
-        } catch (e) {
-            throw e;
+
+            blocksStaged.push(blockId);
+            blockIndex++;
         }
+
+        url = await this.renewUrlIfNecessary(url, renewalCallback);
+        const blockListUrl = Utils.getUrl(url);
+        const blockListXml = this.blockListXml(blocksStaged);
+        blockListUrl.searchParams.append('comp', 'blocklist');
+        const headers = new Headers({
+            'x-ms-date': new Date().toUTCString(),
+            'x-ms-version': blockListUrl.searchParams.get('sv'),
+            'Content-Length': blockListXml.length.toString(),
+        });
+
+        const request = new Request(blockListUrl.toString(), {
+            body: blockListXml,
+            cache: 'no-store',
+            method: 'PUT',
+            headers,
+        });
+
+        const response = await fetch(request);
+
+        if (response.status !== 201) {
+            const message = `Unsuccessful block list PUT. Received status ${response.status}`;
+            this.logService.error(message + '\n' + await response.json());
+            throw new Error(message);
+        }
+
     }
 
     private async renewUrlIfNecessary(url: string, renewalCallback: () => Promise<string>): Promise<string> {
@@ -175,6 +174,7 @@ class Version {
                 a.day !== b.day ? a.day - b.day :
                     0;
     }
+
     year = 0;
     month = 0;
     day = 0;
@@ -187,6 +187,7 @@ class Version {
             this.day = parts[2];
         } catch { }
     }
+
     /**
      * Compares two Azure Versions against each other
      * @param compareTo Version to compare against

@@ -1,0 +1,52 @@
+
+"c.cancel" = "Cancel";
+"c.copied" = "Copied";
+
+// utils
+"utils.touchID" = "Please authorize with Touch Id";
+"utils.disableBiometric" = "Biometry is Unvaliable";
+"utils.unconfigBiometric" = "Your device is not configured for biometric authentication";
+"utils.disableFaceID" = "Face ID is Not Available";
+
+// noti
+"noti.authen" = "Authentication";
+"noti.loginLocker" = "You must to login Locker before using autofill service";
+
+// CredentialsListScreen
+"list.title" = "Login List";
+"list.noDataSearch" = "Oops! Looks like there's no data matching ";
+"list.suggestSearch" = "You can search by the following text(s)";
+
+//Lock screen
+"lock.mp" = "Master Password";
+"lock.title" = "Verify Master Password";
+"lock.btn" = "Unlock";
+"lock.faceid" = "Unlock with Face ID/Touch ID";
+
+
+// totp view
+"totp.desc" = "(The OTP will be auto copied to clipboard if you log in with this item)";
+"totp.update" = "The OTP will update in ";
+
+// credential
+"item.username" = "Username or email";
+"item.password" = "Password";
+
+// password generator
+"pw.length"  = "Length: ";
+"pw.special" = "Use symbols (@!$%*)";
+"pw.ambiguous" = "Avoid ambiguous characters";
+"pw.useBtn" = "Use password";
+"pw.generator" = "Generate strong password";
+"pw.regenerate" = "Regenerate";
+
+// create password
+"create.title" = "Create Login";
+"create.cancel" = "Cancel";
+"create.save" = "Save and autofill";
+"create.name" = "Name (*)";
+"create.info" = "Login Details";
+"create.username" = "Email or Username";
+"create.password" = "Password";
+"create.web" = "Website";
+"create.noti" = "This item will be created and saved locally. It will be synced to the Locker server when you unlock the Locker app.";

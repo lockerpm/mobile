@@ -19,6 +19,7 @@ export abstract class PolicyService {
     getMasterPasswordPolicyOptions: (policies?: Policy[]) => Promise<MasterPasswordPolicyOptions>;
     evaluateMasterPassword: (passwordStrength: number, newPassword: string,
         enforcedPolicyOptions?: MasterPasswordPolicyOptions) => boolean;
+
     getResetPasswordPolicyOptions: (policies: Policy[], orgId: string) => [ResetPasswordPolicyOptions, boolean];
     mapPoliciesFromToken: (policiesResponse: ListResponse<PolicyResponse>) => Policy[];
 }

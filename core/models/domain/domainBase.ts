@@ -14,12 +14,13 @@ export default class Domain {
 
             const objProp = dataObj[(map[prop] || prop)];
             if (alreadyEncrypted === true || notEncList.indexOf(prop) > -1) {
-                (domain as any)[prop] = objProp ? objProp : null;
+                (domain as any)[prop] = objProp || null;
             } else {
                 (domain as any)[prop] = objProp ? new EncString(objProp) : null;
             }
         }
     }
+
     protected buildDataModel<D extends Domain>(domain: D, dataObj: any, map: any, notEncStringList: any[] = []) {
         for (const prop in map) {
             if (!map.hasOwnProperty(prop)) {

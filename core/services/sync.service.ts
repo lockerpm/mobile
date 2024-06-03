@@ -36,7 +36,7 @@ const Keys = {
 };
 
 export class SyncService implements SyncServiceAbstraction {
-    syncInProgress: boolean = false;
+    syncInProgress = false;
 
     constructor(private userService: UserService, private apiService: ApiService,
         private settingsService: SettingsService, private folderService: FolderService,
@@ -253,7 +253,7 @@ export class SyncService implements SyncServiceAbstraction {
 
     private syncCompleted(successfully: boolean): boolean {
         this.syncInProgress = false;
-        this.messagingService.send('syncCompleted', { successfully: successfully });
+        this.messagingService.send('syncCompleted', { successfully });
         return successfully;
     }
 

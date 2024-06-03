@@ -5,6 +5,6 @@ export class UpdateProfileRequest {
 
     constructor(name: string, masterPasswordHint: string) {
         this.name = name;
-        this.masterPasswordHint = masterPasswordHint ? masterPasswordHint : null;
+        this.masterPasswordHint = masterPasswordHint || null;
     }
 }
