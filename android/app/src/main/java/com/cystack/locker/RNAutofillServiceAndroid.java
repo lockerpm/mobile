@@ -65,7 +65,7 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
         String password = null;
 
         Intent intent = new Intent(context, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("savePassword", 1); //start app with OnSaveRequest
         intent.putExtra(DOMAIN, domain);
         for (Field field: fields) {
