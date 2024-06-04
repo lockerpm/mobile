@@ -12,10 +12,11 @@ interface Props {
   onSelect?: (val: string, sortOption: any) => void
   value?: string
   byNameOnly?: boolean
+  byTimeOnly?: boolean
 }
 
 export const SortActionConfigModal = (props: Props) => {
-  const { isOpen, onClose, onSelect, value, byNameOnly } = props
+  const { isOpen, onClose, onSelect, value, byNameOnly, byTimeOnly } = props
   const { colors } = useTheme()
   const { translate } = useHelper()
   const lastUpdateOptions = [
@@ -65,7 +66,9 @@ export const SortActionConfigModal = (props: Props) => {
   if (!byNameOnly) {
     sortOptions = [...lastUpdateOptions, ...sortOptions]
   }
-
+  if (byTimeOnly) {
+    sortOptions = [...lastUpdateOptions]
+  }
   return (
     <ActionSheet
       isOpen={isOpen}

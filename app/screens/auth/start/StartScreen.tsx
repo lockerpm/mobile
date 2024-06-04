@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useStores } from 'app/models'
 import NetInfo from '@react-native-community/netinfo'
 import { useCipherData, useHelper } from 'app/services/hook'
-import { Loading } from 'app/components/utils'
+import {  MotionLoading } from 'app/components/utils'
 import { observer } from 'mobx-react-lite'
 import { AppStackScreenProps } from 'app/navigators/navigators.types'
 import { AndroidAutofillServiceType } from 'app/utils/autofillHelper'
@@ -57,10 +57,10 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) =>
 
       navigationRequest.tempParams &&
         // @ts-ignore TODO
-        navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
+        navigation.replace(navigationRequest.path, navigationRequest.tempParams)
 
       // @ts-ignore TODO
-      navigation.navigate(navigationRequest.path, navigationRequest.params)
+      navigation.replace(navigationRequest.path, navigationRequest.params)
       return
     }
 
@@ -72,7 +72,7 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) =>
         uiStore.setStartFromPasswordLess(false)
         const available = await isBiometricAvailable()
         if (available) {
-          navigation.navigate('biometricUnlockIntro')
+          navigation.replace('biometricUnlockIntro')
           return
         }
       }
@@ -82,27 +82,27 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) =>
     if (uiStore.isAndroidAutofillService) {
       const data = uiStore.androidAutofillServiceData
       if (data.type === AndroidAutofillServiceType.SAVE_REQUEST) {
-        navigation.navigate('passwords__edit', { mode: 'add', androidAutofillSavedData: data })
+        navigation.replace('passwords__edit', { mode: 'add', androidAutofillSavedData: data })
       } else {
-        navigation.navigate('autofill', { data })
+        navigation.replace('autofill', { data })
       }
       return
     }
 
     if (uiStore.isDeeplinkEmergencyAccess) {
       uiStore.setIsDeeplinkEmergencyAccess(false)
-      navigation?.navigate('mainTab', { screen: 'menuTab' })
+      navigation?.replace('mainTab', { screen: 'menuTab' })
       navigation.navigate('emergencyAccess')
     } else if (uiStore.isDeeplinkShares) {
       uiStore.setIsDeeplinkShares(false)
-      navigation?.navigate('mainTab', { screen: 'browseTab' })
+      navigation?.replace('mainTab', { screen: 'browseTab' })
 
       // @ts-ignore TODO
       navigation?.navigate('mainTab', { screen: 'browseTab', params: { screen: 'shares' } })
     } else if (enterpriseStore.isEnterpriseInvitations) {
-      navigation.navigate('enterpriseInvited')
+      navigation.replace('enterpriseInvited')
     } else {
-      navigation.navigate('mainTab', { screen: user.defaultTab })
+      navigation.replace('mainTab', { screen: user.defaultTab })
     }
   }
 
@@ -116,5 +116,5 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) =>
 
   // ------------------------- RENDER ----------------------------
 
-  return <Loading message={msg} />
+  return <MotionLoading message={msg} />
 })

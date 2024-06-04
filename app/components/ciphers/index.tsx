@@ -21,3 +21,4 @@ export * from './cipherCustomFieldsEdit/CipherCustomFields'
 export * from './cipherCustomFieldsEdit/fieldEdit'
 
 export * from './cipherOthersInfo/CipherOthersInfo'
+export * from './cipherList/CipherIconImage'

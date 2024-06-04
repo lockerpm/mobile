@@ -10,7 +10,7 @@ export class PasswordHistoryView implements View {
         if (!ph) {
             return;
         }
-
+     
         this.lastUsedDate = ph.lastUsedDate;
     }
 }

@@ -8,6 +8,7 @@ import { Logger } from "app/utils/utils"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
 import { ActionItem } from "app/components/ciphers/actionsSheet/ActionSheetItem"
 import { CipherAction } from "app/components/ciphers/cipherAction/CipherAction"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = {
   isOpen?: boolean
@@ -19,6 +20,7 @@ type Props = {
 export const PasswordAction = (props: Props) => {
   const { copyToClipboard, translate } = useHelper()
   const { cipherStore } = useStores()
+  const navigation = useNavigation() as any
 
   const selectedCipher: CipherView = cipherStore.cipherView
   const lockerMasterPassword = selectedCipher?.type === CipherType.MasterPassword
@@ -29,7 +31,6 @@ export const PasswordAction = (props: Props) => {
     })
     props.onClose && props.onClose()
   }
-
   const renderContent = () => (
     <>
       <ActionItem
@@ -39,7 +40,7 @@ export const PasswordAction = (props: Props) => {
         disabled={!selectedCipher.login.uri}
       />
 
-      {!lockerMasterPassword && (
+      {!lockerMasterPassword && !!selectedCipher.login.username && (
         <ActionItem
           name={translate("password.copy_username")}
           icon="copy"
@@ -47,11 +48,10 @@ export const PasswordAction = (props: Props) => {
             props.onClose && props.onClose()
             copyToClipboard(selectedCipher.login.username)
           }}
-          disabled={!selectedCipher.login.username}
         />
       )}
 
-      <ActionItem
+      { !!selectedCipher.login.password && !!selectedCipher.viewPassword && <ActionItem
         name={translate("password.copy_password")}
         icon="copy"
         action={() => {
@@ -59,19 +59,26 @@ export const PasswordAction = (props: Props) => {
           copyToClipboard(selectedCipher.login.password)
         }}
         disabled={!selectedCipher.login.password || !selectedCipher.viewPassword}
-      />
+      />}
 
-      <ActionItem
+      {!!selectedCipher.login.totp && <ActionItem
         name={translate("password.copy_totp")}
         icon="copy"
         action={() => {
           props.onClose && props.onClose()
           copyToClipboard(getTOTP(parseOTPUri(selectedCipher.login.totp)))
         }}
-        disabled={!selectedCipher.login.totp}
+      />}
+
+       <ActionItem
+        name={translate("password_history.view")}
+        icon="clock-clockwise"
+        action={() => {
+          props.onClose && props.onClose()
+          navigation.navigate("passwords_history")
+        }}
       />
     </>
   )
-
   return <CipherAction {...props}>{renderContent()}</CipherAction>
 }

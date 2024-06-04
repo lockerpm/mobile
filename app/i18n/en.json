@@ -1188,5 +1188,14 @@
       "accept_request": "{{user}} approved your request to {{type}} their Locker account",
       "reject_request": "{{user}} has rejected your request to {{type}} their Locker account"
     }
+  },
+  "password_history": {
+    "view": "View Password History",
+    "title": "Password History",
+    "updated_password": "Updated at ",
+    "copy": "Copy password",
+    "restore": "Restore password",
+    "restore_note": "Are you sure to restore this password? This will replace the current password",
+    "restore_btn": "Restore"
   }
 }

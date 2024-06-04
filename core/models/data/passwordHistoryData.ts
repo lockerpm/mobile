@@ -8,7 +8,6 @@ export class PasswordHistoryData {
         if (response == null) {
             return;
         }
-
         this.password = response.password;
         this.lastUsedDate = response.lastUsedDate;
     }

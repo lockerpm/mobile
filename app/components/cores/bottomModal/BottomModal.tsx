@@ -24,12 +24,14 @@ interface BottomModalProps {
    * Style for the outer content container useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
+
+  hideCloseBtn?: boolean
 }
 
 /**
  * Show modal view from bottom
  */
-export const BottomModal = ({ style, children, isOpen, onClose, title }: BottomModalProps) => {
+export const BottomModal = ({ style, children, isOpen, onClose, title, hideCloseBtn }: BottomModalProps) => {
   const insets = useSafeAreaInsets()
   const { colors } = useTheme()
   const keyboardHeight = useKeyboard()
@@ -69,7 +71,8 @@ export const BottomModal = ({ style, children, isOpen, onClose, title }: BottomM
       panDirection={null}
       visible={isOpen}
       onDialogDismissed={onClose}
-      renderPannableHeader={() => (
+      renderPannableHeader={() => {
+        return !hideCloseBtn ? (
         <View
           style={{
             height: 45,
@@ -90,7 +93,27 @@ export const BottomModal = ({ style, children, isOpen, onClose, title }: BottomM
           />
           <Icon icon="x" onPress={onClose} />
         </View>
-      )}
+      ): (
+        <View
+          style={{
+            paddingVertical: 4,
+            justifyContent: "center",
+            alignItems: "center",
+            borderTopLeftRadius: 12,
+            borderTopRightRadius: 12,
+          }}
+        >
+          <View
+            style={{
+              marginVertical: 5,
+              height: 4,
+              borderRadius: 2,
+              width: 50,
+              backgroundColor: colors.primaryText,
+            }}
+          />
+        </View>
+      )}}
     >
       <ScrollView
         contentContainerStyle={{ paddingBottom: insets.bottom + 20, paddingHorizontal: 20 }}

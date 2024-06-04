@@ -162,6 +162,7 @@ export type PrimaryParamList = {
   passwords_2fa_setup: {
     mode: 'add' | 'edit' | 'clone'
   }
+  passwords_history: undefined
 
   notes__info: {
     quickShare?: boolean

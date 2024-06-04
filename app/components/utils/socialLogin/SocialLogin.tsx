@@ -52,6 +52,12 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading }: Props) => {
         })
       },
     },
+    github: {
+      icon: "github",
+      handler: () => {
+        setShowGitHubLogin(true)
+      },
+    },
     facebook: {
       icon: "facebook",
       handler: () => {
@@ -60,12 +66,6 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading }: Props) => {
           setIsLoading,
           onLoggedIn,
         })
-      },
-    },
-    github: {
-      icon: "github",
-      handler: () => {
-        setShowGitHubLogin(true)
       },
     },
     sso: {

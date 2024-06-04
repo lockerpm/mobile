@@ -45,12 +45,13 @@ export const DeleteConfirmModal = (props: Props) => {
       </View>
 
       <Button
+        preset="teriatary"
         disabled={isLoading}
         loading={isLoading}
         onPress={handleConfirm}
+        teriataryBackground={colors.error}
         style={{
           width: '100%',
-          backgroundColor: colors.error,
           marginTop: 30,
         }}
       >

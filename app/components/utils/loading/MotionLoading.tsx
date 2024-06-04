@@ -13,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { Screen } from "react-native-screens"
 import { Circle, Path, Svg } from "react-native-svg"
+import { Text } from '../../cores'
 
 interface CircleProgressProps {
   size: number
@@ -114,7 +115,12 @@ export const CircleProgress = ({
   )
 }
 
-export const MotionLoading = () => {
+interface MotionLoadingProps {
+  message?: string
+}
+
+
+export const MotionLoading = ({message = ""}: MotionLoadingProps) => {
   const {colors} = useTheme()
   return (
     <Screen
@@ -142,7 +148,14 @@ export const MotionLoading = () => {
             position:"absolute" 
           }}
         />
+        
       </View>
+        <Text
+          text={message}
+          style={{
+            marginTop: 10,
+          }}
+        />
     </Screen>
   )
 }

@@ -91,8 +91,13 @@ export class CipherData {
         if (response.attachments != null) {
             this.attachments = response.attachments.map(a => new AttachmentData(a));
         }
+
         if (response.passwordHistory != null) {
-            this.passwordHistory = response.passwordHistory.map(ph => new PasswordHistoryData(ph));
+            this.passwordHistory = response.passwordHistory.map(ph => {
+               return new PasswordHistoryData(ph)
+            
+            });
         }
+
     }
 }

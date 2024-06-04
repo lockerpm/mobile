@@ -226,6 +226,7 @@ export const LoginForm = ({
           isError={isError}
           label={translate("login.email_or_username")}
           value={username}
+          keyboardType="email-address"
           onChangeText={(val) => {
             if (passkeySupported && loginMethod !== METHOD.NONE) {
               setLoginMethod(METHOD.NONE)

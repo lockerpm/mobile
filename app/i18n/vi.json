@@ -1233,5 +1233,14 @@
       "accept_request": "{{user}} đã chấp nhận yêu cầu {{type}} tài khoản Locker của bạn",
       "reject_request": "{{user}} đã từ chối yêu cầu {{type}} tài khoản Locker của bạn"
     }
+  },
+  "password_history": {
+    "view": "Xem lịch sử mật khẩu",
+    "title": "Lịch sử mật khẩu",
+    "updated_password": "Cập nhật lúc ",
+    "copy": "Sao chép mật khẩu",
+    "restore": "Khôi phục mật khẩu",
+    "restore_note": "Bận xác định muốn khôi phục lại mật khẩu này? Nó sẽ thay thế mật khẩu hiện tại của bạn",
+    "restore_btn": "Khôi phục"
   }
 }

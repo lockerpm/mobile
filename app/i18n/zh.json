@@ -1186,5 +1186,14 @@
       "accept_request": "{{user}} 同意了您要 {{type}} 他們 Locker 帳戶的申請",
       "reject_request": "{{user}} 拒絕了您要 {{type}} 他們 Locker 帳戶的申請"
     }
+  },
+  "password_history": {
+    "view": "查看密碼歷史記錄",
+    "title": "密碼歷史記錄",
+    "updated_password": "更新於 ",
+    "copy": "複製密碼",
+    "restore": "恢復密碼",
+    "restore_note": "想要恢復該密碼嗎？這將替換當前密碼",
+    "restore_btn": "恢復"
   }
 }

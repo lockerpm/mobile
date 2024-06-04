@@ -109,9 +109,9 @@ export function useCipherData() {
 
   // Reload offline cache of a single cipher only
   const minimalReloadCache = async (payload: { cipher?: CipherView; deletedIds?: string[] }) => {
+    const { cipher, deletedIds } = payload
     Logger.debug("minimal reload cache")
 
-    const { cipher, deletedIds } = payload
     if (cipher) {
       cipherService.csUpdateDecryptedCache([cipher])
     }
@@ -2158,7 +2158,8 @@ export function useCipherData() {
   const syncSingleCipher = async (id: string) => {
     return syncQueue.add(async () => {
       const cipherRes = await cipherStore.getCipher(id)
-
+      
+      
       // Error/Deleted
       if (cipherRes.kind !== "ok") {
         if (cipherRes.kind === "not-found" || cipherRes.kind === "forbidden") {
@@ -2171,27 +2172,27 @@ export function useCipherData() {
         return cipherRes
       }
       cipherStore.setLastSync()
+      console.log("syncSingleCipher", cipherRes.data.passwordHistory)
 
       // Create/Update
       const userId = await userService.getUserId()
       const key = `ciphers_${userId}`
       const res = (await storageService.get(key)) || {}
 
-      const cipher = cipherRes.data
-      const cipherData = new CipherData(cipher, userId, cipher.collectionIds)
+      const cipherData = new CipherData(cipherRes.data, userId, cipherRes.data.collectionIds)
 
       // Update cipher
-      res[cipher.id] = {
+      res[cipherData.id] = {
         ...cipherData,
       }
-      cipherStore.removeNotUpdate(cipher.id)
+      cipherStore.removeNotUpdate(cipherData.id)
 
       // Remove temporary cipher
       for (const _id of Object.keys(res)) {
         if (
           _id.startsWith(TEMP_PREFIX) &&
-          res[_id].name === cipher.name &&
-          res[_id].type === cipher.type
+          res[_id].name === cipherData.name &&
+          res[_id].type === cipherData.type
         ) {
           delete res[_id]
           cipherStore.removeNotUpdate(_id)
@@ -2201,16 +2202,19 @@ export function useCipherData() {
       }
 
       // Sync profile
-      if (cipher.organizationId) {
+      if (cipherData.organizationId) {
         // await syncSingleOrganization(cipher.organizationId)
         await syncProfile()
       }
 
       await storageService.save(key, res)
 
+      console.log("syncSingleCipher cipherData", cipherData.passwordHistory)
       // Decrypt and minimal reload cache
       const c = new Cipher(cipherData, false)
+      console.log("syncSingleCipher Cipher", c.passwordHistory )
       const hasKey = await cryptoService.hasKey()
+
       if (hasKey) {
         await minimalReloadCache({
           cipher: await c.decrypt(),

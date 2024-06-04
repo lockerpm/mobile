@@ -67,6 +67,7 @@ import {
   QuickSharesScreen,
   Password2FASetupScreen,
   QuickSharesDetailScreen,
+  PasswordHistoryScreen,
 } from "../screens"
 import { useAuthentication, useCipherData, useHelper } from "app/services/hook"
 import { Logger } from "app/utils/utils"
@@ -483,6 +484,7 @@ export const MainNavigator = observer(() => {
           initialParams={{ mode: "add" }}
         />
         <Stack.Screen name="passwords_2fa_setup" component={Password2FASetupScreen} />
+        <Stack.Screen name="passwords_history" component={PasswordHistoryScreen} />
 
         <Stack.Screen name="notes__info" component={NoteInfoScreen} />
         <Stack.Screen

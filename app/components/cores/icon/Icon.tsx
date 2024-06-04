@@ -188,6 +188,9 @@ export const iconRegistry = {
   'list-bullets': require('assets/icons/list-bullets.png'),
   'external-link': require('assets/icons/external-link.png'),
   'qr-code': require('assets/icons/qr-code.png'),
+  'clock-clockwise': require('assets/icons/clock-clockwise.png'),
+  "arrow-clockwise": require('assets/icons/arrow-clockwise.png'),
+  'dots-three-vertical': require('assets/icons/dots-three-vertical.png'),
 }
 
 const $imageStyle: ImageStyle = {

@@ -19,6 +19,7 @@ export * from './passwords/PasswordsScreen'
 export * from './passwords/passwordEdit/PasswordEditScreen'
 export * from './passwords/passwordInfo/PasswordInfoScreen'
 export * from './passwords/2faSetup/2faSetupScreen'
+export * from './passwords/history/PasswordHistoryScreen'
 
 export * from './shares/SharesScreen'
 export * from './shares/shareItems/ShareItemsScreen'

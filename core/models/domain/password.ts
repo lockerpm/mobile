@@ -26,6 +26,7 @@ export class Password extends Domain {
         return this.decryptObj(new PasswordHistoryView(this), {
             password: null,
         }, orgId, encKey);
+     
     }
 
     toPasswordHistoryData(): PasswordHistoryData {

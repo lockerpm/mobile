@@ -60,7 +60,6 @@ export const HomeTabScreen = observer(() => {
       }
     }
   }
-
   // ------------------------ EFFECT ----------------------------
   useEffect(() => {
     handleShowFaceIDSuggest()
