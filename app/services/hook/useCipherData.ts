@@ -2172,8 +2172,6 @@ export function useCipherData() {
         return cipherRes
       }
       cipherStore.setLastSync()
-      console.log("syncSingleCipher", cipherRes.data.passwordHistory)
-
       // Create/Update
       const userId = await userService.getUserId()
       const key = `ciphers_${userId}`
@@ -2209,10 +2207,8 @@ export function useCipherData() {
 
       await storageService.save(key, res)
 
-      console.log("syncSingleCipher cipherData", cipherData.passwordHistory)
       // Decrypt and minimal reload cache
       const c = new Cipher(cipherData, false)
-      console.log("syncSingleCipher Cipher", c.passwordHistory )
       const hasKey = await cryptoService.hasKey()
 
       if (hasKey) {
