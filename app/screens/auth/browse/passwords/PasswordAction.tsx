@@ -11,6 +11,7 @@ import { CipherAction } from "app/components/ciphers/cipherAction/CipherAction"
 import { useNavigation } from "@react-navigation/native"
 
 type Props = {
+  disableDetail?: boolean
   isOpen?: boolean
   onClose?: () => void
   navigation: any

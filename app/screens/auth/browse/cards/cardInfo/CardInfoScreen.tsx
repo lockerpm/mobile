@@ -57,6 +57,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<"cards__info">> = observer((
         />
       ) : (
         <CardAction
+          disableDetail
           navigation={navigation}
           isOpen={showAction}
           onClose={() => setShowAction(false)}

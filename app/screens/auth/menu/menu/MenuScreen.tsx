@@ -11,7 +11,7 @@ import { MenuItem, MenuItemContainer, MenuItemProps } from "app/components/utils
 import { getVersion } from "react-native-device-info"
 import { ReferFriendMenuItem } from "./ReferFriendMenuItem"
 import { observer } from "mobx-react-lite"
-import ChatWootWidget from '@chatwoot/react-native-widget';
+import ChatWootWidget from "@chatwoot/react-native-widget"
 import { CHATWOOT_BASE_URL, CHATWOOT_WEBSITE_TOKEN } from "app/config/constants"
 
 export const MenuScreen = observer(() => {
@@ -27,9 +27,8 @@ export const MenuScreen = observer(() => {
 
   const [showFingerprint, setShowFingerprint] = useState(false)
   const [referLink, setReferLink] = useState<string>(null)
-  const [showChatWootWidget, toggleChatWootWidget] = useState(false);
+  const [showChatWootWidget, toggleChatWootWidget] = useState(false)
   const [chatwootUser, setChatwoodUser] = useState<ChatWootUser>(null)
-
 
   // -------------------METHODS-----------------------
 
@@ -51,16 +50,22 @@ export const MenuScreen = observer(() => {
     }
   }
 
-
   // -------------------EFFECT-----------------------
 
   useEffect(() => {
     getChatWoodIdHash()
     if (!user.onPremiseUser) {
       getReferralsLink()
-    } 
+    }
   }, [])
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setShowFingerprint(false)
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   // ------------------COMPUTED------------------------
 
@@ -167,6 +172,7 @@ export const MenuScreen = observer(() => {
       ),
     },
   }
+
   // -------------- RENDER --------------------
 
   return (
@@ -216,13 +222,20 @@ export const MenuScreen = observer(() => {
             <View style={{ flex: 1 }}>
               <Text text={translate("menu.fingerprint")} />
               {showFingerprint && (
-                <Text
+                <View
                   style={{
-                    color: colors.error,
+                    flexDirection: "row",
+                    flexWrap: "wrap",
                     marginTop: 5,
                   }}
-                  text={user.fingerprint}
-                />
+                >
+                  {user.fingerprint.split("-").map((e, index) => (
+                    <Text key={index}>
+                      {index !== 0 && <Text color={colors.error} text={"-"} />}
+                      <Text color={colors.error}  text={e + "as"} />
+                    </Text>
+                  ))}
+                </View>
               )}
             </View>
           }
@@ -260,31 +273,32 @@ export const MenuScreen = observer(() => {
           onPress={() => toggleChatWootWidget(true)}
           content={
             <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-              <Text text={translate("common.customer_service")} style={{ paddingHorizontal: 10 }} />
+              <Text text={translate("common.customer_service")} />
             </View>
           }
         />
       </MenuItemContainer>
 
-      {
-        showChatWootWidget&& 
-          <ChatWootWidget
-            colorScheme={isDark ? "dark" : "light"}
-            websiteToken={CHATWOOT_WEBSITE_TOKEN}
-            locale={chatwootUser?.language_override}
-            baseUrl={CHATWOOT_BASE_URL}
-            closeModal={() => toggleChatWootWidget(false)}
-            isModalVisible={showChatWootWidget}
-            user={ {
-              identifier: chatwootUser?.email || user.email,
-              name: chatwootUser?.name || user.full_name,
-              avatar_url: user.avatar,
-              email: chatwootUser?.email || user.email,
-              identifier_hash: chatwootUser?.user_hash || '',
-            }}
-            customAttributes={{ pricingPlan: user.pwd_user_type !== "enterprise" ? user.plan  : "enterprise"}}
-          />
-      }
+      {showChatWootWidget && (
+        <ChatWootWidget
+          colorScheme={isDark ? "dark" : "light"}
+          websiteToken={CHATWOOT_WEBSITE_TOKEN}
+          locale={chatwootUser?.language_override}
+          baseUrl={CHATWOOT_BASE_URL}
+          closeModal={() => toggleChatWootWidget(false)}
+          isModalVisible={showChatWootWidget}
+          user={{
+            identifier: chatwootUser?.email || user.email,
+            name: chatwootUser?.name || user.full_name,
+            avatar_url: user.avatar,
+            email: chatwootUser?.email || user.email,
+            identifier_hash: chatwootUser?.user_hash || "",
+          }}
+          customAttributes={{
+            pricingPlan: user.pwd_user_type !== "enterprise" ? user.plan : "enterprise",
+          }}
+        />
+      )}
 
       <MenuItemContainer>
         {items2.map((item, index) => (

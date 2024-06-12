@@ -18,6 +18,7 @@ import { CipherIconImage } from "../cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
 
 export interface CipherActionProps {
+  disableDetail?: boolean
   children?: React.ReactNode
   isOpen?: boolean
   onClose?: () => void
@@ -30,7 +31,7 @@ export interface CipherActionProps {
  * Describe your component here
  */
 export const CipherAction = (props: CipherActionProps) => {
-  const { navigation, isOpen, onClose, children, isEmergencyView } = props
+  const { navigation, isOpen, onClose, children, isEmergencyView, disableDetail } = props
 
   const [showConfirmTrashModal, setShowConfirmTrashModal] = useState(false)
   const [showConfirmLeaveModal, setShowConfirmLeaveModal] = useState(false)
@@ -199,15 +200,17 @@ export const CipherAction = (props: CipherActionProps) => {
         }
       >
         {children}
-        <ActionItem
-          disabled={uiStore.isOffline && !!selectedCipher.organizationId}
-          name={translate("common.details")}
-          icon="list-bullets"
-          action={() => {
-            onClose()
-            navigation.navigate(`${cipherMapper.path}__info`)
-          }}
-        />
+        {!disableDetail && (
+          <ActionItem
+            disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+            name={translate("common.details")}
+            icon="list-bullets"
+            action={() => {
+              onClose()
+              navigation.navigate(`${cipherMapper.path}__info`)
+            }}
+          />
+        )}
 
         {editable && !emergencyView && (
           <View>

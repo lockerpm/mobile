@@ -5,6 +5,7 @@ import { useHelper } from "app/services/hook"
 import React from "react"
 
 type Props = {
+  disableDetail?: boolean
   isOpen?: boolean
   onClose?: () => void
   navigation: any

@@ -63,6 +63,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<"cryptoWallets__info
           />
         ) : (
           <CryptoWalletAction
+            disableDetail
             navigation={navigation}
             isOpen={showAction}
             onClose={() => setShowAction(false)}

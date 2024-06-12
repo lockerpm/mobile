@@ -5,10 +5,10 @@ import { Text, Icon } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { SearchBar } from "app/components/utils"
 
-import { DeleteConfirmModal } from "../../browse/trash/DeleteConfirmModal"
 import { useCipherData, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { ShareModal } from "app/components/ciphers"
+import { DeleteOtpModal } from "./DeleteOtpModal"
 
 interface Props {
   disableAddmore: boolean
@@ -202,12 +202,12 @@ export const AuthenticatorHeader = (props: Props) => {
         value={searchText}
       />
 
-      <DeleteConfirmModal
+      <DeleteOtpModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
-        title={translate("trash.to_trash")}
-        desc={translate("trash.to_trash_desc")}
+        title={translate("trash.perma_delete")}
+        desc={translate("trash.perma_delete_desc")}
         btnText="OK"
       />
 

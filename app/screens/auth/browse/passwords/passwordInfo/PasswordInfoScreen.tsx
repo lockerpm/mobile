@@ -68,6 +68,7 @@ export const PasswordInfoScreen: FC<AppStackScreenProps<"passwords__info">> = ob
         />
       ) : (
         <PasswordAction
+          disableDetail
           navigation={navigation}
           isOpen={showAction}
           onClose={() => setShowAction(false)}

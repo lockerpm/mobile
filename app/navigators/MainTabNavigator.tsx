@@ -64,7 +64,7 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
     justifyContent: "center",
     alignItems: "center",
   }
-  return uiStore.isSelecting ? null : (
+  return  (
     <View
       style={{ paddingBottom: insets.bottom, backgroundColor: colors.background, paddingTop: 8 }}
     >

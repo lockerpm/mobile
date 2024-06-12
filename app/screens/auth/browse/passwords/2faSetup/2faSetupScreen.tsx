@@ -26,7 +26,6 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<"passwords_2fa_setup
 
     return (
       <Screen
-        safeAreaEdges={["bottom"]}
         header={
           <Header
             leftIcon="arrow-left"
@@ -35,6 +34,7 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<"passwords_2fa_setup
             }}
             title={translate("password.2fa_setup")}
             rightText={translate("common.save")}
+            rightTextColor={colors.primary}
             onRightPress={() => {
               cipherStore.setSelectedTotp(selectedOtp?.notes || "-1")
               navigation.goBack()

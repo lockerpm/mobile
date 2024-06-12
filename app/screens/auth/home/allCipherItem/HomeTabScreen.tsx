@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Alert, BackHandler, View, AppState, LayoutAnimation } from 'react-native'
+import { Alert, View, AppState, LayoutAnimation } from 'react-native'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { useTheme } from 'app/services/context'
 import { AutofillServiceEnabled } from 'app/utils/autofillHelper'
@@ -121,20 +121,6 @@ export const HomeTabScreen = observer(() => {
     }
     navigation.addListener('beforeRemove', handleBack)
   }, [navigation])
-
-  // Close select before leave
-  useEffect(() => {
-    uiStore.setIsSelecting(isSelecting)
-    const checkSelectBeforeLeaving = () => {
-      if (isSelecting) {
-        setIsSelecting(false)
-        setSelectedItems([])
-        return true
-      }
-      return false
-    }
-    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-  }, [isSelecting])
 
   useEffect(() => {
     if (!isLoading) {

@@ -1,6 +1,5 @@
-import React, { useState } from "react"
-import { View } from "react-native"
-import { DeleteConfirmModal } from "../../browse/trash/DeleteConfirmModal"
+import React, { useEffect, useState } from "react"
+import { Platform, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Text } from "app/components/cores"
 import { useCipherData, useHelper } from "app/services/hook"
@@ -9,6 +8,7 @@ import { useStores } from "app/models"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
 import { ActionItem, ActionSheet } from "app/components/ciphers"
 import { useTheme } from "app/services/context"
+import { DeleteOtpModal } from "./DeleteOtpModal"
 
 type Props = {
   navigation: any
@@ -55,17 +55,29 @@ export const AuthenticatorAction = observer((props: Props) => {
     setNextModal(null)
   }
 
+    // Render
+  useEffect(() => {
+    if (Platform.OS === "android" && !isOpen) {
+      switch (nextModal) {
+        case "deleteConfirm":
+          setShowConfirmModal(true)
+          break
+      }
+      setNextModal(null)
+    }
+  }, [isOpen, nextModal])
+    
   // ---------------- RENDER -----------------
 
   return (
     <View>
       {/* Modals / Actions */}
 
-      <DeleteConfirmModal
+      <DeleteOtpModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
-        title={translate("trash.delete_item")}
+        title={"Asdasd"}
         desc={translate("trash.delete_desc")}
         btnText={translate("common.delete")}
       />

@@ -6,6 +6,7 @@ import { CipherView } from "core/models/view"
 import React from "react"
 
 type Props = {
+  disableDetail?: boolean
   isOpen?: boolean
   onClose?: () => void
   navigation: any

@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite"
 import React from "react"
 
 type Props = {
+  disableDetail?: boolean
   isOpen?: boolean
   onClose?: () => void
   navigation: any

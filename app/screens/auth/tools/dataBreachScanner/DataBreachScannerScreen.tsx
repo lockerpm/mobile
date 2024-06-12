@@ -69,8 +69,8 @@ export const DataBreachScannerScreen = observer(() => {
       />
 
       <TextInput
-        animated
-        label={translate("data_breach_scanner.check_email")}
+        // animated
+        placeholder={translate("data_breach_scanner.check_email")}
         value={email}
         onChangeText={setEmail}
         isError={isError}

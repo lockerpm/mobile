@@ -4,12 +4,13 @@ import React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { Text } from "app/components/cores"
 import { useHelper } from "app/services/hook"
+import { observer } from "mobx-react-lite"
 
 type Props = {
   style?: StyleProp<ViewStyle>
 }
 
-export const LoadingHeader = (props: Props) => {
+export const LoadingHeader = observer((props: Props) => {
   const { style } = props
   const { toolStore } = useStores()
   const { colors } = useTheme()
@@ -46,4 +47,4 @@ export const LoadingHeader = (props: Props) => {
   if (isDataLoading) return <Render title={translate("common.loading") + "..."} />
   if (isLoadingHealth) return <Render title={translate("common.calculating") + "..."} />
   return null
-}
+})
