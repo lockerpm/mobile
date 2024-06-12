@@ -36,6 +36,8 @@ import { ThemeContextProvider } from "./services/context/useTheme"
 import CombineContext from "./services/context/useCombineContext"
 import { IS_IOS } from "./config/constants"
 import { AndroidAutofillServiceType } from "./utils/autofillHelper"
+import SplashScreen from 'react-native-splash-screen'
+
 
 enableScreens()
 Settings.initializeSDK()
@@ -54,7 +56,6 @@ export interface RootProp extends JSX.IntrinsicAttributes {
   lastUserPasswordID?: string
   username?: string
   password?: string
-  hideSplashScreen?: () => void
 }
 
 const App: ComponentType<RootProp> = (props: RootProp) => {
@@ -67,21 +68,9 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
   )
 
   const { rehydrated, rootStore } = useInitialRootStore(() => {
-    // This runs after the root store has been initialized and rehydrated.
-
-    // If your initialization scripts run very fast, it's good to show the splash screen for just a bit longer to prevent flicker.
-    // Slightly delaying splash screen hiding for better UX; can be customized or removed as needed,
-    // Note: (vanilla Android) The splash-screen will not appear if you launch your app via the terminal or Android Studio. Kill the app and launch it normally by tapping on the launcher icon. https://stackoverflow.com/a/69831106
-    // Note: (vanilla iOS) You might notice the splash-screen logo change size. This happens in debug/development mode. Try building the app for release.
-    setTimeout(props.hideSplashScreen, 400)
+    setTimeout(SplashScreen.hide, 400)
   })
 
-  // Before we show the app, we have to wait for our state to be ready.
-  // In the meantime, don't render anything. This will be the background
-  // color set in native by rootView's background color.
-  // In iOS: application:didFinishLaunchingWithOptions:
-  // In Android: https://stackoverflow.com/a/45838109/204044
-  // You can replace with your own loading component if you wish.
   if (!rehydrated) return null
 
   // Set up API listener
@@ -90,8 +79,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
 
     if (problem) {
       Logger.debug(
-        `URL:${response.config?.baseURL}${response.config?.url} - Status: ${
-          response.status
+        `URL:${response.config?.baseURL}${response.config?.url} - Status: ${response.status
         } - Message: ${JSON.stringify(response.data)}`
       )
     }

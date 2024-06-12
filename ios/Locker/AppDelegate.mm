@@ -1,7 +1,7 @@
 #import <Firebase.h>
 #import "AppDelegate.h"
 #import "RNCConfig.h"
-#import "RNBootSplash.h"
+#import "RNSplashScreen.h"
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
@@ -27,13 +27,10 @@
   self.initialProps = @{};
 
   [super application:application didFinishLaunchingWithOptions:launchOptions];
-
-  // RN BootSplash
-  UIView *rootView = self.window.rootViewController.view; // react-native >= 0.71 specific
-  [RNBootSplash initWithStoryboard:@"LaunchScreen" rootView:rootView];
-
+//  UIView *rootView = self.window.rootViewController.view; // react-native >= 0.71 specific
+  [RNSplashScreen show];
+  
   [FIRApp configure];
-
   return YES;
 }
 
