@@ -117,7 +117,7 @@ android {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4183
+        versionCode 4184
         versionName "1.56"
 
         manifestPlaceholders = [

@@ -814,6 +814,7 @@
     "defaultTab": "Màn hình mặc định"
   },
   "autofill_service": {
+    "deleted": "Mật khẩu này đã bị xóa.",
     "searchFor": "Tìm kiếm theo: ",
     "activated": {
       "title": "Tự động điền đã được kích hoạt",

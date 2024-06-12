@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react"
-import { BackHandler, NativeModules } from "react-native"
+import { NativeModules } from "react-native"
 import { AutoFillList } from "./AutofillList"
 import { AndroidAutofillServiceType, parseSearchText } from "app/utils/autofillHelper"
 import { useCipherData, useHelper } from "app/services/hook"
@@ -18,7 +18,7 @@ const EMPTY_CIPHER = require("assets/images/emptyCipherList/autofill-empty-ciphe
 export const AutoFillScreen: FC<AppStackScreenProps<"autofill">> = observer((props) => {
   const navigation = props.navigation
   const { data } = props.route.params
-  const { copyToClipboard, translate } = useHelper()
+  const { copyToClipboard, translate, notify } = useHelper()
   const { getCiphersFromCache } = useCipherData()
   // -------------------- PARAMS ----------------------------
   const suggestSearch = parseSearchText(data.domain)
@@ -68,7 +68,7 @@ export const AutoFillScreen: FC<AppStackScreenProps<"autofill">> = observer((pro
           }
         } else {
           RNAutofillServiceAndroid.removeLastItem()
-          BackHandler.exitApp()
+          notify("info", translate("autofill_service.deleted"))
         }
       }
       check()

@@ -51,33 +51,39 @@ export const PasswordAction = (props: Props) => {
         />
       )}
 
-      { !!selectedCipher.login.password && !!selectedCipher.viewPassword && <ActionItem
-        name={translate("password.copy_password")}
-        icon="copy"
-        action={() => {
-          props.onClose && props.onClose()
-          copyToClipboard(selectedCipher.login.password)
-        }}
-        disabled={!selectedCipher.login.password || !selectedCipher.viewPassword}
-      />}
+      {!!selectedCipher.login.password && !!selectedCipher.viewPassword && (
+        <ActionItem
+          name={translate("password.copy_password")}
+          icon="copy"
+          action={() => {
+            props.onClose && props.onClose()
+            copyToClipboard(selectedCipher.login.password)
+          }}
+          disabled={!selectedCipher.login.password || !selectedCipher.viewPassword}
+        />
+      )}
 
-      {!!selectedCipher.login.totp && <ActionItem
-        name={translate("password.copy_totp")}
-        icon="copy"
-        action={() => {
-          props.onClose && props.onClose()
-          copyToClipboard(getTOTP(parseOTPUri(selectedCipher.login.totp)))
-        }}
-      />}
+      {!!selectedCipher.login.totp && (
+        <ActionItem
+          name={translate("password.copy_totp")}
+          icon="copy"
+          action={() => {
+            props.onClose && props.onClose()
+            copyToClipboard(getTOTP(parseOTPUri(selectedCipher.login.totp)))
+          }}
+        />
+      )}
 
-       <ActionItem
-        name={translate("password_history.view")}
-        icon="clock-clockwise"
-        action={() => {
-          props.onClose && props.onClose()
-          navigation.navigate("passwords_history")
-        }}
-      />
+      {selectedCipher.passwordHistory?.length > 0 && (
+        <ActionItem
+          name={translate("password_history.view")}
+          icon="clock-clockwise"
+          action={() => {
+            props.onClose && props.onClose()
+            navigation.navigate("passwords_history")
+          }}
+        />
+      )}
     </>
   )
   return <CipherAction {...props}>{renderContent()}</CipherAction>

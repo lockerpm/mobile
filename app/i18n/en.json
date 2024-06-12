@@ -763,6 +763,7 @@
     "defaultTab": "Start Screen"
   },
   "autofill_service": {
+    "deleted": "This password has been deleted.",
     "searchFor": "Search for: ",
     "activated": {
       "title": "Auto-fill activated!",

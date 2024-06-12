@@ -761,6 +761,7 @@
     "defaultTab": "起始畫面"
   },
   "autofill_service": {
+    "deleted": "密碼已刪除。",
     "searchFor": "搜尋：",
     "activated": {
       "title": "自動填寫已啟動！",

@@ -17,7 +17,7 @@ export const HistoryItem = ({ password, createAt, setSelectHistory }: Props) => 
   const {translate} = useHelper()
 
   const [showText, setShowText] = useState(false)
-  const updateTime = createAt.getTime() ? translate("password_history.updated_password") + moment(createAt).format("h:mm, MMMM Do YYYY") : ""
+  const updateTime = createAt.getTime() ? translate("password_history.updated_password") + moment(createAt).format("HH:mm, MMMM Do YYYY") : ""
   return (
     <View
       style={{
