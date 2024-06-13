@@ -6,7 +6,7 @@ scan:
   script:
     - cystack-deployer
   tags:
-    - cs_home
+    - cs_newgen
   only:
     - dev
     - tags
