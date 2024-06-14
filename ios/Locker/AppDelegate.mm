@@ -27,10 +27,10 @@
   self.initialProps = @{};
 
   [super application:application didFinishLaunchingWithOptions:launchOptions];
-//  UIView *rootView = self.window.rootViewController.view; // react-native >= 0.71 specific
-  [RNSplashScreen show];
-  
   [FIRApp configure];
+//  UIView *rootView = self.window.rootViewController.view; // react-native >= 0.71 specific
+  
+  [RNSplashScreen show];
   return YES;
 }
 

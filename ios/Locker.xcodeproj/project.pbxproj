@@ -20,7 +20,6 @@
 		7C1F2A3E2B8C7F990003B7EF /* UserAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A3D2B8C7F990003B7EF /* UserAvatar.swift */; };
 		7C1F2A402B8C7FA10003B7EF /* MasterPasswordInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A3F2B8C7FA10003B7EF /* MasterPasswordInput.swift */; };
 		7C1F2A662B8CB7330003B7EF /* CredentialInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A652B8CB7330003B7EF /* CredentialInfo.swift */; };
-		7C1F2A682B9026370003B7EF /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7C1F2A672B9026370003B7EF /* CachedAsyncImage */; };
 		7C1F2A6C2B907BDA0003B7EF /* PasswordImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A6B2B907BDA0003B7EF /* PasswordImage.swift */; };
 		7C1F2A6E2B90873A0003B7EF /* CredentialItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A6D2B90873A0003B7EF /* CredentialItem.swift */; };
 		7C1F2A772B91BB940003B7EF /* TOTPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A762B91BB940003B7EF /* TOTPView.swift */; };
@@ -53,8 +52,6 @@
 		7CCABA802BB188BA006D7FB7 /* AutofillScreenDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCABA7F2BB188BA006D7FB7 /* AutofillScreenDelegate.swift */; };
 		7CCE43192BB5880A0004028E /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCE43182BB5880A0004028E /* Theme.swift */; };
 		7CEB31E22A9309D9007F6051 /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CEB31E12A9309D9007F6051 /* assets.xcassets */; };
-		7CEB31E92A931B50007F6051 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEB31E82A931B50007F6051 /* KeychainAccess */; };
-		7CEB31EB2A931B5A007F6051 /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEB31EA2A931B5A007F6051 /* SwiftOTP */; };
 		7CEB31EC2A932665007F6051 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A4E2A9305EC00875FBA /* Config.xcconfig */; };
 		7CEB31F92A932780007F6051 /* RSAUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31EF2A932780007F6051 /* RSAUtils.swift */; };
 		7CEB31FA2A932780007F6051 /* RCTCryptoServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31F02A932780007F6051 /* RCTCryptoServiceIos.m */; };
@@ -65,7 +62,9 @@
 		7CED251E2ADD1FF100142D59 /* RCTVinSSO.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CED251B2ADD1FF100142D59 /* RCTVinSSO.m */; };
 		7CED251F2ADD1FF100142D59 /* RNVinSSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED251C2ADD1FF100142D59 /* RNVinSSO.swift */; };
 		7CED25202ADD1FF100142D59 /* VinSsoWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED251D2ADD1FF100142D59 /* VinSsoWebViewController.swift */; };
-		864A6CAD2B8F999F0060E3EB /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 864A6CAC2B8F999F0060E3EB /* CachedAsyncImage */; };
+		7CF200582C1C2372005A6B03 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7CF200572C1C2372005A6B03 /* CachedAsyncImage */; };
+		7CF2005A2C1C2378005A6B03 /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = 7CF200592C1C2378005A6B03 /* SwiftOTP */; };
+		7CF2005C2C1C237E005A6B03 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7CF2005B2C1C237E005A6B03 /* KeychainAccess */; };
 		86E9828D2AD5AD9300EB485E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86E9828C2AD5AD9300EB485E /* StoreKit.framework */; };
 		BE406F562862D73000A81E39 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE406F552862D73000A81E39 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -202,7 +201,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C8FB3752ADD298800DA5BCE /* VinCSSFido2ClientSDK.xcframework in Frameworks */,
-				864A6CAD2B8F999F0060E3EB /* CachedAsyncImage in Frameworks */,
 				86E9828D2AD5AD9300EB485E /* StoreKit.framework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-Locker.a in Frameworks */,
 			);
@@ -212,10 +210,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CEB31E92A931B50007F6051 /* KeychainAccess in Frameworks */,
-				7C1F2A682B9026370003B7EF /* CachedAsyncImage in Frameworks */,
-				7CEB31EB2A931B5A007F6051 /* SwiftOTP in Frameworks */,
+				7CF2005C2C1C237E005A6B03 /* KeychainAccess in Frameworks */,
 				7C973A3E2A93055500875FBA /* AuthenticationServices.framework in Frameworks */,
+				7CF2005A2C1C2378005A6B03 /* SwiftOTP in Frameworks */,
+				7CF200582C1C2372005A6B03 /* CachedAsyncImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,7 +529,6 @@
 			);
 			name = Locker;
 			packageProductDependencies = (
-				864A6CAC2B8F999F0060E3EB /* CachedAsyncImage */,
 			);
 			productName = Locker;
 			productReference = 13B07F961A680F5B00A75B9A /* Locker.app */;
@@ -551,9 +548,9 @@
 			);
 			name = LockerAutofill;
 			packageProductDependencies = (
-				7CEB31E82A931B50007F6051 /* KeychainAccess */,
-				7CEB31EA2A931B5A007F6051 /* SwiftOTP */,
-				7C1F2A672B9026370003B7EF /* CachedAsyncImage */,
+				7CF200572C1C2372005A6B03 /* CachedAsyncImage */,
+				7CF200592C1C2378005A6B03 /* SwiftOTP */,
+				7CF2005B2C1C237E005A6B03 /* KeychainAccess */,
 			);
 			productName = LockerAutofill;
 			productReference = 7C973A3C2A93055500875FBA /* LockerAutofill.appex */;
@@ -592,7 +589,7 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				7C973A302A93008B00875FBA /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */,
+				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */,
 				864A6CAB2B8F999F0060E3EB /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -1315,7 +1312,7 @@
 				minimumVersion = 4.0.0;
 			};
 		};
-		7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */ = {
+		7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
 			requirement = {
@@ -1334,25 +1331,20 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7C1F2A672B9026370003B7EF /* CachedAsyncImage */ = {
+		7CF200572C1C2372005A6B03 /* CachedAsyncImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 864A6CAB2B8F999F0060E3EB /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
 			productName = CachedAsyncImage;
 		};
-		7CEB31E82A931B50007F6051 /* KeychainAccess */ = {
+		7CF200592C1C2378005A6B03 /* SwiftOTP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */;
+			productName = SwiftOTP;
+		};
+		7CF2005B2C1C237E005A6B03 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7C973A302A93008B00875FBA /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
-		};
-		7CEB31EA2A931B5A007F6051 /* SwiftOTP */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */;
-			productName = SwiftOTP;
-		};
-		864A6CAC2B8F999F0060E3EB /* CachedAsyncImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 864A6CAB2B8F999F0060E3EB /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
-			productName = CachedAsyncImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
