@@ -1,6 +1,4 @@
-export * from './autoImage/AutoImage'
 export * from './button/Button'
-export * from './card/Card'
 export * from './header/Header'
 export * from './header/TabHeader'
 export * from './icon/Icon'

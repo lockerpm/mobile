@@ -1,6 +1,6 @@
 import React, { FC } from "react"
-import { Screen, Header, Button, Text, AutoImage as Image } from "app/components/cores"
-import { View } from "react-native"
+import { Screen, Header, Button, Text } from "app/components/cores"
+import { View, Image } from "react-native"
 import { useCipherData, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { observer } from "mobx-react-lite"

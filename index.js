@@ -1,13 +1,9 @@
-// This is the first file that ReactNative will run when it starts up.
-// Both do essentially the same thing.
-
 import "react-native-get-random-values"
 
 // It's easier just to leave it here.
 import "./shim.js"
 import React from "react"
-// import App from "./app/app.tsx"
-import App from "./app/components-v2/app.tsx"
+import App from "./app/app.tsx"
 import { AppRegistry } from "react-native"
 import { PushNotifier } from "./app/utils/pushNotification"
 

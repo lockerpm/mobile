@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { View, Image, TouchableOpacity } from "react-native"
-import { BottomModal, Text } from "app/components/cores"
+import { Text, BottomModal } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { useCipherData, useHelper } from "app/services/hook"
 
@@ -56,12 +56,12 @@ export const LeaveShareModal = (props: Props) => {
         onPress={handleLeave}
         style={{
           backgroundColor: colors.error,
-          width: "100%",
           marginTop: 30,
           borderRadius: 12,
           paddingVertical: 12,
           paddingHorizontal: 16,
           alignItems: "center",
+          marginHorizontal: 16,
         }}
       >
         <Text text={translate("shares.leave")} style={{ color: colors.white }} />

@@ -1,6 +1,6 @@
 import React from "react"
-import { ImageStyle, View, ViewStyle } from "react-native"
-import { Text, AutoImage as Image, Icon } from "app/components/cores"
+import { ImageStyle, View, ViewStyle, Image } from "react-native"
+import { Text, Icon } from "app/components/cores"
 import { WALLET_APP_LIST } from "app/utils/crypto/applist"
 import { Select } from "app/components/utils"
 import { useTheme } from "app/services/context"
@@ -102,7 +102,6 @@ export const AppSelect = (props: Props) => {
                     <Image
                       resizeMode="contain"
                       source={selectedApp?.logo || otherApp.logo}
-                      borderRadius={20}
                       style={IMG}
                     />
                   </View>
