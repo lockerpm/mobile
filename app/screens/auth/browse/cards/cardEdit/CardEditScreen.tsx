@@ -10,12 +10,12 @@ import { useStores } from "app/models"
 import { CardView, CipherView } from "core/models/view"
 import { CollectionView } from "core/models/view/collectionView"
 import { CipherType } from "core/enums"
-import { Button, Header, Screen, TextInput, Text, Icon } from "app/components/cores"
+import { Button, Header, Screen, TextInput, Text } from "app/components/cores"
 import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
 import { PlanStorageLimitModal } from "../../planStorageLimitModal"
-import { Select } from "app/components/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { BrandSelectItem } from "./BrandSelectItem"
 
 type InputItem = {
   label: string
@@ -27,7 +27,7 @@ type InputItem = {
   isPassword?: boolean
   maskType?: TextInputMaskTypeProp
   maskOptions?: TextInputMaskOptionProp
-  isSelect?: boolean
+  isBrandSelect?: boolean
   options?: { label: string; value: string | number | null }[]
 }
 
@@ -185,7 +185,7 @@ export const CardEditScreen: FC<AppStackScreenProps<"cards__edit">> = observer((
       label: translate("card.brand"),
       value: brand,
       setter: setBrand,
-      isSelect: true,
+      isBrandSelect: true,
       options: CARD_BRANDS,
     },
     {
@@ -279,40 +279,10 @@ export const CardEditScreen: FC<AppStackScreenProps<"cards__edit">> = observer((
       >
         {cardDetails.map((item, index) => (
           <View key={index} style={{ flex: 1, marginTop: index !== 0 ? 20 : 0 }}>
-            {item.isSelect ? (
-              <Select
-                placeholder={item.label}
-                value={item.value}
-                options={item.options}
-                onChange={(val) => item.setter(val)}
-                renderSelected={({ label }) => (
-                  <View
-                    style={{
-                      paddingHorizontal: 16,
-                      paddingVertical: 12,
-                      borderRadius: 12,
-                      borderWidth: 1,
-                      borderColor: colors.disable,
-                    }}
-                  >
-                    <View
-                      style={{
-                        justifyContent: "space-between",
-                        width: "100%",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <View>
-                        <Text preset="label" size="base" text={label} />
-                        {!!item.value && (
-                          <Text preset="bold" text={item.value} style={{ marginTop: 4 }} />
-                        )}
-                      </View>
-                      <Icon icon="caret-right" size={20} color={colors.secondaryText} />
-                    </View>
-                  </View>
-                )}
+            {item.isBrandSelect ? (
+              <BrandSelectItem
+                brand={item.value}
+                setBrand={(val) => item.setter(val)}
               />
             ) : (
               <TextInput
@@ -345,10 +315,6 @@ export const CardEditScreen: FC<AppStackScreenProps<"cards__edit">> = observer((
         onChangeNote={setNote}
         folderId={folder}
         collectionId={collection}
-        organizationId={organizationId}
-        setOrganizationId={setOrganizationId}
-        collectionIds={collectionIds}
-        setCollectionIds={setCollectionIds}
         isDeleted={selectedCipher.isDeleted}
       />
     </Screen>

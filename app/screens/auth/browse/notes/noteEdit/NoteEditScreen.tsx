@@ -206,10 +206,6 @@ export const NoteEditScreen: FC<AppStackScreenProps<"notes__edit">> = observer((
         navigation={navigation}
         folderId={folder}
         collectionId={collection}
-        organizationId={organizationId}
-        setOrganizationId={setOrganizationId}
-        collectionIds={collectionIds}
-        setCollectionIds={setCollectionIds}
         isDeleted={selectedCipher.isDeleted}
       />
     </Screen>

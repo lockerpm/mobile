@@ -6,12 +6,13 @@ import { useCoreService } from "app/services/coreService"
 import { useStores } from "app/models"
 import { Logger } from "app/utils/utils"
 import { Button, Text } from "app/components/cores"
-import { SettingsItem, Select } from "app/components/utils"
+import { SettingsItem } from "app/components/utils"
 import { FileData } from "app/static/types"
 import { useTheme } from "app/services/context"
+import { FileFormatPickerModal } from "./FileFormatPickerModal"
 
 interface Props {
-  format: any
+  format: string
   setFormat: (val: string) => void
   file: FileData
   setFile: (val: FileData) => void
@@ -20,8 +21,8 @@ interface Props {
 
 export const ImportPickFile = (props: Props) => {
   const { colors } = useTheme()
-  const { notify, translate } = useHelper()
   const { importService } = useCoreService()
+  const { notify, translate } = useHelper()
   const { uiStore } = useStores()
 
   const { format, setFormat, file, setFile, handleImport } = props
@@ -86,15 +87,10 @@ export const ImportPickFile = (props: Props) => {
 
   return (
     <View>
-      <Select
-        showSearch
-        value={format}
-        onChange={(val: string) => setFormat(val)}
-        options={formats}
-        title={translate("import.format")}
-        renderSelected={({ label }) => (
-          <SettingsItem name={translate("import.format")} RightAccessory={<Text text={label} />} />
-        )}
+      <FileFormatPickerModal
+        format={format}
+        formats={formats}
+        setFormat={setFormat}
       />
 
       <SettingsItem

@@ -14,7 +14,7 @@ export const colorsLight = {
    * A helper for making something see-thru.
    */
   transparent: 'rgba(0, 0, 0, 0)',
-  transparentModal: 'rgba(0, 0, 0, 0.3)',
+  transparentModal: 'rgba(0, 0, 0, 0.2)',
 
   toastBackground: 'rgba(22, 22, 22, 0.9)',
   /**
@@ -68,7 +68,7 @@ export const colorsDark = {
    * A helper for making something see-thru.
    */
   transparent: 'rgba(0, 0, 0, 0)',
-  transparentModal: 'rgba(255, 255, 255, 0.1)',
+  transparentModal: 'rgba(255, 255, 255, 0.4)',
 
   toastBackground: 'rgba(100, 100, 100, 1)',
   /**

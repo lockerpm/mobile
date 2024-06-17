@@ -67,7 +67,7 @@ export const IosPasswordlessOptions = ({
         }}
       >
         <Text preset="bold" text={title} style={{ fontSize: 24, lineHeight: 28 }} />
-        <Icon icon="x-circle" size={24} onPress={onClose} />
+        <Icon icon="x" size={24} onPress={onClose} />
       </View>
     )
   }

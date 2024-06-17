@@ -77,7 +77,7 @@ export const AuthenticatorAction = observer((props: Props) => {
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
-        title={"Asdasd"}
+        title={translate('trash.perma_delete')}
         desc={translate("trash.delete_desc")}
         btnText={translate("common.delete")}
       />

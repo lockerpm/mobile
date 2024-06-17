@@ -77,7 +77,7 @@ export const Modal = (props: ModalProps) => {
             size="xl"
           />
           <Icon
-            icon="x-circle"
+            icon="x"
             size={24}
             onPress={onClose}
           />

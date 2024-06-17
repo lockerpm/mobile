@@ -207,7 +207,7 @@ export const PaymentScreen: FC<AppStackScreenProps<"payment">> = observer((props
             preset={isDark ? "locker-premium" : "locker-premium-dark"}
             style={{ height: 32, width: 152 }}
           />
-          <Icon icon="x-circle" onPress={() => navigation.goBack()} disabled={processPayment} />
+          <Icon icon="x" onPress={() => navigation.goBack()} disabled={processPayment} />
         </View>
       }
       contentContainerStyle={{

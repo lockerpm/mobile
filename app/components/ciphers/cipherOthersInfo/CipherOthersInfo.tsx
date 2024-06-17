@@ -1,10 +1,9 @@
 import find from 'lodash/find'
-import React, { useState } from 'react'
+import React from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { Textarea } from '../../utils'
 import { Text, Icon } from '../../cores'
 
-import { OwnershipSelectionModal } from '../cipherAction/OwnershipSelectionModal'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import { useHelper } from 'app/services/hook'
@@ -16,10 +15,6 @@ export interface CipherOthersInfoProps {
   onChangeNote?: (val: string) => void
   folderId?: string
   collectionId?: string
-  organizationId: string
-  setOrganizationId: (val: any) => void
-  collectionIds: string[]
-  setCollectionIds: (val: any) => void
   isDeleted?: boolean
   isOwner: boolean
 }
@@ -36,17 +31,11 @@ export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
     folderId = null,
     isDeleted,
     collectionId,
-    organizationId,
-    collectionIds,
-    setOrganizationId,
-    setCollectionIds,
     isOwner,
   } = props
   const { translate } = useHelper()
   const { folderStore, collectionStore } = useStores()
   const { colors } = useTheme()
-
-  const [showOwnershipSelectionModal, setShowOwnershipSelectionModal] = useState(false)
 
   const folder = (() => {
     return folderId ? find(folderStore.folders, (e) => e.id === folderId) || {} : {}
@@ -117,14 +106,6 @@ export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
         )}
       </View>
 
-      <OwnershipSelectionModal
-        isOpen={showOwnershipSelectionModal}
-        onClose={() => setShowOwnershipSelectionModal(false)}
-        organizationId={organizationId}
-        setOrganizationId={setOrganizationId}
-        collectionIds={collectionIds}
-        setCollectionIds={setCollectionIds}
-      />
     </View>
   )
 }

@@ -7,11 +7,9 @@ export * from './cipherList/CipherListHeader'
 export * from './cipherList/CipherListItem'
 export * from './addCipherModal/AddCipherActionModal'
 
-export * from './cipherAction/ChangeTeamFolderModal'
 export * from './cipherAction/CipherAction'
 export * from './cipherAction/DeletedAction'
 export * from './cipherAction/LeaveShareModal'
-export * from './cipherAction/OwnershipSelectionModal'
 export * from './cipherAction/ShareModal'
 
 export * from './cipherInfoCommon/CipherInfoCommon'

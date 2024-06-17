@@ -9,11 +9,11 @@ import { useStores } from "app/models"
 import { CipherView, IdentityView } from "core/models/view"
 import { CollectionView } from "core/models/view/collectionView"
 import { CipherType } from "core/enums"
-import { Button, Header, Screen, TextInput, Text, Icon } from "app/components/cores"
-import { Select } from "app/components/utils"
+import { Button, Header, Screen, TextInput, Text } from "app/components/cores"
 import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { SetIDTitle } from "./SetIDTitle"
 
 type InputItem = {
   label: string
@@ -252,11 +252,6 @@ export const IdentityEditScreen: FC<AppStackScreenProps<"identities__edit">> = o
       value: address2,
       setter: setAddress2,
     },
-    // {
-    //   label: translate('identity.address') + ' 3',
-    //   value: address3,
-    //   setter: setAddress3
-    // },
     {
       label: translate("identity.city"),
       value: city,
@@ -277,25 +272,6 @@ export const IdentityEditScreen: FC<AppStackScreenProps<"identities__edit">> = o
       label: translate("identity.country"),
       value: country,
       setter: setCountry,
-    },
-  ]
-
-  const TITLES = [
-    {
-      label: "mr",
-      value: "mr",
-    },
-    {
-      label: "mrs",
-      value: "mrs",
-    },
-    {
-      label: "ms",
-      value: "ms",
-    },
-    {
-      label: "dr",
-      value: "dr",
     },
   ]
 
@@ -363,31 +339,9 @@ export const IdentityEditScreen: FC<AppStackScreenProps<"identities__edit">> = o
           paddingBottom: 32,
         }}
       >
-        <Select
-          placeholder={translate("identity.title")}
-          value={title}
-          options={TITLES}
-          onChange={(val) => setTitle(val.toString())}
-          renderSelected={({ label }) => (
-            <View
-              style={{
-                justifyContent: "space-between",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Text preset="bold" text={label + ": "} />
-                {!!title && <Text preset="bold" text={title} style={{ marginTop: 4 }} />}
-              </View>
-              <Icon icon="caret-right" size={20} color={colors.secondaryText} />
-            </View>
-          )}
+        <SetIDTitle
+          title={title}
+          setTitle={setTitle}
         />
 
         {contactDetails.map((item, index) => (
@@ -443,10 +397,6 @@ export const IdentityEditScreen: FC<AppStackScreenProps<"identities__edit">> = o
         onChangeNote={setNote}
         folderId={folder}
         collectionId={collection}
-        organizationId={organizationId}
-        setOrganizationId={setOrganizationId}
-        collectionIds={collectionIds}
-        setCollectionIds={setCollectionIds}
         isDeleted={selectedCipher.isDeleted}
       />
     </Screen>

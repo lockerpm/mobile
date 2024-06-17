@@ -8,7 +8,6 @@ import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { AccountRole, AccountRoleText } from "app/static/types"
-import { ChangeTeamFolderModal } from "./ChangeTeamFolderModal"
 import { ActionSheet } from "../actionsSheet/ActionSheet"
 import { Text } from "../../cores"
 import { ActionItem } from "../actionsSheet/ActionSheetItem"
@@ -36,9 +35,8 @@ export const CipherAction = (props: CipherActionProps) => {
   const [showConfirmTrashModal, setShowConfirmTrashModal] = useState(false)
   const [showConfirmLeaveModal, setShowConfirmLeaveModal] = useState(false)
 
-  const [showChangeTeamFolderModal, setShowChangeTeamFolderModal] = useState(false)
   const [nextModal, setNextModal] = useState<
-    "changeTeamFolder" | "share" | "trashConfirm" | "leaveConfirm" | null
+     "share" | "trashConfirm" | "leaveConfirm" | null
   >(null)
 
   // const [showShareModal, setShowShareModal] = useState(false)
@@ -108,9 +106,6 @@ export const CipherAction = (props: CipherActionProps) => {
   const handleActionSheetClose = () => {
     onClose()
     switch (nextModal) {
-      case "changeTeamFolder":
-        setShowChangeTeamFolderModal(true)
-        break
       case "share":
         setShowShareOptions(true)
         break
@@ -127,9 +122,6 @@ export const CipherAction = (props: CipherActionProps) => {
   useEffect(() => {
     if (Platform.OS === "android" && !isOpen) {
       switch (nextModal) {
-        case "changeTeamFolder":
-          setShowChangeTeamFolderModal(true)
-          break
         case "share":
           setShowShareOptions(true)
           break
@@ -156,11 +148,6 @@ export const CipherAction = (props: CipherActionProps) => {
         title={translate("trash.to_trash")}
         desc={translate("trash.to_trash_desc")}
         btnText="OK"
-      />
-
-      <ChangeTeamFolderModal
-        isOpen={showChangeTeamFolderModal}
-        onClose={() => setShowChangeTeamFolderModal(false)}
       />
 
       {isShared && (

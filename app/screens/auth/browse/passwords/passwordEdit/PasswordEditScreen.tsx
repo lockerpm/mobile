@@ -397,10 +397,6 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
         onChangeNote={setNote}
         folderId={folder}
         collectionId={collection}
-        organizationId={organizationId}
-        setOrganizationId={setOrganizationId}
-        collectionIds={collectionIds}
-        setCollectionIds={setCollectionIds}
         isDeleted={selectedCipher.isDeleted}
       />
 

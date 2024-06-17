@@ -121,7 +121,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
       }}
     >
       <Header
-        leftIcon="x-circle"
+        leftIcon="x"
         onLeftPress={() => onClose()}
         containerStyle={{
           paddingTop: 0,

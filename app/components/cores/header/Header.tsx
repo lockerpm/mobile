@@ -209,7 +209,7 @@ function HeaderAction(props: HeaderActionProps) {
   if (ActionComponent) return <View style={{ paddingHorizontal: 20 }}>{ActionComponent}</View>
 
   const $actionText: TextStyle = {
-    color: textColor || colors.secondaryText,
+    color: textColor || colors.primaryText,
   }
 
   if (content) {
@@ -220,7 +220,7 @@ function HeaderAction(props: HeaderActionProps) {
         disabled={!onPress}
         activeOpacity={0.8}
       >
-        <Text preset="bold" text={content} style={$actionText} color={colors.primaryText} />
+        <Text preset="bold" text={content} style={$actionText} />
       </TouchableOpacity>
     )
   }

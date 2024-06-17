@@ -1,24 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import moment from "moment"
 import React, { useEffect } from "react"
-import { Linking, Platform, TouchableOpacity} from "react-native"
+import { Linking, Platform } from "react-native"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "app/models"
 import { useCipherData, useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { AutofillDataType, loadShared, saveShared } from "app/utils/keychain"
-import { Header, Screen, Text, Toggle } from "app/components/cores"
-import { SettingsItem, MenuItemContainer, Select } from "app/components/utils"
+import { Header, Screen, Toggle } from "app/components/cores"
+import { SettingsItem, MenuItemContainer } from "app/components/utils"
 import { observer } from "mobx-react-lite"
-import { AppTimeoutType, TimeoutActionType } from "app/static/types"
+import { AppTimeoutType } from "app/static/types"
+import { SetlanguageItem } from "./SetLanguageItem"
+import { SetThemeItem } from "./SetThemeItem"
+import { SetTimeOutItem } from "./SetTimeOutItem"
 
 const IS_IOS = Platform.OS === "ios"
 
 export const SettingsScreen = observer(() => {
   const navigation = useNavigation() as any
   const { user, uiStore, cipherStore } = useStores()
-  const { colors, setIsDark } = useTheme()
+  const { colors } = useTheme()
   const { notify, isBiometricAvailable, translate } = useHelper()
   const { startSyncProcess } = useCipherData()
 
@@ -63,30 +64,6 @@ export const SettingsScreen = observer(() => {
     }
   }
 
-  const updateAutofillLanguage = async (language: "vi" | "en" | 'zh') => {
-    if (!IS_IOS) {
-      return
-    }
-    const credentials = await loadShared()
-    if (credentials && credentials.password) {
-      const sharedData: AutofillDataType = JSON.parse(credentials.password)
-      sharedData.language = language
-      await saveShared("autofill", JSON.stringify(sharedData))
-    }
-  }
-
-  const updateAutofillDarkTheme = async (enabled: boolean) => {
-    if (!IS_IOS) {
-      return
-    }
-    const credentials = await loadShared()
-    if (credentials && credentials.password) {
-      const sharedData: AutofillDataType = JSON.parse(credentials.password)
-      sharedData.isDarkTheme = enabled
-      await saveShared("autofill", JSON.stringify(sharedData))
-    }
-  }
-
   const syncDataManually = async () => {
     const res = await startSyncProcess(Date.now())
     // @ts-ignore
@@ -124,55 +101,13 @@ export const SettingsScreen = observer(() => {
   // ----------------------- RENDER -----------------------
 
   const settings = {
-    language: {
-      value: user.language || "en",
-      onChange: (lang: "vi" | "en" |'zh') => {
-        user.setLanguage(lang)
-        if(lang !== 'zh') {
-          user.changeLanguage()
-        }
-        updateAutofillLanguage(lang)
-      },
-      options: [
-        {
-          label: "Tiếng Việt",
-          value: "vi",
-        },
-        {
-          label: "English",
-          value: "en",
-        },
-        {
-          label: "繁體中文",
-          value: "zh",
-        },
-      ],
-    },
-    theme: {
-      value: uiStore.isDark ? "dark" : "light",
-      onChange: (theme: string) => {
-        uiStore.setIsDark(theme === "dark")
-        setIsDark(theme === "dark")
-        updateAutofillDarkTheme(theme === "dark")
-      },
-      options: [
-        {
-          label: translate("settings.light_theme"),
-          value: "light",
-        },
-        {
-          label: translate("settings.dark_theme"),
-          value: "dark",
-        },
-      ],
-    },
     passkey: {
       value: false,
       onChage: () => {
         Linking.openURL(
           `https://id.locker.io/authenticate?token=${encodeURI(user.apiToken)}&path=${encodeURI(
-            "/security/webauthn"
-          )}`
+            "/security/webauthn",
+          )}`,
         )
       },
     },
@@ -214,20 +149,6 @@ export const SettingsScreen = observer(() => {
         },
       ],
     },
-    timeoutAction: {
-      value: user.appTimeoutAction || "lock",
-      onChange: user.setAppTimeoutAction,
-      options: [
-        {
-          label: translate("common.lock"),
-          value: TimeoutActionType.LOCK,
-        },
-        {
-          label: translate("common.logout"),
-          value: TimeoutActionType.LOGOUT,
-        },
-      ],
-    },
   }
 
   return (
@@ -258,48 +179,8 @@ export const SettingsScreen = observer(() => {
           onPress={() => navigation.navigate("notificationSettings")}
         />
 
-        <Select
-          value={settings.language.value}
-          onChange={settings.language.onChange}
-          options={settings.language.options}
-          title={translate("common.language")}
-          renderSelected={({ label }) => (
-            <SettingsItem
-              name={translate("common.language")}
-              RightAccessory={<Text text={label} />}
-            />
-          )}
-          footer={
-            <TouchableOpacity style={{
-              marginTop: 12,
-              paddingVertical: 8,
-              paddingHorizontal: 16
-            }}
-              onPress={() => {
-                Linking.openURL(
-                  `https://cystack.notion.site/Locker-Translation-Guide-bb4e4fc4c23d4bbc994375035b124829`
-                )
-              }}
-            >
-              <Text text="Don't find your language?" style={{
-                textAlign: "center",
-              }} color={colors.link}/>
-            </TouchableOpacity>
-          }
-        />
-
-        <Select
-          value={settings.theme.value}
-          onChange={settings.theme.onChange}
-          options={settings.theme.options}
-          title={translate("settings.theme")}
-          renderSelected={({ label }) => (
-            <SettingsItem
-              name={translate("settings.theme")}
-              RightAccessory={<Text text={label} />}
-            />
-          )}
-        />
+        <SetlanguageItem/>
+        <SetThemeItem/>
       </MenuItemContainer>
 
       <MenuItemContainer title={translate("common.security")}>
@@ -327,17 +208,7 @@ export const SettingsScreen = observer(() => {
             />
           }
         />
-        <Select
-          value={settings.timeout.value}
-          onChange={settings.timeout.onChange}
-          options={settings.timeout.options}
-          renderSelected={({ label }) => (
-            <SettingsItem
-              name={translate("settings.timeout")}
-              RightAccessory={<Text text={label} />}
-            />
-          )}
-        />
+        <SetTimeOutItem/>
       </MenuItemContainer>
 
       <MenuItemContainer title={translate("common.data")}>

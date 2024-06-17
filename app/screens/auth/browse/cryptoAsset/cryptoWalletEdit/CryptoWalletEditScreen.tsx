@@ -57,7 +57,7 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<"cryptoWallets__edit
     const [privateKey, setPrivateKey] = useState(mode !== "add" ? cryptoWalletData.privateKey : "")
     const [seed, setSeed] = useState(mode !== "add" ? cryptoWalletData.seed : "           ")
     const [networks, setNetworks] = useState<{ alias: string; name: string }[]>(
-      mode !== "add" ? cryptoWalletData.networks : [],
+      mode !== "add" ? cryptoWalletData.networks || [] : [],
     )
     const [note, setNote] = useState(mode !== "add" ? cryptoWalletData.notes : "")
 
@@ -330,10 +330,6 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<"cryptoWallets__edit
           navigation={navigation}
           folderId={folder}
           collectionId={collection}
-          organizationId={organizationId}
-          setOrganizationId={setOrganizationId}
-          collectionIds={collectionIds}
-          setCollectionIds={setCollectionIds}
           isDeleted={selectedCipher.isDeleted}
           hasNote
           note={note}

@@ -281,7 +281,7 @@ export const ShareModal = (props: Props) => {
               >
                 <Text text={e} />
                 <Icon
-                  icon="x-circle"
+                  icon="x"
                   size={20}
                   onPress={() => removeEmail(e)}
                   containerStyle={{
@@ -313,7 +313,7 @@ export const ShareModal = (props: Props) => {
               >
                 <Text text={e.name} />
                 <Icon
-                  icon="x-circle"
+                  icon="x"
                   size={20}
                   onPress={() => setGroups(groups.filter((group) => group.id !== e.id))}
                   containerStyle={{
@@ -458,7 +458,7 @@ export const ShareModal = (props: Props) => {
       }}
     >
       <Header
-        leftIcon="x-circle"
+        leftIcon="x"
         onLeftPress={() => onClose()}
         containerStyle={{
           paddingTop: 0,

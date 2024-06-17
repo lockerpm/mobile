@@ -65,7 +65,7 @@ export const SearchBar = (props: SearchBarProps) => {
       {!!value && (
         <Icon
           filled
-          icon="x-circle"
+          icon="x"
           size={20}
           color={colors.secondaryText}
           onPress={() => {

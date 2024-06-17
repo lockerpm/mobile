@@ -1,10 +1,17 @@
-import React from "react"
-import { ImageStyle, View, ViewStyle } from "react-native"
-import { Text, AutoImage as Image, Icon } from "app/components/cores"
+import React, { useState } from "react"
+import {
+  FlatList,
+  ImageStyle,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
+import { Text, AutoImage as Image, Icon, Screen, Header } from "app/components/cores"
 import { WALLET_APP_LIST } from "app/utils/crypto/applist"
-import { Select } from "app/components/utils"
 import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
+import Modal from "react-native-modal"
 
 type Props = {
   alias: string
@@ -17,9 +24,17 @@ export const AppSelect = (props: Props) => {
   const { translate } = useHelper()
 
   // ------------------ METHODS ------------------
+  const [isSelect, setIsSelect] = useState(false)
 
   const findApp = (al: string) => {
     return WALLET_APP_LIST.find((c) => c.alias === al)
+  }
+
+  const onClose = () => setIsSelect(false)
+
+  const setAlias = (app: any) => {
+    setIsSelect(false)
+    onChange(app.alias, app.name)
   }
 
   // ------------------ COMPUTED ------------------
@@ -44,42 +59,34 @@ export const AppSelect = (props: Props) => {
     backgroundColor: "white",
   }
 
-  return (
-    <Select
-      showSearch
-      value={alias}
-      onChange={(alias: string) => {
-        const app = WALLET_APP_LIST.find((a) => a.alias === alias)
-        onChange(alias, app.name)
-      }}
-      options={WALLET_APP_LIST.map((a) => ({
-        label: a.name,
-        value: a.alias,
-      }))}
-      title={translate("crypto_asset.wallet_app")}
-      renderItem={(value, { isSelected }, itemLabel) => (
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: colors.background,
-            paddingHorizontal: 16,
-            paddingVertical: 8,
-          }}
-        >
-          <View style={IMG_CONTAINER}>
-            <Image
-              resizeMode="contain"
-              source={findApp(value)?.logo || otherApp.logo}
-              borderRadius={20}
-              style={IMG}
-            />
-          </View>
-          <Text text={itemLabel} style={{ flex: 1, marginRight: 20 }} />
-          {isSelected && <Icon icon="check" color={colors.primary} size={24} />}
+  const renderItem = ({ item }) => (
+    <TouchableHighlight onPress={() => setAlias(item)}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          backgroundColor: colors.background,
+          paddingHorizontal: 16,
+          paddingVertical: 8,
+        }}
+      >
+        <View style={IMG_CONTAINER}>
+          <Image
+            resizeMode="contain"
+            source={item?.logo || otherApp.logo}
+            borderRadius={20}
+            style={IMG}
+          />
         </View>
-      )}
-      renderSelected={({ label }) => (
+        <Text text={item.name} style={{ flex: 1, marginRight: 20 }} />
+        {item.alias === alias && <Icon icon="check" color={colors.primary} size={24} />}
+      </View>
+    </TouchableHighlight>
+  )
+
+  return (
+    <View>
+      <TouchableOpacity onPress={() => setIsSelect(true)}>
         <View style={{ flex: 1 }}>
           <View
             style={{
@@ -107,13 +114,45 @@ export const AppSelect = (props: Props) => {
                     />
                   </View>
                 )}
-                <Text text={label || translate("common.none")} />
+                <Text text={selectedApp?.name || translate("common.none")} />
               </View>
             </View>
             <Icon icon="caret-right" size={20} color={colors.secondaryText} />
           </View>
         </View>
-      )}
-    />
+      </TouchableOpacity>
+      <Modal
+        animationIn="slideInRight"
+        animationOut="slideOutRight"
+        isVisible={isSelect}
+        onBackdropPress={onClose}
+        style={{
+          margin: 0,
+        }}
+      >
+        <Screen
+          header={
+            <Header
+              leftIcon="arrow-left"
+              onLeftPress={onClose}
+              title={translate("crypto_asset.wallet_app")}
+            />
+          }
+          contentContainerStyle={{
+            flex: 1,
+          }}
+        >
+          <FlatList
+            data={WALLET_APP_LIST}
+            keyboardShouldPersistTaps="never"
+            keyExtractor={(item) => item.alias}
+            renderItem={renderItem}
+            contentContainerStyle={{
+              backgroundColor: colors.background,
+            }}
+          />
+        </Screen>
+      </Modal>
+    </View>
   )
 }
