@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from "react"
+import React, { useState, useEffect, FC, useRef } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Slider, Checkbox } from "react-native-ui-lib"
@@ -23,54 +23,64 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator"
     const { fromTools } = route.params
 
     const [password, setPassword] = useState("")
-    const [passwordLen, setPasswordLen] = useState(16)
     const [sliderValue, setSliderValue] = useState(16)
-    const [options, setOptions] = useState({
-      length: 16,
-      uppercase: true,
-      lowercase: true,
-      number: true,
-      special: true,
-      ambiguous: false,
-    })
+    const [uppercase, setuppercase] = useState(true)
+    const [lowercase, setlowercase] = useState(true)
+    const [number, setnumber] = useState(true)
+    const [special, setspecial] = useState(true)
+    const [ambiguous, setambiguous] = useState(false)
+
+    const passwordLength = useRef(16)
 
     const OPTIONS = [
       {
         label: translate("pass_generator.use_upper"),
-        key: "uppercase",
+        key: uppercase,
+        action: setuppercase,
       },
       {
         label: translate("pass_generator.use_lower"),
-        key: "lowercase",
+        key: lowercase,
+        action: setlowercase,
       },
       {
         label: translate("pass_generator.use_digits"),
-        key: "number",
+        key: number,
+        action: setnumber,
       },
       {
         label: translate("pass_generator.use_symbol"),
-        key: "special",
+        key: special,
+        action: setspecial,
       },
       {
         label: translate("pass_generator.avoid_ambiguous"),
-        key: "ambiguous",
+        key: ambiguous,
+        action: setambiguous,
       },
     ]
 
     // Methods
     const regenerate = async () => {
-      const opt = { ...options }
-      if (!opt.lowercase && !opt.uppercase && !opt.lowercase && !opt.number && !opt.special) {
+      const opt = {
+        uppercase,
+        lowercase,
+        number,
+        special,
+        ambiguous,
+        length: passwordLength.current,
+      }
+      if (!opt.lowercase && !opt.uppercase && !opt.number && !opt.special) {
         opt.lowercase = true
       }
-      const password = await passwordGenerationService.generatePassword(opt)
-      setPassword(password)
+      const val = await passwordGenerationService.generatePassword(opt)
+      setPassword(val)
     }
 
     // Watchers
     useEffect(() => {
       regenerate()
-    }, [options])
+    }, [lowercase, uppercase, number, special, ambiguous])
 
     // Render
     return (
@@ -143,7 +153,7 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator"
           }}
         >
           {/* Password length */}
-          <Text text={`${translate("common.length")}: ${passwordLen}`} />
+          <Text text={`${translate("common.length")}: ${sliderValue}`} />
           <Slider
             value={sliderValue}
             thumbTintColor={colors.primary}
@@ -152,10 +162,12 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator"
             minimumValue={8}
             maximumValue={64}
             step={1}
-            onValueChange={setPasswordLen}
+            onValueChange={(value) => {
+              passwordLength.current = value
+            }}
             onSeekEnd={() => {
-              setOptions({ ...options, length: passwordLen })
-              setSliderValue(passwordLen)
+              regenerate()
+              setSliderValue(passwordLength.current)
             }}
           />
           {/* Password length end */}
@@ -163,19 +175,12 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator"
           <View style={{ marginTop: 10 }}>
             {OPTIONS.map((item) => (
               <Checkbox
-                key={item.key}
-                value={options[item.key]}
-                accessibilityLabel={item.key}
+                key={item.label}
+                value={item.key}
+                accessibilityLabel={item.label}
                 color={colors.primary}
                 label={item.label}
-                onValueChange={(checked) => {
-                  const newOptions = { ...options }
-                  newOptions[item.key] = checked
-                  if (!OPTIONS.some((o) => newOptions[o.key])) {
-                    newOptions.lowercase = true
-                  }
-                  setOptions(newOptions)
-                }}
+                onValueChange={item.action}
                 style={{
                   marginVertical: 7,
                 }}
