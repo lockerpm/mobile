@@ -42,7 +42,7 @@ export const LoginForm = ({
   const passwordRef = useRef(null)
 
   const [isError, setIsError] = useState(false)
-  const [username, setUsername] = useState("thinhnn@cystack.net")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [loginMethodLoading, setLoginMethodLoading] = useState<METHOD>(METHOD.NONE)
 
@@ -151,11 +151,9 @@ export const LoginForm = ({
 
           setLoginMethod(METHOD.PASSWORD)
         }
-        console.log("---------")
         // The `authenticate` method returns a FIDO2 assertion result
         // Pass it to your server for verification
       } catch (error) {
-        console.log(error.error)
         // Handle Error...
         if (error.error === "UserCancelled") {
           notify("error", translate("passkey.error.user_cancel"))

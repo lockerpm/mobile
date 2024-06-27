@@ -9,7 +9,7 @@ import Toast from "react-native-toast-message"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import Clipboard from "@react-native-clipboard/clipboard"
 import ReactNativeBiometrics from "react-native-biometrics"
-import { MASTER_PW_MIN_LENGTH, MAX_CIPHER_SELECTION } from "app/static/constants"
+import { MASTER_PW_MIN_LENGTH } from "app/static/constants"
 import { GeneralApiProblem } from "../api/apiProblem"
 import { NotifeeNotificationData, PushEvent } from "app/utils/pushNotification/types"
 import { translate as tl, TxKeyPath } from "../../i18n"
@@ -122,47 +122,37 @@ export function useHelper() {
   }
 
   // Notify based on api error
-  const notifyApiError = async (problem: GeneralApiProblem) => {
+  const notifyApiError = (problem: GeneralApiProblem, disableToast?: boolean) => {
+    let errorMessage = ''
     switch (problem.kind) {
       case "cannot-connect":
-        notify("error", translate("error.cannot_connect"))
+        errorMessage = translate("error.cannot_connect")
         break
-
       case "network-error":
-        notify("error", translate("error.network_error"))
+        errorMessage = translate("error.network_error")
         break
-
+      case "bad-data":
       case "rejected":
-        notify("error", translate("error.invalid_data"))
+        errorMessage = translate("error.invalid_data")
         break
-
-      case "bad-data": {
-        notify("error", translate("error.invalid_data"))
-        break
-      }
-
       case "forbidden":
-        notify("error", translate("error.forbidden"))
+        errorMessage = translate("error.forbidden")
         break
-
       case "not-found":
-        notify("error", translate("error.not_found"))
+        errorMessage = translate("error.not_found")
         break
-
       case "unauthorized":
-        notify("error", translate("error.token_expired"))
+        errorMessage = translate("error.token_expired")
         break
-
       case "timeout":
-        notify("error", translate("error.network_timeout"))
+        errorMessage = translate("error.network_timeout")
         break
 
       case "server":
-        notify("error", translate("error.server_error"))
+        errorMessage = translate("error.server_error")
         break
-
       default:
-        notify("error", translate("error.something_went_wrong"))
+        errorMessage = translate("error.something_went_wrong")
     }
 
     if ("data" in problem) {
@@ -170,200 +160,19 @@ export function useHelper() {
         details?: {
           [key: string]: string[]
         }
-        code: string
+        code: "0000" | "0002" | "0004" | "0005" | "0008" | "0009" | "1001" | "1002" | "1003" | "1004" | "1005" | "1006" | "1007" | "1008" | "1009" | "1010" | "1011" | "1012" | "3003" 
+        | "3005" | "5000" | "5001" | "5002" | "7002" | "7003" | "7004" | "7005" | "7006" | "7007" | "7008" | "7009" | "7010" | "7011" | "7012" | "7013" | "7014" | "7015" | "7016" | "7017" | "7018" 
+        | "7019" | "8000" | "8001" | "9000"  | "10000" 
         message?: string
       } = problem.data
-      if (errorData.code === "5001") {
-        notify(
-          "error",
-          translate("error.cannot_update_more_at_once", { count: MAX_CIPHER_SELECTION }),
-        )
-      }
+      errorMessage = translate(`error.api.${errorData.code}`) || translate("error.something_went_wrong")
 
-      switch (errorData.code) {
-        case "0000": {
-          notify("error", translate("error.api.0000"))
-          break
-        }
-        case "0002": {
-          notify("error", translate("error.api.0002"))
-          break
-        }
-        case "0004": {
-          notify("error", translate("error.api.0004"))
-          break
-        }
-        case "0005": {
-          notify("error", translate("error.api.0005"))
-          break
-        }
-        case "0008": {
-          notify("error", translate("error.api.0008"))
-          break
-        }
-        case "0009": {
-          notify("error", translate("error.api.0009"))
-          break
-        }
-        case "1001": {
-          notify("error", translate("error.api.1001"))
-          break
-        }
-        case "1002": {
-          notify("error", translate("error.api.1002"))
-          break
-        }
-        case "1003": {
-          notify("error", translate("error.api.1003"))
-          break
-        }
-        case "1004": {
-          notify("error", translate("error.api.1004"))
-          break
-        }
-        case "1005": {
-          notify("error", translate("error.api.1005"))
-          break
-        }
-        case "1006": {
-          notify("error", translate("error.api.1006"))
-          break
-        }
-        case "1007": {
-          notify("error", translate("error.api.1007"))
-          break
-        }
-        case "1008": {
-          notify("error", translate("error.api.1008"))
-          break
-        }
-        case "1009": {
-          notify("error", translate("error.api.1009"))
-          break
-        }
-        case "1010": {
-          notify("error", translate("error.api.1010"))
-          break
-        }
-        case "1011": {
-          notify("error", translate("error.api.1011"))
-          break
-        }
-        case "1012": {
-          notify("error", translate("error.api.1012"))
-          break
-        }
-        case "3003": {
-          notify("error", translate("error.api.3003"))
-          break
-        }
-        case "3005": {
-          notify("error", translate("error.api.3005"))
-          break
-        }
-        case "5000": {
-          notify("error", translate("error.api.5000"))
-          break
-        }
-        case "5001": {
-          notify("error", translate("error.api.5001"))
-          break
-        }
-        case "5002": {
-          notify("error", translate("error.api.5002"))
-          break
-        }
-        case "7002": {
-          notify("error", translate("error.api.7002"))
-          break
-        }
-        case "7003": {
-          notify("error", translate("error.api.7003"))
-          break
-        }
-        case "7004": {
-          notify("error", translate("error.api.7004"))
-          break
-        }
-        case "7005": {
-          notify("error", translate("error.api.7005"))
-          break
-        }
-        case "7006": {
-          notify("error", translate("error.api.7006"))
-          break
-        }
-        case "7007": {
-          notify("error", translate("error.api.7007"))
-          break
-        }
-        case "7008": {
-          notify("error", translate("error.api.7008"))
-          break
-        }
-        case "7009": {
-          notify("error", translate("error.api.7009"))
-          break
-        }
-        case "7010": {
-          notify("error", translate("error.api.7010"))
-          break
-        }
-        case "7011": {
-          notify("error", translate("error.api.7011"))
-          break
-        }
-        case "7012": {
-          notify("error", translate("error.api.7012"))
-          break
-        }
-        case "7013": {
-          notify("error", translate("error.api.7013"))
-          break
-        }
-        case "7014": {
-          notify("error", translate("error.api.7014"))
-          break
-        } 
-        case "7015": {
-          notify("error", translate("error.api.7015"))
-          break
-        }
-        case "7016": {
-          notify("error", translate("error.api.7016"))
-          break
-        }
-        case "7017": {
-          notify("error", translate("error.api.7017"))
-          break
-        }
-        case "7018": {
-          notify("error", translate("error.api.7018"))
-          break
-        }
-        case "7019": {
-          notify("error", translate("error.api.7019"))
-          break
-        }
-        case "8000": {
-          notify("error", translate("error.api.8000"))
-          break
-        }
-        case "8001": {
-          notify("error", translate("error.api.8001"))
-          break
-        }
-        case "9000": {
-          notify("error", translate("error.api.9000"))
-          break
-        }
-        case "10000": {
-          notify("error", translate("error.api.10000"))
-          break
-        }
-
-      }
     }
+    if (disableToast) {
+      return errorMessage
+    }
+    notify("error", errorMessage)
+    return ''
   }
 
   // Parse storage push notification data

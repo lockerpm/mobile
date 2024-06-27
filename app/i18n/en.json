@@ -391,7 +391,8 @@
     },
     "view_user_vault": "You are now viewing {{name}}'s vault items",
     "pending_trusted": "{{count}} request{{s}}",
-    "pending_grant": "{{count}} invitation{{s}}"
+    "pending_grant": "{{count}} invitation{{s}}",
+    "no_account": "This email address hasn't had a Locker account."
   },
   "policy": {
     "min_password_length": "Minimum password length is {{length}}",

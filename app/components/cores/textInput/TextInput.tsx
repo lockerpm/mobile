@@ -166,8 +166,14 @@ export const TextInput = forwardRef(function TextField(
   const [isShowText, setIsShowText] = useState(false)
   const input = useRef<RNTextInput>()
   const status = (() => {
-    const _status = ((isRequired || isError) && "error") || (isDisabled && "disabled")
-    if (_status) return _status
+    if (
+      (isRequired || isError) 
+    ) {
+      return "error"
+    }
+    if (isDisabled) {
+      return "disabled"
+    }
     return statusProps
   })()
   const disabled = TextInputProps.editable === false || status === "disabled"

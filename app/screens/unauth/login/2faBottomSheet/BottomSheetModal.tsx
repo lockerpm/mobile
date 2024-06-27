@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import BottomSheet from "@gorhom/bottom-sheet"
 import { View, Modal, TouchableWithoutFeedback, Keyboard } from "react-native"
 import { useTheme } from "app/services/context"
@@ -56,6 +56,18 @@ export const TwoFAAuthenSheet = ({ credential, isOpen, onClose, onLoggedIn }: Pr
       Keyboard.dismiss()
     }
   }, [])
+
+  const reset = useCallback(() => {
+    setIndex(0)
+    setMethod("")
+    setPartialEamil("")
+  }, [])
+
+  useEffect(() => {
+    if (!isOpen) (
+      reset()
+    )
+  }, [isOpen])
 
   return (
     <Modal transparent animationType="fade" visible={isOpen}>

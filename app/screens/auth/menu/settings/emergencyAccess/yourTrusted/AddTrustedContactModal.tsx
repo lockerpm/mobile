@@ -76,7 +76,7 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
       setEmailError(translate("emergency_access.add.exist_error"))
     }
     if (res.kind === "bad-data") {
-      setEmailError(translate("error.invalid_data"))
+      setEmailError(translate("emergency_access.no_account"))
     }
   }
 

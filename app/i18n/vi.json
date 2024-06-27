@@ -391,7 +391,8 @@
     },
     "view_user_vault": "Bạn đang xem tất cả các mục trong kho của {{name}}",
     "pending_trusted": "{{count}} yêu cầu",
-    "pending_grant": "{{count}} lời mời"
+    "pending_grant": "{{count}} lời mời",
+    "no_account": "Email này chưa có tài khoản Locker."
   },
   "policy": {
     "min_password_length": "Mật khẩu phải chứa ít nhất {{length}} ký tự",
@@ -508,6 +509,7 @@
   "biometric_intro": {
     "title": "Mở khóa Locker bằng Face ID/Touch ID",
     "desc": "Sử dụng nhận dạng khuôn mặt hoặc vân tay để bảo vệ mật khẩu của bạn",
+    "suggest": "Bật FaceID/TouchID để mở khóa vault dễ dàng.",
     "use_btn": "Sử dụng Face ID/Touch ID",
     "later_btn": "Để sau"
   },

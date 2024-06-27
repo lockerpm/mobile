@@ -18,21 +18,20 @@ type Props = {
 export const OtpAuthen = (props: Props) => {
   const { user } = useStores()
   const { colors } = useTheme()
-  const { notify, setApiTokens, translate } = useHelper()
+  const { setApiTokens, translate, notifyApiError } = useHelper()
 
   const { goBack, method, email, username, password, onLoggedIn } = props
 
   // ------------------ Params -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
-  const [isError, setIsError] = useState(false)
   const [otp, setOtp] = useState('')
   const [saveDevice, setSaveDevice] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
   // ------------------ Methods ----------------------
 
   const handleAuthenticate = async () => {
-    setIsError(false)
     setIsLoading(true)
     const res = await user.login(
       {
@@ -50,8 +49,7 @@ export const OtpAuthen = (props: Props) => {
       setApiTokens(res.data?.access_token)
       onLoggedIn()
     } else {
-      notify('error', translate('error.login_failed'))
-      setIsError(true)
+      setErrorMessage(notifyApiError(res, true))
     }
   }
 
@@ -84,10 +82,16 @@ export const OtpAuthen = (props: Props) => {
       />
 
       <TextInput
-        isError={isError}
+        isError={!!errorMessage}
+        helper={errorMessage}
         placeholder={translate('login.enter_code_here')}
         value={otp}
-        onChangeText={setOtp}
+        onChangeText={(val) => {
+          if (errorMessage) {
+            setErrorMessage("")
+          }
+          setOtp(val)
+        }}
         onSubmitEditing={handleAuthenticate}
       />
 

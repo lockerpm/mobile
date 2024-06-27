@@ -391,7 +391,8 @@
     },
     "view_user_vault": "你正在瀏覽 {{name}} 的保險庫內容",
     "pending_trusted": "{{count}} 次請求{{s}}",
-    "pending_grant": "{{count}} 次邀請{{s}}"
+    "pending_grant": "{{count}} 次邀請{{s}}",
+    "no_account": "該電子郵件地址還沒有 Locker 帳號。"
   },
   "policy": {
     "min_password_length": "最小密碼長度為 {{length}}",
