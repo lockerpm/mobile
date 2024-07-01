@@ -1008,7 +1008,8 @@
       "card": "Thẻ thanh toán",
       "identity": "Định danh",
       "note": "Ghi chú",
-      "crypto": "Crypto Backups"
+      "crypto": "Crypto Backups",
+      "otp": "OTP"
     },
     "feature": {
       "title": "Tính năng nâng cao",

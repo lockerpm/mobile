@@ -56,11 +56,14 @@ const ItemStorage = (props: PlanStorageProps) => {
           marginBottom: 8,
         }}
       >
-        <Text text={title} />
-        <Text>
-          {" "}
-          {cipherCount}/{isUnlimited ? "∞" : limits}
-        </Text>
+        <Text text={title + " "} />
+        {isUnlimited ? (
+          <Text text={cipherCount.toString()} />
+        ) : (
+          <Text>
+            {cipherCount}/{isUnlimited ? "∞" : limits}
+          </Text>
+        )}
       </View>
 
       {!isUnlimited && (
@@ -68,7 +71,7 @@ const ItemStorage = (props: PlanStorageProps) => {
           style={{
             height: 6,
             borderRadius: 4,
-            backgroundColor: colors.background,
+            backgroundColor: colors.block,
           }}
           progressColor={backgroundColor}
           // @ts-ignore
@@ -111,6 +114,11 @@ export const PlanUsage = () => {
       cipherType: CipherType.CryptoWallet,
       title: translate("manage_plan.usage.crypto"),
       limits: FREE_PLAN_LIMIT.CRYPTO,
+    },
+    {
+      cipherType: CipherType.TOTP,
+      title: translate("manage_plan.usage.otp"),
+      limits: FREE_PLAN_LIMIT.OTP,
     },
   ]
   // -------------------- RENDER ----------------------

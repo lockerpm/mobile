@@ -14,10 +14,13 @@ interface Props {
 
 export const HistoryItem = ({ password, createAt, setSelectHistory }: Props) => {
   const { colors } = useTheme()
-  const {translate} = useHelper()
+  const { translate } = useHelper()
 
   const [showText, setShowText] = useState(false)
-  const updateTime = createAt.getTime() ? translate("password_history.updated_password") + moment(createAt).format("HH:mm, MMMM Do YYYY") : ""
+  const updateTime = createAt.getTime()
+    ? translate("password_history.updated_password") +
+      moment(createAt).format("HH:mm, MMMM Do YYYY")
+    : ""
   return (
     <View
       style={{
@@ -27,12 +30,15 @@ export const HistoryItem = ({ password, createAt, setSelectHistory }: Props) => 
         borderWidth: 1,
         borderColor: colors.border,
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
+        width: "100%",
       }}
     >
       <View
         style={{
-          flexGrow: 1
+          flexShrink: 1,
+          flexGrow: 1,
+          marginRight: 12,
         }}
       >
         <TextInput
@@ -44,6 +50,7 @@ export const HistoryItem = ({ password, createAt, setSelectHistory }: Props) => 
             fontFamily: typography.primary.regular,
             fontSize: 16,
             lineHeight: 20,
+            flexGrow: 1,
             padding: 2,
           }}
         />

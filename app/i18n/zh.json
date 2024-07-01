@@ -960,7 +960,8 @@
       "card": "付款卡片",
       "identity": "身份資訊",
       "note": "安全筆記",
-      "crypto": "加密資產備份"
+      "crypto": "加密資產備份",
+      "otp": "免洗密碼"
     },
     "feature": {
       "title": "探索您的完整 Premium 功能",

@@ -213,12 +213,6 @@ export const CipherList = observer((props: CipherListProps) => {
     }
   }
 
-  // Go to detail
-  // const goToDetail = (item: CipherView) => {
-  //   cipherStore.setSelectedCipher(item)
-  //   const cipherInfo = getCipherInfo(item)
-  //   navigation.navigate(`${cipherInfo.path}__info`)
-  // }
 
   // Toggle item selection
   const toggleItemSelection = (id: string) => {

@@ -11,7 +11,7 @@ export function useTool() {
   const { user, toolStore, cipherStore } = useStores()
   const { passwordGenerationService, auditService } = useCoreService()
 
-  const { getCiphers, getEncryptedCiphers } = useCipherData()
+  const { getCiphers, getEncryptedCiphers, getCiphersFromCache } = useCipherData()
   const { notify, translate } = useHelper()
 
   // ----------------------------- METHODS ---------------------------
@@ -31,12 +31,14 @@ export function useTool() {
       deleted: false,
       searchText: '',
       filters: [(c: CipherView) => c.type === type],
+      includeExtensions: type === CipherType.TOTP,
     }
     if (deleted) {
       searchConfig = {
         deleted: true,
         searchText: '',
         filters: [],
+        includeExtensions: false,
       }
     }
     if (share) {
@@ -44,9 +46,10 @@ export function useTool() {
         deleted: false,
         searchText: '',
         filters: [(c: CipherView) => c.organizationId !== null],
+        includeExtensions: false,
       }
     }
-    const allCiphers = await getEncryptedCiphers(searchConfig)
+    const allCiphers = await getCiphersFromCache(searchConfig)
     return allCiphers.length
   }
 

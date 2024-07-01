@@ -962,7 +962,8 @@
       "card": "Payment Cards",
       "identity": "Identities",
       "note": "Secure Notes",
-      "crypto": "Crypto Backups"
+      "crypto": "Crypto Backups",
+      "otp": "One time password"
     },
     "feature": {
       "title": "Explore your full premium feature",

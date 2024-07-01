@@ -97,8 +97,11 @@ export const MainNavigator = observer(() => {
 
   // ------------------ PARAMS --------------------
 
-  let appIsActive = true // Cache this to compare to old state
-  let timeout = null
+  const prevAppState = useRef('')
+  const appIsActive = useRef(true)
+  const timeout = useRef(null)
+  const activeHandling = useRef(false)
+
   const [batchDecryptionEnded, setBatchDecryptionEnded] = useState(false)
   const [socket, setSocket] = useState(null)
 
@@ -173,20 +176,19 @@ export const MainNavigator = observer(() => {
     }
   }
 
-  const activeHandling = useRef(false)
 
   // On app return from background -> lock? + sync autofill data + check push noti navigation
   const _handleAppStateChange = async (nextAppState: string) => {
-    // if (prevAppState.current === nextAppState) {
-    //   return
-    // }
-    // prevAppState.current = nextAppState
+    if (prevAppState.current === nextAppState) {
+      return
+    }
+    prevAppState.current = nextAppState
 
     Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
     if (nextAppState !== "active") {
-      appIsActive = false
+      appIsActive.current = false
       activeHandling.current = false
       return
     }
@@ -194,27 +196,19 @@ export const MainNavigator = observer(() => {
     if (!activeHandling.current) {
       activeHandling.current = true
       // Sync autofill data on iOS
-      if (IS_IOS && !appIsActive) {
+      if (IS_IOS && !appIsActive.current) {
         syncAutofillData()
       }
 
       // Active
-      if (!appIsActive) {
-        appIsActive = true
+      if (!appIsActive.current) {
+        appIsActive.current = true
 
         //  Check lock screen
         if (user.appTimeout === AppTimeoutType.SCREEN_OFF) {
           // Dont lock if user just return from overlay task
-
-          // Check user settings to lock
-          if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
-            await logout()
-            navigation.navigate("login")
-          } else {
-            await lock()
-            navigation.navigate("lock")
-          }
-
+          await lock()
+          navigation.navigate("lock")
           activeHandling.current = false
           return
         }
@@ -235,13 +229,8 @@ export const MainNavigator = observer(() => {
   // App inactive trigger
   const handleInactive = async (isActive: boolean) => {
     if (!isActive && user.appTimeout && user.appTimeout > 0) {
-      if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
-        await logout()
-        navigation.navigate("login")
-      } else {
         await lock()
         navigation.navigate("lock")
-      }
     }
   }
 
@@ -310,7 +299,7 @@ export const MainNavigator = observer(() => {
       Logger.debug(`SOCKET CLOSE: ${JSON.stringify(e)}`)
 
       // Auto reconnect
-      timeout = setTimeout(async () => {
+      timeout.current = setTimeout(async () => {
         if (!uiStore.isOffline && user.isLoggedInPw) {
           // Manually check for update
           await handleSync()
@@ -323,22 +312,6 @@ export const MainNavigator = observer(() => {
   }
 
   // ------------------ EFFECT --------------------
-
-  // check app revire
-  useEffect(() => {
-    requestInAppReview()
-  }, [])
-
-  // Check device screen on/off
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", _handleAppStateChange)
-
-    return () => {
-      subscription.remove()
-      clearTimeout(timeout)
-    }
-  }, [timeout])
-
   // Web socket connection
   useEffect(() => {
     if (!uiStore.isOffline && !socket && user.isLoggedInPw) {
@@ -363,42 +336,25 @@ export const MainNavigator = observer(() => {
   }, [uiStore.isOffline, user.isLoggedInPw, batchDecryptionEnded])
 
   useEffect(() => {
+  // check app revire
+    requestInAppReview()
     handleUserDataSync()
-  }, [])
-
-  // Recalculate password health on password update
-  useEffect(() => {
-    const listener = EventBus.createListener(AppEventType.PASSWORD_UPDATE, () => {
-      toolStore.setLastHealthCheck(null)
-    })
-    return () => {
-      EventBus.removeListener(listener)
-    }
   }, [])
 
   // Outdated data warning
   useEffect(() => {
-    const listener = EventBus.createListener(AppEventType.TEMP_ID_DECTECTED, () => {
-      navigation.navigate("dataOutdated")
-    })
-    return () => {
-      EventBus.removeListener(listener)
-    }
-  }, [])
+    const subscription = AppState.addEventListener("change", _handleAppStateChange)
 
-  // New batch decrypted
-  useEffect(() => {
-    const listener = EventBus.createListener(AppEventType.NEW_BATCH_DECRYPTED, () => {
+    const listenerPWUpdate = EventBus.createListener(AppEventType.PASSWORD_UPDATE, () => {
+      toolStore.setLastHealthCheck(null)
+    })
+    const listenerBatchDecrypt = EventBus.createListener(AppEventType.NEW_BATCH_DECRYPTED, () => {
       cipherStore.setLastCacheUpdate()
     })
-    return () => {
-      EventBus.removeListener(listener)
-    }
-  }, [])
-
-  // Batch decrypte
-  useEffect(() => {
-    const listener = EventBus.createListener(AppEventType.DECRYPT_ALL_STATUS, (status) => {
+    const listenerTempId = EventBus.createListener(AppEventType.TEMP_ID_DECTECTED, () => {
+      navigation.navigate("dataOutdated")
+    })
+    const listenerAll = EventBus.createListener(AppEventType.DECRYPT_ALL_STATUS, (status) => {
       switch (status) {
         case "started":
           cipherStore.setIsBatchDecrypting(true)
@@ -411,7 +367,12 @@ export const MainNavigator = observer(() => {
       }
     })
     return () => {
-      EventBus.removeListener(listener)
+      subscription.remove()
+      EventBus.removeListener(listenerTempId)
+      EventBus.removeListener(listenerBatchDecrypt)
+      EventBus.removeListener(listenerAll)
+      EventBus.removeListener(listenerPWUpdate)
+      clearTimeout(timeout.current)
     }
   }, [])
 

@@ -64,14 +64,6 @@ export class CipherView implements View {
                 return this.login.subTitle;
             case CipherType.SecureNote:
             case CipherType.TOTP:
-            case CipherType.DriverLicense:
-            case CipherType.CitizenID:
-            case CipherType.Passport:
-            case CipherType.SocialSecurityNumber:
-            case CipherType.WirelessRouter:
-            case CipherType.Server:
-            case CipherType.APICipher:
-            case CipherType.Database:
             case CipherType.CryptoWallet:
                 return this.secureNote.subTitle;
             case CipherType.Card:
