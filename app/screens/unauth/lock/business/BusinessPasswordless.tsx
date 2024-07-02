@@ -17,9 +17,10 @@ const { width } = Dimensions.get("screen")
 interface Props {
   biometryType: BiometricsType
   handleLogout: () => void
+  handleUnlock: () => Promise<void>
 }
 
-export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
+export const BusinessLockByPasswordless = ({ handleLogout, handleUnlock }: Props) => {
   const navigation = useNavigation() as any
   const { user } = useStores()
   const { biometricLogin } = useAuthentication()
@@ -45,7 +46,7 @@ export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
 
     const res = await biometricLogin()
     if (res.kind === "ok") {
-      navigation.navigate("mainStack", { screen: "start" })
+      handleUnlock()
     }
   }
 
@@ -90,6 +91,7 @@ export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
           scrollTo(0)
         }}
         index={scanQrStep}
+        handleUnlock={handleUnlock}
       />
     </ScrollView>
   )

@@ -10,9 +10,10 @@ interface Props {
   index: number
   otp: number
   goBack: () => void
+  handleUnlock:  () => Promise<void>
 }
 
-export const BusinessPasswordlessQrScan = ({ otp, goBack, index }: Props) => {
+export const BusinessPasswordlessQrScan = ({ otp, goBack, index, handleUnlock }: Props) => {
   const { uiStore } = useStores()
   const { translate } = useHelper()
   const { width, height } = Dimensions.get("screen")
@@ -25,7 +26,7 @@ export const BusinessPasswordlessQrScan = ({ otp, goBack, index }: Props) => {
 
     if (res.kind === "ok") {
       uiStore.setStartFromPasswordLess(true)
-      navigation.navigate("mainStack", { screen: "start" })
+      handleUnlock()
     } else if (res.kind === "unauthorized") {
       navigation.navigate("login", { type: "onPremise" })
     }

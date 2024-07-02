@@ -4,20 +4,18 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React, { useEffect, useRef, useState } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import { AppState } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
-import { useNavigation } from "@react-navigation/native"
 import { MainTabNavigator } from "./MainTabNavigator"
 import { ToolsNavigator } from "./tools/ToolNavigator"
 import UserInactivity from "react-native-user-inactivity"
 import InAppReview from "react-native-in-app-review"
 import { useStores } from "../models"
 import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from "../config/constants"
-import { AppTimeoutType, SocketEvent, SocketEventType, TimeoutActionType } from "app/static/types"
+import { AppTimeoutType, SocketEvent, SocketEventType } from "app/static/types"
 
 import {
-  StartScreen,
   BiometricUnlockIntroScreen,
   PasswordEditScreen,
   PasswordInfoScreen,
@@ -49,7 +47,6 @@ import {
   PaymentScreen,
   ManagePlanScreen,
   InviteMemberScreen,
-  DataOutdatedScreen,
   ReferFriendScreen,
   FolderSharedUsersManagementScreen,
   PushEmailSettingsScreen,
@@ -69,20 +66,20 @@ import {
   QuickSharesDetailScreen,
   PasswordHistoryScreen,
 } from "../screens"
-import { useAuthentication, useCipherData, useHelper } from "app/services/hook"
+import {  useCipherData, useHelper } from "app/services/hook"
 import { Logger } from "app/utils/utils"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { observer } from "mobx-react-lite"
 import { withIAPContext } from "react-native-iap"
-import { PrimaryParamList } from "./navigators.types"
+import { PrimaryParamList, RootStackScreenProps } from "./navigators.types"
 import { MarketingScreen } from "app/screens/auth/marketing/MarketingScreen"
+import { useFocusEffect } from "@react-navigation/native"
 
 const Stack = createStackNavigator<PrimaryParamList>()
 
-export const MainNavigator = observer(() => {
-  const navigation = useNavigation() as any
+export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((props) => {
+  const navigation = props.navigation
   const { notify, parsePushNotiData } = useHelper()
-  const { lock, logout } = useAuthentication()
   const {
     getCipherById,
     syncAutofillData,
@@ -101,6 +98,8 @@ export const MainNavigator = observer(() => {
   const appIsActive = useRef(true)
   const timeout = useRef(null)
   const activeHandling = useRef(false)
+  const transitionEnd = useRef(false)
+  const temporaryLock = useRef(false)
 
   const [batchDecryptionEnded, setBatchDecryptionEnded] = useState(false)
   const [socket, setSocket] = useState(null)
@@ -144,9 +143,7 @@ export const MainNavigator = observer(() => {
 
   // Check invitation
   const handleUserDataSync = () => {
-    user.getInvitations()
-    cipherStore.loadSharingInvitations()
-    cipherStore.loadMyShares()
+    Promise.all([user.getInvitations(), cipherStore.loadSharingInvitations(), cipherStore.loadMyShares()])
   }
 
   // request in app review
@@ -205,10 +202,11 @@ export const MainNavigator = observer(() => {
         appIsActive.current = true
 
         //  Check lock screen
-        if (user.appTimeout === AppTimeoutType.SCREEN_OFF) {
-          // Dont lock if user just return from overlay task
-          await lock()
-          navigation.navigate("lock")
+        if (user.appTimeout === AppTimeoutType.SCREEN_OFF && temporaryLock.current === false) {
+          temporaryLock.current = true
+          navigation.push("lock", {
+            temporaryLock: true
+          })
           activeHandling.current = false
           return
         }
@@ -217,8 +215,9 @@ export const MainNavigator = observer(() => {
         const navigationRequest = await parsePushNotiData()
         if (navigationRequest.path) {
           // handle navigate browse
-          navigationRequest.tempParams &&
-            navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
+          // @ts-ignore
+          navigationRequest.tempParams && navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
+          // @ts-ignore
           navigation.navigate(navigationRequest.path, navigationRequest.params)
         }
       }
@@ -228,9 +227,10 @@ export const MainNavigator = observer(() => {
 
   // App inactive trigger
   const handleInactive = async (isActive: boolean) => {
-    if (!isActive && user.appTimeout && user.appTimeout > 0) {
-        await lock()
-        navigation.navigate("lock")
+    if (!isActive && user.appTimeout  > 0 && temporaryLock.current === false) {
+      navigation.push("lock", {
+        temporaryLock: true
+      })
     }
   }
 
@@ -330,17 +330,17 @@ export const MainNavigator = observer(() => {
     if (batchDecryptionEnded) {
       if (!uiStore.isOffline && user.isLoggedInPw) {
         handleSync()
-        // handleUserDataSync()
       }
     }
   }, [uiStore.isOffline, user.isLoggedInPw, batchDecryptionEnded])
 
-  useEffect(() => {
-  // check app revire
-    requestInAppReview()
-    handleUserDataSync()
-  }, [])
 
+  useFocusEffect(
+    React.useCallback(() => {
+      temporaryLock.current = false
+    }, [])
+  );
+  
   // Outdated data warning
   useEffect(() => {
     const subscription = AppState.addEventListener("change", _handleAppStateChange)
@@ -350,9 +350,6 @@ export const MainNavigator = observer(() => {
     })
     const listenerBatchDecrypt = EventBus.createListener(AppEventType.NEW_BATCH_DECRYPTED, () => {
       cipherStore.setLastCacheUpdate()
-    })
-    const listenerTempId = EventBus.createListener(AppEventType.TEMP_ID_DECTECTED, () => {
-      navigation.navigate("dataOutdated")
     })
     const listenerAll = EventBus.createListener(AppEventType.DECRYPT_ALL_STATUS, (status) => {
       switch (status) {
@@ -366,14 +363,23 @@ export const MainNavigator = observer(() => {
           break
       }
     })
+    const unsubscribeNavigationEnd = navigation.addListener('transitionEnd', () => {
+      if (!transitionEnd.current) {
+        transitionEnd.current = true
+        requestInAppReview()
+        handleUserDataSync()
+      }
+    });
+
     return () => {
       subscription.remove()
-      EventBus.removeListener(listenerTempId)
       EventBus.removeListener(listenerBatchDecrypt)
       EventBus.removeListener(listenerAll)
       EventBus.removeListener(listenerPWUpdate)
+      unsubscribeNavigationEnd()
       clearTimeout(timeout.current)
     }
+
   }, [])
 
   // ------------------ RENDER --------------------
@@ -384,12 +390,11 @@ export const MainNavigator = observer(() => {
       onAction={handleInactive}
     >
       <Stack.Navigator
-        initialRouteName="start"
+        // initialRouteName="start"
         screenOptions={{
           headerShown: false,
         }}
       >
-        <Stack.Screen name="start" component={StartScreen} />
         <Stack.Screen
           name="marketing"
           component={MarketingScreen}
@@ -401,8 +406,6 @@ export const MainNavigator = observer(() => {
 
         <Stack.Screen name="enterpriseInvited" component={EnterpriseInvitedScreen} />
         <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
-
-        <Stack.Screen name="dataOutdated" component={DataOutdatedScreen} />
 
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
         <Stack.Screen name="toolsStack" component={ToolsNavigator} />

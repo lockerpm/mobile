@@ -81,7 +81,6 @@ export function useAuthentication() {
         }
         return res
       }
-
       notify('error', translate('error.session_login_failed'))
       return res
     }

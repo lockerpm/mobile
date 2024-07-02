@@ -3,6 +3,7 @@ import { useTheme } from "app/services/context"
 import React, { useEffect } from "react"
 import {  ColorValue, View } from "react-native"
 import Animated, {
+  cancelAnimation,
   interpolate,
   useAnimatedProps,
   useAnimatedStyle,
@@ -57,6 +58,9 @@ export const CircleProgress = ({
   const back = useSharedValue(false)
   useEffect(() => {
     progress.value = withRepeat(withTiming(100, {duration: 1000}), -1, true)
+    return () => {
+      cancelAnimation(progress)
+    }
   }, [])
 
   const r = size / 2 - strokeWidth / 2

@@ -23,6 +23,7 @@ export type RootParamList = {
   }
   onBoarding: undefined
   lock: {
+    temporaryLock?: boolean
     type?: LockType
     // onpremise data
     data?: OnPremisePreloginData
@@ -32,7 +33,7 @@ export type RootParamList = {
   forgotPassword: undefined
   signup: undefined
   createMasterPassword: undefined
-  mainStack: undefined
+  mainStack: NavigatorScreenParams<PrimaryParamList>
 
   // vinsso
   ssoIdentifier: undefined
@@ -112,12 +113,7 @@ export type PrimaryParamList = {
     screen?: string
   }
   toolsStack: NavigatorScreenParams<ToolsParamList>
-
-  // Errors
-  dataOutdated: undefined
-
-  // Others
-  start: undefined
+  // start: undefined
 
   enterpriseInvited: undefined
   biometricUnlockIntro: undefined

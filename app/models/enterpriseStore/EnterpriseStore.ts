@@ -2,7 +2,6 @@ import { Instance, SnapshotIn, SnapshotOut, types } from 'mobx-state-tree'
 import { withSetPropAction } from '../helpers/withSetPropAction'
 import { enterpriseApi } from 'app/services/api/enterpriseApi'
 import { folderApi } from 'app/services/api/folderApi'
-import { omit } from 'ramda'
 import { EditShareCipherData } from 'app/static/types'
 
 /**
@@ -70,7 +69,6 @@ export const EnterpriseStoreModel = types
       return res
     },
   }))
-  .postProcessSnapshot(omit(['enterpriseInvitations']))
 
 export interface EnterpriseStore extends Instance<typeof EnterpriseStoreModel> {}
 export interface EnterpriseStoreSnapshotOut extends SnapshotOut<typeof EnterpriseStoreModel> {}

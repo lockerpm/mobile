@@ -109,8 +109,6 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
     }
     cipherStore.setIsSynching(false)
 
-    // uiStore.setIsDark(false)
-
     // Reload FCM
     if (connectionState.isConnected) {
       await boostrapPushNotifier()
@@ -141,7 +139,7 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
       return
     }
 
-    // Network connected? || Is autofill?
+    // Network connected? 
     if (!connectionState.isConnected) {
       goLockOrCreatePassword()
       return
@@ -174,11 +172,6 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
     }
   }
   // ------------------ EFFECTS ---------------------
-
-  // NOTE: dont change this effect to navigation onFocus or it will mess up handleDynamicLink
-  // useEffect(() => {
-  //   mounted()
-  // }, [])
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       mounted()

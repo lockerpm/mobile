@@ -11,11 +11,11 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
   const { translate } = useHelper()
 
   const navigateLogin = () => {
-    props.navigation.navigate("login")
+    props.navigation.replace("login")
   }
 
   const navigateSignup = () => {
-    props.navigation.navigate("signup")
+    props.navigation.replace("signup")
   }
 
   const footer = () => (

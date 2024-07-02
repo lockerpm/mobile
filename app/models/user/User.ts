@@ -264,9 +264,7 @@ export const UserModel = types
           if (self.isMobileLangChange) {
             await userApi.setUserLanguage(self.apiToken, self.language)
           } else {
-
-            // TODO disable now
-            // self.setLanguage(res.user.customerLanguage)
+            self.setLanguage(res.user.customerLanguage)
           }
         }
         self.saveUser(res.user)

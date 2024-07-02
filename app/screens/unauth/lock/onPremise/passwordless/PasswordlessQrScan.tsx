@@ -9,9 +9,10 @@ interface Props {
   index: number
   otp: number
   goBack: () => void
+  handleUnlock:  () => Promise<void>
 }
 
-export const PasswordlessQrScan = ({ otp, goBack, index }: Props) => {
+export const PasswordlessQrScan = ({ otp, goBack, index, handleUnlock }: Props) => {
   const { translate } = useHelper()
   const { width, height } = Dimensions.get('screen')
   const navigation = useNavigation() as any
@@ -22,7 +23,7 @@ export const PasswordlessQrScan = ({ otp, goBack, index }: Props) => {
     const res = await sessionQrLogin(e.data, otp.toString(), true)
 
     if (res.kind === 'ok') {
-      navigation.navigate('mainStack', { screen: 'start' })
+      handleUnlock()
     } else if (res.kind === 'unauthorized') {
       navigation.navigate('login', { type: 'onPremise' })
     }

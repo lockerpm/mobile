@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useStores } from 'app/models'
 import NetInfo from '@react-native-community/netinfo'
 import { useCipherData, useHelper } from 'app/services/hook'
@@ -9,12 +9,10 @@ import { AndroidAutofillServiceType } from 'app/utils/autofillHelper'
 
 export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) => {
   const { user, uiStore, enterpriseStore } = useStores()
-  const { isBiometricAvailable, boostrapPushNotifier, parsePushNotiData, translate } = useHelper()
+  const { isBiometricAvailable, boostrapPushNotifier, parsePushNotiData } = useHelper()
   const { loadFolders, loadCollections, loadOrganizations } = useCipherData()
   const navigation = props.navigation
   // ------------------------- PARAMS ----------------------------
-
-  const [msg, setMsg] = useState('')
 
   // ------------------------- METHODS ----------------------------
 
@@ -43,13 +41,7 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) =>
         await user.loadPlan()
       }
     }
-
-    // Load folders and collections
-    setMsg(translate('start.decrypting'))
     Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
-
-    setMsg('')
-
     // Parse push noti data
     const navigationRequest = await parsePushNotiData()
     if (navigationRequest.path) {

@@ -54,6 +54,8 @@ const RootStack = observer((props: Props) => {
   const { clearAllData, handleDynamicLink } = useAuthentication()
   const { uiStore, user } = useStores()
   const insets = useSafeAreaInsets()
+
+  
   const [updateBlogUrl, setUpdateBlogUrl] = useState("")
   // ------------------- METHODS -------------------
 
@@ -90,6 +92,11 @@ const RootStack = observer((props: Props) => {
     }
   }
 
+  const fethDynamicLink = (link) => {
+    Logger.debug(`DYNAMIC LINK BACKGROUND: ${JSON.stringify(link)}`)
+    link?.url && handleDynamicLink(link.url, navigationRef.current)
+  }
+
   // App state change
   const _handleAppStateChange = async (nextAppState: string) => {
     Logger.debug(nextAppState)
@@ -100,60 +107,38 @@ const RootStack = observer((props: Props) => {
     }
 
     const link = await dynamicLinks().getInitialLink()
-    Logger.debug(`DYNAMIC LINK BACKGROUND: ${JSON.stringify(link)}`)
-    link?.url && handleDynamicLink(link.url, navigationRef.current)
+    fethDynamicLink(link)
   }
+  
 
   // ------------------- EFFECTS -------------------
 
   useEffect(() => {
+    !IS_IOS && androidHandleNotiPress()
     setIsDark(uiStore.isDark)
-  }, [])
 
-  // Check internet connection
-  useEffect(() => {
+    AppState.addEventListener("change", _handleAppStateChange)
+
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isConnected
       Logger.debug(offline ? "OFFLINE" : "ONLINE")
       uiStore.setIsOffline(offline)
     })
 
-    return () => {
-      removeNetInfoSubscription()
-    }
-  }, [])
 
-  // Push notification handler
-  useEffect(() => {
-    !IS_IOS && androidHandleNotiPress()
-    const unsubscribe = PushNotifier.setupForegroundHandler({
+    const unsubscribe = dynamicLinks().onLink(fethDynamicLink)
+
+    const unsubscribePush = PushNotifier.setupForegroundHandler({
       handleForegroundPress: handleForegroundNotiPress,
     })
-    return () => {
-      unsubscribe()
-    }
-  }, [])
 
-  // Dynamic links foreground handler
-  useEffect(() => {
-    const unsubscribe = dynamicLinks().onLink((link) => {
-      Logger.debug(`DYNAMIC LINK FOREGROUND: ${JSON.stringify(link)}`)
-      link?.url && handleDynamicLink(link.url, navigationRef.current)
-    })
-    return () => unsubscribe()
-  }, [])
-
-  // Dynamic links background handler
-  useEffect(() => {
-    AppState.addEventListener("change", _handleAppStateChange)
-  }, [])
-
-  // Clear user data on signal
-  useEffect(() => {
     const listener = EventBus.createListener(AppEventType.CLEAR_ALL_DATA, () => {
       clearAllData(true)
     })
     return () => {
+      unsubscribe()
+      unsubscribePush()
+      removeNetInfoSubscription()
       EventBus.removeListener(listener)
     }
   }, [])

@@ -1,12 +1,12 @@
-import React, { FC, useEffect,  useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { Alert, BackHandler, Platform } from "react-native"
 import { useStores } from "app/models"
 import { api } from "app/services/api"
-import { useAuthentication, useHelper } from "app/services/hook"
+import { useAuthentication, useCipherData, useHelper } from "app/services/hook"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { BiometricsType, LockType } from "./lock.types"
 import { LoginMethod } from "app/static/types/enum"
-
+import NetInfo from "@react-native-community/netinfo"
 import { LockByMasterPassword } from "./normal/MasterPassword"
 import { BusinessLockByPasswordless } from "./business/BusinessPasswordless"
 import { OnPremiseLockByPasswordless } from "./onPremise/passwordless/passwordless"
@@ -14,6 +14,7 @@ import { OnPremiseLockMasterPassword } from "./onPremise/masterPassword/OnPremis
 import { observer } from "mobx-react-lite"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { CommonActions } from "@react-navigation/native"
+import { AndroidAutofillServiceType } from "app/utils/autofillHelper"
 
 const IS_IOS = Platform.OS === "ios"
 
@@ -22,13 +23,17 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
   const route = props.route
 
   const { translate } = useHelper()
-  const { user, uiStore } = useStores()
+  const { user, uiStore, enterpriseStore } = useStores()
+
   const { logout } = useAuthentication()
+  const { isBiometricAvailable, boostrapPushNotifier, parsePushNotiData } = useHelper()
+  const { loadFolders, loadCollections, loadOrganizations } = useCipherData()
 
   // ---------------------- PARAMS -------------------------
 
   const [lockMethod, setLogMethod] = useState<LoginMethod>(LoginMethod.PASSWORD)
   const [biometryType, setBiometryType] = useState<BiometricsType>(BiometricsType.Biometrics)
+
   // ---------------------- COMPUTED -------------------------
 
   const isAutofillAnroid = uiStore.isAndroidAutofillService
@@ -49,18 +54,13 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
     }
   }
 
-  const fetchBusinessLoginMethod = async () => {
+  const fetchLockType = async () => {
     if (route.params.type === LockType.Individual) {
       const res = await user.businessLoginMethod()
       if (res.kind === "ok") {
         setLogMethod(res.data.login_method)
       }
-    }
-  }
-
-  const fetchLockType = () => {
-    // Om Premise setup
-    if (route.params.type === LockType.OnPremise) {
+    } else {
       if (route.params.data.login_method !== LoginMethod.PASSWORD) {
         setLogMethod(LoginMethod.PASSWORDLESS)
         user.setPasswordlessLogin(true)
@@ -76,8 +76,6 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
   }
 
   const handleLogout = async () => {
-    // await logout()
-    // navigation.navigate("login")
     await logout()
 
     navigation.dispatch(
@@ -88,16 +86,10 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
     )
   }
 
-  const handleBack = (e) => {
-    if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
-      navigation.dispatch(e.data.action)
-      return
-    }
-    e.preventDefault()
-
+  const handleBack = () => {
     if (!IS_IOS && isAutofillAnroid) {
       BackHandler.exitApp()
-      return
+      return false
     }
     Alert.alert(translate("alert.logout") + user.email + "?", "", [
       {
@@ -110,27 +102,114 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
         onPress: handleLogout,
       },
     ])
+
+    return true
+  }
+
+  const refreshFCM = async () => {
+    if (!user.disablePushNotifications) {
+      let isSuccess = true
+      if (!user.fcmToken) {
+        isSuccess = await boostrapPushNotifier()
+      }
+      if (isSuccess) {
+        user.updateFCM(user.fcmToken)
+      }
+    }
+  }
+
+  const handleUnlock = async () => {
+    if (!route.params.temporaryLock) {
+      const connectionState = await NetInfo.fetch()
+      // Sync
+      if (connectionState.isConnected) {
+        // Refresh FCM
+        refreshFCM()
+  
+        // Sync teams and plan
+        if (!isAutofillAnroid) {
+          await user.loadTeams()
+          await user.loadPlan()
+        }
+      }
+      Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
+      // Parse push noti data
+      const navigationRequest = await parsePushNotiData()
+      if (navigationRequest.path) {
+        // handle navigate browse
+  
+        navigationRequest.tempParams &&
+          // @ts-ignore TODO
+          navigation.replace(navigationRequest.path, navigationRequest.tempParams)
+        // @ts-ignore TODO
+        navigation.replace(navigationRequest.path, navigationRequest.params)
+        return
+      }
+  
+      if (!isAutofillAnroid) {
+        if (
+          (!user.biometricIntroShown || uiStore.isStartFromPasswordLess) &&
+          !user.isBiometricUnlock
+        ) {
+          uiStore.setStartFromPasswordLess(false)
+          const available = await isBiometricAvailable()
+          if (available) {
+            navigation.replace("mainStack", { screen: "biometricUnlockIntro" })
+            return
+          }
+        }
+      }
+  
+      // // Done -> navigate
+      if (isAutofillAnroid) {
+        const data = uiStore.androidAutofillServiceData
+        if (data.type === AndroidAutofillServiceType.SAVE_REQUEST) {
+          navigation.replace("mainStack", { screen: "passwords__edit", params: {mode: "add", androidAutofillSavedData: data } })
+        } else {
+          navigation.replace("mainStack", { screen: "autofill", params: { data} })
+        }
+        return
+      }
+  
+      if (uiStore.isDeeplinkEmergencyAccess) {
+        uiStore.setIsDeeplinkEmergencyAccess(false)
+        navigation.replace("mainStack", { screen: "mainTab", params: {  screen: "menuTab" } })
+        navigation.replace("mainStack", { screen: "emergencyAccess" })
+      } else if (uiStore.isDeeplinkShares) {
+        uiStore.setIsDeeplinkShares(false)
+        navigation.replace("mainStack", { screen: "mainTab", params: {  screen: "browseTab" } })
+      } else if (enterpriseStore.isEnterpriseInvitations) {
+        navigation.replace("mainStack", { screen: "enterpriseInvited" })
+      } else {
+        navigation.replace("mainStack", { screen: "mainTab", params: {  screen: user.defaultTab} })
+      }
+    } else {
+      navigation.pop(1)  
+    }
   }
 
   // -------------- EFFECT ------------------
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-      detectbiometryType()
-      fetchBusinessLoginMethod()
-      fetchLockType()
+    detectbiometryType()
+    fetchLockType()
   }, [])
 
-  // Handle back press
+  // // Handle back press
   useEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", handleBack)
-    return unsubscribe
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBack,
+    );
+    return () => backHandler.remove();
   }, [navigation])
 
   // ---------------------- RENDER -------------------------
   const commonProps = {
     biometryType,
     handleLogout,
+    handleUnlock
   }
 
   if (route.params.type === LockType.OnPremise) {
@@ -146,9 +225,9 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
     return <OnPremiseLockByPasswordless {...commonProps} />
   }
 
-  if (lockMethod === LoginMethod.PASSWORD) {
-    return <LockByMasterPassword {...commonProps} />
+  if (lockMethod === LoginMethod.PASSWORDLESS) {
+    return <BusinessLockByPasswordless {...commonProps} />
   }
-  return <BusinessLockByPasswordless {...commonProps} />
 
+  return <LockByMasterPassword {...commonProps} />
 })

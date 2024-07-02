@@ -14,9 +14,10 @@ interface Props {
   email: string
   biometryType: BiometricsType
   handleLogout: () => void
+  handleUnlock:  () => Promise<void>
 }
 
-export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleLogout }: Props) => {
+export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleLogout, handleUnlock }: Props) => {
   const navigation = useNavigation() as any
   const { user, uiStore } = useStores()
   const { colors } = useTheme()
@@ -30,7 +31,6 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
   const [masterPassword, setMasterPassword] = useState('')
 
   const [isUnlocking, setIsUnlocking] = useState(false)
-  const [isBioUnlocking, setIsBioUnlocking] = useState(false)
   const [isError, setIsError] = useState(false)
 
   // ---------------------- METHODS -------------------------
@@ -49,7 +49,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
       return true
     }
   }
-  const handleUnlock = async () => {
+  const unlock = async () => {
     if (masterPassword) {
       setIsError(false)
       setIsUnlocking(true)
@@ -57,8 +57,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
       setIsUnlocking(false)
 
       if (res.kind === 'ok') {
-        setMasterPassword('')
-        navigation.navigate('mainStack', { screen: 'start' })
+        await handleUnlock()
       } else if (res.kind === 'unauthorized') {
         navigation.navigate('login', { type: 'onPremise' })
       } else if (res.kind === 'on-premise-2fa') {
@@ -72,15 +71,24 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
   }
 
   const handleUnlockBiometric = async () => {
+    if (!user.isBiometricUnlock) {
+      notify('error', translate('error.biometric_not_enable'))
+      return
+    }
+    if (!isValidForBiometric) {
+      notify('info', translate('error.not_valid_for_biometric'))
+      return
+    }
+
+
     const hadKey = await checkKey()
     if (!hadKey) return
 
-    setIsBioUnlocking(true)
+    setIsUnlocking(true)
     const res = await biometricLogin()
-    setIsBioUnlocking(false)
+    setIsUnlocking(false)
     if (res.kind === 'ok') {
-      setMasterPassword('')
-      navigation.navigate('mainStack', { screen: 'start' })
+      await handleUnlock()
     }
   }
 
@@ -173,7 +181,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
             label={translate('common.master_pass')}
             onChangeText={setMasterPassword}
             value={masterPassword}
-            onSubmitEditing={handleUnlock}
+            onSubmitEditing={unlock}
           />
           {/* Master pass input end */}
 
@@ -181,25 +189,15 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
             loading={isUnlocking}
             disabled={isUnlocking || !masterPassword}
             text={translate('common.unlock')}
-            onPress={handleUnlock}
+            onPress={unlock}
             style={{
               marginTop: 20,
             }}
           />
 
           <TouchableOpacity
-            disabled={isBioUnlocking}
-            onPress={() => {
-              if (!user.isBiometricUnlock) {
-                notify('error', translate('error.biometric_not_enable'))
-                return
-              }
-              if (!isValidForBiometric) {
-                notify('info', translate('error.not_valid_for_biometric'))
-                return
-              }
-              handleUnlockBiometric()
-            }}
+            disabled={isUnlocking}
+            onPress={handleUnlockBiometric}
             style={{
               width: '100%',
               marginVertical: 25,
