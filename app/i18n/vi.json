@@ -305,7 +305,7 @@
     },
     "copy": "Sao chép email",
     "edit": "Sửa địa chỉ email",
-    "editable": "Địa chỉ email có thể chính sửa",
+    "editable": "Địa chỉ email có thể chỉnh sửa",
     "random": "Địa chỉ email được tạo ngẫu nhiên {{number}}",
     "edit_modal": {
       "titel": "Thay đổi địa chỉ email",
@@ -421,6 +421,7 @@
     "desc": "Master Password là mật khẩu mở khóa Locker của bạn. Đây là mật khẩu duy nhất bạn cần nhớ để truy cập tất cả các mật khẩu khác được lưu trữ trong Locker. Vui lòng không chia sẻ mật khẩu này với bất kỳ ai.",
     "confirm_master_pass": "Xác nhận Master Password",
     "hint": "Gợi ý (không bắt buộc)",
+    "hint_error": "Gợi ý không thể giống với Master Password",
     "btn": "Tạo mật khẩu",
     "note": "Lưu ý: Locker không thể xem, không thể lưu trữ, cũng như không thể cấp lại Master Password trong trường hợp bạn quên hoặc đánh mất."
   },
