@@ -39,6 +39,7 @@ export const CreateMasterPasswordScreen: FC<RootStackScreenProps<'createMasterPa
     // -------------- COMPUTED ------------------
 
     const isError = !!masterPassword && !!confirmPassword && masterPassword !== confirmPassword
+    const isHintError = !isError && hint === masterPassword
     const masterPasswordError = validateMasterPassword(masterPassword).error
     const isReady = !masterPasswordError && !isError && !!masterPassword && !!confirmPassword
 
@@ -237,9 +238,11 @@ export const CreateMasterPasswordScreen: FC<RootStackScreenProps<'createMasterPa
           {/* Hint */}
           <TextInput
             animated
+            isError={isHintError}
             label={translate('create_master_pass.hint')}
             onChangeText={setHint}
             value={hint}
+            helper={translate('create_master_pass.hint_error')}
           />
           {/* Hint end */}
 

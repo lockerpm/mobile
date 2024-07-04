@@ -30,6 +30,7 @@ export const ChangeMasterPasswordScreen = observer(() => {
   // -------------- COMPUTED --------------
 
   const isError = !!newPass && !!confirm && newPass !== confirm
+  const isHintError = !isError && hint === newPass
   const masterPasswordError = validateMasterPassword(newPass).error
   const isReady = !masterPasswordError && !isError && !!current && !!newPass && !!confirm
 
@@ -82,7 +83,7 @@ export const ChangeMasterPasswordScreen = observer(() => {
           }}
         />
       }
-      // backgroundColor={colors.block}
+    // backgroundColor={colors.block}
     >
       <View style->
         <TextInput
@@ -123,6 +124,8 @@ export const ChangeMasterPasswordScreen = observer(() => {
           label={translate("create_master_pass.hint")}
           onChangeText={setHint}
           value={hint}
+          isError={isHintError}
+          helper={translate('create_master_pass.hint_error')}
           multiline
           numberOfLines={4}
           style={{ marginBottom: 30 }}

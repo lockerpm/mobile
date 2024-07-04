@@ -421,6 +421,7 @@
     "desc": "Master Password is your Locker unlock password. This is the only password you need to remember to access all other passwords stored in Locker. Please do not share this password with anyone.",
     "confirm_master_pass": "Confirm Master Password",
     "hint": "Hint (optional)",
+    "hint_error": "The Hint cannot be the same as the Master Password",
     "btn": "Create Password",
     "note": "Note: Locker cannot view, store, or re-issue Master Password in case you forget or lose it."
   },
