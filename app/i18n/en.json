@@ -1246,6 +1246,11 @@
     "copy": "Copy password",
     "restore": "Restore password",
     "restore_note": "Are you sure to restore this password? This will replace the current password",
-    "restore_btn": "Restore"
+    "restore_btn": "Restore",
+    "free": {
+      "note": "This list only shows the item’s first 3 old passwords. To view more passwords that were changed recently, ",
+      "go_premium": "go Premium.",
+      "upgrade": "Upgrade now"
+    }
   }
 }

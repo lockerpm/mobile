@@ -90,7 +90,7 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<"passwords_2fa_setup
             padding: 16,
           }}
         >
-          <Text preset="label" text="CHOOSE AN EXISTING OTP" />
+          <Text preset="label" tx="password.existing_otp" />
         </View>
 
         <View

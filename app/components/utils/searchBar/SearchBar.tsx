@@ -3,6 +3,7 @@ import { StyleProp, TextInput, TextInputProps, View, ViewStyle } from "react-nat
 import { SharedValue } from "react-native-reanimated"
 import { Text, Icon } from "../../cores"
 import { useTheme } from "app/services/context"
+import { IS_IOS } from "app/config/constants"
 
 export interface SearchBarProps extends TextInputProps {
   /**
@@ -62,10 +63,10 @@ export const SearchBar = (props: SearchBarProps) => {
         onChangeText={onChangeText}
         {...textInputProps}
       />
-      {!!value && (
+      {!!value && !IS_IOS && (
         <Icon
           filled
-          icon="x"
+          icon="x-circle"
           size={20}
           color={colors.secondaryText}
           onPress={() => {

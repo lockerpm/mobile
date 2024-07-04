@@ -1244,6 +1244,11 @@
     "copy": "複製密碼",
     "restore": "恢復密碼",
     "restore_note": "想要恢復該密碼嗎？這將替換當前密碼",
-    "restore_btn": "恢復"
+    "restore_btn": "恢復",
+    "free": {
+      "note": "此清單僅顯示該項目的 3 個最舊的密碼。若要查看最近變更的密碼，",
+      "go_premium": "請升級至 Premium",
+      "upgrade": "現在升級"
+    }
   }
 }

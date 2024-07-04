@@ -202,7 +202,7 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
         appIsActive.current = true
 
         //  Check lock screen
-        if (user.appTimeout === AppTimeoutType.SCREEN_OFF && temporaryLock.current === false) {
+        if (user.appTimeout === AppTimeoutType.SCREEN_OFF && !temporaryLock.current) {
           temporaryLock.current = true
           navigation.push("lock", {
             temporaryLock: true
@@ -227,7 +227,7 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
 
   // App inactive trigger
   const handleInactive = async (isActive: boolean) => {
-    if (!isActive && user.appTimeout  > 0 && temporaryLock.current === false) {
+    if (!isActive && user.appTimeout  > 0 && !temporaryLock.current) {
       navigation.push("lock", {
         temporaryLock: true
       })

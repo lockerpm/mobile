@@ -21,7 +21,7 @@
     "release:android": "cd android && ./gradlew assembleProductionRelease && cd - ",
     "clean": "npx react-native-clean-project",
     "clean-all": "npx react-native clean-project-auto",
-    "prod-android": "react-native run-android --mode=productionRelease"
+    "prod:android": "react-native run-android --mode=productionRelease"
   },
   "overrides": {
     "react-error-overlay": "6.0.9",

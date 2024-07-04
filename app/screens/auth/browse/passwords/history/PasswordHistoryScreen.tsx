@@ -7,16 +7,19 @@ import { CipherView } from "core/models/view"
 import { CipherIconImage, SortActionConfigModal } from "app/components/ciphers"
 import { IS_IOS } from "app/config/constants"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { useCipherHelper } from "app/services/hook"
-import { View } from "react-native"
+import { useCipherHelper, useHelper } from "app/services/hook"
+import { TouchableOpacity, View } from "react-native"
 import { HistoryItem } from "./HistoryItem"
 import { PasswordHistoryView } from "core/models/view/passwordHistoryView"
 import { HistoryItemAction } from "./HistoryItemAction"
+import { useTheme } from "app/services/context"
 
 export const PasswordHistoryScreen: FC<AppStackScreenProps<"passwords_history">> = observer(
   (props) => {
-    const { cipherStore } = useStores()
+    const { cipherStore, user } = useStores()
     const { getWebsiteLogo } = useCipherHelper()
+    const { colors } = useTheme()
+    const { translate } = useHelper()
 
     const [sortOrder, setSortOrder] = useState("last_updated")
     const [isOpenModalSortStrategy, setOpenModalSortStrategy] = useState(false)
@@ -95,6 +98,40 @@ export const PasswordHistoryScreen: FC<AppStackScreenProps<"passwords_history">>
           style={{ textAlign: "center" }}
           text={selectedCipher.login.username}
         />
+
+        {user.isFreePlan && (
+          <View
+            style={{
+              borderRadius: 8,
+              borderColor: colors.border,
+              borderWidth: 1,
+              backgroundColor: colors.block,
+              padding: 16,
+              marginTop: 16,
+            }}
+          >
+            <Text>
+              {translate("password_history.free.note")}
+              <Text preset="bold"> {translate("password_history.free.go_premium")}</Text>
+            </Text>
+
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate("payment")
+              }}
+            >
+              <Text
+                color={colors.primary}
+                style={{
+                  alignSelf: "flex-end",
+                  flexGrow: 1,
+                  marginTop: 16,
+                }}
+                tx="password_history.free.upgrade"
+              />
+            </TouchableOpacity>
+          </View>
+        )}
 
         <View
           style={{

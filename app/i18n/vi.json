@@ -305,7 +305,7 @@
     },
     "copy": "Sao chép email",
     "edit": "Sửa địa chỉ email",
-    "editable": "Địa chỉ email có thể chính sửa",
+    "editable": "Địa chỉ email có thể chỉnh sửa",
     "random": "Địa chỉ email được tạo ngẫu nhiên {{number}}",
     "edit_modal": {
       "titel": "Thay đổi địa chỉ email",
@@ -1292,6 +1292,11 @@
     "copy": "Sao chép mật khẩu",
     "restore": "Khôi phục mật khẩu",
     "restore_note": "Bận xác định muốn khôi phục lại mật khẩu này? Nó sẽ thay thế mật khẩu hiện tại của bạn",
-    "restore_btn": "Khôi phục"
+    "restore_btn": "Khôi phục",
+    "free": {
+      "note": "Danh sách này chỉ hiển thị 3 mật khẩu cũ nhất của mục. Để xem thêm mật khẩu được thay đổi gần đây, nâng cấp lên ",
+      "go_premium": "gói Premium.",
+      "upgrade": "Nâng cấp ngay"
+    }
   }
 }
