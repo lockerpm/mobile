@@ -39,7 +39,7 @@ export const CreateMasterPasswordScreen: FC<RootStackScreenProps<'createMasterPa
     // -------------- COMPUTED ------------------
 
     const isError = !!masterPassword && !!confirmPassword && masterPassword !== confirmPassword
-    const isHintError = !isError && hint === masterPassword
+    const isHintError = !isError && hint === masterPassword && !!hint
     const masterPasswordError = validateMasterPassword(masterPassword).error
     const isReady = !masterPasswordError && !isError && !!masterPassword && !!confirmPassword
 

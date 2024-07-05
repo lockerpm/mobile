@@ -40,6 +40,9 @@ export const PasswordHistoryScreen: FC<AppStackScreenProps<"passwords_history">>
       sortOrder === "last_updated"
         ? [...selectedCipher.passwordHistory]?.reverse() || []
         : selectedCipher.passwordHistory
+
+    const data = user.isFreePlan ?  passwordHistories?.slice(Math.max(passwordHistories.length - 3, 0)) : passwordHistories
+
     return (
       <Screen
         preset="auto"
@@ -138,7 +141,7 @@ export const PasswordHistoryScreen: FC<AppStackScreenProps<"passwords_history">>
             marginTop: 12,
           }}
         >
-          {passwordHistories?.map((i, index) => (
+          {data.map((i, index) => (
             <HistoryItem
               key={index}
               password={i.password}

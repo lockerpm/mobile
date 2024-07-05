@@ -55,7 +55,7 @@ export const HomeTabScreen = observer(() => {
   const fetchMarketingContent = async () => {
     const res = await user.fetchMarketingContent()
     if (res.kind === 'ok' && Object.keys(res.data).length !== 0) {
-      if (res.data.status === 'active') {
+      if (!!res.data && res.data.status === 'active') {
         navigation.navigate('marketing', { data: res.data })
       }
     }

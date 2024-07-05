@@ -9,7 +9,7 @@ import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { AccountRole, AccountRoleText } from "app/static/types"
 import { ActionSheet } from "../actionsSheet/ActionSheet"
-import { Text } from "../../cores"
+import { BottomModal, Text } from "../../cores"
 import { ActionItem } from "../actionsSheet/ActionSheetItem"
 import { PremiumTag } from "app/components/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
@@ -35,9 +35,7 @@ export const CipherAction = (props: CipherActionProps) => {
   const [showConfirmTrashModal, setShowConfirmTrashModal] = useState(false)
   const [showConfirmLeaveModal, setShowConfirmLeaveModal] = useState(false)
 
-  const [nextModal, setNextModal] = useState<
-     "share" | "trashConfirm" | "leaveConfirm" | null
-  >(null)
+  const [nextModal, setNextModal] = useState<"share" | "trashConfirm" | "leaveConfirm" | null>(null)
 
   // const [showShareModal, setShowShareModal] = useState(false)
   const [showShareOptions, setShowShareOptions] = useState(false)
@@ -283,16 +281,10 @@ export const CipherAction = (props: CipherActionProps) => {
         )}
       </ActionSheet>
 
-      <ActionSheet
+      <BottomModal
         isOpen={showShareOptions}
         onClose={() => setShowShareOptions(false)}
-        header={
-          <Text
-            preset="bold"
-            text={translate("quick_shares.share_option.title")}
-            style={{ fontSize: 20, padding: 16 }}
-          />
-        }
+        title={translate("quick_shares.share_option.title")}
       >
         <TouchableOpacity
           onPress={() => {
@@ -303,21 +295,21 @@ export const CipherAction = (props: CipherActionProps) => {
               navigation.navigate("normal_shares", { ciphers: [selectedCipher] })
             }
           }}
-          style={{
-            paddingHorizontal: 20,
-          }}
+          style={{ borderBottomColor: colors.border, borderBottomWidth: 2, paddingBottom: 12 }}
         >
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
+              marginTop: 8,
+              marginBottom: 4,
             }}
           >
             <Text
               preset="bold"
               text={translate("quick_shares.share_option.normal.tl")}
               style={{
-                marginBottom: 4,
+                marginRight: 8,
               }}
             />
             {premiumLock && <PremiumTag />}
@@ -331,20 +323,19 @@ export const CipherAction = (props: CipherActionProps) => {
             navigation.navigate("quick_shares", { cipher: selectedCipher })
           }}
           style={{
-            paddingHorizontal: 20,
+            marginTop: 12,
           }}
         >
           <Text
             preset="bold"
             text={translate("quick_shares.share_option.quick.tl")}
             style={{
-              marginVertical: 24,
               marginBottom: 4,
             }}
           />
           <Text preset="label" text={translate("quick_shares.share_option.quick.dec")} />
         </TouchableOpacity>
-      </ActionSheet>
+      </BottomModal>
     </View>
   )
 }
