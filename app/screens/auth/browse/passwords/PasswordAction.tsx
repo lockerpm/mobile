@@ -9,6 +9,7 @@ import { getTOTP, parseOTPUri } from "app/utils/totp"
 import { ActionItem } from "app/components/ciphers/actionsSheet/ActionSheetItem"
 import { CipherAction } from "app/components/ciphers/cipherAction/CipherAction"
 import { useNavigation } from "@react-navigation/native"
+import { AccountRole } from "app/static/types"
 
 type Props = {
   disableDetail?: boolean
@@ -19,11 +20,17 @@ type Props = {
 }
 
 export const PasswordAction = (props: Props) => {
-  const { copyToClipboard, translate } = useHelper()
+  const { copyToClipboard, translate, getTeam } = useHelper()
   const { cipherStore } = useStores()
   const navigation = useNavigation() as any
 
   const selectedCipher: CipherView = cipherStore.cipherView
+
+  const shareRole = getTeam(cipherStore.organizations, selectedCipher.organizationId).type
+  const editable =
+    !selectedCipher.organizationId ||
+    shareRole === AccountRole.ADMIN ||
+    shareRole === AccountRole.OWNER
   const lockerMasterPassword = selectedCipher?.type === CipherType.MasterPassword
   const launchWebsiteEffort = () => {
     Linking.openURL(selectedCipher.login.uri).catch((e) => {
@@ -75,7 +82,7 @@ export const PasswordAction = (props: Props) => {
         />
       )}
 
-      {selectedCipher.passwordHistory?.length > 0 && (
+      {selectedCipher.passwordHistory?.length > 0 && editable && (
         <ActionItem
           name={translate("password_history.view")}
           icon="clock-clockwise"
