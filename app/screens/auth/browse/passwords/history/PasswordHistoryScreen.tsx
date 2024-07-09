@@ -36,12 +36,14 @@ export const PasswordHistoryScreen: FC<AppStackScreenProps<"passwords_history">>
       }
       return BROWSE_ITEMS.password.icon
     })()
+
+    const data = user.isFreePlan ?  selectedCipher.passwordHistory?.slice(Math.max(selectedCipher.passwordHistory.length - 3, 0)) : selectedCipher.passwordHistory
+
+
     const passwordHistories =
       sortOrder === "last_updated"
-        ? [...selectedCipher.passwordHistory]?.reverse() || []
-        : selectedCipher.passwordHistory
-
-    const data = user.isFreePlan ?  passwordHistories?.slice(Math.max(passwordHistories.length - 3, 0)) : passwordHistories
+        ? [...data]?.reverse() || []
+        : data
 
     return (
       <Screen
@@ -141,7 +143,7 @@ export const PasswordHistoryScreen: FC<AppStackScreenProps<"passwords_history">>
             marginTop: 12,
           }}
         >
-          {data.map((i, index) => (
+          {passwordHistories.map((i, index) => (
             <HistoryItem
               key={index}
               password={i.password}

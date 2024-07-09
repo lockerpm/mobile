@@ -21,6 +21,7 @@ export const HistoryItem = ({ password, createAt, setSelectHistory }: Props) => 
     ? translate("password_history.updated_password") +
       moment(createAt).format("HH:mm, MMMM Do YYYY")
     : ""
+
   return (
     <View
       style={{

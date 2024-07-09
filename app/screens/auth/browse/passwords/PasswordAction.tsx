@@ -29,7 +29,6 @@ export const PasswordAction = (props: Props) => {
   const shareRole = getTeam(cipherStore.organizations, selectedCipher.organizationId).type
   const editable =
     !selectedCipher.organizationId ||
-    shareRole === AccountRole.ADMIN ||
     shareRole === AccountRole.OWNER
   const lockerMasterPassword = selectedCipher?.type === CipherType.MasterPassword
   const launchWebsiteEffort = () => {
