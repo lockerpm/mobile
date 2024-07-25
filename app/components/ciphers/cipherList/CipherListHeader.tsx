@@ -1,12 +1,13 @@
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import { useCipherData, useHelper } from 'app/services/hook'
-import React, { useState } from 'react'
-import { View, BackHandler } from 'react-native'
-import { Text, Icon, TabHeader } from 'app/components/cores'
-import { SearchBar } from 'app/components/utils'
-import { DeleteConfirmModal } from 'app/screens/auth/browse/trash/DeleteConfirmModal'
-import { ShareModal } from '../cipherAction/ShareModal'
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import { useCipherData, useHelper } from "app/services/hook"
+import React, { useState } from "react"
+import { View, BackHandler } from "react-native"
+import { Text, Icon, TabHeader } from "app/components/cores"
+import { SearchBar } from "app/components/utils"
+import { DeleteConfirmModal } from "app/screens/auth/browse/trash/DeleteConfirmModal"
+import { ShareModal } from "../cipherAction/ShareModal"
+import { IS_IOS } from "app/config/constants"
 
 export interface CipherListHeaderProps {
   openSort?: () => void
@@ -25,6 +26,7 @@ export interface CipherListHeaderProps {
   isAuthenticator?: boolean
   isAutoFill?: boolean
   isShared?: boolean
+  setIsOpenGeneratePassword?: () => void // for autofill only
 }
 
 const EmpFc = () => {
@@ -51,6 +53,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
     setSelectedItems = EmpFc,
     toggleSelectAll = EmpFc,
     setIsLoading,
+    setIsOpenGeneratePassword = EmpFc,
     isShared,
   } = props
   const { colors } = useTheme()
@@ -72,15 +75,15 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
     setIsLoading(true)
     const res = await toTrashCiphers(selectedItems)
     setIsLoading(false)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setIsSelecting(false)
       setSelectedItems([])
     }
   }
 
   const handleMoveFolder = () => {
-    navigation.navigate('folders__select', {
-      mode: 'move',
+    navigation.navigate("folders__select", {
+      mode: "move",
       initialId: null,
       cipherIds: selectedItems,
     })
@@ -92,7 +95,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
     setIsLoading(true)
     const res = await restoreCiphers(selectedItems)
     setIsLoading(false)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setIsSelecting(false)
       setSelectedItems([])
     }
@@ -102,7 +105,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
     setIsLoading(true)
     const res = await deleteCiphers(selectedItems)
     setIsLoading(false)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setIsSelecting(false)
       setSelectedItems([])
     }
@@ -113,12 +116,21 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
   const renderHeaderRight = () => (
     <View
       style={{
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
+        justifyContent: "space-between",
+        flexDirection: "row",
+        alignItems: "center",
         marginRight: -8,
       }}
     >
+      {isAutoFill && !IS_IOS && (
+        <Icon
+          icon="password-fill"
+          size={24}
+          color={colors.primaryText}
+          onPress={setIsOpenGeneratePassword}
+          containerStyle={{ padding: 8 }}
+        />
+      )}
       {!isAuthenticator && (
         <Icon
           icon="sliders-horizontal"
@@ -144,9 +156,9 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
   const renderHeaderSelectRight = () => (
     <View
       style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
         marginRight: -8,
       }}
     >
@@ -214,7 +226,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
   )
 
   const renderHeaderSelectLeft = () => (
-    <View style={{ marginLeft: -8, flexDirection: 'row', alignItems: 'center' }}>
+    <View style={{ marginLeft: -8, flexDirection: "row", alignItems: "center" }}>
       <Icon
         icon="x"
         size={26}
@@ -228,8 +240,8 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
         size="xl"
         text={
           selectedItems.length
-            ? `${selectedItems.length} ${translate('common.selected')}`
-            : translate('common.select')
+            ? `${selectedItems.length} ${translate("common.selected")}`
+            : translate("common.select")
         }
         style={{
           marginLeft: 5,
@@ -259,9 +271,9 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
       <View
         style={{
           height: 56,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
           paddingHorizontal: 20,
         }}
       >
@@ -294,12 +306,12 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
         onClose={() => setShowConfirmModal(false)}
         onConfirm={isTrash || isAuthenticator ? handlePermaDelete : handleDelete}
         title={
-          isTrash || isAuthenticator ? translate('trash.perma_delete') : translate('trash.to_trash')
+          isTrash || isAuthenticator ? translate("trash.perma_delete") : translate("trash.to_trash")
         }
         desc={
           isTrash || isAuthenticator
-            ? translate('trash.perma_delete_desc')
-            : translate('trash.to_trash_desc')
+            ? translate("trash.perma_delete_desc")
+            : translate("trash.to_trash_desc")
         }
         btnText="OK"
       />

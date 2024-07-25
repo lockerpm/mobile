@@ -10,6 +10,7 @@ import { Screen } from "app/components/cores"
 import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
 import { observer } from "mobx-react-lite"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { GeneratePasswordModal } from "./GeneratePasswordModal"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
@@ -30,6 +31,7 @@ export const AutoFillScreen: FC<AppStackScreenProps<"autofill">> = observer((pro
     order: "desc",
   })
   const [sortOption, setSortOption] = useState("last_updated")
+  const [isOpenGeneratePassword, setIsOpenGeneratePassword] = useState(false)
 
   // -------------------- EFFECT ----------------------------
 
@@ -93,6 +95,7 @@ export const AutoFillScreen: FC<AppStackScreenProps<"autofill">> = observer((pro
           isSelecting={false}
           navigation={navigation}
           setIsLoading={() => ""}
+          setIsOpenGeneratePassword={() => setIsOpenGeneratePassword(true)}
         />
       }
       contentContainerStyle={{
@@ -109,6 +112,12 @@ export const AutoFillScreen: FC<AppStackScreenProps<"autofill">> = observer((pro
         value={sortOption}
       />
 
+      <GeneratePasswordModal
+        isOpen={isOpenGeneratePassword}
+        onClose={() => {
+          setIsOpenGeneratePassword(false)
+        }}
+      />
       <AutoFillList
         navigation={navigation}
         searchText={searchText}

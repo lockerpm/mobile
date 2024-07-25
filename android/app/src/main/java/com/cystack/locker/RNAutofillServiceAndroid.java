@@ -114,7 +114,6 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void addAutofillValue(String id, String userName, String password, String name, String uri) {
-
         AutofillItem data = new AutofillItem(id, userName, password, name, uri);
         buildResponse(data);
     }
@@ -123,7 +122,9 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
         RemoteViews presentation = new RemoteViews(getReactApplicationContext().getPackageName(), R.layout.remote_locker_app); // crash ?
         Dataset response = Utils.BuildUnlockDataset(sfields, data, presentation);
 
-        Utils.SetCredential(credentialID, data);
+        if (!data.getId().isEmpty()) {
+            Utils.SetCredential(credentialID, data);
+        }
 
         Intent replyIntent = new Intent();
         replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, response);

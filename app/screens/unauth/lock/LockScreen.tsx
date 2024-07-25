@@ -160,29 +160,37 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
         }
       }
   
-      // // Done -> navigate
-      if (isAutofillAnroid) {
-        const data = uiStore.androidAutofillServiceData
-        if (data.type === AndroidAutofillServiceType.SAVE_REQUEST) {
-          navigation.replace("mainStack", { screen: "passwords__edit", params: {mode: "add", androidAutofillSavedData: data } })
-        } else {
-          navigation.replace("mainStack", { screen: "autofill", params: { data} })
-        }
-        return
-      }
+      navigation.replace("mainStack", { screen: "autofill", params: { data: {
+        type: AndroidAutofillServiceType.AUTOFILL,
+        lastUserPasswordID: "",
+        domain: "facebook.com",
+        username: "",
+        password: ""
+    }} })
   
-      if (uiStore.isDeeplinkEmergencyAccess) {
-        uiStore.setIsDeeplinkEmergencyAccess(false)
-        navigation.replace("mainStack", { screen: "mainTab", params: {  screen: "menuTab" } })
-        navigation.replace("mainStack", { screen: "emergencyAccess" })
-      } else if (uiStore.isDeeplinkShares) {
-        uiStore.setIsDeeplinkShares(false)
-        navigation.replace("mainStack", { screen: "mainTab", params: {  screen: "browseTab" } })
-      } else if (enterpriseStore.isEnterpriseInvitations) {
-        navigation.replace("mainStack", { screen: "enterpriseInvited" })
-      } else {
-        navigation.replace("mainStack", { screen: "mainTab", params: {  screen: user.defaultTab} })
-      }
+      // // Done -> navigate
+      // if (isAutofillAnroid) {
+      //   const data = uiStore.androidAutofillServiceData
+      //   if (data.type === AndroidAutofillServiceType.SAVE_REQUEST) {
+      //     navigation.replace("mainStack", { screen: "passwords__edit", params: {mode: "add", androidAutofillSavedData: data } })
+      //   } else {
+      //     navigation.replace("mainStack", { screen: "autofill", params: { data} })
+      //   }
+      //   return
+      // }
+  
+      // if (uiStore.isDeeplinkEmergencyAccess) {
+      //   uiStore.setIsDeeplinkEmergencyAccess(false)
+      //   navigation.replace("mainStack", { screen: "mainTab", params: {  screen: "menuTab" } })
+      //   navigation.replace("mainStack", { screen: "emergencyAccess" })
+      // } else if (uiStore.isDeeplinkShares) {
+      //   uiStore.setIsDeeplinkShares(false)
+      //   navigation.replace("mainStack", { screen: "mainTab", params: {  screen: "browseTab" } })
+      // } else if (enterpriseStore.isEnterpriseInvitations) {
+      //   navigation.replace("mainStack", { screen: "enterpriseInvited" })
+      // } else {
+      //   navigation.replace("mainStack", { screen: "mainTab", params: {  screen: user.defaultTab} })
+      // }
     } else {
       navigation.pop(1)  
     }
