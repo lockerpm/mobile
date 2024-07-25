@@ -37,7 +37,7 @@ import CombineContext from "./services/context/useCombineContext"
 import { IS_IOS } from "./config/constants"
 import { AndroidAutofillServiceType } from "./utils/autofillHelper"
 import SplashScreen from 'react-native-splash-screen'
-
+import BootSplash from "react-native-bootsplash";
 
 enableScreens()
 Settings.initializeSDK()
@@ -67,8 +67,9 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
     NAVIGATION_PERSISTENCE_KEY
   )
 
+  const hideSplash = IS_IOS ? BootSplash.hide : SplashScreen.hide
   const { rehydrated, rootStore } = useInitialRootStore(() => {
-    setTimeout(SplashScreen.hide, 400)
+    setTimeout(hideSplash, 400)
   })
 
   if (!rehydrated) return null
@@ -111,16 +112,16 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
       }
     }
   }
-  const monitorApiRequest = (request: any) => async () => {
-    Logger.debug(
-      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
-        request.params ? JSON.stringify(request.params) : ""
-      }`
-    )
-  }
+  // const monitorApiRequest = (request: any) => async () => {
+  //   Logger.debug(
+  //     `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
+  //       request.params ? JSON.stringify(request.params) : ""
+  //     }`
+  //   )
+  // }
 
   api.apisauce.addMonitor(monitorApiResponse)
-  api.apisauce.addAsyncRequestTransform(monitorApiRequest)
+  // api.apisauce.addAsyncRequestTransform(monitorApiRequest)
 
   // if app start from android autofill service. navigate to autofill screen
   if (!IS_IOS) {

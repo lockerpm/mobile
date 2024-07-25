@@ -1,7 +1,8 @@
 #import <Firebase.h>
 #import "AppDelegate.h"
 #import "RNCConfig.h"
-#import "RNSplashScreen.h"
+
+#import "RNBootSplash.h"
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
@@ -16,6 +17,7 @@
 
 @implementation AppDelegate
 
+  
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
@@ -25,13 +27,9 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
-
-  [super application:application didFinishLaunchingWithOptions:launchOptions];
   [FIRApp configure];
-//  UIView *rootView = self.window.rootViewController.view; // react-native >= 0.71 specific
-  
-  [RNSplashScreen show];
-  return YES;
+
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
@@ -68,7 +66,8 @@
 }
 
 
-
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken  { [FIRMessaging messaging].APNSToken = deviceToken; //add this line
+}
 
 // ------------ Prevent preview background
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -117,5 +116,13 @@
     [TrustKit initSharedInstanceWithConfiguration:trustKitConfig];
 }
 
+// ⬇️ Add this before file @end (for react-native < 0.74)
+- (UIView *)createRootViewWithBridge:(RCTBridge *)bridge
+                          moduleName:(NSString *)moduleName
+                           initProps:(NSDictionary *)initProps {
+  UIView *rootView = [super createRootViewWithBridge:bridge moduleName:moduleName initProps:initProps];
+  [RNBootSplash initWithStoryboard:@"LaunchScreen" rootView:rootView]; // ⬅️ initialize the splash screen
+  return rootView;
+}
 
 @end

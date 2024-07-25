@@ -29,7 +29,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
 
   // ---------------------- PARAMS -------------------------
 
-  const [masterPassword, setMasterPassword] = useState("demo@123")
+  const [masterPassword, setMasterPassword] = useState("")
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
