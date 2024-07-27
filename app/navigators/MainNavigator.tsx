@@ -57,7 +57,7 @@ import {
   ContactsTrustedYouScreen,
   ViewEAScreen,
   TakeoverEAScreen,
-  // @ts-ignore
+  // @ts-ignore 
   AutofillServiceScreen,
   EnterpriseInvitedScreen,
   NormalSharesScreen,
@@ -390,7 +390,7 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
       onAction={handleInactive}
     >
       <Stack.Navigator
-        // initialRouteName="start"
+        initialRouteName="mainTab"
         screenOptions={{
           headerShown: false,
         }}

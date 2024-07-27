@@ -131,6 +131,7 @@ export const iconFillRegistry = {
 }
 
 export const iconRegistry = {
+  'password-fill': require('assets/icons/password-fill.png'),
   'eye-slash': require('assets/icons/eye-slash.png'),
   eye: require('assets/icons/eye.png'),
   dot: require('assets/icons/dot.png'),

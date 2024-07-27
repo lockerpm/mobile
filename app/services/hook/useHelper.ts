@@ -123,7 +123,7 @@ export function useHelper() {
 
   // Notify based on api error
   const notifyApiError = (problem: GeneralApiProblem, disableToast?: boolean) => {
-    let errorMessage = ''
+    let errorMessage = ""
     switch (problem.kind) {
       case "cannot-connect":
         errorMessage = translate("error.cannot_connect")
@@ -160,19 +160,62 @@ export function useHelper() {
         details?: {
           [key: string]: string[]
         }
-        code: "0000" | "0002" | "0004" | "0005" | "0008" | "0009" | "1001" | "1002" | "1003" | "1004" | "1005" | "1006" | "1007" | "1008" | "1009" | "1010" | "1011" | "1012" | "3003" 
-        | "3005" | "5000" | "5001" | "5002" | "7002" | "7003" | "7004" | "7005" | "7006" | "7007" | "7008" | "7009" | "7010" | "7011" | "7012" | "7013" | "7014" | "7015" | "7016" | "7017" | "7018" 
-        | "7019" | "8000" | "8001" | "9000"  | "10000" 
+        code:
+          | "0000"
+          | "0002"
+          | "0004"
+          | "0005"
+          | "0008"
+          | "0009"
+          | "1001"
+          | "1002"
+          | "1003"
+          | "1004"
+          | "1005"
+          | "1006"
+          | "1007"
+          | "1008"
+          | "1009"
+          | "1010"
+          | "1011"
+          | "1012"
+          | "3003"
+          | "3005"
+          | "5000"
+          | "5001"
+          | "5002"
+          | "7002"
+          | "7003"
+          | "7004"
+          | "7005"
+          | "7006"
+          | "7007"
+          | "7008"
+          | "7009"
+          | "7010"
+          | "7011"
+          | "7012"
+          | "7013"
+          | "7014"
+          | "7015"
+          | "7016"
+          | "7017"
+          | "7018"
+          | "7019"
+          | "8000"
+          | "8001"
+          | "9000"
+          | "10000"
         message?: string
       } = problem.data
-      errorMessage = translate(`error.api.${errorData.code}`) || translate("error.something_went_wrong")
-
+      errorMessage =
+        translate(`error.api.${errorData.code}`) || translate("error.something_went_wrong")
     }
     if (disableToast) {
       return errorMessage
     }
     notify("error", errorMessage)
-    return ''
+    return ""
   }
 
   // Parse storage push notification data
@@ -194,41 +237,59 @@ export function useHelper() {
     if (data) {
       switch (data.type) {
         case PushEvent.SHARE_NEW:
-          res.path = "mainTab"
+          res.path = "mainStack"
           res.params = {
-            screen: "browseTab",
+            screen: "mainTab",
             params: {
-              screen: "sharedItems",
+              screen: "browseTab",
+              params: {
+                screen: "sharedItems",
+              },
             },
           }
           res.tempParams = {
-            screen: "browseTab",
+            screen: "mainTab",
+            params: {
+              screen: "browseTab",
+            },
           }
           break
         case PushEvent.SHARE_CONFIRM:
         case PushEvent.SHARE_ACCEPT:
         case PushEvent.SHARE_REJECT:
-          res.path = "mainTab"
+          res.path = "mainStack"
           res.params = {
-            screen: "browseTab",
+            screen: "mainTab",
             params: {
-              screen: "shareItems",
+              screen: "browseTab",
+              params: {
+                screen: "shareItems",
+              },
             },
           }
           res.tempParams = {
-            screen: "browseTab",
+            screen: "mainTab",
+            params: {
+              screen: "browseTab",
+            },
           }
           break
 
         case PushEvent.EMERGENCY_INVITE:
         case PushEvent.EMERGENCY_REJECT_REQUEST:
         case PushEvent.EMERGENCY_APPROVE_REQUEST:
-          res.path = "contactsTrustedYou"
+          res.path = "mainStack"
+          res.params = {
+            screen: "contactsTrustedYou",
+          }
           break
         case PushEvent.EMERGENCY_INITIATE:
         case PushEvent.EMERGENCY_ACCEPT_INVITATION:
         case PushEvent.EMERGENCY_REJECT_INVITATION:
-          res.path = "yourTrustedContact"
+          res.path = "mainStack"
+          res.params = {
+            screen: "yourTrustedContact",
+          }
           break
         case PushEvent.TIP_TRICK:
           res.url = data.url

@@ -115,6 +115,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
       if (isSuccess) {
         user.updateFCM(user.fcmToken)
       }
+      console.log(user.fcmToken)
     }
   }
 
@@ -160,7 +161,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
         }
       }
   
-      // // Done -> navigate
+      // Done -> navigate
       if (isAutofillAnroid) {
         const data = uiStore.androidAutofillServiceData
         if (data.type === AndroidAutofillServiceType.SAVE_REQUEST) {

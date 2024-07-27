@@ -109,7 +109,6 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
 
   // ------------------------ RENDER ----------------------------
 
-  const renderItem = ({ item }) => <AutofillListItem item={item} openActionMenu={openActionMenu} />
 
   return ciphers.length ? (
     <View style={{ flex: 1 }}>
@@ -125,7 +124,7 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
         }}
         data={ciphers}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
+        renderItem={({ item }) => <AutofillListItem item={item} openActionMenu={openActionMenu} />}
         getItemLayout={(data, index) => ({
           length: 71,
           offset: 71 * index,

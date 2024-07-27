@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { TouchableOpacity, View } from "react-native"
 import { OtpList } from "./OtpList"
 import { Text, Screen, Header, Icon } from "app/components/cores"
@@ -8,22 +8,37 @@ import { useTheme } from "app/services/context"
 import { AuthenticatorAddAction } from "app/screens/auth/tools/authenticator/AuthenticatorAddAction"
 import { SearchBar } from "app/components/utils"
 import { observer } from "mobx-react-lite"
-import { useHelper } from "app/services/hook"
+import { useHelper, useTool } from "app/services/hook"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { CipherType } from "core/enums"
+import { FREE_PLAN_LIMIT } from "app/static/constants"
 
 export const Password2FASetupScreen: FC<AppStackScreenProps<"passwords_2fa_setup">> = observer(
   (props) => {
     const navigation: any = props.navigation
     const route = props.route
 
-    const { cipherStore } = useStores()
+    const { cipherStore, user } = useStores()
 
+    const [cipherCount, setCipherCount] = useState(0)
     const [searchText, setSearchText] = useState("")
     const [selectedOtp, setSelectedOtp] = useState<CipherView>(null)
     const [isAddOpen, setIsAddOpen] = useState(false)
     const { translate } = useHelper()
     const { colors } = useTheme()
+    const { getCipherCount } = useTool()
 
+    const disableAddNew = user.isFreePlan && cipherCount >= FREE_PLAN_LIMIT.OTP
+
+    useEffect(() => {
+      const counting = async () => {
+        if (user.isFreePlan) {
+          const count = await getCipherCount(CipherType.TOTP)
+          setCipherCount(count)
+        }
+      }
+      counting()
+    }, [])
     return (
       <Screen
         header={
@@ -73,6 +88,7 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<"passwords_2fa_setup
             {selectedOtp === null && <Icon icon="check" size={19} color={colors.primary} />}
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={disableAddNew}
             style={{
               padding: 16,
               flexDirection: "row",
@@ -81,7 +97,10 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<"passwords_2fa_setup
             }}
             onPress={() => setIsAddOpen(true)}
           >
-            <Text text={translate("password.add_otp")} />
+            <Text
+              color={disableAddNew ? colors.secondaryText : colors.title}
+              text={translate("password.add_otp")}
+            />
           </TouchableOpacity>
         </View>
 

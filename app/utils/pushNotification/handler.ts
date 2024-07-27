@@ -47,7 +47,7 @@ export const handleNewShare = async (data: string | object) => {
   notify({
     id: `share_new`,
     title: 'Locker',
-    body: i.handleNewShares(shareData.share_type),
+    body: i.handleNewShares(shareData.share_type || 1),
     data: {
       type: PushEvent.SHARE_NEW,
     },
