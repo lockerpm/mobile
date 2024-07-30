@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { BackHandler } from 'react-native'
 import { PartialState, NavigationState, NavigationContainerRef } from '@react-navigation/native'
 import { IS_PROD } from '../config/constants'
+import { trackScreenView } from 'app/utils/analytics'
 
 export const RootNavigation = {
   navigate(name: string) {
@@ -102,7 +103,8 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
 
     if (previousRouteName !== currentRouteName) {
       if (!__DEV__ && IS_PROD) {
-        //
+        // track screens.
+        trackScreenView(currentRouteName)
       }
     }
 

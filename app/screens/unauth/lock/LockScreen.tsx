@@ -15,6 +15,7 @@ import { observer } from "mobx-react-lite"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { CommonActions } from "@react-navigation/native"
 import { AndroidAutofillServiceType } from "app/utils/autofillHelper"
+import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 
 const IS_IOS = Platform.OS === "ios"
 
@@ -120,6 +121,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
   }
 
   const handleUnlock = async () => {
+    logFirebaseEvent(AnalyticEvents.ENTER_MASTER_PW, user.email)
     if (!route.params.temporaryLock) {
       const connectionState = await NetInfo.fetch()
       // Sync

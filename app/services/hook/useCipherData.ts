@@ -30,6 +30,7 @@ import { CollectionRequest } from "core/models/request/collectionRequest"
 import { CipherData, FolderData } from "core/models/data"
 import { OrganizationData } from "core/models/data/organizationData"
 import { useTheme } from "../context"
+import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 
 export function useCipherData() {
   const { cipherStore, folderStore, uiStore, collectionStore, user, enterpriseStore } = useStores()
@@ -1078,6 +1079,7 @@ export function useCipherData() {
       } else {
         notifyApiError(res)
       }
+      logFirebaseEvent(AnalyticEvents.CREATE_ITEMS, user.email)
       return res
     } catch (e) {
       notify("error", translate("error.something_went_wrong"))
@@ -1456,6 +1458,7 @@ export function useCipherData() {
       })
       if (res.kind === "ok") {
         notify("success", translate("success.cipher_shared"))
+        logFirebaseEvent(AnalyticEvents.SHARE_ITENS, user.email)
       } else {
         notifyApiError(res)
       }
@@ -1581,6 +1584,7 @@ export function useCipherData() {
       })
       if (res.kind === "ok") {
         notify("success", translate("success.cipher_shared"))
+        logFirebaseEvent(AnalyticEvents.SHARE_ITENS, user.email)
       } else {
         notifyApiError(res)
       }

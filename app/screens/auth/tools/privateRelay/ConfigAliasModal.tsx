@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, {  useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { RelayAddress } from 'app/static/types'
 import { BottomModal, Text, Toggle } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
+import { AnalyticEvents, logFirebaseEvent } from 'app/utils/analytics'
 
 interface Props {
   isOpen?: boolean
@@ -13,7 +14,7 @@ interface Props {
 
 export const ConfigAliasModal = (props: Props) => {
   const { isOpen, onClose, item } = props
-  const { toolStore } = useStores()
+  const { toolStore, user } = useStores()
   const { translate } = useHelper()
 
   // --------------- PARAMS ----------------
@@ -62,7 +63,8 @@ export const ConfigAliasModal = (props: Props) => {
     const blockSpam = val === ALIAS_CONFIG.BLOCK_SPAM
     const res = await toolStore.configRelayAddress(item.id, item.address, enabled, blockSpam)
     if (res.kind === 'ok') {
-      // onClose()
+      onClose()
+      logFirebaseEvent(AnalyticEvents.BLOCK_PRIVATE_EMAIL, user.email)
     }
   }
 

@@ -8,6 +8,23 @@ const WHITELIST_HOSTS = ['https://locker.io', 'https://id.locker.io', 'https://s
 const COOKIES_URL = 'https://locker.io'
 const TAGS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
 
+
+export enum AnalyticEvents {
+  REGISTER_SUCCESS = "register_success",
+  CREATE_MASTER_PW = "create_master_pw",
+  ENTER_MASTER_PW = "enter_master_pw",
+  COPY_OTP = "copy_otp",
+  ADD_OTP = 'add_otp',
+  CREATE_PRIVATE_EMAIL = "create_private_email",
+  BLOCK_PRIVATE_EMAIL = "block_private_email",
+  CREATE_ITEMS = "create_items",
+  SHARE_ITENS = "share_items",
+  GENERATE_PASSWORD = "generate_password",
+  PASSWORD_HEALTH = "password_health",
+  DATA_BREACH_SCANNER = "data_breach_scanner",
+}
+
+
 export const setCookiesFromUrl = (url: string) => {
   if (!url || !WHITELIST_HOSTS.some((host) => url.startsWith(host))) {
     return
@@ -35,6 +52,7 @@ export const setCookiesFromUrl = (url: string) => {
   }
 }
 
+
 export const getUtmCookies = async () => {
   const cookies = await CookieManager.get(COOKIES_URL)
   const res = {}
@@ -51,11 +69,11 @@ export const getCookies = async (name: string) => {
   return cookies[name]
 }
 
-// Register success
+
 export const logRegisterSuccessEvent = async () => {
   const cookies = await getUtmCookies()
-  const device_identifier = DeviceInfo.getUniqueId()
-  await analytics().logEvent('register_success', {
+  const device_identifier = await DeviceInfo.getUniqueId()
+  await analytics().logEvent(AnalyticEvents.REGISTER_SUCCESS, {
     ...cookies,
     device_identifier,
   })
@@ -64,9 +82,28 @@ export const logRegisterSuccessEvent = async () => {
 // Create master pw
 export const logCreateMasterPwEvent = async () => {
   const cookies = await getUtmCookies()
-  const device_identifier = DeviceInfo.getUniqueId()
-  await analytics().logEvent('create_master_pw', {
+  const device_identifier = await DeviceInfo.getUniqueId()
+  await analytics().logEvent(AnalyticEvents.CREATE_MASTER_PW, {
     ...cookies,
     device_identifier,
+  })
+}
+
+export const trackScreenView = (screenName: string) => {
+  if (__DEV__) {
+    return
+  }
+
+  analytics().logScreenView({
+    screen_name: screenName,
+    screen_class: screenName,
+  })
+}
+
+export const logFirebaseEvent = async (event: AnalyticEvents, email: string) => {
+  const device_identifier = await DeviceInfo.getUniqueId()
+  await analytics().logEvent(event, {
+    device_identifier,
+    email
   })
 }
