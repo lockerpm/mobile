@@ -9,6 +9,8 @@ import Modal from "react-native-modal"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useStores } from "app/models"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
+import { useNavigation } from "@react-navigation/native"
+import { GeneralApiProblem } from "app/services/api/apiProblem"
 
 interface Props {
   isOpen: boolean
@@ -17,19 +19,30 @@ interface Props {
 }
 
 export const PrivateEmailModal = ({ isOpen, onClose, onSelectEmail }: Props) => {
-  const { translate } = useHelper()
+  const navigation = useNavigation() as any
+  const { translate, notifyApiError } = useHelper()
   const { colors } = useTheme()
   const { toolStore, user } = useStores()
   const insets = useSafeAreaInsets()
 
   const [isSelectFronExisting, setIsSelectFromExisting] = useState(false)
 
+  const generateFailed = (res: GeneralApiProblem) => {
+    notifyApiError(res)
+    // @ts-ignore
+    if (user.isFreePlan && res.data?.code === "8000") {
+      onClose()
+      navigation.navigate("payment")
+    }
+  }
 
   const generateRelayNewAddress = async () => {
     const res = await toolStore.generateRelayNewAddress()
     if (res.kind === "ok") {
       logFirebaseEvent(AnalyticEvents.CREATE_PRIVATE_EMAIL, user.email)
       onSelectEmail(res.data.full_address)
+    } else {
+      generateFailed(res)
     }
   }
 
@@ -107,7 +120,7 @@ export const PrivateEmailModal = ({ isOpen, onClose, onSelectEmail }: Props) => 
             />
           </>
         )}
-        {isSelectFronExisting && <PrivateEmailList onSelect={onSelectEmail} />}
+        {isSelectFronExisting && <PrivateEmailList onSelect={onSelectEmail} generateFailed={generateFailed} />}
       </View>
     </Modal>
   )

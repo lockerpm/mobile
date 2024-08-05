@@ -1,5 +1,6 @@
 import { Button, Text } from "app/components/cores"
 import { useStores } from "app/models"
+import { GeneralApiProblem } from "app/services/api/apiProblem"
 import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
@@ -8,8 +9,9 @@ import { FlatList, TouchableOpacity, View } from "react-native"
 
 interface Props {
   onSelect: (email: string) => void
+  generateFailed: (res: GeneralApiProblem) => void
 }
-export const PrivateEmailList = ({ onSelect }: Props) => {
+export const PrivateEmailList = ({ onSelect, generateFailed }: Props) => {
   const { toolStore, user } = useStores()
   const { colors } = useTheme()
   const { translate } = useHelper()
@@ -36,6 +38,8 @@ export const PrivateEmailList = ({ onSelect }: Props) => {
     if (res.kind === "ok") {
       logFirebaseEvent(AnalyticEvents.CREATE_PRIVATE_EMAIL, user.email)
       onSelect(res.data.full_address)
+    } else {
+      generateFailed(res)
     }
   }
 
