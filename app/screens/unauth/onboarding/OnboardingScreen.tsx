@@ -24,18 +24,18 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
         marginHorizontal: 20,
       }}
     >
-      <Button preset="primary" text={translate("common.sign_up")} onPress={navigateSignup} />
+      <Button preset="primary" text={translate("common.login")} onPress={navigateLogin} />
       <Text
         style={{
           textAlign: "center",
           marginVertical: 12,
         }}
       >
-        {translate("onBoarding.has_account") + " "}
+        {translate("onBoarding.no_account") + " "}
         <Text
-          onPress={navigateLogin}
+          onPress={navigateSignup}
           style={{ color: colors.primary }}
-          text={translate("common.login")}
+          text={translate("common.sign_up")}
         />
       </Text>
     </View>

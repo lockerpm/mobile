@@ -84,14 +84,14 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
     setIsUnlocking(false)
   }
 
-  const handleUnlockBiometric = async () => {
+  const handleUnlockBiometric = async (init?: boolean) => {
     if (!user.isBiometricUnlock) {
       notify("error", translate("error.biometric_not_enable"))
       return
     }
     const hadKey = await checkKey()
     if (!hadKey) {
-      notify("info", translate("error.not_valid_for_biometric"))
+      !init && notify("info", translate("error.not_valid_for_biometric"))
       return
     }
 
@@ -135,7 +135,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
     fetchEnterpriseInvitation()
     const unsubscribe = navigation.addListener("focus", () => {
       if (user.isBiometricUnlock) {
-        handleUnlockBiometric()
+        handleUnlockBiometric(true)
       }
     })
     return unsubscribe
@@ -255,7 +255,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
 
         <TouchableOpacity
           disabled={isUnlocking}
-          onPress={handleUnlockBiometric}
+          onPress={() => handleUnlockBiometric()}
           style={{
             width: "100%",
             marginVertical: 25,

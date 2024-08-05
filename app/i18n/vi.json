@@ -661,6 +661,11 @@
       "title": "Khỏi lo quên mật khẩu",
       "desc": "Thêm mật khẩu của bạn và truy cập chúng trên mọi thiết bị, bất kỳ lúc nào",
       "btn": "Thêm mật khẩu"
+    },
+    "hide_email": {
+      "title": "Ẩn email của bạn",
+      "generate_new": "Tạo mới email ẩn danh",
+      "existing_email": "Sử dụng emial ẩn danh có sẵn"
     }
   },
   "shares": {

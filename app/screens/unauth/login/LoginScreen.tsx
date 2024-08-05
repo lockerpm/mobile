@@ -57,23 +57,6 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
     api.apisauce.setBaseURL(BASE_URL)
   }, [])
 
-  useEffect(() => {
-    const handleBack = (e) => {
-      if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
-        navigation.dispatch(e.data.action)
-        return
-      }
-
-      e.preventDefault()
-      navigation.navigate("login")
-    }
-
-    navigation.addListener("beforeRemove", handleBack)
-    return () => {
-      navigation.removeListener("beforeRemove", handleBack)
-    }
-  }, [navigation])
-
   // ------------------------------ RENDER -------------------------------
 
   return (

@@ -607,6 +607,11 @@
       "title": "重設密碼",
       "desc": "新增密碼並隨時在任何裝置上存取",
       "btn": "新增密碼"
+    },
+    "hide_email": {
+      "title": "隱藏您的電子郵件",
+      "generate_new": "產生新的私人電子郵件",
+      "existing_email": "使用現有的私人電子郵件"
     }
   },
   "shares": {

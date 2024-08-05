@@ -1,6 +1,6 @@
 import countries from "app/static/countries.json"
 import React, { useState, useEffect, useRef, useCallback, FC } from "react"
-import { Linking, Platform, TouchableOpacity, View } from "react-native"
+import { BackHandler, Linking, Platform, TouchableOpacity, View } from "react-native"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
@@ -58,11 +58,11 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer((props)
   // ---------------- METHODS ---------------------
 
   const goBack = () => {
-    props.navigation.goBack()
+    navigation.replace("login")
   }
 
   const navigateLogin = () => {
-    props.navigation.replace("login")
+    navigation.replace("login")
   }
 
   const getCaptchaToken = useCallback(async () => {
@@ -171,6 +171,17 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer((props)
   useEffect(() => {
     checkPasskeySupported()
   }, [])
+
+  useEffect(() => {
+    const onBackPress = () => {
+      props.navigation.replace("login")
+      return true
+    }
+
+    BackHandler.addEventListener('hardwareBackPress', onBackPress)
+
+    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+  }, [navigation])
   // ---------------- RENDER ---------------------
 
   const Footer = useCallback(

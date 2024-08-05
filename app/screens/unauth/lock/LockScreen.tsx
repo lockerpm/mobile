@@ -116,7 +116,6 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
       if (isSuccess) {
         user.updateFCM(user.fcmToken)
       }
-      console.log(user.fcmToken)
     }
   }
 

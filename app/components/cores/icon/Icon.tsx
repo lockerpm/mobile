@@ -192,6 +192,8 @@ export const iconRegistry = {
   'clock-clockwise': require('assets/icons/clock-clockwise.png'),
   "arrow-clockwise": require('assets/icons/arrow-clockwise.png'),
   'dots-three-vertical': require('assets/icons/dots-three-vertical.png'),
+  'zap-fast': require('assets/icons/zap-fast.png'),
+  'mail-03': require('assets/icons/mail-03.png'),
 }
 
 const $imageStyle: ImageStyle = {
