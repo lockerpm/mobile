@@ -106,6 +106,7 @@
     "share": "Share",
     "show_password": "Show password",
     "sign_up": "Sign up",
+    "sign_in": "Sign in",
     "skip": "Skip",
     "sort": "Sort",
     "submit": "Submit",
@@ -454,7 +455,7 @@
     "master_pass_changed": "Master password changed. Please login using the new password",
     "hint_sent": "Master Password hint sent. Please check your email for instructions",
     "title": "Welcome Back!",
-    "desc": "Enter your Master Password to Log In",
+    "desc": "Enter your Master Password to Unlock",
     "get_hint": "Get Master Password hint"
   },
   "onBoarding": {
@@ -612,7 +613,8 @@
     "hide_email": {
       "title": "Hide your email",
       "generate_new": "Generate new private email",
-      "existing_email": "Use existing private email"
+      "existing_email": "Use existing private email",
+      "empty": "You haven't generated any private email"
     }
   },
   "shares": {
@@ -642,8 +644,8 @@
       }
     },
     "status": {
-      "invited" : "invited",
-      "accepted" : "accepted",
+      "invited": "invited",
+      "accepted": "accepted",
       "confirmed": "confirmed"
     },
     "empty": {
@@ -897,7 +899,7 @@
     "trial": "(Start with 2 weeks free trial)",
     "cancel_text": "Recurring billing. Cancel anytime",
     "benefit": {
-      "locker": "Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Backups",
+      "locker": "Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Backups, OTPs and Private Emails",
       "web": "Dark Web Monitoring protects your accounts from massive data breaches",
       "emergency_contact": "Emergency Contact let trusted accounts access your vault when needed",
       "share_password": "Share Passwords and items securely with your friends and family members"
@@ -1213,17 +1215,17 @@
       "100005": "{{member_joined_text}} group {{group_name}} that you shared your items with. Click to confirm sharing so they can see shared items."
     },
     "payment": {
-      "100007":  "Your invoice {{payment_id}} was paid successfully",
+      "100007": "Your invoice {{payment_id}} was paid successfully",
       "100008": "Locker couldn't proceed payment on your account. Your account was downgraded"
     },
     "emergency_access": {
       "100009": "The user {{grantor_name}} ({{grantor_email}}) has invited you as his/her Emergency Contact",
       "100010": "The user {{grantee_name}} ({{grantee_email}}) has accepted your invitation. Please confirm his/her identity as your new Emergency Access",
-      "100011":  "User {{grantee_name}} ({{grantee_email}}) has accepted your Emergency Contact invitation",
+      "100011": "User {{grantee_name}} ({{grantee_email}}) has accepted your Emergency Contact invitation",
       "100012": "User {{grantee_name}} ({{grantee_email}}) has declined your Emergency Contact invitation",
       "100013": "You are now Emergency Contact of the user {{grantor_name}} ({{grantor_email}})",
       "100014": "User {{grantee_name}} ({{grantee_email}}) has requested to {{request}} your vault items",
-      "100015":  "User {{grantor_name}} ({{grantor_email}}) has accepted your Emergency Request",
+      "100015": "User {{grantor_name}} ({{grantor_email}}) has accepted your Emergency Request",
       "100016": "User {{grantor_name}} ({{grantor_email}}) has declined your Emergency Request"
     }
   },

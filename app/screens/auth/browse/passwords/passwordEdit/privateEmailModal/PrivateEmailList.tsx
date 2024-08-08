@@ -1,20 +1,15 @@
-import { Button, Text } from "app/components/cores"
+import { Text } from "app/components/cores"
 import { useStores } from "app/models"
-import { GeneralApiProblem } from "app/services/api/apiProblem"
 import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
-import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import React, { useEffect, useRef, useState } from "react"
 import { FlatList, TouchableOpacity, View } from "react-native"
 
 interface Props {
   onSelect: (email: string) => void
-  generateFailed: (res: GeneralApiProblem) => void
 }
-export const PrivateEmailList = ({ onSelect, generateFailed }: Props) => {
-  const { toolStore, user } = useStores()
+export const PrivateEmailList = ({ onSelect }: Props) => {
+  const { toolStore } = useStores()
   const { colors } = useTheme()
-  const { translate } = useHelper()
   const [emails, setEmails] = useState<string[]>([])
   const totalCount = useRef(0)
 
@@ -30,16 +25,6 @@ export const PrivateEmailList = ({ onSelect, generateFailed }: Props) => {
   const loadMoreEmail = () => {
     if (totalCount.current > emails.length) {
       fetchRelayListAddressed()
-    }
-  }
-
-  const generateRelayNewAddress = async () => {
-    const res = await toolStore.generateRelayNewAddress()
-    if (res.kind === "ok") {
-      logFirebaseEvent(AnalyticEvents.CREATE_PRIVATE_EMAIL, user.email)
-      onSelect(res.data.full_address)
-    } else {
-      generateFailed(res)
     }
   }
 
@@ -61,7 +46,7 @@ export const PrivateEmailList = ({ onSelect, generateFailed }: Props) => {
           <TouchableOpacity onPress={() => onSelect(item)}>
             <Text
               style={{
-                marginVertical: 8,
+                marginVertical: 12,
               }}
               text={item}
             />
@@ -70,15 +55,13 @@ export const PrivateEmailList = ({ onSelect, generateFailed }: Props) => {
         ItemSeparatorComponent={() => (
           <View style={{ height: 1, backgroundColor: colors.border }} />
         )}
+        ListEmptyComponent={
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Text tx="password.hide_email.empty" />
+          </View>
+        }
         onEndReachedThreshold={0.5}
         onEndReached={loadMoreEmail}
-      />
-      <Button
-        text={translate("password.hide_email.generate_new")}
-        onPress={generateRelayNewAddress}
-        style={{
-          marginHorizontal: 16,
-        }}
       />
     </View>
   )

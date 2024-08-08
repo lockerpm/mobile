@@ -24,7 +24,7 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
         marginHorizontal: 20,
       }}
     >
-      <Button preset="primary" text={translate("common.login")} onPress={navigateLogin} />
+      <Button preset="primary" text={translate("common.sign_in")} onPress={navigateLogin} />
       <Text
         style={{
           textAlign: "center",

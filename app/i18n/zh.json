@@ -106,6 +106,7 @@
     "share": "分享",
     "show_password": "顯示密碼",
     "sign_up": "註冊",
+    "sign_in": "登入",
     "skip": "略過",
     "sort": "排序",
     "submit": "送出",
@@ -611,7 +612,8 @@
     "hide_email": {
       "title": "隱藏您的電子郵件",
       "generate_new": "產生新的私人電子郵件",
-      "existing_email": "使用現有的私人電子郵件"
+      "existing_email": "使用現有的私人電子郵件",
+      "empty": "您還沒有產生任何私人電子郵件"
     }
   },
   "shares": {
@@ -896,7 +898,7 @@
     "trial": "（前 2 週免費試用）",
     "cancel_text": "自動扣款。隨時可取消",
     "benefit": {
-      "locker": "無限密碼、安全筆記、付款卡片、身分、加密貨幣備份",
+      "locker": "無限密碼、安全筆記、付款卡片、身分、加密貨幣備份、OTP 和私人電子郵件",
       "web": "暗網監控可保護您的帳戶免受大規模數據洩露的侵害",
       "emergency_contact": "緊急連絡人可使您信任的帳戶能在必要時取用您的保險庫",
       "share_password": "與您的朋友和家人安全地分享密碼和項目"

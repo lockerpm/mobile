@@ -94,14 +94,9 @@ export const PrivateEmailModal = ({ isOpen, onClose, onSelectEmail }: Props) => 
                 : translate("password.hide_email.title")
             }
             numberOfLines={1}
-            style={{ textAlign: isSelectFronExisting? "center" : "left"}}
+            style={{ textAlign: isSelectFronExisting ? "center" : "left" }}
           />
-          <Icon
-            icon="x"
-            onPress={onClose}
-            containerStyle={{
-            }}
-          />
+          <Icon icon="x" onPress={onClose} containerStyle={{}} />
         </View>
 
         {!isSelectFronExisting && (
@@ -120,7 +115,7 @@ export const PrivateEmailModal = ({ isOpen, onClose, onSelectEmail }: Props) => 
             />
           </>
         )}
-        {isSelectFronExisting && <PrivateEmailList onSelect={onSelectEmail} generateFailed={generateFailed} />}
+        {isSelectFronExisting && <PrivateEmailList onSelect={onSelectEmail} />}
       </View>
     </Modal>
   )

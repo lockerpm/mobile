@@ -360,7 +360,6 @@ export const PasswordEditScreen: FC<AppStackScreenProps<"passwords__edit">> = ob
               alignItems: "center",
             }}
           >
-            <Icon icon="repeat" size={20} color={colors.primary} />
             <Text
               preset="bold"
               color={colors.primary}

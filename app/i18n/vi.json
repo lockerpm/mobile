@@ -106,6 +106,7 @@
     "share": "Chia sẻ",
     "show_password": "Hiện mật khẩu",
     "sign_up": "Đăng ký",
+    "sign_in": "Đăng nhập",
     "skip": "Bỏ qua",
     "sort": "Sắp xếp",
     "submit": "Gửi",
@@ -665,7 +666,8 @@
     "hide_email": {
       "title": "Ẩn email của bạn",
       "generate_new": "Tạo mới email ẩn danh",
-      "existing_email": "Sử dụng emial ẩn danh có sẵn"
+      "existing_email": "Sử dụng emial ẩn danh có sẵn",
+      "empty": "Bạn chưa taọ bất kì email ẩn danh nào"
     }
   },
   "shares": {
@@ -695,8 +697,8 @@
       }
     },
     "status": {
-      "invited" : "Đã mời",
-      "accepted" : "Chấp nhận",
+      "invited": "Đã mời",
+      "accepted": "Chấp nhận",
       "confirmed": "Xác nhận"
     },
     "empty": {
@@ -950,7 +952,7 @@
     "trial": "(Bắt đầu với 2 tuần dùng thử miễn phí)",
     "cancel_text": "Thanh toán định kỳ. Hủy bất cứ lúc nào",
     "benefit": {
-      "locker": "Lưu trữ không giới hạn, Ghi chú bảo mật, Thẻ thanh toán, Tài sản tiền điện tử",
+      "locker": "Lưu trữ không giới hạn, Ghi chú bảo mật, Thẻ thanh toán, Tài sản tiền điện tử, OTPs và Email ẩn danh",
       "web": "Giám sát Dark Web bảo vệ tài khoản của bạn khỏi các vi phạm dữ liệu lớn",
       "emergency_contact": "Liên hệ khẩn cấp cho phép các tài khoản đáng tin cậy truy cập dữ liệu của bạn",
       "share_password": "Chia sẻ mật khẩu an toàn với bạn bè và thành viên gia đình của bạn"
