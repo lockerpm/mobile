@@ -21,6 +21,8 @@ class User {
   var language: String = "vi"
   var isDarkTheme: Bool = false
   var isLoggedInPw: Bool = false
+  var token: String!
+  var isFree: Bool = true
   
   func getAutofillDataById(id: String?) -> AutofillData? {
     if id == nil {
@@ -80,5 +82,7 @@ class User {
     self.hashMassterPass = data.hashPass
     self.avatar = data.avatar
     self.isLoggedInPw = data.isLoggedInPw
+    self.token = data.token
+    self.isFree = data.isFree
   }
 }

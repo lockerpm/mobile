@@ -51,3 +51,11 @@
 "create.password" = "Mật khẩu";
 "create.web" = "Địa chỉ web";
 "create.noti" = "Mục này sẽ được tạo và lưu cục bộ. Nó sẽ được đồng bộ hóa với máy chủ Locker khi bạn mở khóa ứng dụng Locker.";
+
+//hide email
+"relay.title" = "Ẩn email của bạn";
+"relay.generate_new" = "Tạo mới email ẩn danh";
+"relay.existing_email" = "Sử dụng emial ẩn danh có sẵn";
+"relay.empty" = "Bạn chưa taọ bất kì email ẩn danh nào";
+"relay.freeLimit" = "Số lượng email ẩn danh đã đạt tối đa";
+"relay.upgrade" = "Truy cập ứng dụng locker để nâng cấp lên gói Premium để có thể tạo email ẩn danh không giới hạn";

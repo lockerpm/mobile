@@ -2,7 +2,7 @@ import { Text } from "app/components/cores"
 import { useStores } from "app/models"
 import { useTheme } from "app/services/context"
 import React, { useEffect, useRef, useState } from "react"
-import { FlatList, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, FlatList, TouchableOpacity, View } from "react-native"
 
 interface Props {
   onSelect: (email: string) => void
@@ -10,16 +10,20 @@ interface Props {
 export const PrivateEmailList = ({ onSelect }: Props) => {
   const { toolStore } = useStores()
   const { colors } = useTheme()
+
+  const [isLoading, setIsLoading] = useState(false)
   const [emails, setEmails] = useState<string[]>([])
   const totalCount = useRef(0)
 
   const fetchRelayListAddressed = async () => {
+    setIsLoading(true)
     const pageNumber = Math.ceil(emails.length / 20 || 1)
     const res = await toolStore.fetchRelayListAddresses(pageNumber)
     if (res.kind === "ok") {
       totalCount.current = res.data.count
       setEmails(res.data.results.map((e) => e.full_address))
     }
+    setIsLoading(false)
   }
 
   const loadMoreEmail = () => {
@@ -57,7 +61,11 @@ export const PrivateEmailList = ({ onSelect }: Props) => {
         )}
         ListEmptyComponent={
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text tx="password.hide_email.empty" />
+            {isLoading ? (
+              <ActivityIndicator color={colors.primaryText} />
+            ) : (
+              <Text tx="password.hide_email.empty" />
+            )}
           </View>
         }
         onEndReachedThreshold={0.5}

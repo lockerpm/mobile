@@ -50,3 +50,11 @@
 "create.password" = "Password";
 "create.web" = "Website";
 "create.noti" = "This item will be created and saved locally. It will be synced to the Locker server when you unlock the Locker app.";
+
+//hide email
+"relay.title" = "Hide your email";
+"relay.generate_new" = "Generate new private email";
+"relay.existing_email" = "Use existing private email";
+"relay.empty" = "You haven't generated any private email";
+"relay.freeLimit" = "Your Free Plan Storage is Limited";
+"relay.upgrade" = "You are in Free plan. Upgrade to Premium to add more Private Email";

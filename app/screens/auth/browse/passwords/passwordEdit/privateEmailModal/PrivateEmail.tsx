@@ -106,6 +106,7 @@ export const PrivateEmailModal = ({ isOpen, onClose, onSelectEmail }: Props) => 
               icon="zap-fast"
               action={generateRelayNewAddress}
             />
+            <View style={{ height: 1.3, backgroundColor: colors.border }}></View>
             <ActionItem
               name={translate("password.hide_email.existing_email")}
               icon="mail-03"

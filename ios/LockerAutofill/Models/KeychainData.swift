@@ -45,4 +45,6 @@ struct KeychainData: Hashable, Codable {
   var language: String
   var isDarkTheme: Bool
   var isLoggedInPw: Bool
+  var token: String
+  var isFree: Bool
 }

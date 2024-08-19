@@ -127,7 +127,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
       if (connectionState.isConnected) {
         // Refresh FCM
         refreshFCM()
-  
+
         // Sync teams and plan
         if (!isAutofillAnroid) {
           await user.loadTeams()
@@ -139,7 +139,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
       const navigationRequest = await parsePushNotiData()
       if (navigationRequest.path) {
         // handle navigate browse
-  
+
         navigationRequest.tempParams &&
           // @ts-ignore TODO
           navigation.replace(navigationRequest.path, navigationRequest.tempParams)
@@ -147,7 +147,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
         navigation.replace(navigationRequest.path, navigationRequest.params)
         return
       }
-  
+
       if (!isAutofillAnroid) {
         if (
           (!user.biometricIntroShown || uiStore.isStartFromPasswordLess) &&
@@ -161,33 +161,37 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
           }
         }
       }
-  
+
       // Done -> navigate
       if (isAutofillAnroid) {
         const data = uiStore.androidAutofillServiceData
         if (data.type === AndroidAutofillServiceType.SAVE_REQUEST) {
-          navigation.replace("mainStack", { screen: "passwords__edit", params: {mode: "add", androidAutofillSavedData: data } })
+          navigation.replace("mainStack", {
+            screen: "passwords__edit",
+            params: { mode: "add", androidAutofillSavedData: data },
+          })
         } else {
-          navigation.replace("mainStack", { screen: "autofill", params: { data} })
+          navigation.replace("mainStack", { screen: "autofill", params: { data } })
         }
         return
       }
-  
+
       if (uiStore.isDeeplinkEmergencyAccess) {
         uiStore.setIsDeeplinkEmergencyAccess(false)
-        navigation.replace("mainStack", { screen: "mainTab", params: {  screen: "menuTab" } })
+        navigation.replace("mainStack", { screen: "mainTab", params: { screen: "menuTab" } })
         navigation.replace("mainStack", { screen: "emergencyAccess" })
       } else if (uiStore.isDeeplinkShares) {
         uiStore.setIsDeeplinkShares(false)
-        navigation.replace("mainStack", { screen: "mainTab", params: {  screen: "browseTab" } })
+        navigation.replace("mainStack", { screen: "mainTab", params: { screen: "browseTab" } })
       } else if (enterpriseStore.isEnterpriseInvitations) {
         navigation.replace("mainStack", { screen: "enterpriseInvited" })
       } else {
-        navigation.replace("mainStack", { screen: "mainTab", params: {  screen: user.defaultTab} })
+        navigation.replace("mainStack", { screen: "mainTab", params: { screen: user.defaultTab } })
       }
     } else {
-      navigation.pop(1)  
+      navigation.pop(1)
     }
+    console.log(user.apiToken)
   }
 
   // -------------- EFFECT ------------------
@@ -200,18 +204,15 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
 
   // // Handle back press
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      handleBack,
-    );
-    return () => backHandler.remove();
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBack)
+    return () => backHandler.remove()
   }, [navigation])
 
   // ---------------------- RENDER -------------------------
   const commonProps = {
     biometryType,
     handleLogout,
-    handleUnlock
+    handleUnlock,
   }
 
   if (route.params.type === LockType.OnPremise) {

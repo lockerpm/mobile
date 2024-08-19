@@ -88,19 +88,21 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<"passwords_2fa_setup
             {selectedOtp === null && <Icon icon="check" size={19} color={colors.primary} />}
           </TouchableOpacity>
           <TouchableOpacity
-            disabled={disableAddNew}
             style={{
               padding: 16,
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
             }}
-            onPress={() => setIsAddOpen(true)}
+            onPress={() => {
+              if (disableAddNew) {
+                navigation.navigate("payment")
+              } else {
+                setIsAddOpen(true)
+              }
+            }}
           >
-            <Text
-              color={disableAddNew ? colors.secondaryText : colors.title}
-              text={translate("password.add_otp")}
-            />
+            <Text color={colors.title} text={translate("password.add_otp")} />
           </TouchableOpacity>
         </View>
 

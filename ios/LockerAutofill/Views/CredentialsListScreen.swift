@@ -104,12 +104,14 @@ struct CredentialsListScreen: View {
         ToolbarItem(placement: .navigationBarTrailing) {
           NavigationLink(
             destination:  CreateCipherScreen(
+              token: afd.user.token,
+              isFree: afd.user.isFree,
               initWebsite: initSearch,
               goBack: {
                 isShowCreatePassword = false
               },
               saveAndFill: afd.createLoginItem
-            ), 
+            ),
             isActive: $isShowCreatePassword
           ) {
             Button {

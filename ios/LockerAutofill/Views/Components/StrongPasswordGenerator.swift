@@ -72,7 +72,6 @@ struct StrongPasswordGenerator: View {
                     )
                     .onChange(of: length) { newValue in
                         generatePassword()
-                        //                    print(newValue)
                     }
                     .tint(Color("primary"))
                 }
@@ -102,7 +101,7 @@ struct StrongPasswordGenerator: View {
             .cornerRadius(15)
             
             Spacer()
-          HStack {
+            HStack {
             Button {
               generatePassword()
             } label: {

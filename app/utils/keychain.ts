@@ -22,9 +22,11 @@ export type AutofillDataType = {
   hashPass: string
   avatar: string
   faceIdEnabled: boolean
+  token: string
   language: string
   isDarkTheme: boolean
   isLoggedInPw: boolean
+  isFree: boolean
 }
 
 /**
