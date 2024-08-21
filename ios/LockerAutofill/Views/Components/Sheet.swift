@@ -23,7 +23,6 @@ struct HalfSheetHelper<Content: View>: UIViewControllerRepresentable {
   let controller: UIViewController = UIViewController()
   @Binding var showSheet: Int
   var onDismiss: () -> Void = {}
-
   
   func makeCoordinator() -> Coordinator {
     Coordinator(parent: self)
@@ -40,7 +39,7 @@ struct HalfSheetHelper<Content: View>: UIViewControllerRepresentable {
       sheetController.presentationController?.delegate = context.coordinator
       uiViewController.present(sheetController, animated: true)
     } else if showSheet == 2 {
-      uiViewController.dismiss(animated: true)
+      uiViewController.dismiss(animated: true, completion: onDismiss)
     }
   }
   

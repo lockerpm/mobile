@@ -20,8 +20,8 @@ struct PrivateEmailList: View {
       Text(i.translate("relay.existing_email"))
         .font(.title3)
         .padding()
-        .padding(.bottom, 0)
-      List{
+        .padding(.bottom, -4)
+      List {
         ForEach(data.relays){relay in
           Button {
             useEmail(relay.full_address)
@@ -37,9 +37,14 @@ struct PrivateEmailList: View {
             }
         }
       }
-      .padding(.top, -24)
+      .onAppear(perform: {
+        UICollectionView.appearance().contentInset.top = -23
+      })
       .task {
         await data.fetchRelayListAddresses(token: token)
+      }
+      .onDisappear{
+        UICollectionView.appearance().contentInset.top = 8
       }
     }
   }

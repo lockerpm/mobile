@@ -61,6 +61,7 @@ struct CreateCipherScreen: View {
             if !disableHideEmail {
               Button {
                 isShowPrivateEmail = true
+                isShowEmailList = 0
               } label: {
                 HStack() {
                   Spacer()
@@ -68,11 +69,11 @@ struct CreateCipherScreen: View {
                 }
                 .foregroundStyle(Color("primary"))
               }
-              
               .confirmationDialog(i.translate("relay.title"), isPresented: $isShowPrivateEmail, titleVisibility: .visible) {
                 Button(i.translate("relay.generate_new")) {
                   if (isFree && relayData.relays.count >= FREE_LIMIT) {
-                    isShowErrorGenerateEmail = true
+                    self.isShowErrorGenerateEmail = true
+                    self.isShowPrivateEmail = false
                   } else{
                     Task {
                       let email = await relayData.generateRelayNewAddress(token: token)
@@ -84,11 +85,11 @@ struct CreateCipherScreen: View {
                 if relayData.relays.count > 0 {
                   Button(i.translate("relay.existing_email")) {
                     self.isShowEmailList = 1
+                    self.isShowPrivateEmail = false
                   }
                 }
               }
             }
-            
             
             TextInput(isPassword: true, titleKey: i.translate("create.password"), textField: FocusedField.password, value: $passowrd)
             
@@ -154,12 +155,14 @@ struct CreateCipherScreen: View {
         isShowPasswordGenerator = 2
       })
     }
-    .halfSheet(showSheet: $isShowEmailList) {
+    .halfSheet(showSheet: $isShowEmailList, content: {
       PrivateEmailList(token: token, useEmail: {email in
         self.userName = email
         isShowEmailList = 2
       })
-    }
+    }, onDismiss: {
+      isShowEmailList = 0
+    })
     .background(Color.block)
   }
   
