@@ -191,7 +191,6 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
     } else {
       navigation.pop(1)
     }
-    console.log(user.apiToken)
   }
 
   // -------------- EFFECT ------------------

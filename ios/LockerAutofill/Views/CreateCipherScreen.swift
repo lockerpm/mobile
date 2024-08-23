@@ -149,12 +149,17 @@ struct CreateCipherScreen: View {
         }
       }
     }
-    .halfSheet(showSheet: $isShowPasswordGenerator) {
+    // Password Generator
+    .halfSheet(showSheet: $isShowPasswordGenerator, content: {
       StrongPasswordGenerator(usePassword: {strongPW in
         self.passowrd = strongPW
         isShowPasswordGenerator = 2
       })
-    }
+    }, onDismiss: {
+      isShowPasswordGenerator = 0
+    })
+    
+    //Hide Email
     .halfSheet(showSheet: $isShowEmailList, content: {
       PrivateEmailList(token: token, useEmail: {email in
         self.userName = email
