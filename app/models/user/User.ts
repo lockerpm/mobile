@@ -66,7 +66,17 @@ export const UserModel = types
     // Others data
     enterprise: types.maybeNull(types.frozen<Enterprise>()),
     teams: types.array(types.frozen<UserTeam>()),
-    plan: types.maybeNull(types.frozen<UserSubscripePlan>()),
+    plan: types.maybeNull(
+      types.frozen<UserSubscripePlan>({
+        name: "Free",
+        is_family: false,
+        alias: PlanType.FREE,
+        cancel_at_period_end: false,
+        duration: PlanTypeDuration.MONTHLY,
+        next_billing_time: 0,
+        payment_method: null,
+      }),
+    ),
     invitations: types.array(types.frozen<UserInvitations>()),
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),

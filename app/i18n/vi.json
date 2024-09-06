@@ -666,7 +666,7 @@
     "hide_email": {
       "title": "Ẩn email của bạn",
       "generate_new": "Tạo mới email ẩn danh",
-      "existing_email": "Sử dụng emial ẩn danh có sẵn",
+      "existing_email": "Sử dụng email ẩn danh có sẵn",
       "empty": "Bạn chưa taọ bất kì email ẩn danh nào"
     }
   },

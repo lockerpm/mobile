@@ -57,7 +57,7 @@ import {
   ContactsTrustedYouScreen,
   ViewEAScreen,
   TakeoverEAScreen,
-  // @ts-ignore 
+  // @ts-ignore
   AutofillServiceScreen,
   EnterpriseInvitedScreen,
   NormalSharesScreen,
@@ -66,7 +66,7 @@ import {
   QuickSharesDetailScreen,
   PasswordHistoryScreen,
 } from "../screens"
-import {  useCipherData, useHelper } from "app/services/hook"
+import { useCipherData, useHelper } from "app/services/hook"
 import { Logger } from "app/utils/utils"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { observer } from "mobx-react-lite"
@@ -94,7 +94,7 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
 
   // ------------------ PARAMS --------------------
 
-  const prevAppState = useRef('')
+  const prevAppState = useRef("")
   const appIsActive = useRef(true)
   const timeout = useRef(null)
   const activeHandling = useRef(false)
@@ -108,6 +108,9 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
 
   // Sync
   const handleSync = async () => {
+    user.loadTeams()
+    user.loadPlan()
+
     // Sync offline data
     await syncOfflineData()
 
@@ -137,13 +140,15 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
-    user.loadTeams()
-    user.loadPlan()
   }
 
   // Check invitation
   const handleUserDataSync = () => {
-    Promise.all([user.getInvitations(), cipherStore.loadSharingInvitations(), cipherStore.loadMyShares()])
+    Promise.all([
+      user.getInvitations(),
+      cipherStore.loadSharingInvitations(),
+      cipherStore.loadMyShares(),
+    ])
   }
 
   // request in app review
@@ -172,7 +177,6 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
       uiStore.setInAppReviewShowDate(currentTime + 6e8)
     }
   }
-
 
   // On app return from background -> lock? + sync autofill data + check push noti navigation
   const _handleAppStateChange = async (nextAppState: string) => {
@@ -205,7 +209,7 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
         if (user.appTimeout === AppTimeoutType.SCREEN_OFF && !temporaryLock.current) {
           temporaryLock.current = true
           navigation.push("lock", {
-            temporaryLock: true
+            temporaryLock: true,
           })
           activeHandling.current = false
           return
@@ -216,7 +220,8 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
         if (navigationRequest.path) {
           // handle navigate browse
           // @ts-ignore
-          navigationRequest.tempParams && navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
+          navigationRequest.tempParams &&
+            navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
           // @ts-ignore
           navigation.navigate(navigationRequest.path, navigationRequest.params)
         }
@@ -227,9 +232,9 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
 
   // App inactive trigger
   const handleInactive = async (isActive: boolean) => {
-    if (!isActive && user.appTimeout  > 0 && !temporaryLock.current) {
+    if (!isActive && user.appTimeout > 0 && !temporaryLock.current) {
       navigation.push("lock", {
-        temporaryLock: true
+        temporaryLock: true,
       })
     }
   }
@@ -261,7 +266,7 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
                 Promise.all(
                   data.data.ids.map(async (id) => {
                     syncSingleCipher(id)
-                  })
+                  }),
                 )
               } else {
                 const cipherId = data.data.id
@@ -334,13 +339,12 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
     }
   }, [uiStore.isOffline, user.isLoggedInPw, batchDecryptionEnded])
 
-
   useFocusEffect(
     React.useCallback(() => {
       temporaryLock.current = false
-    }, [])
-  );
-  
+    }, []),
+  )
+
   // Outdated data warning
   useEffect(() => {
     const subscription = AppState.addEventListener("change", _handleAppStateChange)
@@ -363,13 +367,13 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
           break
       }
     })
-    const unsubscribeNavigationEnd = navigation.addListener('transitionEnd', () => {
+    const unsubscribeNavigationEnd = navigation.addListener("transitionEnd", () => {
       if (!transitionEnd.current) {
         transitionEnd.current = true
         requestInAppReview()
         handleUserDataSync()
       }
-    });
+    })
 
     return () => {
       subscription.remove()
@@ -379,7 +383,6 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
       unsubscribeNavigationEnd()
       clearTimeout(timeout.current)
     }
-
   }, [])
 
   // ------------------ RENDER --------------------

@@ -55,7 +55,7 @@
 //hide email
 "relay.title" = "Ẩn email của bạn";
 "relay.generate_new" = "Tạo mới email ẩn danh";
-"relay.existing_email" = "Sử dụng emial ẩn danh có sẵn";
+"relay.existing_email" = "Sử dụng email ẩn danh có sẵn";
 "relay.empty" = "Bạn chưa taọ bất kì email ẩn danh nào";
 "relay.freeLimit" = "Số lượng email ẩn danh đã đạt tối đa";
 "relay.upgrade" = "Truy cập ứng dụng locker để nâng cấp lên gói Premium để có thể tạo email ẩn danh không giới hạn";
