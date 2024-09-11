@@ -187,7 +187,67 @@ export const momentRelativeTime = (lang: string) => {
       })
       break
     case "zh":
-      moment.locale("zh")
+      moment.locale("zh", {
+        months: [
+          "一月",
+          "二月",
+          "三月",
+          "四月",
+          "五月",
+          "六月",
+          "七月",
+          "八月",
+          "九月",
+          "十月",
+          "十一月",
+          "十二月",
+        ],
+        monthsShort: [
+          "一月",
+          "二月",
+          "三月",
+          "四月",
+          "五月",
+          "六月",
+          "七月",
+          "八月",
+          "九月",
+          "十月",
+          "十一月",
+          "十二月",
+        ],
+        relativeTime: {
+          future: "%s 后",
+          past: "%s 前",
+          s: "几秒钟",
+          m: "1 分钟",
+          mm: "%d 分钟",
+          h: "1 小时",
+          hh: "%d 小时",
+          d: "1 天",
+          dd: "%d 天",
+          M: "1 个月",
+          MM: "%d 个月",
+          y: "一年",
+          yy: "%d 年",
+        },
+        longDateFormat: {
+          LT: "HH:mm",
+          LTS: "HH:mm:ss",
+          L: "DD/MM/YYYY",
+          LL: "D MMMM [年] YYYY",
+          LLL: "D MMMM [年] YYYY HH:mm",
+          LLLL: "dddd, D MMMM [年] YYYY HH:mm",
+          l: "DD/M/YYYY",
+          ll: "D MMM YYYY",
+          lll: "D MMM YYYY HH:mm",
+          llll: "ddd, D MMM YYYY HH:mm",
+        },
+        week: {
+          dow: 1, // Monday is the first day of the week.
+        },
+      })
+
       break
     default:
       moment.locale("en")

@@ -30,11 +30,9 @@ export const BrowseListScreen = observer(() => {
     const data = await Promise.all(
       temp.map(async (key) => {
         let total = 0
-        let suffix = ""
         switch (key) {
           case "folder":
             total = folderStore.folders.length + collectionStore.collections.length
-            suffix = " " + (total === 1 ? translate("common.folder") : translate("common.folders"))
             break
           case "password":
             total = await getCipherCount(CipherType.Login)
@@ -62,7 +60,7 @@ export const BrowseListScreen = observer(() => {
         return {
           ...BROWSE_ITEMS[key],
           notiCount: key === "shares" ? shareNotiCount : 0,
-          total: total ? `${total}${suffix}` : "",
+          total: total ? `${total}` : "",
         }
       }),
     )

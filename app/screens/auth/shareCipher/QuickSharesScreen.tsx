@@ -500,11 +500,8 @@ const QuickShareConfig = ({
             style={{
               flexDirection: "row",
               alignItems: "center",
-              borderWidth: 1,
-              borderRadius: 8,
-              borderColor: colors.border,
-              padding: 16,
               marginBottom: 12,
+              width: 100,
             }}
             onTouchStart={() => {
               inputRef?.current?.focus()
@@ -515,7 +512,11 @@ const QuickShareConfig = ({
               keyboardType="number-pad"
               value={maxAccessCount.toString()}
               onChangeText={(value) => {
-                setMaxAccessCount(value.replace(/[^0-9]/g, ""))
+                if (value === "") {
+                  setMaxAccessCount("1")
+                } else {
+                  setMaxAccessCount(value.replace(/[^0-9]/g, ""))
+                }
               }}
               onBlur={() => {
                 if (!maxAccessCount || maxAccessCount === "0") setMaxAccessCount("1")
@@ -643,7 +644,7 @@ const QuickSharesInfo = ({
         {emails.map((e) => (
           <Text key={e} text={e} />
         ))}
-        {emails?.length === 0 && <Text tx={'quick_shares.config.anyone'} />}
+        {emails?.length === 0 && <Text tx={"quick_shares.config.anyone"} />}
       </View>
 
       {!!expirationDate && (
