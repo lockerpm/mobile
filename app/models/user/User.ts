@@ -62,6 +62,8 @@ export const UserModel = types
     is_pwd_manager: types.maybeNull(types.boolean),
     default_team_id: types.maybeNull(types.string),
     fingerprint: types.maybeNull(types.string),
+    language: types.optional(types.string, "en"),
+    customer_language: types.optional(types.string, "en"),
 
     // Others data
     enterprise: types.maybeNull(types.frozen<Enterprise>()),
@@ -87,17 +89,12 @@ export const UserModel = types
     isPasswordlessLogin: types.maybeNull(types.boolean),
 
     // User settings
-    language: types.optional(types.string, "en"),
-    customerLanguage: types.optional(types.string, "en"),
     isBiometricUnlockList: types.array(types.string), // store user email
     appTimeout: types.optional(types.number, AppTimeoutType.APP_CLOSE),
     appTimeoutAction: types.optional(types.string, TimeoutActionType.LOCK),
     defaultTab: types.optional(types.string, "homeTab"),
     notificationSettings: types.maybeNull(types.frozen<NotificationSettingData[]>()),
     disablePushNotifications: types.maybeNull(types.boolean),
-
-    // cache
-    isMobileLangChange: types.maybeNull(types.boolean),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -148,6 +145,8 @@ export const UserModel = types
       self.username = userSnapshot.username
       self.full_name = userSnapshot.full_name
       self.avatar = userSnapshot.avatar
+      self.customer_language = userSnapshot.customer_language
+      self.language = userSnapshot.customer_language
     },
     saveUserPw: (userSnapshot: UserSnapshotIn) => {
       self.pwd_user_id = userSnapshot.pwd_user_id
@@ -186,16 +185,14 @@ export const UserModel = types
     setBiometricIntroShown: (val: boolean) => {
       self.biometricIntroShown = val
     },
-    setMobileChangeLanguage: (val: boolean) => {
-      self.isMobileLangChange = val
-    },
+
     // User settings
     setDeviceId: (id: string) => {
       self.deviceId = id
     },
     setLanguage: (lang: string) => {
       self.language = lang
-      self.customerLanguage = lang
+      self.customer_language = lang
       setLang(lang)
       momentRelativeTime(lang)
       save(StorageKey.APP_CURRENT_USER, {
@@ -269,13 +266,6 @@ export const UserModel = types
         if (self.email && res.user.email !== self.email) {
           EventBus.emit(AppEventType.CLEAR_ALL_DATA, null)
           self.clearSettings()
-        }
-        if (self.language !== res.user.language) {
-          if (self.isMobileLangChange) {
-            await userApi.setUserLanguage(self.apiToken, self.language)
-          } else {
-            self.setLanguage(res.user.customerLanguage)
-          }
         }
         self.saveUser(res.user)
       }
@@ -683,7 +673,7 @@ export const UserModel = types
       return res
     },
   }))
-  .postProcessSnapshot(omit(["isLoggedInPw", "isMobileLangChange", "isPasswordlessLogin"]))
+  .postProcessSnapshot(omit(["isLoggedInPw", "isPasswordlessLogin"]))
 
 export interface User extends Instance<typeof UserModel> {}
 export interface UserSnapshotOut extends SnapshotOut<typeof UserModel> {}
