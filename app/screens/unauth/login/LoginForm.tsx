@@ -4,7 +4,7 @@ import { useStores } from "app/models"
 import { Passkey, PasskeyAuthenticationResult } from "react-native-passkey"
 import { PasskeyAuthenticationRequest } from "react-native-passkey/lib/typescript/Passkey"
 import { credentialAuthOptions, publicKeyCredentialWithAssertion } from "app/utils/passkey"
-import { IosPasswordlessOptions, SocialLogin } from "app/components/utils"
+import { DividerText, IosPasswordlessOptions, SocialLogin } from "app/components/utils"
 import { useHelper } from "app/services/hook"
 import { Logo, Text, Button, TextInput } from "app/components/cores"
 import Animated, { FadeInUp } from "react-native-reanimated"
@@ -122,7 +122,7 @@ export const LoginForm = ({
     if (resAuthPasskeyOptions.kind === "ok") {
       try {
         const authRequest: PasskeyAuthenticationRequest = credentialAuthOptions(
-          resAuthPasskeyOptions.data
+          resAuthPasskeyOptions.data,
         )
         // Call the `authenticate` method with the retrieved request in JSON format
         // A native overlay will be displayed
@@ -307,7 +307,18 @@ export const LoginForm = ({
           />
         )}
 
-        <SocialLogin setIsLoading={setIsLoading} onLoggedIn={onLoggedIn} />
+        <DividerText
+          tx="common.or_login_with"
+          style={{ marginHorizontal: 8 }}
+          color={colors.secondaryText}
+          size="base"
+        />
+
+        <SocialLogin
+          setIsLoading={setIsLoading}
+          onLoggedIn={onLoggedIn}
+          style={{ marginVertical: 12 }}
+        />
       </View>
     </View>
   )

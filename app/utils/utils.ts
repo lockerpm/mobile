@@ -145,6 +145,15 @@ export const relativeTime = function timeDifference(previous: number, lang = "en
   }
 }
 
+export const validateEmail = (email: string) => {
+  // eslint-disable-next-line prefer-regex-literals
+  const globalRegex = new RegExp(
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    "g",
+  )
+  return globalRegex.test(email)
+}
+
 export const momentRelativeTime = (lang: string) => {
   switch (lang) {
     case "vi":

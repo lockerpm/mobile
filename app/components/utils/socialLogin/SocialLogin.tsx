@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react"
-import { Dimensions, Platform, View, ViewStyle } from "react-native"
-import { ImageIcon, Text } from "../../cores"
+import { Dimensions, Platform, StyleProp, View, ViewStyle } from "react-native"
+import { ImageIcon } from "../../cores"
 import { useHelper, useSocialLogin } from "app/services/hook"
 import { GITHUB_CONFIG } from "app/config/constants"
 import { getUrlParameterByName } from "app/utils/utils"
@@ -16,12 +16,13 @@ interface Props {
    * Callback when social authen success
    */
   onLoggedIn: (_newUser: boolean, _token: string) => Promise<void>
+
+  style?: StyleProp<ViewStyle>
 }
 
-export const SocialLogin = ({ onLoggedIn, setIsLoading }: Props) => {
+export const SocialLogin = ({ onLoggedIn, setIsLoading, style }: Props) => {
   const navigation = useNavigation() as any
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
-  const { translate } = useHelper()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLogin()
 
   const SOCIAL_LOGIN: {
@@ -126,7 +127,7 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading }: Props) => {
     )
   }, [])
   return (
-    <View>
+    <View style={style}>
       <GitHubLoginModal
         isOpen={showGitHubLogin}
         onClose={() => setShowGitHubLogin(false)}
@@ -138,11 +139,6 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading }: Props) => {
             code,
           })
         }}
-      />
-
-      <Text
-        text={translate("common.social_login")}
-        style={{ textAlign: "center", marginVertical: 16 }}
       />
 
       <SocialLoginFlexLayout />
@@ -163,7 +159,7 @@ export const GitHubLoginModal = (props: GitHubLoginModalProps) => {
   const url = `${GITHUB_CONFIG.authorizationEndpoint}?client_id=${
     GITHUB_CONFIG.clientId
   }&redirect_uri=${encodeURIComponent(GITHUB_CONFIG.redirectUrl)}&scope=${encodeURIComponent(
-    GITHUB_CONFIG.scopes.join(" ")
+    GITHUB_CONFIG.scopes.join(" "),
   )}&state=${randomString()}`
 
   const onURLChange = (url: string) => {

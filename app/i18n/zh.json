@@ -502,6 +502,37 @@
     "signup_successful": "已向您的電子郵件地址發送確認郵件（也請檢查垃圾郵件資料夾）",
     "update_pw_successful": "更新成功"
   },
+  "new_signup": {
+    "title": "Locker Password Manager",
+    "sub_title": "Quick sign-up for a free 14-day trial. Premium plan starts at $1.29/mo.",
+    "other_signup": "Or sign up with email",
+    "enter_email": "Enter your email",
+    "sign_up_email": "Sign up with email",
+    "sign_up_business": {
+      "title": "Sign up for Locker for Business? ",
+      "free_trial": "Get Free Trial"
+    },
+    "has_account": "Already have an account? ",
+    "sign_in": "Sign in",
+    "sign_up_with": "Or Sign Up With",
+    "marketing": "I want to stay updated on news, events and offers"
+  },
+  "login_email_code": {
+    "title": "Check your email for verification code",
+    "sub_title": {
+      "prefix": "We've sent a verification code to ",
+      "suffix": ". Please check your inbox."
+    },
+    "resend": {
+      "prefix": "Didn't receive any email? Check your  ",
+      "prefix2": " spam folder. ",
+      "btn": "Resend",
+      "suffix": " after {{second}}s"
+    },
+    "or": "Or",
+    "not_familiar": "Not familiar with this method? ",
+    "use_password": "Use traditional password instead!"
+  },
   "start": {
     "synching": "同步中……",
     "getting_team_info": "正在取得您的資訊……",

@@ -306,6 +306,29 @@ export const UserModel = types
       return res
     },
 
+    registerByPinCode: async (otp: string, nonce: string) => {
+      const res = await idApi.pinCodeLogin(otp, nonce)
+      if (res.kind === "ok") {
+        if (res.data.token) {
+          const pmRes = await userApi.getPMToken(
+            res.data.token,
+            {
+              SERVICE_URL: "/",
+              SERVICE_SCOPE: "pwdmanager",
+              CLIENT: "mobile",
+            },
+            self.deviceId,
+          )
+          if (pmRes.kind === "ok") {
+            self.setApiToken(pmRes.data.access_token)
+            self.setLoggedIn(true)
+          }
+          return pmRes
+        }
+      }
+      return res
+    },
+
     loginMethod: async (username: string) => {
       const res = await idApi.loginMethod(username)
       return res

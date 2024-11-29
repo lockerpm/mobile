@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react"
-import { View } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import { BASE_URL } from "app/config/constants"
 import { useStores } from "app/models"
 import { api } from "app/services/api"
@@ -97,11 +97,9 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
             marginRight: 12,
           }}
         />
-        <Text
-          color={colors.primary}
-          text={translate("common.sign_up")}
-          onPress={() => navigation.navigate("signup")}
-        />
+        <TouchableOpacity onPress={() => navigation.navigate("signup")}>
+          <Text color={colors.primary} text={translate("common.sign_up")} />
+        </TouchableOpacity>
       </View>
     </Screen>
   )

@@ -502,6 +502,37 @@
     "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác).",
     "update_pw_successful": "Cập nhật thành công"
   },
+  "new_signup": {
+    "title": "Locker Password Manager",
+    "sub_title": "Đăng ký tài khoản mới Miễn phí.",
+    "other_signup": "Hoặc đăng ký bằng email",
+    "enter_email": "Nhập email của bạn",
+    "sign_up_email": "Đăng ký bằng email",
+    "sign_up_business": {
+      "title": "Đăng ký Locker cho doanh nghiệp? Dùng thử miễn phí",
+      "free_trial": "Dùng thử miễn phí"
+    },
+    "has_account": "Bạn đã có tài khoản? Đăng nhập",
+    "sign_in": "Đăng nhập",
+    "sign_up_with": "Hoặc đăng ký với",
+    "marketing": "Cập nhật cho tôi về tin tức, sự kiện, ưu đãi"
+  },
+  "login_email_code": {
+    "title": "Check your email for verification code",
+    "sub_title": {
+      "prefix": "We've sent a verification code to ",
+      "suffix": ". Please check your inbox."
+    },
+    "resend": {
+      "prefix": "Didn't receive any email? Check your  ",
+      "prefix2": " spam folder. ",
+      "btn": "Resend",
+      "suffix": " after {{second}}s"
+    },
+    "or": "Or",
+    "not_familiar": "Not familiar with this method? ",
+    "use_password": "Use traditional password instead!"
+  },
   "start": {
     "synching": "Đồng bộ hoá dữ liệu...",
     "getting_team_info": "Kiểm tra thông tin của bạn...",

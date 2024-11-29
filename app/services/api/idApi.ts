@@ -37,7 +37,7 @@ class IdApi {
 
   // ID login
   async loginMethod(
-    username: string
+    username: string,
   ): Promise<{ kind: "ok"; data: UseLoginMethod } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
@@ -64,7 +64,7 @@ class IdApi {
   async login(
     payload: LoginData,
     deviceId: string,
-    isOtp?: boolean
+    isOtp?: boolean,
   ): Promise<{ kind: "ok"; data: LoginResult } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
@@ -73,7 +73,7 @@ class IdApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/sso/auth${isOtp ? "/otp" : ""}`,
-        payload
+        payload,
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -92,7 +92,7 @@ class IdApi {
   // ID social login
   async socialLogin(
     payload: SocialLoginRequest,
-    deviceId: string
+    deviceId: string,
   ): Promise<{ kind: "ok"; data: SocialLogin } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
@@ -129,7 +129,7 @@ class IdApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/sso/users/webauthn/auth/options",
-        { username }
+        { username },
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -146,7 +146,7 @@ class IdApi {
 
   async authPasskey(
     payload: AuthPasskeyRequest,
-    deviceId?: string
+    deviceId?: string,
   ): Promise<
     | {
         kind: "ok"
@@ -161,7 +161,7 @@ class IdApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/sso/users/webauthn/auth",
-        payload
+        payload,
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -211,7 +211,7 @@ class IdApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/sso/users/webauthn/register/options",
-        payload
+        payload,
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -238,7 +238,7 @@ class IdApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/sso/users/webauthn/register",
-        payload
+        payload,
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -253,9 +253,94 @@ class IdApi {
     }
   }
 
+  // Resend login pin code via email
+  async resendPinCode(
+    email: string,
+    lang: string,
+    nonce: string,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    try {
+      this.api.apisauce.deleteHeader("Authorization")
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/code/send", {
+        username: email,
+        lang,
+        scope: "pwdmanager",
+        nonce,
+      })
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Resend login pin code via email
+  async pinCodeLogin(
+    otp: string,
+    nonce: string,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          token: string
+          service_scope: string
+          service_url: string
+        }
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/code", {
+        code: otp,
+        nonce,
+      })
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Resend login pin code via email
+  async pinCodeLoginWith2FA(
+    otp: string,
+    nonce: string,
+    twoFactorPayload: any,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/code/otp", {
+        code: otp,
+        nonce,
+        ...twoFactorPayload,
+      })
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
   // Get email OTP
   async sendOtpEmail(
-    payload: EmailOtpRequestRequest
+    payload: EmailOtpRequestRequest,
   ): Promise<{ kind: "ok"; success: boolean } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
@@ -288,7 +373,7 @@ class IdApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/sso/users/account_recovery",
-        payload
+        payload,
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -304,7 +389,7 @@ class IdApi {
 
   // Reset ID password
   async resetPassword(
-    payload: ResetIDPasswordRequest
+    payload: ResetIDPasswordRequest,
   ): Promise<{ kind: "ok"; success: boolean } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
@@ -312,7 +397,7 @@ class IdApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/sso/users/reset_password",
-        payload
+        payload,
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -342,7 +427,7 @@ class IdApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/sso/users/reset_password/token",
-        payload
+        payload,
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -367,7 +452,7 @@ class IdApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/sso/users/new_password",
-        payload
+        payload,
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -407,7 +492,7 @@ class IdApi {
 
   async webAuthListCredentials(
     token: string,
-    paging: number
+    paging: number,
   ): Promise<
     | {
         kind: "ok"
@@ -420,7 +505,7 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/sso/users/me/webauthn/list?paging=${paging}`
+        `/sso/users/me/webauthn/list?paging=${paging}`,
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -471,7 +556,7 @@ class IdApi {
   > {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/users/me/login_method`
+        `/cystack_platform/pm/users/me/login_method`,
       )
 
       // the typical ways to die when calling an api
@@ -496,7 +581,7 @@ class IdApi {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/users/onpremise/prelogin`,
-        preLoginPayload
+        preLoginPayload,
       )
 
       // the typical ways to die when calling an api
@@ -521,7 +606,7 @@ class IdApi {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/users/onpremise/identifier`,
-        { identifier }
+        { identifier },
       )
 
       // the typical ways to die when calling an api
