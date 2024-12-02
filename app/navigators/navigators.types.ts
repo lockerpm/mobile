@@ -1,19 +1,20 @@
-import { NavigatorScreenParams } from '@react-navigation/native'
-import { StackScreenProps } from '@react-navigation/stack'
-import { LockType } from 'app/screens/unauth/lock/lock.types'
+import { NavigatorScreenParams } from "@react-navigation/native"
+import { StackScreenProps } from "@react-navigation/stack"
+import { LockType } from "app/screens/unauth/lock/lock.types"
 import {
   AppNotification,
+  LOGIN_METHOD,
   MarketingContent,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
   RelayAddress,
   SubdomainData,
   TrustedContact,
-} from 'app/static/types'
-import { AndroidAutofillServiceData } from 'app/utils/autofillHelper'
-import { CipherView } from 'core/models/view/cipherView'
-import { CollectionView } from 'core/models/view/collectionView'
-import { SendView } from 'core/models/view/sendView'
+} from "app/static/types"
+import { AndroidAutofillServiceData } from "app/utils/autofillHelper"
+import { CipherView } from "core/models/view/cipherView"
+import { CollectionView } from "core/models/view/collectionView"
+import { SendView } from "core/models/view/sendView"
 
 // ---------------------------ROOT Navigator---------------------------
 export type RootParamList = {
@@ -29,9 +30,25 @@ export type RootParamList = {
     data?: OnPremisePreloginData
     email?: string
   }
-  login: undefined
-  forgotPassword: undefined
+  login: {
+    initMethod?: LOGIN_METHOD
+  }
+  login_by_pincode: {
+    email: string
+    // user register by password of not
+    havePassword: boolean
+  }
+  forgotPassword: {
+    email?: string
+  }
   signup: undefined
+  signup_pin_code: {
+    email: string
+    getNews: boolean
+  }
+  signup_password: {
+    email: string
+  }
   createMasterPassword: undefined
   mainStack: NavigatorScreenParams<PrimaryParamList>
 
@@ -122,14 +139,14 @@ export type PrimaryParamList = {
     fromTools?: boolean
   }
   authenticator__edit: {
-    mode: 'add' | 'edit'
+    mode: "add" | "edit"
     passwordTotp?: boolean
-    passwordMode?: 'add' | 'edit' | 'clone'
+    passwordMode?: "add" | "edit" | "clone"
   }
   qrScanner: {
     totpCount?: number
     passwordTotp?: boolean
-    passwordMode?: 'add' | 'edit' | 'clone'
+    passwordMode?: "add" | "edit" | "clone"
   }
   dataBreachScanner: undefined
   dataBreachList: undefined
@@ -150,13 +167,13 @@ export type PrimaryParamList = {
     quickShare?: boolean
   }
   passwords__edit: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
     initialUrl?: string
     collection?: CollectionView
     androidAutofillSavedData?: AndroidAutofillServiceData
   }
   passwords_2fa_setup: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
   }
   passwords_history: undefined
 
@@ -164,33 +181,33 @@ export type PrimaryParamList = {
     quickShare?: boolean
   }
   notes__edit: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
   cards__info: {
     quickShare?: boolean
   }
   cards__edit: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
   identities__info: {
     quickShare?: boolean
   }
   identities__edit: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
   cryptoWallets__info: {
     quickShare?: boolean
   }
   cryptoWallets__edit: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
 
   folders__select: {
-    mode: 'add' | 'move'
+    mode: "add" | "move"
     initialId?: string
     cipherIds?: string[]
   }

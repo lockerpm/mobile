@@ -9,6 +9,7 @@ import { getTOTP, parseOTPUri } from "app/utils/totp"
 import { ActionItem, ActionSheet } from "app/components/ciphers"
 import { useTheme } from "app/services/context"
 import { DeleteOtpModal } from "./DeleteOtpModal"
+import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 
 type Props = {
   navigation: any
@@ -23,7 +24,7 @@ export const AuthenticatorAction = observer((props: Props) => {
   const { colors } = useTheme()
   const { copyToClipboard, translate } = useHelper()
   const { deleteCiphers } = useCipherData()
-  const { cipherStore } = useStores()
+  const { cipherStore, user } = useStores()
 
   // ---------------- PARAMS -----------------
 
@@ -100,6 +101,7 @@ export const AuthenticatorAction = observer((props: Props) => {
           icon="copy"
           action={() => {
             copyToClipboard(getTOTP(otp))
+            logFirebaseEvent(AnalyticEvents.COPY_OTP, user.email)
             onClose()
           }}
         />

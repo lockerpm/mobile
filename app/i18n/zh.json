@@ -106,6 +106,7 @@
     "share": "分享",
     "show_password": "顯示密碼",
     "sign_up": "註冊",
+    "sign_in": "登入",
     "skip": "略過",
     "sort": "排序",
     "submit": "送出",
@@ -501,6 +502,38 @@
     "signup_successful": "已向您的電子郵件地址發送確認郵件（也請檢查垃圾郵件資料夾）",
     "update_pw_successful": "更新成功"
   },
+  "new_signup": {
+    "title": "Locker Password Manager",
+    "sub_title": "Quick sign-up for a free 14-day trial. Premium plan starts at $1.29/mo.",
+    "other_signup": "Or sign up with email",
+    "enter_email": "Enter your email",
+    "sign_up_email": "Sign up with email",
+    "sign_up_business": {
+      "title": "Sign up for Locker for Business? ",
+      "free_trial": "Get Free Trial"
+    },
+    "has_account": "Already have an account? ",
+    "sign_in": "Sign in",
+    "sign_up_with": "Or Sign Up With",
+    "marketing": "I want to stay updated on news, events and offers"
+  },
+  "login_email_code": {
+    "title": "Check your email for verification code",
+    "sub_title": {
+      "prefix": "We've sent a verification code to ",
+      "suffix": ". Please check your inbox."
+    },
+    "resend": {
+      "prefix": "Didn't receive any email? Check your  ",
+      "prefix2": " spam folder. ",
+      "btn": "Resend",
+      "suffix": " after {{second}}s"
+    },
+    "or": "Or",
+    "not_familiar": "Not familiar with this method? ",
+    "use_password": "Use traditional password instead!",
+    "sign_in": "Sign in with password"
+  },
   "start": {
     "synching": "同步中……",
     "getting_team_info": "正在取得您的資訊……",
@@ -607,6 +640,12 @@
       "title": "重設密碼",
       "desc": "新增密碼並隨時在任何裝置上存取",
       "btn": "新增密碼"
+    },
+    "hide_email": {
+      "title": "隱藏您的電子郵件",
+      "generate_new": "產生新的私人電子郵件",
+      "existing_email": "使用現有的私人電子郵件",
+      "empty": "您還沒有產生任何私人電子郵件"
     }
   },
   "shares": {
@@ -891,7 +930,7 @@
     "trial": "（前 2 週免費試用）",
     "cancel_text": "自動扣款。隨時可取消",
     "benefit": {
-      "locker": "無限密碼、安全筆記、付款卡片、身分、加密貨幣備份",
+      "locker": "無限密碼、安全筆記、付款卡片、身分、加密貨幣備份、OTP 和私人電子郵件",
       "web": "暗網監控可保護您的帳戶免受大規模數據洩露的侵害",
       "emergency_contact": "緊急連絡人可使您信任的帳戶能在必要時取用您的保險庫",
       "share_password": "與您的朋友和家人安全地分享密碼和項目"

@@ -50,3 +50,13 @@
 "create.password" = "密碼";
 "create.web" = "网站";
 "create.noti" = "这些项目将在本地创建并保存。 当您解锁 Locker 应用程序时，它会同步到 Locker 服务器。";
+
+//hide email
+"relay.title" = "隱藏您的電子郵件";
+"relay.generate_new" = "產生新的私人電子郵件";
+"relay.existing_email" = "使用現有的私人電子郵件";
+"relay.empty" = "您還沒有產生任何私人電子郵件";
+"relay.freeLimit" = "您的免費方案儲存空間有限";
+"relay.upgrade" = "您處於免費方案。升級到高級版以添加更多私人電子郵件";
+
+

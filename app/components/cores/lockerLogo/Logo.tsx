@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { ComponentType } from 'react'
+import * as React from "react"
+import { ComponentType } from "react"
 import {
   Image,
   ImageResizeMode,
@@ -9,7 +9,7 @@ import {
   TouchableOpacityProps,
   View,
   ViewStyle,
-} from 'react-native'
+} from "react-native"
 
 type LogoPreset = keyof typeof logoRegistry
 
@@ -34,7 +34,7 @@ interface LogoProps extends TouchableOpacityProps {
   /**
    * An optional function to be called when the Logo is pressed
    */
-  onPress?: TouchableOpacityProps['onPress']
+  onPress?: TouchableOpacityProps["onPress"]
 }
 
 /**
@@ -47,7 +47,7 @@ export function Logo(props: LogoProps) {
   const {
     preset,
     containerStyle: $containerStyleOverride,
-    resizeMode = 'contain',
+    resizeMode = "contain",
     ...WrapperProps
   } = props
 
@@ -58,7 +58,7 @@ export function Logo(props: LogoProps) {
 
   return (
     <Wrapper
-      accessibilityRole={isPressable ? 'imagebutton' : undefined}
+      accessibilityRole={isPressable ? "imagebutton" : undefined}
       {...WrapperProps}
       style={$containerStyleOverride}
     >
@@ -68,13 +68,14 @@ export function Logo(props: LogoProps) {
 }
 
 const logoRegistry = {
-  default: require('assets/images/logo/locker.png'),
-  'app-logo-secondary': require('assets/images/icons/app-logo-secondary.png'),
-  'vertical-dark': require('assets/images/logo/logo-vertical-dark.png'),
-  'vertical-light': require('assets/images/logo/logo-vertical-light.png'),
-  'locker-bg-dark': require('assets/images/logo/locker-dark.png'),
-  'horizontal-dark': require('assets/images/logo/logo-horizontal-dark.png'),
-  'horizontal-light': require('assets/images/logo/logo-horizontal-light.png'),
-  'locker-premium': require('assets/images/logo/locker-premium.png'),
-  'locker-premium-dark': require('assets/images/logo/locker-premium-dark.png'),
+  "cystack-logo": require("assets/images/logo/cystack-logo.png"),
+  default: require("assets/images/logo/locker.png"),
+  "app-logo-secondary": require("assets/images/icons/app-logo-secondary.png"),
+  "vertical-dark": require("assets/images/logo/logo-vertical-dark.png"),
+  "vertical-light": require("assets/images/logo/logo-vertical-light.png"),
+  "locker-bg-dark": require("assets/images/logo/locker-dark.png"),
+  "horizontal-dark": require("assets/images/logo/logo-horizontal-dark.png"),
+  "horizontal-light": require("assets/images/logo/logo-horizontal-light.png"),
+  "locker-premium": require("assets/images/logo/locker-premium.png"),
+  "locker-premium-dark": require("assets/images/logo/locker-premium-dark.png"),
 }

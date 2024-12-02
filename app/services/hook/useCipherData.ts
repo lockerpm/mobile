@@ -30,6 +30,7 @@ import { CollectionRequest } from "core/models/request/collectionRequest"
 import { CipherData, FolderData } from "core/models/data"
 import { OrganizationData } from "core/models/data/organizationData"
 import { useTheme } from "../context"
+import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 
 export function useCipherData() {
   const { cipherStore, folderStore, uiStore, collectionStore, user, enterpriseStore } = useStores()
@@ -345,7 +346,7 @@ export function useCipherData() {
               // @ts-ignore
               folderReq.id = f.id
               folders.push(folderReq)
-            })
+            }),
           )
         })
       await Promise.all(promises)
@@ -409,6 +410,8 @@ export function useCipherData() {
       hashPass: hashPasswordAutofill,
       avatar: user.avatar,
       isLoggedInPw: true,
+      token: user.apiToken,
+      isFree: user.isFreePlan,
     }
     await saveShared("autofill", JSON.stringify(sharedData))
   }
@@ -433,6 +436,8 @@ export function useCipherData() {
           hashPass: "",
           avatar: user.avatar || "",
           isLoggedInPw: false,
+          token: "",
+          isFree: true,
         }
         await saveShared("autofill", JSON.stringify(sharedData))
         return
@@ -444,22 +449,22 @@ export function useCipherData() {
       // Create passwords
       if (sharedData.tempPasswords && sharedData.tempPasswords.length > 0) {
         for (const cipher of sharedData.tempPasswords) {
-            const payload = newCipher(CipherType.Login)
-            const data = new LoginView()
-            data.username = cipher.username
-            data.password = cipher.password
-            if (cipher.uri) {
-              const uriView = new LoginUriView()
-              uriView.uri = cipher.uri
-              data.uris = [uriView]
-            }
-            payload.name = cipher.name
-            payload.login = data
-            await _offlineCreateCipher({
-              cipher: payload,
-              collectionIds: [],
-            })
-            hasUpdate = true
+          const payload = newCipher(CipherType.Login)
+          const data = new LoginView()
+          data.username = cipher.username
+          data.password = cipher.password
+          if (cipher.uri) {
+            const uriView = new LoginUriView()
+            uriView.uri = cipher.uri
+            data.uris = [uriView]
+          }
+          payload.name = cipher.name
+          payload.login = data
+          await _offlineCreateCipher({
+            cipher: payload,
+            collectionIds: [],
+          })
+          hasUpdate = true
         }
       }
 
@@ -509,7 +514,7 @@ export function useCipherData() {
             ...folder,
             cipherCount: ciphers ? ciphers.length : 0,
           }
-        })
+        }),
       )
 
       folderStore.setFolders(folders)
@@ -536,7 +541,7 @@ export function useCipherData() {
             ...collection,
             cipherCount: ciphers ? ciphers.length : 0,
           }
-        })
+        }),
       )
 
       // Add unassigned
@@ -548,9 +553,9 @@ export function useCipherData() {
             !c.collectionIds?.length && !!getTeam(user.teams, c.organizationId).name,
         ],
       })
-      unassignedTeamCiphers.forEach((item: CipherView) => {
+      unassignedTeamCiphers.forEach((item) => {
         const target = collections.find(
-          (f) => f.id === null && f.organizationId === item.organizationId
+          (f) => f.id === null && f.organizationId === item.organizationId,
         )
         if (target) {
           target.cipherCount += 1
@@ -613,7 +618,7 @@ export function useCipherData() {
 
   // Get ciphers from cache only
   const getCiphersFromCache: (params: GetCiphersParams) => Promise<CipherView[]> = async (
-    params: GetCiphersParams
+    params: GetCiphersParams,
   ) => {
     try {
       const deletedFilter = (c: CipherView) => c.isDeleted === params.deleted
@@ -669,7 +674,7 @@ export function useCipherData() {
       })
       notify(
         "success",
-        translate("import.success") + " " + translate("success.will_sync_when_online")
+        translate("import.success") + " " + translate("success.will_sync_when_online"),
       )
       return { kind: "ok" }
     }
@@ -763,7 +768,7 @@ export function useCipherData() {
     }
     if (importResult.folderRelationships != null) {
       importResult.folderRelationships.forEach((r) =>
-        request.folderRelationships.push(new KvpRequest(r[0], r[1]))
+        request.folderRelationships.push(new KvpRequest(r[0], r[1])),
       )
     }
 
@@ -1043,7 +1048,7 @@ export function useCipherData() {
     cipher: CipherView,
     score: number,
     collectionIds: string[],
-    silent?: boolean
+    silent?: boolean,
   ) => {
     try {
       // Check name duplication
@@ -1058,7 +1063,7 @@ export function useCipherData() {
         await _offlineCreateCipher({ cipher, collectionIds })
         notify(
           "success",
-          `${translate("success.cipher_created")} ${translate("success.will_sync_when_online")}`
+          `${translate("success.cipher_created")} ${translate("success.will_sync_when_online")}`,
         )
         return { kind: "ok" }
       }
@@ -1078,6 +1083,7 @@ export function useCipherData() {
       } else {
         notifyApiError(res)
       }
+      logFirebaseEvent(AnalyticEvents.CREATE_ITEMS, user.email)
       return res
     } catch (e) {
       notify("error", translate("error.something_went_wrong"))
@@ -1125,7 +1131,7 @@ export function useCipherData() {
     cipher: CipherView,
     score: number,
     collectionIds: string[],
-    silent?: boolean
+    silent?: boolean,
   ) => {
     try {
       // Offline
@@ -1133,7 +1139,7 @@ export function useCipherData() {
         await _offlineUpdateCipher({ cipher, collectionIds })
         notify(
           "success",
-          `${translate("success.cipher_updated")} ${translate("success.will_sync_when_online")}`
+          `${translate("success.cipher_updated")} ${translate("success.will_sync_when_online")}`,
         )
         return { kind: "ok" }
       }
@@ -1249,7 +1255,7 @@ export function useCipherData() {
         await _offlineToTrashCiphers(ids)
         notify(
           "success",
-          `${translate("success.cipher_trashed")} ${translate("success.will_sync_when_online")}`
+          `${translate("success.cipher_trashed")} ${translate("success.will_sync_when_online")}`,
         )
         return { kind: "ok" }
       }
@@ -1295,7 +1301,7 @@ export function useCipherData() {
       await _offlineRestoreCiphers(ids)
       notify(
         "success",
-        `${translate("success.cipher_restored")} ${translate("success.will_sync_when_online")}`
+        `${translate("success.cipher_restored")} ${translate("success.will_sync_when_online")}`,
       )
       return { kind: "ok" }
     }
@@ -1326,7 +1332,7 @@ export function useCipherData() {
       ids.map((id) => ({
         id,
         revisionDate: new Date().toISOString(),
-      }))
+      })),
     )
 
     ids.forEach((id) => {
@@ -1341,7 +1347,7 @@ export function useCipherData() {
   const inviteEA = async (
     email: string,
     type: EmergencyAccessType,
-    waitTime: number
+    waitTime: number,
   ): Promise<{ kind: string }> => {
     try {
       const publicKeyRes = await cipherStore.getSharingPublicKey(email)
@@ -1372,7 +1378,7 @@ export function useCipherData() {
 
   const _shareFolderToGroups = async (
     orgKey: SymmetricCryptoKey,
-    groups: { id: string; name: string }[]
+    groups: { id: string; name: string }[],
   ) => {
     return await Promise.all(
       groups.map(async (group) => {
@@ -1388,14 +1394,14 @@ export function useCipherData() {
                 username: member.email,
                 key: member.public_key ? await _generateMemberKey(member.public_key, orgKey) : null,
               }
-            })
+            }),
         )
         return {
           id: group.id,
           role: "member",
           members,
         }
-      })
+      }),
     )
   }
 
@@ -1405,7 +1411,7 @@ export function useCipherData() {
     emails: string[],
     role: AccountRoleText,
     autofillOnly: boolean,
-    groups?: { id: string; name: string }[]
+    groups?: { id: string; name: string }[],
   ) => {
     try {
       // Prepare org key
@@ -1436,7 +1442,7 @@ export function useCipherData() {
             hide_passwords: autofillOnly,
             key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
           }
-        })
+        }),
       )
 
       // prepare for share to groups
@@ -1456,6 +1462,7 @@ export function useCipherData() {
       })
       if (res.kind === "ok") {
         notify("success", translate("success.cipher_shared"))
+        logFirebaseEvent(AnalyticEvents.SHARE_ITENS, user.email)
       } else {
         notifyApiError(res)
       }
@@ -1480,7 +1487,7 @@ export function useCipherData() {
     emails: string[],
     role: AccountRoleText,
     autofillOnly: boolean,
-    groups?: { id: string; name: string }[]
+    groups?: { id: string; name: string }[],
   ) => {
     if (!ids.length) {
       return { kind: "ok" }
@@ -1534,7 +1541,7 @@ export function useCipherData() {
             hide_passwords: autofillOnly,
             key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
           }
-        })
+        }),
       )
 
       // Prepare cipher
@@ -1553,7 +1560,7 @@ export function useCipherData() {
               hide_passwords: autofillOnly,
               key: m.publicKey ? await _generateMemberKey(m.publicKey, _orgKey) : null,
             }
-          })
+          }),
         )
 
         // prepare for share to groups
@@ -1581,6 +1588,7 @@ export function useCipherData() {
       })
       if (res.kind === "ok") {
         notify("success", translate("success.cipher_shared"))
+        logFirebaseEvent(AnalyticEvents.SHARE_ITENS, user.email)
       } else {
         notifyApiError(res)
       }
@@ -1596,7 +1604,7 @@ export function useCipherData() {
   const confirmShareCipher = async (
     organizationId: string,
     memberId: string,
-    publicKey: string
+    publicKey: string,
   ) => {
     try {
       const key = await _generateOrgKey(organizationId, publicKey)
@@ -1701,7 +1709,7 @@ export function useCipherData() {
     itemId: string,
     role: AccountRoleText,
     onlyFill: boolean,
-    isGroup?: boolean
+    isGroup?: boolean,
   ) => {
     try {
       // Send API
@@ -1798,7 +1806,7 @@ export function useCipherData() {
         await _offlineCreateFolder({ folder })
         notify(
           "success",
-          `${translate("folder.folder_created")} ${translate("success.will_sync_when_online")}`
+          `${translate("folder.folder_created")} ${translate("success.will_sync_when_online")}`,
         )
         return { kind: "ok" }
       }
@@ -1862,7 +1870,7 @@ export function useCipherData() {
         await _offlineUpdateFolder({ folder })
         notify(
           "success",
-          `${translate("folder.folder_updated")} ${translate("success.will_sync_when_online")}`
+          `${translate("folder.folder_updated")} ${translate("success.will_sync_when_online")}`,
         )
         return { kind: "ok" }
       }
@@ -2037,7 +2045,7 @@ export function useCipherData() {
       const res = await collectionStore.updateCollection(
         collection.id,
         collection.organizationId,
-        payload
+        payload,
       )
 
       if (res.kind === "ok") {
@@ -2158,8 +2166,7 @@ export function useCipherData() {
   const syncSingleCipher = async (id: string) => {
     return syncQueue.add(async () => {
       const cipherRes = await cipherStore.getCipher(id)
-      
-      
+
       // Error/Deleted
       if (cipherRes.kind !== "ok") {
         if (cipherRes.kind === "not-found" || cipherRes.kind === "forbidden") {

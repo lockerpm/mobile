@@ -1,7 +1,5 @@
 package com.cystack.locker.autofill;
 
-
-
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -21,29 +19,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-
 public class AutofillDataKeychain {
     private static final String TAG = "AutofillDataKeychain";
     private static final String service = "W7S57TNBH5.com.cystack.lockerapp";
 
-   private final PrefsStorage prefsStorage;
-   private final CipherStorage cipherStorage;
+    private final PrefsStorage prefsStorage;
+    private final CipherStorage cipherStorage;
 
     // Data used by autofill service
 
     public String email;
     public String hashPass;
     public String avatar;
-    public  boolean faceIdEnabled = false;
-    public  boolean isLoggedInPw = false;
+    public boolean faceIdEnabled = false;
+    public boolean isLoggedInPw = false;
 
     public String language = "en";
     public boolean isDarkTheme = false;
 
     public ArrayList<AutofillItem> passwords = new ArrayList<>();
     // public ArrayList<AutofillItem> otherCredentials = new ArrayList<>();
-
 
     public AutofillDataKeychain(ReactApplicationContext reactContext) {
         cipherStorage = new CipherStorageKeystoreAesCbc();
@@ -54,19 +49,20 @@ public class AutofillDataKeychain {
     /**
      * Deprecated
      * For a given domain name, attempt to find matching AutoFill credentials
-     * @return - List of matching Username/Passwords in the form of the AutofillData class.
+     * 
+     * @return - List of matching Username/Passwords in the form of the AutofillData
+     *         class.
      */
     public void getAutoFillEntriesForDomain() {
         try {
             String itemString = getAutoFillItems();
-            Log.d(TAG, itemString);
-            if (itemString == null){
+            if (itemString == null) {
                 return;
             }
             JSONObject jsonObject = new JSONObject(itemString);
-            JSONArray jsonArray  = jsonObject.getJSONArray("passwords");
+            JSONArray jsonArray = jsonObject.getJSONArray("passwords");
             List<Object> itemList = toList(jsonArray);
-            for (Object item: itemList) {
+            for (Object item : itemList) {
                 if (item instanceof HashMap) {
                     HashMap map = (HashMap) item;
                     String username = (String) map.get("username");
@@ -76,8 +72,10 @@ public class AutofillDataKeychain {
                     String id = (String) map.get("id");
 
                     this.passwords.add(new AutofillItem(id, username, password, name, uri));
-                };
-            };
+                }
+                ;
+            }
+            ;
             this.email = jsonObject.getString("email");
             this.hashPass = jsonObject.getString("hashPass");
             this.avatar = jsonObject.getString("avatar");
@@ -90,6 +88,7 @@ public class AutofillDataKeychain {
             Log.e(TAG, ex.getMessage());
         }
     }
+
     private String getAutoFillItems() throws Exception {
         PrefsStorage.ResultSet resultSet = prefsStorage.getEncryptedEntry(service);
         if (resultSet == null) {
@@ -97,28 +96,29 @@ public class AutofillDataKeychain {
             return "[]";
         }
 
-        CipherStorage.DecryptionResult decryptionResult = cipherStorage.decrypt(service, resultSet.username, resultSet.password, SecurityLevel.ANY);
+        CipherStorage.DecryptionResult decryptionResult = cipherStorage.decrypt(service, resultSet.username,
+                resultSet.password, SecurityLevel.ANY);
         return decryptionResult.password;
     }
 
     private void setItem(String key, String value) throws Exception {
-       CipherStorage.EncryptionResult result = cipherStorage.encrypt(service, key, value, SecurityLevel.ANY);
-       prefsStorage.storeEncryptedEntry(service, result);
+        CipherStorage.EncryptionResult result = cipherStorage.encrypt(service, key, value, SecurityLevel.ANY);
+        prefsStorage.storeEncryptedEntry(service, result);
     }
 
     public static Map<String, Object> toMap(JSONObject object) throws JSONException {
         Map<String, Object> map = new HashMap<String, Object>();
 
         Iterator<String> keysItr = object.keys();
-        while(keysItr.hasNext()) {
+        while (keysItr.hasNext()) {
             String key = keysItr.next();
             Object value = object.get(key);
 
-            if(value instanceof JSONArray) {
+            if (value instanceof JSONArray) {
                 value = toList((JSONArray) value);
             }
 
-            else if(value instanceof JSONObject) {
+            else if (value instanceof JSONObject) {
                 value = toMap((JSONObject) value);
             }
             map.put(key, value);
@@ -128,13 +128,13 @@ public class AutofillDataKeychain {
 
     public static List<Object> toList(JSONArray array) throws JSONException {
         List<Object> list = new ArrayList<Object>();
-        for(int i = 0; i < array.length(); i++) {
+        for (int i = 0; i < array.length(); i++) {
             Object value = array.get(i);
-            if(value instanceof JSONArray) {
+            if (value instanceof JSONArray) {
                 value = toList((JSONArray) value);
             }
 
-            else if(value instanceof JSONObject) {
+            else if (value instanceof JSONObject) {
                 value = toMap((JSONObject) value);
             }
             list.add(value);

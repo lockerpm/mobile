@@ -26,6 +26,9 @@ import {
   CreateMasterPasswordScreen,
   ForgotPasswordScreen,
   LockType,
+  SignUpWithPinCode,
+  SignUpWithPassword,
+  PinCodeLoginScreen,
 } from "../screens"
 import { MainNavigator } from "./MainNavigator"
 import { useAuthentication, useHelper } from "app/services/hook"
@@ -55,7 +58,6 @@ const RootStack = observer((props: Props) => {
   const { uiStore, user } = useStores()
   const insets = useSafeAreaInsets()
 
-  
   const [updateBlogUrl, setUpdateBlogUrl] = useState("")
   // ------------------- METHODS -------------------
 
@@ -109,7 +111,6 @@ const RootStack = observer((props: Props) => {
     const link = await dynamicLinks().getInitialLink()
     fethDynamicLink(link)
   }
-  
 
   // ------------------- EFFECTS -------------------
 
@@ -124,7 +125,6 @@ const RootStack = observer((props: Props) => {
       Logger.debug(offline ? "OFFLINE" : "ONLINE")
       uiStore.setIsOffline(offline)
     })
-
 
     const unsubscribe = dynamicLinks().onLink(fethDynamicLink)
 
@@ -163,8 +163,11 @@ const RootStack = observer((props: Props) => {
           initialParams={{ type: LockType.Individual }}
         />
         <Stack.Screen name="login" component={LoginScreen} />
+        <Stack.Screen name="login_by_pincode" component={PinCodeLoginScreen} />
         <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="signup" component={SignupScreen} />
+        <Stack.Screen name="signup_pin_code" component={SignUpWithPinCode} />
+        <Stack.Screen name="signup_password" component={SignUpWithPassword} />
         <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
         <Stack.Screen
           name="mainStack"

@@ -15,7 +15,7 @@ import { useHelper } from "app/services/hook"
 const EMPTY = require("assets/images/emptyCipherList/password-empty-img.png")
 
 export const AuthenticatorScreen = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { uiStore, user } = useStores()
   const { translate } = useHelper()
 
@@ -58,10 +58,15 @@ export const AuthenticatorScreen = observer(() => {
       safeAreaEdges={["top"]}
       header={
         <AuthenticatorHeader
-          disableAddmore={disableAddmore}
           header={translate("authenticator.title")}
           openSort={() => setIsSortOpen(true)}
-          openAdd={() => setIsAddOpen(true)}
+          openAdd={() => {
+            if (disableAddmore) {
+              navigation.navigate("payment")
+            } else {
+              setIsAddOpen(true)
+            }
+          }}
           navigation={navigation}
           searchText={searchText}
           onSearch={setSearchText}

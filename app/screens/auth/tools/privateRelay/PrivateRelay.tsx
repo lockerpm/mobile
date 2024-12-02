@@ -12,6 +12,7 @@ import { observer } from "mobx-react-lite"
 import { useHelper } from "app/services/hook"
 import { ToolsStackScreenProps } from "app/navigators/navigators.types"
 import { ConfigItem } from "./ConfigItem"
+import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 
 const FREE_PLAM_ALIAS_LIMIT = 5
 
@@ -64,6 +65,7 @@ export const PrivateRelay: FC<ToolsStackScreenProps<"privateRelay">> = observer(
   const generateRelayNewAddress = async () => {
     const res = await toolStore.generateRelayNewAddress()
     if (res.kind === "ok") {
+      logFirebaseEvent(AnalyticEvents.CREATE_PRIVATE_EMAIL, user.email)
       const newList = [...alias, res.data]
       setAlias(newList)
     }
@@ -149,7 +151,6 @@ export const PrivateRelay: FC<ToolsStackScreenProps<"privateRelay">> = observer(
               isOpen={showConfigModal}
               onClose={() => {
                 setShowConfigModal(false)
-                setSelectedItem(null)
               }}
             />
           )}

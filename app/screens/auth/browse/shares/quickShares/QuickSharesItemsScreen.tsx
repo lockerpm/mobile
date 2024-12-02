@@ -63,11 +63,7 @@ export const QuickShareItemsScreen = observer(() => {
           header={translate("quick_shares.share_option.quick.tl")}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
-            if (isFreeAccount) {
-              navigation.navigate("payment")
-            } else {
-              navigation.navigate("mainTab", { screen: "homeTab" })
-            }
+            navigation.navigate("mainTab", { screen: "homeTab" })
           }}
           onSearch={setSearchText}
           searchText={searchText}

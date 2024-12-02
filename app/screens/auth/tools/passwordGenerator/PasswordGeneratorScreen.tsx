@@ -9,6 +9,7 @@ import { useStores } from "app/models"
 import { Button, Header, Icon, Screen, Text } from "app/components/cores"
 import { PasswordStrength } from "app/components/utils"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 
 export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator">> = observer(
   (props) => {
@@ -19,7 +20,7 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator"
     const { copyToClipboard, translate } = useHelper()
     const { getPasswordStrength } = useCipherHelper()
     const { passwordGenerationService } = useCoreService()
-    const { cipherStore } = useStores()
+    const { cipherStore, user } = useStores()
     const { fromTools } = route.params
 
     const [password, setPassword] = useState("")
@@ -101,6 +102,7 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator"
             <Button
               text={translate("pass_generator.use_password")}
               onPress={() => {
+                logFirebaseEvent(AnalyticEvents.SHARE_ITENS, user.email)
                 if (fromTools) {
                   copyToClipboard(password)
                 } else {

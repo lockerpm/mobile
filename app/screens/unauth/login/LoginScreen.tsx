@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react"
-import { View } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import { BASE_URL } from "app/config/constants"
 import { useStores } from "app/models"
 import { api } from "app/services/api"
@@ -11,8 +11,7 @@ import { useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
 
-export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) => {
-  const navigation = props.navigation
+export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(({ navigation }) => {
   const { colors } = useTheme()
   const { user } = useStores()
   const { notify, translate } = useHelper()
@@ -57,23 +56,6 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
     api.apisauce.setBaseURL(BASE_URL)
   }, [])
 
-  useEffect(() => {
-    const handleBack = (e) => {
-      if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
-        navigation.dispatch(e.data.action)
-        return
-      }
-
-      e.preventDefault()
-      navigation.navigate("login")
-    }
-
-    navigation.addListener("beforeRemove", handleBack)
-    return () => {
-      navigation.removeListener("beforeRemove", handleBack)
-    }
-  }, [navigation])
-
   // ------------------------------ RENDER -------------------------------
 
   return (
@@ -114,11 +96,9 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
             marginRight: 12,
           }}
         />
-        <Text
-          color={colors.primary}
-          text={translate("common.sign_up")}
-          onPress={() => navigation.navigate("signup")}
-        />
+        <TouchableOpacity onPress={() => navigation.navigate("signup")}>
+          <Text color={colors.primary} text={translate("common.sign_up")} />
+        </TouchableOpacity>
       </View>
     </Screen>
   )

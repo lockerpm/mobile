@@ -45,9 +45,7 @@ export const SetlanguageItem = observer(() => {
 
   const setLanguage = (lang: "vi" | "en" | "zh") => {
     user.setLanguage(lang)
-    if (lang !== "zh") {
-      user.changeLanguage()
-    }
+    user.changeLanguage()
     updateAutofillLanguage(lang)
     setIsLanguageSelect(false)
   }
@@ -57,7 +55,7 @@ export const SetlanguageItem = observer(() => {
       <SettingsItem
         name={translate("common.language")}
         onPress={() => setIsLanguageSelect(true)}
-        RightAccessory={<Text text={options.find(e => e.value === user.language).label} />}
+        RightAccessory={<Text text={options.find((e) => e.value === user.language).label} />}
       />
       <NewActionSheet
         isOpen={isLanguageSelect}

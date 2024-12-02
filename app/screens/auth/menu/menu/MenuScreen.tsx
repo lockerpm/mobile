@@ -60,12 +60,12 @@ export const MenuScreen = observer(() => {
   }, [])
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => {
+    const unsubscribe = navigation.addListener("blur", () => {
       setShowFingerprint(false)
-    });
+    })
 
-    return unsubscribe;
-  }, [navigation]);
+    return unsubscribe
+  }, [navigation])
 
   // ------------------COMPUTED------------------------
 
@@ -232,7 +232,7 @@ export const MenuScreen = observer(() => {
                   {user.fingerprint.split("-").map((e, index) => (
                     <Text key={index}>
                       {index !== 0 && <Text color={colors.error} text={"-"} />}
-                      <Text color={colors.error}  text={e + "as"} />
+                      <Text color={colors.error} text={e + "as"} />
                     </Text>
                   ))}
                 </View>

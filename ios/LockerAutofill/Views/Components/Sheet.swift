@@ -23,7 +23,6 @@ struct HalfSheetHelper<Content: View>: UIViewControllerRepresentable {
   let controller: UIViewController = UIViewController()
   @Binding var showSheet: Int
   var onDismiss: () -> Void = {}
-
   
   func makeCoordinator() -> Coordinator {
     Coordinator(parent: self)
@@ -40,7 +39,7 @@ struct HalfSheetHelper<Content: View>: UIViewControllerRepresentable {
       sheetController.presentationController?.delegate = context.coordinator
       uiViewController.present(sheetController, animated: true)
     } else if showSheet == 2 {
-      uiViewController.dismiss(animated: true)
+      uiViewController.dismiss(animated: true, completion: onDismiss)
     }
   }
   
@@ -63,6 +62,7 @@ struct HalfSheetHelper<Content: View>: UIViewControllerRepresentable {
 final class CustomHostingController<Content: View>: UIHostingController<Content> {
   override func viewDidLoad() {
     //        view.backgroundColor = .clear
+    
     if let presentationController = presentationController as? UISheetPresentationController {
       presentationController.detents = [
         .medium(),
@@ -76,7 +76,7 @@ final class CustomHostingController<Content: View>: UIHostingController<Content>
       presentationController.prefersScrollingExpandsWhenScrolledToEdge = false
       
       //MARK: - sheet corner radius
-      presentationController.preferredCornerRadius = 30
+      presentationController.preferredCornerRadius = 18
       
       // for more sheet customisation check out this great article https://sarunw.com/posts/bottom-sheet-in-ios-15-with-uisheetpresentationcontroller/#scrolling
     }

@@ -1,9 +1,9 @@
-import { Platform } from 'react-native'
-import Config from 'react-native-config'
+import { Platform } from "react-native"
+import Config from "react-native-config"
 
-export const IS_PROD = Config.IS_PROD === '1'
+export const IS_PROD = Config.IS_PROD === "1"
 
-export const IS_IOS = Platform.OS === 'ios'
+export const IS_IOS = Platform.OS === "ios"
 
 export const LOGIN_URL = Config.LOGIN_URL
 export const REGISTER_URL = Config.REGISTER_URL
@@ -33,8 +33,8 @@ export const SHARED_KEYCHAIN_ACCESS_GROUP = Config.SHARED_KEYCHAIN_ACCESS_GROUP
 export const GITHUB_CONFIG = {
   redirectUrl: Config.GITHUB_CONFIG_REDIRECTURL,
   clientId: Config.GITHUB_CONFIG_CLIENTID,
-  scopes: ['user:email'],
-  authorizationEndpoint: 'https://github.com/login/oauth/authorize',
+  scopes: ["user:email"],
+  authorizationEndpoint: "https://github.com/login/oauth/authorize",
 }
 
 export const RECAPTCHA_SITE_KEY = Config.RECAPTCHA_SITE_KEY
@@ -55,3 +55,6 @@ export const VIN_AUTH_CALLBACK = Config.VIN_AUTH_CALLBACK
 // Chat woot
 export const CHATWOOT_WEBSITE_TOKEN = Config.CHATWOOT_WEBSITE_TOKEN
 export const CHATWOOT_BASE_URL = Config.CHATWOOT_BASE_URL
+
+export const REGISTER_BUSINESS_URL =
+  "https://id.locker.io/register/locker-enterprise-trial?next=register&SERVICE_SCOPE=pwdmanager"

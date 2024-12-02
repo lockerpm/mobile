@@ -106,6 +106,7 @@
     "share": "Share",
     "show_password": "Show password",
     "sign_up": "Sign up",
+    "sign_in": "Sign in",
     "skip": "Skip",
     "sort": "Sort",
     "submit": "Submit",
@@ -454,7 +455,7 @@
     "master_pass_changed": "Master password changed. Please login using the new password",
     "hint_sent": "Master Password hint sent. Please check your email for instructions",
     "title": "Welcome Back!",
-    "desc": "Enter your Master Password to Log In",
+    "desc": "Enter your Master Password to Unlock",
     "get_hint": "Get Master Password hint"
   },
   "onBoarding": {
@@ -493,14 +494,47 @@
   "signup": {
     "title": "Sign up for a free account",
     "confirm_password": "Confirm Password",
-    "agree_with": "I agree with the",
+    "agree_with": "I have read and accept the",
     "subscribe_desc": "Please keep me updated on news, events and offers",
     "has_account": "Already have an account?",
-    "terms": "terms",
-    "conditions": "conditions",
+    "terms": "Terms",
+    "conditions": "Privacy Policy.",
     "signup_successful": "A confirmation email has been sent to your address (check your SPAM folder as well)",
     "update_pw_successful": "Update successfully"
   },
+  "new_signup": {
+    "title": "Locker Password Manager",
+    "sub_title": "Quick sign-up for a free 14-day trial. Premium plan starts at $1.29/mo.",
+    "other_signup": "Or sign up with email",
+    "enter_email": "Enter your email",
+    "sign_up_email": "Sign up with email",
+    "sign_up_business": {
+      "title": "Sign up for Locker for Business? ",
+      "free_trial": "Get Free Trial"
+    },
+    "has_account": "Already have an account? ",
+    "sign_in": "Sign in",
+    "sign_up_with": "Or Sign Up With",
+    "marketing": "I want to stay updated on news, events and offers"
+  },
+  "login_email_code": {
+    "title": "Check your email for verification code",
+    "sub_title": {
+      "prefix": "We've sent a verification code to ",
+      "suffix": ". Please check your inbox."
+    },
+    "resend": {
+      "prefix": "Didn't receive any email? Check your  ",
+      "prefix2": " spam folder. ",
+      "btn": "Resend",
+      "suffix": " after {{second}}s"
+    },
+    "or": "Or",
+    "not_familiar": "Not familiar with this method? ",
+    "use_password": "Use traditional password instead!",
+    "sign_in": "Sign in with password"
+  },
+
   "start": {
     "synching": "Synchronizing...",
     "getting_team_info": "Getting your information...",
@@ -604,11 +638,16 @@
     "no_otp": "No OTP",
     "existing_otp": "Choose an existing OTP",
     "2fa_setup": "2FA Setup",
-
     "empty": {
       "title": "Forget password resets",
       "desc": "Add your passwords and access them on any device, anytime",
       "btn": "Add Password"
+    },
+    "hide_email": {
+      "title": "Hide your email",
+      "generate_new": "Generate new private email",
+      "existing_email": "Use existing private email",
+      "empty": "You haven't generated any private email"
     }
   },
   "shares": {
@@ -638,8 +677,8 @@
       }
     },
     "status": {
-      "invited" : "invited",
-      "accepted" : "accepted",
+      "invited": "invited",
+      "accepted": "accepted",
       "confirmed": "confirmed"
     },
     "empty": {
@@ -893,7 +932,7 @@
     "trial": "(Start with 2 weeks free trial)",
     "cancel_text": "Recurring billing. Cancel anytime",
     "benefit": {
-      "locker": "Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Backups",
+      "locker": "Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Backups, OTPs and Private Emails",
       "web": "Dark Web Monitoring protects your accounts from massive data breaches",
       "emergency_contact": "Emergency Contact let trusted accounts access your vault when needed",
       "share_password": "Share Passwords and items securely with your friends and family members"
@@ -1209,17 +1248,17 @@
       "100005": "{{member_joined_text}} group {{group_name}} that you shared your items with. Click to confirm sharing so they can see shared items."
     },
     "payment": {
-      "100007":  "Your invoice {{payment_id}} was paid successfully",
+      "100007": "Your invoice {{payment_id}} was paid successfully",
       "100008": "Locker couldn't proceed payment on your account. Your account was downgraded"
     },
     "emergency_access": {
       "100009": "The user {{grantor_name}} ({{grantor_email}}) has invited you as his/her Emergency Contact",
       "100010": "The user {{grantee_name}} ({{grantee_email}}) has accepted your invitation. Please confirm his/her identity as your new Emergency Access",
-      "100011":  "User {{grantee_name}} ({{grantee_email}}) has accepted your Emergency Contact invitation",
+      "100011": "User {{grantee_name}} ({{grantee_email}}) has accepted your Emergency Contact invitation",
       "100012": "User {{grantee_name}} ({{grantee_email}}) has declined your Emergency Contact invitation",
       "100013": "You are now Emergency Contact of the user {{grantor_name}} ({{grantor_email}})",
       "100014": "User {{grantee_name}} ({{grantee_email}}) has requested to {{request}} your vault items",
-      "100015":  "User {{grantor_name}} ({{grantor_email}}) has accepted your Emergency Request",
+      "100015": "User {{grantor_name}} ({{grantor_email}}) has accepted your Emergency Request",
       "100016": "User {{grantor_name}} ({{grantor_email}}) has declined your Emergency Request"
     }
   },

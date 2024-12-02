@@ -106,6 +106,7 @@
     "share": "Chia sẻ",
     "show_password": "Hiện mật khẩu",
     "sign_up": "Đăng ký",
+    "sign_in": "Đăng nhập",
     "skip": "Bỏ qua",
     "sort": "Sắp xếp",
     "submit": "Gửi",
@@ -501,6 +502,38 @@
     "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác).",
     "update_pw_successful": "Cập nhật thành công"
   },
+  "new_signup": {
+    "title": "Locker Password Manager",
+    "sub_title": "Đăng ký tài khoản mới Miễn phí.",
+    "other_signup": "Hoặc đăng ký bằng email",
+    "enter_email": "Nhập email của bạn",
+    "sign_up_email": "Đăng ký bằng email",
+    "sign_up_business": {
+      "title": "Đăng ký Locker cho doanh nghiệp? Dùng thử miễn phí",
+      "free_trial": "Dùng thử miễn phí"
+    },
+    "has_account": "Bạn đã có tài khoản? Đăng nhập",
+    "sign_in": "Đăng nhập",
+    "sign_up_with": "Hoặc đăng ký với",
+    "marketing": "Cập nhật cho tôi về tin tức, sự kiện, ưu đãi"
+  },
+  "login_email_code": {
+    "title": "Kiểm tra email của bạn để lấy mã xác minh",
+    "sub_title": {
+      "prefix": "Chúng tôi đã gửi mã xác minh tới ",
+      "suffix": ". Vui lòng kiểm tra hộp thư đến của bạn."
+    },
+    "resend": {
+      "prefix": "Không nhận được email nào? Hãy kiểm tra ",
+      "prefix2": " hòm thư rác. ",
+      "btn": "Gửi lại",
+      "suffix": " sau {{second}}s"
+    },
+    "or": "Hoặc",
+    "not_familiar": "Không quen thuộc với tính năng? ",
+    "use_password": "Đăng ký bằng mật khẩu!",
+    "sign_in": "Đăng nhập bằng mật khẩu"
+  },
   "start": {
     "synching": "Đồng bộ hoá dữ liệu...",
     "getting_team_info": "Kiểm tra thông tin của bạn...",
@@ -661,6 +694,12 @@
       "title": "Khỏi lo quên mật khẩu",
       "desc": "Thêm mật khẩu của bạn và truy cập chúng trên mọi thiết bị, bất kỳ lúc nào",
       "btn": "Thêm mật khẩu"
+    },
+    "hide_email": {
+      "title": "Ẩn email của bạn",
+      "generate_new": "Tạo mới email ẩn danh",
+      "existing_email": "Sử dụng email ẩn danh có sẵn",
+      "empty": "Bạn chưa taọ bất kì email ẩn danh nào"
     }
   },
   "shares": {
@@ -690,8 +729,8 @@
       }
     },
     "status": {
-      "invited" : "Đã mời",
-      "accepted" : "Chấp nhận",
+      "invited": "Đã mời",
+      "accepted": "Chấp nhận",
       "confirmed": "Xác nhận"
     },
     "empty": {
@@ -945,7 +984,7 @@
     "trial": "(Bắt đầu với 2 tuần dùng thử miễn phí)",
     "cancel_text": "Thanh toán định kỳ. Hủy bất cứ lúc nào",
     "benefit": {
-      "locker": "Lưu trữ không giới hạn, Ghi chú bảo mật, Thẻ thanh toán, Tài sản tiền điện tử",
+      "locker": "Lưu trữ không giới hạn, Ghi chú bảo mật, Thẻ thanh toán, Tài sản tiền điện tử, OTPs và Email ẩn danh",
       "web": "Giám sát Dark Web bảo vệ tài khoản của bạn khỏi các vi phạm dữ liệu lớn",
       "emergency_contact": "Liên hệ khẩn cấp cho phép các tài khoản đáng tin cậy truy cập dữ liệu của bạn",
       "share_password": "Chia sẻ mật khẩu an toàn với bạn bè và thành viên gia đình của bạn"

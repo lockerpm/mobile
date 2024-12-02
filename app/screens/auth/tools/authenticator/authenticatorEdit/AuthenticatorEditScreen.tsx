@@ -9,6 +9,7 @@ import { getTOTP, parseOTPUri } from "app/utils/totp"
 import { CipherType } from "core/enums"
 import { TOOLS_ITEMS } from "app/navigators/navigators.route"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 
 export const AuthenticatorEditScreen: FC<AppStackScreenProps<"authenticator__edit">> = observer(
   (props) => {
@@ -19,7 +20,7 @@ export const AuthenticatorEditScreen: FC<AppStackScreenProps<"authenticator__edi
 
     const { createCipher, updateCipher } = useCipherData()
     const { newCipher } = useCipherHelper()
-    const { cipherStore } = useStores()
+    const { cipherStore, user } = useStores()
 
     const { mode = "add", passwordTotp, passwordMode } = route.params
     const selectedCipher: CipherView = cipherStore.cipherView
@@ -73,6 +74,7 @@ export const AuthenticatorEditScreen: FC<AppStackScreenProps<"authenticator__edi
 
       setIsLoading(false)
       if (res.kind === "ok") {
+        logFirebaseEvent(AnalyticEvents.ADD_OTP, user.email)
         if (!passwordTotp) {
           navigation.goBack()
         } else {

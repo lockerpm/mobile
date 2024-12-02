@@ -11,7 +11,6 @@ import { ShareModal } from "app/components/ciphers"
 import { DeleteOtpModal } from "./DeleteOtpModal"
 
 interface Props {
-  disableAddmore: boolean
   openSort: () => void
   openAdd: () => void
   toggleSelectAll: () => void
@@ -31,7 +30,6 @@ export const AuthenticatorHeader = (props: Props) => {
     openAdd,
     onSearch,
     searchText,
-    disableAddmore,
     setIsLoading,
     navigation,
     header,
@@ -66,10 +64,9 @@ export const AuthenticatorHeader = (props: Props) => {
       <Icon
         icon="plus"
         size={24}
-        disabled={disableAddmore}
-        color={!disableAddmore ? colors.primaryText : colors.secondaryText}
+        color={colors.primaryText}
         onPress={openAdd}
-        containerStyle={{ padding: 8, opacity: disableAddmore ? 0.3 : 1 }}
+        containerStyle={{ padding: 8 }}
       />
     </View>
   )

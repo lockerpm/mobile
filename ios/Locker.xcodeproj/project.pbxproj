@@ -32,6 +32,9 @@
 		7C39140F2B87321900213EEB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C39140E2B87321900213EEB /* User.swift */; };
 		7C3914112B87338E00213EEB /* LockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3914102B87338E00213EEB /* LockScreen.swift */; };
 		7C3914132B8737DC00213EEB /* CredentialsListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3914122B8737DC00213EEB /* CredentialsListScreen.swift */; };
+		7C6D58A52C6C955C0059ACAC /* PrivateEmailList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A42C6C955C0059ACAC /* PrivateEmailList.swift */; };
+		7C6D58A72C6DC2340059ACAC /* PrivateEmailApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A62C6DC2340059ACAC /* PrivateEmailApiService.swift */; };
+		7C6D58A92C6DC6D70059ACAC /* PrivateEmailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A82C6DC6D70059ACAC /* PrivateEmailModel.swift */; };
 		7C8FB3752ADD298800DA5BCE /* VinCSSFido2ClientSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */; };
 		7C8FB3762ADD298900DA5BCE /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7C9379E82BC6741E00157962 /* zh.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C9379E72BC6741E00157962 /* zh.strings */; };
@@ -39,7 +42,6 @@
 		7C973A412A93055500875FBA /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A402A93055500875FBA /* CredentialProviderViewController.swift */; };
 		7C973A442A93055500875FBA /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A422A93055500875FBA /* MainInterface.storyboard */; };
 		7C973A492A93055500875FBA /* LockerAutofill.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7C973A3C2A93055500875FBA /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		7C973A512A93068F00875FBA /* AutofillData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A502A93068F00875FBA /* AutofillData.swift */; };
 		7C973A532A9306A700875FBA /* AutofillDataKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A522A9306A700875FBA /* AutofillDataKeychain.swift */; };
 		7C973A5B2A93075E00875FBA /* vi.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A572A93075E00875FBA /* vi.strings */; };
 		7C973A5D2A93075E00875FBA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A592A93075E00875FBA /* Utils.swift */; };
@@ -142,6 +144,9 @@
 		7C39140E2B87321900213EEB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7C3914102B87338E00213EEB /* LockScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreen.swift; sourceTree = "<group>"; };
 		7C3914122B8737DC00213EEB /* CredentialsListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsListScreen.swift; sourceTree = "<group>"; };
+		7C6D58A42C6C955C0059ACAC /* PrivateEmailList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailList.swift; sourceTree = "<group>"; };
+		7C6D58A62C6DC2340059ACAC /* PrivateEmailApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailApiService.swift; sourceTree = "<group>"; };
+		7C6D58A82C6DC6D70059ACAC /* PrivateEmailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailModel.swift; sourceTree = "<group>"; };
 		7C9379E72BC6741E00157962 /* zh.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = zh.strings; sourceTree = "<group>"; };
 		7C973A362A93019C00875FBA /* Locker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Locker.entitlements; path = Locker/Locker.entitlements; sourceTree = "<group>"; };
 		7C973A372A9304CA00875FBA /* Locker-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Locker-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -152,7 +157,6 @@
 		7C973A452A93055500875FBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C973A462A93055500875FBA /* LockerAutofill.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofill.entitlements; sourceTree = "<group>"; };
 		7C973A4E2A9305EC00875FBA /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		7C973A502A93068F00875FBA /* AutofillData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillData.swift; sourceTree = "<group>"; };
 		7C973A522A9306A700875FBA /* AutofillDataKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillDataKeychain.swift; sourceTree = "<group>"; };
 		7C973A552A93072700875FBA /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
 		7C973A572A93075E00875FBA /* vi.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = vi.strings; sourceTree = "<group>"; };
@@ -292,6 +296,7 @@
 				7C1F2A3D2B8C7F990003B7EF /* UserAvatar.swift */,
 				7C1F2A3F2B8C7FA10003B7EF /* MasterPasswordInput.swift */,
 				7C1F2A652B8CB7330003B7EF /* CredentialInfo.swift */,
+				7C6D58A42C6C955C0059ACAC /* PrivateEmailList.swift */,
 				7C1F2A6B2B907BDA0003B7EF /* PasswordImage.swift */,
 				7C1F2A6D2B90873A0003B7EF /* CredentialItem.swift */,
 				7C1F2A762B91BB940003B7EF /* TOTPView.swift */,
@@ -335,10 +340,10 @@
 		7C973A4F2A93067800875FBA /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				7C973A502A93068F00875FBA /* AutofillData.swift */,
 				7C973A522A9306A700875FBA /* AutofillDataKeychain.swift */,
 				7C39140E2B87321900213EEB /* User.swift */,
 				7CCABA7D2BB170EE006D7FB7 /* KeychainData.swift */,
+				7C6D58A82C6DC6D70059ACAC /* PrivateEmailModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -380,6 +385,7 @@
 				7C3914042B87149900213EEB /* OTPService.swift */,
 				7C3914062B872A5900213EEB /* AuthenService.swift */,
 				7CCABA732BB11F9B006D7FB7 /* PasswordGenerator.swift */,
+				7C6D58A62C6DC2340059ACAC /* PrivateEmailApiService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -850,20 +856,22 @@
 			files = (
 				7CCABA7A2BB13779006D7FB7 /* CreateCipherScreen.swift in Sources */,
 				7C1F2A3E2B8C7F990003B7EF /* UserAvatar.swift in Sources */,
+				7C6D58A52C6C955C0059ACAC /* PrivateEmailList.swift in Sources */,
 				7C1F2A6C2B907BDA0003B7EF /* PasswordImage.swift in Sources */,
 				7CCABA7E2BB170EE006D7FB7 /* KeychainData.swift in Sources */,
 				7CCABA742BB11F9B006D7FB7 /* PasswordGenerator.swift in Sources */,
 				7C3914132B8737DC00213EEB /* CredentialsListScreen.swift in Sources */,
 				7C39140A2B872CB800213EEB /* translate.swift in Sources */,
 				7C1F2A402B8C7FA10003B7EF /* MasterPasswordInput.swift in Sources */,
+				7C6D58A72C6DC2340059ACAC /* PrivateEmailApiService.swift in Sources */,
 				7C3914112B87338E00213EEB /* LockScreen.swift in Sources */,
 				7C1F2A662B8CB7330003B7EF /* CredentialInfo.swift in Sources */,
 				7CCABA782BB120DB006D7FB7 /* StrongPasswordGenerator.swift in Sources */,
 				7C973A532A9306A700875FBA /* AutofillDataKeychain.swift in Sources */,
 				7C973A412A93055500875FBA /* CredentialProviderViewController.swift in Sources */,
+				7C6D58A92C6DC6D70059ACAC /* PrivateEmailModel.swift in Sources */,
 				7C1F2A772B91BB940003B7EF /* TOTPView.swift in Sources */,
 				7C1F2A6E2B90873A0003B7EF /* CredentialItem.swift in Sources */,
-				7C973A512A93068F00875FBA /* AutofillData.swift in Sources */,
 				7C39140F2B87321900213EEB /* User.swift in Sources */,
 				7CCE43192BB5880A0004028E /* Theme.swift in Sources */,
 				7C3914012B870A2800213EEB /* CredentialsQuickTypeBar.swift in Sources */,
@@ -969,7 +977,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 196;
+				CURRENT_PROJECT_VERSION = 207;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
@@ -981,7 +989,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.59;
+				MARKETING_VERSION = 1.62;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1009,7 +1017,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 196;
+				CURRENT_PROJECT_VERSION = 207;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -1020,7 +1028,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.59;
+				MARKETING_VERSION = 1.62;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

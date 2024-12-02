@@ -30,25 +30,27 @@ class CredentialProviderController: ASCredentialProviderViewController {
   override func viewDidAppear(_ animated: Bool) {
     self.view.backgroundColor = UIColor(named: "background")
 //    self.overrideUserInterfaceStyle = .dark
-    if (user.faceIdEnabled){
-      authenService.biometricAuthentication(
-        view: self,
-        onSuccess: {
-          if (self.quickBarCredential == nil) {
-            self.navigateCredentialsList()
-          } else {
-            self.loginSelected(data: self.quickBarCredential)
+    if (self.loginLocker()) {
+      if (user.faceIdEnabled){
+        authenService.biometricAuthentication(
+          view: self,
+          onSuccess: {
+            if (self.quickBarCredential == nil) {
+              self.navigateCredentialsList()
+            } else {
+              self.loginSelected(data: self.quickBarCredential)
+            }
+          },
+          onFailed: self.navigateLockScreen,
+          notSupported: {
+            self.user.faceIdEnabled = false
+            self.navigateLockScreen()
           }
-        },
-        onFailed: self.navigateLockScreen,
-        notSupported: {
-          self.user.faceIdEnabled = false
-          self.navigateLockScreen()
-        }
-      )
-    }
-    else {
-      self.navigateLockScreen()
+        )
+      }
+      else {
+        self.navigateLockScreen()
+      }
     }
   }
  
@@ -58,18 +60,19 @@ class CredentialProviderController: ASCredentialProviderViewController {
    prioritize the most relevant credentials in the list.
   */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    loginLocker()
-    if serviceIdentifiers.count > 0 {
-      self.serviceIdentifier = serviceIdentifiers[0].identifier
-      if serviceIdentifiers[0].type == .URL {
-        user.setUri(uri: URL(string: serviceIdentifier)?.host ?? "", isDomain: false)
+    if (self.loginLocker()) {
+      if serviceIdentifiers.count > 0 {
+        self.serviceIdentifier = serviceIdentifiers[0].identifier
+        if serviceIdentifiers[0].type == .URL {
+          user.setUri(uri: URL(string: serviceIdentifier)?.host ?? "", isDomain: false)
+        }
+        else {
+          user.setUri(uri: serviceIdentifier, isDomain: true)
+          self.serviceIdentifier = "https://" +  serviceIdentifier
+        }
+      } else {
+        user.URI = ""
       }
-      else {
-        user.setUri(uri: serviceIdentifier, isDomain: true)
-        self.serviceIdentifier = "https://" +  serviceIdentifier
-      }
-    } else {
-      user.URI = ""
     }
   }
   
@@ -80,18 +83,18 @@ class CredentialProviderController: ASCredentialProviderViewController {
    by completing the extension request with the associated ASPasswordCredential.
    */
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-    loginLocker()
-    
-    self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
-    self.quickBar = true
-    user.URI = URL(string: serviceIdentifier)?.host ?? serviceIdentifier
+    if (self.loginLocker()) {
+      self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
+      self.quickBar = true
+      user.URI = URL(string: serviceIdentifier)?.host ?? serviceIdentifier
 
-    if let credential = user.getAutofillDataById(id: credentialIdentity.recordIdentifier!)  {
-      self.quickBarCredential = credential
-    } else {
-      quickTypeBar.removeCredentialIdentities(credentialIdentity)
+      if let credential = user.getAutofillDataById(id: credentialIdentity.recordIdentifier!)  {
+        self.quickBarCredential = credential
+      } else {
+        quickTypeBar.removeCredentialIdentities(credentialIdentity)
+      }
+      loadView()
     }
-    loadView()
   }
   
   /**
@@ -106,11 +109,13 @@ class CredentialProviderController: ASCredentialProviderViewController {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
   }
   
-  private func loginLocker(){
-    if (!user.loginedLocker){
+  private func loginLocker() -> Bool {
+    if (!user.loginedLocker) {
       noti(contex: self, title: "noti.authen", message:  "noti.loginLocker", completion: cancel)
       quickTypeBar.removeAllCredentialIdentities() // remove all credentials in store
+      return false
     }
+    return true
   }
 }
 

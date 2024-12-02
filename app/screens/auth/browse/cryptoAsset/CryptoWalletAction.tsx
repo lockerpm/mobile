@@ -25,55 +25,60 @@ export const CryptoWalletAction = observer((props: Props) => {
 
   const renderContent = () => (
     <>
-      <ActionItem
-        name={translate("crypto_asset.copy_address")}
-        icon="copy"
-        action={() => {
-          props.onClose && props.onClose()
-          copyToClipboard(data.address)
-        }}
-        disabled={!data.address}
-      />
+      {!!data.address && (
+        <ActionItem
+          name={translate("crypto_asset.copy_address")}
+          icon="copy"
+          action={() => {
+            props.onClose && props.onClose()
+            copyToClipboard(data.address)
+          }}
+        />
+      )}
 
-      <ActionItem
-        name={translate("crypto_asset.copy_password")}
-        icon="copy"
-        action={() => {
-          props.onClose && props.onClose()
-          copyToClipboard(data.password)
-        }}
-        disabled={!data.password}
-      />
+      {!!data.password && (
+        <ActionItem
+          name={translate("crypto_asset.copy_password")}
+          icon="copy"
+          action={() => {
+            props.onClose && props.onClose()
+            copyToClipboard(data.password)
+          }}
+        />
+      )}
 
-      <ActionItem
-        name={translate("crypto_asset.copy_pin")}
-        icon="copy"
-        action={() => {
-          props.onClose && props.onClose()
-          copyToClipboard(data.pin)
-        }}
-        disabled={!data.password}
-      />
+      {!!data.password && (
+        <ActionItem
+          name={translate("crypto_asset.copy_pin")}
+          icon="copy"
+          action={() => {
+            props.onClose && props.onClose()
+            copyToClipboard(data.pin)
+          }}
+        />
+      )}
 
-      <ActionItem
-        name={translate("crypto_asset.copy_private_key")}
-        icon="copy"
-        action={() => {
-          props.onClose && props.onClose()
-          copyToClipboard(data.privateKey)
-        }}
-        disabled={!data.privateKey}
-      />
+      {!!data.privateKey && (
+        <ActionItem
+          name={translate("crypto_asset.copy_private_key")}
+          icon="copy"
+          action={() => {
+            props.onClose && props.onClose()
+            copyToClipboard(data.privateKey)
+          }}
+        />
+      )}
 
-      <ActionItem
-        name={translate("crypto_asset.copy_seed")}
-        icon="copy"
-        action={() => {
-          props.onClose && props.onClose()
-          copyToClipboard(data.seed)
-        }}
-        disabled={!data.seed}
-      />
+      {!!data.seed.trim() && (
+        <ActionItem
+          name={translate("crypto_asset.copy_seed")}
+          icon="copy"
+          action={() => {
+            props.onClose && props.onClose()
+            copyToClipboard(data.seed)
+          }}
+        />
+      )}
       {__DEV__ && (
         <ActionItem
           name={"(DEBUG) Copy notes"}

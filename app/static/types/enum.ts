@@ -6,128 +6,135 @@ export enum AccountRole {
 }
 
 export enum LockPMType {
-  ONPREMISE = 'onPremise',
-  INDIVIDUAL = 'individual',
+  ONPREMISE = "onPremise",
+  INDIVIDUAL = "individual",
 }
 
 export enum AccountType {
-  PERSONAL = 'personal',
-  ENTERPRISE = 'enterprise',
+  PERSONAL = "personal",
+  ENTERPRISE = "enterprise",
 }
 
 export enum EnterpriseGroupRoleText {
-  PRIMARY_ADMIN = 'primary_admin',
-  ADMIN = 'admin',
-  MEMBER = 'member',
+  PRIMARY_ADMIN = "primary_admin",
+  ADMIN = "admin",
+  MEMBER = "member",
 }
 export enum EnterpriseInvitationStatus {
-  INVITED = 'invited',
-  REQUESTED = 'requested',
+  INVITED = "invited",
+  REQUESTED = "requested",
 }
 
 export enum AccountRoleText {
-  OWNER = 'owner',
-  ADMIN = 'admin',
-  MANAGER = 'manager',
-  MEMBER = 'member',
+  OWNER = "owner",
+  ADMIN = "admin",
+  MANAGER = "manager",
+  MEMBER = "member",
 }
 
 export enum SocketEvent {
-  SYNC = 'sync',
-  MEMBERS = 'members',
-  EMERGENCY_ACCESS = 'emergency_access',
-  QUICK_SHARE = 'quick_share',
+  SYNC = "sync",
+  MEMBERS = "members",
+  EMERGENCY_ACCESS = "emergency_access",
+  QUICK_SHARE = "quick_share",
 }
 
 export enum SocketEventType {
-  CIPHER_UPDATE = 'cipher_update',
-  CIPHER = 'cipher',
+  CIPHER_UPDATE = "cipher_update",
+  CIPHER = "cipher",
 
-  FOLDER_UPDATE = 'folder_update',
-  FOLDER_DELETE = 'folder_delete',
+  FOLDER_UPDATE = "folder_update",
+  FOLDER_DELETE = "folder_delete",
 
-  COLLECTION_UPDATE = 'collection_update',
-  COLLECTION_DELETE = 'collection_delete',
+  COLLECTION_UPDATE = "collection_update",
+  COLLECTION_DELETE = "collection_delete",
 
-  GROUP_CREATE = 'group_create',
-  GROUP_UPDATE = 'group_update',
-  GROUP_DELETE = 'group_delete',
+  GROUP_CREATE = "group_create",
+  GROUP_UPDATE = "group_update",
+  GROUP_DELETE = "group_delete",
 
-  MEMBER_INVITATION = 'member_invitation',
-  MEMBER_ACCEPTED = 'member_accepted',
+  MEMBER_INVITATION = "member_invitation",
+  MEMBER_ACCEPTED = "member_accepted",
 
-  VAULT = 'sync_vault',
+  VAULT = "sync_vault",
 
-  ORG_KEY = 'sync_org_key',
+  ORG_KEY = "sync_org_key",
 
-  SYNC_SETTINGS = 'sync_settings',
+  SYNC_SETTINGS = "sync_settings",
 
-  SYNC_EMERGENCY_ACCESS = 'emergency_access',
+  SYNC_EMERGENCY_ACCESS = "emergency_access",
 }
 
 export enum SharingStatus {
-  INVITED = 'invited',
-  ACCEPTED = 'accepted',
-  CONFIRMED = 'confirmed',
+  INVITED = "invited",
+  ACCEPTED = "accepted",
+  CONFIRMED = "confirmed",
 }
 
 export enum SharingType {
-  EDIT = 'Edit',
-  VIEW = 'View',
-  ONLY_FILL = 'Only fill',
+  EDIT = "Edit",
+  VIEW = "View",
+  ONLY_FILL = "Only fill",
 }
 
 export enum PlanType {
-  FREE = 'pm_free',
-  PREMIUM = 'pm_premium',
-  FAMILY = 'pm_family',
-  LIFETIME_PREMIUM = 'pm_lifetime_premium',
-  LIFETIME_FAMILY = 'pm_lifetime_family',
+  FREE = "pm_free",
+  PREMIUM = "pm_premium",
+  FAMILY = "pm_family",
+  LIFETIME_PREMIUM = "pm_lifetime_premium",
+  LIFETIME_FAMILY = "pm_lifetime_family",
 }
 
 export enum PlanTypeDuration {
-  MONTHLY = 'monthly',
-  YEARLY = 'yearly',
+  MONTHLY = "monthly",
+  YEARLY = "yearly",
 }
 
 export enum InvitationStatus {
-  INVITED = 'invited',
-  REJECTED = 'rejected',
-  CONFIRMED = 'confirmed',
+  INVITED = "invited",
+  REJECTED = "rejected",
+  CONFIRMED = "confirmed",
 }
 
 export enum NotificationCategory {
-  ITEM_SHARE = 'item_sharing',
-  EMERGENCY = 'emergency_access',
-  DATA_BREACH = 'data_breach',
-  PW_TIPS = 'password_tip_trick',
-  MARKETING = 'marketing',
-  PAYMENT = 'payment',
-  OTHER = 'other',
+  ITEM_SHARE = "item_sharing",
+  EMERGENCY = "emergency_access",
+  DATA_BREACH = "data_breach",
+  PW_TIPS = "password_tip_trick",
+  MARKETING = "marketing",
+  PAYMENT = "payment",
+  OTHER = "other",
 }
 
 export enum EmergencyAccessStatus {
-  INVITED = 'invited',
-  CONFIRMED = 'confirmed',
-  RECOVERY_INITIATED = 'recovery_initiated',
-  RECOVERY_APPROVED = 'recovery_approved',
+  INVITED = "invited",
+  CONFIRMED = "confirmed",
+  RECOVERY_INITIATED = "recovery_initiated",
+  RECOVERY_APPROVED = "recovery_approved",
 }
 
 export enum EmergencyAccessType {
-  TAKEOVER = 'takeover',
-  VIEW = 'view',
+  TAKEOVER = "takeover",
+  VIEW = "view",
 }
 
 export enum PolicyType {
-  PASSWORD_REQ = 'password_requirement',
-  MASTER_PASSWORD_REQ = 'master_password_requirement',
-  BLOCK_FAILED_LOGIN = 'block_failed_login',
-  PASSWORDLESS = 'passwordless',
+  PASSWORD_REQ = "password_requirement",
+  MASTER_PASSWORD_REQ = "master_password_requirement",
+  BLOCK_FAILED_LOGIN = "block_failed_login",
+  PASSWORDLESS = "passwordless",
 }
 
 export enum LoginMethod {
-  PASSWORD = 'password',
-  PASSWORDLESS = 'passwordless',
+  PASSWORD = "password",
+  PASSWORDLESS = "passwordless",
+}
+
+// use only on Login screen
+export enum LOGIN_METHOD {
+  PASSKEY = 0,
+  PASSWORD = 1,
+  NONE = 2,
 }
 
 export enum AppTimeoutType {
@@ -135,6 +142,6 @@ export enum AppTimeoutType {
   APP_CLOSE = 0,
 }
 export enum TimeoutActionType {
-  LOCK = 'lock',
-  LOGOUT = 'logout',
+  LOCK = "lock",
+  LOGOUT = "logout",
 }
