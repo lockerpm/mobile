@@ -5,6 +5,7 @@ import { useTheme } from "app/services/context"
 import { MethodSelection } from "./MethodSelection"
 import { OtpAuthen } from "./OtpAuthen"
 import Animated, { FadeInDown } from "react-native-reanimated"
+import { gestureHandlerRootHOC } from "react-native-gesture-handler"
 
 interface Props {
   credential: {
@@ -64,74 +65,76 @@ export const TwoFAAuthenSheet = ({ credential, isOpen, onClose, onLoggedIn }: Pr
   }, [])
 
   useEffect(() => {
-    if (!isOpen) (
-      reset()
-    )
+    if (!isOpen) reset()
   }, [isOpen])
+
+  const Content = gestureHandlerRootHOC(() => (
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
+      <BottomSheet
+        index={0}
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        onClose={onClose}
+        onChange={onSheetChange}
+        enablePanDownToClose
+        handleStyle={{
+          backgroundColor: colors.background,
+        }}
+        backdropComponent={() => (
+          <TouchableWithoutFeedback onPress={closeSheet} style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: colors.transparentModal }} />
+          </TouchableWithoutFeedback>
+        )}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: colors.background,
+            paddingHorizontal: 20,
+          }}
+        >
+          {index === 0 && (
+            <Animated.View entering={FadeInDown}>
+              <MethodSelection
+                methods={credential.methods}
+                onSelect={(type: string, data: any) => {
+                  setMethod(type)
+                  setPartialEamil(data)
+                  setIndex(1)
+                  showFullSheet()
+                }}
+                username={credential.username}
+                password={credential.password}
+              />
+            </Animated.View>
+          )}
+          {index === 1 && (
+            <Animated.View entering={FadeInDown}>
+              <OtpAuthen
+                goBack={() => setIndex(0)}
+                method={method}
+                email={partialEmail}
+                username={credential.username}
+                password={credential.password}
+                onLoggedIn={() => {
+                  closeSheet()
+                  onLoggedIn()
+                }}
+              />
+            </Animated.View>
+          )}
+        </View>
+      </BottomSheet>
+    </View>
+  ))
 
   return (
     <Modal transparent animationType="fade" visible={isOpen}>
-      <View
-        style={{
-          flex: 1,
-        }}
-      >
-        <BottomSheet
-          index={0}
-          ref={sheetRef}
-          snapPoints={snapPoints}
-          onClose={onClose}
-          onChange={onSheetChange}
-          enablePanDownToClose
-          handleStyle={{
-            backgroundColor: colors.background,
-          }}
-          backdropComponent={() => (
-            <TouchableWithoutFeedback onPress={closeSheet} style={{ flex: 1 }}>
-              <View style={{ flex: 1, backgroundColor: colors.transparentModal }} />
-            </TouchableWithoutFeedback>
-          )}
-        >
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: colors.background,
-              paddingHorizontal: 20,
-            }}
-          >
-            {index === 0 && (
-              <Animated.View entering={FadeInDown}>
-                <MethodSelection
-                  methods={credential.methods}
-                  onSelect={(type: string, data: any) => {
-                    setMethod(type)
-                    setPartialEamil(data)
-                    setIndex(1)
-                    showFullSheet()
-                  }}
-                  username={credential.username}
-                  password={credential.password}
-                />
-              </Animated.View>
-            )}
-            {index === 1 && (
-              <Animated.View entering={FadeInDown}>
-                <OtpAuthen
-                  goBack={() => setIndex(0)}
-                  method={method}
-                  email={partialEmail}
-                  username={credential.username}
-                  password={credential.password}
-                  onLoggedIn={() => {
-                    closeSheet()
-                    onLoggedIn()
-                  }}
-                />
-              </Animated.View>
-            )}
-          </View>
-        </BottomSheet>
-      </View>
+      <Content />
     </Modal>
   )
 }

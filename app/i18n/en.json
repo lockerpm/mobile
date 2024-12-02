@@ -531,7 +531,8 @@
     },
     "or": "Or",
     "not_familiar": "Not familiar with this method? ",
-    "use_password": "Use traditional password instead!"
+    "use_password": "Use traditional password instead!",
+    "sign_in": "Sign in with password"
   },
 
   "start": {

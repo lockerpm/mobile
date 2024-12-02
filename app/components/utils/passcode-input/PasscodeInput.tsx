@@ -11,7 +11,7 @@ interface PasscodeInputProps {
    * Reset error state when passcode input change
    */
   onTextChange?: () => void
-  errorText?: string
+  isError?: boolean
   isLoading?: boolean
 }
 
@@ -22,7 +22,7 @@ interface PasscodeInputProps {
  * @returns
  */
 export const PasscodeInput: React.FC<PasscodeInputProps> = ({
-  errorText,
+  isError,
   onCodeFilled,
   style,
   onTextChange,
@@ -38,7 +38,6 @@ export const PasscodeInput: React.FC<PasscodeInputProps> = ({
 
   const handleInputChange = (index: number, text: string) => {
     if (!text) return
-    console.log(index, text)
     onTextChange && onTextChange()
     // Update passcode array with the entered digit
     const newPasscode = passcode.slice()
@@ -67,6 +66,7 @@ export const PasscodeInput: React.FC<PasscodeInputProps> = ({
     }
     setPasscode(newPasscode)
     inputRefs.current[0]?.focus()
+    onTextChange && onTextChange()
   }
 
   useEffect(() => {
@@ -81,35 +81,51 @@ export const PasscodeInput: React.FC<PasscodeInputProps> = ({
   return (
     <View>
       <View style={[$container, style]}>
-        {passcode.map((digit, index) => (
-          <>
+        {passcode.slice(0, 3).map((digit, index) => (
+          <PinItemInput
+            editable={!isLoading}
+            key={index}
+            isError={isError}
+            ref={(ref) => (inputRefs.current[index] = ref)}
+            onKeyPress={({ nativeEvent }) => {
+              if (nativeEvent.key === "Backspace") {
+                handleKeyPress()
+              }
+            }}
+            onChangeText={(text) => handleInputChange(index, text)}
+            value={digit}
+            maxLength={1}
+            placeholder="0"
+          />
+        ))}
+        <View
+          style={{
+            width: 12,
+            height: 5,
+            borderRadius: 2,
+            backgroundColor: colors.palette.neutral5,
+          }}
+        />
+        {passcode.slice(3).map((digit, index) => {
+          const passcodeIndex = index + 3
+          return (
             <PinItemInput
               editable={!isLoading}
-              key={index}
-              isError={!!errorText}
-              ref={(ref) => (inputRefs.current[index] = ref)}
+              key={passcodeIndex}
+              isError={isError}
+              ref={(ref) => (inputRefs.current[passcodeIndex] = ref)}
               onKeyPress={({ nativeEvent }) => {
                 if (nativeEvent.key === "Backspace") {
                   handleKeyPress()
                 }
               }}
-              onChangeText={(text) => handleInputChange(index, text)}
+              onChangeText={(text) => handleInputChange(passcodeIndex, text)}
               value={digit}
               maxLength={1}
               placeholder="0"
             />
-            {index === 2 && (
-              <View
-                style={{
-                  width: 12,
-                  height: 5,
-                  borderRadius: 2,
-                  backgroundColor: colors.palette.neutral5,
-                }}
-              />
-            )}
-          </>
-        ))}
+          )
+        })}
       </View>
     </View>
   )

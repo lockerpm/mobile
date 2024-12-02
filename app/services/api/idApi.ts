@@ -24,6 +24,7 @@ import {
   SocialLoginRequest,
   OnPremiseIdentifierData,
   OnpremisePreloginPayload,
+  LoginPinCodeData,
 } from "app/static/types"
 import { LoginMethod } from "app/static/types/enum"
 import { Logger } from "app/utils/utils"
@@ -287,11 +288,7 @@ class IdApi {
   ): Promise<
     | {
         kind: "ok"
-        data: {
-          token: string
-          service_scope: string
-          service_url: string
-        }
+        data: LoginResult
       }
     | GeneralApiProblem
   > {
@@ -315,23 +312,17 @@ class IdApi {
 
   // Resend login pin code via email
   async pinCodeLoginWith2FA(
-    otp: string,
-    nonce: string,
-    twoFactorPayload: any,
-  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    params: LoginPinCodeData,
+  ): Promise<{ kind: "ok"; data: LoginResult } | GeneralApiProblem> {
     try {
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/code/otp", {
-        code: otp,
-        nonce,
-        ...twoFactorPayload,
-      })
+      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/code/otp", params)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      return { kind: "ok", data: response.data }
     } catch (e) {
       Logger.error(e.message)
       return { kind: "bad-data" }

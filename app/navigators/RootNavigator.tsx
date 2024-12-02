@@ -28,6 +28,7 @@ import {
   LockType,
   SignUpWithPinCode,
   SignUpWithPassword,
+  PinCodeLoginScreen,
 } from "../screens"
 import { MainNavigator } from "./MainNavigator"
 import { useAuthentication, useHelper } from "app/services/hook"
@@ -162,6 +163,7 @@ const RootStack = observer((props: Props) => {
           initialParams={{ type: LockType.Individual }}
         />
         <Stack.Screen name="login" component={LoginScreen} />
+        <Stack.Screen name="login_by_pincode" component={PinCodeLoginScreen} />
         <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="signup" component={SignupScreen} />
         <Stack.Screen name="signup_pin_code" component={SignUpWithPinCode} />

@@ -11,14 +11,13 @@ import { observer } from "mobx-react-lite"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
 
 export const ForgotPasswordScreen: FC<RootStackScreenProps<"forgotPassword">> = observer(
-  (props) => {
-    const navigation = props.navigation
+  ({ navigation, route: { params } }) => {
     const { user } = useStores()
     const { notify, notifyApiError, translate } = useHelper()
     // ------------------------------ PARAMS -------------------------------
 
     const [isError, setIsError] = useState(false)
-    const [username, setUsername] = useState("")
+    const [username, setUsername] = useState(params?.email || "")
 
     const [methods, setMethods] = useState([])
 

@@ -1,11 +1,12 @@
 import {
   PasskeyAuthenticationResult,
   PasskeyRegistrationResult,
-} from 'react-native-passkey/lib/typescript/Passkey'
+} from "react-native-passkey/lib/typescript/Passkey"
 
 export type UseLoginMethod = {
   webauthn: boolean
   is_random_password: boolean
+  has_social_login: boolean
 }
 
 export type LoginResult = {
@@ -20,6 +21,14 @@ export type LoginResult = {
 export type LoginData = {
   username: string
   password: string
+  method?: string
+  otp?: string
+  save_device?: boolean
+}
+
+export type LoginPinCodeData = {
+  nonce: string
+  code: string
   method?: string
   otp?: string
   save_device?: boolean
@@ -51,7 +60,7 @@ export type OnPremisePreloginData = {
   alias: string
   avatar: string
   base_api: string
-  login_method: 'password' | 'passwordless' | string
+  login_method: "password" | "passwordless" | string
   email: string
   require_passwordless: boolean
   set_up_passwordless: boolean

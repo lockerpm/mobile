@@ -157,11 +157,9 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
 
   const sendPinCode = async () => {
     setEnableResendBtn(false)
+    setTimer(60)
     const res = await idApi.resendPinCode(email, language, nonce)
-    if (res.kind === "ok") {
-      setEnableResendBtn(false)
-      console.log(res)
-    } else {
+    if (res.kind !== "ok") {
       notifyApiError(res)
     }
   }
@@ -171,7 +169,6 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
       const interval = setInterval(() => {
         setTimer((lastTimerCount) => {
           if (lastTimerCount === 0) {
-            setEnableResendBtn(true)
             return 0
           } else {
             lastTimerCount <= 1 && clearInterval(interval)
@@ -185,9 +182,15 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
     return undefined
   }, [enableResendBtn])
 
-  // useEffect(() => {
-  //   sendPinCode()
-  // }, [])
+  useEffect(() => {
+    if (timerCount === 0) {
+      setEnableResendBtn(true)
+    }
+  }, [timerCount])
+
+  useEffect(() => {
+    sendPinCode()
+  }, [])
 
   return (
     <View>

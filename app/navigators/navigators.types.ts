@@ -3,6 +3,7 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { LockType } from "app/screens/unauth/lock/lock.types"
 import {
   AppNotification,
+  LOGIN_METHOD,
   MarketingContent,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
@@ -29,8 +30,17 @@ export type RootParamList = {
     data?: OnPremisePreloginData
     email?: string
   }
-  login: undefined
-  forgotPassword: undefined
+  login: {
+    initMethod?: LOGIN_METHOD
+  }
+  login_by_pincode: {
+    email: string
+    // user register by password of not
+    havePassword: boolean
+  }
+  forgotPassword: {
+    email?: string
+  }
   signup: undefined
   signup_pin_code: {
     email: string

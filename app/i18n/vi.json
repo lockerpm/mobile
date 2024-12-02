@@ -518,20 +518,21 @@
     "marketing": "Cập nhật cho tôi về tin tức, sự kiện, ưu đãi"
   },
   "login_email_code": {
-    "title": "Check your email for verification code",
+    "title": "Kiểm tra email của bạn để lấy mã xác minh",
     "sub_title": {
-      "prefix": "We've sent a verification code to ",
-      "suffix": ". Please check your inbox."
+      "prefix": "Chúng tôi đã gửi mã xác minh tới ",
+      "suffix": ". Vui lòng kiểm tra hộp thư đến của bạn."
     },
     "resend": {
-      "prefix": "Didn't receive any email? Check your  ",
-      "prefix2": " spam folder. ",
-      "btn": "Resend",
-      "suffix": " after {{second}}s"
+      "prefix": "Không nhận được email nào? Hãy kiểm tra ",
+      "prefix2": " hòm thư rác. ",
+      "btn": "Gửi lại",
+      "suffix": " sau {{second}}s"
     },
-    "or": "Or",
-    "not_familiar": "Not familiar with this method? ",
-    "use_password": "Use traditional password instead!"
+    "or": "Hoặc",
+    "not_familiar": "Không quen thuộc với tính năng? ",
+    "use_password": "Đăng ký bằng mật khẩu!",
+    "sign_in": "Đăng nhập bằng mật khẩu"
   },
   "start": {
     "synching": "Đồng bộ hoá dữ liệu...",

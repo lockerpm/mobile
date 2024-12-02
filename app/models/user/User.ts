@@ -6,6 +6,7 @@ import {
   ChangePasswordRequest,
   Enterprise,
   LoginData,
+  LoginPinCodeData,
   NotificationSettingData,
   OnpremisePreloginPayload,
   RegisterLockerRequest,
@@ -308,6 +309,29 @@ export const UserModel = types
 
     registerByPinCode: async (otp: string, nonce: string) => {
       const res = await idApi.pinCodeLogin(otp, nonce)
+      if (res.kind === "ok") {
+        if (res.data.token) {
+          const pmRes = await userApi.getPMToken(
+            res.data.token,
+            {
+              SERVICE_URL: "/",
+              SERVICE_SCOPE: "pwdmanager",
+              CLIENT: "mobile",
+            },
+            self.deviceId,
+          )
+          if (pmRes.kind === "ok") {
+            self.setApiToken(pmRes.data.access_token)
+            self.setLoggedIn(true)
+          }
+          return pmRes
+        }
+      }
+      return res
+    },
+
+    loginPinCode2FA: async (params: LoginPinCodeData) => {
+      const res = await idApi.pinCodeLoginWith2FA(params)
       if (res.kind === "ok") {
         if (res.data.token) {
           const pmRes = await userApi.getPMToken(

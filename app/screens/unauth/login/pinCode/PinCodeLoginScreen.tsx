@@ -1,15 +1,17 @@
-import { Header, Logo, Screen, Text } from "app/components/cores"
+import { Button, Header, Logo, Screen, Text } from "app/components/cores"
 import { DividerText, PasscodeInput } from "app/components/utils"
 import { useStores } from "app/models"
-import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useRef, useState } from "react"
-import { TouchableOpacity } from "react-native"
+import { View } from "react-native"
 import { randomString, ResendOtp } from "../../signup/SignUpWithPinCode"
+import { RootStackScreenProps } from "app/navigators/navigators.types"
+import { LOGIN_METHOD } from "app/static/types"
+import { TwoFactorAuthentication } from "./2faModal"
 
-export const PinCodeLoginScreen: FC<RootStackScreenProps<"signup_pin_code">> = observer(
+export const PinCodeLoginScreen: FC<RootStackScreenProps<"login_by_pincode">> = observer(
   ({
     navigation,
     route: {
@@ -23,24 +25,31 @@ export const PinCodeLoginScreen: FC<RootStackScreenProps<"signup_pin_code">> = o
     const [code, setCode] = useState("")
     const [isLoadding, setIsLoading] = useState(false)
     const [errorText, setErrorText] = useState("")
+    const [methods, setMethods] = useState<{ type: string; data: any }[]>([])
 
     const nonce = useRef(randomString(32))
 
     const isEnable = code.length === 6
+    const show2FaModal = methods.length > 0
 
     const submitOTP = async () => {
       if (isEnable) {
         setIsLoading(true)
         const res = await user.registerByPinCode(code, nonce.current)
         if (res.kind === "ok") {
-          if ("access_token" in res.data) {
-            setApiTokens(res.data.access_token)
+          if (res.data.is_factor2) {
+            setMethods(res.data.methods || [])
+          } else {
+            if ("access_token" in res.data) {
+              setApiTokens(res.data.access_token)
+            }
+            onLoggedIn()
+            setCode("")
           }
-          onLoggedIn()
         } else {
           setErrorText(notifyApiError(res, true))
         }
-        setCode("")
+        setIsLoading(false)
       }
     }
 
@@ -48,9 +57,9 @@ export const PinCodeLoginScreen: FC<RootStackScreenProps<"signup_pin_code">> = o
       const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
       if (userRes.kind === "ok" && userPwRes.kind === "ok") {
         if (user.is_pwd_manager) {
-          navigation.navigate("lock")
+          navigation.replace("lock")
         } else {
-          navigation.navigate("createMasterPassword")
+          navigation.replace("createMasterPassword")
         }
       } else {
         notify("error", translate("error.something_went_wrong"))
@@ -63,82 +72,84 @@ export const PinCodeLoginScreen: FC<RootStackScreenProps<"signup_pin_code">> = o
     }, [isEnable])
 
     return (
-      <Screen
-        padding
-        safeAreaEdges={["bottom"]}
-        header={<Header leftIcon="arrow-left" onLeftPress={navigation.goBack} />}
-      >
-        <Logo
-          preset={"cystack-logo"}
-          style={{ height: 70, width: 70, marginBottom: 10, alignSelf: "center" }}
-        />
-        <Text
-          weight="semibold"
-          size="xl"
-          tx="new_signup.title"
-          style={{ textAlign: "center", marginBottom: 4 }}
-        />
-        <Text
-          preset="label"
-          size="medium"
-          style={{ textAlign: "center", marginBottom: 4, maxWidth: "80%", alignSelf: "center" }}
-        >
-          {translate("login_email_code.sub_title.prefix")}
-          <Text color={colors.link} text={email} />
-          {translate("login_email_code.sub_title.suffix")}
-        </Text>
+      <Screen header={<Header leftIcon="arrow-left" onLeftPress={navigation.goBack} />}>
+        {show2FaModal && (
+          <TwoFactorAuthentication
+            email={email}
+            isOpen={show2FaModal}
+            onClose={() => {
+              setMethods([])
+              setCode("")
+            }}
+            code={code}
+            nonce={nonce.current}
+            methods={methods}
+            onLoggedIn={onLoggedIn}
+          />
+        )}
+        <View style={{ padding: 16 }}>
+          <Logo
+            preset={"cystack-logo"}
+            style={{ height: 70, width: 70, marginBottom: 10, alignSelf: "center" }}
+          />
+          <Text
+            weight="semibold"
+            size="xl"
+            tx="new_signup.title"
+            style={{ textAlign: "center", marginBottom: 4 }}
+          />
+          <Text
+            preset="label"
+            size="medium"
+            style={{ textAlign: "center", marginBottom: 4, maxWidth: "80%", alignSelf: "center" }}
+          >
+            {translate("login_email_code.sub_title.prefix")}
+            <Text color={colors.link} text={email} />
+            {translate("login_email_code.sub_title.suffix")}
+          </Text>
 
-        <PasscodeInput
-          isLoading={isLoadding}
-          onCodeFilled={setCode}
-          style={{
-            marginVertical: 16,
-            marginBottom: 8,
-          }}
-        />
-        <Text
-          text={errorText}
-          color={colors.error}
-          style={{ textAlign: "center", marginBottom: 4 }}
-        />
+          <PasscodeInput
+            isError={!!errorText}
+            isLoading={isLoadding}
+            onCodeFilled={setCode}
+            onTextChange={() => {
+              setErrorText("")
+            }}
+            style={{
+              marginVertical: 16,
+              marginBottom: 8,
+            }}
+          />
+          <Text
+            text={errorText}
+            color={colors.error}
+            style={{ textAlign: "center", marginBottom: 4 }}
+          />
 
-        <ResendOtp email={email} language={user.language} nonce={nonce.current} />
+          <ResendOtp email={email} language={user.language} nonce={nonce.current} />
 
-        <DividerText
-          tx="login_email_code.or"
-          style={{ marginHorizontal: 8 }}
-          color={colors.secondaryText}
-          size="base"
-          containerStyle={{
-            marginVertical: 12,
-          }}
-        />
+          <>
+            <DividerText
+              tx="login_email_code.or"
+              style={{ marginHorizontal: 8 }}
+              color={colors.secondaryText}
+              size="base"
+              containerStyle={{
+                marginVertical: 12,
+              }}
+            />
 
-        <Text
-          preset="label"
-          tx="login_email_code.not_familiar"
-          size="base"
-          style={{ textAlign: "center", marginBottom: 16 }}
-        />
-
-        <TouchableOpacity
-          disabled={isLoadding}
-          style={{
-            alignItems: "center",
-            borderWidth: 1,
-            borderColor: colors.palette.neutral5,
-            borderRadius: 8,
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-          }}
-          onPress={() => {
-            navigation.replace("signup_password", {
-              email,
-            })
-          }}
-        >
-          <Text preset="bold" tx="login_email_code.use_password" />
-        </TouchableOpacity>
+            <Button
+              disabled={isLoadding}
+              onPress={() => {
+                navigation.navigate("login", {
+                  initMethod: LOGIN_METHOD.PASSWORD,
+                })
+              }}
+              text={translate("login_email_code.sign_in")}
+            />
+          </>
+        </View>
       </Screen>
     )
   },

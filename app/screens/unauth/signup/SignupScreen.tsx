@@ -14,7 +14,7 @@ import {
 import { Passkey, PasskeyRegistrationResult } from "react-native-passkey"
 import { PasskeyRegistrationRequest } from "react-native-passkey/lib/typescript/Passkey"
 import { credentialCreationOptions, publicKeyCredentialWithAttestation } from "app/utils/passkey"
-import { IS_IOS, PRIVACY_POLICY_URL, TERMS_URL } from "app/config/constants"
+import { IS_IOS, PRIVACY_POLICY_URL, REGISTER_BUSINESS_URL, TERMS_URL } from "app/config/constants"
 import { getCookies, logRegisterSuccessEvent } from "app/utils/analytics"
 import { Logger, validateEmail } from "app/utils/utils"
 import { observer } from "mobx-react-lite"
@@ -30,7 +30,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
   const captchaRef = useRef(null)
 
   const [isLoading, setIsLoading] = useState(false)
-  const [email, setEmail] = useState("thinh.nn3386@gmail.com")
+  const [email, setEmail] = useState("")
   const [getNews, setGesNews] = useState(false)
 
   const [isPasskeySupported, setIsPasskeySupported] = useState(true)
@@ -282,7 +282,15 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
         >
           <Text size="base" preset="label" tx={"new_signup.sign_up_business.title"} />
 
-          <TouchableOpacity onPress={navigateLogin}>
+          <TouchableOpacity
+            onPress={() => {
+              Linking.canOpenURL(REGISTER_BUSINESS_URL)
+                .then((val) => {
+                  if (val) Linking.openURL(REGISTER_BUSINESS_URL)
+                })
+                .catch((e) => Logger.error(e))
+            }}
+          >
             <Text
               size="base"
               weight="medium"

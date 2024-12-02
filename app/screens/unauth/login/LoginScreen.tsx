@@ -11,8 +11,7 @@ import { useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
 
-export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) => {
-  const navigation = props.navigation
+export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(({ navigation }) => {
   const { colors } = useTheme()
   const { user } = useStores()
   const { notify, translate } = useHelper()
