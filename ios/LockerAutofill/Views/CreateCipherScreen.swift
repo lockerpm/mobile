@@ -31,7 +31,7 @@ struct CreateCipherScreen: View {
     token.isEmpty || relayData.hasError
   }
   var disableSave: Bool {
-    webUrl.isEmpty || userName.isEmpty || passowrd.isEmpty || itemName.isEmpty
+     userName.isEmpty || passowrd.isEmpty || itemName.isEmpty
   }
   
   var body: some View {
