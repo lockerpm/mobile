@@ -150,7 +150,7 @@ interface Props {
   nonce: string
 }
 export const ResendOtp = ({ email, language, nonce }: Props) => {
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const { colors } = useTheme()
   const [timerCount, setTimer] = useState(60)
   const [enableResendBtn, setEnableResendBtn] = useState(true)
@@ -188,43 +188,26 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
     }
   }, [timerCount])
 
-  useEffect(() => {
-    sendPinCode()
-  }, [])
+  // useEffect(() => {
+  //   sendPinCode()
+  // }, [])
 
   return (
     <View>
       <Text
         preset="label"
         style={{ textAlign: "center", marginBottom: 4, maxWidth: "80%", alignSelf: "center" }}
-        tx="login_email_code.resend.prefix"
-      />
-
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
       >
-        <Text preset="label" tx="login_email_code.resend.prefix2" />
-        <TouchableOpacity disabled={!enableResendBtn} onPress={sendPinCode}>
-          <Text
-            color={enableResendBtn ? colors.link : colors.secondaryText}
-            text={email}
-            tx="login_email_code.resend.btn"
-          />
-        </TouchableOpacity>
-        {!enableResendBtn && (
-          <Text
-            preset="label"
-            tx="login_email_code.resend.suffix"
-            txOptions={{
-              second: timerCount,
-            }}
-          />
-        )}
-      </View>
+        {translate("login_email_code.resend.prefix")}
+        <Text
+          disabled={!enableResendBtn}
+          onPress={sendPinCode}
+          color={enableResendBtn ? colors.link : colors.secondaryText}
+          text={email}
+          tx="login_email_code.resend.btn"
+        />
+        {!enableResendBtn && translate("login_email_code.resend.suffix", { second: timerCount })}
+      </Text>
     </View>
   )
 }

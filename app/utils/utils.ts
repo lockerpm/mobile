@@ -157,7 +157,7 @@ export const validateEmail = (email: string) => {
 export const momentRelativeTime = (lang: string) => {
   switch (lang) {
     case "vi":
-      moment.locale("vi", {
+      moment.updateLocale("vi", {
         months:
           "tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12".split(
             "_",
@@ -196,7 +196,7 @@ export const momentRelativeTime = (lang: string) => {
       })
       break
     case "zh":
-      moment.locale("zh", {
+      moment.updateLocale("zh", {
         months: [
           "一月",
           "二月",

@@ -1,10 +1,11 @@
 import React, { FC } from "react"
 import { View } from "react-native"
 import { useTheme } from "app/services/context"
-import { Button, Screen, Text, Logo } from "app/components/cores"
+import { Button, Screen, Text, Logo, Header } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { useHelper } from "app/services/hook"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
+import { SetLanguage } from "app/components/utils"
 
 export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer((props) => {
   const { colors, isDark } = useTheme()
@@ -43,8 +44,9 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
 
   return (
     <Screen
-      safeAreaEdges={["bottom", "top"]}
+      safeAreaEdges={["bottom"]}
       footer={footer()}
+      header={<Header RightActionComponent={<SetLanguage />} />}
       KeyboardAvoidingViewProps={{
         behavior: undefined,
       }}

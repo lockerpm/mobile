@@ -4,7 +4,7 @@ import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
-import { SocialLogin, RecaptchaChecker, DividerText } from "app/components/utils"
+import { SocialLogin, RecaptchaChecker, DividerText, SetLanguage } from "app/components/utils"
 import { getCookies, logRegisterSuccessEvent } from "app/utils/analytics"
 import { Logger, validateEmail } from "app/utils/utils"
 import { observer } from "mobx-react-lite"
@@ -91,10 +91,18 @@ export const SignUpWithPassword: FC<RootStackScreenProps<"signup_password">> = o
     // ---------------- RENDER ---------------------
 
     return (
-      <Screen preset="auto" safeAreaEdges={["bottom"]}>
+      <Screen
+        preset="auto"
+        safeAreaEdges={["bottom"]}
+        header={
+          <Header
+            leftIcon="arrow-left"
+            onLeftPress={navigation.goBack}
+            RightActionComponent={<SetLanguage />}
+          />
+        }
+      >
         <RecaptchaChecker ref={captchaRef} />
-
-        <Header leftIcon="arrow-left" onLeftPress={navigation.goBack} />
 
         <View style={{ paddingHorizontal: 20 }}>
           <Logo

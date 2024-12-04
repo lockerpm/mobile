@@ -524,15 +524,15 @@
       "suffix": ". Please check your inbox."
     },
     "resend": {
-      "prefix": "Didn't receive any email? Check your  ",
-      "prefix2": " spam folder. ",
+      "prefix": "Didn't receive any email? Check your spam folder. ",
       "btn": "Resend",
       "suffix": " after {{second}}s"
     },
     "or": "Or",
     "not_familiar": "Not familiar with this method? ",
     "use_password": "Use traditional password instead!",
-    "sign_in": "Sign in with password"
+    "sign_in": "Sign in with password",
+    "sign_in_email": "Sign in with email"
   },
 
   "start": {

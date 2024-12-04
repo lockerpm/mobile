@@ -509,10 +509,10 @@
     "enter_email": "Nhập email của bạn",
     "sign_up_email": "Đăng ký bằng email",
     "sign_up_business": {
-      "title": "Đăng ký Locker cho doanh nghiệp? Dùng thử miễn phí",
+      "title": "Đăng ký Locker cho doanh nghiệp? ",
       "free_trial": "Dùng thử miễn phí"
     },
-    "has_account": "Bạn đã có tài khoản? Đăng nhập",
+    "has_account": "Bạn đã có tài khoản? ",
     "sign_in": "Đăng nhập",
     "sign_up_with": "Hoặc đăng ký với",
     "marketing": "Cập nhật cho tôi về tin tức, sự kiện, ưu đãi"
@@ -524,15 +524,15 @@
       "suffix": ". Vui lòng kiểm tra hộp thư đến của bạn."
     },
     "resend": {
-      "prefix": "Không nhận được email nào? Hãy kiểm tra ",
-      "prefix2": " hòm thư rác. ",
+      "prefix": "Không nhận được email nào? Hãy kiểm tra hòm thư rác.",
       "btn": "Gửi lại",
       "suffix": " sau {{second}}s"
     },
     "or": "Hoặc",
     "not_familiar": "Không quen thuộc với tính năng? ",
     "use_password": "Đăng ký bằng mật khẩu!",
-    "sign_in": "Đăng nhập bằng mật khẩu"
+    "sign_in": "Đăng nhập bằng mật khẩu",
+    "sign_in_email": "Đăng nhập bằng email"
   },
   "start": {
     "synching": "Đồng bộ hoá dữ liệu...",

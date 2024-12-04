@@ -1,18 +1,16 @@
 import React, { FC, useEffect, useState } from "react"
-import { TouchableOpacity, View } from "react-native"
 import { BASE_URL } from "app/config/constants"
 import { useStores } from "app/models"
 import { api } from "app/services/api"
 import { LoginForm } from "./LoginForm"
 import { TwoFAAuthenSheet } from "./2faBottomSheet/BottomSheetModal"
-import { Screen, Text } from "app/components/cores"
+import { Header, Screen } from "app/components/cores"
 import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
+import { SetLanguage } from "app/components/utils"
 
 export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(({ navigation }) => {
-  const { colors } = useTheme()
   const { user } = useStores()
   const { notify, translate } = useHelper()
 
@@ -62,7 +60,8 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(({ naviga
     <Screen
       preset="auto"
       padding
-      safeAreaEdges={["top", "bottom"]}
+      safeAreaEdges={["bottom"]}
+      header={<Header RightActionComponent={<SetLanguage />} />}
       contentContainerStyle={{ flex: 1, justifyContent: "space-between" }}
     >
       <TwoFAAuthenSheet
@@ -81,25 +80,6 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(({ naviga
         onLoggedIn={onLoggedIn}
         nextStep={nextStep}
       />
-
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          marginVertical: 12,
-        }}
-      >
-        <Text
-          text={translate("login.no_account")}
-          style={{
-            marginRight: 12,
-          }}
-        />
-        <TouchableOpacity onPress={() => navigation.navigate("signup")}>
-          <Text color={colors.primary} text={translate("common.sign_up")} />
-        </TouchableOpacity>
-      </View>
     </Screen>
   )
 })

@@ -4,12 +4,13 @@ import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { Checkbox } from "react-native-ui-lib"
-import { Screen, Text, Button, TextInput, Logo } from "app/components/cores"
+import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
 import {
   SocialLogin,
   RecaptchaChecker,
   IosPasswordlessOptions,
   DividerText,
+  SetLanguage,
 } from "app/components/utils"
 import { Passkey, PasskeyRegistrationResult } from "react-native-passkey"
 import { PasskeyRegistrationRequest } from "react-native-passkey/lib/typescript/Passkey"
@@ -163,8 +164,9 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
 
   return (
     <Screen
-      safeAreaEdges={["top", "bottom"]}
-      contentContainerStyle={{ paddingBottom: 20, paddingTop: 24 }}
+      safeAreaEdges={["bottom"]}
+      header={<Header RightActionComponent={<SetLanguage />} />}
+      contentContainerStyle={{ paddingBottom: 20 }}
     >
       <RecaptchaChecker ref={captchaRef} />
 
@@ -272,17 +274,12 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
           }}
         />
 
-        <View
-          style={{
-            margin: 12,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text size="base" preset="label" tx={"new_signup.sign_up_business.title"} />
-
-          <TouchableOpacity
+        <Text size="base" preset="label" style={{ textAlign: "center", marginVertical: 12 }}>
+          {translate("new_signup.sign_up_business.title")}
+          <Text
+            size="base"
+            weight="medium"
+            style={{ color: colors.primary }}
             onPress={() => {
               Linking.canOpenURL(REGISTER_BUSINESS_URL)
                 .then((val) => {
@@ -290,34 +287,20 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
                 })
                 .catch((e) => Logger.error(e))
             }}
-          >
-            <Text
-              size="base"
-              weight="medium"
-              style={{ color: colors.primary }}
-              tx="new_signup.sign_up_business.free_trial"
-            />
-          </TouchableOpacity>
-        </View>
+            tx="new_signup.sign_up_business.free_trial"
+          />
+        </Text>
 
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text size="base" preset="label" tx="new_signup.has_account" />
-
-          <TouchableOpacity onPress={navigateLogin}>
-            <Text
-              size="base"
-              weight="medium"
-              style={{ color: colors.primary }}
-              tx="new_signup.sign_in"
-            />
-          </TouchableOpacity>
-        </View>
+        <Text size="base" preset="label" style={{ textAlign: "center" }}>
+          {translate("new_signup.has_account")}
+          <Text
+            size="base"
+            weight="medium"
+            onPress={navigateLogin}
+            style={{ color: colors.primary }}
+            tx="new_signup.sign_in"
+          />
+        </Text>
       </View>
     </Screen>
   )
@@ -342,6 +325,7 @@ const TermAndConditions = ({
       }}
     >
       <Checkbox
+        borderRadius={4}
         value={agreed}
         color={colors.primary}
         onValueChange={setAgreed}
@@ -351,14 +335,10 @@ const TermAndConditions = ({
           borderColor: colors.secondaryText,
           borderRadius: 4,
         }}
-        labelStyle={{
-          color: colors.primaryText,
-          fontSize: 16,
-        }}
         size={18}
       />
       <TouchableOpacity onPress={() => setAgreed(!agreed)}>
-        <Text tx={"new_signup.marketing"} size="small" />
+        <Text tx={"new_signup.marketing"} size="base" />
       </TouchableOpacity>
     </View>
   )

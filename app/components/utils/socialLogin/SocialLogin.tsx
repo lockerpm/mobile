@@ -88,7 +88,7 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading, style }: Props) => {
                 style={{ marginHorizontal: 16 }}
                 key={index}
                 icon={item.icon}
-                size={40}
+                size={32}
                 onPress={item.handler}
               />
             ))}
