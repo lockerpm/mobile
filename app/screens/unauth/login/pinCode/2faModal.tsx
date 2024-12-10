@@ -50,6 +50,7 @@ export const TwoFactorAuthentication = ({
       // @ts-ignore
       setApiTokens(res.data?.access_token)
       onLoggedIn()
+      onClose()
     } else {
       setErrorMessage(notifyApiError(res, true))
     }
@@ -57,10 +58,12 @@ export const TwoFactorAuthentication = ({
 
   return (
     <Modal
+      avoidKeyboard
       animationIn="slideInUp"
       animationOut="slideOutDown"
       isVisible={isOpen}
       onModalHide={onClose}
+      onBackdropPress={onClose}
       style={{ margin: 0, backgroundColor: colors.background }}
     >
       <Header leftIcon="arrow-left" titleTx="authenticator.title" onLeftPress={onClose} />

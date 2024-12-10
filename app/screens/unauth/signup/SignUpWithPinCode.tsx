@@ -7,7 +7,7 @@ import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useRef, useState } from "react"
-import { TouchableOpacity, View } from "react-native"
+import { AppState, TouchableOpacity, View } from "react-native"
 
 export const SignUpWithPinCode: FC<RootStackScreenProps<"signup_pin_code">> = observer(
   ({
@@ -17,7 +17,7 @@ export const SignUpWithPinCode: FC<RootStackScreenProps<"signup_pin_code">> = ob
     },
   }) => {
     const { colors } = useTheme()
-    const { translate, notifyApiError, setApiTokens, notify } = useHelper()
+    const { translate, setApiTokens, notify } = useHelper()
     const { user } = useStores()
 
     const [code, setCode] = useState("")
@@ -26,7 +26,7 @@ export const SignUpWithPinCode: FC<RootStackScreenProps<"signup_pin_code">> = ob
 
     const nonce = useRef(randomString(32))
 
-    const isEnable = code.length === 6
+    const isEnable = code.trim().length === 6
 
     const submitOTP = async () => {
       if (isEnable) {
@@ -38,9 +38,10 @@ export const SignUpWithPinCode: FC<RootStackScreenProps<"signup_pin_code">> = ob
           }
           onLoggedIn()
         } else {
-          setErrorText(notifyApiError(res, true))
+          setErrorText(translate("new_signup.error_pin"))
         }
         setCode("")
+        setIsLoading(false)
       }
     }
 
@@ -154,9 +155,12 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
   const { colors } = useTheme()
   const [timerCount, setTimer] = useState(60)
   const [enableResendBtn, setEnableResendBtn] = useState(true)
+  const lastSend = useRef(0)
+  const appState = useRef(AppState.currentState)
 
   const sendPinCode = async () => {
     setEnableResendBtn(false)
+    lastSend.current = Date.now()
     setTimer(60)
     const res = await idApi.resendPinCode(email, language, nonce)
     if (res.kind !== "ok") {
@@ -172,6 +176,7 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
             return 0
           } else {
             lastTimerCount <= 1 && clearInterval(interval)
+
             return lastTimerCount - 1
           }
         })
@@ -188,9 +193,27 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
     }
   }, [timerCount])
 
-  // useEffect(() => {
-  //   sendPinCode()
-  // }, [])
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+        setTimer((lastTimerCount) => {
+          if (lastTimerCount === 0) {
+            return 0
+          }
+          return 60 - Math.min(60, Math.floor((Date.now() - lastSend.current) / 1000))
+        })
+      }
+      appState.current = nextAppState
+    })
+
+    return () => {
+      subscription.remove()
+    }
+  }, [])
+
+  useEffect(() => {
+    sendPinCode()
+  }, [])
 
   return (
     <View>

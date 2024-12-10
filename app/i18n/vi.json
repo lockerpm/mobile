@@ -515,7 +515,8 @@
     "has_account": "Bạn đã có tài khoản? ",
     "sign_in": "Đăng nhập",
     "sign_up_with": "Hoặc đăng ký với",
-    "marketing": "Cập nhật cho tôi về tin tức, sự kiện, ưu đãi"
+    "marketing": "Cập nhật cho tôi về tin tức, sự kiện, ưu đãi",
+    "error_pin": "Mã xác minh không hợp lệ."
   },
   "login_email_code": {
     "title": "Kiểm tra email của bạn để lấy mã xác minh",
@@ -524,7 +525,7 @@
       "suffix": ". Vui lòng kiểm tra hộp thư đến của bạn."
     },
     "resend": {
-      "prefix": "Không nhận được email nào? Hãy kiểm tra hòm thư rác.",
+      "prefix": "Không nhận được email nào? Hãy kiểm tra hòm thư rác. ",
       "btn": "Gửi lại",
       "suffix": " sau {{second}}s"
     },
@@ -1262,6 +1263,7 @@
         "label": "Sử dụng khoá bảo mật bên ngoài."
       }
     },
+    "login": "Đăng nhập",
     "login_passkey_setting": "Đăng nhập với passkeys",
     "login_passkey": "Đăng nhập bằng passkey",
     "login_passkey_options": "Chọn một nơi mà bạn đã lưu trữ passkey cho Locker"

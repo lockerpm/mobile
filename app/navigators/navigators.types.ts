@@ -32,6 +32,7 @@ export type RootParamList = {
   }
   login: {
     initMethod?: LOGIN_METHOD
+    email?: string
   }
   login_by_pincode: {
     email: string

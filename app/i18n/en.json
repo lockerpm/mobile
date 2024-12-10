@@ -504,7 +504,7 @@
   },
   "new_signup": {
     "title": "Locker Password Manager",
-    "sub_title": "Quick sign-up for a free 14-day trial. Premium plan starts at $1.29/mo.",
+    "sub_title": "Sign up for a free account",
     "other_signup": "Or sign up with email",
     "enter_email": "Enter your email",
     "sign_up_email": "Sign up with email",
@@ -515,7 +515,8 @@
     "has_account": "Already have an account? ",
     "sign_in": "Sign in",
     "sign_up_with": "Or Sign Up With",
-    "marketing": "I want to stay updated on news, events and offers"
+    "marketing": "I want to stay updated on news, events and offers",
+    "error_pin": "Code is invalid. Please retry!"
   },
   "login_email_code": {
     "title": "Check your email for verification code",
@@ -1216,6 +1217,7 @@
         "label": "Use an external security key"
       }
     },
+    "login": "Login",
     "login_passkey_setting": "Login with passkeys",
     "login_passkey": "Log in with passkey",
     "login_passkey_options": "Choose an option in which you've stored your passkey for Locker"

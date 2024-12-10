@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import BottomSheet from "@gorhom/bottom-sheet"
-import { View, Modal, TouchableWithoutFeedback, Keyboard } from "react-native"
+import React, { useCallback, useEffect, useState } from "react"
+import { View } from "react-native"
 import { useTheme } from "app/services/context"
 import { MethodSelection } from "./MethodSelection"
 import { OtpAuthen } from "./OtpAuthen"
 import Animated, { FadeInDown } from "react-native-reanimated"
-import { gestureHandlerRootHOC } from "react-native-gesture-handler"
+import Modal from "react-native-modal"
+import { useSafeAreaInsetsStyle } from "app/utils/useSafeAreaInsetsStyle"
 
 interface Props {
   credential: {
@@ -32,31 +32,11 @@ interface Props {
 export const TwoFAAuthenSheet = ({ credential, isOpen, onClose, onLoggedIn }: Props) => {
   const { colors } = useTheme()
 
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState(1)
   const [method, setMethod] = useState("")
   const [partialEmail, setPartialEamil] = useState("")
 
-  // ref
-  const sheetRef = useRef<BottomSheet>(null)
-
-  // variables
-  const snapPoints = useMemo(() => ["40%", "80%"], [])
-
-  const showFullSheet = useCallback(() => {
-    sheetRef.current?.snapToIndex(1)
-  }, [])
-
-  const closeSheet = useCallback(() => {
-    sheetRef.current?.close()
-    Keyboard.dismiss()
-    setTimeout(onClose, 200)
-  }, [])
-
-  const onSheetChange = useCallback((index: number) => {
-    if (index === 0) {
-      Keyboard.dismiss()
-    }
-  }, [])
+  const $safeStyle = useSafeAreaInsetsStyle(["bottom"])
 
   const reset = useCallback(() => {
     setIndex(0)
@@ -68,73 +48,58 @@ export const TwoFAAuthenSheet = ({ credential, isOpen, onClose, onLoggedIn }: Pr
     if (!isOpen) reset()
   }, [isOpen])
 
-  const Content = gestureHandlerRootHOC(() => (
-    <View
-      style={{
-        flex: 1,
-      }}
+  return (
+    <Modal
+      avoidKeyboard
+      animationIn="slideInUp"
+      animationOut="slideOutDown"
+      isVisible={isOpen}
+      onModalHide={onClose}
+      onBackdropPress={onClose}
+      style={{ margin: 0, justifyContent: "flex-end" }}
     >
-      <BottomSheet
-        index={0}
-        ref={sheetRef}
-        snapPoints={snapPoints}
-        onClose={onClose}
-        onChange={onSheetChange}
-        enablePanDownToClose
-        handleStyle={{
-          backgroundColor: colors.background,
-        }}
-        backdropComponent={() => (
-          <TouchableWithoutFeedback onPress={closeSheet} style={{ flex: 1 }}>
-            <View style={{ flex: 1, backgroundColor: colors.transparentModal }} />
-          </TouchableWithoutFeedback>
-        )}
-      >
-        <View
-          style={{
-            flex: 1,
+      <View
+        style={[
+          {
             backgroundColor: colors.background,
             paddingHorizontal: 20,
-          }}
-        >
-          {index === 0 && (
-            <Animated.View entering={FadeInDown}>
-              <MethodSelection
-                methods={credential.methods}
-                onSelect={(type: string, data: any) => {
-                  setMethod(type)
-                  setPartialEamil(data)
-                  setIndex(1)
-                  showFullSheet()
-                }}
-                username={credential.username}
-                password={credential.password}
-              />
-            </Animated.View>
-          )}
-          {index === 1 && (
-            <Animated.View entering={FadeInDown}>
-              <OtpAuthen
-                goBack={() => setIndex(0)}
-                method={method}
-                email={partialEmail}
-                username={credential.username}
-                password={credential.password}
-                onLoggedIn={() => {
-                  closeSheet()
-                  onLoggedIn()
-                }}
-              />
-            </Animated.View>
-          )}
-        </View>
-      </BottomSheet>
-    </View>
-  ))
-
-  return (
-    <Modal transparent animationType="fade" visible={isOpen}>
-      <Content />
+            borderTopLeftRadius: 12,
+            borderTopRightRadius: 12,
+            paddingTop: 12,
+          },
+          $safeStyle,
+        ]}
+      >
+        {index === 0 && (
+          <Animated.View entering={FadeInDown}>
+            <MethodSelection
+              methods={credential.methods}
+              onSelect={(type: string, data: any) => {
+                setMethod(type)
+                setPartialEamil(data)
+                setIndex(1)
+              }}
+              username={credential.username}
+              password={credential.password}
+            />
+          </Animated.View>
+        )}
+        {index === 1 && (
+          <Animated.View entering={FadeInDown}>
+            <OtpAuthen
+              goBack={() => setIndex(0)}
+              method={method}
+              email={partialEmail}
+              username={credential.username}
+              password={credential.password}
+              onLoggedIn={() => {
+                onClose()
+                onLoggedIn()
+              }}
+            />
+          </Animated.View>
+        )}
+      </View>
     </Modal>
   )
 }

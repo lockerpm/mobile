@@ -515,7 +515,8 @@
     "has_account": "Already have an account? ",
     "sign_in": "Sign in",
     "sign_up_with": "Or Sign Up With",
-    "marketing": "I want to stay updated on news, events and offers"
+    "marketing": "I want to stay updated on news, events and offers",
+    "error_pin": "Code is invalid. Please retry!"
   },
   "login_email_code": {
     "title": "Check your email for verification code",
@@ -1214,6 +1215,7 @@
         "label": "使用外部安全鑰匙"
       }
     },
+    "login": "使用",
     "login_passkey_setting": "使用 Passkey 登入",
     "login_passkey": "使用 Passkey 登入",
     "login_passkey_options": "選擇您儲存 Locker Passkey 的方式"

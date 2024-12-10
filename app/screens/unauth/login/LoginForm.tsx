@@ -33,19 +33,19 @@ export const LoginForm = observer(
     const { colors } = useTheme()
     const { notify, notifyApiError, setApiTokens, translate } = useHelper()
     const initMethod = params?.initMethod
-
+    const initEmail = params?.email || ""
     // ------------------ Params -----------------------
 
     const passwordRef = useRef(null)
 
     const [isError, setIsError] = useState(false)
-    const [username, setUsername] = useState("")
+    const [username, setUsername] = useState(initEmail)
     const [password, setPassword] = useState("")
     const [loginMethodLoading, setLoginMethodLoading] = useState<LOGIN_METHOD>(LOGIN_METHOD.NONE)
 
-    const [loginMethod, setLoginMethod] = useState<LOGIN_METHOD>(LOGIN_METHOD.NONE)
-    const [passkeySupported, setPasskeySupported] = useState(false)
-    const [showExtraPasskeyLogin, setShowExtraPasskeyLogin] = useState(false)
+    const [loginMethod, setLoginMethod] = useState<LOGIN_METHOD>(
+      params?.initMethod || LOGIN_METHOD.NONE,
+    )
 
     const [isShowCreatePasskeyOptions, setIsShowCreatePasskeyOptions] = useState(false)
     const [isIcloudSelected, setIsIcloudSelected] = useState(true)
@@ -54,7 +54,7 @@ export const LoginForm = observer(
     // ------------------ Methods ----------------------
 
     const onGoToPinCode = () => {
-      navigation.navigate("login_by_pincode", {
+      navigation.replace("login_by_pincode", {
         email: username,
         havePassword: enableLoginByPassword.current,
       })
@@ -70,7 +70,6 @@ export const LoginForm = observer(
           } else {
             await handleAuthWebauth()
           }
-          setShowExtraPasskeyLogin(true)
           return
         }
         if (res.data.is_random_password) {
@@ -182,14 +181,15 @@ export const LoginForm = observer(
       setLoginMethodLoading(LOGIN_METHOD.NONE)
     }
     const checkPasskeySupported = async () => {
-      const res = await Passkey.isSupported()
-      if (res) {
-        setLoginMethod(LOGIN_METHOD.NONE)
-        setPasskeySupported(true)
-        return
+      if (!initMethod) {
+        const res = await Passkey.isSupported()
+        if (res) {
+          setLoginMethod(LOGIN_METHOD.NONE)
+          return
+        }
+        // setLoginMethod(LOGIN_METHOD.PASSWORD)
+        onGoToPinCode()
       }
-      // setLoginMethod(LOGIN_METHOD.PASSWORD)
-      onGoToPinCode()
     }
 
     // ------------------------------ EFFECT -------------------------------
@@ -197,12 +197,6 @@ export const LoginForm = observer(
     useEffect(() => {
       checkPasskeySupported()
     }, [])
-
-    useEffect(() => {
-      if (initMethod && initMethod !== LOGIN_METHOD.NONE) {
-        setLoginMethod(initMethod)
-      }
-    }, [initMethod])
 
     // ------------------------------ RENDER -------------------------------
 
@@ -218,7 +212,7 @@ export const LoginForm = observer(
                 // setLoginMethod(LOGIN_METHOD.PASSWORD)
               }}
               label={translate("passkey.login_passkey_options")}
-              title={translate("common.login")}
+              title={translate("passkey.login")}
               isIcloudSelected={isIcloudSelected}
               setIsIcloudSelected={setIsIcloudSelected}
               action={async () => {
@@ -241,9 +235,10 @@ export const LoginForm = observer(
 
           <Text preset="label" size="medium" tx="login.title" style={{ textAlign: "center" }} />
 
-          {loginMethod === LOGIN_METHOD.NONE && (
+          {loginMethod === LOGIN_METHOD.NONE && !initEmail && (
             <>
               <SocialLogin
+                isSingIn
                 onLoggedIn={onLoggedIn}
                 setIsLoading={setIsLoading}
                 style={{
@@ -268,10 +263,10 @@ export const LoginForm = observer(
             value={username}
             keyboardType="email-address"
             onChangeText={(val) => {
-              if (passkeySupported && loginMethod !== LOGIN_METHOD.NONE) {
+              if (loginMethod !== LOGIN_METHOD.NONE) {
                 setLoginMethod(LOGIN_METHOD.NONE)
-                setShowExtraPasskeyLogin(false)
               }
+
               setUsername(val)
             }}
             onSubmitEditing={() => passwordRef.current && passwordRef.current.focus()}
@@ -327,27 +322,7 @@ export const LoginForm = observer(
             />
           )}
 
-          {showExtraPasskeyLogin && (
-            <Button
-              preset="secondary"
-              loading={loginMethodLoading === LOGIN_METHOD.PASSKEY || isLoading}
-              disabled={loginMethodLoading !== LOGIN_METHOD.NONE || !username}
-              text={translate("passkey.login_passkey")}
-              onPress={() => {
-                if (Platform.OS === "ios") {
-                  setIsShowCreatePasskeyOptions(true)
-                } else {
-                  handleAuthWebauth(false)
-                }
-              }}
-              style={{
-                height: 50,
-                marginBottom: 12,
-              }}
-            />
-          )}
-
-          {loginMethod === LOGIN_METHOD.PASSWORD && (
+          {(loginMethod === LOGIN_METHOD.PASSWORD || !!initEmail) && (
             <>
               <DividerText
                 tx="login_email_code.or"
@@ -356,6 +331,7 @@ export const LoginForm = observer(
                 size="base"
               />
               <SocialLogin
+                isSingIn
                 onLoggedIn={onLoggedIn}
                 setIsLoading={setIsLoading}
                 style={{

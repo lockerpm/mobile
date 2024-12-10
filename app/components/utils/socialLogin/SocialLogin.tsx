@@ -11,6 +11,8 @@ const IS_IOS = Platform.OS === "ios"
 const SCREEN_WIDTH = Dimensions.get("screen").width
 
 interface Props {
+  isSingIn: boolean
+
   setIsLoading: (val: boolean) => void
   /**
    * Callback when social authen success
@@ -20,7 +22,7 @@ interface Props {
   style?: StyleProp<ViewStyle>
 }
 
-export const SocialLogin = ({ onLoggedIn, setIsLoading, style }: Props) => {
+export const SocialLogin = ({ onLoggedIn, setIsLoading, style, isSingIn }: Props) => {
   const navigation = useNavigation() as any
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLogin()
@@ -70,6 +72,7 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading, style }: Props) => {
       },
     },
     sso: {
+      hide: !isSingIn,
       icon: "sso",
       handler: () => {
         navigation.navigate("ssoIdentifier")

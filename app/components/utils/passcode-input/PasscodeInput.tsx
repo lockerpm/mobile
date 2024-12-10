@@ -39,34 +39,79 @@ export const PasscodeInput: React.FC<PasscodeInputProps> = ({
   const handleInputChange = (index: number, text: string) => {
     if (!text) return
     onTextChange && onTextChange()
-    // Update passcode array with the entered digit
-    const newPasscode = passcode.slice()
-    newPasscode[index] = text.toUpperCase()
 
-    // Check if all inputs are filled
+    if (text.length === 1) {
+      // Update passcode array with the entered digit
+      const newPasscode = passcode.slice()
+      newPasscode[index] = text.toUpperCase()
 
-    const code = newPasscode.join("")
-    if (onCodeFilled) {
-      onCodeFilled(code)
-    }
+      // Check if all inputs are filled
 
-    setPasscode(newPasscode)
+      const code = newPasscode.join("")
+      if (onCodeFilled) {
+        onCodeFilled(code)
+      }
 
-    // Move focus to the next input or submit if all inputs are filled
-    if (index < pinCount - 1) {
-      inputRefs.current[index + 1]?.focus()
+      setPasscode(newPasscode)
+
+      // Move focus to the next input or submit if all inputs are filled
+      if (index < pinCount - 1) {
+        inputRefs.current[index + 1]?.focus()
+      }
+    } else if (text.length === 2) {
+      // Update passcode array with the entered digit
+      const newPasscode = passcode.slice()
+      const old = newPasscode[index]
+      if (text[0] === old) {
+        newPasscode[index] = text[1].toUpperCase()
+      } else {
+        newPasscode[index] = text[0].toUpperCase()
+      }
+
+      // Check if all inputs are filled
+
+      const code = newPasscode.join("")
+      if (onCodeFilled) {
+        onCodeFilled(code)
+      }
+
+      setPasscode(newPasscode)
+
+      // Move focus to the next input or submit if all inputs are filled
+      if (index < pinCount - 1) {
+        inputRefs.current[index + 1]?.focus()
+      }
+    } else if (text.length >= 6) {
+      // Update passcode array with the entered digit
+      const newPasscode = text.slice(0, 6).toLocaleUpperCase()
+
+      // Check if all inputs are filled
+      if (onCodeFilled) {
+        onCodeFilled(newPasscode)
+      }
+
+      setPasscode(newPasscode.split(""))
+      inputRefs.current[5]?.focus()
     }
   }
 
-  const handleKeyPress = () => {
-    // Handle backspace (delete) key
-    const newPasscode = Array(pinCount).fill("")
-    if (onCodeFilled) {
-      onCodeFilled("")
+  const handleKeyPress = (index: number) => {
+    if (index > 0) {
+      onTextChange && onTextChange()
+      // Handle backspace (delete) key
+      const newPasscode = passcode.slice()
+      if (newPasscode[index] !== "") {
+        newPasscode[index] = ""
+      } else {
+        newPasscode[index - 1] = ""
+        inputRefs.current[index - 1]?.focus()
+      }
+
+      if (onCodeFilled) {
+        onCodeFilled(newPasscode.join(""))
+      }
+      setPasscode(newPasscode)
     }
-    setPasscode(newPasscode)
-    inputRefs.current[0]?.focus()
-    onTextChange && onTextChange()
   }
 
   useEffect(() => {
@@ -89,12 +134,11 @@ export const PasscodeInput: React.FC<PasscodeInputProps> = ({
             ref={(ref) => (inputRefs.current[index] = ref)}
             onKeyPress={({ nativeEvent }) => {
               if (nativeEvent.key === "Backspace") {
-                handleKeyPress()
+                handleKeyPress(index)
               }
             }}
             onChangeText={(text) => handleInputChange(index, text)}
             value={digit}
-            maxLength={1}
             placeholder="0"
           />
         ))}
@@ -116,12 +160,11 @@ export const PasscodeInput: React.FC<PasscodeInputProps> = ({
               ref={(ref) => (inputRefs.current[passcodeIndex] = ref)}
               onKeyPress={({ nativeEvent }) => {
                 if (nativeEvent.key === "Backspace") {
-                  handleKeyPress()
+                  handleKeyPress(passcodeIndex)
                 }
               }}
               onChangeText={(text) => handleInputChange(passcodeIndex, text)}
               value={digit}
-              maxLength={1}
               placeholder="0"
             />
           )

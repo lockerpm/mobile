@@ -88,6 +88,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
           navigation.replace("login")
         } else {
           notifyApiError(res)
+          onRegisterWithPinCode()
         }
       } catch (error) {
         onRegisterWithPinCode()
@@ -97,6 +98,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
       }
     } else {
       notifyApiError(resPassKeyOptions)
+      onRegisterWithPinCode()
     }
   }
 
@@ -164,9 +166,10 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
 
   return (
     <Screen
+      preset="scroll"
       safeAreaEdges={["bottom"]}
       header={<Header RightActionComponent={<SetLanguage />} />}
-      contentContainerStyle={{ paddingBottom: 20 }}
+      keyboardOffset={0}
     >
       <RecaptchaChecker ref={captchaRef} />
 
@@ -208,6 +211,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
         />
 
         <SocialLogin
+          isSingIn={false}
           onLoggedIn={onLoggedIn}
           setIsLoading={setIsLoading}
           style={{
@@ -274,10 +278,9 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
           }}
         />
 
-        <Text size="base" preset="label" style={{ textAlign: "center", marginVertical: 12 }}>
+        <Text preset="label" style={{ textAlign: "center", marginVertical: 12 }}>
           {translate("new_signup.sign_up_business.title")}
           <Text
-            size="base"
             weight="medium"
             style={{ color: colors.primary }}
             onPress={() => {
@@ -291,10 +294,9 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
           />
         </Text>
 
-        <Text size="base" preset="label" style={{ textAlign: "center" }}>
+        <Text preset="label" style={{ textAlign: "center" }}>
           {translate("new_signup.has_account")}
           <Text
-            size="base"
             weight="medium"
             onPress={navigateLogin}
             style={{ color: colors.primary }}

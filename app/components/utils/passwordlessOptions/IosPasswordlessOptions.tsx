@@ -1,10 +1,10 @@
-import React from 'react'
-import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Button, Icon, ImageIconTypes, ImageIcon, Text, Logo, Toggle } from '../../cores'
-import { useTheme } from 'app/services/context'
-import { Dialog } from 'react-native-ui-lib'
-import { useHelper } from 'app/services/hook'
+import React from "react"
+import { StyleProp, TouchableOpacity, View, ViewStyle } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { Button, Icon, ImageIconTypes, ImageIcon, Text, Logo, Toggle } from "../../cores"
+import { useTheme } from "app/services/context"
+import { Dialog } from "react-native-ui-lib"
+import { useHelper } from "app/services/hook"
 
 interface Props {
   /**
@@ -58,9 +58,9 @@ export const IosPasswordlessOptions = ({
     return (
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
           backgroundColor: colors.block,
           paddingHorizontal: 16,
           paddingVertical: 16,
@@ -79,19 +79,19 @@ export const IosPasswordlessOptions = ({
       onDismiss={onClose}
       containerStyle={$containerStyle}
       renderPannableHeader={header}
-      supportedOrientations={['portrait', 'landscape']}
+      supportedOrientations={["portrait", "landscape"]}
       panDirection={null}
     >
       <View style={{ paddingHorizontal: 16, backgroundColor: colors.block }}>
         <Logo
           preset="app-logo-secondary"
-          style={{ alignSelf: 'center', marginBottom: 16, width: 60, height: 60 }}
+          style={{ alignSelf: "center", marginBottom: 16, width: 60, height: 60 }}
         />
-        <Text text={label} style={{ textAlign: 'center' }} />
+        <Text text={label} style={{ textAlign: "center" }} />
 
         <Options
-          title={translate('passkey.sign_up.keychain.title')}
-          label={translate('passkey.sign_up.keychain.label')}
+          title={translate("passkey.sign_up.keychain.title")}
+          label={translate("passkey.sign_up.keychain.label")}
           icon="keychain"
           isSelect={isIcloudSelected}
           action={() => {
@@ -99,8 +99,8 @@ export const IosPasswordlessOptions = ({
           }}
         />
         <Options
-          title={translate('passkey.sign_up.security_key.title')}
-          label={translate('passkey.sign_up.security_key.label')}
+          title={translate("passkey.sign_up.security_key.title")}
+          label={translate("passkey.sign_up.security_key.label")}
           icon="security-key"
           isSelect={!isIcloudSelected}
           action={() => {
@@ -110,12 +110,12 @@ export const IosPasswordlessOptions = ({
       </View>
 
       <Button
-        text={translate('common.continue')}
+        text={translate("common.continue")}
         style={{
           borderRadius: 8,
           width: 120,
           marginTop: 16,
-          alignSelf: 'center',
+          alignSelf: "center",
         }}
         onPress={action}
       />
@@ -142,16 +142,16 @@ const Options = ({ title, label, icon, isSelect, action }: OptionsProps) => {
           paddingVertical: 8,
           backgroundColor: colors.background,
           borderRadius: 12,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            maxWidth: '90%',
+            flexDirection: "row",
+            alignItems: "center",
+            maxWidth: "90%",
           }}
         >
           <ImageIcon icon={icon} size={32} />
@@ -161,7 +161,7 @@ const Options = ({ title, label, icon, isSelect, action }: OptionsProps) => {
             }}
           >
             <Text text={title} />
-            <Text preset="label" text={label} size="base" style={{ maxWidth: '90%' }} />
+            <Text preset="label" text={label} size="base" style={{ maxWidth: "90%" }} />
           </View>
         </View>
 

@@ -72,7 +72,19 @@ export const PinCodeLoginScreen: FC<RootStackScreenProps<"login_by_pincode">> = 
     }, [isEnable])
 
     return (
-      <Screen header={<Header leftIcon="arrow-left" onLeftPress={navigation.goBack} />}>
+      <Screen
+        header={
+          <Header
+            leftIcon="arrow-left"
+            onLeftPress={() => {
+              navigation.navigate("login", {
+                initMethod: LOGIN_METHOD.PASSWORD,
+                email,
+              })
+            }}
+          />
+        }
+      >
         {show2FaModal && (
           <TwoFactorAuthentication
             email={email}
@@ -144,6 +156,7 @@ export const PinCodeLoginScreen: FC<RootStackScreenProps<"login_by_pincode">> = 
               onPress={() => {
                 navigation.navigate("login", {
                   initMethod: LOGIN_METHOD.PASSWORD,
+                  email,
                 })
               }}
               text={translate("login_email_code.sign_in")}
