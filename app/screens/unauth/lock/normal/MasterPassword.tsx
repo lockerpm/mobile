@@ -13,7 +13,7 @@ import { EnterpriseInvitationModal } from "./EnterpriseInvitationModal"
 interface Props {
   biometryType: BiometricsType
   handleLogout: () => void
-  handleUnlock:  () => Promise<void>
+  handleUnlock: () => Promise<void>
 }
 
 export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock }: Props) => {
@@ -159,7 +159,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
               />
             ) : (
               <Text
-                text={translate("common.logout").toUpperCase()}
+                text={translate("common.signout").toUpperCase()}
                 preset="bold"
                 color={colors.primary}
                 onPress={handleLogout}
@@ -235,7 +235,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
           animated
           isError={isError}
           label={translate("common.master_pass")}
-          onChangeText={( val) => {
+          onChangeText={(val) => {
             setMasterPassword(val)
             isError && setIsError(false)
           }}

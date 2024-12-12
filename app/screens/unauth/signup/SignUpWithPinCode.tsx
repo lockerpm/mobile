@@ -1,5 +1,5 @@
 import { Header, Logo, Screen, Text } from "app/components/cores"
-import { DividerText, PasscodeInput } from "app/components/utils"
+import { PasscodeInput } from "app/components/utils"
 import { useStores } from "app/models"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { idApi } from "app/services/api"
@@ -7,7 +7,7 @@ import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useRef, useState } from "react"
-import { AppState, TouchableOpacity, View } from "react-native"
+import { AppState, View } from "react-native"
 
 export const SignUpWithPinCode: FC<RootStackScreenProps<"signup_pin_code">> = observer(
   ({
@@ -105,7 +105,7 @@ export const SignUpWithPinCode: FC<RootStackScreenProps<"signup_pin_code">> = ob
 
         <ResendOtp email={email} language={user.language} nonce={nonce.current} />
 
-        <DividerText
+        {/* <DividerText
           tx="login_email_code.or"
           style={{ marginHorizontal: 8 }}
           color={colors.secondaryText}
@@ -139,7 +139,7 @@ export const SignUpWithPinCode: FC<RootStackScreenProps<"signup_pin_code">> = ob
           }}
         >
           <Text preset="bold" tx="login_email_code.use_password" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </Screen>
     )
   },
@@ -211,9 +211,9 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
     }
   }, [])
 
-  useEffect(() => {
-    sendPinCode()
-  }, [])
+  // useEffect(() => {
+  //   sendPinCode()
+  // }, [])
 
   return (
     <View>

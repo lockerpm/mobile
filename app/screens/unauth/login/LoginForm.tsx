@@ -212,7 +212,7 @@ export const LoginForm = observer(
                 // setLoginMethod(LOGIN_METHOD.PASSWORD)
               }}
               label={translate("passkey.login_passkey_options")}
-              title={translate("passkey.login")}
+              title={translate("common.signin")}
               isIcloudSelected={isIcloudSelected}
               setIsIcloudSelected={setIsIcloudSelected}
               action={async () => {
@@ -224,7 +224,7 @@ export const LoginForm = observer(
 
           <Logo
             preset={"cystack-logo"}
-            style={{ height: 70, width: 70, marginBottom: 10, alignSelf: "center" }}
+            style={{ height: 70, width: 70, marginBottom: 24, alignSelf: "center" }}
           />
           <Text
             weight="semibold"
@@ -278,7 +278,6 @@ export const LoginForm = observer(
               <TextInput
                 ref={passwordRef}
                 animated
-                isRequired
                 isPassword
                 isError={isError}
                 label={translate("common.password")}
@@ -290,20 +289,20 @@ export const LoginForm = observer(
                 style={{
                   width: "100%",
                   alignItems: "flex-start",
-                  marginTop: 12,
+                  marginTop: 4,
                 }}
               >
                 <TouchableOpacity onPress={handleForgot}>
-                  <Text text={translate("login.forgot_password")} color={colors.primary} />
+                  <Text text={translate("login.forgot_password")} color={colors.link} />
                 </TouchableOpacity>
               </View>
               <Button
                 loading={loginMethodLoading === LOGIN_METHOD.PASSWORD || isLoading}
                 disabled={loginMethodLoading !== LOGIN_METHOD.NONE || !(username && password)}
-                text={translate("common.login")}
+                text={translate("common.signin")}
                 onPress={handleLogin}
                 style={{
-                  marginVertical: 16,
+                  marginVertical: 20,
                 }}
               />
             </Animated.View>
@@ -324,12 +323,7 @@ export const LoginForm = observer(
 
           {(loginMethod === LOGIN_METHOD.PASSWORD || !!initEmail) && (
             <>
-              <DividerText
-                tx="login_email_code.or"
-                style={{ marginHorizontal: 8 }}
-                color={colors.secondaryText}
-                size="base"
-              />
+              <DividerText tx="login_email_code.or" style={{ marginHorizontal: 8 }} size="base" />
               <SocialLogin
                 isSingIn
                 onLoggedIn={onLoggedIn}
@@ -352,14 +346,18 @@ export const LoginForm = observer(
           >
             <Text
               preset="label"
+              size="base"
               text={translate("login.no_account")}
               style={{
                 marginRight: 8,
               }}
             />
-            <TouchableOpacity onPress={() => navigation.navigate("signup")}>
-              <Text color={colors.primary} text={translate("common.sign_up")} />
-            </TouchableOpacity>
+            <Text
+              size="base"
+              color={colors.primary}
+              text={translate("common.sign_up")}
+              onPress={() => navigation.replace("signup")}
+            />
           </View>
         </View>
       </View>

@@ -1,23 +1,29 @@
-import React, { useEffect, useState } from 'react'
-import { BackHandler, View, Image, TouchableOpacity } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { useStores } from 'app/models'
-import { useCoreService } from 'app/services/coreService'
-import { OnPremisePreloginData } from 'app/static/types'
-import { BiometricsType } from '../../lock.types'
-import { useAuthentication, useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { Logo, Button, Screen, Text, TextInput, Icon } from 'app/components/cores'
+import React, { useEffect, useState } from "react"
+import { BackHandler, View, Image, TouchableOpacity } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import { useStores } from "app/models"
+import { useCoreService } from "app/services/coreService"
+import { OnPremisePreloginData } from "app/static/types"
+import { BiometricsType } from "../../lock.types"
+import { useAuthentication, useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { Logo, Button, Screen, Text, TextInput, Icon } from "app/components/cores"
 
 interface Props {
   data: OnPremisePreloginData
   email: string
   biometryType: BiometricsType
   handleLogout: () => void
-  handleUnlock:  () => Promise<void>
+  handleUnlock: () => Promise<void>
 }
 
-export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleLogout, handleUnlock }: Props) => {
+export const OnPremiseLockMasterPassword = ({
+  data,
+  email,
+  biometryType,
+  handleLogout,
+  handleUnlock,
+}: Props) => {
   const navigation = useNavigation() as any
   const { user, uiStore } = useStores()
   const { colors } = useTheme()
@@ -28,7 +34,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
   // ---------------------- PARAMS -------------------------
 
   const [isValidForBiometric, setIsValidForBiometric] = useState(false)
-  const [masterPassword, setMasterPassword] = useState('')
+  const [masterPassword, setMasterPassword] = useState("")
 
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isError, setIsError] = useState(false)
@@ -56,11 +62,11 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
       const res = await sessionLogin(masterPassword, () => null, true)
       setIsUnlocking(false)
 
-      if (res.kind === 'ok') {
+      if (res.kind === "ok") {
         await handleUnlock()
-      } else if (res.kind === 'unauthorized') {
-        navigation.navigate('login', { type: 'onPremise' })
-      } else if (res.kind === 'on-premise-2fa') {
+      } else if (res.kind === "unauthorized") {
+        navigation.navigate("login", { type: "onPremise" })
+      } else if (res.kind === "on-premise-2fa") {
         //
       } else {
         setIsError(true)
@@ -72,14 +78,13 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
 
   const handleUnlockBiometric = async () => {
     if (!user.isBiometricUnlock) {
-      notify('error', translate('error.biometric_not_enable'))
+      notify("error", translate("error.biometric_not_enable"))
       return
     }
     if (!isValidForBiometric) {
-      notify('info', translate('error.not_valid_for_biometric'))
+      notify("info", translate("error.not_valid_for_biometric"))
       return
     }
-
 
     const hadKey = await checkKey()
     if (!hadKey) return
@@ -87,7 +92,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
     setIsUnlocking(true)
     const res = await biometricLogin()
     setIsUnlocking(false)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       await handleUnlock()
     }
   }
@@ -97,7 +102,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
     checkKey()
-    navigation.addListener('focus', () => {
+    navigation.addListener("focus", () => {
       if (user.isBiometricUnlock) {
         handleUnlockBiometric()
       }
@@ -108,34 +113,34 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
   return (
     <Screen>
       <View style={{ flex: 1 }}>
-        <View style={{ alignItems: 'flex-end', marginTop: 8 }}>
+        <View style={{ alignItems: "flex-end", marginTop: 8 }}>
           {isAutofillAnroid ? (
             <Text
               preset="bold"
-              text={translate('common.cancel').toUpperCase()}
+              text={translate("common.cancel").toUpperCase()}
               onPress={() => BackHandler.exitApp()}
               color={colors.primary}
             />
           ) : (
             <Text
               preset="bold"
-              text={translate('common.logout').toUpperCase()}
+              text={translate("common.signout").toUpperCase()}
               onPress={handleLogout}
               color={colors.primary}
             />
           )}
         </View>
-        <View style={{ alignItems: 'center', paddingTop: '10%' }}>
+        <View style={{ alignItems: "center", paddingTop: "10%" }}>
           <Logo preset="default" style={{ height: 73, width: 63 }} />
 
           <Text
             preset="bold"
             size="xl"
             style={{ marginBottom: 10, marginTop: 25 }}
-            tx={'lock.title'}
+            tx={"lock.title"}
           />
 
-          <Text style={{ textAlign: 'center' }} tx={'lock.desc'} />
+          <Text style={{ textAlign: "center" }} tx={"lock.desc"} />
 
           {/* Current user */}
           <View
@@ -144,13 +149,13 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
               marginBottom: 16,
               borderRadius: 20,
               backgroundColor: colors.block,
-              flexDirection: 'row',
-              alignItems: 'center',
+              flexDirection: "row",
+              alignItems: "center",
               padding: 4,
             }}
           >
             {!!data?.avatar && (
-              <View style={{ borderRadius: 14, overflow: 'hidden' }}>
+              <View style={{ borderRadius: 14, overflow: "hidden" }}>
                 <Image
                   resizeMode="contain"
                   source={{ uri: data.avatar }}
@@ -178,7 +183,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
             isPassword
             animated
             isError={isError}
-            label={translate('common.master_pass')}
+            label={translate("common.master_pass")}
             onChangeText={setMasterPassword}
             value={masterPassword}
             onSubmitEditing={unlock}
@@ -188,7 +193,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
           <Button
             loading={isUnlocking}
             disabled={isUnlocking || !masterPassword}
-            text={translate('common.unlock')}
+            text={translate("common.unlock")}
             onPress={unlock}
             style={{
               marginTop: 20,
@@ -199,18 +204,18 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
             disabled={isUnlocking}
             onPress={handleUnlockBiometric}
             style={{
-              width: '100%',
+              width: "100%",
               marginVertical: 25,
-              alignItems: 'center',
+              alignItems: "center",
             }}
           >
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
+                flexDirection: "row",
+                alignItems: "center",
               }}
             >
-              <Icon icon={biometryType === BiometricsType.FaceID ? 'face-id' : 'fingerprint'} />
+              <Icon icon={biometryType === BiometricsType.FaceID ? "face-id" : "fingerprint"} />
               <Text
                 // @ts-ignore
                 text={translate(`common.${biometryType}_unlocking`)}

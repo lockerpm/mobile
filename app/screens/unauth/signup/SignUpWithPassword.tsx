@@ -206,6 +206,7 @@ export const SignUpWithPassword: FC<RootStackScreenProps<"signup_password">> = o
           />
 
           <SocialLogin
+            isSingIn={false}
             onLoggedIn={onLoggedIn}
             setIsLoading={setIsLoading}
             style={{

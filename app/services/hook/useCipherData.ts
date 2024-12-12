@@ -498,7 +498,19 @@ export function useCipherData() {
 
       const folders = await Promise.all(
         res.map(async (folder) => {
-          if (!folder.id) return folder
+          if (!folder.id) {
+            const ciphers = await getEncryptedCiphers({
+              deleted: false,
+              searchText: "",
+              // filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name))]
+              // exclude share folder item
+              filters: [(c: CipherView) => c.collectionIds.length === 0 && !c.folderId],
+            })
+            return {
+              ...folder,
+              cipherCount: ciphers ? ciphers.length : 0,
+            }
+          }
           const ciphers = await getEncryptedCiphers({
             deleted: false,
             searchText: "",

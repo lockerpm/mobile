@@ -31,7 +31,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
   const captchaRef = useRef(null)
 
   const [isLoading, setIsLoading] = useState(false)
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState("dwmdhe@dfgdfgdfdfg.maily.org")
   const [getNews, setGesNews] = useState(false)
 
   const [isPasskeySupported, setIsPasskeySupported] = useState(true)
@@ -73,7 +73,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
         const res = await user.registerPasskey({
           email,
           password: "",
-          country: undefined,
+          country: "vi",
           confirm_password: "",
           full_name: fullname,
           request_code: "",
@@ -278,10 +278,11 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
           }}
         />
 
-        <Text preset="label" style={{ textAlign: "center", marginVertical: 12 }}>
+        <Text size="base" preset="label" style={{ textAlign: "center", marginVertical: 12 }}>
           {translate("new_signup.sign_up_business.title")}
           <Text
             weight="medium"
+            size="base"
             style={{ color: colors.primary }}
             onPress={() => {
               Linking.canOpenURL(REGISTER_BUSINESS_URL)
@@ -294,9 +295,10 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
           />
         </Text>
 
-        <Text preset="label" style={{ textAlign: "center" }}>
+        <Text size="base" preset="label" style={{ textAlign: "center" }}>
           {translate("new_signup.has_account")}
           <Text
+            size="base"
             weight="medium"
             onPress={navigateLogin}
             style={{ color: colors.primary }}

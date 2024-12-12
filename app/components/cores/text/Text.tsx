@@ -11,7 +11,6 @@ import { TxKeyPath } from "../../../i18n"
 import { typography } from "../../../theme"
 import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
-import { isTablet } from "react-native-device-info"
 
 type Sizes = keyof typeof $sizeStyles
 type Weights = keyof typeof typography.primary
@@ -106,7 +105,7 @@ export function Text(props: TextProps) {
   )
 }
 
-const fontSizeNormal = {
+export const $sizeStyles = {
   xxxl: { fontSize: 32, lineHeight: 46 },
   xxl: { fontSize: 28, lineHeight: 38 },
   xl: { fontSize: 24, lineHeight: 32 },
@@ -116,18 +115,6 @@ const fontSizeNormal = {
   small: { fontSize: 12, lineHeight: 20 },
   sx: { fontSize: 10, lineHeight: 18 },
 }
-
-const fontSizeTablet = {
-  xxxl: { fontSize: 34, lineHeight: 48 },
-  xxl: { fontSize: 30, lineHeight: 45 },
-  xl: { fontSize: 26, lineHeight: 36 },
-  large: { fontSize: 22, lineHeight: 33 },
-  medium: { fontSize: 18, lineHeight: 27 },
-  base: { fontSize: 16, lineHeight: 24 },
-  small: { fontSize: 14, lineHeight: 21 },
-  sx: { fontSize: 12, lineHeight: 18 },
-}
-export const $sizeStyles = isTablet() ? fontSizeTablet : fontSizeNormal
 
 const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {
   return { ...acc, [weight]: { fontFamily } }

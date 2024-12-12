@@ -208,8 +208,18 @@ export function useHelper() {
           | "10000"
         message?: string
       } = problem.data
-      errorMessage =
-        translate(`error.api.${errorData.code}`) || translate("error.something_went_wrong")
+      if (errorData.code === "0004") {
+        // if invalid data, try parse details error
+        const keys = Object.keys(errorData.details)
+        if (keys.length > 0 && errorData.details[keys[0]].length > 0) {
+          errorMessage = errorData.details[keys[0]][0]
+        } else {
+          errorMessage = translate("error.something_went_wrong")
+        }
+      } else {
+        errorMessage =
+          translate(`error.api.${errorData.code}`) || translate("error.something_went_wrong")
+      }
     }
     if (disableToast) {
       return errorMessage
