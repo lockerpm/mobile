@@ -71,11 +71,12 @@ const logoRegistry = {
   "cystack-logo": require("assets/images/logo/cystack-logo.png"),
   default: require("assets/images/logo/locker.png"),
   "app-logo-secondary": require("assets/images/icons/app-logo-secondary.png"),
-  "vertical-dark": require("assets/images/logo/logo-vertical-dark.png"),
-  "vertical-light": require("assets/images/logo/logo-vertical-light.png"),
-  "locker-bg-dark": require("assets/images/logo/locker-dark.png"),
   "horizontal-dark": require("assets/images/logo/logo-horizontal-dark.png"),
   "horizontal-light": require("assets/images/logo/logo-horizontal-light.png"),
+
+  "vertical-dark": require("assets/images/logo/logo-vertical-dark.png"),
+  "vertical-light": require("assets/images/logo/logo-vertical-light.png"),
+
   "locker-premium": require("assets/images/logo/locker-premium.png"),
   "locker-premium-dark": require("assets/images/logo/locker-premium-dark.png"),
 }
