@@ -163,6 +163,7 @@
     "logout": "登出自 "
   },
   "error": {
+    "incorrect_pw": "主密碼不正確",
     "master_password": "無法自動建立主密碼",
     "not_supported": "未支援",
     "not_valid_for_biometric": "使用主密碼登入來重新啟用 FaceID/TouchID",
@@ -506,37 +507,37 @@
     "update_pw_successful": "更新成功"
   },
   "new_signup": {
-    "title": "Locker Password Manager",
-    "sub_title": "Quick sign-up for a free 14-day trial. Premium plan starts at $1.29/mo.",
-    "other_signup": "Or sign up with email",
-    "enter_email": "Enter your email",
-    "sign_up_email": "Sign up with email",
+    "title": "Locker 密碼管理器",
+    "sub_title": "快速註冊 14 天免費試用。高級計劃起價為 1.29 美元/月。",
+    "other_signup": "或使用電子郵件註冊",
+    "enter_email": "輸入您的電子郵件",
+    "sign_up_email": "使用電子郵件註冊",
     "sign_up_business": {
-      "title": "Sign up for Locker for Business? ",
-      "free_trial": "Get Free Trial"
+      "title": "註冊 Locker 進行商務活動？",
+      "free_trial": "獲得免費試用"
     },
-    "has_account": "Already have an account? ",
-    "sign_in": "Sign in",
-    "sign_up_with": "Or Sign Up With",
-    "marketing": "I want to stay updated on news, events and offers",
-    "error_pin": "Code is invalid. Please retry!"
+    "has_account": "已經有帳戶？",
+    "sign_in": "登入",
+    "sign_up_with": "或註冊",
+    "marketing": "我想了解最新的新聞、活動和優惠",
+    "error_pin": "代碼無效。請重試！"
   },
   "login_email_code": {
-    "title": "Check your email for verification code",
+    "title": "檢查您的電子郵件以取得驗證碼",
     "sub_title": {
-      "prefix": "We've sent a verification code to ",
-      "suffix": ". Please check your inbox."
+      "prefix": "我們已將驗證碼發送至 ",
+      "suffix": "。請檢查您的收件匣。"
     },
     "resend": {
-      "prefix": "Didn't receive any email? Check your spam folder. ",
-      "btn": "Resend",
-      "suffix": " after {{second}}s"
+      "prefix": "沒有收到任何電子郵件？檢查您的垃圾郵件資料夾。",
+      "btn": "重新發送",
+      "suffix": " 後 {{second}}"
     },
-    "or": "Or",
-    "not_familiar": "Not familiar with this method? ",
-    "use_password": "Use traditional password instead!",
-    "sign_in": "Sign in with password",
-    "sign_in_email": "Sign in with email"
+    "or": "或者",
+    "not_familiar": "不熟悉這個方法？",
+    "use_password": "請使用傳統密碼！",
+    "sign_in": "使用密碼登入",
+    "sign_in_email": "使用電子郵件登入"
   },
   "start": {
     "synching": "同步中……",

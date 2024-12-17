@@ -13,7 +13,7 @@ export const SetLanguage = observer((props: ViewProps) => {
   const { translate } = useHelper()
   const [isLanguageSelect, setIsLanguageSelect] = useState(false)
 
-  const options: { label: string; value: "vi" | "en" }[] = [
+  const options: { label: string; value: "vi" | "en" | "zh" }[] = [
     {
       label: "Tiếng Việt",
       value: "vi",
@@ -22,11 +22,14 @@ export const SetLanguage = observer((props: ViewProps) => {
       label: "English",
       value: "en",
     },
+    {
+      label: "繁體中文",
+      value: "zh",
+    },
   ]
 
-  const setLanguage = (lang: "vi" | "en") => {
+  const setLanguage = (lang: "vi" | "en" | "zh") => {
     user.setLanguage(lang)
-    // user.changeLanguage()
     // updateAutofillLanguage(lang)
     setIsLanguageSelect(false)
   }

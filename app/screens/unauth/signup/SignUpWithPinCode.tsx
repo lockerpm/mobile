@@ -211,9 +211,9 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
     }
   }, [])
 
-  // useEffect(() => {
-  //   sendPinCode()
-  // }, [])
+  useEffect(() => {
+    sendPinCode()
+  }, [])
 
   return (
     <View>

@@ -131,14 +131,12 @@ export const OnPremiseLockMasterPassword = ({
           )}
         </View>
         <View style={{ alignItems: "center", paddingTop: "10%" }}>
-          <Logo preset="default" style={{ height: 73, width: 63 }} />
-
-          <Text
-            preset="bold"
-            size="xl"
-            style={{ marginBottom: 10, marginTop: 25 }}
-            tx={"lock.title"}
+          <Logo
+            preset={"cystack-logo"}
+            style={{ height: 70, width: 70, marginBottom: 10, alignSelf: "center" }}
           />
+
+          <Text preset="bold" size="xl" style={{ marginBottom: 10 }} tx={"lock.title"} />
 
           <Text style={{ textAlign: "center" }} tx={"lock.desc"} />
 

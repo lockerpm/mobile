@@ -183,8 +183,8 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
 
       <View>
         <Logo
-          preset={"default"}
-          style={{ height: 80, width: 70, marginBottom: 25, alignSelf: "center" }}
+          preset={"cystack-logo"}
+          style={{ height: 70, width: 70, marginBottom: 10, alignSelf: "center" }}
         />
 
         <Text

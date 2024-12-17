@@ -115,7 +115,7 @@ export const MenuScreen = observer(() => {
     },
     {
       icon: "sign-out",
-      name: translate("common.logout"),
+      name: translate("common.signout"),
       onPress: async () => {
         await logout()
 

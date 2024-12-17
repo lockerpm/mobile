@@ -163,6 +163,7 @@
     "logout": "Đăng xuất khỏi "
   },
   "error": {
+    "incorrect_pw": "Master Password không chính xác",
     "master_password": "Không thể tự động tạo Siêu Mật Khẩu tự động",
     "not_supported": "Không hỗ trợ",
     "not_valid_for_biometric": "Bạn cần nhập lại Master Password để kích hoạt lại FaceID/TouchID",

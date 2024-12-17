@@ -31,7 +31,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
   const captchaRef = useRef(null)
 
   const [isLoading, setIsLoading] = useState(false)
-  const [email, setEmail] = useState("dwmdhe@dfgdfgdfdfg.maily.org")
+  const [email, setEmail] = useState("")
   const [getNews, setGesNews] = useState(false)
 
   const [isPasskeySupported, setIsPasskeySupported] = useState(true)
@@ -40,7 +40,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer(({ navi
   const [isIcloudSelected, setIsIcloudSelected] = useState(true)
 
   // ---------------- COMPUTED ---------------------
-  const fullname = email.split("@")[0]
+  const fullname = email.replace(/[^a-zA-Z ]/g, "")
   const isEmail = validateEmail(email)
 
   // ---------------- METHODS ---------------------

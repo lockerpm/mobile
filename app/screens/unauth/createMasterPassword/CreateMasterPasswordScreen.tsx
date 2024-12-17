@@ -208,12 +208,15 @@ export const CreateMasterPasswordScreen: FC<RootStackScreenProps<"createMasterPa
         }
       >
         <View style={{ alignItems: "center" }}>
-          <Logo preset="default" style={{ height: 73, width: 63 }} />
+          <Logo
+            preset={"cystack-logo"}
+            style={{ height: 70, width: 70, marginBottom: 10, alignSelf: "center" }}
+          />
 
           <Text
             preset="bold"
             size="xl"
-            style={{ marginBottom: 10, marginTop: 25 }}
+            style={{ marginBottom: 10 }}
             text={translate("create_master_pass.title")}
           />
 

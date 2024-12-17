@@ -32,6 +32,7 @@ export const PinItemInput = forwardRef((props: Props, ref: Ref<TextInput>) => {
     borderRadius: 8,
     textAlign: "center",
     fontSize: 37,
+    paddingVertical: 0,
     color: isError ? colors.error : colors.primary,
     fontFamily: typography.primary.semibold,
   }

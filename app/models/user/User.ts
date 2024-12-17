@@ -146,8 +146,9 @@ export const UserModel = types
       self.username = userSnapshot.username
       self.full_name = userSnapshot.full_name
       self.avatar = userSnapshot.avatar
-      self.customer_language = userSnapshot.customer_language
-      self.language = userSnapshot.customer_language
+      // sync language with server
+      // self.customer_language = userSnapshot.customer_language
+      // self.language = userSnapshot.customer_language
     },
     saveUserPw: (userSnapshot: UserSnapshotIn) => {
       self.pwd_user_id = userSnapshot.pwd_user_id

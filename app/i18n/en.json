@@ -163,6 +163,7 @@
     "logout": "Log out from "
   },
   "error": {
+    "incorrect_pw": "Incorrect Master Password",
     "master_password": "Cannot auto create Master Password item",
     "not_supported": "Not supported",
     "not_valid_for_biometric": "Log in with Master Password to re-enable FaceID/TouchID",
