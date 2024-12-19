@@ -74,7 +74,7 @@
 {
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.window.bounds];
     imageView.tag = 1234;
-    imageView.backgroundColor = [UIColor whiteColor];
+    imageView.backgroundColor = [UIColor blackColor];
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     [imageView setImage:[UIImage imageNamed:@"LaunchScreen.png"]];
     [self.window addSubview:imageView];
