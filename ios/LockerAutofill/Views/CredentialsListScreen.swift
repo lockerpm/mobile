@@ -78,14 +78,16 @@ struct CredentialsListScreen: View {
             }
           }
         }
-      } .onAppear{
+      }
+      .padding(.top, -24)
+      .onAppear{
         if !isInitSearch {
           self.isInitSearch = true
           self.searchText = initSearch
         }
       }
+
       .foregroundStyle(Color.title)
-      .searchable(text: $searchText)
       .autocapitalization(.none)
       .navigationTitle(i.translate("list.title"))
       .toolbar {
@@ -124,6 +126,7 @@ struct CredentialsListScreen: View {
       }
       .navigationBarTitleDisplayMode(.inline)
     }
+    .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
     .navigationBarHidden(true)
     .navigationBarBackButtonHidden()
     .halfSheet(showSheet: $isShowPasswordGenerator) {

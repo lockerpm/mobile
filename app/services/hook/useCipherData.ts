@@ -385,9 +385,7 @@ export function useCipherData() {
   const _updateAutofillData = async () => {
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
     const passwordRes = await getCiphers({
-      filters: [
-        (c: CipherView) => c.type === CipherType.Login && !!c.login.username && !!c.login.password,
-      ],
+      filters: [(c: CipherView) => c.type === CipherType.Login],
       searchText: "",
       deleted: false,
     })

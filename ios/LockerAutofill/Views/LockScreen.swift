@@ -19,7 +19,12 @@ struct LockScreen: View {
     NavigationView {
       VStack {
         Image("Logo")
+          .resizable()
+          .scaledToFit()
+          .frame(width: 70, height: 70)
+          .clipShape(RoundedRectangle(cornerRadius: 12))
           .padding()
+          
         Text(i.translate("lock.title"))
           .fontWeight(.medium)
           .padding(.bottom, 4)

@@ -18,7 +18,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="HdZ-Af-DHy">
-                                <rect key="frame" x="147.5" y="288.5" width="80.5" height="90"/>
+                                <rect key="frame" x="147.5" y="293.5" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="afW-Aa-yf0"/>
+                                    <constraint firstAttribute="height" constant="80" id="tnL-IY-AXP"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XM4-ef-jvJ"/>
@@ -38,7 +42,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Logo" width="80.5" height="90"/>
+        <image name="Logo" width="239" height="272"/>
         <namedColor name="background">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
