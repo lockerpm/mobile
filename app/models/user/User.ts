@@ -533,6 +533,7 @@ export const UserModel = types
     },
     changeLanguage: async () => {
       const res = await userApi.setUserLanguage(self.apiToken, self.language)
+      console.log(res)
       return res
     },
     lock: () => {
