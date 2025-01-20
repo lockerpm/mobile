@@ -24,6 +24,7 @@
     "create": "Создать",
     "crypto_asset": "Резервные копии крипто-данных",
     "crypto_wallet": "Резервные копии крипто-кошелька",
+    "cryptoWallet": "Crypto Wallet",
     "custom_fields": "Пользовательские поля",
     "data": "Данные",
     "date": "Дата",
@@ -57,6 +58,9 @@
     "lock": "Блокировать",
     "login": "Войти",
     "logout": "Выйти",
+    "signin": "Sign in",
+    "signout": "Sign out",
+    "signup": "Sign up",
     "male": "Мужской",
     "master_pass": "Мастер-пароль",
     "max": "Максимум",
@@ -105,6 +109,7 @@
     "share": "Поделится",
     "show_password": "Показать пароль",
     "sign_up": "Зарегистрироваться",
+    "sign_in": "Sign in",
     "skip": "Пропустить",
     "sort": "Сортировать",
     "submit": "Подтвердить",
@@ -158,6 +163,7 @@
     "logout": "Выйти с "
   },
   "error": {
+    "incorrect_pw": "Incorrect Master Password",
     "master_password": "Невозможно автоматически создать мастер-пароль",
     "not_supported": "Не поддерживается",
     "not_valid_for_biometric": "Войдите в систему, используя мастер-пароль, чтобы повторно включить FaceID/TouchID",
@@ -220,7 +226,54 @@
     "network_error": "Ошибка сети. Ваше соединение не защищено",
     "share_folder": "Невозможно поделиться этой папкой",
     "share_folder_move_item": "Этот элемент находится в общем доступе. Отмените общий доступ и попробуйте снова",
-    "onpremise_login_failed": "Ваш email не принадлежит ни одному предприятию. Попробуйте еще раз"
+    "onpremise_login_failed": "Ваш email не принадлежит ни одному предприятию. Попробуйте еще раз",
+    "api": {
+      "1001": "The email address or password is not valid.",
+      "1002": "The authorization code is not valid.",
+      "1003": "The account is not activated yet.",
+      "1004": "There's no account associated with this email or username. Try another or create a new account.",
+      "1005": "This is not an admin account.",
+      "1006": "This group is a base group. So you can not delete it.",
+      "1007": "Cannot delete this user because he/she is the sole owner of at least one organization. Please delete these organizations.",
+      "1008": "You cannot log in due to the limited attempts allowed by the enterprise's policy. Try again later.",
+      "1009": "The account is blocked by the enterprise. Please contact your enterprise admin to unblock your account.",
+      "1010": "The account is locked because the Enterprise plan is expired. Please contact your enterprise admin.",
+      "1011": "Your account belongs to an enterprise. Please request or contact your enterprise admin to continue using Locker.",
+      "1012": "The enterprise requires you to enable 2-Step Verification.",
+      "3003": "This team was locked. Please upgrade your plan.",
+      "3005": "The domain ownership is not verified.",
+      "5000": "This item has already been shared. ",
+      "5001": "You can only select up to 10000 items at a time.",
+      "5002": "The maximum number of items is reached. You can remove items in Trash if any.",
+      "7002": "You need to upgrade your plan to execute this operator.",
+      "7003": "You don't need to pay to execute this operator.",
+      "7004": "You can not cancel the default plan.",
+      "7005": "An unexpected error has occurred when connecting to Stripe.",
+      "7006": "This card already exists.",
+      "7007": "This user doesn't have any card.",
+      "7008": "This user doesn't have any subscriptions.",
+      "7009": "Your card has been declined (insufficient funds, etc...). Please try another one.",
+      "7010": "Your current plan does not support this operator.",
+      "7011": "This account's original transaction ID is registered with mobile. Please use another account or use the family plan.",
+      "7012": "The number of members, including you, has exceeded the limit allowed by your subscription plan.",
+      "7013": "The trial plan is applied.",
+      "7014": "You need to cancel the current plan to upgrade to a new plan.",
+      "7015": "Your account belongs to an enterprise. You need to leave the enterprise to execute this operator.",
+      "7016": "Your account belongs to a [Family] plan. You need to leave the plan to execute this operator.",
+      "7017": "Your current plan is Lifetime Premium, so you can not execute this operator.",
+      "7018": "The email you provided was not a valid school email.",
+      "7019": "This email has already been used.",
+      "8000": "The maximum number of aliases has been reached.",
+      "8001": "The maximum number of subdomains has been reached.",
+      "9000": "The quick share is not valid because the email or the code is not valid.",
+      "10000": "The maximum number of credential backups has been reached.",
+      "0000": "The authentication token is invalid.",
+      "0002": "Your account does not have enough permission to execute this operation.",
+      "0004": "Invalid data.",
+      "0005": "Method Not Allowed.",
+      "0008": "Unknown Error.",
+      "0009": "Service temporarily unavailable, try again later."
+    }
   },
   "success": {
     "done": "Готово",
@@ -257,6 +310,8 @@
     },
     "copy": "Копировать псевдоним",
     "edit": "Редактировать адрес-псевдоним",
+    "editable": "Editable email alias",
+    "random": "Random email alias {{number}}",
     "edit_modal": {
       "titel": "Редактировать Адрес-псевдоним",
       "current": "Текущий адрес",
@@ -341,7 +396,8 @@
     },
     "view_user_vault": "Сейчас вы просматриваете элементы из хранилища {{name}}",
     "pending_trusted": "{{count}} запрос(ов){{s}}",
-    "pending_grant": "{{count}} приглашений{{s}}"
+    "pending_grant": "{{count}} приглашений{{s}}",
+    "no_account": "This email address hasn't had a Locker account."
   },
   "policy": {
     "min_password_length": "Минимальная длина пароля — {{length}}",
@@ -370,6 +426,7 @@
     "desc": "Мастер пароль - это ваш пароль для разблокировки Locker. Это единственный пароль, который нужно запомнить, чтобы получить доступ ко всем другим паролям, хранящимся в Locker. Пожалуйста, не делитесь этим паролем ни с кем.",
     "confirm_master_pass": "Подтвердите мастер-пароль",
     "hint": "Подсказка (необязательно)",
+    "hint_error": "The Hint cannot be the same as the Master Password",
     "btn": "Создать пароль",
     "note": "Примечание: Locker не может просматривать, хранить или повторно выдавать мастер-пароль на случай, если вы его забудете или потеряете."
   },
@@ -448,6 +505,39 @@
     "conditions": "условия",
     "signup_successful": "На ваш адрес было отправлено письмо с подтверждением (проверьте также папку СПАМ)",
     "update_pw_successful": "Обновление прошло успешно"
+  },
+  "new_signup": {
+    "title": "Locker Password Manager",
+    "sub_title": "Sign up for a free account",
+    "other_signup": "Or sign up with email",
+    "enter_email": "Enter your email",
+    "sign_up_email": "Sign up with email",
+    "sign_up_business": {
+      "title": "Sign up for Locker for Business? ",
+      "free_trial": "Get Free Trial"
+    },
+    "has_account": "Already have an account? ",
+    "sign_in": "Sign in",
+    "sign_up_with": "Or Sign Up With",
+    "marketing": "I want to stay updated on news, events and offers",
+    "error_pin": "Code is invalid. Please retry!"
+  },
+  "login_email_code": {
+    "title": "Check your email for verification code",
+    "sub_title": {
+      "prefix": "We've sent a verification code to ",
+      "suffix": ". Please check your inbox."
+    },
+    "resend": {
+      "prefix": "Didn't receive any email? Check your spam folder. ",
+      "btn": "Resend",
+      "suffix": " after {{second}}s"
+    },
+    "or": "Or",
+    "not_familiar": "Not familiar with this method? ",
+    "use_password": "Use traditional password instead!",
+    "sign_in": "Sign in with password",
+    "sign_in_email": "Sign in with email"
   },
   "start": {
     "synching": "Синхронизация...",
@@ -555,6 +645,12 @@
       "title": "Забыли пароль? Сброс",
       "desc": "Добавьте свои пароли и получайте к ним доступ с любого устройства в любое время.",
       "btn": "Добавить пароль"
+    },
+    "hide_email": {
+      "title": "Hide your email",
+      "generate_new": "Generate new private email",
+      "existing_email": "Use existing private email",
+      "empty": "You haven't generated any private email"
     }
   },
   "shares": {
@@ -582,6 +678,11 @@
         "stop": "Отменить общий доступ",
         "add_items": "Добавить элементы"
       }
+    },
+    "status": {
+      "invited": "invited",
+      "accepted": "accepted",
+      "confirmed": "confirmed"
     },
     "empty": {
       "title": "Безопасно поделиться элементами",
@@ -753,6 +854,8 @@
     "defaultTab": "Начальный экран"
   },
   "autofill_service": {
+    "deleted": "This password has been deleted.",
+    "searchFor": "Search for: ",
     "activated": {
       "title": "Автозаполнение активировано!",
       "content": "Теперь вы можете быстрее входить в приложения и на сайты"
@@ -902,7 +1005,8 @@
       "card": "Платёжные карты",
       "identity": "Визитные карточки",
       "note": "Безопасные заметки",
-      "crypto": "Резервные копии криптовалют"
+      "crypto": "Резервные копии криптовалют",
+      "otp": "One time password"
     },
     "feature": {
       "title": "Изучите все возможности премиум-функций",
@@ -1029,11 +1133,11 @@
     "expired": "Код истекает через: {{ss}}с",
     "new_otp": "Сгенерировать новый",
     "instruction": {
-      "label": "Инструкция",
       "1": "Войти через настольное приложение",
       "2": "Нажмите на меню вашего профиля в правом верхнем углу.",
       "3": "Выберите мобильный вход без пароля",
       "4": "Введите OTP",
+      "label": "Инструкция",
       "go_back": "Назад"
     },
     "qr_scan": "Сканировать QR-код",
@@ -1115,6 +1219,7 @@
         "label": "Используйте внешний ключ безопасности"
       }
     },
+    "login": "Login",
     "login_passkey_setting": "Войти с ключами доступа",
     "login_passkey": "Войти с ключом доступа",
     "login_passkey_options": "Выберите вариант, в котором вы сохранили свой ключ доступа от Locker"
@@ -1133,6 +1238,63 @@
       "ble": "Аутентификация через BLE",
       "usb": "Аутентификация через USB",
       "nfc": "Аутентификация через NFC"
+    }
+  },
+  "app_noti": {
+    "item_sharing": {
+      "100001": "{{recipient_name}} has accepted the item you share",
+      "100002": "{{recipient_name}} has rejected  the item you share",
+      "100003": "{{owner_name}} has shared a {{cipher_type}} with you",
+      "100004": "A user has registered a Locker account via your sharing request. Please confirm your sharing request",
+      "100006": "{{owner_name}} has confirmed to share a {{cipher_type}} with you"
+    },
+    "member_to_group_share": {
+      "100005": "{{member_joined_text}} group {{group_name}} that you shared your items with. Click to confirm sharing so they can see shared items."
+    },
+    "payment": {
+      "100007": "Your invoice {{payment_id}} was paid successfully",
+      "100008": "Locker couldn't proceed payment on your account. Your account was downgraded"
+    },
+    "emergency_access": {
+      "100009": "The user {{grantor_name}} ({{grantor_email}}) has invited you as his/her Emergency Contact",
+      "100010": "The user {{grantee_name}} ({{grantee_email}}) has accepted your invitation. Please confirm his/her identity as your new Emergency Access",
+      "100011": "User {{grantee_name}} ({{grantee_email}}) has accepted your Emergency Contact invitation",
+      "100012": "User {{grantee_name}} ({{grantee_email}}) has declined your Emergency Contact invitation",
+      "100013": "You are now Emergency Contact of the user {{grantor_name}} ({{grantor_email}})",
+      "100014": "User {{grantee_name}} ({{grantee_email}}) has requested to {{request}} your vault items",
+      "100015": "User {{grantor_name}} ({{grantor_email}}) has accepted your Emergency Request",
+      "100016": "User {{grantor_name}} ({{grantor_email}}) has declined your Emergency Request"
+    }
+  },
+  "push_noti": {
+    "item_sharing": {
+      "new_share": "You have a new shared {{typeName}}",
+      "new_shares": "You have {{count}} new shared items. Open Locker to accept or reject.",
+      "confirm": "Please confirm your sharing request",
+      "accept": "{{recipientName}} has accepted the {{typeName}} you share",
+      "reject": "{{recipientName}} has rejected the {{typeName}} you share"
+    },
+    "emergency_access": {
+      "invite": "{{user}} has invited you to be emergency access contact",
+      "accept_invite": "{{user}} has accepted your emergency access invitation",
+      "reject_invite": "{{user}}  has rejected your emergency access invitation",
+      "request": "{{user}} has requested to {{type}} your Locker account",
+      "accept_request": "{{user}} approved your request to {{type}} their Locker account",
+      "reject_request": "{{user}} has rejected your request to {{type}} their Locker account"
+    }
+  },
+  "password_history": {
+    "view": "View Password History",
+    "title": "Password History",
+    "updated_password": "Updated at ",
+    "copy": "Copy password",
+    "restore": "Restore password",
+    "restore_note": "Are you sure to restore this password? This will replace the current password",
+    "restore_btn": "Restore",
+    "free": {
+      "note": "This list only shows the item’s first 3 old passwords. To view more passwords that were changed recently, ",
+      "go_premium": "go Premium.",
+      "upgrade": "Upgrade now"
     }
   }
 }

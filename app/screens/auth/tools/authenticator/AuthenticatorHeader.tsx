@@ -41,7 +41,7 @@ export const AuthenticatorHeader = (props: Props) => {
   } = props
   const { translate } = useHelper()
   const { colors } = useTheme()
-  const { toTrashCiphers } = useCipherData()
+  const { deleteCiphers } = useCipherData()
   const { user, uiStore } = useStores()
 
   // ----------------------- PARAMS ------------------------
@@ -130,7 +130,7 @@ export const AuthenticatorHeader = (props: Props) => {
         }}
       />
       <Text
-        size="xl"
+        preset="bold"
         text={
           selectedItems.length
             ? `${selectedItems.length} ${translate("common.selected")}`
@@ -147,7 +147,7 @@ export const AuthenticatorHeader = (props: Props) => {
 
   const handleDelete = async () => {
     setIsLoading(true)
-    const res = await toTrashCiphers(selectedItems)
+    const res = await deleteCiphers(selectedItems)
     setIsLoading(false)
     if (res.kind === "ok") {
       setIsSelecting(false)

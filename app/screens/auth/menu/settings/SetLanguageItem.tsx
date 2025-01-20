@@ -16,7 +16,7 @@ export const SetlanguageItem = observer(() => {
   const { translate } = useHelper()
   const [isLanguageSelect, setIsLanguageSelect] = useState(false)
 
-  const options: { label: string; value: "vi" | "en" | "zh" }[] = [
+  const options: { label: string; value: "vi" | "en" | "zh" | "ru" }[] = [
     {
       label: "Tiếng Việt",
       value: "vi",
@@ -29,9 +29,13 @@ export const SetlanguageItem = observer(() => {
       label: "繁體中文",
       value: "zh",
     },
+    {
+      label: "Русский",
+      value: "ru",
+    },
   ]
 
-  const updateAutofillLanguage = async (language: "vi" | "en" | "zh") => {
+  const updateAutofillLanguage = async (language: string) => {
     if (!IS_IOS) {
       return
     }
@@ -43,7 +47,7 @@ export const SetlanguageItem = observer(() => {
     }
   }
 
-  const setLanguage = (lang: "vi" | "en" | "zh") => {
+  const setLanguage = (lang: string) => {
     user.setLanguage(lang)
     user.changeLanguage()
     updateAutofillLanguage(lang)

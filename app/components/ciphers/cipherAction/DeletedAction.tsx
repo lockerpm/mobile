@@ -122,7 +122,7 @@ export const DeletedAction = (props: DeletedActionProps) => {
       >
         {children}
 
-        <ActionItem
+        {/* <ActionItem
           disabled={uiStore.isOffline && !!selectedCipher.organizationId}
           name={translate("common.edit")}
           icon="edit"
@@ -130,7 +130,7 @@ export const DeletedAction = (props: DeletedActionProps) => {
             onClose()
             navigation.navigate(`${cipherMapper.path}__edit`, { mode: "edit" })
           }}
-        />
+        /> */}
 
         <ActionItem
           disabled={uiStore.isOffline && !!selectedCipher.organizationId}
