@@ -69,9 +69,18 @@ struct CredentialsListScreen: View {
             }
             
             if isShowItemDetailId ==  credential.fillID {
-              CredentialInfo(label: i.translate("item.username"), text: credential.username, isCopydable: true)
-              CredentialInfo(label: i.translate("item.password"), text: credential.password, isCopydable: true)
-              CredentialInfo(label: "URL", text: credential.uri, isCopydable: false)
+              if !credential.username.isEmpty {
+                CredentialInfo(label: i.translate("item.username"), text: credential.username, isCopydable: true)
+              }
+              
+              if !credential.password.isEmpty {
+                CredentialInfo(label: i.translate("item.password"), text: credential.password, isCopydable: true)
+              }
+              
+              if !credential.uri.isEmpty {
+                CredentialInfo(label: "URL", text: credential.uri, isCopydable: false)
+              }
+
               if !credential.otp.isEmpty {
                 TOTPView(url: credential.otp)
               }

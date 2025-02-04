@@ -35,6 +35,8 @@
 		7C6D58A52C6C955C0059ACAC /* PrivateEmailList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A42C6C955C0059ACAC /* PrivateEmailList.swift */; };
 		7C6D58A72C6DC2340059ACAC /* PrivateEmailApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A62C6DC2340059ACAC /* PrivateEmailApiService.swift */; };
 		7C6D58A92C6DC6D70059ACAC /* PrivateEmailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A82C6DC6D70059ACAC /* PrivateEmailModel.swift */; };
+		7C8043E52D51B315003B7FD9 /* ru.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C8043E42D51B315003B7FD9 /* ru.strings */; };
+		7C8043E82D51F389003B7FD9 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 7C8043E72D51F389003B7FD9 /* Sentry */; };
 		7C8FB3752ADD298800DA5BCE /* VinCSSFido2ClientSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */; };
 		7C8FB3762ADD298900DA5BCE /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7C9379E82BC6741E00157962 /* zh.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C9379E72BC6741E00157962 /* zh.strings */; };
@@ -54,7 +56,6 @@
 		7CCABA802BB188BA006D7FB7 /* AutofillScreenDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCABA7F2BB188BA006D7FB7 /* AutofillScreenDelegate.swift */; };
 		7CCE43192BB5880A0004028E /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCE43182BB5880A0004028E /* Theme.swift */; };
 		7CEB31E22A9309D9007F6051 /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CEB31E12A9309D9007F6051 /* assets.xcassets */; };
-		7CEB31EC2A932665007F6051 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A4E2A9305EC00875FBA /* Config.xcconfig */; };
 		7CEB31F92A932780007F6051 /* RSAUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31EF2A932780007F6051 /* RSAUtils.swift */; };
 		7CEB31FA2A932780007F6051 /* RCTCryptoServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31F02A932780007F6051 /* RCTCryptoServiceIos.m */; };
 		7CEB31FB2A932780007F6051 /* RNCryptoServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31F12A932780007F6051 /* RNCryptoServiceIos.swift */; };
@@ -147,6 +148,7 @@
 		7C6D58A42C6C955C0059ACAC /* PrivateEmailList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailList.swift; sourceTree = "<group>"; };
 		7C6D58A62C6DC2340059ACAC /* PrivateEmailApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailApiService.swift; sourceTree = "<group>"; };
 		7C6D58A82C6DC6D70059ACAC /* PrivateEmailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailModel.swift; sourceTree = "<group>"; };
+		7C8043E42D51B315003B7FD9 /* ru.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = ru.strings; sourceTree = "<group>"; };
 		7C9379E72BC6741E00157962 /* zh.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = zh.strings; sourceTree = "<group>"; };
 		7C973A362A93019C00875FBA /* Locker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Locker.entitlements; path = Locker/Locker.entitlements; sourceTree = "<group>"; };
 		7C973A372A9304CA00875FBA /* Locker-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Locker-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -156,7 +158,6 @@
 		7C973A432A93055500875FBA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7C973A452A93055500875FBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C973A462A93055500875FBA /* LockerAutofill.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofill.entitlements; sourceTree = "<group>"; };
-		7C973A4E2A9305EC00875FBA /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		7C973A522A9306A700875FBA /* AutofillDataKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillDataKeychain.swift; sourceTree = "<group>"; };
 		7C973A552A93072700875FBA /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
 		7C973A572A93075E00875FBA /* vi.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = vi.strings; sourceTree = "<group>"; };
@@ -214,6 +215,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C8043E82D51F389003B7FD9 /* Sentry in Frameworks */,
 				7CF2005C2C1C237E005A6B03 /* KeychainAccess in Frameworks */,
 				7C973A3E2A93055500875FBA /* AuthenticationServices.framework in Frameworks */,
 				7CF2005A2C1C2378005A6B03 /* SwiftOTP in Frameworks */,
@@ -314,6 +316,7 @@
 				7C1F2A782B91CB000003B7EF /* en.strings */,
 				7C9379E72BC6741E00157962 /* zh.strings */,
 				7C3914092B872CB800213EEB /* translate.swift */,
+				7C8043E42D51B315003B7FD9 /* ru.strings */,
 			);
 			path = Localize;
 			sourceTree = "<group>";
@@ -331,7 +334,6 @@
 				7C973A5E2A93076E00875FBA /* Controller */,
 				7C973A452A93055500875FBA /* Info.plist */,
 				7C973A422A93055500875FBA /* MainInterface.storyboard */,
-				7C973A4E2A9305EC00875FBA /* Config.xcconfig */,
 				7CEB31E12A9309D9007F6051 /* assets.xcassets */,
 			);
 			path = LockerAutofill;
@@ -555,6 +557,7 @@
 				7CF200572C1C2372005A6B03 /* CachedAsyncImage */,
 				7CF200592C1C2378005A6B03 /* SwiftOTP */,
 				7CF2005B2C1C237E005A6B03 /* KeychainAccess */,
+				7C8043E72D51F389003B7FD9 /* Sentry */,
 			);
 			productName = LockerAutofill;
 			productReference = 7C973A3C2A93055500875FBA /* LockerAutofill.appex */;
@@ -595,6 +598,7 @@
 				7C973A302A93008B00875FBA /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */,
 				864A6CAB2B8F999F0060E3EB /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
+				7C8043E62D51F389003B7FD9 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -632,10 +636,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C9379E82BC6741E00157962 /* zh.strings in Resources */,
-				7CEB31EC2A932665007F6051 /* Config.xcconfig in Resources */,
 				7C973A442A93055500875FBA /* MainInterface.storyboard in Resources */,
 				7C973A5B2A93075E00875FBA /* vi.strings in Resources */,
 				7CEB31E22A9309D9007F6051 /* assets.xcassets in Resources */,
+				7C8043E52D51B315003B7FD9 /* ru.strings in Resources */,
 				7C1F2A792B91CB000003B7EF /* en.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1310,6 +1314,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7C8043E62D51F389003B7FD9 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.44.0;
+			};
+		};
 		7C973A302A93008B00875FBA /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
@@ -1337,6 +1349,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7C8043E72D51F389003B7FD9 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C8043E62D51F389003B7FD9 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
 		7CF200572C1C2372005A6B03 /* CachedAsyncImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 864A6CAB2B8F999F0060E3EB /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;

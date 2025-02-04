@@ -34,6 +34,14 @@ extension String {
         value: self,
         comment: self)
     }
+    if ( locale == "ru") {
+      return NSLocalizedString(
+        self,
+        tableName: "ru",
+        bundle: .main,
+        value: self,
+        comment: self)
+    }
     return NSLocalizedString(
       self,
       tableName: "en",

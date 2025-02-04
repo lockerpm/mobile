@@ -9,7 +9,22 @@ import UIKit
 import LocalAuthentication
 import AuthenticationServices
 import SwiftUI
+import Sentry
 
+class CredentialProviderViewController: ASCredentialProviderViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        SentrySDK.start { options in
+            options.dsn = "your_sentry_dsn"
+            options.debug = true  // Enable for debugging
+            options.enableAppHangTracking = true
+            options.enableSwizzling = false  // Reduce interference in an extension
+            options.attachStacktrace = true
+
+        }
+    }
+}
 
 class CredentialProviderController: ASCredentialProviderViewController {
   internal var user: User!
@@ -21,6 +36,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   @IBOutlet weak var logo: UIImageView!
   
   required init?(coder: NSCoder) {
+    print("-------init")
     super.init(coder: coder)
     self.user = User()
     self.dataModel = AutofillDataModel(self.user)
@@ -28,6 +44,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   override func viewDidAppear(_ animated: Bool) {
+    print("-------viewDidAppear")
     self.view.backgroundColor = UIColor(named: "background")
 //    self.overrideUserInterfaceStyle = .dark
     if (self.loginLocker()) {
@@ -60,13 +77,13 @@ class CredentialProviderController: ASCredentialProviderViewController {
    prioritize the most relevant credentials in the list.
   */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+    print("-------prepareCredentialList")
     if (self.loginLocker()) {
       if serviceIdentifiers.count > 0 {
         self.serviceIdentifier = serviceIdentifiers[0].identifier
         if serviceIdentifiers[0].type == .URL {
           user.setUri(uri: URL(string: serviceIdentifier)?.host ?? "", isDomain: false)
-        }
-        else {
+        } else {
           user.setUri(uri: serviceIdentifier, isDomain: true)
           self.serviceIdentifier = "https://" +  serviceIdentifier
         }
@@ -83,6 +100,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
    by completing the extension request with the associated ASPasswordCredential.
    */
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
+    print("-------prepareInterfaceToProvideCredential")
     if (self.loginLocker()) {
       self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
       self.quickBar = true

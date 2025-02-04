@@ -1,24 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Alert, View, AppState, LayoutAnimation } from 'react-native'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { useTheme } from 'app/services/context'
-import { AutofillServiceEnabled } from 'app/utils/autofillHelper'
-import { useStores } from 'app/models'
-import { useAuthentication, useHelper } from 'app/services/hook'
-import { useNavigation } from '@react-navigation/native'
-import { Icon, Screen, Text } from 'app/components/cores'
+import React, { useState, useEffect, useRef } from "react"
+import { Alert, View, AppState, LayoutAnimation } from "react-native"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { useTheme } from "app/services/context"
+import { AutofillServiceEnabled } from "app/utils/autofillHelper"
+import { useStores } from "app/models"
+import { useAuthentication, useHelper } from "app/services/hook"
+import { useNavigation } from "@react-navigation/native"
+import { Icon, Screen, Text } from "app/components/cores"
 
-import { HomeHeader } from './HomeHeader'
+import { HomeHeader } from "./HomeHeader"
 import {
   SortActionConfigModal,
   EmptyCipherList,
   CipherList,
   AddCipherActionModal,
-} from 'app/components/ciphers'
-import { observer } from 'mobx-react-lite'
-import { SuggestEnableFaceID } from './SuggestEnableFaceID'
+} from "app/components/ciphers"
+import { observer } from "mobx-react-lite"
+import { SuggestEnableFaceID } from "./SuggestEnableFaceID"
 
-const HOME_EMPTY_CIPHER = require('assets/images/emptyCipherList/home-empty-cipher.png')
+const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
 
 export const HomeTabScreen = observer(() => {
   const navigation: any = useNavigation()
@@ -33,12 +33,12 @@ export const HomeTabScreen = observer(() => {
   const [isLoading, setIsLoading] = useState(true)
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("")
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
@@ -54,9 +54,9 @@ export const HomeTabScreen = observer(() => {
   }
   const fetchMarketingContent = async () => {
     const res = await user.fetchMarketingContent()
-    if (res.kind === 'ok' && Object.keys(res.data).length !== 0) {
-      if (!!res.data && res.data.status === 'active') {
-        navigation.navigate('marketing', { data: res.data })
+    if (res.kind === "ok" && Object.keys(res.data).length !== 0) {
+      if (!!res.data && res.data.status === "active") {
+        navigation.navigate("marketing", { data: res.data })
       }
     }
   }
@@ -67,11 +67,11 @@ export const HomeTabScreen = observer(() => {
       !uiStore.isShowedPopupMarketing &&
       !user.isLifeTimeFamilyPlan &&
       !user.isLifeTimePremiumPlan &&
-      user.pwd_user_type !== 'enterprise'
+      user.pwd_user_type !== "enterprise"
     ) {
       fetchMarketingContent()
     }
-    AppState.addEventListener('change', (nextAppState) => {
+    AppState.addEventListener("change", (nextAppState) => {
       setAppStateVisible(nextAppState)
     })
   }, [])
@@ -81,45 +81,44 @@ export const HomeTabScreen = observer(() => {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption('most_relevant')
+        setSortOption("most_relevant")
       }
     } else {
       setSortList({
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       })
-      setSortOption('last_updated')
+      setSortOption("last_updated")
     }
   }, [searchText])
-
 
   // Navigation event listener
   useEffect(() => {
     const handleBack = (e) => {
-      if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
+      if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
         navigation.dispatch(e.data.action)
         return
       }
 
       e.preventDefault()
 
-      Alert.alert(translate('alert.lock_app'), '', [
+      Alert.alert(translate("alert.lock_app"), "", [
         {
-          text: translate('common.cancel'),
-          style: 'cancel',
+          text: translate("common.cancel"),
+          style: "cancel",
           onPress: () => null,
         },
         {
-          text: translate('common.lock'),
-          style: 'destructive',
+          text: translate("common.lock"),
+          style: "destructive",
           onPress: async () => {
             await lock()
-            navigation.navigate('lock')
+            navigation.navigate("lock")
           },
         },
       ])
     }
-    navigation.addListener('beforeRemove', handleBack)
+    navigation.addListener("beforeRemove", handleBack)
   }, [navigation])
 
   useEffect(() => {
@@ -137,7 +136,7 @@ export const HomeTabScreen = observer(() => {
 
   return (
     <Screen
-      safeAreaEdges={['top']}
+      safeAreaEdges={["top"]}
       header={
         <HomeHeader
           navigation={navigation}
@@ -220,9 +219,9 @@ export const HomeTabScreen = observer(() => {
           <EmptyCipherList
             img={HOME_EMPTY_CIPHER}
             imgStyle={{ height: 55, width: 120 }}
-            title={translate('all_items.empty.title')}
-            desc={translate('all_items.empty.desc')}
-            buttonText={translate('all_items.empty.btn')}
+            title={translate("all_items.empty.title")}
+            desc={translate("all_items.empty.desc")}
+            buttonText={translate("all_items.empty.btn")}
             addItem={() => {
               setIsAddOpen(true)
             }}
@@ -246,7 +245,7 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
           marginHorizontal: 16,
           borderColor: colors.palette.orange8,
           backgroundColor: colors.palette.orange3,
-          flexDirection: 'row',
+          flexDirection: "row",
           paddingVertical: 16,
           paddingHorizontal: 20,
           borderRadius: 12,
@@ -261,22 +260,22 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
         />
 
         <View style={{ marginRight: 80 }}>
-          <Text text={translate('all_items.enable_autofill.content')} />
+          <Text text={translate("all_items.enable_autofill.content")} />
           <Text
             preset="bold"
-            text={translate('all_items.enable_autofill.btn')}
+            text={translate("all_items.enable_autofill.btn")}
             color={colors.link}
             style={{
               marginTop: 10,
             }}
             onPress={() => {
-              navigation.navigate('autofillService')
+              navigation.navigate("autofillService")
             }}
           />
         </View>
         <View
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 20,
             right: 20,
           }}
