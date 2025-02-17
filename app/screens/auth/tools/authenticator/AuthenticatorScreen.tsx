@@ -67,7 +67,6 @@ export const AuthenticatorScreen = observer(() => {
               setIsAddOpen(true)
             }
           }}
-          navigation={navigation}
           searchText={searchText}
           onSearch={setSearchText}
           isSelecting={isSelecting}

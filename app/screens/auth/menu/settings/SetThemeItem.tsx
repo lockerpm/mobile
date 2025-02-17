@@ -7,8 +7,6 @@ import { Text } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
-import { IS_IOS } from "app/config/constants"
-import { AutofillDataType, loadShared, saveShared } from "app/utils/keychain"
 
 export const SetThemeItem = observer(() => {
   const { colors, setIsDark, isDark } = useTheme()
@@ -25,28 +23,15 @@ export const SetThemeItem = observer(() => {
     {
       label: translate("settings.dark_theme"),
       value: "Dark",
-    }
+    },
   ]
 
-  const value = isDark ? "Dark" : "Light"
-
-  const updateAutofillDarkTheme = async (enabled: boolean) => {
-    if (!IS_IOS) {
-      return
-    }
-    const credentials = await loadShared()
-    if (credentials && credentials.password) {
-      const sharedData: AutofillDataType = JSON.parse(credentials.password)
-      sharedData.isDarkTheme = enabled
-      await saveShared("autofill", JSON.stringify(sharedData))
-    }
-  }
+  const value = isDark ? translate("settings.dark_theme") : translate("settings.light_theme")
 
   const setTheme = (theme: string) => {
     const isDark = theme === "Dark"
     uiStore.setIsDark(isDark)
     setIsDark(isDark)
-    updateAutofillDarkTheme(isDark)
     setIsThemeSelect(false)
   }
 

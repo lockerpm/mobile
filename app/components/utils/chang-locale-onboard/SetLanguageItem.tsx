@@ -34,7 +34,6 @@ export const SetLanguage = observer((props: ViewProps) => {
 
   const setLanguage = (lang: string) => {
     user.setLanguage(lang)
-    // updateAutofillLanguage(lang)
     setIsLanguageSelect(false)
   }
 

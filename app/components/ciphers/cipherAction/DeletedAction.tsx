@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { View, Platform } from "react-native"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/DeleteConfirmModal"
-import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { ActionSheet } from "../actionsSheet/ActionSheet"
 import { Text } from "app/components/cores"
@@ -28,9 +28,11 @@ export const DeletedAction = (props: DeletedActionProps) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [nextModal, setNextModal] = useState<"deleteConfirm" | null>(null)
 
+  const { shareFolderRemoveItem } = useFolder()
   const { colors } = useTheme()
   const { getRouteName, translate } = useHelper()
-  const { deleteCiphers, restoreCiphers } = useCipherData()
+  const { deleteCiphers, restoreCiphers, stopShareCipherForGroup, stopShareCipher } =
+    useCipherData()
   const { getCipherInfo } = useCipherHelper()
   const { cipherStore, uiStore } = useStores()
 
@@ -56,6 +58,24 @@ export const DeletedAction = (props: DeletedActionProps) => {
   }
 
   const handleDelete = async () => {
+    if (selectedCipher.organizationId) {
+      if (selectedCipher.collectionIds?.length > 0) {
+        await shareFolderRemoveItem(
+          selectedCipher.collectionIds[0],
+          selectedCipher.organizationId,
+          selectedCipher,
+        )
+      }
+      const share = cipherStore.myShares.find((s) => s.id === selectedCipher.organizationId)
+
+      if (share.members.length > 0) {
+        await stopShareCipher(selectedCipher, share.members[0].id)
+      }
+      if (share.groups.length) {
+        await stopShareCipherForGroup(selectedCipher, share.groups[0].id)
+      }
+    }
+
     const res = await deleteCiphers([selectedCipher.id])
     if (res.kind === "ok") {
       const routeName = await getRouteName()

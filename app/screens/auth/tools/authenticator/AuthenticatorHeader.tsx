@@ -6,7 +6,6 @@ import { useTheme } from "app/services/context"
 import { SearchBar } from "app/components/utils"
 
 import { useCipherData, useHelper } from "app/services/hook"
-import { useStores } from "app/models"
 import { ShareModal } from "app/components/ciphers"
 import { DeleteOtpModal } from "./DeleteOtpModal"
 
@@ -22,7 +21,6 @@ interface Props {
   selectedItems: string[]
   setSelectedItems: (val: any) => void
   setIsLoading: (val: boolean) => void
-  navigation: any
 }
 
 export const AuthenticatorHeader = (props: Props) => {
@@ -31,7 +29,6 @@ export const AuthenticatorHeader = (props: Props) => {
     onSearch,
     searchText,
     setIsLoading,
-    navigation,
     header,
     isSelecting,
     setIsSelecting,
@@ -42,7 +39,6 @@ export const AuthenticatorHeader = (props: Props) => {
   const { translate } = useHelper()
   const { colors } = useTheme()
   const { deleteCiphers } = useCipherData()
-  const { user, uiStore } = useStores()
 
   // ----------------------- PARAMS ------------------------
 
@@ -50,8 +46,6 @@ export const AuthenticatorHeader = (props: Props) => {
   const [showShareModal, setShowShareModal] = useState(false)
 
   // ----------------------- COMPUTED ------------------------
-
-  const isFreeAccount = user.isFreePlan
 
   // Header right
   const renderHeaderRight = () => (
@@ -89,22 +83,6 @@ export const AuthenticatorHeader = (props: Props) => {
       />
       {selectedItems.length > 0 && (
         <>
-          {!uiStore.isOffline && !isFreeAccount && (
-            <Icon
-              icon="share"
-              size={24}
-              color={colors.primaryText}
-              onPress={() => setShowShareModal(true)}
-              containerStyle={{ padding: 8 }}
-            />
-          )}
-          <Icon
-            icon="folder-simple"
-            size={24}
-            color={colors.primaryText}
-            onPress={handleMoveFolder}
-            containerStyle={{ padding: 8 }}
-          />
           <Icon
             icon="trash"
             size={24}
@@ -153,16 +131,6 @@ export const AuthenticatorHeader = (props: Props) => {
       setIsSelecting(false)
       setSelectedItems([])
     }
-  }
-
-  const handleMoveFolder = () => {
-    navigation.navigate("folders__select", {
-      mode: "move",
-      initialId: null,
-      cipherIds: selectedItems,
-    })
-    setIsSelecting(false)
-    setSelectedItems([])
   }
 
   // ----------------------- RENDER ------------------------

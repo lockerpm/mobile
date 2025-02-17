@@ -183,13 +183,13 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
                 />
               )}
 
-              <Icon
+              {/* <Icon
                 icon="trash"
                 size={24}
                 color={colors.error}
                 onPress={() => setShowConfirmModal(true)}
                 containerStyle={{ padding: 8 }}
-              />
+              /> */}
             </>
           ) : (
             <>
@@ -211,13 +211,13 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
                 containerStyle={{ padding: 8 }}
               />
 
-              <Icon
+              {/* <Icon
                 icon="trash"
                 size={24}
                 color={colors.error}
                 onPress={() => setShowConfirmModal(true)}
                 containerStyle={{ padding: 8 }}
-              />
+              /> */}
             </>
           )}
         </>
@@ -237,7 +237,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
       />
 
       <Text
-        size="xl"
+        preset="bold"
         text={
           selectedItems.length
             ? `${selectedItems.length} ${translate("common.selected")}`

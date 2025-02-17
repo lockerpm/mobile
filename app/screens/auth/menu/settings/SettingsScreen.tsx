@@ -1,11 +1,10 @@
 import React, { useEffect } from "react"
-import { Linking, Platform } from "react-native"
+import { Linking } from "react-native"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "app/models"
 import { useCipherData, useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
-import { AutofillDataType, loadShared, saveShared } from "app/utils/keychain"
 import { Header, Screen, Toggle } from "app/components/cores"
 import { SettingsItem, MenuItemContainer } from "app/components/utils"
 import { observer } from "mobx-react-lite"
@@ -13,12 +12,13 @@ import { AppTimeoutType } from "app/static/types"
 import { SetlanguageItem } from "./SetLanguageItem"
 import { SetThemeItem } from "./SetThemeItem"
 import { SetTimeOutItem } from "./SetTimeOutItem"
-
-const IS_IOS = Platform.OS === "ios"
+import { iosKeyChain } from "app/utils/iosAutofillData"
+import { useCoreService } from "app/services/coreService"
 
 export const SettingsScreen = observer(() => {
   const navigation = useNavigation() as any
   const { user, uiStore, cipherStore } = useStores()
+  const { cryptoService } = useCoreService()
   const { colors } = useTheme()
   const { notify, isBiometricAvailable, translate } = useHelper()
   const { startSyncProcess } = useCipherData()
@@ -44,8 +44,6 @@ export const SettingsScreen = observer(() => {
       return
     }
 
-    user.setBiometricUnlock(true)
-
     // Update autofill settings
     await updateAutofillFaceIdSetting(true)
 
@@ -53,15 +51,18 @@ export const SettingsScreen = observer(() => {
   }
 
   const updateAutofillFaceIdSetting = async (enabled: boolean) => {
-    if (!IS_IOS) {
-      return
-    }
-    const credentials = await loadShared()
-    if (credentials && credentials.password) {
-      const sharedData: AutofillDataType = JSON.parse(credentials.password)
-      sharedData.faceIdEnabled = enabled
-      await saveShared("autofill", JSON.stringify(sharedData))
-    }
+    user.setBiometricUnlock(enabled)
+    const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
+    await iosKeyChain.saveUserInfo({
+      email: user.email || "",
+      avatar: user.avatar || "",
+      hashPass: hashPasswordAutofill || "",
+      token: user.apiToken || "",
+      language: user.language || "en",
+
+      faceIdEnabled: enabled,
+      isFree: user.isFreePlan,
+    })
   }
 
   const syncDataManually = async () => {
@@ -117,7 +118,6 @@ export const SettingsScreen = observer(() => {
         if (isActive) {
           enableBiometric()
         } else {
-          user.setBiometricUnlock(false)
           updateAutofillFaceIdSetting(false)
         }
       },
@@ -179,8 +179,8 @@ export const SettingsScreen = observer(() => {
           onPress={() => navigation.navigate("notificationSettings")}
         />
 
-        <SetlanguageItem/>
-        <SetThemeItem/>
+        <SetlanguageItem />
+        <SetThemeItem />
       </MenuItemContainer>
 
       <MenuItemContainer title={translate("common.security")}>
@@ -208,7 +208,7 @@ export const SettingsScreen = observer(() => {
             />
           }
         />
-        <SetTimeOutItem/>
+        <SetTimeOutItem />
       </MenuItemContainer>
 
       <MenuItemContainer title={translate("common.data")}>

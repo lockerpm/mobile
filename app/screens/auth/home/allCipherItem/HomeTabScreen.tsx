@@ -17,11 +17,14 @@ import {
 } from "app/components/ciphers"
 import { observer } from "mobx-react-lite"
 import { SuggestEnableFaceID } from "./SuggestEnableFaceID"
+import { useCoreService } from "app/services/coreService"
+import { iosKeyChain } from "app/utils/iosAutofillData"
 
 const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
 
 export const HomeTabScreen = observer(() => {
   const navigation: any = useNavigation()
+  const { cryptoService } = useCoreService()
   const { uiStore, user } = useStores()
   const { translate, isBiometricAvailable } = useHelper()
   const { lock } = useAuthentication()
@@ -60,8 +63,24 @@ export const HomeTabScreen = observer(() => {
       }
     }
   }
+
+  const syncAutofillUserInfo = async () => {
+    const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
+    await iosKeyChain.saveUserInfo({
+      email: user.email || "",
+      avatar: user.avatar || "",
+      hashPass: hashPasswordAutofill || "",
+      token: user.apiToken || "",
+      language: user.language || "en",
+
+      faceIdEnabled: user.isBiometricUnlock,
+      isFree: user.isFreePlan,
+    })
+  }
+
   // ------------------------ EFFECT ----------------------------
   useEffect(() => {
+    syncAutofillUserInfo()
     handleShowFaceIDSuggest()
     if (
       !uiStore.isShowedPopupMarketing &&

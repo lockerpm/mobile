@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useStores } from "app/models"
 import { useCoreService } from "../coreService"
 import { useHelper } from "./useHelper"
@@ -17,7 +16,6 @@ import {
 } from "app/static/constants"
 import { Cipher, EncString, SymmetricCryptoKey } from "core/models/domain"
 import { FolderView } from "core/models/view/folderView"
-import { AutofillDataType, loadShared, saveShared } from "app/utils/keychain"
 import { GetCiphersParams } from "app/static/types"
 import { ImportCiphersRequest } from "core/models/request/importCiphersRequest"
 import { KvpRequest } from "core/models/request/kvpRequest"
@@ -29,8 +27,8 @@ import { CollectionView } from "core/models/view/collectionView"
 import { CollectionRequest } from "core/models/request/collectionRequest"
 import { CipherData, FolderData } from "core/models/data"
 import { OrganizationData } from "core/models/data/organizationData"
-import { useTheme } from "../context"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
+import { IosAutofillPassword, iosKeyChain } from "app/utils/iosAutofillData"
 
 export function useCipherData() {
   const { cipherStore, folderStore, uiStore, collectionStore, user, enterpriseStore } = useStores()
@@ -47,7 +45,6 @@ export function useCipherData() {
   } = useCoreService()
   const { notify, randomString, notifyApiError, getTeam, translate } = useHelper()
   const { newCipher } = useCipherHelper()
-  const { isDark } = useTheme()
   const syncQueue = SyncQueue
 
   // ----------------------------- METHODS ---------------------------
@@ -383,15 +380,14 @@ export function useCipherData() {
 
   // Store password for autofill
   const _updateAutofillData = async () => {
-    const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
     const passwordRes = await getCiphers({
       filters: [(c: CipherView) => c.type === CipherType.Login],
       searchText: "",
       deleted: false,
     })
-    const passwordData = passwordRes.map((c: CipherView) => ({
-      id: c.id,
-      name: c.name,
+    const passwordData: IosAutofillPassword = passwordRes.map((c: CipherView) => ({
+      id: c.id || "",
+      name: c.name || "",
       uri: c.login.uri || "",
       username: c.login.username || "",
       password: c.login.password || "",
@@ -399,19 +395,7 @@ export function useCipherData() {
       otp: c.login.totp || "",
     }))
 
-    const sharedData: AutofillDataType = {
-      passwords: passwordData,
-      faceIdEnabled: user.isBiometricUnlock,
-      language: user.language,
-      isDarkTheme: isDark || false,
-      email: user.email,
-      hashPass: hashPasswordAutofill,
-      avatar: user.avatar,
-      isLoggedInPw: true,
-      token: user.apiToken,
-      isFree: user.isFreePlan,
-    }
-    await saveShared("autofill", JSON.stringify(sharedData))
+    await iosKeyChain.savePassword(passwordData)
   }
 
   // Sync autofill data
@@ -423,30 +407,11 @@ export function useCipherData() {
       }
       cipherStore.setIsSynchingAutofill(true)
 
-      const credentials = await loadShared()
-      if (!credentials || !credentials.password) {
-        const sharedData: AutofillDataType = {
-          passwords: [],
-          faceIdEnabled: user.isBiometricUnlock || false,
-          language: user.language || "en",
-          isDarkTheme: isDark || false,
-          email: user.email || "",
-          hashPass: "",
-          avatar: user.avatar || "",
-          isLoggedInPw: false,
-          token: "",
-          isFree: true,
-        }
-        await saveShared("autofill", JSON.stringify(sharedData))
-        return
-      }
-
       let hasUpdate = false
-      const sharedData: AutofillDataType = JSON.parse(credentials.password)
-
-      // Create passwords
-      if (sharedData.tempPasswords && sharedData.tempPasswords.length > 0) {
-        for (const cipher of sharedData.tempPasswords) {
+      // sync temporary passwords
+      const tempPasswords = await iosKeyChain.getTempPassword()
+      if (tempPasswords && Array.isArray(tempPasswords)) {
+        for (const cipher of tempPasswords) {
           const payload = newCipher(CipherType.Login)
           const data = new LoginView()
           data.username = cipher.username
@@ -465,9 +430,8 @@ export function useCipherData() {
           hasUpdate = true
         }
       }
-
+      await iosKeyChain.resetTempPassword()
       await _updateAutofillData()
-
       if (hasUpdate && !uiStore.isOffline) {
         await syncOfflineData()
       }
@@ -846,7 +810,6 @@ export function useCipherData() {
     const {
       importResult,
       setImportedCount,
-      setTotalCount,
       setIsLimited,
       isFreeAccount,
       isCaching,
@@ -1022,7 +985,7 @@ export function useCipherData() {
   }
 
   // Check cipher name duplication
-  const _countDuplicateCipherName = async (cipher: CipherView) => {
+  const _countDuplicateCipherName = async (_: CipherView) => {
     // TODO: no more counting duplicate cipher
     return 0
 

@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { View, Image } from 'react-native'
-import { BottomModal, Button, Text } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { useHelper } from 'app/services/hook'
+import React, { useState } from "react"
+import { View, Image } from "react-native"
+import { BottomModal, Button, Text } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { useHelper } from "app/services/hook"
 
 interface Props {
   isOpen?: boolean
@@ -13,15 +13,14 @@ interface Props {
   btnText?: string
 }
 
-const TRASH = require('assets/images/intro/trash.png')
+const TRASH = require("assets/images/intro/trash.png")
 
 export const DeleteConfirmModal = (props: Props) => {
   const { isOpen, onClose, onConfirm, title, desc, btnText } = props
   const { translate } = useHelper()
+  const { colors } = useTheme()
 
   const [isLoading, setIsLoading] = useState(false)
-
-  const { colors } = useTheme()
 
   const handleConfirm = async () => {
     setIsLoading(true)
@@ -33,14 +32,14 @@ export const DeleteConfirmModal = (props: Props) => {
   }
 
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose} title={title || translate('trash.delete_item')}>
-      <View style={{ alignItems: 'center' }}>
-        <Image resizeMode='contain' source={TRASH} style={{ height: 110, width: 100 }} />
+    <BottomModal isOpen={isOpen} onClose={onClose} title={title || translate("trash.delete_item")}>
+      <View style={{ alignItems: "center" }}>
+        <Image resizeMode="contain" source={TRASH} style={{ height: 110, width: 100 }} />
         <Text
           preset="label"
           size="base"
-          text={desc || translate('trash.delete_desc')}
-          style={{ textAlign: 'center' }}
+          text={desc || translate("trash.delete_desc")}
+          style={{ textAlign: "center" }}
         />
       </View>
 
@@ -51,13 +50,13 @@ export const DeleteConfirmModal = (props: Props) => {
         onPress={handleConfirm}
         teriataryBackground={colors.error}
         style={{
-          width: '100%',
+          width: "100%",
           marginTop: 30,
         }}
       >
         <Text
           preset="bold"
-          text={btnText || translate('common.delete')}
+          text={btnText || translate("common.delete")}
           style={{ color: colors.white }}
         />
       </Button>
