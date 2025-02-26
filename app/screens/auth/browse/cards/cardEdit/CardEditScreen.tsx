@@ -280,10 +280,7 @@ export const CardEditScreen: FC<AppStackScreenProps<"cards__edit">> = observer((
         {cardDetails.map((item, index) => (
           <View key={index} style={{ flex: 1, marginTop: index !== 0 ? 20 : 0 }}>
             {item.isBrandSelect ? (
-              <BrandSelectItem
-                brand={item.value}
-                setBrand={(val) => item.setter(val)}
-              />
+              <BrandSelectItem brand={item.value} setBrand={(val) => item.setter(val)} />
             ) : (
               <TextInput
                 isRequired={item.isRequired}

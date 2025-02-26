@@ -7,16 +7,17 @@ import { Text } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
-import { IS_IOS } from "app/config/constants"
-import { AutofillDataType, loadShared, saveShared } from "app/utils/keychain"
+import { useCoreService } from "app/services/coreService"
+import { iosKeyChain } from "app/utils/iosAutofillData"
 
 export const SetlanguageItem = observer(() => {
+  const { cryptoService } = useCoreService()
   const { colors } = useTheme()
   const { user } = useStores()
   const { translate } = useHelper()
   const [isLanguageSelect, setIsLanguageSelect] = useState(false)
 
-  const options: { label: string; value: "vi" | "en" | "zh" }[] = [
+  const options: { label: string; value: "vi" | "en" | "zh" | "ru" }[] = [
     {
       label: "Tiếng Việt",
       value: "vi",
@@ -29,23 +30,30 @@ export const SetlanguageItem = observer(() => {
       label: "繁體中文",
       value: "zh",
     },
+    {
+      label: "Русский",
+      value: "ru",
+    },
   ]
 
-  const updateAutofillLanguage = async (language: "vi" | "en" | "zh") => {
-    if (!IS_IOS) {
-      return
-    }
-    const credentials = await loadShared()
-    if (credentials && credentials.password) {
-      const sharedData: AutofillDataType = JSON.parse(credentials.password)
-      sharedData.language = language
-      await saveShared("autofill", JSON.stringify(sharedData))
-    }
+  const updateAutofillLanguage = async (language: string) => {
+    const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
+    await iosKeyChain.saveUserInfo({
+      email: user.email || "",
+      avatar: user.avatar || "",
+      hashPass: hashPasswordAutofill || "",
+      token: user.apiToken || "",
+      language,
+
+      faceIdEnabled: user.isBiometricUnlock,
+      isFree: user.isFreePlan,
+    })
   }
 
-  const setLanguage = (lang: "vi" | "en" | "zh") => {
+  const setLanguage = (lang: string) => {
     user.setLanguage(lang)
-    user.changeLanguage()
+
+    // user.changeLanguage()
     updateAutofillLanguage(lang)
     setIsLanguageSelect(false)
   }

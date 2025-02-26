@@ -1,23 +1,23 @@
-import orderBy from 'lodash/orderBy'
-import React, { useState, useEffect, useCallback } from 'react'
-import { View, FlatList, ActivityIndicator } from 'react-native'
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { CipherAppView } from 'app/static/types'
-import { CipherType } from 'core/enums'
-import { CipherView } from 'core/models/view'
+import orderBy from "lodash/orderBy"
+import React, { useState, useEffect, useCallback, useMemo } from "react"
+import { View, FlatList, ActivityIndicator } from "react-native"
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { AccountRole, CipherAppView } from "app/static/types"
+import { CipherType } from "core/enums"
+import { CipherView } from "core/models/view"
 
-import { CipherListItem } from './CipherListItem'
-import { Text } from '../../cores'
-import { PasswordAction } from 'app/screens/auth/browse/passwords/PasswordAction'
-import { CardAction } from 'app/screens/auth/browse/cards/CardAction'
-import { IdentityAction } from 'app/screens/auth/browse/identities/IdentityAction'
-import { NoteAction } from 'app/screens/auth/browse/notes/NoteAction'
-import { CryptoWalletAction } from 'app/screens/auth/browse/cryptoAsset/CryptoWalletAction'
-import { DeletedAction } from '../cipherAction/DeletedAction'
-import { observer } from 'mobx-react-lite'
+import { CipherListItem } from "./CipherListItem"
+import { Text } from "../../cores"
+import { PasswordAction } from "app/screens/auth/browse/passwords/PasswordAction"
+import { CardAction } from "app/screens/auth/browse/cards/CardAction"
+import { IdentityAction } from "app/screens/auth/browse/identities/IdentityAction"
+import { NoteAction } from "app/screens/auth/browse/notes/NoteAction"
+import { CryptoWalletAction } from "app/screens/auth/browse/cryptoAsset/CryptoWalletAction"
+import { DeletedAction } from "../cipherAction/DeletedAction"
+import { observer } from "mobx-react-lite"
 
 export interface CipherListProps {
   navigation: any
@@ -79,7 +79,7 @@ export const CipherList = observer((props: CipherListProps) => {
 
   const [ciphers, setCiphers] = useState<CipherAppView[]>([])
 
-  const [checkedItem, setCheckedItem] = useState('')
+  const [checkedItem, setCheckedItem] = useState("")
 
   const [isSearching, setIsSearching] = useState(true)
 
@@ -101,7 +101,7 @@ export const CipherList = observer((props: CipherListProps) => {
     // Filter
     const filters = []
     if (props.cipherType) {
-      if (typeof props.cipherType === 'number') {
+      if (typeof props.cipherType === "number") {
         filters.push((c: CipherView) => c.type === props.cipherType)
       } else {
         // @ts-ignore
@@ -130,7 +130,7 @@ export const CipherList = observer((props: CipherListProps) => {
         ...c,
         imgLogo: cipherInfo.img,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-          c.id
+          c.id,
         ),
         isDeleted: c.isDeleted,
       }
@@ -167,8 +167,8 @@ export const CipherList = observer((props: CipherListProps) => {
       res =
         orderBy(
           res,
-          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order]
+          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order],
         ) || []
     }
 
@@ -213,7 +213,6 @@ export const CipherList = observer((props: CipherListProps) => {
     }
   }
 
-
   // Toggle item selection
   const toggleItemSelection = (id: string) => {
     if (!isSelecting) {
@@ -222,7 +221,7 @@ export const CipherList = observer((props: CipherListProps) => {
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
       if (selected.length === MAX_CIPHER_SELECTION) {
-        notify('error', translate('error.cannot_select_more', { count: MAX_CIPHER_SELECTION }))
+        notify("error", translate("error.cannot_select_more", { count: MAX_CIPHER_SELECTION }))
         return
       }
       selected.push(id)
@@ -236,6 +235,7 @@ export const CipherList = observer((props: CipherListProps) => {
 
   const lastSync = cipherStore.lastSync
   const lastCacheUpdate = cipherStore.lastCacheUpdate
+  const notSynchedCiphers = cipherStore.notSynchedCiphers
 
   useEffect(() => {
     if (searchText) setIsSearching(true)
@@ -244,7 +244,7 @@ export const CipherList = observer((props: CipherListProps) => {
     }
 
     loadData()
-  }, [searchText, lastSync, lastCacheUpdate, sortList])
+  }, [searchText, lastSync, lastCacheUpdate, sortList, notSynchedCiphers])
 
   useEffect(() => {
     if (checkedItem) {
@@ -254,6 +254,20 @@ export const CipherList = observer((props: CipherListProps) => {
   }, [checkedItem, selectedItems])
 
   // ------------------------ RENDER ----------------------------
+
+  const data = useMemo(
+    () =>
+      isSelecting
+        ? ciphers.filter((c) => {
+            if (!c.organizationId) return true
+            const shareRole = getTeam(cipherStore.organizations, c.organizationId).type
+
+            const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
+            return !isShared
+          })
+        : ciphers,
+    [ciphers, cipherStore.organizations, isSelecting],
+  )
 
   const renderEmptyComponents = useCallback(() => {
     if (!isLoadingDone) return null
@@ -265,9 +279,9 @@ export const CipherList = observer((props: CipherListProps) => {
       <View style={{ paddingHorizontal: 20 }}>
         {searchText ? (
           <Text
-            text={translate('error.no_results_found') + ` '${searchText}'`}
+            text={translate("error.no_results_found") + ` '${searchText}'`}
             style={{
-              textAlign: 'center',
+              textAlign: "center",
             }}
           />
         ) : (
@@ -331,7 +345,7 @@ export const CipherList = observer((props: CipherListProps) => {
       />
 
       <FlatList
-        data={ciphers}
+        data={data}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         removeClippedSubviews

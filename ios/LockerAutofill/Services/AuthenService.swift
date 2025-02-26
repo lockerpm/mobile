@@ -34,8 +34,9 @@ struct AuthenService {
         }
       }
     } else {
+      notSupported()
       // can not use biometric for auth
-      noti(contex: view, title: i.translate("utils.disableBiometric"), message: i.translate("utils.unconfigBiometric"),  completion: notSupported)
+//      noti(contex: view, title: i.translate("utils.disableBiometric"), message: i.translate("utils.unconfigBiometric"),  completion: notSupported)
       
     }
   }

@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator<TabsParamList>()
 
 const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) => {
   const { colors } = useTheme()
-  const {  uiStore, cipherStore } = useStores()
+  const { uiStore, cipherStore } = useStores()
   const { translate } = useHelper()
   const insets = useSafeAreaInsets()
 
@@ -64,7 +64,7 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
     justifyContent: "center",
     alignItems: "center",
   }
-  return  (
+  return (
     <View
       style={{ paddingBottom: insets.bottom, backgroundColor: colors.background, paddingTop: 8 }}
     >
@@ -189,6 +189,7 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
                 style={{
                   fontSize: 12,
                   marginTop: 3,
+                  textAlign: "center",
                 }}
               />
             </TouchableOpacity>

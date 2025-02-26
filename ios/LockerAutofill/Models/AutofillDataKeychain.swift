@@ -8,61 +8,61 @@
 import Foundation
 import KeychainAccess
 import StoreKit
-
+import Sentry
 
 class AutofillDataModel {
-  private let KEYCHAIN_SERVICE: String = getStringInfo(key: "SHARED_KEYCHAIN_SERVICE")
-  private let KEYCHAIN_ACCESS_GROUP: String = getStringInfo(key: "SHARED_KEYCHAIN_ACCESS_GROUP")
-  private let KEYCHAIN_PROPS: String = "autofill"
   private var keychainData: String!
   private var user: User
-  private var decodeData: KeychainData = KeychainData(passwords: [], email: "", hashPass: "", avatar: "", faceIdEnabled: false, language: "", isDarkTheme: false, isLoggedInPw: false, token: "", isFree: true)
-  private var keychain = Keychain()
+  private var tempPasswords: [TempLoginItem] = []
   
   init(_ user: User){
-    keychain = Keychain(service: KEYCHAIN_SERVICE, accessGroup: KEYCHAIN_ACCESS_GROUP)
-    keychainData = try! keychain.get(KEYCHAIN_PROPS)
     self.user = user
-    if (keychainData != nil && keychainData != "{}") {
-      self.user.loginedLocker = true;
-      fetchAutofillData(text: keychainData)
+  }
+  
+  func getUserInfo() {
+    do {
+      let keychain = Keychain(service: infoKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
+      keychainData = try! keychain.get(infoKey.username)
+      if (keychainData != nil && !keychainData.isEmpty) {
+        self.user.loginedLocker = true;
+        let jsonData = Data(keychainData.utf8)
+        let decoder = JSONDecoder()
+        let decodeData = try decoder.decode(UserInfo.self, from: jsonData)
+        user.setInfo(decodeData)
+      }
+    } catch {
+      SentrySDK.capture(message: "Couldn't decode jsonData when getUserInfo: \(error)")
+    }
+  }
+  
+  func getPasswords() {
+    do {
+      let keychain = Keychain(service: passwordKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
+      keychainData = try! keychain.get(passwordKey.username)
+      if (keychainData != nil && !keychainData.isEmpty) {
+        let jsonData = Data(keychainData.utf8)
+        let decoder = JSONDecoder()
+        let decodeData = try decoder.decode([LoginItem].self, from: jsonData)
+        user.setPasswords(decodeData)
+      }
+    } catch {
+      SentrySDK.capture(message: "Couldn't decode jsonData when getPasswords: \(error)")
     }
   }
   
   func saveAutofillData(tempItem: TempLoginItem) {
     do {
-      if (self.decodeData.tempPasswords != nil) {
-        self.decodeData.tempPasswords?.append(tempItem)
-      } else {
-        self.decodeData.tempPasswords = Array([tempItem])
-      }
-
+      user.addTempPassword(tempItem)
+      self.tempPasswords.append(tempItem)
+      
       let jsonEncoder = JSONEncoder()
-      let jsonData = try jsonEncoder.encode(self.decodeData)
+      let jsonData = try jsonEncoder.encode(self.tempPasswords)
       let json = String(data: jsonData, encoding: String.Encoding.utf8)
-      try keychain.set( json!, key: KEYCHAIN_PROPS)
+      
+      let keychain = Keychain(service: tempPasswordKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
+      try keychain.set( json!, key: tempPasswordKey.username)
     }  catch {
-      fatalError("Couldn't encode jsonData to save\(error)")
-    }
-  }
-    
-  private func dictToJson(dictionary: [String: [[String: Any]]]) -> String{
-    if let theJSONData = try? JSONSerialization.data(
-      withJSONObject: dictionary,
-      options: []) {
-      return String(data: theJSONData, encoding: .ascii)!
-    }
-    return ""
-  }
-  
-  private func fetchAutofillData(text: String) {
-    let jsonData = Data(text.utf8)
-    do {
-      let decoder = JSONDecoder()
-      decodeData = try decoder.decode(KeychainData.self, from: jsonData)
-      user.syncLocker(decodeData)
-    } catch {
-      print("Couldn't parse jsonData as \(KeychainData.self):\n\(error)")
+      SentrySDK.capture(message: "Couldn't encode jsonData to saveAutofillData: \(error)")
     }
   }
 }

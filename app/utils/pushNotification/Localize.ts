@@ -1,14 +1,14 @@
-import { CipherType } from "core/enums";
-import en from 'app/i18n/en.json'
-import vi from 'app/i18n/vi.json'
-import zh from 'app/i18n/zh.json'
+import { CipherType } from "core/enums"
+import en from "app/i18n/en.json"
+import vi from "app/i18n/vi.json"
+import zh from "app/i18n/zh.json"
 
 export class Localize {
-  private language: 'vi' | 'en' | 'zh';
-  private translations =  { en, vi, zh }
+  private language: "vi" | "en" | "zh" | "ru"
+  private translations = { en, vi, zh }
 
-  public constructor(language: 'vi' | 'en' | 'zh') {
-    this.language = language;
+  public constructor(language: "vi" | "en" | "zh" | "ru") {
+    this.language = language
   }
 
   get tl() {
@@ -16,17 +16,15 @@ export class Localize {
   }
 
   private translate(t: string, options?: object) {
-    if (!options)
-      return t
-    let result = t;
-    Object.keys(options).forEach(key =>{
-      const re = new RegExp(`{{${key}}}`, "gi");
-      result = result.replace(re, options[key]);
+    if (!options) return t
+    let result = t
+    Object.keys(options).forEach((key) => {
+      const re = new RegExp(`{{${key}}}`, "gi")
+      result = result.replace(re, options[key])
     })
-  
+
     return result
   }
-  
 
   public shareTypeName(shareType: number): string {
     switch (shareType) {
@@ -46,22 +44,22 @@ export class Localize {
   }
 
   private eaTypeNam(isView: boolean): string {
-    return isView? this.tl.emergency_access.view : this.tl.emergency_access.takeover
+    return isView ? this.tl.emergency_access.view : this.tl.emergency_access.takeover
   }
 
   public handleNewShares(count: number): string {
     return this.translate(this.tl.push_noti.item_sharing.new_shares, {
-      count
-    });
+      count,
+    })
   }
 
   public handleNewShare(shareType: number): string {
     const typeName = this.shareTypeName(shareType)
     return this.translate(this.tl.push_noti.item_sharing.new_share, {
-      typeName
-    });
+      typeName,
+    })
   }
-  
+
   public confirmShare(): string {
     return this.tl.push_noti.item_sharing.confirm
   }
@@ -70,39 +68,39 @@ export class Localize {
     const typeName = this.shareTypeName(shareType)
     return this.translate(this.tl.push_noti.item_sharing.accept, {
       recipientName,
-      typeName
-    });
+      typeName,
+    })
   }
 
   public rejectShare(recipientName = "", shareType: number): string {
     const typeName = this.shareTypeName(shareType)
     return this.translate(this.tl.push_noti.item_sharing.reject, {
       recipientName,
-      typeName
-    });
+      typeName,
+    })
   }
 
   public inviteEA(user = ""): string {
     return this.translate(this.tl.push_noti.emergency_access.invite, {
       user,
-    });
+    })
   }
 
   public iviteResponseEA(user = "", isAccept: boolean): string {
-    return isAccept ?  
-      this.translate(this.tl.push_noti.emergency_access.accept_invite, {user}) :  
-      this.translate(this.tl.push_noti.emergency_access.reject_invite, {user})
+    return isAccept
+      ? this.translate(this.tl.push_noti.emergency_access.accept_invite, { user })
+      : this.translate(this.tl.push_noti.emergency_access.reject_invite, { user })
   }
 
   public requestEA(user = "", isView: boolean): string {
     const type = this.eaTypeNam(isView)
-    return this.translate(this.tl.push_noti.emergency_access.request, {user, type})
+    return this.translate(this.tl.push_noti.emergency_access.request, { user, type })
   }
 
   public requestResponseEA(user = "", isAccept: boolean, isView: boolean): string {
     const type = this.eaTypeNam(isView)
-    return isAccept ?  
-      this.translate(this.tl.push_noti.emergency_access.accept_request, {user, type}) :  
-      this.translate(this.tl.push_noti.emergency_access.reject_request, {user, type})
+    return isAccept
+      ? this.translate(this.tl.push_noti.emergency_access.accept_request, { user, type })
+      : this.translate(this.tl.push_noti.emergency_access.reject_request, { user, type })
   }
 }

@@ -1,15 +1,17 @@
 import { useStores } from "app/models"
 import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
-import { AutofillDataType, loadShared, saveShared } from "app/utils/keychain"
 import React from "react"
 import { View, Image } from "react-native"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { Icon, Text } from "app/components/cores"
+import { useCoreService } from "app/services/coreService"
+import { iosKeyChain } from "app/utils/iosAutofillData"
 
 const FACEID = require("assets/images/intro/faceid.png")
 
 export const SuggestEnableFaceID = ({ isShow, onClose }) => {
+  const { cryptoService } = useCoreService()
   const { notify } = useHelper()
   const { colors } = useTheme()
   const { user } = useStores()
@@ -24,20 +26,25 @@ export const SuggestEnableFaceID = ({ isShow, onClose }) => {
       return
     }
 
-    user.setBiometricUnlock(true)
-    await _updateAutofillFaceIdSetting(true)
+    await _updateAutofillFaceIdSetting()
     notify("success", translate("success.biometric_enabled"))
     user.setBiometricIntroShown(true)
     onClose()
   }
 
-  const _updateAutofillFaceIdSetting = async (enabled: boolean) => {
-    const credentials = await loadShared()
-    if (credentials && credentials.password) {
-      const sharedData: AutofillDataType = JSON.parse(credentials.password)
-      sharedData.faceIdEnabled = enabled
-      await saveShared("autofill", JSON.stringify(sharedData))
-    }
+  const _updateAutofillFaceIdSetting = async () => {
+    user.setBiometricUnlock(true)
+    const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
+    await iosKeyChain.saveUserInfo({
+      email: user.email || "",
+      avatar: user.avatar || "",
+      hashPass: hashPasswordAutofill || "",
+      token: user.apiToken || "",
+      language: user.language || "en",
+
+      faceIdEnabled: true,
+      isFree: user.isFreePlan,
+    })
   }
 
   const { translate } = useHelper()

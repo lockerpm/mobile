@@ -94,5 +94,7 @@ android/gradle.properties
 android/app/my-upload-key.keystore
 android/app/google-services.json
 
+ios/**/**.xcconfig
+
 /ios/Firebase/
 /vendor

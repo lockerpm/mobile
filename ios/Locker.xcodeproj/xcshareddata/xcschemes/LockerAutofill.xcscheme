@@ -57,9 +57,9 @@
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "2">
       <RemoteRunnable
-         runnableDebuggingMode = "1"
-         BundleIdentifier = "com.apple.mobilesafari"
-         RemotePath = "/Library/Developer/CoreSimulator/Volumes/iOS_21A328/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 17.0.simruntime/Contents/Resources/RuntimeRoot/Applications/MobileSafari.app">
+         runnableDebuggingMode = "0"
+         BundleIdentifier = "com.fpt.tpb.emobile"
+         RemotePath = "/var/containers/Bundle/Application/A84DE9B4-EE50-425A-A5F5-89FBE49F96D7/Hydrobank.app">
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference

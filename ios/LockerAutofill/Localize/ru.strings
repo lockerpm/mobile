@@ -1,0 +1,67 @@
+/* 
+  ru.strings
+  Locker
+
+  Created by Nguyen Thinh on 04/02/2025.
+  
+*/
+
+"c.cancel" = "Отменить";
+"c.copied" = "Скопировано";
+
+// utils
+"utils.touchID" = "Разблокировать с помощью Touch ID";
+"utils.disableBiometric" = "Биометрия недоступна";
+"utils.unconfigBiometric" = "Ваше устройство не настроено для биометрической аутентификации";
+"utils.disableFaceID" = "Face ID недоступен";
+
+// noti
+"noti.authen" = "Аутентификация";
+"noti.loginLocker" = "Перед использованием сервиса автозаполнения необходимо войти в Locker.";
+
+// CredentialsListScreen
+"list.title" = "Список паролей";
+"list.noDataSearch" = "Упс! Похоже, что сопоставление данных не найдено. ";
+"list.suggestSearch" = "Вы можете выполнить поиск по следующему тексту";
+
+//Lock screen
+"lock.mp" = "Мастер-пароль";
+"lock.title" = "Подтвердите Мастер-пароль";
+"lock.btn" = "Разблокировать";
+"lock.faceid" = "Разблокировка с помощью Face ID/Touch ID";
+
+
+// totp view
+"totp.desc" = "(Одноразовый пароль будет автоматически скопирован в буфер обмена, если вы войдете в систему с помощью этого элемента)";
+"totp.update" = "OTP обновится через ";
+
+// credential
+"item.username" = "Имя пользователя";
+"item.password" = "Пароль";
+
+// password generator
+"pw.length"  = "Длина: ";
+"pw.special" = "Используйте символы (@!$%*)";
+"pw.ambiguous" = "Избегайте двусмысленных символов.";
+"pw.useBtn" = "Использовать пароль";
+"pw.generator" = "Создайте надежный пароль";
+"pw.regenerate" = "Регенерировать";
+
+// create password
+"create.title" = "Создать пароль";
+"create.cancel" = "Отменить";
+"create.save" = "Сохранить и автозаполнить";
+"create.name" = "Имя (*)";
+"create.info" = "Данные пароля";
+"create.username" = "Имя пользователя";
+"create.password" = "Пароль";
+"create.web" = "Веб-сайт";
+"create.noti" = "Этот элемент будет создан и сохранен локально. Он будет синхронизирован с сервером Locker, когда вы разблокируете приложение Locker.";
+
+//hide email
+"relay.title" = "Скрыть свой адрес электронной почты";
+"relay.generate_new" = "Создать новый личный адрес электронной почты";
+"relay.existing_email" = "Использовать существующий личный адрес электронной почты";
+"relay.empty" = "Вы не создали ни одного личного адреса электронной почты";
+"relay.freeLimit" = "Ваш бесплатный тарифный план имеет ограниченное хранилище";
+"relay.upgrade" = "Вы находитесь на бесплатном плане. Обновитесь до Premium, чтобы добавить больше личных адресов электронной почты";
