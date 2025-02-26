@@ -9,6 +9,8 @@ import UIKit
 import LocalAuthentication
 import AuthenticationServices
 import SwiftUI
+import Sentry
+
 
 
 class CredentialProviderController: ASCredentialProviderViewController {
@@ -17,56 +19,70 @@ class CredentialProviderController: ASCredentialProviderViewController {
   private var serviceIdentifier: String = ""
   private var quickBar: Bool = false
   private var quickBarCredential: AutofillData!
-
+  
   @IBOutlet weak var logo: UIImageView!
   
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     self.user = User()
     self.dataModel = AutofillDataModel(self.user)
+    
+  }
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    SentrySDK.start { options in
+      options.dsn = getStringInfo(key: "DSN_SENTRY")
+      options.enableAppHangTracking = false  // Reduce resource usage
+      options.enableSwizzling = false  // Avoid conflicts in the extension
+      options.attachStacktrace = true
+      options.sendDefaultPii = true  // Capture user details if necessary
+    }
+  
+    self.dataModel.getUserInfo()
     i.locale = user.language
   }
-  
+
   override func viewDidAppear(_ animated: Bool) {
-    self.view.backgroundColor = UIColor(named: "background")
-//    self.overrideUserInterfaceStyle = .dark
-    if (self.loginLocker()) {
-      if (user.faceIdEnabled){
-        authenService.biometricAuthentication(
-          view: self,
-          onSuccess: {
-            if (self.quickBarCredential == nil) {
-              self.navigateCredentialsList()
-            } else {
-              self.loginSelected(data: self.quickBarCredential)
+      self.view.backgroundColor = UIColor(named: "background")
+      self.dataModel.getPasswords()
+    
+      if (self.loginLocker()) {
+        if (user.faceIdEnabled){
+          authenService.biometricAuthentication(
+            view: self,
+            onSuccess: {
+              if (self.quickBarCredential == nil) {
+                self.navigateCredentialsList()
+              } else {
+                self.loginSelected(data: self.quickBarCredential)
+              }
+            },
+            onFailed: self.navigateLockScreen,
+            notSupported: {
+//              self.user.faceIdEnabled = false
+              self.navigateLockScreen()
             }
-          },
-          onFailed: self.navigateLockScreen,
-          notSupported: {
-            self.user.faceIdEnabled = false
-            self.navigateLockScreen()
-          }
-        )
+          )
+        }
+        else {
+          self.navigateLockScreen()
+        }
       }
-      else {
-        self.navigateLockScreen()
-      }
-    }
   }
- 
+  
   /*
    Prepare your UI to list available credentials for the user to choose from. The items in
    'serviceIdentifiers' describe the service the user is logging in to, so your extension can
    prioritize the most relevant credentials in the list.
-  */
+   */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     if (self.loginLocker()) {
       if serviceIdentifiers.count > 0 {
         self.serviceIdentifier = serviceIdentifiers[0].identifier
         if serviceIdentifiers[0].type == .URL {
           user.setUri(uri: URL(string: serviceIdentifier)?.host ?? "", isDomain: false)
-        }
-        else {
+        } else {
           user.setUri(uri: serviceIdentifier, isDomain: true)
           self.serviceIdentifier = "https://" +  serviceIdentifier
         }
@@ -87,7 +103,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
       self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
       self.quickBar = true
       user.URI = URL(string: serviceIdentifier)?.host ?? serviceIdentifier
-
+      
       if let credential = user.getAutofillDataById(id: credentialIdentity.recordIdentifier!)  {
         self.quickBarCredential = credential
       } else {
@@ -120,7 +136,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
 }
 
 /**
-  Navigation
+ Navigation
  */
 extension CredentialProviderController {
   private func navigateCredentialsList() {
@@ -133,7 +149,7 @@ extension CredentialProviderController {
     
     self.navigateView(view: lockView)
   }
-
+  
   private func navigateView(view: some View) -> Void {
     let hostingController = UIHostingController(rootView: view)
     hostingController.modalPresentationStyle = .fullScreen

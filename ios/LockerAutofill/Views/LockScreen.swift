@@ -30,7 +30,7 @@ struct LockScreen: View {
           .padding(.bottom, 4)
           .foregroundColor(Color.title)
         
-        UserAvatar(imageUri: afd.user.avatar, email: afd.user.email ?? "")
+        UserAvatar(imageUri: afd.user.avatar , email: afd.user.email)
         
         MasterPasswordInput(masterPassword: $masterPassword)
         

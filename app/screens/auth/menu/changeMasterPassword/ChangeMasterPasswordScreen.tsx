@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useNavigation } from "@react-navigation/native"
+import { CommonActions, useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { useAuthentication, useCipherHelper, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
@@ -30,7 +30,7 @@ export const ChangeMasterPasswordScreen = observer(() => {
   // -------------- COMPUTED --------------
 
   const isError = !!newPass && !!confirm && newPass !== confirm
-  const isHintError = !isError && hint === newPass
+  const isHintError = !isError && !!newPass && hint === newPass
   const masterPasswordError = validateMasterPassword(newPass).error
   const isReady = !masterPasswordError && !isError && !!current && !!newPass && !!confirm
 
@@ -53,7 +53,12 @@ export const ChangeMasterPasswordScreen = observer(() => {
 
     const res = await changeMasterPassword(current, newPass, hint)
     if (res.kind === "ok") {
-      navigation.navigate("login")
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "login" }],
+        }),
+      )
     }
     setIsLoading(false)
   }
@@ -83,7 +88,7 @@ export const ChangeMasterPasswordScreen = observer(() => {
           }}
         />
       }
-    // backgroundColor={colors.block}
+      // backgroundColor={colors.block}
     >
       <View style->
         <TextInput
@@ -125,7 +130,7 @@ export const ChangeMasterPasswordScreen = observer(() => {
           onChangeText={setHint}
           value={hint}
           isError={isHintError}
-          helper={translate('create_master_pass.hint_error')}
+          helper={translate("create_master_pass.hint_error")}
           multiline
           numberOfLines={4}
           style={{ marginBottom: 30 }}

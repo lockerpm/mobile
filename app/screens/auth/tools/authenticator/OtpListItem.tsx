@@ -1,9 +1,8 @@
 import React, { memo, useState } from "react"
 import { TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
-import { Checkbox } from "react-native-ui-lib"
 import isEqual from "lodash/isEqual"
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer"
-import { Text, Icon } from "app/components/cores"
+import { Text, Icon, Toggle } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
 
@@ -107,9 +106,8 @@ export const OtpListItem = memo(
 
           {/* Couter/Select */}
           {isSelecting ? (
-            <Checkbox
+            <Toggle
               value={isSelected}
-              color={colors.primary}
               onValueChange={() => {
                 toggleItemSelection(item.id)
               }}
@@ -160,5 +158,5 @@ export const OtpListItem = memo(
       return val && isEqual(prev[key], next[key])
     }, true)
     return isPropsEqual
-  }
+  },
 )

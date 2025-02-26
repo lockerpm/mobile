@@ -13,9 +13,9 @@ import { CipherRequest } from "core/models/request"
 import { CipherType } from "core/enums"
 import { CipherView, LoginUriView, LoginView } from "core/models/view"
 import { Logger, delay, getUrlParameterByName } from "app/utils/utils"
-import { saveShared } from "app/utils/keychain"
 import { StorageKey, remove, removeSecure } from "app/utils/storage"
 import { setCookiesFromUrl } from "app/utils/analytics"
+import { iosKeyChain } from "app/utils/iosAutofillData"
 
 export function useAuthentication() {
   const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore, enterpriseStore } =
@@ -620,7 +620,7 @@ export function useAuthentication() {
     enterpriseStore.clearStore(dataOnly)
 
     // Reset shared data
-    await saveShared("autofill", "{}")
+    await iosKeyChain.resetAll()
 
     // Reset push noti data
     await remove(StorageKey.PUSH_NOTI_DATA)

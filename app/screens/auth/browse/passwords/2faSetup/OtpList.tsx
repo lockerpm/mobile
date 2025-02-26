@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { View } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import orderBy from 'lodash/orderBy'
-import sortBy from 'lodash/sortBy'
-import DraggableFlatList from 'react-native-draggable-flatlist'
-import { OtpListItem } from './OtpListItem'
-import { CipherView } from 'core/models/view'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { CipherType } from 'core/enums'
-import { Text } from 'app/components/cores'
+import React, { useState, useEffect } from "react"
+import { View } from "react-native"
+import { observer } from "mobx-react-lite"
+import orderBy from "lodash/orderBy"
+import sortBy from "lodash/sortBy"
+import DraggableFlatList from "react-native-draggable-flatlist"
+import { OtpListItem } from "./OtpListItem"
+import { CipherView } from "core/models/view"
+import { useCipherData, useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { CipherType } from "core/enums"
+import { Text } from "app/components/cores"
 
 interface Props {
   searchText: string
@@ -60,7 +60,7 @@ export const OtpList = observer((props: Props) => {
       const data = {
         ...c,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-          c.id
+          c.id,
         ),
       }
       return data
@@ -72,8 +72,8 @@ export const OtpList = observer((props: Props) => {
       res =
         orderBy(
           res,
-          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order]
+          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order],
         ) || []
     }
 
@@ -106,7 +106,7 @@ export const OtpList = observer((props: Props) => {
   return (
     <View style={{ flex: 1 }}>
       <DraggableFlatList
-        style={{ height: '100%' }}
+        style={{ height: "100%" }}
         contentContainerStyle={{
           paddingHorizontal: 16,
         }}
@@ -115,15 +115,17 @@ export const OtpList = observer((props: Props) => {
         onDragEnd={handleChangeOrder}
         renderItem={renderItem}
         ListEmptyComponent={
-          <View style={{ paddingHorizontal: 20 }}>
-            <Text
-              preset="label"
-              text={translate('error.no_results_found') + ` '${searchText}'`}
-              style={{
-                textAlign: 'center',
-              }}
-            />
-          </View>
+          searchText ? (
+            <View style={{ paddingHorizontal: 20 }}>
+              <Text
+                preset="label"
+                text={translate("error.no_results_found") + ` '${searchText}'`}
+                style={{
+                  textAlign: "center",
+                }}
+              />
+            </View>
+          ) : undefined
         }
       />
     </View>

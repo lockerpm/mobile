@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import React, { useEffect, useState } from "react"
+import { View } from "react-native"
 
-import { Text, Icon, Logo } from 'app/components/cores'
-import { AppNotification } from 'app/static/types'
-import { useTheme } from 'app/services/context'
-import { SearchBar } from 'app/components/utils'
+import { Text, Icon, Logo } from "app/components/cores"
+import { AppNotification } from "app/static/types"
+import { useTheme } from "app/services/context"
+import { SearchBar } from "app/components/utils"
 
-import { DeleteConfirmModal } from '../../browse/trash/DeleteConfirmModal'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { ShareModal } from 'app/components/ciphers'
+import { DeleteConfirmModal } from "../../browse/trash/DeleteConfirmModal"
+import { useDeleteCipher, useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { ShareModal } from "app/components/ciphers"
 
 interface Props {
   openSort: () => void
@@ -41,7 +41,7 @@ export const HomeHeader = (props: Props) => {
   } = props
   const { colors, isDark } = useTheme()
   const { notifyApiError, translate } = useHelper()
-  const { toTrashCiphers } = useCipherData()
+  const { toTrashCiphers } = useDeleteCipher()
   const { user, uiStore } = useStores()
 
   // ----------------------- PARAMS ------------------------
@@ -59,7 +59,7 @@ export const HomeHeader = (props: Props) => {
   const fetchInAppNotification = async () => {
     if (navigation.isFocused()) {
       const res = await user.fetchInAppNoti()
-      if (res.kind === 'ok') {
+      if (res.kind === "ok") {
         setNotifications(res.data)
       } else {
         notifyApiError(res)
@@ -79,8 +79,8 @@ export const HomeHeader = (props: Props) => {
   const renderHeaderRight = () => (
     <View
       style={{
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
       }}
     >
       {/** In app notification */}
@@ -88,7 +88,7 @@ export const HomeHeader = (props: Props) => {
         {notifications?.unread_count > 0 && (
           <View
             style={{
-              position: 'absolute',
+              position: "absolute",
               top: 10,
               right: 10,
               height: 6,
@@ -103,7 +103,7 @@ export const HomeHeader = (props: Props) => {
           size={24}
           color={colors.primaryText}
           onPress={() => {
-            navigation.navigate('app_list_noti', {
+            navigation.navigate("app_list_noti", {
               notifications,
             })
           }}
@@ -132,9 +132,9 @@ export const HomeHeader = (props: Props) => {
   const renderHeaderSelectRight = () => (
     <View
       style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
       }}
     >
       <Icon
@@ -176,7 +176,7 @@ export const HomeHeader = (props: Props) => {
 
   // Select left
   const renderHeaderSelectLeft = () => (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View style={{ flexDirection: "row", alignItems: "center" }}>
       <Icon
         icon="x"
         size={24}
@@ -187,11 +187,11 @@ export const HomeHeader = (props: Props) => {
         }}
       />
       <Text
-        preset='bold'
+        preset="bold"
         text={
           selectedItems.length
-            ? `${selectedItems.length} ${translate('common.selected')}`
-            : translate('common.select')
+            ? `${selectedItems.length} ${translate("common.selected")}`
+            : translate("common.select")
         }
         style={{
           marginLeft: 8,
@@ -206,15 +206,15 @@ export const HomeHeader = (props: Props) => {
     setIsLoading(true)
     const res = await toTrashCiphers(selectedItems)
     setIsLoading(false)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setIsSelecting(false)
       setSelectedItems([])
     }
   }
 
   const handleMoveFolder = () => {
-    navigation.navigate('folders__select', {
-      mode: 'move',
+    navigation.navigate("folders__select", {
+      mode: "move",
       initialId: null,
       cipherIds: selectedItems,
     })
@@ -233,9 +233,9 @@ export const HomeHeader = (props: Props) => {
       <View
         style={{
           height: 56,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
           paddingHorizontal: 20,
         }}
       >
@@ -243,7 +243,7 @@ export const HomeHeader = (props: Props) => {
           renderHeaderSelectLeft()
         ) : (
           <Logo
-            preset={isDark ? 'horizontal-light' : 'horizontal-dark'}
+            preset={isDark ? "horizontal-light" : "horizontal-dark"}
             style={{ height: 35, width: 115 }}
           />
         )}
@@ -261,8 +261,8 @@ export const HomeHeader = (props: Props) => {
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
-        title={translate('trash.to_trash')}
-        desc={translate('trash.to_trash_desc')}
+        title={translate("trash.to_trash")}
+        desc={translate("trash.to_trash_desc")}
         btnText="OK"
       />
 

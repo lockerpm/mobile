@@ -12,17 +12,18 @@ class User {
   // Data used by autofill service
   var faceIdEnabled: Bool = false
   var loginedLocker: Bool = false
-  var email: String!
-  var hashMassterPass: String!
-  var avatar: String!
-  var URI: String!
-  var autofillMobileApp: Bool = false
-  var credentials: [AutofillData] = []
-  var language: String = "vi"
-  var isDarkTheme: Bool = false
-  var isLoggedInPw: Bool = false
-  var token: String!
   var isFree: Bool = true
+  
+  var autofillMobileApp: Bool = false
+  var URI: String = ""
+  
+  var email: String = ""
+  var avatar: String = ""
+  var hashMassterPass: String = ""
+  var language: String = "en"
+  var token: String = ""
+
+  var credentials: [AutofillData] = []
   
   func getAutofillDataById(id: String?) -> AutofillData? {
     if id == nil {
@@ -31,7 +32,6 @@ class User {
     if let autofillData = self.credentials.first(where: {$0.id == id}){
       return autofillData
     }
-    
     return nil
   }
   
@@ -40,12 +40,20 @@ class User {
     self.autofillMobileApp = isDomain
   }
   
-  func setAutofillData(_ data: KeychainData){
-    self.credentials = []
-    
-    let passwords = data.passwords
-
-    
+  func addTempPassword(_ item: TempLoginItem) {
+    let currentCredentialsLength = credentials.count
+    let credential = AutofillData(fillID: currentCredentialsLength,
+                                  id: "tempPassword" + String(currentCredentialsLength),
+                                  name: item.name,
+                                  uri: item.uri ,
+                                  username: item.username,
+                                  password: item.password,
+                                  isOwner: true,
+                                  otp: "" )
+    self.credentials.append(credential)
+  }
+  
+  func setPasswords(_ passwords: [LoginItem]){
     if !passwords.isEmpty {
       for (index, item) in passwords.enumerated() {
         let credential = AutofillData(fillID: index,
@@ -59,29 +67,14 @@ class User {
         self.credentials.append(credential)
       }
     }
-    if let tempPasswords = data.tempPasswords {
-      for (index, item) in tempPasswords.enumerated() {
-        let credential = AutofillData(fillID: passwords.count + index,
-                                      id: "tempPassword" + String(index),
-                                      name: item.name,
-                                      uri: item.uri ,
-                                      username: item.username,
-                                      password: item.password,
-                                      isOwner: true,
-                                      otp: "" )
-        self.credentials.append(credential)
-      }
-    }
   }
   
-  func syncLocker(_ data: KeychainData) {
-    self.setAutofillData(data)
+  func setInfo(_ data: UserInfo) {
     self.faceIdEnabled = data.faceIdEnabled
     self.email = data.email
     self.language = data.language
     self.hashMassterPass = data.hashPass
     self.avatar = data.avatar
-    self.isLoggedInPw = data.isLoggedInPw
     self.token = data.token
     self.isFree = data.isFree
   }
