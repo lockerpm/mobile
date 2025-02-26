@@ -1217,52 +1217,6 @@ export function useCipherData() {
     minimalReloadCache({})
   }
 
-  // To trash
-  const toTrashCiphers = async (ids: string[]) => {
-    if (!ids.length) {
-      return { kind: "ok" }
-    }
-    try {
-      // Offline
-      if (uiStore.isOffline) {
-        await _offlineToTrashCiphers(ids)
-        notify(
-          "success",
-          `${translate("success.cipher_trashed")} ${translate("success.will_sync_when_online")}`,
-        )
-        return { kind: "ok" }
-      }
-
-      // Online
-      const res = await cipherStore.toTrashCiphers(ids)
-      if (res.kind === "ok") {
-        await _offlineToTrashCiphers(ids, true)
-        notify("success", translate("success.cipher_trashed"))
-      } else {
-        notifyApiError(res)
-      }
-      return res
-    } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
-      Logger.error("toTrashCiphers: " + e)
-      return { kind: "unknown" }
-    }
-  }
-
-  // Offline to trash
-  const _offlineToTrashCiphers = async (ids: string[], isAccepted?: boolean) => {
-    if (!ids.length) {
-      return
-    }
-    await cipherService.softDelete(ids)
-    ids.forEach((id) => {
-      if (!isAccepted) {
-        cipherStore.addNotSync(id)
-      }
-    })
-    await minimalReloadCache({})
-  }
-
   // Restore
   const restoreCiphers = async (ids: string[]) => {
     if (!ids.length) {
@@ -2303,6 +2257,7 @@ export function useCipherData() {
   }
 
   return {
+    minimalReloadCache,
     reloadCache,
     startSyncProcess,
     getSyncData,
@@ -2321,7 +2276,6 @@ export function useCipherData() {
     createCipher,
     updateCipher,
     deleteCiphers,
-    toTrashCiphers,
     restoreCiphers,
     importCiphers,
 

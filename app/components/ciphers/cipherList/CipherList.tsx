@@ -1,11 +1,11 @@
 import orderBy from "lodash/orderBy"
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, useMemo } from "react"
 import { View, FlatList, ActivityIndicator } from "react-native"
 import { useStores } from "app/models"
 import { useTheme } from "app/services/context"
 import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
-import { CipherAppView } from "app/static/types"
+import { AccountRole, CipherAppView } from "app/static/types"
 import { CipherType } from "core/enums"
 import { CipherView } from "core/models/view"
 
@@ -255,6 +255,20 @@ export const CipherList = observer((props: CipherListProps) => {
 
   // ------------------------ RENDER ----------------------------
 
+  const data = useMemo(
+    () =>
+      isSelecting
+        ? ciphers.filter((c) => {
+            if (!c.organizationId) return true
+            const shareRole = getTeam(cipherStore.organizations, c.organizationId).type
+
+            const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
+            return !isShared
+          })
+        : ciphers,
+    [ciphers, cipherStore.organizations, isSelecting],
+  )
+
   const renderEmptyComponents = useCallback(() => {
     if (!isLoadingDone) return null
 
@@ -331,7 +345,7 @@ export const CipherList = observer((props: CipherListProps) => {
       />
 
       <FlatList
-        data={ciphers}
+        data={data}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         removeClippedSubviews

@@ -7,7 +7,7 @@ import { useTheme } from "app/services/context"
 import { SearchBar } from "app/components/utils"
 
 import { DeleteConfirmModal } from "../../browse/trash/DeleteConfirmModal"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useDeleteCipher, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { ShareModal } from "app/components/ciphers"
 
@@ -41,7 +41,7 @@ export const HomeHeader = (props: Props) => {
   } = props
   const { colors, isDark } = useTheme()
   const { notifyApiError, translate } = useHelper()
-  const { toTrashCiphers } = useCipherData()
+  const { toTrashCiphers } = useDeleteCipher()
   const { user, uiStore } = useStores()
 
   // ----------------------- PARAMS ------------------------
@@ -162,13 +162,13 @@ export const HomeHeader = (props: Props) => {
             onPress={handleMoveFolder}
             containerStyle={{ padding: 8 }}
           />
-          {/* <Icon
+          <Icon
             icon="trash"
             size={24}
             color={colors.error}
             onPress={() => setShowConfirmModal(true)}
             containerStyle={{ padding: 8 }}
-          /> */}
+          />
         </>
       )}
     </View>

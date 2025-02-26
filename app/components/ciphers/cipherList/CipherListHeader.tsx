@@ -1,6 +1,6 @@
 import { useStores } from "app/models"
 import { useTheme } from "app/services/context"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData, useDeleteCipher, useHelper } from "app/services/hook"
 import React, { useState } from "react"
 import { View, BackHandler } from "react-native"
 import { Text, Icon, TabHeader } from "app/components/cores"
@@ -58,8 +58,9 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
   } = props
   const { colors } = useTheme()
   const { translate } = useHelper()
-  const { toTrashCiphers, restoreCiphers, deleteCiphers } = useCipherData()
+  const { restoreCiphers, deleteCiphers } = useCipherData()
   const { user, uiStore } = useStores()
+  const { toTrashCiphers } = useDeleteCipher()
 
   // ----------------------- PARAMS ------------------------
 
@@ -73,6 +74,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
 
   const handleDelete = async () => {
     setIsLoading(true)
+
     const res = await toTrashCiphers(selectedItems)
     setIsLoading(false)
     if (res.kind === "ok") {
@@ -183,13 +185,13 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
                 />
               )}
 
-              {/* <Icon
+              <Icon
                 icon="trash"
                 size={24}
                 color={colors.error}
                 onPress={() => setShowConfirmModal(true)}
                 containerStyle={{ padding: 8 }}
-              /> */}
+              />
             </>
           ) : (
             <>
@@ -211,13 +213,13 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
                 containerStyle={{ padding: 8 }}
               />
 
-              {/* <Icon
+              <Icon
                 icon="trash"
                 size={24}
                 color={colors.error}
                 onPress={() => setShowConfirmModal(true)}
                 containerStyle={{ padding: 8 }}
-              /> */}
+              />
             </>
           )}
         </>

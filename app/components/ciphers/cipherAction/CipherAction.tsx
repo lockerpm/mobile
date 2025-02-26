@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react"
 import { TouchableOpacity, View, Platform } from "react-native"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/DeleteConfirmModal"
 import { LeaveShareModal } from "./LeaveShareModal"
-import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
+import {
+  useCipherData,
+  useCipherHelper,
+  useDeleteCipher,
+  useFolder,
+  useHelper,
+} from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
@@ -44,7 +50,7 @@ export const CipherAction = (props: CipherActionProps) => {
   const { stopShareCipherForGroup, stopShareCipher } = useCipherData()
   const { shareFolderRemoveItem } = useFolder()
   const { getRouteName, getTeam, translate } = useHelper()
-  const { toTrashCiphers } = useCipherData()
+  const { toTrashCiphers } = useDeleteCipher()
   const { getCipherDescription, getCipherInfo } = useCipherHelper()
   const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = { ...cipherStore.cipherView }

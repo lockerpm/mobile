@@ -1,0 +1,119 @@
+import { CipherView } from "core/models/view"
+import { useCipherData } from "./useCipherData"
+import { useFolder } from "./useFolder"
+import { useStores } from "app/models"
+import { useCoreService } from "../coreService"
+import { useHelper } from "./useHelper"
+import { Logger } from "app/utils/utils"
+import { useCipherHelper } from "./useCipherHelper"
+
+export const useDeleteCipher = () => {
+  const { cipherStore, uiStore } = useStores()
+  const { cipherService } = useCoreService()
+  const {
+    getCiphersFromCache,
+    stopShareCipher,
+    stopShareCipherForGroup,
+    minimalReloadCache,
+    updateCipher,
+  } = useCipherData()
+  const { shareFolderRemoveItem } = useFolder()
+  const { notify, notifyApiError, translate } = useHelper()
+  const { getPasswordStrength } = useCipherHelper()
+
+  const removeItemFromFolder = async (selectedCipher: CipherView) => {
+    selectedCipher.folderId = null
+    const passwordStrength = getPasswordStrength(selectedCipher.login.password).score
+    await updateCipher(
+      selectedCipher.id,
+      selectedCipher,
+      passwordStrength,
+      selectedCipher.collectionIds,
+    )
+  }
+
+  // To trash
+  const toTrashCiphers = async (ids: string[]) => {
+    if (!ids.length) {
+      return { kind: "ok" }
+    }
+
+    // Search
+    const searchRes = await getCiphersFromCache({
+      filters: [(c: CipherView) => ids.includes(c.id)],
+      searchText: "",
+      deleted: false,
+    })
+    if (searchRes.length === 0) {
+      return {
+        kind: "ok",
+      }
+    }
+    searchRes.forEach(async (selectedCipher) => {
+      if (selectedCipher.folderId) {
+        await removeItemFromFolder(selectedCipher)
+      }
+      if (selectedCipher.organizationId) {
+        if (selectedCipher.collectionIds?.length > 0) {
+          await shareFolderRemoveItem(
+            selectedCipher.collectionIds[0],
+            selectedCipher.organizationId,
+            selectedCipher,
+          )
+        }
+        const share = cipherStore.myShares.find((s) => s.id === selectedCipher.organizationId)
+
+        if (share.members.length > 0) {
+          await stopShareCipher(selectedCipher, share.members[0].id)
+        }
+        if (share.groups.length) {
+          await stopShareCipherForGroup(selectedCipher, share.groups[0].id)
+        }
+      }
+    })
+
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineToTrashCiphers(ids)
+        notify(
+          "success",
+          `${translate("success.cipher_trashed")} ${translate("success.will_sync_when_online")}`,
+        )
+        return { kind: "ok" }
+      }
+
+      // Online
+      const res = await cipherStore.toTrashCiphers(ids)
+      if (res.kind === "ok") {
+        await _offlineToTrashCiphers(ids, true)
+        notify("success", translate("success.cipher_trashed"))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify("error", translate("error.something_went_wrong"))
+      Logger.error("toTrashCiphers: " + e)
+      return { kind: "unknown" }
+    }
+  }
+
+  // Offline to trash
+  const _offlineToTrashCiphers = async (ids: string[], isAccepted?: boolean) => {
+    if (!ids.length) {
+      return
+    }
+    await cipherService.softDelete(ids)
+    ids.forEach((id) => {
+      if (!isAccepted) {
+        cipherStore.addNotSync(id)
+      }
+    })
+    await minimalReloadCache({})
+  }
+
+  return {
+    toTrashCiphers,
+  }
+}

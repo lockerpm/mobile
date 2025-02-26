@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Text } from "app/components/cores"
-import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
+import { useCipherHelper, useDeleteCipher, useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
@@ -31,8 +31,7 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
   const [nextModal, setNextModal] = useState<"trashConfirm" | null>(null)
 
   const { colors } = useTheme()
-  const { stopShareCipherForGroup, stopShareCipher, toTrashCiphers } = useCipherData()
-  const { shareFolderRemoveItem } = useFolder()
+  const { toTrashCiphers } = useDeleteCipher()
   const { getTeam, copyToClipboard } = useHelper()
   const { getWebsiteLogo } = useCipherHelper()
   const { cipherStore, user, uiStore } = useStores()
@@ -62,24 +61,6 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
   // Methods
 
   const handleDelete = async () => {
-    if (selectedCipher.organizationId) {
-      if (selectedCipher.collectionIds?.length > 0) {
-        await shareFolderRemoveItem(
-          selectedCipher.collectionIds[0],
-          selectedCipher.organizationId,
-          selectedCipher,
-        )
-      }
-      const share = cipherStore.myShares.find((s) => s.id === selectedCipher.organizationId)
-
-      if (share.members.length > 0) {
-        await stopShareCipher(selectedCipher, share.members[0].id)
-      }
-      if (share.groups.length) {
-        await stopShareCipherForGroup(selectedCipher, share.groups[0].id)
-      }
-    }
-
     await toTrashCiphers([selectedCipher.id])
   }
 
