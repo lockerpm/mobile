@@ -101,7 +101,6 @@ export const PricePlan = (props: PricePlanProps) => {
         subtitle: translate("payment.price.per.monthly.subtitle"),
         onSale: translate("payment.price.per.monthly.sale"),
         pay_title: translate("payment.price.per.monthly.pay_title"),
-        discount: translate("payment.price.per.monthly.discount"),
       },
       yearly: {
         subId: SKU.PRE_YEAR,
@@ -109,7 +108,6 @@ export const PricePlan = (props: PricePlanProps) => {
         subtitle: translate("payment.price.per.yearly.subtitle"),
         onSale: translate("payment.price.per.yearly.sale"),
         pay_title: translate("payment.price.per.yearly.pay_title"),
-        discount: translate("payment.price.per.yearly.discount"),
       },
     },
     fam: {
@@ -119,7 +117,6 @@ export const PricePlan = (props: PricePlanProps) => {
         subtitle: translate("payment.price.fam.monthly.subtitle"),
         onSale: translate("payment.price.fam.monthly.sale"),
         pay_title: translate("payment.price.fam.monthly.pay_title"),
-        discount: translate("payment.price.fam.monthly.discount"),
       },
       yearly: {
         subId: SKU.FAM_YEAR,
@@ -127,7 +124,6 @@ export const PricePlan = (props: PricePlanProps) => {
         subtitle: translate("payment.price.fam.yearly.subtitle"),
         onSale: translate("payment.price.fam.yearly.sale"),
         pay_title: translate("payment.price.fam.yearly.pay_title"),
-        discount: translate("payment.price.fam.yearly.discount"),
       },
     },
   }

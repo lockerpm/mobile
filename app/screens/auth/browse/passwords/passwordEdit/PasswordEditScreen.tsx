@@ -206,8 +206,6 @@ export const PasswordEditScreen: FC<AppStackScreenProps<"passwords__edit">> = ob
     handleSave(payload, passwordStrength)
   }
 
-  console.log(folder)
-
   // Save password
   const handleSave = async (payload: CipherView, passwordStrength: number) => {
     setIsLoading(true)

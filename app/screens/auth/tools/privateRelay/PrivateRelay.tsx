@@ -14,7 +14,7 @@ import { ToolsStackScreenProps } from "app/navigators/navigators.types"
 import { ConfigItem } from "./ConfigItem"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 
-const FREE_PLAM_ALIAS_LIMIT = 5
+const FREE_PLAM_ALIAS_LIMIT = 1
 
 export const PrivateRelay: FC<ToolsStackScreenProps<"privateRelay">> = observer((props) => {
   const navigation = props.navigation
@@ -96,12 +96,12 @@ export const PrivateRelay: FC<ToolsStackScreenProps<"privateRelay">> = observer(
     : ` (${ramdomEmailAlias.length})`
   const data = [
     {
-      title: translate('private_relay.editable'),
+      title: translate("private_relay.editable"),
       data: [alias[0]],
       edited: true,
     },
     {
-      title: translate('private_relay.random', {number: suffixitle }),
+      title: isFreeAccount ? "" : translate("private_relay.random", { number: suffixitle }),
       data: ramdomEmailAlias,
       edited: false,
     },

@@ -300,7 +300,7 @@
     "label": "Địa chỉ email ẩn danh",
     "desc": {
       "one": "Tất cả email gửi đến địa chỉ ẩn danh sẽ được chuyển tiếp đến địa chỉ email gốc",
-      "two": "Bạn có thể tạo và dùng tối đa 05 email ẩn danh tại một thời điểm",
+      "two": "Bạn có thể tạo và dùng tối đa 1 email ẩn danh tại một thời điểm",
       "three": "Bạn có thể sửa đổi 01 email ẩn danh theo ý bạn"
     },
     "desc_premium": {
@@ -1012,34 +1012,30 @@
     "price": {
       "per": {
         "monthly": {
-          "title": "$4.99/tháng",
+          "title": "$2.99/tháng",
           "subtitle": "Thanh toán theo tháng",
           "sale": "",
-          "pay_title": "Nâng cấp ngay với $4.99",
-          "discount": "Nâng cấp ngay với $3.49 cho tháng đầu. Sau đó $4.99/tháng"
+          "pay_title": "Nâng cấp ngay với $2.99"
         },
         "yearly": {
           "title": "$15.49/năm",
           "subtitle": "$1.29/tháng - thanh toán theo năm",
-          "sale": "Tiết kiệm 75%",
-          "pay_title": "Nâng cấp ngay với $15.49",
-          "discount": "Nâng cấp ngay với $10.99 cho năm đầu. Sau đó $15.49/năm"
+          "sale": "Tiết kiệm 57%",
+          "pay_title": "Nâng cấp ngay với $15.49"
         }
       },
       "fam": {
         "yearly": {
           "title": "$71.99/năm/6 người",
           "subtitle": "Tận hưởng tất cả các tính năng của Locker, cho 6 người",
-          "sale": "Tiết kiệm 80%",
-          "pay_title": "Nâng cấp ngay với $71.99",
-          "discount": "Nâng cấp ngay với $50.99 cho năm đầu. Sau đó $71.99/năm"
+          "sale": "Tiết kiệm 41%",
+          "pay_title": "Nâng cấp ngay với $71.99"
         },
         "monthly": {
           "title": "$9.99/tháng/6 người",
           "subtitle": "Thanh toán theo tháng",
-          "sale": "Tiết kiệm 67%",
-          "pay_title": "Nâng cấp ngay với $9.99",
-          "discount": "Nâng cấp ngay $6.99 cho tháng đầu. Sau đó $9.99/tháng"
+          "sale": "",
+          "pay_title": "Nâng cấp ngay với $9.99"
         }
       }
     }
@@ -1054,7 +1050,9 @@
       "identity": "Định danh",
       "note": "Ghi chú",
       "crypto": "Crypto Backups",
-      "otp": "OTP"
+      "otp": "OTPs",
+      "items": "Mật khẩu, Ghi chú, Thẻ, Định danh, Ví crypto",
+      "private_email": "Email ẩn danh"
     },
     "feature": {
       "title": "Tính năng nâng cao",
