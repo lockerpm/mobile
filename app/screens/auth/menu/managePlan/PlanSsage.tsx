@@ -123,10 +123,10 @@ export const PlanUsage = () => {
           backgroundColor: colors.background,
         }}
       >
-        {isFreeAccount && <Text preset="bold" text={"Plan Usage"} />}
+        {isFreeAccount && <Text preset="bold" text={translate("manage_plan.usage.title")} />}
         {!isFreeAccount && (
           <View style={{ flex: 1, flexDirection: "row" }}>
-            <Text preset="default" text={"Plan Usage"} />
+            <Text preset="default" text={translate("manage_plan.usage.title")} />
             <View
               style={{
                 marginLeft: 8,

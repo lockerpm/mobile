@@ -1,11 +1,11 @@
-import React from 'react'
-import { Screen, Header } from 'app/components/cores'
-import { useNavigation } from '@react-navigation/native'
-import { useStores } from 'app/models'
-import { observer } from 'mobx-react-lite'
-import { PremiumFeature } from './PremiumFeature'
-import { PlanUsage } from './PlanSsage'
-import { useTheme } from 'app/services/context'
+import React from "react"
+import { Screen, Header } from "app/components/cores"
+import { useNavigation } from "@react-navigation/native"
+import { useStores } from "app/models"
+import { observer } from "mobx-react-lite"
+import { PremiumFeature } from "./PremiumFeature"
+import { PlanUsage } from "./PlanSsage"
+import { useTheme } from "app/services/context"
 
 export const ManagePlanScreen = observer(() => {
   const navigation = useNavigation()
@@ -17,14 +17,14 @@ export const ManagePlanScreen = observer(() => {
   return (
     <Screen
       preset="auto"
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={["bottom"]}
       header={
         <Header
           leftIcon="arrow-left"
           onLeftPress={() => {
             navigation.goBack()
           }}
-          title={user.plan?.name + ' Plan'}
+          title={user.plan?.name}
         />
       }
       backgroundColor={colors.block}

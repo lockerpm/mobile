@@ -1,8 +1,9 @@
 export enum CipherType {
-    Login = 1,
-    SecureNote = 2,
-    Card = 3,
-    Identity = 4,
-    TOTP = 5,
-    CryptoWallet = 7,
-    MasterPassword = 8}
+  Login = 1,
+  SecureNote = 2,
+  Card = 3,
+  Identity = 4,
+  TOTP = 5,
+  CryptoWallet = 7,
+  MasterPassword = 8,
+}
