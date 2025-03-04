@@ -93,7 +93,6 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<"folders__ciphers">> = 
         setSortOption("last_updated")
       }
     }, [searchText])
-
     // Render
     return (
       <Screen

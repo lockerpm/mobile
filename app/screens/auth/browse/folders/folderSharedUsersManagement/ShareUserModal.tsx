@@ -33,6 +33,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
   const [groups, setGroups] = useState<{ name: string; id: string }[]>([])
   type Suggest = GroupData | GroupMemberData
   const [suggestions, setSuggestions] = useState<Suggest[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   // ----------------------- METHODS -----------------------
 
@@ -53,6 +54,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
   }
 
   const addFolderMember = async (emails?: string[]) => {
+    setIsLoading(true)
     let res
     if (folder instanceof CollectionView) {
       res = await shareFolderAddMember(folder, emails, AccountRoleText.MEMBER, true, groups)
@@ -67,6 +69,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
         setEmails([])
       }
     }
+    setIsLoading(false)
   }
 
   const searchGroupOrMember = async (query: string) => {
@@ -129,7 +132,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
         RightActionComponent={
           <Button
             preset="teriatary"
-            disabled={emails?.length < 1 && groups.length < 1}
+            disabled={(emails?.length < 1 && groups.length < 1) || isLoading}
             onPress={() => {
               addFolderMember(emails)
             }}

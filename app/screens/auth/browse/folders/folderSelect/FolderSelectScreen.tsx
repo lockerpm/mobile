@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { FC, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View, SectionList } from "react-native"
 import { NewFolderModal } from "../NewFolderModal"
 import { useStores } from "app/models"
 import { useFolder, useHelper } from "app/services/hook"
@@ -20,6 +19,7 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
   const { shareFolderAddMultipleItems } = useFolder()
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFolder, setSelectedFolder] = useState(initialId)
   const isSelectedCollection = useRef(false)
@@ -70,20 +70,22 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
     navigation.goBack()
   }
 
-  const renderItem = (item, index, isCollection: boolean) => (
+  const renderItem = ({ item, index, section }) => (
     <TouchableOpacity
       key={index}
       onPress={() => {
         setSelectedFolder(item.id)
-        isSelectedCollection.current = isCollection
+        isSelectedCollection.current = section.isCollection
       }}
       style={{
         padding: 16,
         backgroundColor: colors.background,
+        borderBottomColor: colors.border,
+        borderBottomWidth: 1,
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <ImageIcon icon={!isCollection ? "folder" : "folder-share"} size={30} />
+        <ImageIcon icon={!section.isCollection ? "folder" : "folder-share"} size={30} />
         <View
           style={{
             flexDirection: "row",
@@ -108,10 +110,28 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
     </TouchableOpacity>
   )
 
+  const sections = [
+    {
+      title: "Folders",
+      data: folderStore.folders.filter((i) => i.id).sort((a, _) => (a.id === initialId ? -1 : 1)),
+      isCollection: false,
+    },
+    {
+      title: "Collections",
+      data:
+        collectionStore.collections?.filter((item) => {
+          const shareRole = getTeam(organizations, item.organizationId).type
+          return shareRole === AccountRole.OWNER
+        }) || [],
+      isCollection: true,
+    },
+  ]
+
   // Render
   return (
     <Screen
       backgroundColor={colors.block}
+      safeAreaEdges={["bottom"]}
       header={
         <Header
           title={
@@ -124,6 +144,9 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
           onRightPress={handleMove}
         />
       }
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
       <NewFolderModal isOpen={showNewFolderModal} onClose={() => setShowNewFolderModal(false)} />
 
@@ -160,22 +183,17 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
         </View>
       </TouchableOpacity>
 
-      {/* Other folders */}
-      {folderStore.folders.filter((i) => i.id).map((item, index) => renderItem(item, index, false))}
-
-      <View
-        style={{
-          backgroundColor: colors.background,
-          marginVertical: 16,
-        }}
-      >
-        {collectionStore.collections
-          ?.filter((item) => {
-            const shareRole = getTeam(organizations, item.organizationId).type
-            return shareRole === AccountRole.OWNER
-          })
-          .map((item, index) => renderItem(item, index, true))}
-      </View>
+      <SectionList
+        stickySectionHeadersEnabled={false}
+        sections={sections}
+        keyExtractor={(item, index) => item.id + index}
+        renderItem={renderItem}
+        renderSectionHeader={({ section: { title, data } }) => {return data.length > 0 && (
+          <View style={{ backgroundColor: colors.background, marginTop: 16 }}>
+            <Text text={title} style={{ padding: 16, fontWeight: "bold" }} />
+          </View>
+        )}}
+      />
     </Screen>
   )
 })

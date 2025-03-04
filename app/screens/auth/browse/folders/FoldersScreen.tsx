@@ -108,7 +108,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
   return (
     <Screen
-      safeAreaEdges={['bottom', 'top']}
+      safeAreaEdges={[ 'top']}
       header={
         <CipherListHeader
           header={translate('common.folders')}
