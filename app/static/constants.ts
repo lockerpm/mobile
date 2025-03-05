@@ -21,9 +21,3 @@ export const FREE_PLAN_LIMIT = {
   OTP: 10,
   PRIVATE_EMAIL: 10,
 }
-
-export const GEN = {
-  MALE: "t",
-  FEMALE: "f",
-  OTHER: "o",
-}

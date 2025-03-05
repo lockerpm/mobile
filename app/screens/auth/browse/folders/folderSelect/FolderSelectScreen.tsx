@@ -5,7 +5,7 @@ import { NewFolderModal } from "../NewFolderModal"
 import { useStores } from "app/models"
 import { useFolder, useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
-import { Header, Icon, ImageIcon, Screen, Text } from "app/components/cores"
+import { Button, Header, Icon, ImageIcon, Screen, Text } from "app/components/cores"
 import { AccountRole } from "app/static/types"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 
@@ -19,7 +19,6 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
   const { shareFolderAddMultipleItems } = useFolder()
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFolder, setSelectedFolder] = useState(initialId)
   const isSelectedCollection = useRef(false)
@@ -28,15 +27,16 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
 
   // Methods
   const handleMove = async () => {
+    setIsLoading(true)
     if (isSelectedCollection.current) {
       await handleMoveToCollection()
     } else {
       await handleMoveFolder()
     }
+    setIsLoading(false)
   }
   const handleMoveFolder = async () => {
     if (mode === "move") {
-      setIsLoading(true)
       const res = await cipherStore.moveToFolder({
         ids: cipherIds,
         folderId: selectedFolder,
@@ -46,7 +46,6 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
       } else {
         notifyApiError(res)
       }
-      setIsLoading(false)
     } else {
       cipherStore.setSelectedFolder(selectedFolder)
     }
@@ -55,7 +54,6 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
 
   const handleMoveToCollection = async () => {
     if (mode === "move") {
-      setIsLoading(true)
       const res = await shareFolderAddMultipleItems(
         collectionStore.collections.find((c) => c.id === selectedFolder),
         cipherIds,
@@ -63,7 +61,6 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
       if (res.kind === "ok") {
         notify("success", translate("folder.item_moved"))
       }
-      setIsLoading(false)
     } else {
       cipherStore.setSelectedCollection(selectedFolder)
     }
@@ -112,12 +109,12 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
 
   const sections = [
     {
-      title: "Folders",
+      title: translate("common.folder"),
       data: folderStore.folders.filter((i) => i.id).sort((a, _) => (a.id === initialId ? -1 : 1)),
       isCollection: false,
     },
     {
-      title: "Collections",
+      title: translate("shares.shared_folder"),
       data:
         collectionStore.collections?.filter((item) => {
           const shareRole = getTeam(organizations, item.organizationId).type
@@ -139,9 +136,15 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
           }
           onLeftPress={() => navigation.goBack()}
           leftText={translate("common.cancel")}
-          rightText={translate("common.save")}
-          rightTextColor={colors.primary}
-          onRightPress={handleMove}
+          RightActionComponent={
+            <Button
+              loading={isLoading}
+              preset="teriatary"
+              disabled={isLoading}
+              onPress={handleMove}
+              text={translate("common.save")}
+            />
+          }
         />
       }
       contentContainerStyle={{
@@ -188,11 +191,15 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
         sections={sections}
         keyExtractor={(item, index) => item.id + index}
         renderItem={renderItem}
-        renderSectionHeader={({ section: { title, data } }) => {return data.length > 0 && (
-          <View style={{ backgroundColor: colors.background, marginTop: 16 }}>
-            <Text text={title} style={{ padding: 16, fontWeight: "bold" }} />
-          </View>
-        )}}
+        renderSectionHeader={({ section: { title, data } }) => {
+          return (
+            data.length > 0 && (
+              <View style={{ backgroundColor: colors.background, marginTop: 16 }}>
+                <Text text={title} style={{ padding: 16, fontWeight: "bold" }} />
+              </View>
+            )
+          )
+        }}
       />
     </Screen>
   )

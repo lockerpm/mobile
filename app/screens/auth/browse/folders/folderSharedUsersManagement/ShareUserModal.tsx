@@ -131,15 +131,13 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
         }}
         RightActionComponent={
           <Button
+            loading={isLoading}
             preset="teriatary"
             disabled={(emails?.length < 1 && groups.length < 1) || isLoading}
             onPress={() => {
               addFolderMember(emails)
             }}
             text={translate("common.done")}
-            textStyle={{
-              color: emails?.length > 0 || groups.length > 0 ? colors.primary : colors.disable,
-            }}
           />
         }
       />

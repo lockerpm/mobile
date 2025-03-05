@@ -729,8 +729,8 @@
         "shared": "Chia sẻ thư mục thành công",
         "add_member": "Thêm thành viên thành công",
         "remove_member": "Xoá thành viên thành công",
-        "stop": "Stop share success",
-        "add_items": "Add items success"
+        "stop": "Dừng chia sẻ thành công",
+        "add_items": "Thêm mục vào thư mục thành công"
       }
     },
     "status": {
