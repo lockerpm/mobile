@@ -1,4 +1,4 @@
-import { paletteDark, paletteLight } from './palette'
+import { paletteDark, paletteLight } from "./palette"
 
 export const colorsLight = {
   /**
@@ -8,15 +8,15 @@ export const colorsLight = {
    */
   palette: paletteLight,
 
-  white: '#ffffff',
-  black: '#000000',
+  white: "#ffffff",
+  black: "#000000",
   /**
    * A helper for making something see-thru.
    */
-  transparent: 'rgba(0, 0, 0, 0)',
-  transparentModal: 'rgba(0, 0, 0, 0.2)',
+  transparent: "rgba(0, 0, 0, 0)",
+  transparentModal: "rgba(0, 0, 0, 0.2)",
 
-  toastBackground: 'rgba(22, 22, 22, 0.9)',
+  toastBackground: "rgba(22, 22, 22, 0.9)",
   /**
    * Brand Color
    */
@@ -62,15 +62,15 @@ export const colorsDark = {
    */
   palette: paletteDark,
 
-  white: '#ffffff',
-  black: '#000000',
+  white: "#ffffff",
+  black: "#000000",
   /**
    * A helper for making something see-thru.
    */
-  transparent: 'rgba(0, 0, 0, 0)',
-  transparentModal: 'rgba(255, 255, 255, 0.4)',
+  transparent: "rgba(0, 0, 0, 0)",
+  transparentModal: "rgba(255, 255, 255, 0.4)",
 
-  toastBackground: 'rgba(100, 100, 100, 1)',
+  toastBackground: "rgba(100, 100, 100, 1)",
   /**
    * Brand Color
    */
@@ -104,23 +104,25 @@ export const colorsDark = {
   disable: paletteDark.neutral5,
   border: paletteDark.neutral7,
   divider: paletteDark.neutral8,
-  background: '#000000',
+  background: "#000000",
   block: paletteDark.neutral9,
 }
 
 /**  @see https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4 */
 const transparencyForHex = {
-  80: 'CC',
-  75: 'BF',
-  50: '80',
-  40: '66',
-  20: '33',
-  10: '1A',
+  80: "CC",
+  75: "BF",
+  50: "80",
+  40: "66",
+  20: "33",
+  10: "1A",
 }
 
 export const colorTransparency = (
   hexColor: string,
-  transparency: keyof typeof transparencyForHex
+  transparency: keyof typeof transparencyForHex,
 ) => {
   return hexColor + transparencyForHex[transparency]
 }
+
+export type ThemedColors = typeof colorsLight | typeof colorsDark

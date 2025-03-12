@@ -2,7 +2,7 @@ import { useStores } from "app/models"
 import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import React from "react"
-import { View, Image } from "react-native"
+import { View, Image, StyleProp, ViewStyle, StyleSheet } from "react-native"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { Icon, Text } from "app/components/cores"
 import { useCoreService } from "app/services/coreService"
@@ -10,7 +10,12 @@ import { iosKeyChain } from "app/utils/iosAutofillData"
 
 const FACEID = require("assets/images/intro/faceid.png")
 
-export const SuggestEnableFaceID = ({ isShow, onClose }) => {
+interface Props {
+  onClose: () => void
+  style: StyleProp<ViewStyle>
+}
+
+export const SuggestEnableFaceID = ({ onClose, style }: Props) => {
   const { cryptoService } = useCoreService()
   const { notify } = useHelper()
   const { colors } = useTheme()
@@ -49,54 +54,42 @@ export const SuggestEnableFaceID = ({ isShow, onClose }) => {
 
   const { translate } = useHelper()
   return (
-    isShow && (
-      <View
-        style={{
-          borderWidth: 1,
-          marginVertical: 12,
-          marginHorizontal: 16,
-          borderColor: colors.palette.orange8,
-          backgroundColor: colors.palette.orange3,
-          flexDirection: "row",
-          paddingVertical: 16,
-          paddingHorizontal: 20,
-          borderRadius: 12,
-        }}
-      >
-        <Image
-          source={FACEID}
-          resizeMode="contain"
-          style={{ height: 32, width: 36, marginRight: 16 }}
+    <View style={style}>
+      <Image source={FACEID} resizeMode="contain" style={styles.image} />
+      <View style={styles.content}>
+        <Text tx={"biometric_intro.suggest"} />
+        <Text
+          preset="bold"
+          tx={"common.enable"}
+          color={colors.link}
+          style={styles.label}
+          onPress={handleUseBiometric}
         />
-
-        <View style={{ marginRight: 80 }}>
-          <Text text={translate("biometric_intro.suggest")} />
-          <Text
-            preset="bold"
-            text={translate("common.enable")}
-            color={colors.link}
-            style={{
-              marginTop: 10,
-            }}
-            onPress={handleUseBiometric}
-          />
-        </View>
-        <View
-          style={{
-            position: "absolute",
-            top: 20,
-            right: 20,
-          }}
-        >
-          <Icon
-            icon="x"
-            size={20}
-            onPress={() => {
-              onClose(true)
-            }}
-          />
-        </View>
       </View>
-    )
+
+      <Icon icon="x" size={20} onPress={onClose} containerStyle={styles.close} />
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  close: {
+    alignItems: "center",
+    height: 32,
+    justifyContent: "flex-start",
+    width: 32,
+  },
+  content: {
+    flexGrow: 1,
+    flexShrink: 1,
+    marginHorizontal: 8,
+  },
+  image: {
+    height: 32,
+    marginLeft: 4,
+    width: 32,
+  },
+  label: {
+    marginTop: 10,
+  },
+})
