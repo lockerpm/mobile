@@ -4,7 +4,7 @@ import { useHelper } from "app/services/hook"
 import React from "react"
 import { View, Image, StyleProp, ViewStyle, StyleSheet } from "react-native"
 import ReactNativeBiometrics from "react-native-biometrics"
-import { Icon, Text } from "app/components/cores"
+import { Icon, Text, TouchableText } from "app/components/cores"
 import { useCoreService } from "app/services/coreService"
 import { iosKeyChain } from "app/utils/iosAutofillData"
 
@@ -58,7 +58,7 @@ export const SuggestEnableFaceID = ({ onClose, style }: Props) => {
       <Image source={FACEID} resizeMode="contain" style={styles.image} />
       <View style={styles.content}>
         <Text tx={"biometric_intro.suggest"} />
-        <Text
+        <TouchableText
           preset="bold"
           tx={"common.enable"}
           color={colors.link}

@@ -2,7 +2,7 @@ import React from "react"
 import { StyleProp, View, ViewStyle, StyleSheet } from "react-native"
 import { useTheme } from "app/services/context"
 import { useNavigation } from "@react-navigation/native"
-import { Icon, Text } from "app/components/cores"
+import { Icon, Text, TouchableText } from "app/components/cores"
 
 interface Props {
   onClose: () => void
@@ -17,7 +17,7 @@ export const SuggestEnableAutofill = ({ onClose, style }: Props) => {
       <Icon icon="keyboard" size={32} />
       <View style={styles.content}>
         <Text tx={"all_items.enable_autofill.content"} />
-        <Text
+        <TouchableText
           preset="bold"
           tx={"all_items.enable_autofill.btn"}
           color={colors.link}

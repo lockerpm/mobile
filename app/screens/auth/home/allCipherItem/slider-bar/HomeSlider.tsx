@@ -1,11 +1,14 @@
-import React, { useEffect, useRef, useState } from "react"
-import { View, FlatList, Dimensions, ViewStyle, AppState } from "react-native"
+import React, { useCallback, useEffect, useRef, useState } from "react"
+import { View, Dimensions, ViewStyle, AppState } from "react-native"
 import { SuggestEnableFaceID } from "./SuggestEnableFaceID"
-import { FirstImport } from "./FirstImport"
 import { SuggestEnableAutofill } from "./SuggestEnableAutofill"
 import { ThemedColors } from "app/theme"
 import { useTheme } from "app/services/context"
-import Animated, { LinearTransition } from "react-native-reanimated"
+import Animated, {
+  LinearTransition,
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from "react-native-reanimated"
 import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
@@ -15,7 +18,6 @@ import { AutofillServiceEnabled } from "app/utils/autofillHelper"
 enum SliderEnum {
   SuggestEnableFaceID = "SuggestEnableFaceID",
   SuggestEnableAutofill = "SuggestEnableAutofill",
-  FirstImport = "FirstImport",
 }
 
 type SliderDataType = {
@@ -24,7 +26,6 @@ type SliderDataType = {
   isShow: boolean
   onClose: () => void
 }
-
 const WIDTH = Dimensions.get("window").width
 
 export const HomeSlider = () => {
@@ -35,72 +36,67 @@ export const HomeSlider = () => {
 
   const styles = themedStyle(colors)
   // -------------- PARAMS ------------------
+
+  const scrollRef = useRef(null)
   const appState = useRef(AppState.currentState)
   const [appStateVisible, setAppStateVisible] = useState(appState.current)
 
-  const [isAutofillEnabled, setIsAutofillEnabled] = useState(true)
-  const [isShowAutofillSuggest, setShowAutofillSuggest] = useState(true)
-  const [isShowFaceIDSuggest, setShowFaceIDSuggest] = useState(false)
-
-  const [data, setData] = useState<SliderDataType[]>([
-    {
-      id: "SuggestEnableFaceID",
-      type: SliderEnum.SuggestEnableFaceID,
-      isShow: true,
-      onClose: () => {
-        setData((prev) =>
-          prev.map((item) =>
-            item.id === "SuggestEnableFaceID" ? { ...item, isShow: false } : item,
-          ),
-        )
-      },
-    },
-    {
-      id: "SuggestEnableAutofill",
-      type: SliderEnum.SuggestEnableAutofill,
-      isShow: true,
-      onClose: () => {
-        setData((prev) =>
-          prev.map((item) =>
-            item.id === "SuggestEnableAutofill" ? { ...item, isShow: false } : item,
-          ),
-        )
-      },
-    },
-    {
-      id: "FirstImport",
-      type: SliderEnum.FirstImport,
-      isShow: true,
-      onClose: () => {
-        setData((prev) =>
-          prev.map((item) => (item.id === "FirstImport" ? { ...item, isShow: false } : item)),
-        )
-      },
-    },
-  ])
+  const [data, setData] = useState<SliderDataType[]>([])
 
   const isShowData = data.filter((item) => item.isShow)
 
   // -------------- PARAMS ------------------
+
+  const closeFaceid = useCallback(() => {
+    setData((prev) =>
+      prev.map((item) => (item.id === "SuggestEnableFaceID" ? { ...item, isShow: false } : item)),
+    )
+  }, [])
+
+  const closeAutofill = useCallback(() => {
+    setData((prev) =>
+      prev.map((item) => (item.id === "SuggestEnableAutofill" ? { ...item, isShow: false } : item)),
+    )
+  }, [])
+
+  const animIndex = useSharedValue(0)
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    animIndex.value = event.contentOffset.x / WIDTH
+  }, [])
+
   const handleShowFaceIDSuggest = async () => {
     if (!user.isBiometricUnlock) {
       const available = await isBiometricAvailable()
-      if (available) setShowFaceIDSuggest(true)
+      if (available) {
+        setData((prev) => [
+          ...prev,
+          {
+            id: "SuggestEnableFaceID",
+            type: SliderEnum.SuggestEnableFaceID,
+            isShow: true,
+            onClose: closeFaceid,
+          },
+        ])
+      }
     }
   }
 
   const syncAutofillUserInfo = async () => {
-    const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
-    await iosKeyChain.saveUserInfo({
-      email: user.email || "",
-      avatar: user.avatar || "",
-      hashPass: hashPasswordAutofill || "",
-      token: user.apiToken || "",
-      language: user.language || "en",
+    if (!user.saveIosAutofillInfor) {
+      const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
+      await iosKeyChain.saveUserInfo({
+        email: user.email || "",
+        avatar: user.avatar || "",
+        hashPass: hashPasswordAutofill || "",
+        token: user.apiToken || "",
+        language: user.language || "en",
 
-      faceIdEnabled: user.isBiometricUnlock,
-      isFree: user.isFreePlan,
-    })
+        faceIdEnabled: user.isBiometricUnlock,
+        isFree: user.isFreePlan,
+      })
+      user.setSaveIosAutofillInfor(true)
+    }
   }
 
   useEffect(() => {
@@ -114,35 +110,52 @@ export const HomeSlider = () => {
 
   useEffect(() => {
     AutofillServiceEnabled((isActived, androidNotSupport) => {
-      setIsAutofillEnabled(isActived)
-      if (androidNotSupport) {
-        setShowAutofillSuggest(false)
+      if (!androidNotSupport && !isActived) {
+        setData((prev) => [
+          ...prev.filter((item) => item.id !== "SuggestEnableAutofill"),
+          {
+            id: "SuggestEnableAutofill",
+            type: SliderEnum.SuggestEnableAutofill,
+            isShow: true,
+            onClose: closeAutofill,
+          },
+        ])
+      }
+      if (isActived) {
+        closeAutofill()
       }
     })
   }, [appStateVisible])
+  console.log("data", data.length)
 
   return (
     <View>
       <Animated.FlatList
+        ref={scrollRef}
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled
+        snapToInterval={WIDTH}
         data={isShowData}
+        bounces={false}
+        alwaysBounceHorizontal={false}
+        decelerationRate="fast"
+        scrollEventThrottle={16}
         keyExtractor={(item) => item.id}
         itemLayoutAnimation={LinearTransition}
+        onScroll={scrollHandler}
         renderItem={({ item }) => {
           switch (item.type) {
             case SliderEnum.SuggestEnableFaceID:
               return <SuggestEnableFaceID style={styles.itemContainer} onClose={item.onClose} />
             case SliderEnum.SuggestEnableAutofill:
               return <SuggestEnableAutofill style={styles.itemContainer} onClose={item.onClose} />
-            case SliderEnum.FirstImport:
-              return <FirstImport style={styles.itemContainer} onClose={item.onClose} />
             default:
               return null
           }
         }}
       />
+      {/* <AnimatedFooter animIndex={animIndex} length={data.length} /> */}
     </View>
   )
 }
