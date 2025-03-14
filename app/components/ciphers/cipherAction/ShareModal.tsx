@@ -33,6 +33,7 @@ export const ShareModal = (props: Props) => {
   const selectedCipher: CipherView = cipherStore.cipherView
 
   // --------------- PARAMS ----------------
+  const [isSharing, setIsSharing] = useState(false)
   const [page, setPage] = useState<0 | 1>(0)
   const [email, setEmail] = useState("")
   const [emails, setEmails] = useState<string[]>([])
@@ -108,6 +109,7 @@ export const ShareModal = (props: Props) => {
 
   // Share single/multiple
   const handleShare = async () => {
+    setIsSharing(true)
     let role = AccountRoleText.MEMBER
     let autofillOnly = false
     switch (shareType) {
@@ -130,6 +132,7 @@ export const ShareModal = (props: Props) => {
       onClose()
       reset()
     }
+    setIsSharing(false)
   }
 
   const searchGroupOrMember = async (query: string) => {
@@ -192,6 +195,8 @@ export const ShareModal = (props: Props) => {
   }, [page, reload])
 
   // --------------- RENDER ----------------
+
+  const disabled = (emails?.length < 1 && groups.length < 1) || isSharing
 
   const renderAddUser = () => (
     <View>
@@ -466,14 +471,13 @@ export const ShareModal = (props: Props) => {
         RightActionComponent={
           page === 0 && (
             <Button
+              loading={isSharing}
               preset="teriatary"
-              disabled={emails?.length < 1 && groups.length < 1}
-              onPress={() => {
-                handleShare()
-              }}
+              disabled={disabled}
+              onPress={handleShare}
               text={translate("common.done")}
               textStyle={{
-                color: emails?.length > 0 || groups.length > 0 ? colors.primary : colors.disable,
+                color: !disabled ? colors.primary : colors.disable,
               }}
             />
           )

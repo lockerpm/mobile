@@ -303,6 +303,11 @@ export const CipherList = observer((props: CipherListProps) => {
       />
     )
   }
+
+  const masterPassword =
+    data.length === 1 && data[0].type === CipherType.MasterPassword ? data[0] : null
+  const data1 = masterPassword ? [] : data
+
   return (
     <View style={{ flex: 1 }}>
       <PasswordAction
@@ -344,8 +349,18 @@ export const CipherList = observer((props: CipherListProps) => {
         navigation={navigation}
       />
 
+      {masterPassword && (
+        <CipherListItem
+          item={masterPassword}
+          isSelecting={isSelecting}
+          toggleItemSelection={setCheckedItem}
+          openActionMenu={openActionMenu}
+          isSelected={selectedItems.includes(masterPassword.id)}
+          isShared={isShared(masterPassword.organizationId)}
+        />
+      )}
       <FlatList
-        data={data}
+        data={data1}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         removeClippedSubviews

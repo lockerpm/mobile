@@ -23,6 +23,8 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
   const [accessRight, setAccessRight] = useState(false) // false for view, true for takeover
   const [waitTime, setWaitTime] = useState(1)
   const [emailError, setEmailError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+
   const role = [
     {
       value: !accessRight,
@@ -63,6 +65,7 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
   ]
   // ----------------------- METHODS -----------------------
   const onAdd = async () => {
+    setIsLoading(true)
     if (!email.includes("@")) return
     const res = await inviteEA(
       email.toLowerCase(),
@@ -78,6 +81,7 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
     if (res.kind === "bad-data") {
       setEmailError(translate("emergency_access.no_account"))
     }
+    setIsLoading(false)
   }
 
   // ----------------------- EFFECTS -----------------------
@@ -124,7 +128,8 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
             containerStyle={{ paddingTop: 0 }}
             RightActionComponent={
               <Button
-                disabled={!email}
+                loading={isLoading}
+                disabled={!email || isLoading}
                 text={translate("common.add")}
                 preset="teriatary"
                 onPress={onAdd}

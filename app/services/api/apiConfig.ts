@@ -26,5 +26,5 @@ export interface ApiConfig {
  */
 export const DEFAULT_API_CONFIG: ApiConfig = {
   url: API_URL || "https://jsonplaceholder.typicode.com",
-  timeout: 10000,
+  timeout: 15000,
 }

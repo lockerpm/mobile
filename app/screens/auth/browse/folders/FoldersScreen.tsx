@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
-import groupBy from 'lodash/groupBy'
-import orderBy from 'lodash/orderBy'
-import { useNavigation } from '@react-navigation/native'
-import { SectionList, TouchableOpacity, View } from 'react-native'
-import { NewFolderModal } from './NewFolderModal'
-import { FolderAction } from './FolderAction'
-import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
-import { Icon, ImageIcon, Screen, Text } from 'app/components/cores'
-import { useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { useStores } from 'app/models'
-import { FolderView } from 'core/models/view/folderView'
-import { CollectionView } from 'core/models/view/collectionView'
-import { TEAM_COLLECTION_EDITOR } from 'app/static/constants'
+import React, { useState, useEffect } from "react"
+import { observer } from "mobx-react-lite"
+import groupBy from "lodash/groupBy"
+import orderBy from "lodash/orderBy"
+import { useNavigation } from "@react-navigation/native"
+import { SectionList, TouchableOpacity, View } from "react-native"
+import { NewFolderModal } from "./NewFolderModal"
+import { FolderAction } from "./FolderAction"
+import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
+import { Icon, ImageIcon, Screen, Text } from "app/components/cores"
+import { useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { useStores } from "app/models"
+import { FolderView } from "core/models/view/folderView"
+import { CollectionView } from "core/models/view/collectionView"
+import { TEAM_COLLECTION_EDITOR } from "app/static/constants"
 
-const EMPTY = require('assets/images/emptyCipherList/folder-empty-img.png')
+const EMPTY = require("assets/images/emptyCipherList/folder-empty-img.png")
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation() as any
@@ -37,14 +37,14 @@ export const FoldersScreen = observer(function FoldersScreen() {
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isActionOpen, setIsActionOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("")
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
   const [selectedFolder, setSelectedFolder] = useState<FolderView | CollectionView>(
-    new FolderView()
+    new FolderView(),
   )
   const [isLoading, setIsLoading] = useState(false)
   const [sections, setSections] = useState<SectionType>([])
@@ -63,8 +63,8 @@ export const FoldersScreen = observer(function FoldersScreen() {
       const result =
         orderBy(
           filtered,
-          [(f) => (orderField === 'name' ? f.name && f.name.toLowerCase() : f.revisionDate)],
-          [order]
+          [(f) => (orderField === "name" ? f.name && f.name.toLowerCase() : f.revisionDate)],
+          [order],
         ).map((i) => ({ ...i, teamShared, editable })) || []
       return result
     }
@@ -72,26 +72,26 @@ export const FoldersScreen = observer(function FoldersScreen() {
   }
 
   const loadSections = async () => {
-    const filteredCollection = groupBy(collectionStore.collections, 'organizationId')
+    const filteredCollection = groupBy(collectionStore.collections, "organizationId")
     const sharedFolders = []
     Object.keys(filteredCollection).forEach((id) => {
       const temp = getFilteredData(
         filteredCollection[id],
         true,
-        TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role) && !uiStore.isOffline
+        TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role) && !uiStore.isOffline,
       )
       sharedFolders.push(...temp)
     })
 
     const data = [
       {
-        id: 'folder',
-        title: translate('common.me'),
+        id: "folder",
+        title: translate("common.folder"),
         data: getFilteredData(folders, false, true),
       },
       {
-        id: 'collection',
-        title: translate('shares.shared_folder'),
+        id: "collection",
+        title: translate("shares.shared_folder"),
         data: sharedFolders,
       },
     ]
@@ -108,10 +108,10 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
   return (
     <Screen
-      safeAreaEdges={['bottom', 'top']}
+      safeAreaEdges={["top"]}
       header={
         <CipherListHeader
-          header={translate('common.folders')}
+          header={translate("common.folders")}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
@@ -148,9 +148,9 @@ export const FoldersScreen = observer(function FoldersScreen() {
         <EmptyCipherList
           img={EMPTY}
           imgStyle={{ height: 55, width: 55 }}
-          title={translate('folder.empty.title')}
-          desc={translate('folder.empty.desc')}
-          buttonText={translate('folder.empty.btn')}
+          title={translate("folder.empty.title")}
+          desc={translate("folder.empty.desc")}
+          buttonText={translate("folder.empty.btn")}
           addItem={() => {
             setIsAddOpen(true)
           }}
@@ -178,12 +178,12 @@ export const FoldersScreen = observer(function FoldersScreen() {
               <TouchableOpacity
                 onPress={() => {
                   if (item.teamShared) {
-                    navigation.navigate('folders__ciphers', {
+                    navigation.navigate("folders__ciphers", {
                       collectionId: item.id,
                       organizationId: item.organizationId,
                     })
                   } else {
-                    navigation.navigate('folders__ciphers', { folderId: item.id })
+                    navigation.navigate("folders__ciphers", { folderId: item.id })
                   }
                 }}
                 style={{
@@ -192,19 +192,19 @@ export const FoldersScreen = observer(function FoldersScreen() {
                   paddingVertical: 15,
                 }}
               >
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <ImageIcon icon={item.teamShared ? 'folder-share' : 'folder'} size={30} />
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <ImageIcon icon={item.teamShared ? "folder-share" : "folder"} size={30} />
                   <View style={{ flex: 1, marginLeft: 12 }}>
                     <View
                       style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        flexWrap: 'wrap',
+                        flexDirection: "row",
+                        alignItems: "center",
+                        flexWrap: "wrap",
                       }}
                     >
                       <Text
                         preset="bold"
-                        text={item.name || translate('folder.unassigned')}
+                        text={item.name || translate("folder.unassigned")}
                         numberOfLines={2}
                       />
 
@@ -222,11 +222,11 @@ export const FoldersScreen = observer(function FoldersScreen() {
                       size="base"
                       preset="label"
                       text={
-                        (item.cipherCount !== undefined ? `${item.cipherCount}` : '0') +
-                        ' ' +
+                        (item.cipherCount !== undefined ? `${item.cipherCount}` : "0") +
+                        " " +
                         (item.cipherCount > 1
-                          ? translate('common.items')
-                          : translate('common.item'))
+                          ? translate("common.items")
+                          : translate("common.item"))
                       }
                     />
                   </View>
@@ -243,8 +243,8 @@ export const FoldersScreen = observer(function FoldersScreen() {
                         style={{
                           height: 35,
                           width: 40,
-                          justifyContent: 'flex-end',
-                          alignItems: 'center',
+                          justifyContent: "flex-end",
+                          alignItems: "center",
                         }}
                       >
                         <Icon icon="dots-three" size={18} />

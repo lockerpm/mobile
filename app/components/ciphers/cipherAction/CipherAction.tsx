@@ -2,18 +2,12 @@ import React, { useEffect, useState } from "react"
 import { TouchableOpacity, View, Platform } from "react-native"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/DeleteConfirmModal"
 import { LeaveShareModal } from "./LeaveShareModal"
-import {
-  useCipherData,
-  useCipherHelper,
-  useDeleteCipher,
-  useFolder,
-  useHelper,
-} from "app/services/hook"
+import { useCipherHelper, useDeleteCipher, useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
-import { AccountRole, AccountRoleText } from "app/static/types"
+import { AccountRole } from "app/static/types"
 import { ActionSheet } from "../actionsSheet/ActionSheet"
 import { BottomModal, Text } from "../../cores"
 import { ActionItem } from "../actionsSheet/ActionSheetItem"
@@ -47,8 +41,6 @@ export const CipherAction = (props: CipherActionProps) => {
   const [showShareOptions, setShowShareOptions] = useState(false)
 
   const { colors } = useTheme()
-  const { stopShareCipherForGroup, stopShareCipher } = useCipherData()
-  const { shareFolderRemoveItem } = useFolder()
   const { getRouteName, getTeam, translate } = useHelper()
   const { toTrashCiphers } = useDeleteCipher()
   const { getCipherDescription, getCipherInfo } = useCipherHelper()
@@ -60,7 +52,6 @@ export const CipherAction = (props: CipherActionProps) => {
   const lockerMasterPassword = selectedCipher.type === CipherType.MasterPassword
   const emergencyView = isEmergencyView === undefined ? false : isEmergencyView
   const organizations = cipherStore.organizations
-  const teamRole = getTeam(user.teams, selectedCipher.organizationId).role
   const shareRole = getTeam(organizations, selectedCipher.organizationId).type
 
   const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
@@ -68,7 +59,6 @@ export const CipherAction = (props: CipherActionProps) => {
   // const isOwner = shareRole === AccountRole.ADMIN
   const editable =
     !selectedCipher.organizationId ||
-    (teamRole && teamRole !== AccountRoleText.MEMBER) ||
     shareRole === AccountRole.ADMIN ||
     shareRole === AccountRole.OWNER
 
@@ -80,24 +70,6 @@ export const CipherAction = (props: CipherActionProps) => {
   // Methods
 
   const handleDelete = async () => {
-    if (selectedCipher.organizationId) {
-      if (selectedCipher.collectionIds?.length > 0) {
-        await shareFolderRemoveItem(
-          selectedCipher.collectionIds[0],
-          selectedCipher.organizationId,
-          selectedCipher,
-        )
-      }
-      const share = cipherStore.myShares.find((s) => s.id === selectedCipher.organizationId)
-
-      if (share.members.length > 0) {
-        await stopShareCipher(selectedCipher, share.members[0].id)
-      }
-      if (share.groups.length) {
-        await stopShareCipherForGroup(selectedCipher, share.groups[0].id)
-      }
-    }
-
     const res = await toTrashCiphers([selectedCipher.id])
     if (res.kind === "ok") {
       const routeName = await getRouteName()
@@ -183,6 +155,8 @@ export const CipherAction = (props: CipherActionProps) => {
                     preset="label"
                     text={getCipherDescription(selectedCipher)}
                     style={{ fontSize: 14 }}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
                   />
                 )}
               </View>
@@ -243,7 +217,17 @@ export const CipherAction = (props: CipherActionProps) => {
                 }}
               />
             )}
-
+            {!lockerMasterPassword && (isInFolderShare || isShared) && editable && (
+              <ActionItem
+                disabled={uiStore.isOffline}
+                name={translate("quick_shares.share_option.quick.tl")}
+                icon="share"
+                action={() => {
+                  onClose()
+                  navigation.navigate("quick_shares", { cipher: selectedCipher })
+                }}
+              />
+            )}
             {!lockerMasterPassword && !isInFolderShare && !isShared && (
               <ActionItem
                 disabled={uiStore.isOffline}

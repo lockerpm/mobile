@@ -60,14 +60,15 @@ export const useDeleteCipher = () => {
             selectedCipher.organizationId,
             selectedCipher,
           )
-        }
-        const share = cipherStore.myShares.find((s) => s.id === selectedCipher.organizationId)
+        } else {
+          const share = cipherStore.myShares.find((s) => s.id === selectedCipher.organizationId)
 
-        if (share.members.length > 0) {
-          await stopShareCipher(selectedCipher, share.members[0].id)
-        }
-        if (share.groups.length) {
-          await stopShareCipherForGroup(selectedCipher, share.groups[0].id)
+          if (share.members.length > 0) {
+            await stopShareCipher(selectedCipher, share.members[0].id)
+          }
+          if (share.groups.length) {
+            await stopShareCipherForGroup(selectedCipher, share.groups[0].id)
+          }
         }
       }
     })

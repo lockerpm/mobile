@@ -35,25 +35,25 @@ export const BrowseListScreen = observer(() => {
             total = folderStore.folders.length + collectionStore.collections.length
             break
           case "password":
-            total = (await getCipherCount(CipherType.Login)) + 1 // 1 is master password
+            total = (await getCipherCount([CipherType.Login])) + 1 // 1 is master password
             break
           case "note":
-            total = await getCipherCount(CipherType.SecureNote)
+            total = await getCipherCount([CipherType.SecureNote])
             break
           case "card":
-            total = await getCipherCount(CipherType.Card)
+            total = await getCipherCount([CipherType.Card])
             break
           case "cryptoWallet":
-            total = await getCipherCount(CipherType.CryptoWallet)
+            total = await getCipherCount([CipherType.CryptoWallet])
             break
           case "identity":
-            total = await getCipherCount(CipherType.Identity)
+            total = await getCipherCount([CipherType.Identity])
             break
           case "shares":
-            total = await getCipherCount(CipherType.Login, false, true)
+            total = await getCipherCount([CipherType.Login], false, true)
             break
           case "trash":
-            total = await getCipherCount(CipherType.Login, true)
+            total = await getCipherCount([CipherType.Login], true)
             break
         }
 

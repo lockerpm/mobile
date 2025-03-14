@@ -33,7 +33,7 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<"passwords_2fa_setup
     useEffect(() => {
       const counting = async () => {
         if (user.isFreePlan) {
-          const count = await getCipherCount(CipherType.TOTP)
+          const count = await getCipherCount([CipherType.TOTP])
           setCipherCount(count)
         }
       }

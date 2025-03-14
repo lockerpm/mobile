@@ -22,9 +22,6 @@ import * as storage from "./utils/storage"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import * as Tracking from "./utils/tracking"
 import * as Sentry from "@sentry/react-native"
-// This puts screens in a native ViewController or Activity. If you want fully native
-// stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
-// https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 import { enableScreens } from "react-native-screens"
 import { ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./services/api/apiProblem"
@@ -64,8 +61,8 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
     NAVIGATION_PERSISTENCE_KEY,
   )
 
-  const hideSplash = IS_IOS ? BootSplash.hide : SplashScreen.hide
   const { rehydrated, rootStore } = useInitialRootStore(() => {
+    const hideSplash = IS_IOS ? BootSplash.hide : SplashScreen.hide
     setTimeout(hideSplash, 400)
   })
 

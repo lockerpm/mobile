@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { FC, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View, SectionList } from "react-native"
 import { NewFolderModal } from "../NewFolderModal"
 import { useStores } from "app/models"
 import { useFolder, useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
-import { Header, Icon, ImageIcon, Screen, Text } from "app/components/cores"
+import { Button, Header, Icon, ImageIcon, Screen, Text } from "app/components/cores"
 import { AccountRole } from "app/static/types"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 
@@ -28,15 +27,16 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
 
   // Methods
   const handleMove = async () => {
+    setIsLoading(true)
     if (isSelectedCollection.current) {
       await handleMoveToCollection()
     } else {
       await handleMoveFolder()
     }
+    setIsLoading(false)
   }
   const handleMoveFolder = async () => {
     if (mode === "move") {
-      setIsLoading(true)
       const res = await cipherStore.moveToFolder({
         ids: cipherIds,
         folderId: selectedFolder,
@@ -46,7 +46,6 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
       } else {
         notifyApiError(res)
       }
-      setIsLoading(false)
     } else {
       cipherStore.setSelectedFolder(selectedFolder)
     }
@@ -55,7 +54,6 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
 
   const handleMoveToCollection = async () => {
     if (mode === "move") {
-      setIsLoading(true)
       const res = await shareFolderAddMultipleItems(
         collectionStore.collections.find((c) => c.id === selectedFolder),
         cipherIds,
@@ -63,27 +61,28 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
       if (res.kind === "ok") {
         notify("success", translate("folder.item_moved"))
       }
-      setIsLoading(false)
     } else {
       cipherStore.setSelectedCollection(selectedFolder)
     }
     navigation.goBack()
   }
 
-  const renderItem = (item, index, isCollection: boolean) => (
+  const renderItem = ({ item, index, section }) => (
     <TouchableOpacity
       key={index}
       onPress={() => {
         setSelectedFolder(item.id)
-        isSelectedCollection.current = isCollection
+        isSelectedCollection.current = section.isCollection
       }}
       style={{
         padding: 16,
         backgroundColor: colors.background,
+        borderBottomColor: colors.border,
+        borderBottomWidth: 1,
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <ImageIcon icon={!isCollection ? "folder" : "folder-share"} size={30} />
+        <ImageIcon icon={!section.isCollection ? "folder" : "folder-share"} size={30} />
         <View
           style={{
             flexDirection: "row",
@@ -108,10 +107,28 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
     </TouchableOpacity>
   )
 
+  const sections = [
+    {
+      title: translate("common.folder"),
+      data: folderStore.folders.filter((i) => i.id).sort((a, _) => (a.id === initialId ? -1 : 1)),
+      isCollection: false,
+    },
+    {
+      title: translate("shares.shared_folder"),
+      data:
+        collectionStore.collections?.filter((item) => {
+          const shareRole = getTeam(organizations, item.organizationId).type
+          return shareRole === AccountRole.OWNER
+        }) || [],
+      isCollection: true,
+    },
+  ]
+
   // Render
   return (
     <Screen
       backgroundColor={colors.block}
+      safeAreaEdges={["bottom"]}
       header={
         <Header
           title={
@@ -119,11 +136,20 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
           }
           onLeftPress={() => navigation.goBack()}
           leftText={translate("common.cancel")}
-          rightText={translate("common.save")}
-          rightTextColor={colors.primary}
-          onRightPress={handleMove}
+          RightActionComponent={
+            <Button
+              loading={isLoading}
+              preset="teriatary"
+              disabled={isLoading}
+              onPress={handleMove}
+              text={translate("common.save")}
+            />
+          }
         />
       }
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
       <NewFolderModal isOpen={showNewFolderModal} onClose={() => setShowNewFolderModal(false)} />
 
@@ -160,22 +186,21 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
         </View>
       </TouchableOpacity>
 
-      {/* Other folders */}
-      {folderStore.folders.filter((i) => i.id).map((item, index) => renderItem(item, index, false))}
-
-      <View
-        style={{
-          backgroundColor: colors.background,
-          marginVertical: 16,
+      <SectionList
+        stickySectionHeadersEnabled={false}
+        sections={sections}
+        keyExtractor={(item, index) => item.id + index}
+        renderItem={renderItem}
+        renderSectionHeader={({ section: { title, data } }) => {
+          return (
+            data.length > 0 && (
+              <View style={{ backgroundColor: colors.background, marginTop: 16 }}>
+                <Text text={title} style={{ padding: 16, fontWeight: "bold" }} />
+              </View>
+            )
+          )
         }}
-      >
-        {collectionStore.collections
-          ?.filter((item) => {
-            const shareRole = getTeam(organizations, item.organizationId).type
-            return shareRole === AccountRole.OWNER
-          })
-          .map((item, index) => renderItem(item, index, true))}
-      </View>
+      />
     </Screen>
   )
 })
