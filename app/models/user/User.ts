@@ -96,6 +96,7 @@ export const UserModel = types
     defaultTab: types.optional(types.string, "homeTab"),
     notificationSettings: types.maybeNull(types.frozen<NotificationSettingData[]>()),
     disablePushNotifications: types.maybeNull(types.boolean),
+    saveIosAutofillInfor: types.maybeNull(types.boolean),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -122,6 +123,10 @@ export const UserModel = types
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setSaveIosAutofillInfor: (val: boolean) => {
+      self.saveIosAutofillInfor = val
+    },
+
     setApiToken: (token: string) => {
       self.apiToken = token
     },

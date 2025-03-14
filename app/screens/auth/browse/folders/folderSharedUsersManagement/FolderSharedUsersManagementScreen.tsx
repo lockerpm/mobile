@@ -32,7 +32,6 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFol
     const [sharedGroups, setSharedGroups] = useState<SharedGroupType[]>([])
     const [showConfirmModal, setShowConfirmModal] = useState(false)
 
-
     const data = (() => {
       const data = []
       sharedGroups.forEach((e) => {
@@ -66,7 +65,6 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFol
         return share.members?.length + share.groups?.length
       }
       return 0
-
     }
 
     const onRemove = async (collection: CollectionView, id: string, isGroup?: boolean) => {
@@ -79,13 +77,11 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFol
       }
     }
 
-        // Handle action menu open
+    // Handle action menu open
     const openShowConfirmModal = (item: SharedMemberType) => {
       setSelectedMember(item)
       setShowConfirmModal(true)
     }
-
- 
 
     // ----------------------- EFFECT -----------------------
     useEffect(() => {
@@ -98,9 +94,7 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFol
         header={
           <Header
             leftIcon="arrow-left"
-            onLeftPress={() => {
-              navigation.goBack()
-            }}
+            onLeftPress={navigation.goBack}
             title={translate("shares.share_folder.manage_user")}
           />
         }

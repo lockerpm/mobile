@@ -42,7 +42,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<"cards__info">> = observer((
       header={
         <Header
           leftIcon="arrow-left"
-          onLeftPress={() => navigation.goBack()}
+          onLeftPress={navigation.goBack}
           rightIcon={!fromQuickShare ? "dots-three" : undefined}
           onRightPress={() => setShowAction(true)}
         />

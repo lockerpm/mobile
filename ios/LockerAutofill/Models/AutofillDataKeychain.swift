@@ -45,14 +45,27 @@ class AutofillDataModel {
         let decodeData = try decoder.decode([LoginItem].self, from: jsonData)
         user.setPasswords(decodeData)
       }
+      try getTempPasswords()
     } catch {
       SentrySDK.capture(message: "Couldn't decode jsonData when getPasswords: \(error)")
     }
   }
   
+  func getTempPasswords() throws {
+    let keychain = Keychain(service: tempPasswordKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
+    keychainData = try! keychain.get(tempPasswordKey.username)
+    if (keychainData != nil && !keychainData.isEmpty) {
+      let jsonData = Data(keychainData.utf8)
+      let decoder = JSONDecoder()
+      let decodeData = try decoder.decode([TempLoginItem].self, from: jsonData)
+      user.addTempPassword(decodeData)
+      self.tempPasswords.append(contentsOf: decodeData)
+    }
+  }
+  
   func saveAutofillData(tempItem: TempLoginItem) {
     do {
-      user.addTempPassword(tempItem)
+      user.addTempPassword([tempItem])
       self.tempPasswords.append(tempItem)
       
       let jsonEncoder = JSONEncoder()

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useStores } from 'app/models'
-import { useCoreService } from '../coreService'
-import { useHelper } from './useHelper'
-import { useCipherData } from './useCipherData'
-import { CipherView } from 'core/models/view'
-import { CipherType } from 'core/enums'
-import { Logger } from 'app/utils/utils'
+import { useStores } from "app/models"
+import { useCoreService } from "../coreService"
+import { useHelper } from "./useHelper"
+import { useCipherData } from "./useCipherData"
+import { CipherView } from "core/models/view"
+import { CipherType } from "core/enums"
+import { Logger } from "app/utils/utils"
 
 export function useTool() {
   const { user, toolStore, cipherStore } = useStores()
@@ -19,24 +19,24 @@ export function useTool() {
   const checkLoginIdExist = async (id: string) => {
     const allLogins = await getEncryptedCiphers({
       deleted: false,
-      searchText: '',
+      searchText: "",
       filters: [(c: CipherView) => c.type === CipherType.Login],
     })
     const res = allLogins.some((e) => e.id === id)
     return res
   }
 
-  const getCipherCount = async (type: CipherType, deleted?: boolean, share?: boolean) => {
+  const getCipherCount = async (type: CipherType[], deleted?: boolean, share?: boolean) => {
     let searchConfig = {
       deleted: false,
-      searchText: '',
-      filters: [(c: CipherView) => c.type === type],
-      includeExtensions: type === CipherType.TOTP,
+      searchText: "",
+      filters: [(c: CipherView) => type.includes(c.type)],
+      includeExtensions: type.includes(CipherType.TOTP),
     }
     if (deleted) {
       searchConfig = {
         deleted: true,
-        searchText: '',
+        searchText: "",
         filters: [],
         includeExtensions: false,
       }
@@ -44,7 +44,7 @@ export function useTool() {
     if (share) {
       searchConfig = {
         deleted: false,
-        searchText: '',
+        searchText: "",
         filters: [(c: CipherView) => c.organizationId !== null],
         includeExtensions: false,
       }
@@ -79,15 +79,15 @@ export function useTool() {
 
       const allCiphers = await getCiphers({
         deleted: false,
-        searchText: '',
+        searchText: "",
         filters: [(c: CipherView) => c.type === CipherType.Login && !!c.login.password],
       })
       const weakPasswordCiphers = []
       const isUserNameNotEmpty = (c: CipherView) => {
-        return c.login.username != null && c.login.username.trim() !== ''
+        return c.login.username != null && c.login.username.trim() !== ""
       }
       const getCacheKey = (c: CipherView) => {
-        return c.login.password + '_____' + (isUserNameNotEmpty(c) ? c.login.username : '')
+        return c.login.password + "_____" + (isUserNameNotEmpty(c) ? c.login.username : "")
       }
 
       allCiphers.forEach((c: CipherView) => {
@@ -106,7 +106,7 @@ export function useTool() {
           // Compare password with username as well
           let userInput = []
           if (hasUserName) {
-            const atPosition = c.login.username.indexOf('@')
+            const atPosition = c.login.username.indexOf("@")
             if (atPosition > -1) {
               userInput = userInput
                 .concat(
@@ -114,7 +114,7 @@ export function useTool() {
                     .substr(0, atPosition)
                     .trim()
                     .toLowerCase()
-                    .split(/[^A-Za-z0-9]/)
+                    .split(/[^A-Za-z0-9]/),
                 )
                 .filter((i) => i.length >= 3)
             } else {
@@ -126,7 +126,7 @@ export function useTool() {
             }
           }
           const result = passwordGenerationService.passwordStrength(
-            c.login.password
+            c.login.password,
             // TODO: disable for now
             // userInput.length > 0 ? userInput : null
           )
@@ -156,7 +156,7 @@ export function useTool() {
       })
       const reusedPasswordCiphers = allCiphers.filter(
         (c: CipherView) =>
-          passwordUseMap.has(c.login.password) && passwordUseMap.get(c.login.password) > 1
+          passwordUseMap.has(c.login.password) && passwordUseMap.get(c.login.password) > 1,
       )
       toolStore.setLoadingHealth(false)
       toolStore.setWeakPasswords(weakPasswordCiphers)
@@ -166,8 +166,8 @@ export function useTool() {
       toolStore.setExposedPasswords(exposedPasswordCiphers)
       toolStore.setExposedPasswordMap(exposedPasswordMap)
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      Logger.error('loadPasswordsHealth: ' + e)
+      notify("error", translate("error.something_went_wrong"))
+      Logger.error("loadPasswordsHealth: " + e)
       toolStore.setLoadingHealth(false)
     }
   }

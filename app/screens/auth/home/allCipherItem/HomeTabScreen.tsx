@@ -1,38 +1,25 @@
-import React, { useState, useEffect, useRef } from "react"
-import { Alert, View, AppState, LayoutAnimation } from "react-native"
+import React, { useState, useEffect } from "react"
+import { Alert } from "react-native"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
-import { useTheme } from "app/services/context"
-import { AutofillServiceEnabled } from "app/utils/autofillHelper"
 import { useStores } from "app/models"
 import { useAuthentication, useHelper } from "app/services/hook"
 import { useNavigation } from "@react-navigation/native"
-import { Icon, Screen, Text } from "app/components/cores"
+import { Screen } from "app/components/cores"
 
 import { HomeHeader } from "./HomeHeader"
-import {
-  SortActionConfigModal,
-  EmptyCipherList,
-  CipherList,
-  AddCipherActionModal,
-} from "app/components/ciphers"
+import { SortActionConfigModal, CipherList, AddCipherActionModal } from "app/components/ciphers"
 import { observer } from "mobx-react-lite"
-import { SuggestEnableFaceID } from "./SuggestEnableFaceID"
-import { useCoreService } from "app/services/coreService"
-import { iosKeyChain } from "app/utils/iosAutofillData"
-
-const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
+import { HomeSlider } from "./slider-bar/HomeSlider"
+import { EmptyCipherList } from "./EmptyCipherList"
 
 export const HomeTabScreen = observer(() => {
   const navigation: any = useNavigation()
-  const { cryptoService } = useCoreService()
   const { uiStore, user } = useStores()
-  const { translate, isBiometricAvailable } = useHelper()
+  const { translate } = useHelper()
   const { lock } = useAuthentication()
 
   // -------------- PARAMS ------------------
-  const [isAutofillEnabled, setIsAutofillEnabled] = useState(true)
-  const [isShowAutofillSuggest, setShowAutofillSuggest] = useState(true)
-  const [isShowFaceIDSuggest, setShowFaceIDSuggest] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(true)
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -46,15 +33,6 @@ export const HomeTabScreen = observer(() => {
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
 
-  const appState = useRef(AppState.currentState)
-  const [appStateVisible, setAppStateVisible] = useState(appState.current)
-
-  const handleShowFaceIDSuggest = async () => {
-    if (!user.isBiometricUnlock) {
-      const available = await isBiometricAvailable()
-      if (available) setShowFaceIDSuggest(true)
-    }
-  }
   const fetchMarketingContent = async () => {
     const res = await user.fetchMarketingContent()
     if (res.kind === "ok" && Object.keys(res.data).length !== 0) {
@@ -64,24 +42,12 @@ export const HomeTabScreen = observer(() => {
     }
   }
 
-  const syncAutofillUserInfo = async () => {
-    const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
-    await iosKeyChain.saveUserInfo({
-      email: user.email || "",
-      avatar: user.avatar || "",
-      hashPass: hashPasswordAutofill || "",
-      token: user.apiToken || "",
-      language: user.language || "en",
-
-      faceIdEnabled: user.isBiometricUnlock,
-      isFree: user.isFreePlan,
-    })
+  const onImport = async () => {
+    navigation.navigate("import")
   }
 
   // ------------------------ EFFECT ----------------------------
   useEffect(() => {
-    syncAutofillUserInfo()
-    handleShowFaceIDSuggest()
     if (
       !uiStore.isShowedPopupMarketing &&
       !user.isLifeTimeFamilyPlan &&
@@ -90,9 +56,6 @@ export const HomeTabScreen = observer(() => {
     ) {
       fetchMarketingContent()
     }
-    AppState.addEventListener("change", (nextAppState) => {
-      setAppStateVisible(nextAppState)
-    })
   }, [])
 
   useEffect(() => {
@@ -140,17 +103,6 @@ export const HomeTabScreen = observer(() => {
     navigation.addListener("beforeRemove", handleBack)
   }, [navigation])
 
-  useEffect(() => {
-    if (!isLoading) {
-      AutofillServiceEnabled((isActived, androidNotSupport) => {
-        setIsAutofillEnabled(isActived)
-        if (androidNotSupport) {
-          setShowAutofillSuggest(false)
-        }
-      })
-    }
-  }, [appStateVisible, isLoading])
-
   // -------------- RENDER ------------------
 
   return (
@@ -197,32 +149,7 @@ export const HomeTabScreen = observer(() => {
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
       />
-
-      <SuggestEnableAutofill
-        isShow={isShowAutofillSuggest && !isAutofillEnabled && !isShowFaceIDSuggest}
-        onClose={() => {
-          LayoutAnimation.configureNext({
-            duration: 250,
-            update: {
-              type: LayoutAnimation.Types.easeInEaseOut,
-            },
-          })
-          setShowAutofillSuggest(false)
-        }}
-      />
-
-      <SuggestEnableFaceID
-        isShow={isShowFaceIDSuggest}
-        onClose={() => {
-          LayoutAnimation.configureNext({
-            duration: 250,
-            update: {
-              type: LayoutAnimation.Types.easeInEaseOut,
-            },
-          })
-          setShowFaceIDSuggest(false)
-        }}
-      />
+      <HomeSlider />
 
       <CipherList
         navigation={navigation}
@@ -236,78 +163,13 @@ export const HomeTabScreen = observer(() => {
         setAllItems={setAllItems}
         emptyContent={
           <EmptyCipherList
-            img={HOME_EMPTY_CIPHER}
-            imgStyle={{ height: 55, width: 120 }}
-            title={translate("all_items.empty.title")}
-            desc={translate("all_items.empty.desc")}
-            buttonText={translate("all_items.empty.btn")}
-            addItem={() => {
+            onAdd={() => {
               setIsAddOpen(true)
             }}
+            onImport={onImport}
           />
         }
       />
     </Screen>
   )
 })
-
-const SuggestEnableAutofill = ({ isShow, onClose }) => {
-  const navigation = useNavigation() as any
-  const { colors } = useTheme()
-  const { translate } = useHelper()
-  return (
-    isShow && (
-      <View
-        style={{
-          borderWidth: 1,
-          marginVertical: 12,
-          marginHorizontal: 16,
-          borderColor: colors.palette.orange8,
-          backgroundColor: colors.palette.orange3,
-          flexDirection: "row",
-          paddingVertical: 16,
-          paddingHorizontal: 20,
-          borderRadius: 12,
-        }}
-      >
-        <Icon
-          icon="keyboard"
-          size={32}
-          containerStyle={{
-            marginRight: 16,
-          }}
-        />
-
-        <View style={{ marginRight: 80 }}>
-          <Text text={translate("all_items.enable_autofill.content")} />
-          <Text
-            preset="bold"
-            text={translate("all_items.enable_autofill.btn")}
-            color={colors.link}
-            style={{
-              marginTop: 10,
-            }}
-            onPress={() => {
-              navigation.navigate("autofillService")
-            }}
-          />
-        </View>
-        <View
-          style={{
-            position: "absolute",
-            top: 20,
-            right: 20,
-          }}
-        >
-          <Icon
-            icon="x"
-            size={20}
-            onPress={() => {
-              onClose(true)
-            }}
-          />
-        </View>
-      </View>
-    )
-  )
-}

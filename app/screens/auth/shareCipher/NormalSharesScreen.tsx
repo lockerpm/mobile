@@ -34,6 +34,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<"normal_shares">> = obse
   const selectedCipher: CipherView = ciphers?.length === 1 ? ciphers[0] : null
 
   // --------------- PARAMS ----------------
+  const [isSharing, setIsSharing] = useState(false)
   const [page, setPage] = useState<0 | 1>(0)
   const [email, setEmail] = useState("")
   const [emails, setEmails] = useState<string[]>([])
@@ -114,6 +115,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<"normal_shares">> = obse
 
   // Share single/multiple
   const handleShare = async () => {
+    setIsSharing(true)
     let role = AccountRoleText.MEMBER
     let autofillOnly = false
     switch (shareType) {
@@ -133,6 +135,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<"normal_shares">> = obse
       reset()
       navigation.goBack()
     }
+    setIsSharing(false)
   }
 
   const searchGroupOrMember = async (query: string) => {
@@ -432,19 +435,22 @@ export const NormalSharesScreen: FC<AppStackScreenProps<"normal_shares">> = obse
       />
     </View>
   )
+  const disabled = (emails?.length < 1 && groups.length < 1) || isSharing
   return (
     <Screen
       header={
         <Header
           leftText={translate("common.cancel")}
           onLeftPress={() => navigation.goBack()}
-          rightText={translate("common.done")}
-          rightTextColor={emails?.length > 0 || groups.length > 0 ? colors.primary : colors.disable}
-          onRightPress={() => {
-            if (emails?.length > 0 || groups.length > 0) {
-              handleShare()
-            }
-          }}
+          RightActionComponent={
+            <Button
+              loading={isSharing}
+              preset="teriatary"
+              disabled={disabled}
+              onPress={handleShare}
+              text={translate("common.done")}
+            />
+          }
         />
       }
       contentContainerStyle={{

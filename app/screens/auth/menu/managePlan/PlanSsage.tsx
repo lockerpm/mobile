@@ -10,7 +10,7 @@ import { useStores } from "app/models"
 import { FREE_PLAN_LIMIT } from "app/static/constants"
 
 interface PlanItemUsage {
-  cipherType: CipherType
+  cipherType: CipherType[]
   title: string
   limits: number
 }
@@ -18,7 +18,7 @@ interface PlanItemUsage {
 interface PlanStorageProps {
   style?: StyleProp<ViewStyle>
   isUnlimited?: boolean
-  cipherType: CipherType
+  cipherType: CipherType[]
   limits: number
   title: string
 }
@@ -56,7 +56,12 @@ const ItemStorage = (props: PlanStorageProps) => {
           marginBottom: 8,
         }}
       >
-        <Text text={title + " "} />
+        <Text
+          text={title + " "}
+          style={{
+            maxWidth: "75%",
+          }}
+        />
         {isUnlimited ? (
           <Text text={cipherCount.toString()} />
         ) : (
@@ -91,32 +96,18 @@ export const PlanUsage = () => {
   const isFreeAccount = user.isFreePlan
   const items: PlanItemUsage[] = [
     {
-      cipherType: CipherType.Login,
-      title: translate("manage_plan.usage.login"),
-      limits: FREE_PLAN_LIMIT.LOGIN,
+      cipherType: [
+        CipherType.Login,
+        CipherType.SecureNote,
+        CipherType.Card,
+        CipherType.Identity,
+        CipherType.CryptoWallet,
+      ],
+      title: translate("manage_plan.usage.items"),
+      limits: FREE_PLAN_LIMIT.ITEMS,
     },
     {
-      cipherType: CipherType.Card,
-      title: translate("manage_plan.usage.card"),
-      limits: FREE_PLAN_LIMIT.PAYMENT_CARD,
-    },
-    {
-      cipherType: CipherType.Identity,
-      title: translate("manage_plan.usage.identity"),
-      limits: FREE_PLAN_LIMIT.IDENTITY,
-    },
-    {
-      cipherType: CipherType.SecureNote,
-      title: translate("manage_plan.usage.note"),
-      limits: FREE_PLAN_LIMIT.NOTE,
-    },
-    {
-      cipherType: CipherType.CryptoWallet,
-      title: translate("manage_plan.usage.crypto"),
-      limits: FREE_PLAN_LIMIT.CRYPTO,
-    },
-    {
-      cipherType: CipherType.TOTP,
+      cipherType: [CipherType.TOTP],
       title: translate("manage_plan.usage.otp"),
       limits: FREE_PLAN_LIMIT.OTP,
     },
@@ -132,10 +123,10 @@ export const PlanUsage = () => {
           backgroundColor: colors.background,
         }}
       >
-        {isFreeAccount && <Text preset="bold" text={"Plan Usage"} />}
+        {isFreeAccount && <Text preset="bold" text={translate("manage_plan.usage.title")} />}
         {!isFreeAccount && (
           <View style={{ flex: 1, flexDirection: "row" }}>
-            <Text preset="default" text={"Plan Usage"} />
+            <Text preset="default" text={translate("manage_plan.usage.title")} />
             <View
               style={{
                 marginLeft: 8,
@@ -161,9 +152,9 @@ export const PlanUsage = () => {
           </View>
         )}
 
-        {items.map((e) => (
+        {items.map((e, index) => (
           <ItemStorage
-            key={e.cipherType}
+            key={index}
             cipherType={e.cipherType}
             limits={e.limits}
             title={e.title}

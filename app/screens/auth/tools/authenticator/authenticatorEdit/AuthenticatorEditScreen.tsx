@@ -102,6 +102,7 @@ export const AuthenticatorEditScreen: FC<AppStackScreenProps<"authenticator__edi
             leftText={translate("common.cancel")}
             RightActionComponent={
               <Button
+                loading={isLoading}
                 disabled={isLoading || !name.trim() || !secretKey.trim()}
                 preset="teriatary"
                 text={translate("common.save")}

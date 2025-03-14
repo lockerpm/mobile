@@ -173,7 +173,7 @@ export const Button = observer((props: ButtonProps) => {
   }
 
   const $disabledTextStyle: StyleProp<TextStyle> = {
-    color: colors.palette.neutral5,
+    color: colors.disable,
   }
 
   // Button Loading

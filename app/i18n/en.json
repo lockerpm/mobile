@@ -300,8 +300,8 @@
     "label": "Your alias addresses",
     "desc": {
       "one": "All emails to your alias addresses will be forwarded to your root email",
-      "two": "You can create and use up to 05 concurrent alias addresses",
-      "three": "You have 01 customizable alias"
+      "two": "You can create and use up to 1 concurrent alias addresses",
+      "three": "You have 1 customizable alias"
     },
     "desc_premium": {
       "one": "All emails to your alias addresses will be forwarded to your root email",
@@ -960,40 +960,36 @@
     "premium": {
       "header": "Upgrade to Premium",
       "ads": "Enjoy Locker Premium with advanced features",
-      "month": "$4.99 / Month",
+      "month": "$2.99 / Month",
       "year": "$15.49 / Year"
     },
     "price": {
       "per": {
         "monthly": {
-          "title": "$4.99/month",
+          "title": "$2.99/month",
           "subtitle": "Billed monthly",
           "sale": "",
-          "pay_title": "Upgrade now for $4.99",
-          "discount": "Upgrade now for $3.49 (save 30%) for first cycle. Then $4.99/month"
+          "pay_title": "Upgrade now for $2.99"
         },
         "yearly": {
           "title": "$15.49/year",
           "subtitle": "$1.29/month - billed yearly",
-          "sale": "Save 75%",
-          "pay_title": "Upgrade now for $15.49",
-          "discount": "Upgrade now for $10.99 (save 30%) for first cycle. Then $15.49/year"
+          "sale": "Save 57%",
+          "pay_title": "Upgrade now for $15.49"
         }
       },
       "fam": {
         "yearly": {
           "title": "$71.99/year/6 people",
           "subtitle": "$5.99 per month/6 people. Billed yearly",
-          "sale": "Save 80%",
-          "pay_title": "Upgrade now for $71.99",
-          "discount": "Upgrade now for $50.99 (save 30%) for first cycle. Then $71.99/year"
+          "sale": "Save 41%",
+          "pay_title": "Upgrade now for $71.99"
         },
         "monthly": {
           "title": "$9.99/month/6 people",
           "subtitle": "Billed monthly",
-          "sale": "Save 67%",
-          "pay_title": "Upgrade now for $9.99",
-          "discount": "Upgrade now for $6.99 (save 30%) for first cycle. Then $9.99/month"
+          "sale": "",
+          "pay_title": "Upgrade now for $9.99"
         }
       }
     }
@@ -1008,7 +1004,9 @@
       "identity": "Identities",
       "note": "Secure Notes",
       "crypto": "Crypto Backups",
-      "otp": "One time password"
+      "otp": "OTPs",
+      "items": "Passwords, Notes, Cards, Identities, Crypto backups",
+      "private_email": "Email aliases"
     },
     "feature": {
       "title": "Explore your full premium feature",

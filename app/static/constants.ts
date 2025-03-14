@@ -17,16 +17,7 @@ export const FAMILY_MEMBER_LIMIT = 6
 
 // FREE
 export const FREE_PLAN_LIMIT = {
-  CRYPTO: 5,
-  IDENTITY: 10,
-  LOGIN: 100,
-  PAYMENT_CARD: 5,
-  NOTE: 50,
+  ITEMS: 100,
   OTP: 10,
-}
-
-export const GEN = {
-  MALE: "t",
-  FEMALE: "f",
-  OTHER: "o",
+  PRIVATE_EMAIL: 10,
 }
