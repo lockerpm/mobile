@@ -1,4 +1,7 @@
+import { useNavigation } from "@react-navigation/native"
 import { Icon, IconTypes, Text } from "app/components/cores"
+import { PremiumTag } from "app/components/utils"
+import { useStores } from "app/models"
 import * as React from "react"
 import { ColorValue, StyleProp, TouchableOpacity, View, ViewStyle } from "react-native"
 
@@ -24,14 +27,29 @@ export interface ActionItemProps {
    */
   action: () => void
   /**
+   * onClose callback
+   */
+  onClose: () => void
+  /**
    * Disable touch
    */
   disabled?: boolean
   containerStyle?: StyleProp<ViewStyle>
 }
 
-export const ActionItem = (props: ActionItemProps) => {
-  const { name, icon, action, disabled, color, containerStyle, iconColor } = props
+export const ActionPremiumItem = (props: ActionItemProps) => {
+  const navigation: any = useNavigation()
+  const { name, icon, action, onClose, disabled, color, containerStyle, iconColor } = props
+
+  const { user } = useStores()
+  const onPress = () => {
+    if (user.isFreePlan) {
+      navigation.navigate("payment")
+      onClose()
+      return
+    }
+    action()
+  }
 
   return (
     <TouchableOpacity
@@ -43,7 +61,7 @@ export const ActionItem = (props: ActionItemProps) => {
         },
         containerStyle,
       ]}
-      onPress={action}
+      onPress={onPress}
     >
       <View
         style={{
@@ -53,7 +71,15 @@ export const ActionItem = (props: ActionItemProps) => {
           width: "100%",
         }}
       >
-        <Text text={name} color={color} />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Text text={name} color={color} style={{ marginRight: 8 }} />
+          {user.isFreePlan && <PremiumTag />}
+        </View>
         {!!icon && <Icon icon={icon} size={22} color={iconColor || color} />}
       </View>
     </TouchableOpacity>

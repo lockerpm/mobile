@@ -15,6 +15,7 @@ import { PremiumTag } from "app/components/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "../cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
+import { ActionPremiumItem } from "../actionsSheet/ActionSheetPremiumItem"
 
 export interface CipherActionProps {
   disableDetail?: boolean
@@ -217,7 +218,21 @@ export const CipherAction = (props: CipherActionProps) => {
                 }}
               />
             )}
-            {!lockerMasterPassword && (isInFolderShare || isShared) && editable && (
+
+            {!lockerMasterPassword && (
+              <ActionPremiumItem
+                disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+                name={translate("file_attachment.title")}
+                icon="file-arrow-up"
+                onClose={onClose}
+                action={() => {
+                  onClose()
+                  navigation.navigate("attachment")
+                }}
+              />
+            )}
+
+            {!lockerMasterPassword && (isInFolderShare || isShared) && (
               <ActionItem
                 disabled={uiStore.isOffline}
                 name={translate("quick_shares.share_option.quick.tl")}

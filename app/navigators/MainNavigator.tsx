@@ -65,6 +65,7 @@ import {
   Password2FASetupScreen,
   QuickSharesDetailScreen,
   PasswordHistoryScreen,
+  AttachmentScreen,
 } from "../screens"
 import { useCipherData, useHelper } from "app/services/hook"
 import { Logger } from "app/utils/utils"
@@ -513,6 +514,7 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
         <Stack.Screen name="contactsTrustedYou" component={ContactsTrustedYouScreen} />
         <Stack.Screen name="viewEA" component={ViewEAScreen} />
         <Stack.Screen name="takeoverEA" component={TakeoverEAScreen} />
+        <Stack.Screen name="attachment" component={AttachmentScreen} />
       </Stack.Navigator>
     </UserInactivity>
   )

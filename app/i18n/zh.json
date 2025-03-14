@@ -1294,5 +1294,22 @@
       "go_premium": "請升級至 Premium",
       "upgrade": "現在升級"
     }
+  },
+  "file_attachment": {
+    "title": "文件附件",
+    "upload_photo": "上传照片",
+    "upload_file": "上传文件",
+    "max_size": "文件最大大小为50MB",
+    "max_size_error": "文件大小必须小于50MB",
+    "upload_error": "上传错误，请重试",
+    "upload_success": "文件上传成功",
+    "upload_limit_error": "您已超过1GB的存储限制。请删除不必要的文件以释放空间。",
+    "download": "文件下载成功",
+    "delete": "文件删除成功",
+    "delete_confirm": "您确定要删除此文件吗？",
+    "delete_btn": "删除",
+    "permission_denied": "权限被拒绝",
+    "permission_denied_desc": "您已拒绝{{type}}权限。在'{{type}}'选项卡中授予此权限以完全使用Locker功能",
+    "go_setting": "前往设置"
   }
 }
