@@ -126,7 +126,6 @@ export const HomeSlider = () => {
       }
     })
   }, [appStateVisible])
-  console.log("data", data.length)
 
   return (
     <View>

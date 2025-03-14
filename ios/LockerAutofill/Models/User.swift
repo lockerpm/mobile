@@ -40,17 +40,19 @@ class User {
     self.autofillMobileApp = isDomain
   }
   
-  func addTempPassword(_ item: TempLoginItem) {
+  func addTempPassword(_ items: [TempLoginItem]) {
     let currentCredentialsLength = credentials.count
-    let credential = AutofillData(fillID: currentCredentialsLength,
-                                  id: "tempPassword" + String(currentCredentialsLength),
-                                  name: item.name,
-                                  uri: item.uri ,
-                                  username: item.username,
-                                  password: item.password,
-                                  isOwner: true,
-                                  otp: "" )
-    self.credentials.append(credential)
+    for (index, item) in items.enumerated() {
+      let credential = AutofillData(fillID: currentCredentialsLength + index,
+                                    id: "tempPassword" + String(currentCredentialsLength),
+                                    name: item.name,
+                                    uri: item.uri ,
+                                    username: item.username,
+                                    password: item.password,
+                                    isOwner: true,
+                                    otp: "" )
+      self.credentials.append(credential)
+    }
   }
   
   func setPasswords(_ passwords: [LoginItem]){

@@ -7,16 +7,10 @@ import { useNavigation } from "@react-navigation/native"
 import { Screen } from "app/components/cores"
 
 import { HomeHeader } from "./HomeHeader"
-import {
-  SortActionConfigModal,
-  EmptyCipherList,
-  CipherList,
-  AddCipherActionModal,
-} from "app/components/ciphers"
+import { SortActionConfigModal, CipherList, AddCipherActionModal } from "app/components/ciphers"
 import { observer } from "mobx-react-lite"
 import { HomeSlider } from "./slider-bar/HomeSlider"
-
-const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
+import { EmptyCipherList } from "./EmptyCipherList"
 
 export const HomeTabScreen = observer(() => {
   const navigation: any = useNavigation()
@@ -46,6 +40,10 @@ export const HomeTabScreen = observer(() => {
         navigation.navigate("marketing", { data: res.data })
       }
     }
+  }
+
+  const onImport = async () => {
+    navigation.navigate("import")
   }
 
   // ------------------------ EFFECT ----------------------------
@@ -165,14 +163,10 @@ export const HomeTabScreen = observer(() => {
         setAllItems={setAllItems}
         emptyContent={
           <EmptyCipherList
-            img={HOME_EMPTY_CIPHER}
-            imgStyle={{ height: 55, width: 120 }}
-            title={translate("all_items.empty.title")}
-            desc={translate("all_items.empty.desc")}
-            buttonText={translate("all_items.empty.btn")}
-            addItem={() => {
+            onAdd={() => {
               setIsAddOpen(true)
             }}
+            onImport={onImport}
           />
         }
       />

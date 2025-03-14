@@ -407,10 +407,11 @@ export function useCipherData() {
       }
       cipherStore.setIsSynchingAutofill(true)
 
-      let hasUpdate = false
       // sync temporary passwords
       const tempPasswords = await iosKeyChain.getTempPassword()
       if (tempPasswords && Array.isArray(tempPasswords)) {
+        const ciphers: CipherRequest[] = []
+
         for (const cipher of tempPasswords) {
           const payload = newCipher(CipherType.Login)
           const data = new LoginView()
@@ -423,18 +424,30 @@ export function useCipherData() {
           }
           payload.name = cipher.name
           payload.login = data
-          await _offlineCreateCipher({
-            cipher: payload,
-            collectionIds: [],
+
+          const cipherEnc = await cipherService.encrypt(payload)
+          const cipherReq = new CipherRequest(cipherEnc)
+          ciphers.push(cipherReq)
+
+          if (uiStore.isOffline) {
+            await _offlineCreateCipher({
+              cipher: payload,
+              collectionIds: [],
+            })
+          }
+        }
+
+        if (!uiStore.isOffline) {
+          await cipherStore.offlineSyncCipher({
+            ciphers,
+            folders: [],
+            folderRelationships: [],
           })
-          hasUpdate = true
         }
       }
+
       await iosKeyChain.resetTempPassword()
       await _updateAutofillData()
-      if (hasUpdate && !uiStore.isOffline) {
-        await syncOfflineData()
-      }
     } catch (e) {
       Logger.error("syncAutofillData: " + e)
     } finally {

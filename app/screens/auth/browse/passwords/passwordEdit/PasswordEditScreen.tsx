@@ -84,7 +84,7 @@ export const PasswordEditScreen: FC<AppStackScreenProps<"passwords__edit">> = ob
       setNote(selectedCipher.notes)
       setFolder(selectedCipher.folderId)
       setCollection(
-        selectedCipher.collectionIds.length > 0 ? selectedCipher.collectionIds[0] : null,
+        selectedCipher.collectionIds?.length > 0 ? selectedCipher.collectionIds[0] : null,
       )
       setOrganizationId(mode === "clone" ? null : selectedCipher.organizationId)
       setCollectionIds(selectedCipher.collectionIds)
