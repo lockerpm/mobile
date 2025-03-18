@@ -996,7 +996,10 @@ export function useCipherData() {
 
       // Online
       const cipherEnc = await cipherService.encrypt(cipher)
+
+      console.log(cipherEnc)
       const data = new CipherRequest(cipherEnc)
+
       const res = await cipherStore.createCipher(data, score, collectionIds)
       if (res.kind === "ok") {
         await _offlineCreateCipher({

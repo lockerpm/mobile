@@ -96,6 +96,7 @@
     "react-native": "0.71.7",
     "react-native-android-settings-tool": "^1.0.4",
     "react-native-app-auth": "^7.0.0",
+    "react-native-background-upload": "^6.6.0",
     "react-native-biometrics": "2.1.4",
     "react-native-bootsplash": "^6.0.0",
     "react-native-camera": "^4.2.1",

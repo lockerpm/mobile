@@ -31,7 +31,7 @@ import { AppEventType, EventBus } from "./utils/eventBus"
 import { api } from "./services/api"
 import { ThemeContextProvider } from "./services/context/useTheme"
 import CombineContext from "./services/context/useCombineContext"
-import { IS_IOS } from "./config/constants"
+import { BASE_URL, IS_IOS } from "./config/constants"
 import { AndroidAutofillServiceType } from "./utils/autofillHelper"
 import SplashScreen from "react-native-splash-screen"
 import BootSplash from "react-native-bootsplash"
@@ -68,6 +68,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
 
   if (!rehydrated) return null
 
+  console.log(BASE_URL)
   // Set up API listener
   const monitorApiResponse = (response: ApiResponse<any>) => {
     const problem = getGeneralApiProblem(response)
