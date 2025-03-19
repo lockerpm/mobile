@@ -179,16 +179,16 @@ export const PasswordEditScreen: FC<AppStackScreenProps<"passwords__edit">> = ob
       data.uris = [uriView]
     }
 
-    const attachment = new AttachmentView()
-    attachment.id = Date.now().toString()
-    attachment.fileName = "Hello"
-    attachment.size = "20"
-    attachment.sizeName = "kb"
-    attachment.url = "https://www.google.com"
+    // const attachment = new AttachmentView()
+    // attachment.id = Date.now().toString()
+    // attachment.fileName = "Hello"
+    // attachment.size = "20"
+    // attachment.sizeName = "kb"
+    // attachment.url = "https://www.google.com"
 
-    payload.attachments = [attachment]
+    // payload.attachments = [attachment]
 
-    console.log(payload.attachments)
+    // console.log(payload.attachments)
 
     payload.fields = fields
     payload.name = name

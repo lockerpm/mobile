@@ -47,8 +47,8 @@ export function useHelper() {
   }
 
   // Random string
-  const randomString = () => {
-    return nanoid()
+  const randomString = (size?: number) => {
+    return nanoid(size)
   }
 
   // Clipboard

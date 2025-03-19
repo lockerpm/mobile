@@ -5,10 +5,10 @@ import { Icon, IconTypes, Text } from "app/components/cores"
 import { useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { AttachmentType, usePickAttachment } from "./usePickAttachment"
-import { AttachmentPreview } from "./item/AttachmentPreview"
+import { FilePreview } from "./item/FilePreview"
 
 interface Props {
-  addAttachment: (newFile: AttachmentType) => void
+  addAttachment: (file: AttachmentType) => void
 }
 export const AttachmentSelectIcon = ({ addAttachment }: Props) => {
   const { colors } = useTheme()
@@ -16,14 +16,14 @@ export const AttachmentSelectIcon = ({ addAttachment }: Props) => {
   const { pickFile, pickMedia } = usePickAttachment()
 
   const [isAddOpen, setIsAddOpen] = useState(false)
-  const [attachment, setAttachment] = useState<AttachmentType | null>(null)
+  const [localFile, setLocalFile] = useState<AttachmentType | null>(null)
 
   const openModal = useCallback(() => {
     setIsAddOpen(true)
   }, [])
 
   const closeModal = useCallback(() => {
-    setAttachment(null)
+    setLocalFile(null)
     setIsAddOpen(false)
   }, [])
 
@@ -36,7 +36,7 @@ export const AttachmentSelectIcon = ({ addAttachment }: Props) => {
         onPress: async () => {
           const res = await pickMedia()
           if (res) {
-            setAttachment(res)
+            setLocalFile(res)
           } else {
             closeModal()
           }
@@ -49,7 +49,7 @@ export const AttachmentSelectIcon = ({ addAttachment }: Props) => {
         onPress: async () => {
           const res = await pickFile()
           if (res) {
-            setAttachment(res)
+            setLocalFile(res)
           } else {
             closeModal()
           }
@@ -73,7 +73,7 @@ export const AttachmentSelectIcon = ({ addAttachment }: Props) => {
         onClose={closeModal}
         closeText={translate("common.cancel")}
         footer={
-          !attachment ? (
+          !localFile ? (
             <View
               style={{
                 paddingHorizontal: 16,
@@ -95,12 +95,12 @@ export const AttachmentSelectIcon = ({ addAttachment }: Props) => {
           ) : undefined
         }
       >
-        {attachment ? (
-          <AttachmentPreview
-            item={attachment}
-            setItem={setAttachment}
+        {localFile ? (
+          <FilePreview
+            item={localFile}
+            setItem={setLocalFile}
             addAttachment={() => {
-              addAttachment(attachment)
+              addAttachment(localFile)
               closeModal()
             }}
           />

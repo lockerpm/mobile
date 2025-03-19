@@ -19,7 +19,7 @@ export class AttachmentService {
     uri: string
     fileName: string
     onProgress: (val: number) => void
-  }): Promise<{ id: string }> {
+  }): Promise<{ kind: "ok"; id: string } | { kind: "error"; error: string }> {
     const { uri, fileName, onProgress, cipherId, token } = params
 
     try {
@@ -30,10 +30,12 @@ export class AttachmentService {
         },
       })
 
-      console.log(uploadFormRes)
-      return { id: "123" }
+      console.tron.log("uploadFormRes", uploadFormRes)
       if (uploadFormRes.kind !== "ok") {
-        throw new Error(`Failed to fetch upload form: ${JSON.stringify(uploadFormRes)}`)
+        return {
+          kind: "error",
+          error: `Failed to fetch upload form: ${JSON.stringify(uploadFormRes)}`,
+        }
       }
 
       const uploadForm = uploadFormRes.data.upload_form
@@ -50,7 +52,7 @@ export class AttachmentService {
         },
       }
 
-      return new Promise<{ id: string }>((resolve, reject) => {
+      const { id } = await new Promise<{ id: string }>((resolve, reject) => {
         Upload.startUpload(uploadOptions)
           .then((uploadId) => {
             Upload.addListener("progress", uploadId, (data) => {
@@ -77,9 +79,11 @@ export class AttachmentService {
             reject(new Error(`Upload start error: ${err}`))
           })
       })
+
+      return { kind: "ok", id }
     } catch (error) {
       Logger.error(`UploadAttachment Error: ${error}`)
-      throw new Error(`Upload error: ${error}`)
+      return { kind: "error", error: `Upload error: ${error}` }
     }
   }
 

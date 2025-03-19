@@ -18,20 +18,22 @@ export const FilePreview = memo(({ item, addAttachment, setItem }: Props) => {
   const { translate } = useHelper()
   const $styles = useMemo(() => styles(colors), [colors])
 
-  const [isEditing, setIsEditing] = useState(false)
-  const [name, setName] = useState(item.name)
+  const [name, setName] = useState(item.fileName)
 
-  const onEdit = useCallback(() => {
-    setIsEditing(true)
+  const changeName = useCallback((val: string) => {
+    setName(val.trim())
   }, [])
-
-  const onEditDone = useCallback(() => {
-    if (name !== item.name) {
-      setItem({ ...item, name })
+  const onEditDone = () => {
+    if (name !== item.fileName) {
+      setItem({ ...item, fileName: name })
     }
-    setIsEditing(false)
     Keyboard.dismiss()
-  }, [])
+  }
+
+  const onAdd = () => {
+    addAttachment()
+    onEditDone()
+  }
 
   return (
     <View style={container}>
@@ -44,37 +46,29 @@ export const FilePreview = memo(({ item, addAttachment, setItem }: Props) => {
             paddingHorizontal: 12,
           }}
         >
-          {!isEditing ? (
-            <Text text={item.name} numberOfLines={3} />
-          ) : (
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              onSubmitEditing={onEditDone}
-              RightAccessory={() => <Text text={name.split(".")[1]} />}
-            />
-          )}
+          <TextInput
+            autoFocus
+            animated
+            label={translate("common.name")}
+            value={name}
+            multiline
+            returnKeyType="done"
+            onKeyPress={({ nativeEvent }) => {
+              if (nativeEvent.key === "Enter") {
+                onEditDone()
+              }
+            }}
+            onChangeText={changeName}
+            inputWrapperStyle={{
+              minHeight: 48,
+              flexGrow: 1,
+              flexShrink: 1,
+            }}
+          />
           <Text preset="label" text={convertBytes(item.size)} size="base" />
         </View>
-        <View style={row}>
-          {!isEditing ? (
-            <Icon icon="edit" containerStyle={iconPadding} onPress={onEdit} />
-          ) : (
-            <Icon
-              icon="check"
-              color={colors.success}
-              containerStyle={iconPadding}
-              onPress={onEditDone}
-            />
-          )}
-        </View>
       </View>
-      <Button
-        disabled={isEditing}
-        preset="teriatary"
-        text={translate("common.add")}
-        onPress={addAttachment}
-      />
+      <Button preset="teriatary" text={translate("common.add")} onPress={onAdd} />
     </View>
   )
 })
@@ -82,10 +76,6 @@ export const FilePreview = memo(({ item, addAttachment, setItem }: Props) => {
 const row: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
-}
-
-const iconPadding: ViewStyle = {
-  padding: 8,
 }
 
 const styles = (colors: ThemedColors) => ({

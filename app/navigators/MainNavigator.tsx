@@ -298,11 +298,11 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
     }
 
     ws.onerror = (e) => {
-      Logger.debug(`SOCKET ERROR: ${JSON.stringify(e)}`)
+      // Logger.debug(`SOCKET ERROR: ${JSON.stringify(e)}`)
     }
 
     ws.onclose = (e) => {
-      Logger.debug(`SOCKET CLOSE: ${JSON.stringify(e)}`)
+      // Logger.debug(`SOCKET CLOSE: ${JSON.stringify(e)}`)
 
       // Auto reconnect
       timeout.current = setTimeout(async () => {
