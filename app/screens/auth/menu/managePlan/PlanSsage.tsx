@@ -123,34 +123,7 @@ export const PlanUsage = () => {
           backgroundColor: colors.background,
         }}
       >
-        {isFreeAccount && <Text preset="bold" text={translate("manage_plan.usage.title")} />}
-        {!isFreeAccount && (
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            <Text preset="default" text={translate("manage_plan.usage.title")} />
-            <View
-              style={{
-                marginLeft: 8,
-                paddingHorizontal: 10,
-                paddingVertical: 3,
-                backgroundColor: colors.primary,
-                borderRadius: 3,
-              }}
-            >
-              <Text
-                preset="bold"
-                text={
-                  user.pwd_user_type === "enterprise"
-                    ? translate("common.enterprise")
-                    : user.plan?.name.toUpperCase()
-                }
-                size="base"
-                style={{
-                  color: colors.background,
-                }}
-              />
-            </View>
-          </View>
-        )}
+        <Text preset="bold" text={translate("manage_plan.usage.title")} />
 
         {items.map((e, index) => (
           <ItemStorage

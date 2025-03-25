@@ -7,6 +7,14 @@ import { PremiumFeature } from "./PremiumFeature"
 import { PlanUsage } from "./PlanSsage"
 import { useTheme } from "app/services/context"
 
+const map = {
+  pm_lifetime_family: "Lifetime Family",
+  pm_lifetime_premium: "Lifetime Premium",
+  pm_free: "Free",
+  pm_premium: "Premium",
+  pm_family: "Family",
+}
+
 export const ManagePlanScreen = observer(() => {
   const navigation = useNavigation()
   const { user } = useStores()
@@ -24,7 +32,7 @@ export const ManagePlanScreen = observer(() => {
           onLeftPress={() => {
             navigation.goBack()
           }}
-          title={user.plan?.name}
+          title={map[user.plan?.alias] ?? "Free"}
         />
       }
       backgroundColor={colors.block}

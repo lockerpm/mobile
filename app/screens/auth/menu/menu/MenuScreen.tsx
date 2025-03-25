@@ -145,14 +145,16 @@ export const MenuScreen = observer(() => {
       node: (
         <View style={{ flexDirection: isSmallWidth ? "column" : "row" }}>
           <Text text="PREMIUM" color={colors.primary} style={$planName} />
-          <Text
-            text={
-              translate("menu.expired_time") +
-              ": " +
-              moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")
-            }
-            style={[$planName, { marginLeft: isSmallWidth ? 0 : 8 }]}
-          />
+          {!user.plan?.is_family && (
+            <Text
+              text={
+                translate("menu.expired_time") +
+                ": " +
+                moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")
+              }
+              style={[$planName, { marginLeft: isSmallWidth ? 0 : 8 }]}
+            />
+          )}
         </View>
       ),
     },
