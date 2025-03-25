@@ -7,8 +7,8 @@ import { useCoreService } from "app/services/coreService"
 import { useStores } from "app/models"
 import { Platform } from "react-native"
 import { Logger } from "app/utils/utils"
-import { SymmetricCryptoKey } from "core/models/domain"
-import { KdfType } from "core/enums/kdfType"
+import crypto from "react-native-crypto"
+import { attachmentApi } from "app/services/api"
 
 export const MAX_UPLOAD_SIZE = 50000000
 export const IS_ANDROID = Platform.OS === "android"
@@ -18,33 +18,13 @@ export type AttachmentType = {
   size: number
   url: string
   fileName: string
-  key: SymmetricCryptoKey | null
-}
-
-const prepareFileUri = async (uri: string) => {
-  if (uri !== decodeURIComponent(uri)) {
-    try {
-      const res = await RNFS.stat(uri)
-      return res.path
-    } catch (error) {
-      return decodeURIComponent(uri)
-    }
-  }
-  return uri
-}
-
-const prepareFileName = (name: string, type?: string) => {
-  if (IS_ANDROID && type) {
-    const fileExtension = type.split("/").pop()
-    return `${name.replace(":", "-")}.${fileExtension}`
-  }
-  return name
+  key: string | null
 }
 
 export const usePickAttachment = () => {
-  const { notify, randomString } = useHelper()
+  const { notify, notifyApiError, translate } = useHelper()
   const { handleUserDeniedPermission } = usePermission()
-  const { attachmentService, cryptoService } = useCoreService()
+  const { attachmentService } = useCoreService()
   const { cipherStore } = useStores()
 
   const pickFile = async (): Promise<AttachmentType | null> => {
@@ -65,13 +45,13 @@ export const usePickAttachment = () => {
       }
 
       if (!file.size || file.size === 0) {
-        notify("error", "File is corrupted")
+        notify("error", translate("file_attachment.error.file_zero"))
         return null
       }
 
       // Limit size
       if (file.size > MAX_UPLOAD_SIZE) {
-        notify("error", "File too large")
+        notify("error", translate("file_attachment.error.max_size_error"))
         return null
       }
       // If file name have space or unicode characters, picker will encode it -> need decode
@@ -103,12 +83,12 @@ export const usePickAttachment = () => {
     }
 
     if (res.didCancel || res.assets.length === 0) {
-      notify("error", "File is corrupted")
+      notify("error", translate("file_attachment.error.file_zero"))
       return null
     }
     // Limit size
     if (res.assets[0].fileSize > MAX_UPLOAD_SIZE) {
-      notify("error", "File too large")
+      notify("error", translate("file_attachment.error.max_size_error"))
       return null
     }
 
@@ -125,74 +105,45 @@ export const usePickAttachment = () => {
     return file
   }
 
-  // const test = async (file: AttachmentType) => {
-  //   const kdf = KdfType.PBKDF2_SHA256
-  //   const kdfIterations = 100000
-  //   const password = randomString(32)
-  //   const salt = randomString(16)
-
-  //   const key: SymmetricCryptoKey = await cryptoService.makeKey(password, salt, kdf, kdfIterations)
-
-  //   const fileData = await RNFS.readFile(file.uri, "base64")
-
-  //   console.log("fileData", fileData)
-
-  //   const encryptedData = await cryptoService.encrypt(fileData, key)
-
-  //   // console.log("encryptedData", encryptedData)
-  //   const decryptToUtf8 = await cryptoService.decryptToUtf8(encryptedData, key)
-
-  //   console.log("decryptToUtf8", decryptToUtf8)
-
-  //   const filePath = `${RNFS.MainBundlePath}/${file.name}`
-
-  //   try {
-  //     if (await RNFS.exists(filePath)) {
-  //       await RNFS.unlink(filePath)
-  //     }
-  //     await RNFS.writeFile(filePath, decryptToUtf8, "base64")
-  //     console.log("Image saved at:", filePath)
-  //   } catch (error) {
-  //     console.error("Error saving image:", error)
-  //   }
-  //   return filePath
-  // }
-
   const encryptAndUploadFile = async (
     file: AttachmentType,
     onProgress: (val: number) => void,
   ): Promise<AttachmentType | null> => {
-    const tempEncFile = `${RNFS.DocumentDirectoryPath}/${Date.now()}${file.fileName}`
-
+    const tempEncFile = `${RNFS.CachesDirectoryPath}/${Date.now()}${file.fileName}`
     try {
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
-      const password = randomString(32)
-      const salt = randomString(16)
+      const randomKey = crypto.randomBytes(32)
+      const encRes = await attachmentService.encryptFile(file.url, tempEncFile, randomKey)
+      if (!encRes) {
+        notify("error", translate("file_attachment.error.encrypt_error"))
+        onProgress(-1)
+        return null
+      }
 
-      const key: SymmetricCryptoKey = await cryptoService.makeKey(
-        password,
-        salt,
-        kdf,
-        kdfIterations,
-      )
-
-      const fileData = await RNFS.readFile(file.url, "base64")
-
-      const encryptedData = await cryptoService.encrypt(fileData, key)
-
-      const encryptedFileData = JSON.stringify(encryptedData)
-
-      await RNFS.writeFile(tempEncFile, encryptedFileData, "base64")
-
-      const uploadRes = await attachmentService.uploadAttachment({
-        token: cipherStore.apiToken,
-        cipherId: cipherStore.selectedCipher.id,
-        uri: tempEncFile,
-        fileName: file.fileName,
-        onProgress,
+      const uploadFormRes = await attachmentApi.getUploadForm(cipherStore.apiToken, {
+        file_name: file.fileName,
+        metadata: {
+          cipher_id: cipherStore.selectedCipher.id,
+        },
       })
 
+      if (uploadFormRes.kind !== "ok") {
+        notifyApiError(uploadFormRes)
+        onProgress(-1)
+        return null
+      }
+
+      const encryptedFileSize = await getFileSize(tempEncFile)
+      if (uploadFormRes.data.limit_size < encryptedFileSize) {
+        notify("error", translate("file_attachment.error.upload_limit_error"))
+        onProgress(-1)
+        return null
+      }
+
+      const uploadRes = await attachmentService.uploadAttachment({
+        uploadFormData: uploadFormRes.data,
+        uri: tempEncFile,
+        onProgress,
+      })
       if (uploadRes.kind === "error") {
         notify("error", uploadRes.error)
         onProgress(-1)
@@ -202,14 +153,13 @@ export const usePickAttachment = () => {
       const attachment: AttachmentType = {
         ...file,
         url: uploadRes.id,
-        key,
+        key: randomKey.toString("base64"),
       }
 
-      console.tron.log("attachment", attachment)
       onProgress(1)
       return attachment
     } catch (error) {
-      notify("error", "Error uploading file")
+      notify("error", translate("file_attachment.error.upload_error"))
       onProgress(-1)
     } finally {
       if (await RNFS.exists(tempEncFile)) {
@@ -221,4 +171,33 @@ export const usePickAttachment = () => {
   }
 
   return { pickFile, pickMedia, encryptAndUploadFile }
+}
+
+const prepareFileUri = async (uri: string) => {
+  if (uri !== decodeURIComponent(uri)) {
+    try {
+      const res = await RNFS.stat(uri)
+      return res.path
+    } catch (error) {
+      return decodeURIComponent(uri)
+    }
+  }
+  return uri
+}
+
+const prepareFileName = (name: string, type?: string) => {
+  if (IS_ANDROID && type) {
+    const fileExtension = type.split("/").pop()
+    return `${name.replace(":", "-")}.${fileExtension}`
+  }
+  return name
+}
+
+const getFileSize = async (uri: string) => {
+  try {
+    const res = await RNFS.stat(uri)
+    return res.size
+  } catch (error) {
+    return 0
+  }
 }

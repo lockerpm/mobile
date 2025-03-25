@@ -260,7 +260,9 @@ export type PrimaryParamList = {
     trusted: TrustedContact
     reset_pw: boolean
   }
-  attachment: undefined
+  attachment: {
+    isShared?: boolean
+  }
 }
 
 export type AppStackScreenProps<T extends keyof PrimaryParamList> = StackScreenProps<

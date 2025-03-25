@@ -1,23 +1,23 @@
-import React, { FC,  useState } from 'react'
-import { Alert, Linking, View } from 'react-native'
+import React, { FC, useState } from "react"
+import { Alert, Linking, View } from "react-native"
 
-import VersionCheck from 'react-native-version-check'
-import dynamicLinks from '@react-native-firebase/dynamic-links'
-import NetInfo from '@react-native-community/netinfo'
-import DeviceInfo from 'react-native-device-info'
-import JailMonkey from 'jail-monkey'
-import { useStores } from 'app/models'
-import { IS_PROD } from 'app/config/constants'
-import { Logger } from 'app/utils/utils'
-import { useAuthentication, useHelper } from 'app/services/hook'
-import { Text } from 'app/components/cores'
-import {  MotionLoading } from 'app/components/utils'
-import { LockType } from '../lock/lock.types'
-import { observer } from 'mobx-react-lite'
-import { RootStackScreenProps } from 'app/navigators/navigators.types'
-import { useTheme } from 'app/services/context'
+import VersionCheck from "react-native-version-check"
+import dynamicLinks from "@react-native-firebase/dynamic-links"
+import NetInfo from "@react-native-community/netinfo"
+import DeviceInfo from "react-native-device-info"
+import JailMonkey from "jail-monkey"
+import { useStores } from "app/models"
+import { IS_PROD } from "app/config/constants"
+import { Logger } from "app/utils/utils"
+import { useAuthentication, useHelper } from "app/services/hook"
+import { Text } from "app/components/cores"
+import { MotionLoading } from "app/components/utils"
+import { LockType } from "../lock/lock.types"
+import { observer } from "mobx-react-lite"
+import { RootStackScreenProps } from "app/navigators/navigators.types"
+import { useTheme } from "app/services/context"
 
-export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => {
+export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => {
   const { translate } = useHelper()
   const { colors } = useTheme()
   const { user, cipherStore } = useStores()
@@ -43,12 +43,12 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
   const goLockOrCreatePassword = () => {
     if (user.is_pwd_manager) {
       if (user.onPremiseUser) {
-        navigation.replace('lock', { type: LockType.OnPremise })
+        navigation.replace("lock", { type: LockType.OnPremise })
       } else {
-        navigation.replace('lock', { type: LockType.Individual })
+        navigation.replace("lock", { type: LockType.Individual })
       }
     } else {
-      navigation.replace('createMasterPassword')
+      navigation.replace("createMasterPassword")
     }
   }
 
@@ -59,22 +59,22 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
         .then(async (res) => {
           const showAlert = () => {
             Alert.alert(
-              translate('alert.update.title'),
-              translate('alert.update.content', { version: res.latestVersion }),
+              translate("alert.update.title"),
+              translate("alert.update.content", { version: res.latestVersion }),
               [
                 {
-                  text: translate('alert.update.later'),
-                  style: 'cancel',
+                  text: translate("alert.update.later"),
+                  style: "cancel",
                   onPress: () => null,
                 },
                 {
-                  text: translate('alert.update.now'),
-                  style: 'destructive',
+                  text: translate("alert.update.now"),
+                  style: "destructive",
                   onPress: async () => {
                     Linking.openURL(res.storeUrl) // open store if update is needed.
                   },
                 },
-              ]
+              ],
             )
           }
 
@@ -132,14 +132,14 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
     if (!user.isLoggedIn) {
       if (!user.introShown) {
         user.setIntroShown(true)
-        navigation.replace('intro')
+        navigation.replace("intro")
       } else {
-        navigation.replace('onBoarding')
+        navigation.replace("onBoarding")
       }
       return
     }
 
-    // Network connected? 
+    // Network connected?
     if (!connectionState.isConnected) {
       goLockOrCreatePassword()
       return
@@ -147,15 +147,15 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
 
     if (user.onPremiseUser) {
       const res = await user.onPremisePreLogin({ email: user.email })
-      if (res.kind === 'ok') {
+      if (res.kind === "ok") {
         if (res.data[0].activated) {
-          navigation.replace('lock', {
+          navigation.replace("lock", {
             type: LockType.OnPremise,
             data: res.data[0],
             email: user.email,
           })
         } else {
-          navigation.replace('login')
+          navigation.replace("login")
         }
         return
       }
@@ -163,23 +163,23 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
 
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
     if (
-      ['ok', 'unauthorized'].includes(userRes.kind) &&
-      ['ok', 'unauthorized'].includes(userPwRes.kind)
+      ["ok", "unauthorized"].includes(userRes.kind) &&
+      ["ok", "unauthorized"].includes(userPwRes.kind)
     ) {
       goLockOrCreatePassword()
     } else {
-      navigation.replace('login')
+      navigation.replace("login")
     }
   }
   // ------------------ EFFECTS ---------------------
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       mounted()
-    });
+    })
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
-  }, [navigation]);
+    return unsubscribe
+  }, [navigation])
 
   // ------------------ RENDER ---------------------
 
@@ -189,16 +189,16 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
         <View
           style={{
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
             paddingHorizontal: 20,
             paddingVertical: 16,
           }}
         >
           <Text
-            text={translate('error.rooted_device')}
+            text={translate("error.rooted_device")}
             style={{
-              textAlign: 'center',
+              textAlign: "center",
             }}
           />
         </View>

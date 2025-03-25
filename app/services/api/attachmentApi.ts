@@ -54,6 +54,30 @@ class AttachmentApi {
       return { kind: "bad-data" }
     }
   }
+
+  public async deleteAttachment(
+    token: string,
+    paths: string[],
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        "/cystack_platform/pm/attachments/multiple_delete",
+        {
+          paths,
+        },
+      )
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e)
+      return { kind: "bad-data" }
+    }
+  }
 }
 
 export const attachmentApi = new AttachmentApi()

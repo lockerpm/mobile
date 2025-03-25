@@ -1,87 +1,111 @@
-import { useNavigation } from "@react-navigation/native"
 import { Header, Screen } from "app/components/cores"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { FC, useCallback, useState } from "react"
 import { AttachmentSelectIcon } from "./AttachmentSelectModal"
 import { observer } from "mobx-react-lite"
 import { useStores } from "app/models"
 import { FlatList, Image, ImageStyle, View, ViewStyle } from "react-native"
 import { Attachment } from "./item/Attachment"
 import { AttachmentType } from "./usePickAttachment"
-import { SymmetricCryptoKey } from "core/models/domain"
+import { AttachmentView, CipherView } from "core/models/view"
+import { useCipherData } from "app/services/hook"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 const EMPTY_IMAGE = require("assets/images/empty_attachment.png")
 
-const test: AttachmentType = {
-  id: "1742358762669",
-  fileName: "8ADADE66-65F2-476D-AAEE-EFBEFE81C53F.png",
-  size: 1001,
-  url: "attachments/14da34aaae7412be6967ce97061b61f4/5f8918b1-60bb-4a58-94c7-841e55b18565/2561750864821100586",
-  key: {
-    key: {},
-    encType: 0,
-    encKey: {},
-    macKey: null,
-    keyB64: "98CAkwpg4Vp1sTbsGt1Ac/yladqdX3L2ANtj68Sj6JE=",
-    encKeyB64: "98CAkwpg4Vp1sTbsGt1Ac/yladqdX3L2ANtj68Sj6JE=",
-  } as SymmetricCryptoKey,
-}
+export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
+  ({ navigation, route }) => {
+    const { cipherStore } = useStores()
+    const { updateCipher } = useCipherData()
 
-export const AttachmentScreen = observer(() => {
-  const navigation = useNavigation()
-  const { cipherStore } = useStores()
+    const isShared = route.params?.isShared ?? false
 
-  console.tron.log("selected cipher id", cipherStore.selectedCipher?.id)
-  // -------------- PARAMS ------------------
+    console.log("selected cipher", cipherStore.selectedCipher)
 
-  const [attachments, setAttachments] = useState<AttachmentType[]>([])
+    console.tron.log("selected cipher id", cipherStore.selectedCipher?.id)
+    // -------------- PARAMS ------------------
 
-  // -------------- METHODS ------------------
+    const [attachments, setAttachments] = useState<AttachmentType[]>(
+      cipherStore.selectedCipher.attachments || [],
+    )
 
-  const addAttachment = useCallback((newFile: AttachmentType) => {
-    setAttachments((prev) => [newFile, ...prev])
-  }, [])
+    // -------------- METHODS ------------------
+    const updateCipherAttachment = async (attachments: AttachmentType[]) => {
+      const payload: CipherView = { ...cipherStore.selectedCipher }
+      const attachmentsView: AttachmentView[] = attachments.map((a) => {
+        const attachment = new AttachmentView()
+        attachment.id = a.id
+        attachment.fileName = a.fileName
+        attachment.size = a.size
+        attachment.url = a.url
+        attachment.key = a.key
+        return attachment
+      })
+      payload.attachments = attachmentsView
+      await updateCipher(payload.id, payload, 0, payload.collectionIds, true)
+    }
 
-  // -------------- RENDER ------------------
-  const RightActionComponent = useCallback(() => {
-    return <AttachmentSelectIcon addAttachment={addAttachment} />
-  }, [])
+    /**
+     * User select local attachment to upload
+     */
+    const addLocalAttachment = useCallback((newFile: AttachmentType) => {
+      setAttachments((prev) => [newFile, ...prev])
+    }, [])
 
-  const EmptyList = useCallback(
-    () => <Image source={EMPTY_IMAGE} style={imageStyle} resizeMode="contain" />,
-    [],
-  )
+    /**
+     * Call back when user delete or upload successfully attachment
+     */
+    const updateAttachments = useCallback(
+      async (attachment: AttachmentType, isDelete: boolean) => {
+        const newAttachments = attachments.filter((a) => a.id !== attachment.id)
+        if (!isDelete) {
+          newAttachments.unshift(attachment)
+        }
+        setAttachments(newAttachments)
+        await updateCipherAttachment(newAttachments)
+      },
+      [attachments],
+    )
 
-  const ItemSeparatorComponent = useCallback(() => <View style={separator} />, [])
+    // -------------- RENDER ------------------
+    const RightActionComponent = useCallback(() => {
+      return !isShared ? <AttachmentSelectIcon addAttachment={addLocalAttachment} /> : undefined
+    }, [isShared])
 
-  useEffect(() => {
-    setAttachments([test])
-  }, [])
+    const EmptyList = useCallback(
+      () => <Image source={EMPTY_IMAGE} style={imageStyle} resizeMode="contain" />,
+      [],
+    )
 
-  return (
-    <Screen
-      safeAreaEdges={["bottom"]}
-      header={
-        <Header
-          leftIcon="arrow-left"
-          onLeftPress={navigation.goBack}
-          titleTx="file_attachment.title"
-          rightIcon="plus"
-          RightActionComponent={<RightActionComponent />}
+    const ItemSeparatorComponent = useCallback(() => <View style={separator} />, [])
+
+    return (
+      <Screen
+        safeAreaEdges={["bottom"]}
+        header={
+          <Header
+            leftIcon="arrow-left"
+            onLeftPress={navigation.goBack}
+            titleTx="file_attachment.title"
+            rightIcon="plus"
+            RightActionComponent={<RightActionComponent />}
+          />
+        }
+        contentContainerStyle={container}
+      >
+        <FlatList
+          data={attachments}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={listContent}
+          renderItem={({ item }) => (
+            <Attachment item={item} updateAttachments={updateAttachments} isShared={isShared} />
+          )}
+          ListEmptyComponent={<EmptyList />}
+          ItemSeparatorComponent={ItemSeparatorComponent}
         />
-      }
-      contentContainerStyle={container}
-    >
-      <FlatList
-        data={attachments}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={listContent}
-        renderItem={({ item }) => <Attachment item={item} />}
-        ListEmptyComponent={<EmptyList />}
-        ItemSeparatorComponent={ItemSeparatorComponent}
-      />
-    </Screen>
-  )
-})
+      </Screen>
+    )
+  },
+)
 
 const container: ViewStyle = {
   flex: 1,

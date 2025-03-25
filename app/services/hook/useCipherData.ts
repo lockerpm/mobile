@@ -143,7 +143,6 @@ export function useCipherData() {
       try {
         cipherStore.setIsSynching(true)
         messagingService.send("syncStarted")
-
         // Sync api
         const res = await cipherStore.syncData()
         if (res.kind !== "ok") {
@@ -151,7 +150,6 @@ export function useCipherData() {
           messagingService.send("syncCompleted", { successfully: false })
           return res
         }
-
         // Start sync
         cipherStore.setLastSync(bumpTimestamp)
         await syncService.setLastSync(new Date(bumpTimestamp))
@@ -215,25 +213,24 @@ export function useCipherData() {
         // Set last sync
         cipherStore.setLastSync(bumpTimestamp)
         await syncService.setLastSync(new Date(bumpTimestamp))
-
         // Sync service with data from first page
         const userId = await userService.getUserId()
-
         await syncService.syncProfile(res.data.profile)
         await syncService.syncFolders(userId, res.data.folders)
         await syncService.syncCollections(res.data.collections)
+
+        console.log("syncSomeCiphers start")
         await syncService.syncSomeCiphers(userId, res.data.ciphers)
+        console.log("syncSomeCiphers end")
+
         await syncService.syncSends(userId, res.data.sends)
         await syncService.syncSettings(userId, res.data.domains)
         await syncService.syncPolicies(res.data.policies)
         await syncQuickShares()
-
         cipherIds = res.data.ciphers.map((c) => c.id)
-
         // Load all loaded data
         loadOrganizations()
         cipherStore.setLastCacheUpdate()
-
         // Sync other ciphers
         const totalCipherCount = res.data.count.ciphers
         while (page * pageSize < totalCipherCount) {
@@ -259,7 +256,6 @@ export function useCipherData() {
         }
         await storageService.save(`ciphers_${userId}`, storageRes)
         await cipherService.csDeleteFromDecryptedCache(deletedIds)
-
         // Load folders
         loadFolders()
         loadCollections()
@@ -268,14 +264,12 @@ export function useCipherData() {
         cipherStore.clearNotUpdate()
         folderStore.clearNotUpdate()
         collectionStore.clearNotUpdate()
-
         // Save fingerprint
         const fingerprint = await cryptoService.getFingerprint(userId)
         user.setFingerprint(fingerprint.join("-"))
 
         // Save to shared keychain for autofill service
         await _updateAutofillData()
-
         // Reload password health
         EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
 
@@ -996,10 +990,7 @@ export function useCipherData() {
 
       // Online
       const cipherEnc = await cipherService.encrypt(cipher)
-
-      console.log(cipherEnc)
       const data = new CipherRequest(cipherEnc)
-
       const res = await cipherStore.createCipher(data, score, collectionIds)
       if (res.kind === "ok") {
         await _offlineCreateCipher({
@@ -1075,7 +1066,9 @@ export function useCipherData() {
 
       // Online
       const cipherEnc = await cipherService.encrypt(cipher)
+
       const data = new CipherRequest(cipherEnc)
+      // return { kind: "unknown" }
       const res = await cipherStore.updateCipher(id, data, score, collectionIds)
       if (res.kind === "ok") {
         await _offlineUpdateCipher({
@@ -1309,6 +1302,7 @@ export function useCipherData() {
 
       // Prepare cipher
       const cipherEnc = await cipherService.encrypt(cipher, orgKey)
+
       const data = new CipherRequest(cipherEnc)
 
       // Get public keys

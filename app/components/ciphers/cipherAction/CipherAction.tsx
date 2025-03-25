@@ -274,6 +274,20 @@ export const CipherAction = (props: CipherActionProps) => {
 
         {isShared && (
           <ActionItem
+            disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+            name={translate("file_attachment.title")}
+            icon="file-arrow-up"
+            action={() => {
+              onClose()
+              navigation.navigate("attachment", {
+                isShared: true,
+              })
+            }}
+          />
+        )}
+
+        {isShared && (
+          <ActionItem
             disabled={uiStore.isOffline}
             name={translate("shares.leave")}
             icon="sign-out"

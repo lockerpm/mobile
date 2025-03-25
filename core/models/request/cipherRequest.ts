@@ -26,9 +26,8 @@ export class CipherRequest {
   identity: IdentityApi
   fields: FieldApi[]
   passwordHistory: PasswordHistoryRequest[]
-  // Deprecated, remove at some point and rename attachments2 to attachments
-  attachments: { [id: string]: string }
-  attachments2: { [id: string]: AttachmentRequest }
+  attachments: AttachmentRequest[]
+  // attachments2: { [id: string]: AttachmentRequest }
   lastKnownRevisionDate: Date
   reprompt: CipherRepromptType
 
@@ -149,17 +148,16 @@ export class CipherRequest {
     }
 
     if (cipher.attachments != null) {
-      this.attachments = {}
-      this.attachments2 = {}
+      this.attachments = []
       cipher.attachments.forEach((attachment) => {
-        const fileName = attachment.fileName ? attachment.fileName.encryptedString : null
-        this.attachments[attachment.id] = fileName
         const attachmentRequest = new AttachmentRequest()
-        attachmentRequest.fileName = fileName
-        if (attachment.key != null) {
-          attachmentRequest.key = attachment.key.encryptedString
-        }
-        this.attachments2[attachment.id] = attachmentRequest
+        attachmentRequest.id = attachment.id
+        attachmentRequest.size = attachment.size
+
+        attachmentRequest.fileName = attachment.fileName?.encryptedString ?? null
+        attachmentRequest.url = attachment.url?.encryptedString ?? null
+        attachmentRequest.key = attachment.key?.encryptedString ?? null
+        this.attachments.push(attachmentRequest)
       })
     }
   }

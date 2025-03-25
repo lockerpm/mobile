@@ -1,37 +1,64 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { AttachmentType } from "../usePickAttachment"
-import { View, ViewStyle } from "react-native"
+import { ActivityIndicator, Alert, View, ViewStyle } from "react-native"
 import { ThemedColors } from "app/theme"
 import { useTheme } from "app/services/context"
 import { Icon, Text } from "app/components/cores"
 import { convertBytes } from "./utils"
 import { AttachmentProgress } from "./AttachmentProgress"
+import { useAttachmentActions } from "./useAttachmentActions"
+import { useHelper } from "app/services/hook"
 
 interface Props {
   item: AttachmentType
+  updateAttachments: (attachment: AttachmentType, isDelete: boolean) => void
+  isShared?: boolean
 }
 
-export const Attachment = ({ item }: Props) => {
+export const Attachment = ({ item, updateAttachments, isShared }: Props) => {
   const { colors } = useTheme()
+  const { translate } = useHelper()
+
   const $styles = useMemo(() => styles(colors), [colors])
 
   const [isLoading, setIsLoading] = useState(!item.key)
   const [attachment, setAttachment] = useState(item)
 
+  const { onDownloadAttachment, onDeleteAttachment } = useAttachmentActions(
+    attachment,
+    setIsLoading,
+    updateAttachments,
+  )
+
+  /**
+   * Call back when user upload successfully attachment
+   */
   const uploadAttachment = useCallback((attachment: AttachmentType) => {
     if (attachment.key) {
       setAttachment(attachment)
       setIsLoading(false)
+      updateAttachments(attachment, false)
     }
   }, [])
 
-  const onDownloadAttachment = useCallback(() => {
-    // download attachment
-  }, [])
-
-  const onDeleteAttachment = useCallback(() => {
-    // delete attachment
-  }, [])
+  const deleteAlert = useCallback(() => {
+    Alert.alert(
+      translate("file_attachment.delete_btn"),
+      "",
+      [
+        {
+          text: translate("common.cancel"),
+          style: "cancel",
+        },
+        {
+          text: translate("common.delete"),
+          style: "destructive",
+          onPress: onDeleteAttachment,
+        },
+      ],
+      { cancelable: true },
+    )
+  }, [onDeleteAttachment])
 
   return (
     <View style={$styles.constainer}>
@@ -42,7 +69,7 @@ export const Attachment = ({ item }: Props) => {
             flexGrow: 1,
             flexShrink: 1,
             paddingHorizontal: 12,
-            opacity: isLoading ? 0.5 : 1,
+            opacity: isLoading && !attachment.key ? 0.5 : 1,
           }}
         >
           <Text text={attachment.fileName} numberOfLines={3} />
@@ -56,14 +83,19 @@ export const Attachment = ({ item }: Props) => {
               containerStyle={iconPadding}
               onPress={onDownloadAttachment}
             />
-            <Icon
-              icon="trash"
-              size={24}
-              color={colors.error}
-              containerStyle={iconPadding}
-              onPress={onDeleteAttachment}
-            />
+            {!isShared && (
+              <Icon
+                icon="trash"
+                size={24}
+                color={colors.error}
+                containerStyle={iconPadding}
+                onPress={deleteAlert}
+              />
+            )}
           </View>
+        )}
+        {isLoading && !!attachment.key && (
+          <ActivityIndicator size={"small"} color={colors.primary} />
         )}
       </View>
       {!attachment.key && <AttachmentProgress item={item} uploadAttachment={uploadAttachment} />}

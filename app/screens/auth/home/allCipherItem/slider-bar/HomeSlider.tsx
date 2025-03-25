@@ -14,6 +14,7 @@ import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
 import { iosKeyChain } from "app/utils/iosAutofillData"
 import { AutofillServiceEnabled } from "app/utils/autofillHelper"
+import { observer } from "mobx-react-lite"
 
 enum SliderEnum {
   SuggestEnableFaceID = "SuggestEnableFaceID",
@@ -28,7 +29,7 @@ type SliderDataType = {
 }
 const WIDTH = Dimensions.get("window").width
 
-export const HomeSlider = () => {
+export const HomeSlider = observer(() => {
   const { user } = useStores()
   const { colors } = useTheme()
   const { cryptoService } = useCoreService()
@@ -157,7 +158,7 @@ export const HomeSlider = () => {
       {/* <AnimatedFooter animIndex={animIndex} length={data.length} /> */}
     </View>
   )
-}
+})
 
 const themedStyle = (colors: ThemedColors) => ({
   itemContainer: {

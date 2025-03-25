@@ -6,7 +6,7 @@ import { useTheme } from "app/services/context"
 import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { CollectionView } from "core/models/view/collectionView"
-import { AttachmentView, CipherView, FieldView, LoginUriView, LoginView } from "core/models/view"
+import { CipherView, FieldView, LoginUriView, LoginView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { Button, Header, Screen, TextInput, Text, Icon } from "app/components/cores"
 import { PlanStorageLimitModal } from "../../planStorageLimitModal"
@@ -45,7 +45,6 @@ export const PasswordEditScreen: FC<AppStackScreenProps<"passwords__edit">> = ob
     return !!org
   })()
 
-  console.log(selectedCipher.attachments)
   // ----------------- PARAMS ------------------
 
   const [isLoading, setIsLoading] = useState(false)
@@ -178,17 +177,6 @@ export const PasswordEditScreen: FC<AppStackScreenProps<"passwords__edit">> = ob
       uriView.uri = url
       data.uris = [uriView]
     }
-
-    // const attachment = new AttachmentView()
-    // attachment.id = Date.now().toString()
-    // attachment.fileName = "Hello"
-    // attachment.size = "20"
-    // attachment.sizeName = "kb"
-    // attachment.url = "https://www.google.com"
-
-    // payload.attachments = [attachment]
-
-    // console.log(payload.attachments)
 
     payload.fields = fields
     payload.name = name

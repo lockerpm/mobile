@@ -99,9 +99,9 @@ export const AttachmentSelectIcon = ({ addAttachment }: Props) => {
           <FilePreview
             item={localFile}
             setItem={setLocalFile}
-            addAttachment={() => {
-              addAttachment(localFile)
+            addAttachment={(file: AttachmentType) => {
               closeModal()
+              addAttachment(file)
             }}
           />
         ) : (

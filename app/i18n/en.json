@@ -1302,16 +1302,22 @@
     "upload_photo": "Upload Photo",
     "upload_file": "Upload File",
     "max_size": "Max file size is 50MB",
-    "max_size_error": "File size must be less than 50MB",
-    "upload_error": "Upload error, please try again",
     "upload_success": "File uploaded successfully",
-    "upload_limit_error": "You have exceeded the 1GB storage limit. Please delete unnecessary files to free up space.",
-    "download": "File downloaded successfully",
-    "delete": "File deleted successfully",
+    "download_success": "File downloaded successfully",
+    "delete_success": "File deleted successfully",
     "delete_confirm": "Are you sure you want to delete this file?",
-    "delete_btn": "Delete",
+    "delete_btn": "Delete attachment",
     "permission_denied": "Permission Denied",
     "permission_denied_desc": "You have denied {{type}} permission. Grant this permission in '{{type}}' tab to fully using Locker feature",
-    "go_setting": "Go to Setting"
+    "go_setting": "Go to Setting",
+    "error": {
+      "file_zero": "File is corrupted",
+      "max_size_error": "File size must be less than 50MB",
+      "encrypt_error": "Error encrypting file",
+      "decrypt_error": "Error decrypting file",
+      "download_error": "Download error, please try again",
+      "upload_error": "Upload error, please try again",
+      "upload_limit_error": "You have exceeded the 1GB storage limit. Please delete unnecessary files to free up space."
+    }
   }
 }

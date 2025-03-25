@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-async-promise-executor */
-import * as crypto from 'crypto'
-import * as forge from 'node-forge'
-import { CryptoFunctionService } from 'core/abstractions/cryptoFunction.service'
-import { SymmetricCryptoKey } from 'core/models/domain'
-import { DecryptParameters } from 'core/models/domain/decryptParameters'
-import { Utils } from 'core/misc/utils'
-import RNSimpleCrypto from 'react-native-simple-crypto'
-import { NativeModules } from 'react-native'
-import { IS_IOS } from '../../../config/constants'
+import * as crypto from "crypto"
+import * as forge from "node-forge"
+import { CryptoFunctionService } from "core/abstractions/cryptoFunction.service"
+import { SymmetricCryptoKey } from "core/models/domain"
+import { DecryptParameters } from "core/models/domain/decryptParameters"
+import { Utils } from "core/misc/utils"
+import RNSimpleCrypto from "react-native-simple-crypto"
+import { NativeModules } from "react-native"
+import { IS_IOS } from "../../../config/constants"
 
 const { RNCryptoServiceIos, RNCryptoServiceAndroid } = NativeModules
 
@@ -17,10 +17,10 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   pbkdf2(
     password: string | ArrayBuffer,
     salt: string | ArrayBuffer,
-    algorithm: 'sha256' | 'sha512',
-    iterations: number
+    algorithm: "sha256" | "sha512",
+    iterations: number,
   ): Promise<ArrayBuffer> {
-    const len = algorithm === 'sha256' ? 32 : 64
+    const len = algorithm === "sha256" ? 32 : 64
     const nodePassword = this.toNodeValue(password)
     const nodeSalt = this.toNodeValue(salt)
     return new Promise<ArrayBuffer>(async (resolve, reject) => {
@@ -36,7 +36,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
         nodeSalt,
         iterations,
         len,
-        algorithm === 'sha256' ? 'SHA256' : 'SHA512'
+        algorithm === "sha256" ? "SHA256" : "SHA512",
       )
       resolve(this.toArrayBuffer(key))
     })
@@ -49,7 +49,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     salt: string | ArrayBuffer,
     info: string | ArrayBuffer,
     outputByteSize: number,
-    algorithm: 'sha256' | 'sha512'
+    algorithm: "sha256" | "sha512",
   ): Promise<ArrayBuffer> {
     const saltBuf = this.toArrayBuffer(salt)
     const prk = await this.hmac(ikm, saltBuf, algorithm)
@@ -62,15 +62,15 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     prk: ArrayBuffer,
     info: string | ArrayBuffer,
     outputByteSize: number,
-    algorithm: 'sha256' | 'sha512'
+    algorithm: "sha256" | "sha512",
   ): Promise<ArrayBuffer> {
-    const hashLen = algorithm === 'sha256' ? 32 : 64
+    const hashLen = algorithm === "sha256" ? 32 : 64
     if (outputByteSize > 255 * hashLen) {
-      throw new Error('outputByteSize is too large.')
+      throw new Error("outputByteSize is too large.")
     }
     const prkArr = new Uint8Array(prk)
     if (prkArr.length < hashLen) {
-      throw new Error('prk is too small.')
+      throw new Error("prk is too small.")
     }
     const infoBuf = this.toArrayBuffer(info)
     const infoArr = new Uint8Array(infoBuf)
@@ -96,18 +96,18 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   // DONE (can ignore md5)
   hash(
     value: string | ArrayBuffer,
-    algorithm: 'sha1' | 'sha256' | 'sha512' | 'md5'
+    algorithm: "sha1" | "sha256" | "sha512" | "md5",
   ): Promise<ArrayBuffer> {
     const nodeValue = this.toNodeValue(value)
 
     switch (algorithm) {
-      case 'sha1':
+      case "sha1":
         // @ts-ignore
         return RNSimpleCrypto.SHA.sha1(nodeValue)
-      case 'sha256':
+      case "sha256":
         // @ts-ignore
         return RNSimpleCrypto.SHA.sha256(nodeValue)
-      case 'sha512':
+      case "sha512":
         // @ts-ignore
         return RNSimpleCrypto.SHA.sha512(nodeValue)
       default:
@@ -123,12 +123,12 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   hmac(
     value: ArrayBuffer,
     key: ArrayBuffer,
-    algorithm: 'sha1' | 'sha256' | 'sha512'
+    algorithm: "sha1" | "sha256" | "sha512",
   ): Promise<ArrayBuffer> {
     const nodeValue = this.toNodeBuffer(value)
     const nodeKey = this.toNodeBuffer(key)
 
-    if (algorithm === 'sha256') {
+    if (algorithm === "sha256") {
       return RNSimpleCrypto.HMAC.hmac256(nodeValue, nodeKey)
     }
 
@@ -140,8 +140,8 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
 
   async compare(a: ArrayBuffer, b: ArrayBuffer): Promise<boolean> {
     const key = await this.randomBytes(32)
-    const mac1 = await this.hmac(a, key, 'sha256')
-    const mac2 = await this.hmac(b, key, 'sha256')
+    const mac1 = await this.hmac(a, key, "sha256")
+    const mac2 = await this.hmac(b, key, "sha256")
     if (mac1.byteLength !== mac2.byteLength) {
       return false
     }
@@ -160,7 +160,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   hmacFast(
     value: ArrayBuffer,
     key: ArrayBuffer,
-    algorithm: 'sha1' | 'sha256' | 'sha512'
+    algorithm: "sha1" | "sha256" | "sha512",
   ): Promise<ArrayBuffer> {
     return this.hmac(value, key, algorithm)
   }
@@ -185,7 +185,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     data: string,
     iv: string,
     mac: string,
-    key: SymmetricCryptoKey
+    key: SymmetricCryptoKey,
   ): DecryptParameters<ArrayBuffer> {
     const p = new DecryptParameters<ArrayBuffer>()
     p.encKey = key.encKey
@@ -228,10 +228,10 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   rsaEncrypt(
     data: ArrayBuffer,
     publicKey: ArrayBuffer,
-    algorithm: 'sha1' | 'sha256'
+    algorithm: "sha1" | "sha256",
   ): Promise<ArrayBuffer> {
-    if (algorithm === 'sha256') {
-      throw new Error('Node crypto does not support RSA-OAEP SHA-256')
+    if (algorithm === "sha256") {
+      throw new Error("Node crypto does not support RSA-OAEP SHA-256")
     }
 
     const pem = this.toPemPublicKey(publicKey)
@@ -243,16 +243,16 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   async rsaDecrypt(
     data: ArrayBuffer,
     privateKey: ArrayBuffer,
-    algorithm: 'sha1' | 'sha256'
+    algorithm: "sha1" | "sha256",
   ): Promise<ArrayBuffer> {
-    if (algorithm === 'sha256') {
-      throw new Error('Node crypto does not support RSA-OAEP SHA-256')
+    if (algorithm === "sha256") {
+      throw new Error("Node crypto does not support RSA-OAEP SHA-256")
     }
 
     const CryptoServiceModule = IS_IOS ? RNCryptoServiceIos : RNCryptoServiceAndroid
     const decipher = await CryptoServiceModule.decryptOAEPSHA1(
       Utils.fromBufferToB64(data),
-      Utils.fromBufferToB64(privateKey)
+      Utils.fromBufferToB64(privateKey),
     )
     return Utils.fromB64ToArray(decipher).buffer
   }
@@ -326,7 +326,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
 
   private toNodeValue(value: string | ArrayBuffer): string | Buffer {
     let nodeValue: string | Buffer
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       nodeValue = value
     } else {
       nodeValue = this.toNodeBuffer(value)
@@ -340,7 +340,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
 
   private toArrayBuffer(value: Buffer | string | ArrayBuffer): ArrayBuffer {
     let buf: ArrayBuffer
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       buf = Utils.fromUtf8ToArray(value).buffer
     } else {
       buf = new Uint8Array(value).buffer

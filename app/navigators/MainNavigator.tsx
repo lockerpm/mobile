@@ -80,7 +80,7 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((props) => {
   const navigation = props.navigation
-  const { notify, parsePushNotiData } = useHelper()
+  const { notify } = useHelper()
   const {
     getCipherById,
     syncAutofillData,
@@ -215,17 +215,6 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
           activeHandling.current = false
           return
         }
-
-        // Check push noti data
-        const navigationRequest = await parsePushNotiData()
-        if (navigationRequest.path) {
-          // handle navigate browse
-          // @ts-ignore
-          navigationRequest.tempParams &&
-            navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
-          // @ts-ignore
-          navigation.navigate(navigationRequest.path, navigationRequest.params)
-        }
       }
       activeHandling.current = false
     }
@@ -303,15 +292,14 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
 
     ws.onclose = (e) => {
       // Logger.debug(`SOCKET CLOSE: ${JSON.stringify(e)}`)
-
       // Auto reconnect
-      timeout.current = setTimeout(async () => {
-        if (!uiStore.isOffline && user.isLoggedInPw) {
-          // Manually check for update
-          await handleSync()
-          setSocket(generateSocket())
-        }
-      }, 10000)
+      // timeout.current = setTimeout(async () => {
+      //   if (!uiStore.isOffline && user.isLoggedInPw) {
+      //     // Manually check for update
+      //     await handleSync()
+      //     setSocket(generateSocket())
+      //   }
+      // }, 10000)
     }
 
     return ws

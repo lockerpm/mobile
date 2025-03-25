@@ -1347,17 +1347,23 @@
       "upload_photo": "Tải lên ảnh",
       "upload_file": "Tải lên tệp",
       "max_size": "Kích thước tệp tối đa là 50MB",
-      "max_size_error": "Kích thước tệp phải nhỏ hơn 50MB",
-      "upload_error": "Lỗi tải lên, vui lòng thử lại",
       "upload_success": "Tệp đã được tải lên thành công",
-      "upload_limit_error": "Bạn đã vượt quá giới hạn lưu trữ 1GB. Vui lòng xóa các tệp không cần thiết để giải phóng dung lượng.",
-      "download": "Tệp đã được tải xuống thành công",
-      "delete": "Tệp đã được xóa thành công",
+      "download_success": "Tệp đã được tải xuống thành công",
+      "delete_success": "Tệp đã được xóa thành công",
       "delete_confirm": "Bạn có chắc chắn muốn xóa tệp này không?",
-      "delete_btn": "Xóa",
+      "delete_btn": "Xóa tệp đính kèm",
       "permission_denied": "Quyền bị từ chối",
       "permission_denied_desc": "Bạn đã từ chối quyền {{type}}. Cấp quyền này trong tab '{{type}}' để sử dụng đầy đủ tính năng của Locker",
-      "go_setting": "Đi tới Cài đặt"
+      "go_setting": "Đi tới Cài đặt",
+      "error": {
+        "file_zero": "Tệp bị hỏng",
+        "max_size_error": "Kích thước tệp phải nhỏ hơn 50MB",
+        "encrypt_error": "Lỗi mã hóa tệp",
+        "decrypt_error": "Lỗi giải mã tệp",
+        "download_error": "Lỗi tải xuống, vui lòng thử lại",
+        "upload_error": "Lỗi tải lên, vui lòng thử lại",
+        "upload_limit_error": "Bạn đã vượt quá giới hạn lưu trữ 1GB. Vui lòng xóa các tệp không cần thiết để giải phóng dung lượng."
+      }
     }
   }
 }

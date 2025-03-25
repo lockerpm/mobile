@@ -10,7 +10,7 @@ import { useHelper } from "app/services/hook"
 interface Props {
   item: AttachmentType
   setItem: (val: AttachmentType) => void
-  addAttachment: () => void
+  addAttachment: (file: AttachmentType) => void
 }
 
 export const FilePreview = memo(({ item, addAttachment, setItem }: Props) => {
@@ -31,8 +31,8 @@ export const FilePreview = memo(({ item, addAttachment, setItem }: Props) => {
   }
 
   const onAdd = () => {
-    addAttachment()
     onEditDone()
+    addAttachment({ ...item, fileName: name })
   }
 
   return (

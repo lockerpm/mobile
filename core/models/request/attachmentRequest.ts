@@ -1,6 +1,7 @@
 export class AttachmentRequest {
-    fileName: string;
-    key: string;
-    fileSize: number;
-    adminRequest: boolean;
+  id: string
+  url: string
+  size: number
+  fileName: string
+  key: string
 }

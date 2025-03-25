@@ -1,12 +1,69 @@
-import Upload, { MultipartUploadOptions } from "react-native-background-upload"
+import Upload, { UploadOptions } from "react-native-background-upload"
 import RNFS from "react-native-fs"
-import { attachmentApi } from "../api"
 import { IS_IOS } from "app/config/constants"
 import { Logger } from "app/utils/utils"
+import crypto from "react-native-crypto"
+import { Buffer } from "buffer"
+import { GetUploadFormResult } from "app/static/types"
 
 export class AttachmentService {
   private static readonly PROGRESS_INTERVAL = 1500 // ms
   private static readonly PROGRESS_DIVIDER = 1
+
+  /**
+   * Encrypts a file using AES-256-GCM.
+   * @param inputPath - The input file path.
+   * @param outputPath - The output file path.
+   * @param key - The encryption key.
+   */
+  encryptFile = async (inputPath: string, outputPath: string, key: Buffer): Promise<boolean> => {
+    try {
+      const iv = crypto.randomBytes(12) // 12-byte IV for AES-GCM
+      const fileData = await RNFS.readFile(inputPath, "base64") // Read file as base64
+      const fileBuffer = Buffer.from(fileData, "base64")
+
+      const cipher = crypto.createCipheriv("aes-256-gcm", key, iv)
+      const encryptedData = Buffer.concat([cipher.update(fileBuffer), cipher.final()])
+      const authTag = cipher.getAuthTag() // 16-byte AuthTag for integrity
+
+      // Combine IV + AuthTag + Encrypted Data
+      const finalData = Buffer.concat([iv, authTag, encryptedData]).toString("base64")
+
+      await RNFS.writeFile(outputPath, finalData, "base64")
+      return true
+    } catch (error) {
+      console.error("❌ Error encrypting file:", error)
+      return false
+    }
+  }
+
+  /**
+   * Decrypts a file using AES-256-GCM.
+   * @param inputPath - The input file path.
+   * @param outputPath - The output file path.
+   */
+  decryptFile = async (inputPath: string, outputPath: string, key: Buffer): Promise<boolean> => {
+    try {
+      const encryptedBase64 = await RNFS.readFile(inputPath, "base64")
+      const encryptedBuffer = Buffer.from(encryptedBase64, "base64")
+
+      // Extract IV, AuthTag, and Encrypted Data
+      const iv = encryptedBuffer.slice(0, 12)
+      const authTag = encryptedBuffer.slice(12, 28)
+      const encryptedData = encryptedBuffer.slice(28)
+
+      const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv)
+      decipher.setAuthTag(authTag)
+
+      const decryptedData = Buffer.concat([decipher.update(encryptedData), decipher.final()])
+
+      await RNFS.writeFile(outputPath, decryptedData.toString("base64"), "base64")
+      return true
+    } catch (error) {
+      console.error("❌ Error decrypting file:", error)
+      return false
+    }
+  }
 
   /**
    * Uploads an attachment to the server.
@@ -14,38 +71,20 @@ export class AttachmentService {
    * @returns A promise resolving with the uploaded attachment ID.
    */
   public async uploadAttachment(params: {
-    token: string
-    cipherId: string
+    uploadFormData: GetUploadFormResult
     uri: string
-    fileName: string
     onProgress: (val: number) => void
   }): Promise<{ kind: "ok"; id: string } | { kind: "error"; error: string }> {
-    const { uri, fileName, onProgress, cipherId, token } = params
+    const { uri, uploadFormData, onProgress } = params
 
     try {
-      const uploadFormRes = await attachmentApi.getUploadForm(token, {
-        file_name: fileName,
-        metadata: {
-          cipher_id: cipherId,
-        },
-      })
+      const uploadForm = uploadFormData.upload_form
 
-      console.tron.log("uploadFormRes", uploadFormRes)
-      if (uploadFormRes.kind !== "ok") {
-        return {
-          kind: "error",
-          error: `Failed to fetch upload form: ${JSON.stringify(uploadFormRes)}`,
-        }
-      }
-
-      const uploadForm = uploadFormRes.data.upload_form
-
-      const uploadOptions: MultipartUploadOptions = {
+      const uploadOptions: UploadOptions = {
         url: uploadForm.url,
         path: IS_IOS ? `file://${uri}` : uri,
-        type: "multipart",
-        field: "file",
-        parameters: uploadForm.fields,
+        type: "raw",
+        method: "PUT",
         notification: {
           enabled: true,
           autoClear: true,
@@ -60,8 +99,8 @@ export class AttachmentService {
             })
 
             Upload.addListener("completed", uploadId, (data) => {
-              if (data.responseCode === 201) {
-                resolve({ id: uploadFormRes.data.upload_id })
+              if (data.responseCode === 200) {
+                resolve({ id: uploadFormData.upload_id })
               } else {
                 reject(new Error(`Upload failed with response code ${data.responseCode}`))
               }
@@ -95,10 +134,8 @@ export class AttachmentService {
   public async downloadAttachment(params: {
     inputUri: string
     outputUri: string
-    onBegin?: (size: number) => void
-    onProgress?: (val: number) => void
   }): Promise<boolean> {
-    const { inputUri, outputUri, onBegin, onProgress } = params
+    const { inputUri, outputUri } = params
 
     if (!inputUri || !outputUri) {
       Logger.error("Invalid download parameters")
@@ -112,11 +149,6 @@ export class AttachmentService {
         discretionary: true,
         progressInterval: AttachmentService.PROGRESS_INTERVAL,
         progressDivider: AttachmentService.PROGRESS_DIVIDER,
-        begin: (res) => onBegin?.(res.contentLength),
-        progress: (res) => {
-          const percentage = res.bytesWritten / res.contentLength
-          onProgress?.(percentage)
-        },
       })
 
       const res = await job.promise

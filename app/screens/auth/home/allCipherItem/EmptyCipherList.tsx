@@ -2,6 +2,7 @@ import * as React from "react"
 import { View, Image, StyleSheet } from "react-native"
 import { Button, Text } from "app/components/cores"
 import { useHelper } from "app/services/hook"
+import { observer } from "mobx-react-lite"
 
 export interface EmptyCipherListProps {
   onAdd: () => void
@@ -10,7 +11,7 @@ export interface EmptyCipherListProps {
 
 const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
 
-export const EmptyCipherList = (props: EmptyCipherListProps) => {
+export const EmptyCipherList = observer((props: EmptyCipherListProps) => {
   const { onAdd, onImport } = props
   const { translate } = useHelper()
 
@@ -47,7 +48,7 @@ export const EmptyCipherList = (props: EmptyCipherListProps) => {
       </View>
     </View>
   )
-}
+})
 
 const styles = StyleSheet.create({
   buttonContainer: {
