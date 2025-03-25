@@ -89,6 +89,7 @@ yarn.lock
 .env
 app/config/.env.production
 app/config/.env.staging
+app/config/.env.productionSave
 
 android/gradle.properties
 android/app/my-upload-key.keystore

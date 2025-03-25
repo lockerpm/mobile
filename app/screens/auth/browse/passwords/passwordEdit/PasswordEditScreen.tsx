@@ -6,7 +6,7 @@ import { useTheme } from "app/services/context"
 import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { CollectionView } from "core/models/view/collectionView"
-import { CipherView, FieldView, LoginUriView, LoginView } from "core/models/view"
+import { AttachmentView, CipherView, FieldView, LoginUriView, LoginView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { Button, Header, Screen, TextInput, Text, Icon } from "app/components/cores"
 import { PlanStorageLimitModal } from "../../planStorageLimitModal"
@@ -167,6 +167,13 @@ export const PasswordEditScreen: FC<AppStackScreenProps<"passwords__edit">> = ob
       // @ts-ignore
       payload = { ...selectedCipher }
     }
+    const attachment = new AttachmentView()
+    attachment.id = "1211"
+    attachment.size = "100000"
+    attachment.fileName = "test"
+    attachment.url = "https://test.com"
+    attachment.key = "key"
+    payload.attachments = [attachment]
 
     const data = new LoginView()
     data.username = username

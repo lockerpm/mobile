@@ -211,6 +211,7 @@ export function useCipherData() {
           notifyApiError(res)
           return res
         }
+        console.log("syncSomeCiphers, ", res.data.ciphers)
 
         // Set last sync
         cipherStore.setLastSync(bumpTimestamp)
@@ -996,7 +997,10 @@ export function useCipherData() {
 
       // Online
       const cipherEnc = await cipherService.encrypt(cipher)
+      console.log("cipherEnc", cipherEnc)
       const data = new CipherRequest(cipherEnc)
+
+      console.log("CipherRequest", data)
       const res = await cipherStore.createCipher(data, score, collectionIds)
       if (res.kind === "ok") {
         await _offlineCreateCipher({
@@ -1460,6 +1464,8 @@ export function useCipherData() {
       }
 
       await Promise.all(ciphers.map(prepareCipher))
+
+      console.log("sharedCiphers", sharedCiphers)
 
       // Send API
       const res = await cipherStore.shareMultipleCiphers({
