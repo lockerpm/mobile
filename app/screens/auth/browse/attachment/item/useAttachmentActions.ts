@@ -52,7 +52,6 @@ export const useAttachmentActions = (
       }
       notify("success", translate("file_attachment.download_success"))
     } catch (error) {
-      console.error(error)
       notify("error", translate("file_attachment.error.download_error"))
     } finally {
       setIsLoading(false)

@@ -52,31 +52,15 @@ export default class Domain {
     orgId: string,
     key: SymmetricCryptoKey = null,
   ): Promise<T> {
-    try {
-      const promises = Object.keys(map).map(async (prop) => {
-        const mapProp = map[prop] || prop
-        if (viewModel.id === "9934826b-1905-4492-bdc7-d1b723d1f920") {
-          console.log("decryptObj props", prop, mapProp, this[mapProp])
-        }
-        if (this[mapProp]) {
-          try {
-            if (viewModel.id === "9934826b-1905-4492-bdc7-d1b723d1f920") {
-              console.log("decryptObj val")
-              ;(viewModel as any)[prop] = "test 1234"
-            } else {
-              const val = await this[mapProp].decrypt(orgId, key, viewModel.id)
-              ;(viewModel as any)[prop] = val
-            }
-          } catch (e) {
-            console.error(e)
-          }
-        }
-      })
-      await Promise.all(promises)
-    } catch (e) {
-      console.error("decryptObj", e)
-    }
+    const promises = Object.keys(map).map(async (prop) => {
+      const mapProp = map[prop] || prop
 
+      if (this[mapProp]) {
+        const val = await this[mapProp].decrypt(orgId, key)
+        ;(viewModel as any)[prop] = val
+      }
+    })
+    await Promise.all(promises)
     return viewModel
   }
 }

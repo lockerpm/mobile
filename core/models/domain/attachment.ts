@@ -1,36 +1,30 @@
 import { AttachmentData } from "../data/attachmentData"
-
 import { AttachmentView } from "../view/attachmentView"
-
 import Domain from "./domainBase"
 import { EncString } from "./encString"
 import { SymmetricCryptoKey } from "./symmetricCryptoKey"
-
 export class Attachment extends Domain {
   id: string
-  size: number
-  key: EncString
+  size: string
   url: EncString
+  key: EncString
   fileName: EncString
-
   constructor(obj?: AttachmentData, alreadyEncrypted = false) {
     super()
     if (obj == null) {
       return
     }
-
     this.size = obj.size
+    this.id = obj.id
     this.buildDomainModel(
       this,
       obj,
       {
-        id: null,
         url: null,
         fileName: null,
         key: null,
       },
       alreadyEncrypted,
-      ["id"],
     )
   }
 
@@ -38,9 +32,9 @@ export class Attachment extends Domain {
     const view = await this.decryptObj(
       new AttachmentView(this),
       {
+        key: null,
         fileName: null,
         url: null,
-        key: null,
       },
       orgId,
       encKey,
@@ -51,17 +45,12 @@ export class Attachment extends Domain {
   toAttachmentData(): AttachmentData {
     const a = new AttachmentData()
     a.size = this.size
-    this.buildDataModel(
-      this,
-      a,
-      {
-        id: null,
-        url: null,
-        fileName: null,
-        key: null,
-      },
-      ["id"],
-    )
+    a.id = this.id
+    this.buildDataModel(this, a, {
+      url: null,
+      fileName: null,
+      key: null,
+    })
     return a
   }
 }

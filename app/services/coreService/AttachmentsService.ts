@@ -32,7 +32,6 @@ export class AttachmentService {
       await RNFS.writeFile(outputPath, finalData, "base64")
       return true
     } catch (error) {
-      console.error("❌ Error encrypting file:", error)
       return false
     }
   }
@@ -60,7 +59,6 @@ export class AttachmentService {
       await RNFS.writeFile(outputPath, decryptedData.toString("base64"), "base64")
       return true
     } catch (error) {
-      console.error("❌ Error decrypting file:", error)
       return false
     }
   }

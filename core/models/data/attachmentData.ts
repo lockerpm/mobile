@@ -5,7 +5,7 @@ export class AttachmentData {
   url: string
   fileName: string
   key: string
-  size: number
+  size: string
 
   constructor(response?: AttachmentResponse) {
     if (response == null) {

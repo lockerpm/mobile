@@ -19,9 +19,6 @@ export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
 
     const isShared = route.params?.isShared ?? false
 
-    console.log("selected cipher", cipherStore.selectedCipher)
-
-    console.tron.log("selected cipher id", cipherStore.selectedCipher?.id)
     // -------------- PARAMS ------------------
 
     const [attachments, setAttachments] = useState<AttachmentType[]>(
@@ -35,7 +32,7 @@ export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
         const attachment = new AttachmentView()
         attachment.id = a.id
         attachment.fileName = a.fileName
-        attachment.size = a.size
+        attachment.size = a.size.toString()
         attachment.url = a.url
         attachment.key = a.key
         return attachment

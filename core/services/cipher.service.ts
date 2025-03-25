@@ -235,8 +235,8 @@ export class CipherService implements CipherServiceAbstraction {
         model,
         attachment,
         {
-          fileName: null,
           url: null,
+          fileName: null,
           key: null,
         },
         key,
@@ -812,11 +812,11 @@ export class CipherService implements CipherServiceAbstraction {
     const encData = await this.cryptoService.encryptToBytes(data, dataEncKey[0])
 
     const request: AttachmentRequest = {
-      key: dataEncKey[1].encryptedString,
-      fileName: encFileName.encryptedString,
-      size: encData.buffer.byteLength,
       id: "",
       url: "",
+      key: dataEncKey[1].encryptedString,
+      fileName: encFileName.encryptedString,
+      size: encData.buffer.byteLength.toString(),
     }
 
     let response: CipherResponse
@@ -946,9 +946,7 @@ export class CipherService implements CipherServiceAbstraction {
     for (const id in ciphers) {
       data[id] = ciphers[id]
     }
-
     await this.storageService.save(key, data)
-    console.log("replaceSome")
     await this.csDecryptAndUpdateCache(Object.values(ciphers))
   }
 
@@ -1425,18 +1423,14 @@ export class CipherService implements CipherServiceAbstraction {
       this.decryptedCipherCache = null
       return
     }
-
     const promises: Promise<CipherView>[] = []
     for (const cipher of ciphers) {
-      if (cipher.id !== "9934826b-1905-4492-bdc7-d1b723d1f920") {
+      if (cipher) {
         const c = new Cipher(cipher, false)
         promises.push(c.decrypt())
       }
     }
-
-    console.log("csDecryptAndUpdateCache start")
     const decCiphers = await Promise.all(promises)
-    console.log("csDecryptAndUpdateCache end")
     this.csUpdateDecryptedCache(decCiphers)
   }
 

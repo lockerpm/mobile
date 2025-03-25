@@ -115,71 +115,56 @@ export class Cipher extends Domain {
     }
   }
 
-  async log(a: string) {
-    if (this.id === "9934826b-1905-4492-bdc7-d1b723d1f920") console.log("decrypt", a)
-  }
-
   async decrypt(encKey?: SymmetricCryptoKey): Promise<CipherView> {
-    this.log("1")
     const model = new CipherView(this)
-    this.log("11")
-    try {
-      await this.decryptObj(
-        model,
-        {
-          name: null,
-          notes: null,
-        },
-        this.organizationId,
-        encKey,
-      )
-      this.log("2")
-      switch (this.type) {
-        case CipherType.MasterPassword:
-        case CipherType.Login:
-          model.login = await this.login.decrypt(this.organizationId, encKey)
-          break
-        case CipherType.SecureNote:
-        case CipherType.TOTP:
-        case CipherType.CryptoWallet:
-          model.secureNote = await this.secureNote.decrypt(this.organizationId, encKey)
-          break
-        case CipherType.Card:
-          model.card = await this.card.decrypt(this.organizationId, encKey)
-          break
-        case CipherType.Identity:
-          model.identity = await this.identity.decrypt(this.organizationId, encKey)
-          break
-        default:
-          break
-      }
-      this.log("3")
-      const orgId = this.organizationId
-
-      if (this.attachments != null && this.attachments.length > 0) {
-        console.log("decrypt attachment", this.id)
-        const attachmentsPromises = this.attachments.map((attachment) =>
-          attachment.decrypt(orgId, encKey),
-        )
-        const attachments = await Promise.all(attachmentsPromises)
-        model.attachments = attachments
-      }
-      this.log("4")
-      if (this.fields != null && this.fields.length > 0) {
-        const fieldsPromises = this.fields.map((field) => field.decrypt(orgId, encKey))
-        const fields = await Promise.all(fieldsPromises)
-        model.fields = fields
-      }
-      this.log("5")
-      if (this.passwordHistory != null && this.passwordHistory.length > 0) {
-        const passwordHistoryPromises = this.passwordHistory.map((ph) => ph.decrypt(orgId, encKey))
-        const passwordHistory = await Promise.all(passwordHistoryPromises)
-        model.passwordHistory = passwordHistory
-      }
-      this.log("6")
-    } catch (e) {
-      console.error("error decrypting cipher", e)
+    await this.decryptObj(
+      model,
+      {
+        name: null,
+        notes: null,
+      },
+      this.organizationId,
+      encKey,
+    )
+    switch (this.type) {
+      case CipherType.MasterPassword:
+      case CipherType.Login:
+        model.login = await this.login.decrypt(this.organizationId, encKey)
+        break
+      case CipherType.SecureNote:
+      case CipherType.TOTP:
+      case CipherType.CryptoWallet:
+        model.secureNote = await this.secureNote.decrypt(this.organizationId, encKey)
+        break
+      case CipherType.Card:
+        model.card = await this.card.decrypt(this.organizationId, encKey)
+        break
+      case CipherType.Identity:
+        model.identity = await this.identity.decrypt(this.organizationId, encKey)
+        break
+      default:
+        break
     }
+    const orgId = this.organizationId
+
+    if (this.attachments != null && this.attachments.length > 0) {
+      const attachmentsPromises = this.attachments.map((attachment) =>
+        attachment.decrypt(orgId, encKey),
+      )
+      const attachments = await Promise.all(attachmentsPromises)
+      model.attachments = attachments
+    }
+    if (this.fields != null && this.fields.length > 0) {
+      const fieldsPromises = this.fields.map((field) => field.decrypt(orgId, encKey))
+      const fields = await Promise.all(fieldsPromises)
+      model.fields = fields
+    }
+    if (this.passwordHistory != null && this.passwordHistory.length > 0) {
+      const passwordHistoryPromises = this.passwordHistory.map((ph) => ph.decrypt(orgId, encKey))
+      const passwordHistory = await Promise.all(passwordHistoryPromises)
+      model.passwordHistory = passwordHistory
+    }
+
     return model
   }
 

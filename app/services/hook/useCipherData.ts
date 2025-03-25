@@ -218,11 +218,7 @@ export function useCipherData() {
         await syncService.syncProfile(res.data.profile)
         await syncService.syncFolders(userId, res.data.folders)
         await syncService.syncCollections(res.data.collections)
-
-        console.log("syncSomeCiphers start")
         await syncService.syncSomeCiphers(userId, res.data.ciphers)
-        console.log("syncSomeCiphers end")
-
         await syncService.syncSends(userId, res.data.sends)
         await syncService.syncSettings(userId, res.data.domains)
         await syncService.syncPolicies(res.data.policies)

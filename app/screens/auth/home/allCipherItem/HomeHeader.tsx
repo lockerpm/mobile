@@ -7,7 +7,7 @@ import { useTheme } from "app/services/context"
 import { SearchBar } from "app/components/utils"
 
 import { DeleteConfirmModal } from "../../browse/trash/DeleteConfirmModal"
-import { useCipherData, useDeleteCipher, useHelper } from "app/services/hook"
+import { useDeleteCipher, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { ShareModal } from "app/components/ciphers"
 
@@ -42,7 +42,6 @@ export const HomeHeader = (props: Props) => {
   const { colors, isDark } = useTheme()
   const { notifyApiError, translate } = useHelper()
   const { toTrashCiphers } = useDeleteCipher()
-  const { deleteCiphers } = useCipherData()
   const { user, uiStore } = useStores()
 
   // ----------------------- PARAMS ------------------------
@@ -205,8 +204,7 @@ export const HomeHeader = (props: Props) => {
 
   const handleDelete = async () => {
     setIsLoading(true)
-    // const res = await toTrashCiphers(selectedItems)
-    const res = await deleteCiphers(["9934826b-1905-4492-bdc7-d1b723d1f920"])
+    const res = await toTrashCiphers(selectedItems)
     setIsLoading(false)
     if (res.kind === "ok") {
       setIsSelecting(false)

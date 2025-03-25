@@ -97,16 +97,9 @@ export class EncString {
     }
   }
 
-  async decrypt(orgId: string, key: SymmetricCryptoKey = null, id?: string): Promise<string> {
-    console.log("decrypt enc string ", orgId)
-    if (id === "9934826b-1905-4492-bdc7-d1b723d1f920") {
-      console.log("decrypt enc string 1")
-    }
+  async decrypt(orgId: string, key: SymmetricCryptoKey = null): Promise<string> {
     if (this.decryptedValue != null) {
       return this.decryptedValue
-    }
-    if (id === "9934826b-1905-4492-bdc7-d1b723d1f920") {
-      console.log("decrypt enc string 2")
     }
     let cryptoService: CryptoService
     const containerService = (Utils.global as any).cyStackContainerService
@@ -116,33 +109,13 @@ export class EncString {
       throw new Error("global cyStackContainerService not initialized.")
     }
 
-    if (id === "9934826b-1905-4492-bdc7-d1b723d1f920") {
-      console.log("decrypt enc string 3")
-    }
     try {
       if (key == null) {
-        if (id === "9934826b-1905-4492-bdc7-d1b723d1f920") {
-          console.log("decrypt enc string 31", orgId)
-        }
         key = await cryptoService.getOrgKey(orgId)
-        if (id === "9934826b-1905-4492-bdc7-d1b723d1f920") {
-          console.log("decrypt enc string 32")
-        }
-      }
-
-      if (id === "9934826b-1905-4492-bdc7-d1b723d1f920") {
-        console.log("decrypt enc string 4")
       }
       this.decryptedValue = await cryptoService.decryptToUtf8(this, key)
-
-      if (id === "9934826b-1905-4492-bdc7-d1b723d1f920") {
-        console.log("decrypt enc string 5")
-      }
     } catch (e) {
       this.decryptedValue = "[error: cannot decrypt]"
-      if (id === "9934826b-1905-4492-bdc7-d1b723d1f920") {
-        console.log("decrypt enc string 6")
-      }
     }
     return this.decryptedValue
   }
