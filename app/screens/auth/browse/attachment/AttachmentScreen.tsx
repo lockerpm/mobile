@@ -19,14 +19,18 @@ export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
 
     const isShared = route.params?.isShared ?? false
 
+    const selectedCipher = (cipherStore.selectedCipher as CipherView) ?? null
+
     // -------------- PARAMS ------------------
 
     const [attachments, setAttachments] = useState<AttachmentType[]>(
-      cipherStore.selectedCipher.attachments || [],
+      cipherStore.selectedCipher?.attachments || [],
     )
 
     // -------------- METHODS ------------------
     const updateCipherAttachment = async (attachments: AttachmentType[]) => {
+      if (!selectedCipher) return
+
       const payload: CipherView = { ...cipherStore.selectedCipher }
       const attachmentsView: AttachmentView[] = attachments.map((a) => {
         const attachment = new AttachmentView()
@@ -38,6 +42,7 @@ export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
         return attachment
       })
       payload.attachments = attachmentsView
+
       await updateCipher(payload.id, payload, 0, payload.collectionIds, true)
     }
 

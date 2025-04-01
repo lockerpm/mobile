@@ -103,7 +103,9 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Save photos to the cloud server and send them to the support center.</string>
+	<string>We need access to your photo library to save images.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to your photo library to save images</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Medium.ttf</string>

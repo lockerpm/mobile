@@ -1,10 +1,10 @@
 import Upload, { UploadOptions } from "react-native-background-upload"
 import RNFS from "react-native-fs"
-import { IS_IOS } from "app/config/constants"
 import { Logger } from "app/utils/utils"
 import crypto from "react-native-crypto"
 import { Buffer } from "buffer"
 import { GetUploadFormResult } from "app/static/types"
+import { IS_IOS } from "app/config/constants"
 
 export class AttachmentService {
   private static readonly PROGRESS_INTERVAL = 1500 // ms
@@ -86,9 +86,11 @@ export class AttachmentService {
         notification: {
           enabled: true,
           autoClear: true,
+          onProgressTitle: "Uploading...",
+          onCompleteTitle: "Upload Complete",
+          onErrorTitle: "Upload Failed",
         },
       }
-
       const { id } = await new Promise<{ id: string }>((resolve, reject) => {
         Upload.startUpload(uploadOptions)
           .then((uploadId) => {
@@ -116,7 +118,6 @@ export class AttachmentService {
             reject(new Error(`Upload start error: ${err}`))
           })
       })
-
       return { kind: "ok", id }
     } catch (error) {
       Logger.error(`UploadAttachment Error: ${error}`)

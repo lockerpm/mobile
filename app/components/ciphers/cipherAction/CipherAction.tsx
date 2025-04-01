@@ -219,7 +219,7 @@ export const CipherAction = (props: CipherActionProps) => {
               />
             )}
 
-            {!lockerMasterPassword && (
+            {!lockerMasterPassword && !isShared && (
               <ActionPremiumItem
                 disabled={uiStore.isOffline && !!selectedCipher.organizationId}
                 name={translate("file_attachment.title")}

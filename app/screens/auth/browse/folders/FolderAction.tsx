@@ -13,6 +13,7 @@ import { AccountRole, AccountRoleText } from "app/static/types"
 import { GeneralApiProblem } from "app/services/api/apiProblem"
 import { ActionItem, ActionSheet, LeaveShareModal } from "app/components/ciphers"
 import { useTheme } from "app/services/context"
+import { ActionPremiumItem } from "app/components/ciphers/actionsSheet/ActionSheetPremiumItem"
 
 type Props = {
   isOpen?: boolean
@@ -194,8 +195,7 @@ export const FolderAction = (props: Props) => {
                 />
               )
             ) : (
-              <ActionItem
-                isPremium={user.isFreePlan}
+              <ActionPremiumItem
                 name={translate("common.share")}
                 icon="share"
                 action={() => {
@@ -206,6 +206,7 @@ export const FolderAction = (props: Props) => {
                   setNextModal("share")
                   onClose()
                 }}
+                onClose={onClose}
               />
             )}
             {isOwner && isCollection && (

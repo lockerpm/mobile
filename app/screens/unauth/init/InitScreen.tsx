@@ -96,9 +96,9 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
 
   // Mounted
   const mounted = async () => {
-    if (checkTrustFall()) {
-      return
-    }
+    // if (checkTrustFall()) {
+    //   return
+    // }
     const connectionState = await NetInfo.fetch()
 
     // Setup basic data

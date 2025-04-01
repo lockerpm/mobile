@@ -82,7 +82,10 @@ export const usePickAttachment = () => {
       return null
     }
 
-    if (res.didCancel || res.assets.length === 0) {
+    if (res.didCancel) {
+      return null
+    }
+    if (res.assets.length === 0) {
       notify("error", translate("file_attachment.error.file_zero"))
       return null
     }
@@ -118,7 +121,6 @@ export const usePickAttachment = () => {
         onProgress(-1)
         return null
       }
-
       const uploadFormRes = await attachmentApi.getUploadForm(cipherStore.apiToken, {
         file_name: file.fileName,
         metadata: {
@@ -138,7 +140,6 @@ export const usePickAttachment = () => {
         onProgress(-1)
         return null
       }
-
       const uploadRes = await attachmentService.uploadAttachment({
         uploadFormData: uploadFormRes.data,
         uri: tempEncFile,
@@ -188,7 +189,7 @@ const prepareFileUri = async (uri: string) => {
 const prepareFileName = (name: string, type?: string) => {
   if (IS_ANDROID && type) {
     const fileExtension = type.split("/").pop()
-    return `${name.replace(":", "-")}.${fileExtension}`
+    return `${name.split(".").shift().replace(":", "-")}.${fileExtension}`
   }
   return name
 }

@@ -2,6 +2,13 @@ package com.cystack.locker;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
+import org.jetbrains.annotations.Nullable;
+
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -9,6 +16,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
+
 import com.facebook.soloader.SoLoader;
 
 import java.util.List;
@@ -20,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
       @Override
       public boolean getUseDeveloperSupport() {
         return BuildConfig.DEBUG;
+        // return false;
       }
 
       @Override
@@ -50,6 +59,15 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;
+  }
+
+  @Override
+  public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter) {
+      if (Build.VERSION.SDK_INT >= 34 && getApplicationInfo().targetSdkVersion >= 34) {
+          return super.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
+      } else {
+          return super.registerReceiver(receiver, filter);
+      }
   }
 
   @Override

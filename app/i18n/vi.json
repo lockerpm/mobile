@@ -1348,7 +1348,7 @@
       "upload_file": "Tải lên tệp",
       "max_size": "Kích thước tệp tối đa là 50MB",
       "upload_success": "Tệp đã được tải lên thành công",
-      "download_success": "Tệp đã được tải xuống thành công",
+      "download_success": "Tệp đã được tải xuống thành công! Xem trong ứng dụng Tệp của bạn.",
       "delete_success": "Tệp đã được xóa thành công",
       "delete_confirm": "Bạn có chắc chắn muốn xóa tệp này không?",
       "delete_btn": "Xóa tệp đính kèm",

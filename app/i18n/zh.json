@@ -1301,7 +1301,7 @@
     "upload_file": "上传文件",
     "max_size": "文件最大大小为50MB",
     "upload_success": "文件上传成功",
-    "download_success": "文件下载成功",
+    "download_success": "文件下载成功！在您的文件应用中查看。",
     "delete_success": "文件删除成功",
     "delete_confirm": "您确定要删除此文件吗？",
     "delete_btn": "删除附件",
@@ -1310,7 +1310,7 @@
     "go_setting": "前往设置",
     "error": {
       "file_zero": "文件已损坏",
-      "max_size_error": "文件大小必须小于50MB",
+      "max_size_error": "文件大小必须小于 50 MB",
       "encrypt_error": "文件加密错误",
       "decrypt_error": "文件解密错误",
       "download_error": "下载错误，请重试",

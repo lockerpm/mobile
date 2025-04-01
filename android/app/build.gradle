@@ -117,8 +117,8 @@ android {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 41229
-        versionName "1.66"
+        versionCode 41233
+        versionName "1.67"
 
         manifestPlaceholders = [
             appAuthRedirectScheme: 'com.cystack.locker'
@@ -209,6 +209,9 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation 'org.jetbrains:annotations:16.0.2'
+    
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
     // RN BootSplash
     implementation("androidx.core:core-splashscreen:1.0.0")
@@ -254,6 +257,12 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.10'
 
     implementation("androidx.activity:activity:1.9.+")
+}
+
+configurations.all {
+    resolutionStrategy {
+        force "androidx.viewpager2:viewpager2:1.0.0"
+    }
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

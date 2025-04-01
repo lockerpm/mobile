@@ -87,6 +87,66 @@ const ItemStorage = (props: PlanStorageProps) => {
   )
 }
 
+const convertBytesToGB = (bytes: number) => {
+  return bytes / 1024 / 1024 / 1024
+}
+
+const AttachmentStorage = (props: { title: string }) => {
+  const { title } = props
+  const { colors } = useTheme()
+  const { getAttachmentStorage } = useTool()
+
+  const [totalSize, setTotalSize] = useState(0)
+
+  const usagePercentage = convertBytesToGB(totalSize) * 100
+  const backgroundColor =
+    usagePercentage >= 80
+      ? usagePercentage >= 100
+        ? colors.error
+        : colors.warning
+      : colors.primary
+
+  const counting = async () => {
+    const count = await getAttachmentStorage()
+
+    setTotalSize(count)
+  }
+  useEffect(() => {
+    counting()
+  }, [])
+
+  return (
+    <View style={{ width: "100%", marginVertical: 4 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginBottom: 8,
+        }}
+      >
+        <Text
+          text={title + " "}
+          style={{
+            maxWidth: "75%",
+          }}
+        />
+
+        <Text text={`${usagePercentage.toFixed(4)}/1 GB`} />
+      </View>
+
+      <ProgressBar
+        style={{
+          height: 6,
+          borderRadius: 4,
+          backgroundColor: colors.block,
+        }}
+        progressColor={backgroundColor}
+        progress={usagePercentage}
+      />
+    </View>
+  )
+}
+
 export const PlanUsage = () => {
   const { colors } = useTheme()
   const navigation = useNavigation() as any
@@ -134,6 +194,7 @@ export const PlanUsage = () => {
             isUnlimited={!isFreeAccount}
           />
         ))}
+        {!isFreeAccount && <AttachmentStorage title={translate("file_attachment.title")} />}
       </View>
       {isFreeAccount && (
         <Button

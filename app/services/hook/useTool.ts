@@ -9,7 +9,7 @@ import { Logger } from "app/utils/utils"
 
 export function useTool() {
   const { user, toolStore, cipherStore } = useStores()
-  const { passwordGenerationService, auditService } = useCoreService()
+  const { passwordGenerationService, auditService, searchService } = useCoreService()
 
   const { getCiphers, getEncryptedCiphers, getCiphersFromCache } = useCipherData()
   const { notify, translate } = useHelper()
@@ -51,6 +51,23 @@ export function useTool() {
     }
     const allCiphers = await getCiphersFromCache(searchConfig)
     return allCiphers.length
+  }
+
+  const getAttachmentStorage = async () => {
+    try {
+      const filters = [(c: CipherView) => c.attachments.length > 0]
+      const cipherWithAttachments: CipherView[] =
+        (await searchService.searchCiphersFromCache("", filters, null)) || []
+      let totial = 0
+      cipherWithAttachments.forEach((c) => {
+        totial += c.attachments.reduce((acc, att) => acc + att.fileSize, 0)
+      })
+      return totial
+    } catch (e) {
+      notify("error", "Can not get attachment storage")
+      Logger.error("getCiphersFromCache: " + e)
+      return 0
+    }
   }
 
   // Load weak passwords
@@ -176,5 +193,6 @@ export function useTool() {
     checkLoginIdExist,
     loadPasswordsHealth,
     getCipherCount,
+    getAttachmentStorage,
   }
 }
