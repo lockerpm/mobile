@@ -139,16 +139,6 @@ export function useFolder() {
         },
         groups: groupsPayload,
       })
-      console.log("res", {
-        sharing_key: shareKey ? shareKey[0].encryptedString : null,
-        members,
-        folder: {
-          id: folder.id,
-          name: folderNameEnc.encryptedString,
-          ciphers: sharedCiphers,
-        },
-        groups: groupsPayload,
-      })
 
       if (res.kind === "ok") {
         notify("success", translate("shares.share_folder.success.shared"))

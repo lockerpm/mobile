@@ -6,6 +6,7 @@ import { useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { AttachmentType, usePickAttachment } from "./usePickAttachment"
 import { FilePreview } from "./item/FilePreview"
+import { delay } from "app/utils/utils"
 
 interface Props {
   addAttachment: (file: AttachmentType) => void
@@ -99,8 +100,9 @@ export const AttachmentSelectIcon = ({ addAttachment }: Props) => {
           <FilePreview
             item={localFile}
             setItem={setLocalFile}
-            addAttachment={(file: AttachmentType) => {
+            addAttachment={async (file: AttachmentType) => {
               closeModal()
+              await delay(300)
               addAttachment(file)
             }}
           />

@@ -1,11 +1,10 @@
-import React, { useCallback, useMemo, useState } from "react"
-import { AttachmentType } from "../usePickAttachment"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { AttachmentType, UploadStatus, usePickAttachment } from "../usePickAttachment"
 import { ActivityIndicator, Alert, View, ViewStyle } from "react-native"
 import { ThemedColors } from "app/theme"
 import { useTheme } from "app/services/context"
 import { Icon, Text } from "app/components/cores"
 import { convertBytes } from "./utils"
-import { AttachmentProgress } from "./AttachmentProgress"
 import { useAttachmentActions } from "./useAttachmentActions"
 import { useHelper } from "app/services/hook"
 
@@ -18,11 +17,13 @@ interface Props {
 export const Attachment = ({ item, updateAttachments, isShared }: Props) => {
   const { colors } = useTheme()
   const { translate } = useHelper()
+  const { encryptAndUploadFile } = usePickAttachment()
 
   const $styles = useMemo(() => styles(colors), [colors])
 
   const [isLoading, setIsLoading] = useState(!item.key)
   const [attachment, setAttachment] = useState(item)
+  const [status, setStatus] = useState<UploadStatus>(UploadStatus.NONE)
 
   const { onDownloadAttachment, onDeleteAttachment } = useAttachmentActions(
     attachment,
@@ -60,6 +61,19 @@ export const Attachment = ({ item, updateAttachments, isShared }: Props) => {
     )
   }, [onDeleteAttachment])
 
+  const onUploadAttachment = useCallback(async () => {
+    if (!attachment.key) {
+      const res = await encryptAndUploadFile(item, setStatus)
+      if (res) {
+        uploadAttachment(res)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    onUploadAttachment()
+  }, [])
+
   return (
     <View style={$styles.constainer}>
       <View style={row}>
@@ -94,11 +108,20 @@ export const Attachment = ({ item, updateAttachments, isShared }: Props) => {
             )}
           </View>
         )}
-        {isLoading && !!attachment.key && (
-          <ActivityIndicator size={"small"} color={colors.primary} />
-        )}
+        {isLoading && <ActivityIndicator size={"small"} color={colors.primary} />}
       </View>
-      {!attachment.key && <AttachmentProgress item={item} uploadAttachment={uploadAttachment} />}
+      {status !== UploadStatus.NONE && (
+        <Text
+          preset="label"
+          text={
+            status === UploadStatus.ENCRYPTING
+              ? translate("file_attachment.encrypting")
+              : translate("file_attachment.uploading")
+          }
+          size="base"
+          style={{ marginTop: 8 }}
+        />
+      )}
     </View>
   )
 }

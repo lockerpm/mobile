@@ -55,7 +55,7 @@ export function useTool() {
 
   const getAttachmentStorage = async () => {
     try {
-      const filters = [(c: CipherView) => c.attachments.length > 0]
+      const filters = [(c: CipherView) => c.attachments && c.attachments.length > 0]
       const cipherWithAttachments: CipherView[] =
         (await searchService.searchCiphersFromCache("", filters, null)) || []
       let totial = 0

@@ -10,8 +10,13 @@ import { Logger } from "app/utils/utils"
 import crypto from "react-native-crypto"
 import { attachmentApi } from "app/services/api"
 
-export const MAX_UPLOAD_SIZE = 50000000
+export const MAX_UPLOAD_SIZE = 52428800 // 50MB
 export const IS_ANDROID = Platform.OS === "android"
+export enum UploadStatus {
+  ENCRYPTING,
+  UPLOADING,
+  NONE,
+}
 
 export type AttachmentType = {
   id: string
@@ -110,17 +115,11 @@ export const usePickAttachment = () => {
 
   const encryptAndUploadFile = async (
     file: AttachmentType,
-    onProgress: (val: number) => void,
+    onStatus: (status: UploadStatus) => void,
   ): Promise<AttachmentType | null> => {
     const tempEncFile = `${RNFS.CachesDirectoryPath}/${Date.now()}${file.fileName}`
     try {
-      const randomKey = crypto.randomBytes(32)
-      const encRes = await attachmentService.encryptFile(file.url, tempEncFile, randomKey)
-      if (!encRes) {
-        notify("error", translate("file_attachment.error.encrypt_error"))
-        onProgress(-1)
-        return null
-      }
+      onStatus(UploadStatus.ENCRYPTING)
       const uploadFormRes = await attachmentApi.getUploadForm(cipherStore.apiToken, {
         file_name: file.fileName,
         metadata: {
@@ -130,39 +129,50 @@ export const usePickAttachment = () => {
 
       if (uploadFormRes.kind !== "ok") {
         notifyApiError(uploadFormRes)
-        onProgress(-1)
+        onStatus(UploadStatus.NONE)
+        return null
+      }
+      if (uploadFormRes.data.limit_size < file.size) {
+        notify("error", translate("file_attachment.error.upload_limit_error"))
+        onStatus(UploadStatus.NONE)
         return null
       }
 
+      const randomKey = crypto.randomBytes(32)
+      const encRes = await attachmentService.encryptFile(file.url, tempEncFile, randomKey)
+      if (!encRes) {
+        notify("error", translate("file_attachment.error.encrypt_error"))
+        onStatus(UploadStatus.NONE)
+        return null
+      }
+
+      onStatus(UploadStatus.UPLOADING)
       const encryptedFileSize = await getFileSize(tempEncFile)
       if (uploadFormRes.data.limit_size < encryptedFileSize) {
         notify("error", translate("file_attachment.error.upload_limit_error"))
-        onProgress(-1)
+        onStatus(UploadStatus.NONE)
         return null
       }
       const uploadRes = await attachmentService.uploadAttachment({
         uploadFormData: uploadFormRes.data,
         uri: tempEncFile,
-        onProgress,
       })
       if (uploadRes.kind === "error") {
         notify("error", uploadRes.error)
-        onProgress(-1)
+        onStatus(UploadStatus.NONE)
         return null
       }
-
       const attachment: AttachmentType = {
         ...file,
         url: uploadRes.id,
         key: randomKey.toString("base64"),
       }
 
-      onProgress(1)
       return attachment
     } catch (error) {
       notify("error", translate("file_attachment.error.upload_error"))
-      onProgress(-1)
     } finally {
+      onStatus(UploadStatus.NONE)
       if (await RNFS.exists(tempEncFile)) {
         await RNFS.unlink(tempEncFile)
       }

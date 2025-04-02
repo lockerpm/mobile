@@ -1363,7 +1363,16 @@
         "download_error": "Lỗi tải xuống, vui lòng thử lại",
         "upload_error": "Lỗi tải lên, vui lòng thử lại",
         "upload_limit_error": "Bạn đã vượt quá giới hạn lưu trữ 1GB. Vui lòng xóa các tệp không cần thiết để giải phóng dung lượng."
-      }
+      },
+      "android_permission": {
+        "title": "Quyền truy cập bộ nhớ",
+        "message": "Ứng dụng cần quyền truy cập bộ nhớ để tải xuống tệp.",
+        "button_neutral": "Để sau",
+        "allert_title": "Yêu cầu quyền truy cập bộ nhớ",
+        "allert_sub": "Bạn đã từ chối quyền truy cập bộ nhớ vĩnh viễn. Vui lòng bật quyền này trong cài đặt để tiếp tục."
+      },
+      "encrypting": "Đang mã hóa tệp...",
+      "uploading": "Đang tải tệp lên..."
     }
   }
 }

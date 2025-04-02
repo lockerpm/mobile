@@ -71,7 +71,7 @@ export class AttachmentService {
   public async uploadAttachment(params: {
     uploadFormData: GetUploadFormResult
     uri: string
-    onProgress: (val: number) => void
+    onProgress?: (val: number) => void
   }): Promise<{ kind: "ok"; id: string } | { kind: "error"; error: string }> {
     const { uri, uploadFormData, onProgress } = params
 
@@ -95,7 +95,7 @@ export class AttachmentService {
         Upload.startUpload(uploadOptions)
           .then((uploadId) => {
             Upload.addListener("progress", uploadId, (data) => {
-              onProgress(data.progress / 100)
+              onProgress && onProgress(data.progress / 100)
             })
 
             Upload.addListener("completed", uploadId, (data) => {

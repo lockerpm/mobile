@@ -9,6 +9,7 @@ import { useTheme } from "app/services/context"
 
 const map = {
   pm_lifetime_family: "Lifetime Family",
+  pm_lifetime_team: "Lifetime Team",
   pm_lifetime_premium: "Lifetime Premium",
   pm_free: "Free",
   pm_premium: "Premium",

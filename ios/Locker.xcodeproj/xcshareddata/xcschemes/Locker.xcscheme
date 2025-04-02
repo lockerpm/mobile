@@ -15,7 +15,7 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-                     BuildableName = "Locker Staging.app"
+                     BuildableName = "Locker.app"
                      BlueprintName = "Locker"
                      ReferencedContainer = "container:Locker.xcodeproj">
                   </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Locker Staging.app"
+               BuildableName = "Locker.app"
                BlueprintName = "Locker"
                ReferencedContainer = "container:Locker.xcodeproj">
             </BuildableReference>
@@ -73,7 +73,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Locker Staging.app"
+            BuildableName = "Locker.app"
             BlueprintName = "Locker"
             ReferencedContainer = "container:Locker.xcodeproj">
          </BuildableReference>
@@ -90,7 +90,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Locker Staging.app"
+            BuildableName = "Locker.app"
             BlueprintName = "Locker"
             ReferencedContainer = "container:Locker.xcodeproj">
          </BuildableReference>

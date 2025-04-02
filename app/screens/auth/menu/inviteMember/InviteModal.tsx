@@ -6,17 +6,17 @@ import { Icon, Text, Screen, Header, Button } from "app/components/cores"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
-import { FAMILY_MEMBER_LIMIT } from "app/static/constants"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 
 interface InviteProps {
+  limit: number
   isShow: boolean
   onClose: React.Dispatch<React.SetStateAction<boolean>>
   familyMembers?: any
   setRelad?: any
 }
 export const InviteMemberModal = (props: InviteProps) => {
-  const { isShow, onClose, familyMembers, setRelad } = props
+  const { limit, isShow, onClose, familyMembers, setRelad } = props
   const { user } = useStores()
   const { colors } = useTheme()
   const { notifyApiError, notify, translate } = useHelper()
@@ -31,7 +31,7 @@ export const InviteMemberModal = (props: InviteProps) => {
     const e = email.trim().toLowerCase()
     if (!e) return
 
-    const unreachLimit = familyMembers.length + emails.length < FAMILY_MEMBER_LIMIT
+    const unreachLimit = familyMembers.length + emails.length < limit
     if (!unreachLimit) return
 
     const isOwner = user?.email === e

@@ -1316,6 +1316,15 @@
       "download_error": "下载错误，请重试",
       "upload_error": "上传错误，请重试",
       "upload_limit_error": "您已超过1GB的存储限制。请删除不必要的文件以释放空间。"
-    }
+    },
+    "android_permission": {
+      "title": "存储权限",
+      "message": "应用需要访问存储权限以下载文件。",
+      "button_neutral": "稍后询问",
+      "allert_title": "需要存储权限",
+      "allert_sub": "您已永久拒绝存储权限。请在设置中启用此权限以继续。"
+    },
+    "encrypting": "正在加密文件...",
+    "uploading": "正在上传文件..."
   }
 }

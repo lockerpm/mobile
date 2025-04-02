@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { View, Alert, TouchableOpacity } from 'react-native'
-import { Screen, Text, Header } from 'app/components/cores'
-import { useNavigation } from '@react-navigation/native'
+import React, { useState, useEffect } from "react"
+import { View, Alert, TouchableOpacity } from "react-native"
+import { Screen, Text, Header } from "app/components/cores"
+import { useNavigation } from "@react-navigation/native"
 
-import { FamilyMemberProp, Member } from './Member'
-import { InviteMemberModal } from './InviteModal'
-import { useStores } from 'app/models'
-import { useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { FAMILY_MEMBER_LIMIT } from 'app/static/constants'
-import { observer } from 'mobx-react-lite'
+import { FamilyMemberProp, Member } from "./Member"
+import { InviteMemberModal } from "./InviteModal"
+import { useStores } from "app/models"
+import { useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { FAMILY_MEMBER_LIMIT, FAMILY_MEMBER_LIMIT_TEAM } from "app/static/constants"
+import { observer } from "mobx-react-lite"
 
 export const InviteMemberScreen = observer(() => {
   const navigation = useNavigation()
@@ -22,13 +22,16 @@ export const InviteMemberScreen = observer(() => {
   const [familyMembers, setFamilyMembers] = useState<FamilyMemberProp[]>([])
   const [showInviteMemberModal, setShowInviteMemberModal] = useState(false)
 
-  const isFamilyAccount = user.isFamilyPlan || user.isLifeTimeFamilyPlan
+  const isFamilyAccount =
+    user.isFamilyPlan || user.isLifeTimeFamilyPlan || user.isLifeTimeTeamFamilyPlan
+
+  const LIMIT = user.isLifeTimeTeamFamilyPlan ? FAMILY_MEMBER_LIMIT_TEAM : FAMILY_MEMBER_LIMIT
 
   // ----------------------- METHODS -----------------------
 
   const getFamilyMember = async () => {
     const res = await user.getFamilyMember()
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setFamilyMembers(res.data)
     } else {
       notifyApiError(res)
@@ -37,31 +40,31 @@ export const InviteMemberScreen = observer(() => {
 
   const comfirmRemoveMember = async (id: string) => {
     Alert.alert(
-      translate('invite_member.confirm'),
-      '',
+      translate("invite_member.confirm"),
+      "",
       [
         {
-          text: translate('common.yes'),
+          text: translate("common.yes"),
           onPress: () => {
             removeFamilyMember(id)
           },
-          style: 'destructive',
+          style: "destructive",
         },
         {
-          text: translate('common.cancel'),
-          style: 'cancel',
+          text: translate("common.cancel"),
+          style: "cancel",
         },
       ],
       {
         cancelable: true,
-      }
+      },
     )
   }
   const removeFamilyMember = async (id: string) => {
     const res = await user.removeFamilyMember(id)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setRelad(true)
-      notify('success', translate('invite_member.delete_noti'))
+      notify("success", translate("invite_member.delete_noti"))
     } else {
       notifyApiError(res)
     }
@@ -83,7 +86,7 @@ export const InviteMemberScreen = observer(() => {
           onLeftPress={() => {
             navigation.goBack()
           }}
-          title={translate('invite_member.header')}
+          title={translate("invite_member.header")}
         />
       }
       padding
@@ -92,30 +95,30 @@ export const InviteMemberScreen = observer(() => {
       }}
     >
       <InviteMemberModal
+        limit={LIMIT}
         isShow={showInviteMemberModal}
         onClose={setShowInviteMemberModal}
         familyMembers={familyMembers}
         setRelad={setRelad}
       />
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text preset="bold" style={{ marginBottom: 20, fontSize: 16 }}>
-          {translate('invite_member.number_member')} ({familyMembers?.length} / 6)
+          {translate("invite_member.number_member")} ({familyMembers?.length} / {LIMIT})
         </Text>
         {isFamilyAccount && (
           <TouchableOpacity
-            disabled={familyMembers?.length >= FAMILY_MEMBER_LIMIT}
+            disabled={familyMembers?.length >= LIMIT}
             onPress={() => {
               setShowInviteMemberModal(true)
             }}
           >
             <Text
               style={{
-                color:
-                  familyMembers?.length < FAMILY_MEMBER_LIMIT ? colors.primary : colors.background,
+                color: familyMembers?.length < LIMIT ? colors.primary : colors.background,
               }}
             >
-              {translate('invite_member.action')}
+              {translate("invite_member.action")}
             </Text>
           </TouchableOpacity>
         )}

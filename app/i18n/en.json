@@ -1326,6 +1326,8 @@
       "button_neutral": "Ask Me Later",
       "allert_title": "Storage Permission Required",
       "allert_sub": "You have permanently denied storage permission. Please enable it in settings to proceed."
-    }
+    },
+    "encrypting": "Encrypting file...",
+    "uploading": "Uploading file..."
   }
 }
