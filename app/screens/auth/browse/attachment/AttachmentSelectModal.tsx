@@ -7,12 +7,15 @@ import { useTheme } from "app/services/context"
 import { AttachmentType, usePickAttachment } from "./usePickAttachment"
 import { FilePreview } from "./item/FilePreview"
 import { delay } from "app/utils/utils"
+import { useNavigation } from "@react-navigation/native"
 
 interface Props {
+  isFree: boolean
   addAttachment: (file: AttachmentType) => void
 }
-export const AttachmentSelectIcon = ({ addAttachment }: Props) => {
+export const AttachmentSelectIcon = ({ isFree, addAttachment }: Props) => {
   const { colors } = useTheme()
+  const navigation = useNavigation() as any
   const { translate } = useHelper()
   const { pickFile, pickMedia } = usePickAttachment()
 
@@ -20,8 +23,12 @@ export const AttachmentSelectIcon = ({ addAttachment }: Props) => {
   const [localFile, setLocalFile] = useState<AttachmentType | null>(null)
 
   const openModal = useCallback(() => {
+    if (isFree) {
+      navigation.navigate("payment")
+      return
+    }
     setIsAddOpen(true)
-  }, [])
+  }, [isFree])
 
   const closeModal = useCallback(() => {
     setLocalFile(null)

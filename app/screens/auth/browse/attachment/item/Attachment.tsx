@@ -9,12 +9,13 @@ import { useAttachmentActions } from "./useAttachmentActions"
 import { useHelper } from "app/services/hook"
 
 interface Props {
+  isFree: boolean
   item: AttachmentType
   updateAttachments: (attachment: AttachmentType, isDelete: boolean) => void
   isShared?: boolean
 }
 
-export const Attachment = ({ item, updateAttachments, isShared }: Props) => {
+export const Attachment = ({ item, updateAttachments, isFree, isShared }: Props) => {
   const { colors } = useTheme()
   const { translate } = useHelper()
   const { encryptAndUploadFile } = usePickAttachment()
@@ -34,7 +35,7 @@ export const Attachment = ({ item, updateAttachments, isShared }: Props) => {
   /**
    * Call back when user upload successfully attachment
    */
-  const uploadAttachment = useCallback((attachment: AttachmentType) => {
+  const uploadedAttachment = useCallback((attachment: AttachmentType) => {
     if (attachment.key) {
       setAttachment(attachment)
       setIsLoading(false)
@@ -65,7 +66,7 @@ export const Attachment = ({ item, updateAttachments, isShared }: Props) => {
     if (!attachment.key) {
       const res = await encryptAndUploadFile(item, setStatus)
       if (res) {
-        uploadAttachment(res)
+        uploadedAttachment(res)
       }
     }
   }, [])
@@ -91,12 +92,14 @@ export const Attachment = ({ item, updateAttachments, isShared }: Props) => {
         </View>
         {!isLoading && (
           <View style={row}>
-            <Icon
-              icon="download-simple"
-              size={24}
-              containerStyle={iconPadding}
-              onPress={onDownloadAttachment}
-            />
+            {(!isFree || isShared) && (
+              <Icon
+                icon="download-simple"
+                size={24}
+                containerStyle={iconPadding}
+                onPress={onDownloadAttachment}
+              />
+            )}
             {!isShared && (
               <Icon
                 icon="trash"

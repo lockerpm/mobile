@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react"
-import { View, TouchableOpacity, TextInput, Modal } from "react-native"
+import React, { useCallback, useEffect, useState } from "react"
+import { View, TouchableOpacity, Modal, StyleSheet } from "react-native"
 import { Member } from "./Member"
-
-import { Icon, Text, Screen, Header, Button } from "app/components/cores"
+import { Icon, Text, Button, TextInput } from "app/components/cores"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
@@ -26,27 +25,34 @@ export const InviteMemberModal = (props: InviteProps) => {
   const [emails, setEmails] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
+  const isIncluded = familyMembers.some((element) => element.email === email?.trim().toLowerCase())
+  const isAdded = emails.includes(email?.trim().toLowerCase())
+
   // ----------------------- METHODS -----------------------
-  const addEmailToInviteList = (email: string) => {
-    const e = email.trim().toLowerCase()
-    if (!e) return
+  const addEmailToInviteList = useCallback(
+    (email: string) => {
+      const e = email.trim().toLowerCase()
+      if (!e) return
 
-    const unreachLimit = familyMembers.length + emails.length < limit
-    if (!unreachLimit) return
+      const unreachLimit = familyMembers.length + emails.length < limit
+      if (!unreachLimit) return
 
-    const isOwner = user?.email === e
-    const isIncluded = familyMembers.some((element) => element.email === e)
+      const isOwner = user?.email === e
+      const isIncluded = familyMembers.some((element) => element.email === e)
 
-    if (!emails.includes(e) && !isOwner && !isIncluded) {
-      setEmails([...emails, e])
-      setEmail("")
-    }
-  }
-  const removeEmailFromInviteList = (val: string) => {
-    setEmails(emails.filter((e) => e !== val))
-  }
+      if (!emails.includes(e) && !isOwner && !isIncluded) {
+        setEmails([...emails, e])
+        setEmail("")
+      }
+    },
+    [familyMembers, emails, limit, user?.email],
+  )
 
-  const addFamilyMember = async (emails?: string[]) => {
+  const removeEmailFromInviteList = useCallback((val: string) => {
+    setEmails((prev) => prev.filter((e) => e !== val))
+  }, [])
+
+  const addFamilyMember = useCallback(async (emails?: string[]) => {
     setIsLoading(true)
     const res = await user.addFamilyMember(emails)
     onClose(false)
@@ -58,7 +64,12 @@ export const InviteMemberModal = (props: InviteProps) => {
       notifyApiError(res)
     }
     setIsLoading(false)
-  }
+  }, [])
+
+  const onReset = useCallback(() => {
+    setEmail("")
+    setEmails([])
+  }, [])
 
   // ----------------------- EFFECTS -----------------------
 
@@ -79,30 +90,21 @@ export const InviteMemberModal = (props: InviteProps) => {
       visible={isShow}
       animationType="slide"
       onRequestClose={() => onClose(false)}
+      onDismiss={onReset}
     >
-      <Screen
-        padding
-        header={
-          <Header
-            leftIcon="x"
-            onLeftPress={() => onClose(false)}
-            containerStyle={{
-              paddingTop: 10,
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Icon icon="x" onPress={() => onClose(false)} />
+          <Button
+            loading={isLoading}
+            preset="teriatary"
+            disabled={isLoading || emails.length === 0}
+            onPress={() => {
+              addFamilyMember(emails)
             }}
-            RightActionComponent={
-              <Button
-                loading={isLoading}
-                preset="teriatary"
-                disabled={isLoading || emails.length === 0}
-                onPress={() => {
-                  addFamilyMember(emails)
-                }}
-                text={translate("invite_member.action")}
-              />
-            }
+            text={translate("invite_member.action")}
           />
-        }
-      >
+        </View>
         <Text
           preset="bold"
           size="xl"
@@ -116,34 +118,42 @@ export const InviteMemberModal = (props: InviteProps) => {
             borderBottomWidth: 1,
           }}
         >
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-            }}
-          >
+          <View style={styles.emailInput}>
             <TouchableOpacity
               onPress={() => {
                 addEmailToInviteList(email)
               }}
-              style={{ marginRight: 16, marginVertical: 16 }}
+              style={styles.userPlus}
             >
               <Icon icon={"user-plus"} size={24} color={colors.title} />
             </TouchableOpacity>
-            <TextInput
-              placeholder={translate("invite_member.placeholder")}
-              placeholderTextColor={colors.secondaryText}
-              selectionColor={colors.primary}
-              style={{ color: colors.title }}
-              onChangeText={setEmail}
-              value={email}
-              clearButtonMode="unless-editing"
-              clearTextOnFocus={true}
-              onSubmitEditing={() => {
-                addEmailToInviteList(email)
+            <View
+              style={{
+                flex: 1,
               }}
-            ></TextInput>
+            >
+              <TextInput
+                placeholder={translate("invite_member.placeholder")}
+                placeholderTextColor={colors.secondaryText}
+                selectionColor={colors.primary}
+                style={{ color: colors.title }}
+                onChangeText={setEmail}
+                value={email}
+                clearButtonMode="unless-editing"
+                clearTextOnFocus={true}
+                onSubmitEditing={() => {
+                  addEmailToInviteList(email)
+                }}
+              />
+            </View>
           </View>
+          {(isIncluded || isAdded) && (
+            <Text
+              preset="label"
+              text={translate("invite_member.existing_member")}
+              style={{ marginTop: 8, textAlign: "center" }}
+            />
+          )}
           <View>
             {emails.map((e, index) => {
               return (
@@ -186,7 +196,29 @@ export const InviteMemberModal = (props: InviteProps) => {
             <Member member={{ email }} add={true} />
           </TouchableOpacity>
         )}
-      </Screen>
+      </View>
     </Modal>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  emailInput: {
+    flexDirection: "row",
+    flexShrink: 1,
+    width: "100%",
+  },
+  header: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 10,
+  },
+  userPlus: {
+    marginRight: 16,
+    marginVertical: 16,
+  },
+})

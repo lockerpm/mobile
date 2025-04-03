@@ -1036,7 +1036,8 @@
     "list_member_title": "Member you added to the plan will appear at the list below",
     "select_person": "SELECT A PERSON",
     "number_member": "Member on Your plan",
-    "remove": "Remove family member"
+    "remove": "Remove family member",
+    "existing_member": "The user has already been added"
   },
   "outdated_data": {
     "desc": "Looks like you are trying to update an unsynchronized item. Please wait for the synchronization process to finish, or you can manually synchronize your data here",
@@ -1328,6 +1329,7 @@
       "allert_sub": "You have permanently denied storage permission. Please enable it in settings to proceed."
     },
     "encrypting": "Encrypting file...",
-    "uploading": "Uploading file..."
+    "uploading": "Uploading file...",
+    "upgrade": "Upgrade account to Premium to download your file attachments."
   }
 }

@@ -98,7 +98,7 @@ const AttachmentStorage = (props: { title: string }) => {
 
   const [totalSize, setTotalSize] = useState(0)
 
-  const usagePercentage = convertBytesToGB(totalSize) * 100
+  const usagePercentage = convertBytesToGB(totalSize)
   const backgroundColor =
     usagePercentage >= 80
       ? usagePercentage >= 100

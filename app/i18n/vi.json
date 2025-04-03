@@ -1082,7 +1082,8 @@
     "list_member_title": "Danh sách các thành viên trong gói",
     "select_person": "Chọn email để thêm vào danh sách mời",
     "number_member": "Số lượng ",
-    "remove": "Xoá thành viên"
+    "remove": "Xoá thành viên",
+    "existing_member": "Người dùng đã được thêm trước đó"
   },
   "outdated_data": {
     "desc": "Có vẻ như bạn đang cố gắng cập nhật một mục chưa được đồng bộ hóa. Vui lòng đợi quá trình đồng bộ hóa kết thúc hoặc bạn có thể đồng bộ hóa dữ liệu của mình theo cách thủ công tại đây",
@@ -1372,7 +1373,8 @@
         "allert_sub": "Bạn đã từ chối quyền truy cập bộ nhớ vĩnh viễn. Vui lòng bật quyền này trong cài đặt để tiếp tục."
       },
       "encrypting": "Đang mã hóa tệp...",
-      "uploading": "Đang tải tệp lên..."
+      "uploading": "Đang tải tệp lên...",
+      "upgrade": "Nâng cấp tài khoản lên Premium để tải xuống tệp đính kèm của bạn."
     }
   }
 }

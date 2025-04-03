@@ -1034,7 +1034,8 @@
     "list_member_title": "您新增至方案的成員將顯示在以下清單中",
     "select_person": "選擇一個人",
     "number_member": "您方案上的成員",
-    "remove": "移除家庭成員"
+    "remove": "移除家庭成員",
+    "existing_member": "該用戶已新增"
   },
   "outdated_data": {
     "desc": "您似乎嘗試更新未同步的項目。 請等待同步完成，或者您可以在這裡手動同步您的資料",
@@ -1325,6 +1326,7 @@
       "allert_sub": "您已永久拒绝存储权限。请在设置中启用此权限以继续。"
     },
     "encrypting": "正在加密文件...",
-    "uploading": "正在上传文件..."
+    "uploading": "正在上传文件...",
+    "upgrade": "升级账户到高级版以下载您的附件。"
   }
 }

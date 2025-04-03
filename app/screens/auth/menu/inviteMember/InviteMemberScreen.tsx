@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View, Alert, TouchableOpacity } from "react-native"
+import { View, Alert, TouchableOpacity, FlatList, StyleSheet } from "react-native"
 import { Screen, Text, Header } from "app/components/cores"
 import { useNavigation } from "@react-navigation/native"
 
@@ -27,6 +27,7 @@ export const InviteMemberScreen = observer(() => {
 
   const LIMIT = user.isLifeTimeTeamFamilyPlan ? FAMILY_MEMBER_LIMIT_TEAM : FAMILY_MEMBER_LIMIT
 
+  console.log(familyMembers.map((e) => e.email))
   // ----------------------- METHODS -----------------------
 
   const getFamilyMember = async () => {
@@ -80,6 +81,7 @@ export const InviteMemberScreen = observer(() => {
   // ----------------------- RENDER -----------------------
   return (
     <Screen
+      safeAreaEdges={["bottom"]}
       header={
         <Header
           leftIcon="arrow-left"
@@ -89,10 +91,7 @@ export const InviteMemberScreen = observer(() => {
           title={translate("invite_member.header")}
         />
       }
-      padding
-      contentContainerStyle={{
-        flex: 1,
-      }}
+      contentContainerStyle={styles.container}
     >
       <InviteMemberModal
         limit={LIMIT}
@@ -102,8 +101,8 @@ export const InviteMemberScreen = observer(() => {
         setRelad={setRelad}
       />
 
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text preset="bold" style={{ marginBottom: 20, fontSize: 16 }}>
+      <View style={styles.header}>
+        <Text preset="bold" style={styles.text}>
           {translate("invite_member.number_member")} ({familyMembers?.length} / {LIMIT})
         </Text>
         {isFamilyAccount && (
@@ -123,19 +122,27 @@ export const InviteMemberScreen = observer(() => {
           </TouchableOpacity>
         )}
       </View>
-
-      <View>
-        {familyMembers.map((e, index) => {
-          return (
-            <Member
-              key={index}
-              family={isFamilyAccount}
-              member={e}
-              onRemove={comfirmRemoveMember}
-            />
-          )
-        })}
-      </View>
+      <FlatList
+        data={familyMembers}
+        keyExtractor={(item) => item.email}
+        renderItem={({ item }) => <Member family member={item} onRemove={comfirmRemoveMember} />}
+        contentContainerStyle={styles.content}
+      />
     </Screen>
   )
+})
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    paddingHorizontal: 16,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+  },
+  text: { fontSize: 16, marginBottom: 20 },
 })

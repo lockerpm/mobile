@@ -1,23 +1,35 @@
-import { Header, Screen } from "app/components/cores"
+import { Header, Screen, Text } from "app/components/cores"
 import React, { FC, useCallback, useState } from "react"
 import { AttachmentSelectIcon } from "./AttachmentSelectModal"
 import { observer } from "mobx-react-lite"
 import { useStores } from "app/models"
-import { FlatList, Image, ImageStyle, View, ViewStyle } from "react-native"
+import {
+  FlatList,
+  Image,
+  ImageStyle,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
 import { Attachment } from "./item/Attachment"
 import { AttachmentType } from "./usePickAttachment"
 import { AttachmentView, CipherView } from "core/models/view"
-import { useCipherData } from "app/services/hook"
+import { useCipherData, useHelper } from "app/services/hook"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { useTheme } from "app/services/context"
 
 const EMPTY_IMAGE = require("assets/images/empty_attachment.png")
 
 export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
   ({ navigation, route }) => {
-    const { cipherStore } = useStores()
+    const { cipherStore, user } = useStores()
     const { updateCipher } = useCipherData()
+    const { colors } = useTheme()
+    const { translate } = useHelper()
 
     const isShared = route.params?.isShared ?? false
+    const isFree = user.isFreePlan
 
     const selectedCipher = (cipherStore.selectedCipher as CipherView) ?? null
 
@@ -28,6 +40,10 @@ export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
     )
 
     // -------------- METHODS ------------------
+    const goPayment = useCallback(() => {
+      navigation.navigate("payment")
+    }, [navigation])
+
     const updateCipherAttachment = async (attachments: AttachmentType[]) => {
       if (!selectedCipher) return
 
@@ -70,8 +86,10 @@ export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
 
     // -------------- RENDER ------------------
     const RightActionComponent = useCallback(() => {
-      return !isShared ? <AttachmentSelectIcon addAttachment={addLocalAttachment} /> : undefined
-    }, [isShared])
+      return !isShared ? (
+        <AttachmentSelectIcon isFree={isFree} addAttachment={addLocalAttachment} />
+      ) : undefined
+    }, [isShared, isFree])
 
     const EmptyList = useCallback(
       () => <Image source={EMPTY_IMAGE} style={imageStyle} resizeMode="contain" />,
@@ -88,18 +106,32 @@ export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
             leftIcon="arrow-left"
             onLeftPress={navigation.goBack}
             titleTx="file_attachment.title"
-            rightIcon="plus"
             RightActionComponent={<RightActionComponent />}
           />
         }
         contentContainerStyle={container}
       >
+        {!isFree && !isShared && (
+          <View style={upgradeNote(colors)}>
+            <Text text={translate("file_attachment.upgrade")} />
+
+            <TouchableOpacity onPress={goPayment}>
+              <Text color={colors.primary} style={upgrade} tx="password_history.free.upgrade" />
+            </TouchableOpacity>
+          </View>
+        )}
+
         <FlatList
           data={attachments}
           keyExtractor={(item) => item.id}
           contentContainerStyle={listContent}
           renderItem={({ item }) => (
-            <Attachment item={item} updateAttachments={updateAttachments} isShared={isShared} />
+            <Attachment
+              isFree={isFree}
+              item={item}
+              updateAttachments={updateAttachments}
+              isShared={isShared}
+            />
           )}
           ListEmptyComponent={<EmptyList />}
           ItemSeparatorComponent={ItemSeparatorComponent}
@@ -125,3 +157,19 @@ const imageStyle: ImageStyle = {
   height: 250,
   alignSelf: "center",
 }
+
+const upgrade: TextStyle = {
+  alignSelf: "flex-end",
+  flexGrow: 1,
+  marginTop: 16,
+}
+
+const upgradeNote: (colors: any) => ViewStyle = (colors) => ({
+  borderRadius: 8,
+  marginHorizontal: 16,
+  borderColor: colors.border,
+  borderWidth: 1,
+  backgroundColor: colors.block,
+  padding: 16,
+  marginTop: 16,
+})
