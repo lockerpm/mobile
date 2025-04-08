@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class RNPacketsManager implements ReactPackage {
+public class RNPackagesManager implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
@@ -25,6 +25,7 @@ public class RNPacketsManager implements ReactPackage {
         modules.add(new RNAutofillServiceAndroid(reactContext));
         modules.add(new RNManufacturerSettingsAndroid(reactContext));
         modules.add(new RNVinCssSsoLogin(reactContext));
+        modules.add(new RNFileEncryptor(reactContext));
         return modules;
     }
 

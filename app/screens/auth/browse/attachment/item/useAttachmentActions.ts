@@ -29,6 +29,10 @@ export const useAttachmentActions = (
 
   const onDownloadAttachment = async () => {
     if (!attachment.key) return
+
+    const tempEncFile = `${RNFS.CachesDirectoryPath}/${Date.now()}enc${attachment.fileName}`
+
+    const filePath = `${DOWNLOAD_PATH}/${attachment.fileName}`
     try {
       setIsLoading(true)
       const hasPermission = await requestStoragePermission()
@@ -37,8 +41,6 @@ export const useAttachmentActions = (
         return
       }
 
-      const tempEncFile = `${RNFS.CachesDirectoryPath}/${Date.now()}enc${attachment.fileName}`
-      const filePath = `${DOWNLOAD_PATH}/${attachment.fileName}`
       if (await RNFS.exists(filePath)) {
         await RNFS.unlink(filePath)
       }
@@ -59,10 +61,10 @@ export const useAttachmentActions = (
         return
       }
 
-      const decryptedRes = await attachmentService.decryptFile(
+      const decryptedRes = await attachmentService.nativeDecryptFileByChunk(
         tempEncFile,
         filePath,
-        Buffer.from(attachment.key, "base64"),
+        attachment.key,
       )
 
       if (!decryptedRes) {
@@ -106,6 +108,9 @@ export const useAttachmentActions = (
     } catch (error) {
       notify("error", translate("file_attachment.error.download_error"))
     } finally {
+      if (await RNFS.exists(tempEncFile)) {
+        await RNFS.unlink(tempEncFile)
+      }
       setIsLoading(false)
     }
   }

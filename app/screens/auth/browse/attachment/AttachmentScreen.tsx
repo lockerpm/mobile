@@ -111,7 +111,7 @@ export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
         }
         contentContainerStyle={container}
       >
-        {!isFree && !isShared && (
+        {isFree && !isShared && (
           <View style={upgradeNote(colors)}>
             <Text text={translate("file_attachment.upgrade")} />
 

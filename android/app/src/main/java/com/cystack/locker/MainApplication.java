@@ -1,7 +1,6 @@
 package com.cystack.locker;
 
 import android.app.Application;
-import androidx.annotation.NonNull;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,7 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
         @SuppressWarnings("UnnecessaryLocalVariable")
         List<ReactPackage> packages = new PackageList(this).getPackages();
         // Packages that cannot be autolinked yet can be added manually here, for example:
-        packages.add(new RNPacketsManager());
+        packages.add(new RNPackagesManager());
         return packages;
       }
 

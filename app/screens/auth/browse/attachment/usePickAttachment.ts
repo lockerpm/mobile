@@ -16,6 +16,7 @@ export enum UploadStatus {
   ENCRYPTING,
   UPLOADING,
   NONE,
+  ERROR,
 }
 
 export type AttachmentType = {
@@ -129,28 +130,31 @@ export const usePickAttachment = () => {
 
       if (uploadFormRes.kind !== "ok") {
         notifyApiError(uploadFormRes)
-        onStatus(UploadStatus.NONE)
+        onStatus(UploadStatus.ERROR)
         return null
       }
       if (uploadFormRes.data.limit_size < file.size) {
         notify("error", translate("file_attachment.error.upload_limit_error"))
-        onStatus(UploadStatus.NONE)
+        onStatus(UploadStatus.ERROR)
         return null
       }
 
       const randomKey = crypto.randomBytes(32)
-      const encRes = await attachmentService.encryptFile(file.url, tempEncFile, randomKey)
+      const encRes = await attachmentService.nativeEncryptFileByChunk(
+        file.url,
+        tempEncFile,
+        randomKey.toString("base64"),
+      )
       if (!encRes) {
         notify("error", translate("file_attachment.error.encrypt_error"))
-        onStatus(UploadStatus.NONE)
+        onStatus(UploadStatus.ERROR)
         return null
       }
-
       onStatus(UploadStatus.UPLOADING)
       const encryptedFileSize = await getFileSize(tempEncFile)
       if (uploadFormRes.data.limit_size < encryptedFileSize) {
         notify("error", translate("file_attachment.error.upload_limit_error"))
-        onStatus(UploadStatus.NONE)
+        onStatus(UploadStatus.ERROR)
         return null
       }
       const uploadRes = await attachmentService.uploadAttachment({
@@ -159,20 +163,21 @@ export const usePickAttachment = () => {
       })
       if (uploadRes.kind === "error") {
         notify("error", uploadRes.error)
-        onStatus(UploadStatus.NONE)
+        onStatus(UploadStatus.ERROR)
         return null
       }
+
       const attachment: AttachmentType = {
         ...file,
         url: uploadRes.id,
         key: randomKey.toString("base64"),
       }
-
+      onStatus(UploadStatus.NONE)
       return attachment
     } catch (error) {
+      onStatus(UploadStatus.ERROR)
       notify("error", translate("file_attachment.error.upload_error"))
     } finally {
-      onStatus(UploadStatus.NONE)
       if (await RNFS.exists(tempEncFile)) {
         await RNFS.unlink(tempEncFile)
       }

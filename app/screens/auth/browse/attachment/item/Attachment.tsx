@@ -24,7 +24,7 @@ export const Attachment = ({ item, updateAttachments, isFree, isShared }: Props)
 
   const [isLoading, setIsLoading] = useState(!item.key)
   const [attachment, setAttachment] = useState(item)
-  const [status, setStatus] = useState<UploadStatus>(UploadStatus.NONE)
+  const [status, setStatus] = useState<UploadStatus>(UploadStatus.ERROR)
 
   const { onDownloadAttachment, onDeleteAttachment } = useAttachmentActions(
     attachment,
@@ -32,13 +32,16 @@ export const Attachment = ({ item, updateAttachments, isFree, isShared }: Props)
     updateAttachments,
   )
 
+  const removeAttachmentOnUploadFailed = useCallback(() => {
+    updateAttachments(item, true)
+  }, [item, updateAttachments])
+
   /**
    * Call back when user upload successfully attachment
    */
   const uploadedAttachment = useCallback((attachment: AttachmentType) => {
     if (attachment.key) {
       setAttachment(attachment)
-      setIsLoading(false)
       updateAttachments(attachment, false)
     }
   }, [])
@@ -69,11 +72,14 @@ export const Attachment = ({ item, updateAttachments, isFree, isShared }: Props)
         uploadedAttachment(res)
       }
     }
+    setIsLoading(false)
   }, [])
 
   useEffect(() => {
     onUploadAttachment()
   }, [])
+
+  const isError = status === UploadStatus.ERROR
 
   return (
     <View style={$styles.constainer}>
@@ -84,13 +90,17 @@ export const Attachment = ({ item, updateAttachments, isFree, isShared }: Props)
             flexGrow: 1,
             flexShrink: 1,
             paddingHorizontal: 12,
-            opacity: isLoading && !attachment.key ? 0.5 : 1,
+            opacity: isError ? 1 : isLoading && !attachment.key ? 0.5 : 1,
           }}
         >
-          <Text text={attachment.fileName} numberOfLines={3} />
+          <Text
+            text={attachment.fileName}
+            numberOfLines={3}
+            color={isError ? colors.error : undefined}
+          />
           <Text preset="label" text={convertBytes(attachment.size)} size="base" />
         </View>
-        {!isLoading && (
+        {!isLoading && !isError && (
           <View style={row}>
             {(!isFree || isShared) && (
               <Icon
@@ -111,9 +121,18 @@ export const Attachment = ({ item, updateAttachments, isFree, isShared }: Props)
             )}
           </View>
         )}
+        {isError && (
+          <Icon
+            icon="trash"
+            size={24}
+            color={colors.error}
+            containerStyle={iconPadding}
+            onPress={removeAttachmentOnUploadFailed}
+          />
+        )}
         {isLoading && <ActivityIndicator size={"small"} color={colors.primary} />}
       </View>
-      {status !== UploadStatus.NONE && (
+      {![UploadStatus.NONE, UploadStatus.ERROR].includes(status) && (
         <Text
           preset="label"
           text={
