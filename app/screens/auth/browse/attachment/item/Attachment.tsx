@@ -24,7 +24,7 @@ export const Attachment = ({ item, updateAttachments, isFree, isShared }: Props)
 
   const [isLoading, setIsLoading] = useState(!item.key)
   const [attachment, setAttachment] = useState(item)
-  const [status, setStatus] = useState<UploadStatus>(UploadStatus.ERROR)
+  const [status, setStatus] = useState<UploadStatus>(UploadStatus.NONE)
 
   const { onDownloadAttachment, onDeleteAttachment } = useAttachmentActions(
     attachment,
