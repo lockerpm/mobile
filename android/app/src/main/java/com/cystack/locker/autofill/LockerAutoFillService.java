@@ -55,6 +55,9 @@ public class LockerAutoFillService extends AutofillService {
         ArrayList<Field> fields = (ArrayList<Field>) parseResult.getFillable();
         String domain = parseResult.getDomain();
 
+        Log.d(TAG, "fields" + fields.size());
+        Log.d(TAG, "fields" + fields.isEmpty() +  Utils.BlacklistedUris.contains(domain) + !this.readyToStart);
+
         if (fields == null || fields.isEmpty() || Utils.BlacklistedUris.contains(domain) || !this.readyToStart) {
             Log.d(TAG, "No autofill hints found");
             callback.onSuccess(null);
