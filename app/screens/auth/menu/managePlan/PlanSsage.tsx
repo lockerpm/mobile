@@ -47,6 +47,7 @@ const ItemStorage = (props: PlanStorageProps) => {
     counting()
   }, [])
 
+
   return (
     <View style={[{ width: "100%", marginVertical: 4 }, style]}>
       <View
@@ -100,8 +101,8 @@ const AttachmentStorage = (props: { title: string }) => {
 
   const usagePercentage = convertBytesToGB(totalSize)
   const backgroundColor =
-    usagePercentage >= 80
-      ? usagePercentage >= 100
+    usagePercentage >= 0.8
+      ? usagePercentage >= 1
         ? colors.error
         : colors.warning
       : colors.primary
@@ -141,7 +142,7 @@ const AttachmentStorage = (props: { title: string }) => {
           backgroundColor: colors.block,
         }}
         progressColor={backgroundColor}
-        progress={usagePercentage}
+        progress={Math.min(usagePercentage * 100, 100)}
       />
     </View>
   )

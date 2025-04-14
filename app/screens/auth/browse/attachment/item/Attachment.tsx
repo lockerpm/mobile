@@ -70,6 +70,8 @@ export const Attachment = ({ item, updateAttachments, isFree, isShared }: Props)
       const res = await encryptAndUploadFile(item, setStatus)
       if (res) {
         uploadedAttachment(res)
+      } else {
+        updateAttachments(attachment, true)
       }
     }
     setIsLoading(false)
@@ -84,7 +86,7 @@ export const Attachment = ({ item, updateAttachments, isFree, isShared }: Props)
   return (
     <View style={$styles.constainer}>
       <View style={row}>
-        <Icon icon="file-text" size={40} color={isLoading ? colors.disable : colors.primary} />
+        <Icon icon="file-text" size={40} color={isError ? colors.error : isLoading ? colors.disable : colors.primary} />
         <View
           style={{
             flexGrow: 1,

@@ -251,6 +251,7 @@
       "5000": "This item has already been shared. ",
       "5001": "You can only select up to 10000 items at a time.",
       "5002": "The maximum number of items is reached. You can remove items in Trash if any.",
+      "5003": "You have exceeded the 1GB storage limit. Please delete unnecessary files to free up space.",
       "7002": "You need to upgrade your plan to execute this operator.",
       "7003": "You don't need to pay to execute this operator.",
       "7004": "You can not cancel the default plan.",

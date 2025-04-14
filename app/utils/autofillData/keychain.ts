@@ -4,34 +4,33 @@ import { Logger } from "../utils"
 import {
   IosAutofillPassword,
   IosAutofillTemporaryPassword,
-  IosAutofillUserInfo,
-  IosStorekey,
-} from "./iosAutofillType"
+  AutofillUserInfo,
+  AutofillStorekey,
+} from "./autofillType"
 
-class IosKeychainService {
-  public async saveUserInfo(data: IosAutofillUserInfo) {
-    if (!IS_IOS) return
-
+class KeychainService {
+  public async saveUserInfo(data: AutofillUserInfo) {
     await this.saveShared(
-      IosStorekey.USER_INFO.service,
-      IosStorekey.USER_INFO.username,
+      AutofillStorekey.USER_INFO.service,
+      AutofillStorekey.USER_INFO.username,
       JSON.stringify(data),
     )
   }
 
+  /**
+   * Disable on android
+   */
   public async savePassword(data: IosAutofillPassword) {
     if (!IS_IOS) return
 
     await this.saveShared(
-      IosStorekey.PASSWORD.service,
-      IosStorekey.PASSWORD.username,
+      AutofillStorekey.PASSWORD.service,
+      AutofillStorekey.PASSWORD.username,
       JSON.stringify(data),
     )
   }
 
   public async resetAll() {
-    if (!IS_IOS) return
-
     await ReactNativeKeychain.resetGenericPassword()
   }
 
@@ -40,8 +39,8 @@ class IosKeychainService {
     if (!IS_IOS) return
 
     await this.saveShared(
-      IosStorekey.TEMP_PASSWORD.service,
-      IosStorekey.TEMP_PASSWORD.username,
+      AutofillStorekey.TEMP_PASSWORD.service,
+      AutofillStorekey.TEMP_PASSWORD.username,
       JSON.stringify(data),
     )
   }
@@ -49,7 +48,7 @@ class IosKeychainService {
   public async getTempPassword(): Promise<IosAutofillTemporaryPassword | null> {
     if (!IS_IOS) return null
 
-    const res = await this.loadShared(IosStorekey.TEMP_PASSWORD.service)
+    const res = await this.loadShared(AutofillStorekey.TEMP_PASSWORD.service)
     if (!res || !res.password) {
       return null
     }
@@ -60,24 +59,14 @@ class IosKeychainService {
   public async resetTempPassword() {
     if (!IS_IOS) return
 
-    await this.saveShared(IosStorekey.TEMP_PASSWORD.service, IosStorekey.TEMP_PASSWORD.username, "")
+    await this.saveShared(AutofillStorekey.TEMP_PASSWORD.service, AutofillStorekey.TEMP_PASSWORD.username, "")
   }
 
-  public async getUserInfo(): Promise<IosAutofillUserInfo | null> {
-    if (!IS_IOS) return null
-
-    const res = await this.loadShared(IosStorekey.USER_INFO.service)
-    if (!res || !res.password) {
-      return null
-    }
-
-    return JSON.parse(res.password)
-  }
 
   public async getPasswords(): Promise<IosAutofillPassword | null> {
     if (!IS_IOS) return null
 
-    const res = await this.loadShared(IosStorekey.PASSWORD.service)
+    const res = await this.loadShared(AutofillStorekey.PASSWORD.service)
     if (!res || !res.password) {
       return null
     }
@@ -117,4 +106,4 @@ class IosKeychainService {
   }
 }
 
-export const iosKeyChain = new IosKeychainService()
+export const autofillKeyChain = new KeychainService()

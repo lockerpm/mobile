@@ -12,7 +12,7 @@ import { AppTimeoutType } from "app/static/types"
 import { SetlanguageItem } from "./SetLanguageItem"
 import { SetThemeItem } from "./SetThemeItem"
 import { SetTimeOutItem } from "./SetTimeOutItem"
-import { iosKeyChain } from "app/utils/iosAutofillData"
+import { autofillKeyChain } from "app/utils/autofillData"
 import { useCoreService } from "app/services/coreService"
 
 export const SettingsScreen = observer(() => {
@@ -53,7 +53,7 @@ export const SettingsScreen = observer(() => {
   const updateAutofillFaceIdSetting = async (enabled: boolean) => {
     user.setBiometricUnlock(enabled)
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
-    await iosKeyChain.saveUserInfo({
+    await autofillKeyChain.saveUserInfo({
       email: user.email || "",
       avatar: user.avatar || "",
       hashPass: hashPasswordAutofill || "",

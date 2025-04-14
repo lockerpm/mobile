@@ -8,7 +8,6 @@ import { InviteMemberModal } from "./InviteModal"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
-import { FAMILY_MEMBER_LIMIT, FAMILY_MEMBER_LIMIT_TEAM } from "app/static/constants"
 import { observer } from "mobx-react-lite"
 
 export const InviteMemberScreen = observer(() => {
@@ -16,6 +15,7 @@ export const InviteMemberScreen = observer(() => {
   const { user } = useStores()
   const { colors } = useTheme()
   const { notifyApiError, notify, translate } = useHelper()
+
 
   // ----------------------- PARAMS -----------------------
   const [reload, setRelad] = useState<boolean>(true)
@@ -25,9 +25,8 @@ export const InviteMemberScreen = observer(() => {
   const isFamilyAccount =
     user.isFamilyPlan || user.isLifeTimeFamilyPlan || user.isLifeTimeTeamFamilyPlan
 
-  const LIMIT = user.isLifeTimeTeamFamilyPlan ? FAMILY_MEMBER_LIMIT_TEAM : FAMILY_MEMBER_LIMIT
+  const LIMIT = user.plan.max_number || 6
 
-  console.log(familyMembers.map((e) => e.email))
   // ----------------------- METHODS -----------------------
 
   const getFamilyMember = async () => {

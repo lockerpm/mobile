@@ -6,13 +6,14 @@ import { useCipherData } from "./useCipherData"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { Logger } from "app/utils/utils"
+import { AccountRole } from "app/static/types"
 
 export function useTool() {
   const { user, toolStore, cipherStore } = useStores()
   const { passwordGenerationService, auditService, searchService } = useCoreService()
 
   const { getCiphers, getEncryptedCiphers, getCiphersFromCache } = useCipherData()
-  const { notify, translate } = useHelper()
+  const { notify, translate, getTeam } = useHelper()
 
   // ----------------------------- METHODS ---------------------------
 
@@ -59,7 +60,13 @@ export function useTool() {
       const cipherWithAttachments: CipherView[] =
         (await searchService.searchCiphersFromCache("", filters, null)) || []
       let totial = 0
-      cipherWithAttachments.forEach((c) => {
+      const myCiphers = cipherWithAttachments.filter((c) => {
+        const organizations = cipherStore.organizations
+        const shareRole = getTeam(organizations, c.organizationId).type
+
+        return !c.organizationId || shareRole === AccountRole.OWNER
+      })
+      myCiphers.forEach((c) => {
         totial += c.attachments.reduce((acc, att) => acc + att.fileSize, 0)
       })
       return totial

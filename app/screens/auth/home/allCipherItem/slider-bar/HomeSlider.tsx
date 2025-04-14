@@ -12,7 +12,7 @@ import Animated, {
 import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
-import { iosKeyChain } from "app/utils/iosAutofillData"
+import { autofillKeyChain } from "app/utils/autofillData"
 import { AutofillServiceEnabled } from "app/utils/autofillHelper"
 import { observer } from "mobx-react-lite"
 
@@ -86,7 +86,18 @@ export const HomeSlider = observer(() => {
   const syncAutofillUserInfo = async () => {
     if (!user.saveIosAutofillInfor) {
       const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
-      await iosKeyChain.saveUserInfo({
+
+      console.log({
+        email: user.email || "",
+        avatar: user.avatar || "",
+        hashPass: hashPasswordAutofill || "",
+        token: user.apiToken || "",
+        language: user.language || "en",
+
+        faceIdEnabled: user.isBiometricUnlock,
+        isFree: user.isFreePlan,
+      })
+      await autofillKeyChain.saveUserInfo({
         email: user.email || "",
         avatar: user.avatar || "",
         hashPass: hashPasswordAutofill || "",

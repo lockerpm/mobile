@@ -28,7 +28,7 @@ import { CollectionRequest } from "core/models/request/collectionRequest"
 import { CipherData, FolderData } from "core/models/data"
 import { OrganizationData } from "core/models/data/organizationData"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
-import { IosAutofillPassword, iosKeyChain } from "app/utils/iosAutofillData"
+import { IosAutofillPassword, autofillKeyChain } from "app/utils/autofillData"
 
 export function useCipherData() {
   const { cipherStore, folderStore, uiStore, collectionStore, user, enterpriseStore } = useStores()
@@ -385,7 +385,7 @@ export function useCipherData() {
       otp: c.login.totp || "",
     }))
 
-    await iosKeyChain.savePassword(passwordData)
+    await autofillKeyChain.savePassword(passwordData)
   }
 
   // Sync autofill data
@@ -398,7 +398,7 @@ export function useCipherData() {
       cipherStore.setIsSynchingAutofill(true)
 
       // sync temporary passwords
-      const tempPasswords = await iosKeyChain.getTempPassword()
+      const tempPasswords = await autofillKeyChain.getTempPassword()
       if (tempPasswords && Array.isArray(tempPasswords)) {
         const ciphers: CipherRequest[] = []
 
@@ -436,7 +436,7 @@ export function useCipherData() {
         }
       }
 
-      await iosKeyChain.resetTempPassword()
+      await autofillKeyChain.resetTempPassword()
       await _updateAutofillData()
     } catch (e) {
       Logger.error("syncAutofillData: " + e)

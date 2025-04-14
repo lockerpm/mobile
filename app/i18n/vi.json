@@ -251,6 +251,7 @@
       "5000": "Mục này đã được chia sẻ.",
       "5001": "Bạn chỉ có thể chọn tối đa 10000 mục cùng lúc.",
       "5002": "Đã đạt đến số lượng mục tối đa. Bạn có thể xóa các mục trong Thùng rác nếu có.",
+      "5003": "Bạn đã vượt quá giới hạn lưu trữ 1GB. Vui lòng xóa các tệp không cần thiết để giải phóng dung lượng.",
       "7002": "Bạn cần nâng cấp tài khoản để thực hiện thao tác này.",
       "7003": "Bạn không cần trả phí để thực hiện thao tác này.",
       "7004": "Bạn không thể hùy gói mặc định.",

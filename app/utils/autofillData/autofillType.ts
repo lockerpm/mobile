@@ -1,6 +1,6 @@
 import { SHARED_KEYCHAIN_SERVICE } from "app/config/constants"
 
-export type IosAutofillUserInfo = {
+export type AutofillUserInfo = {
   email: string
   avatar: string
   hashPass: string
@@ -34,7 +34,7 @@ export enum StoreKey {
   PASSWORD = "PASSWORD",
 }
 
-export const IosStorekey: Record<
+export const AutofillStorekey: Record<
   StoreKey,
   {
     service: string
@@ -54,3 +54,4 @@ export const IosStorekey: Record<
     username: "locker_password",
   },
 }
+// SHARED_KEYCHAIN_SERVICE = 'W7S57TNBH5.com.cystack.lockerapp'
