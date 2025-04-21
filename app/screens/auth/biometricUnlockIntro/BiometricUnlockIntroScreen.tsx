@@ -7,7 +7,7 @@ import { useHelper } from "app/services/hook"
 import { Button, Screen, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { useCoreService } from "app/services/coreService"
-import { iosKeyChain } from "app/utils/iosAutofillData"
+import { autofillKeyChain } from "app/utils/autofillData"
 
 const FACEID = require("assets/images/intro/faceid.png")
 
@@ -57,7 +57,7 @@ export const BiometricUnlockIntroScreen = observer(() => {
   const _updateAutofillFaceIdSetting = async () => {
     user.setBiometricUnlock(true)
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
-    await iosKeyChain.saveUserInfo({
+    await autofillKeyChain.saveUserInfo({
       email: user.email || "",
       avatar: user.avatar || "",
       hashPass: hashPasswordAutofill || "",

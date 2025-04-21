@@ -65,6 +65,7 @@ import {
   Password2FASetupScreen,
   QuickSharesDetailScreen,
   PasswordHistoryScreen,
+  AttachmentScreen,
 } from "../screens"
 import { useCipherData, useHelper } from "app/services/hook"
 import { Logger } from "app/utils/utils"
@@ -79,7 +80,7 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((props) => {
   const navigation = props.navigation
-  const { notify, parsePushNotiData } = useHelper()
+  const { notify } = useHelper()
   const {
     getCipherById,
     syncAutofillData,
@@ -214,17 +215,6 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
           activeHandling.current = false
           return
         }
-
-        // Check push noti data
-        const navigationRequest = await parsePushNotiData()
-        if (navigationRequest.path) {
-          // handle navigate browse
-          // @ts-ignore
-          navigationRequest.tempParams &&
-            navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
-          // @ts-ignore
-          navigation.navigate(navigationRequest.path, navigationRequest.params)
-        }
       }
       activeHandling.current = false
     }
@@ -302,7 +292,6 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
 
     ws.onclose = (e) => {
       Logger.debug(`SOCKET CLOSE: ${JSON.stringify(e)}`)
-
       // Auto reconnect
       timeout.current = setTimeout(async () => {
         if (!uiStore.isOffline && user.isLoggedInPw) {
@@ -513,6 +502,7 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
         <Stack.Screen name="contactsTrustedYou" component={ContactsTrustedYouScreen} />
         <Stack.Screen name="viewEA" component={ViewEAScreen} />
         <Stack.Screen name="takeoverEA" component={TakeoverEAScreen} />
+        <Stack.Screen name="attachment" component={AttachmentScreen} />
       </Stack.Navigator>
     </UserInactivity>
   )

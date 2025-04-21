@@ -17,7 +17,6 @@ export const HomeTabScreen = observer(() => {
   const { uiStore, user } = useStores()
   const { translate } = useHelper()
   const { lock } = useAuthentication()
-
   // -------------- PARAMS ------------------
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(true)

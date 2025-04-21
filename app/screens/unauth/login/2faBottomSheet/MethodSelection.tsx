@@ -24,6 +24,7 @@ export const MethodSelection = (props: Props) => {
 
   const captchaRef = useRef(null)
 
+
   // ------------------ Params -----------------------
 
   const [sendingEmail, setIsSendingEmail] = useState(false)

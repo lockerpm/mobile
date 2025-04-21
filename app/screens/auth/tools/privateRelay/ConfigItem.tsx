@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { LayoutAnimation, TouchableOpacity, View } from "react-native"
+import {  TouchableOpacity, View } from "react-native"
 import { useTheme } from "app/services/context"
 import { SubdomainData } from "app/static/types"
 import { Text, Button, ImageIcon, Icon } from "app/components/cores"
@@ -38,6 +38,7 @@ export const ConfigItem = ({
         translate("private_relay.desc_premium.one"),
         translate("private_relay.desc_premium.two"),
         translate("private_relay.desc_premium.three"),
+        translate("private_relay.desc_premium.note"),
       ]
 
   const subDomainDesc = [
@@ -49,12 +50,6 @@ export const ConfigItem = ({
   return (
     <TouchableOpacity
       onPress={() => {
-        LayoutAnimation.configureNext({
-          duration: 250,
-          update: {
-            type: LayoutAnimation.Types.easeInEaseOut,
-          },
-        })
         setShowDesc(!showDesc)
       }}
     >
@@ -103,7 +98,6 @@ export const ConfigItem = ({
                   flexDirection: "row",
                   marginRight: 16,
                   marginVertical: 2,
-                  alignItems: "center",
                 }}
               >
                 <Icon icon="dot" size={24} />

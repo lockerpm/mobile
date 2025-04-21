@@ -217,7 +217,20 @@ export const CipherAction = (props: CipherActionProps) => {
                 }}
               />
             )}
-            {!lockerMasterPassword && (isInFolderShare || isShared) && editable && (
+
+            {!lockerMasterPassword && !isShared && (
+              <ActionItem
+                disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+                name={translate("file_attachment.title")}
+                icon="file-arrow-up"
+                action={() => {
+                  onClose()
+                  navigation.navigate("attachment")
+                }}
+              />
+            )}
+
+            {!lockerMasterPassword && (isInFolderShare || isShared) && (
               <ActionItem
                 disabled={uiStore.isOffline}
                 name={translate("quick_shares.share_option.quick.tl")}
@@ -255,6 +268,20 @@ export const CipherAction = (props: CipherActionProps) => {
               />
             )}
           </View>
+        )}
+
+        {isShared && (
+          <ActionItem
+            disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+            name={translate("file_attachment.title")}
+            icon="file-arrow-up"
+            action={() => {
+              onClose()
+              navigation.navigate("attachment", {
+                isShared: true,
+              })
+            }}
+          />
         )}
 
         {isShared && (

@@ -87,11 +87,7 @@ export const ImportPickFile = (props: Props) => {
 
   return (
     <View>
-      <FileFormatPickerModal
-        format={format}
-        formats={formats}
-        setFormat={setFormat}
-      />
+      <FileFormatPickerModal format={format} formats={formats} setFormat={setFormat} />
 
       <SettingsItem
         name={translate("import.file")}

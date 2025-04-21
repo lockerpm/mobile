@@ -77,6 +77,7 @@ public class FieldParser {
         for (Field field: fields){
             // parse by hint
             String hint = parseHint(field);
+            Log.d(TAG, "parseHint " + hint);
             if (!Utils.isNullOrWhiteSpace(hint)){
                 switch (hint) {
                     case View.AUTOFILL_HINT_EMAIL_ADDRESS:
@@ -105,6 +106,7 @@ public class FieldParser {
                 }
             }
         }
+        Log.d(TAG, "fillable " + fillable.size());
         Log.d(TAG, "unknowType fields size: " + unknowType.size());
         // If there is only 1 fillable item in the list and the type is Fill.FILL_TYPE PASSWORD
         // and if there is only 1 item in the list the type is unknown
@@ -186,6 +188,7 @@ public class FieldParser {
         String[] moreHeuristics = new String[] {field.hint, field.idHint, field.entry, field.idEntry, field.text};
         for (String fieldHint: moreHeuristics) {
             hint = inferHint(fieldHint);
+            Log.d(TAG, "inferHint " + hint);
             if (hint != null) return hint;
         }
         return null;

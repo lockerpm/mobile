@@ -17,6 +17,8 @@
 		4D1804180C27433DAC77EA9B /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7513C8939ACC471CA47CDCF0 /* Inter-Medium.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-Locker-LockerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Locker-LockerTests.a */; };
 		7AFE8CFE79B347BB8A6EC2F7 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B3E8C478BDD34B21AF021044 /* Inter-SemiBold.ttf */; };
+		7C1027702DA4C40500E83A2A /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C10276F2DA4C3FA00E83A2A /* FileEncryptor.swift */; };
+		7C1027742DA4C70B00E83A2A /* FileEncryptorBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C1027732DA4C70400E83A2A /* FileEncryptorBridge.m */; };
 		7C1F2A3E2B8C7F990003B7EF /* UserAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A3D2B8C7F990003B7EF /* UserAvatar.swift */; };
 		7C1F2A402B8C7FA10003B7EF /* MasterPasswordInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A3F2B8C7FA10003B7EF /* MasterPasswordInput.swift */; };
 		7C1F2A662B8CB7330003B7EF /* CredentialInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F2A652B8CB7330003B7EF /* CredentialInfo.swift */; };
@@ -130,6 +132,8 @@
 		5B7EB9410499542E8C5724F5 /* Pods-Locker-LockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.debug.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-Locker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Locker.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7513C8939ACC471CA47CDCF0 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
+		7C10276F2DA4C3FA00E83A2A /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
+		7C1027732DA4C70400E83A2A /* FileEncryptorBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileEncryptorBridge.m; sourceTree = "<group>"; };
 		7C1F2A3D2B8C7F990003B7EF /* UserAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatar.swift; sourceTree = "<group>"; };
 		7C1F2A3F2B8C7FA10003B7EF /* MasterPasswordInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterPasswordInput.swift; sourceTree = "<group>"; };
 		7C1F2A652B8CB7330003B7EF /* CredentialInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialInfo.swift; sourceTree = "<group>"; };
@@ -395,6 +399,8 @@
 		7CEB31EE2A932780007F6051 /* RNCryptoService */ = {
 			isa = PBXGroup;
 			children = (
+				7C1027732DA4C70400E83A2A /* FileEncryptorBridge.m */,
+				7C10276F2DA4C3FA00E83A2A /* FileEncryptor.swift */,
 				7CEB31EF2A932780007F6051 /* RSAUtils.swift */,
 				7CEB31F02A932780007F6051 /* RCTCryptoServiceIos.m */,
 				7CEB31F12A932780007F6051 /* RNCryptoServiceIos.swift */,
@@ -843,11 +849,13 @@
 			files = (
 				7CEB32082A933FE5007F6051 /* AppDelegate.swift in Sources */,
 				7CEB31FB2A932780007F6051 /* RNCryptoServiceIos.swift in Sources */,
+				7C1027702DA4C40500E83A2A /* FileEncryptor.swift in Sources */,
 				7CEB31F92A932780007F6051 /* RSAUtils.swift in Sources */,
 				7CED25202ADD1FF100142D59 /* VinSsoWebViewController.swift in Sources */,
 				7CED251E2ADD1FF100142D59 /* RCTVinSSO.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				7CEB31FA2A932780007F6051 /* RCTCryptoServiceIos.m in Sources */,
+				7C1027742DA4C70B00E83A2A /* FileEncryptorBridge.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				7CED251F2ADD1FF100142D59 /* RNVinSSO.swift in Sources */,
 				7CEB31FC2A932780007F6051 /* RNAutofillServiceIos.swift in Sources */,
@@ -982,14 +990,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 230;
+				CURRENT_PROJECT_VERSION = 243;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				INFOPLIST_FILE = Locker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Locker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1022,13 +1031,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 230;
+				CURRENT_PROJECT_VERSION = 243;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				INFOPLIST_FILE = Locker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Locker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

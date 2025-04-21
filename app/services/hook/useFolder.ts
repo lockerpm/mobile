@@ -1,16 +1,16 @@
-import { useStores } from 'app/models'
-import { useCoreService } from '../coreService'
-import { useCipherData } from './useCipherData'
-import { useHelper } from './useHelper'
-import { Utils } from '../coreService/utils'
-import { EncString, SymmetricCryptoKey } from 'core/models/domain'
-import { FolderView } from 'core/models/view/folderView'
-import { CipherView } from 'core/models/view'
-import { Alert } from 'react-native'
-import { CipherRequest } from 'core/models/request'
-import { Logger } from 'app/utils/utils'
-import { CollectionView } from 'core/models/view/collectionView'
-import { AccountRoleText } from 'app/static/types'
+import { useStores } from "app/models"
+import { useCoreService } from "../coreService"
+import { useCipherData } from "./useCipherData"
+import { useHelper } from "./useHelper"
+import { Utils } from "../coreService/utils"
+import { EncString, SymmetricCryptoKey } from "core/models/domain"
+import { FolderView } from "core/models/view/folderView"
+import { CipherView } from "core/models/view"
+import { Alert } from "react-native"
+import { CipherRequest } from "core/models/request"
+import { Logger } from "app/utils/utils"
+import { CollectionView } from "core/models/view/collectionView"
+import { AccountRoleText } from "app/static/types"
 
 export function useFolder() {
   const { cipherStore, folderStore, collectionStore, enterpriseStore, user } = useStores()
@@ -26,12 +26,12 @@ export function useFolder() {
 
   const _shareFolderToGroups = async (
     orgKey: SymmetricCryptoKey,
-    groups: { id: string; name: string }[]
+    groups: { id: string; name: string }[],
   ) => {
     return await Promise.all(
       groups.map(async (group) => {
         const groupMemberRes = await enterpriseStore.getListGroupMembers(group.id)
-        if (groupMemberRes.kind !== 'ok') {
+        if (groupMemberRes.kind !== "ok") {
           return null
         }
         const members = await Promise.all(
@@ -42,14 +42,14 @@ export function useFolder() {
                 username: member.email,
                 key: member.public_key ? await _generateMemberKey(member.public_key, orgKey) : null,
               }
-            })
+            }),
         )
         return {
           id: group.id,
-          role: 'member',
+          role: "member",
           members,
         }
-      })
+      }),
     )
   }
 
@@ -59,31 +59,31 @@ export function useFolder() {
     emails: string[],
     role: AccountRoleText,
     autofillOnly: boolean,
-    groups?: { id: string; name: string }[]
+    groups?: { id: string; name: string }[],
   ) => {
     if (!folder || (!emails.length && !groups.length)) {
-      return { kind: 'ok' }
+      return { kind: "ok" }
     }
 
     const ciphers: CipherView[] =
       (await getCiphers({
         deleted: false,
-        searchText: '',
+        searchText: "",
         filters: [(c: CipherView) => c.folderId === folder.id],
       })) || []
 
     try {
       if (ciphers.some((c) => c.organizationId)) {
         Alert.alert(
-          translate('error.share_folder'),
-          translate('shares.share_folder.error_share_item'),
+          translate("error.share_folder"),
+          translate("shares.share_folder.error_share_item"),
           [
             {
-              text: 'OK',
+              text: "OK",
             },
-          ]
+          ],
         )
-        return { kind: 'ok' }
+        return { kind: "ok" }
       }
       // Prepare org key
       const shareKey: [EncString, SymmetricCryptoKey] = await cryptoService.makeShareKey()
@@ -93,8 +93,8 @@ export function useFolder() {
       const members = await Promise.all(
         emails.map(async (email) => {
           const publicKeyRes = await cipherStore.getSharingPublicKey(email)
-          let publicKey = ''
-          if (publicKeyRes.kind === 'ok') {
+          let publicKey = ""
+          if (publicKeyRes.kind === "ok") {
             publicKey = publicKeyRes.data.public_key
           }
           return {
@@ -103,7 +103,7 @@ export function useFolder() {
             hide_passwords: autofillOnly,
             key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
           }
-        })
+        }),
       )
 
       // Prepare cipher..  CipherRequest & { id: string }
@@ -140,17 +140,17 @@ export function useFolder() {
         groups: groupsPayload,
       })
 
-      if (res.kind === 'ok') {
-        notify('success', translate('shares.share_folder.success.shared'))
+      if (res.kind === "ok") {
+        notify("success", translate("shares.share_folder.success.shared"))
         await reloadCache()
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      Logger.error('shareCipher: ' + e)
-      return { kind: 'unknown' }
+      notify("error", translate("error.something_went_wrong"))
+      Logger.error("shareCipher: " + e)
+      return { kind: "unknown" }
     }
   }
 
@@ -159,10 +159,10 @@ export function useFolder() {
     emails: string[],
     role: AccountRoleText,
     autofillOnly: boolean,
-    _groups?: { id: string; name: string }[]
+    _groups?: { id: string; name: string }[],
   ) => {
     if (!collection || !emails.length) {
-      return { kind: 'ok' }
+      return { kind: "ok" }
     }
 
     try {
@@ -172,8 +172,8 @@ export function useFolder() {
       const members = await Promise.all(
         emails.map(async (email) => {
           const publicKeyRes = await cipherStore.getSharingPublicKey(email)
-          let publicKey = ''
-          if (publicKeyRes.kind === 'ok') {
+          let publicKey = ""
+          if (publicKeyRes.kind === "ok") {
             publicKey = publicKeyRes.data.public_key
           }
           return {
@@ -182,35 +182,35 @@ export function useFolder() {
             hide_passwords: autofillOnly,
             key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
           }
-        })
+        }),
       )
 
       // Prepare folder name
       const res = await collectionStore.addShareMember(collection.organizationId, members)
 
-      if (res.kind === 'ok') {
-        notify('success', translate('shares.share_folder.success.add_member'))
+      if (res.kind === "ok") {
+        notify("success", translate("shares.share_folder.success.add_member"))
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      Logger.error('shareFolder ' + e)
-      return { kind: 'unknown' }
+      notify("error", translate("error.something_went_wrong"))
+      Logger.error("shareFolder " + e)
+      return { kind: "unknown" }
     }
   }
   const shareFolderRemoveMember = async (
     collection: CollectionView,
     memberID: string,
-    isGroup?: boolean
+    isGroup?: boolean,
   ) => {
     try {
       const personalKey = await cryptoService.getEncKey()
       const ciphers: CipherView[] =
         (await getCiphers({
           deleted: false,
-          searchText: '',
+          searchText: "",
           filters: [(c: CipherView) => c.collectionIds.includes(collection.id)],
         })) || []
 
@@ -228,19 +228,19 @@ export function useFolder() {
             ciphers: data,
           },
         },
-        isGroup
+        isGroup,
       )
 
-      if (res.kind === 'ok') {
-        notify('success', translate('shares.share_folder.success.remove_member'))
+      if (res.kind === "ok") {
+        notify("success", translate("shares.share_folder.success.remove_member"))
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      Logger.error('shareCipher: ' + e)
-      return { kind: 'unknown' }
+      notify("error", translate("error.something_went_wrong"))
+      Logger.error("shareCipher: " + e)
+      return { kind: "unknown" }
     }
   }
 
@@ -260,50 +260,50 @@ export function useFolder() {
       const res = await collectionStore.updateShareItem(
         collection.id,
         collection.organizationId,
-        payload
+        payload,
       )
 
-      if (res.kind === 'ok') {
+      if (res.kind === "ok") {
         await reloadCache()
-        notify('success', translate('shares.share_folder.success.add_items'))
+        notify("success", translate("shares.share_folder.success.add_items"))
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      Logger.error('shareCipher: ' + e)
-      return { kind: 'unknown' }
+      notify("error", translate("error.something_went_wrong"))
+      Logger.error("shareCipher: " + e)
+      return { kind: "unknown" }
     }
   }
 
   const shareFolderAddMultipleItems = async (collection: CollectionView, cipherIds: string[]) => {
-    if (!collection) return { kind: 'unknown' }
+    if (!collection) return { kind: "unknown" }
 
     try {
       const ciphers: CipherView[] =
         (await getCiphers({
           deleted: false,
-          searchText: '',
+          searchText: "",
           filters: [(c: CipherView) => cipherIds.includes(c.id)],
         })) || []
 
       if (ciphers.some((c) => c.organizationId)) {
-        notify('error', translate('error.share_folder_move_item'))
-        return { kind: 'unknown' }
+        notify("error", translate("error.share_folder_move_item"))
+        return { kind: "unknown" }
       }
 
       await Promise.all(
         ciphers.map(async (cipher) => {
           await shareFolderAddItem(collection, cipher)
-        })
+        }),
       )
 
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      Logger.error('shareCipher: ' + e)
-      return { kind: 'unknown' }
+      notify("error", translate("error.something_went_wrong"))
+      Logger.error("shareCipher: " + e)
+      return { kind: "unknown" }
     }
   }
 
@@ -322,7 +322,7 @@ export function useFolder() {
 
       const res = await collectionStore.removeShareItem(id, organizationId, payload)
 
-      if (res.kind === 'ok') {
+      if (res.kind === "ok") {
         await reloadCache()
         // notify('success', 'Remove shared item  success')
       } else {
@@ -330,9 +330,9 @@ export function useFolder() {
       }
       return res
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      Logger.error('shareCipher: ' + e)
-      return { kind: 'unknown' }
+      notify("error", translate("error.something_went_wrong"))
+      Logger.error("shareCipher: " + e)
+      return { kind: "unknown" }
     }
   }
 
@@ -342,7 +342,7 @@ export function useFolder() {
       const ciphers: CipherView[] =
         (await getCiphers({
           deleted: false,
-          searchText: '',
+          searchText: "",
           filters: [(c: CipherView) => c.collectionIds.includes(collection.id)],
         })) || []
 
@@ -358,17 +358,17 @@ export function useFolder() {
         },
       })
 
-      if (res.kind === 'ok') {
+      if (res.kind === "ok") {
         await reloadCache()
-        notify('success', translate('shares.share_folder.success.stop'))
+        notify("success", translate("shares.share_folder.success.stop"))
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      Logger.error('shareCipher: ' + e)
-      return { kind: 'unknown' }
+      notify("error", translate("error.something_went_wrong"))
+      Logger.error("shareCipher: " + e)
+      return { kind: "unknown" }
     }
   }
 

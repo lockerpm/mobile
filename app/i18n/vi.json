@@ -251,6 +251,7 @@
       "5000": "Mục này đã được chia sẻ.",
       "5001": "Bạn chỉ có thể chọn tối đa 10000 mục cùng lúc.",
       "5002": "Đã đạt đến số lượng mục tối đa. Bạn có thể xóa các mục trong Thùng rác nếu có.",
+      "5003": "Bạn đã vượt quá giới hạn lưu trữ 1GB. Vui lòng xóa các tệp không cần thiết để giải phóng dung lượng.",
       "7002": "Bạn cần nâng cấp tài khoản để thực hiện thao tác này.",
       "7003": "Bạn không cần trả phí để thực hiện thao tác này.",
       "7004": "Bạn không thể hùy gói mặc định.",
@@ -306,7 +307,8 @@
     "desc_premium": {
       "one": "Tất cả email gửi đến địa chỉ ẩn danh sẽ được chuyển tiếp đến địa chỉ email gốc",
       "two": "Bạn có thể trả lời người gửi thông qua email ẩn danh",
-      "three": "Bạn có thể sửa đổi một email ẩn danh và tên miền phụ theo ý bạn"
+      "three": "Bạn có thể sửa đổi một email ẩn danh và tên miền phụ theo ý bạn",
+      "note": " Lưu ý: Nếu tên miền phụ của bạn không hoạt động trong 90 ngày liên tiếp (không có email nào được gửi đến các địa chỉ email sử dụng tên miền phụ đó), hệ thống sẽ tự động xóa tên miền phụ cùng toàn bộ email liên quan."
     },
     "copy": "Sao chép email",
     "edit": "Sửa địa chỉ email",
@@ -1082,7 +1084,8 @@
     "list_member_title": "Danh sách các thành viên trong gói",
     "select_person": "Chọn email để thêm vào danh sách mời",
     "number_member": "Số lượng ",
-    "remove": "Xoá thành viên"
+    "remove": "Xoá thành viên",
+    "existing_member": "Người dùng đã được thêm trước đó"
   },
   "outdated_data": {
     "desc": "Có vẻ như bạn đang cố gắng cập nhật một mục chưa được đồng bộ hóa. Vui lòng đợi quá trình đồng bộ hóa kết thúc hoặc bạn có thể đồng bộ hóa dữ liệu của mình theo cách thủ công tại đây",
@@ -1341,6 +1344,39 @@
       "note": "Danh sách này chỉ hiển thị 3 mật khẩu cũ nhất của mục. Để xem thêm mật khẩu được thay đổi gần đây, nâng cấp lên ",
       "go_premium": "gói Premium.",
       "upgrade": "Nâng cấp ngay"
+    },
+    "file_attachment": {
+      "title": "Tệp đính kèm",
+      "upload_photo": "Tải lên ảnh",
+      "upload_file": "Tải lên tệp",
+      "max_size": "Kích thước tệp tối đa là 50MB",
+      "upload_success": "Tệp đã được tải lên thành công",
+      "download_success": "Tệp đã được tải xuống thành công! Xem trong ứng dụng Tệp của bạn.",
+      "delete_success": "Tệp đã được xóa thành công",
+      "delete_confirm": "Bạn có chắc chắn muốn xóa tệp này không?",
+      "delete_btn": "Xóa tệp đính kèm",
+      "permission_denied": "Quyền bị từ chối",
+      "permission_denied_desc": "Bạn đã từ chối quyền {{type}}. Cấp quyền này trong tab '{{type}}' để sử dụng đầy đủ tính năng của Locker",
+      "go_setting": "Đi tới Cài đặt",
+      "error": {
+        "file_zero": "Tệp bị hỏng",
+        "max_size_error": "Kích thước tệp phải nhỏ hơn 50MB",
+        "encrypt_error": "Lỗi mã hóa tệp",
+        "decrypt_error": "Lỗi giải mã tệp",
+        "download_error": "Lỗi tải xuống, vui lòng thử lại",
+        "upload_error": "Lỗi tải lên, vui lòng thử lại",
+        "upload_limit_error": "Bạn đã vượt quá giới hạn lưu trữ 1GB. Vui lòng xóa các tệp không cần thiết để giải phóng dung lượng."
+      },
+      "android_permission": {
+        "title": "Quyền truy cập bộ nhớ",
+        "message": "Ứng dụng cần quyền truy cập bộ nhớ để tải xuống tệp.",
+        "button_neutral": "Để sau",
+        "allert_title": "Yêu cầu quyền truy cập bộ nhớ",
+        "allert_sub": "Bạn đã từ chối quyền truy cập bộ nhớ vĩnh viễn. Vui lòng bật quyền này trong cài đặt để tiếp tục."
+      },
+      "encrypting": "Đang mã hóa tệp...",
+      "uploading": "Đang tải tệp lên...",
+      "upgrade": "Nâng cấp tài khoản lên Premium để tải xuống tệp đính kèm của bạn."
     }
   }
 }

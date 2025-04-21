@@ -6,7 +6,8 @@ import { View, Image, StyleProp, ViewStyle, StyleSheet } from "react-native"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { Icon, Text, TouchableText } from "app/components/cores"
 import { useCoreService } from "app/services/coreService"
-import { iosKeyChain } from "app/utils/iosAutofillData"
+import { autofillKeyChain } from "app/utils/autofillData"
+import { observer } from "mobx-react-lite"
 
 const FACEID = require("assets/images/intro/faceid.png")
 
@@ -15,9 +16,9 @@ interface Props {
   style: StyleProp<ViewStyle>
 }
 
-export const SuggestEnableFaceID = ({ onClose, style }: Props) => {
+export const SuggestEnableFaceID = observer(({ onClose, style }: Props) => {
   const { cryptoService } = useCoreService()
-  const { notify } = useHelper()
+  const { notify, translate } = useHelper()
   const { colors } = useTheme()
   const { user } = useStores()
 
@@ -40,7 +41,7 @@ export const SuggestEnableFaceID = ({ onClose, style }: Props) => {
   const _updateAutofillFaceIdSetting = async () => {
     user.setBiometricUnlock(true)
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
-    await iosKeyChain.saveUserInfo({
+    await autofillKeyChain.saveUserInfo({
       email: user.email || "",
       avatar: user.avatar || "",
       hashPass: hashPasswordAutofill || "",
@@ -52,15 +53,14 @@ export const SuggestEnableFaceID = ({ onClose, style }: Props) => {
     })
   }
 
-  const { translate } = useHelper()
   return (
     <View style={style}>
       <Image source={FACEID} resizeMode="contain" style={styles.image} />
       <View style={styles.content}>
-        <Text tx={"biometric_intro.suggest"} />
+        <Text text={translate("biometric_intro.suggest")} />
         <TouchableText
           preset="bold"
-          tx={"common.enable"}
+          text={translate("common.enable")}
           color={colors.link}
           style={styles.label}
           onPress={handleUseBiometric}
@@ -70,7 +70,7 @@ export const SuggestEnableFaceID = ({ onClose, style }: Props) => {
       <Icon icon="x" size={20} onPress={onClose} containerStyle={styles.close} />
     </View>
   )
-}
+})
 
 const styles = StyleSheet.create({
   close: {

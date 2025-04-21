@@ -20,7 +20,6 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
   const { uiStore, cipherStore } = useStores()
   const { translate } = useHelper()
   const insets = useSafeAreaInsets()
-
   const mappings = {
     homeTab: {
       label: translate("common.home"),

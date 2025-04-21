@@ -251,6 +251,7 @@
       "5000": "該項目已被共享。",
       "5001": "您一次最多只能選擇 10,000 個項目。",
       "5002": "已達到最大項目數。您可以刪除「垃圾箱」中的項目（如果有）。",
+      "5003": "您已超过1GB的存储限制。请删除不必要的文件以释放空间。",
       "7002": "您需要升級您的計劃才能執行此運算符。",
       "7003": "您無需付費即可執行此運算符。",
       "7004": "您無法取消預設計劃。",
@@ -306,7 +307,8 @@
     "desc_premium": {
       "one": "所有發送至您的別名地址的電子郵件將被轉寄至您的主電子郵件",
       "two": "您可以透過 Locker 私人電子郵件別名回覆至寄件者地址",
-      "three": "您有一個可自訂的別名和一個子網域"
+      "three": "您有一個可自訂的別名和一個子網域",
+      "note": "注意：如果您的子網域連續 90 天未使用（沒有任何郵件發送至使用該子網域的地址），該子網域及所有相關的郵件將會被自動刪除。"
     },
     "copy": "複製別名",
     "edit": "編輯別名地址",
@@ -1034,7 +1036,8 @@
     "list_member_title": "您新增至方案的成員將顯示在以下清單中",
     "select_person": "選擇一個人",
     "number_member": "您方案上的成員",
-    "remove": "移除家庭成員"
+    "remove": "移除家庭成員",
+    "existing_member": "該用戶已新增"
   },
   "outdated_data": {
     "desc": "您似乎嘗試更新未同步的項目。 請等待同步完成，或者您可以在這裡手動同步您的資料",
@@ -1294,5 +1297,38 @@
       "go_premium": "請升級至 Premium",
       "upgrade": "現在升級"
     }
+  },
+  "file_attachment": {
+    "title": "文件附件",
+    "upload_photo": "上传照片",
+    "upload_file": "上传文件",
+    "max_size": "文件最大大小为50MB",
+    "upload_success": "文件上传成功",
+    "download_success": "文件下载成功！在您的文件应用中查看。",
+    "delete_success": "文件删除成功",
+    "delete_confirm": "您确定要删除此文件吗？",
+    "delete_btn": "删除附件",
+    "permission_denied": "权限被拒绝",
+    "permission_denied_desc": "您已拒绝{{type}}权限。在'{{type}}'选项卡中授予此权限以完全使用Locker功能",
+    "go_setting": "前往设置",
+    "error": {
+      "file_zero": "文件已损坏",
+      "max_size_error": "文件大小必须小于 50 MB",
+      "encrypt_error": "文件加密错误",
+      "decrypt_error": "文件解密错误",
+      "download_error": "下载错误，请重试",
+      "upload_error": "上传错误，请重试",
+      "upload_limit_error": "您已超过1GB的存储限制。请删除不必要的文件以释放空间。"
+    },
+    "android_permission": {
+      "title": "存储权限",
+      "message": "应用需要访问存储权限以下载文件。",
+      "button_neutral": "稍后询问",
+      "allert_title": "需要存储权限",
+      "allert_sub": "您已永久拒绝存储权限。请在设置中启用此权限以继续。"
+    },
+    "encrypting": "正在加密文件...",
+    "uploading": "正在上传文件...",
+    "upgrade": "升级账户到高级版以下载您的附件。"
   }
 }

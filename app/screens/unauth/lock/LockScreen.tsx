@@ -134,7 +134,10 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
           await user.loadPlan()
         }
       }
-      Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
+      if (!isAutofillAnroid) {
+        Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
+
+      }
       // Parse push noti data
       const navigationRequest = await parsePushNotiData()
       if (navigationRequest.path) {

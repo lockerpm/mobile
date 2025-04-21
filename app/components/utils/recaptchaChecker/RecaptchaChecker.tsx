@@ -7,16 +7,16 @@ import { useHelper } from 'app/services/hook'
 export const RecaptchaChecker = forwardRef((_props, ref) => {
   const { notify } = useHelper()
 
-  let token = ''
+  const token  = useRef('')
   const recaptcha = useRef(null)
 
   const waitForToken = () => {
     return new Promise<string>((resolve) => {
-      token = ''
+      token.current = ''
       recaptcha.current.open()
       const interval = setInterval(() => {
-        if (token) {
-          resolve(token)
+        if (token.current) {
+          resolve(token.current)
           clearInterval(interval)
         }
       }, 500)
@@ -25,7 +25,7 @@ export const RecaptchaChecker = forwardRef((_props, ref) => {
 
   const onVerify = (t: string) => {
     Logger.debug('Captcha loaded')
-    token = t
+    token.current = t
   }
 
   const onExpire = () => {

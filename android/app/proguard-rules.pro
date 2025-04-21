@@ -60,3 +60,6 @@
 -keep class androidx.credentials.playservices.** {
   *;
 }
+
+# React-native-background-upload
+-keep class net.gotev.uploadservice.** { *; }
