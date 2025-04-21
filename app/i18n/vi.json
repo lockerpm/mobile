@@ -307,7 +307,8 @@
     "desc_premium": {
       "one": "Tất cả email gửi đến địa chỉ ẩn danh sẽ được chuyển tiếp đến địa chỉ email gốc",
       "two": "Bạn có thể trả lời người gửi thông qua email ẩn danh",
-      "three": "Bạn có thể sửa đổi một email ẩn danh và tên miền phụ theo ý bạn"
+      "three": "Bạn có thể sửa đổi một email ẩn danh và tên miền phụ theo ý bạn",
+      "note": " Lưu ý: Nếu tên miền phụ của bạn không hoạt động trong 90 ngày liên tiếp (không có email nào được gửi đến các địa chỉ email sử dụng tên miền phụ đó), hệ thống sẽ tự động xóa tên miền phụ cùng toàn bộ email liên quan."
     },
     "copy": "Sao chép email",
     "edit": "Sửa địa chỉ email",

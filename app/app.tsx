@@ -68,7 +68,6 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
 
   if (!rehydrated) return null
 
-  console.log(BASE_URL)
   // Set up API listener
   const monitorApiResponse = (response: ApiResponse<any>) => {
     const problem = getGeneralApiProblem(response)

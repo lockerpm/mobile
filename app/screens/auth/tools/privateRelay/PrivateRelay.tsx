@@ -3,7 +3,7 @@ import { SectionList, TouchableOpacity } from "react-native"
 import { useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { RelayAddress, SubdomainData } from "app/static/types"
-import { Screen, Header, Text } from "app/components/cores"
+import { Screen, Header, Text, Icon } from "app/components/cores"
 import { AliasItem } from "./PrivateRelayItem"
 import { EditAliasModal } from "./EditAliasModal"
 import { CreateSubdomainModal } from "./manageSubdomain/CreateSubdomainModal"
@@ -125,8 +125,9 @@ export const PrivateRelay: FC<ToolsStackScreenProps<"privateRelay">> = observer(
                 generateRelayNewAddress()
               }}
             >
-              <Text
-                text={translate("private_relay.btn")}
+              <Icon
+                disabled={isReachLimit}
+                icon="plus"
                 color={isReachLimit ? colors.block : colors.primary}
               />
             </TouchableOpacity>

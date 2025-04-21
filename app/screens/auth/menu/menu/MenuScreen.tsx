@@ -90,7 +90,8 @@ export const MenuScreen = observer(() => {
       hide:
         user.pwd_user_type === "enterprise" ||
         user.isLifeTimePremiumPlan ||
-        user.isLifeTimeFamilyPlan,
+        user.isLifeTimeFamilyPlan ||
+        user.isLifeTimeTeamFamilyPlan,
     },
     {
       icon: "gear",

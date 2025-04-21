@@ -87,16 +87,6 @@ export const HomeSlider = observer(() => {
     if (!user.saveIosAutofillInfor) {
       const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
 
-      console.log({
-        email: user.email || "",
-        avatar: user.avatar || "",
-        hashPass: hashPasswordAutofill || "",
-        token: user.apiToken || "",
-        language: user.language || "en",
-
-        faceIdEnabled: user.isBiometricUnlock,
-        isFree: user.isFreePlan,
-      })
       await autofillKeyChain.saveUserInfo({
         email: user.email || "",
         avatar: user.avatar || "",

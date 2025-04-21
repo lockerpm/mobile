@@ -307,7 +307,8 @@
     "desc_premium": {
       "one": "All emails to your alias addresses will be forwarded to your root email",
       "two": "You can reply to sender address via Locker Private Email aliases",
-      "three": "You have one customizable alias and one subdomain"
+      "three": "You have one customizable alias and one subdomain",
+      "note": "Note: If your subdomain is inactive for 90 consecutive days (no emails are sent to any address using that subdomain), it will be auto deleted, along with all emails associated with it."
     },
     "copy": "Copy alias",
     "edit": "Edit alias address",
