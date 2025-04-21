@@ -8,7 +8,7 @@ import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
-import { iosKeyChain } from "app/utils/iosAutofillData"
+import { autofillKeyChain } from "app/utils/autofillData"
 
 export const SetlanguageItem = observer(() => {
   const { cryptoService } = useCoreService()
@@ -38,7 +38,7 @@ export const SetlanguageItem = observer(() => {
 
   const updateAutofillLanguage = async (language: string) => {
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
-    await iosKeyChain.saveUserInfo({
+    await autofillKeyChain.saveUserInfo({
       email: user.email || "",
       avatar: user.avatar || "",
       hashPass: hashPasswordAutofill || "",

@@ -6,6 +6,11 @@
 	<string>$(DSN_SENTRY)</string>
 	<key>NSExtension</key>
 	<dict>
+		<key>NSExtensionAttributes</key>
+    <dict>
+        <key>supportsAutofillCredentialProvider</key>
+        <true/>
+    </dict>
 		<key>NSExtensionMainStoryboard</key>
 		<string>MainInterface</string>
 		<key>NSExtensionPointIdentifier</key>

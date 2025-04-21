@@ -6,7 +6,7 @@ import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useRef, useState } from "react"
 import { View } from "react-native"
-import { randomString, ResendOtp } from "../../signup/SignUpWithPinCode"
+import { ResendOtp } from "../../signup/SignUpWithPinCode"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { LOGIN_METHOD } from "app/static/types"
 import { TwoFactorAuthentication } from "./2faModal"
@@ -19,7 +19,7 @@ export const PinCodeLoginScreen: FC<RootStackScreenProps<"login_by_pincode">> = 
     },
   }) => {
     const { colors } = useTheme()
-    const { translate, notifyApiError, setApiTokens, notify } = useHelper()
+    const { translate, notifyApiError, setApiTokens, notify, randomString } = useHelper()
     const { user } = useStores()
 
     const [code, setCode] = useState("")

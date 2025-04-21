@@ -47,6 +47,7 @@ const ItemStorage = (props: PlanStorageProps) => {
     counting()
   }, [])
 
+
   return (
     <View style={[{ width: "100%", marginVertical: 4 }, style]}>
       <View
@@ -87,6 +88,66 @@ const ItemStorage = (props: PlanStorageProps) => {
   )
 }
 
+const convertBytesToGB = (bytes: number) => {
+  return bytes / 1024 / 1024 / 1024
+}
+
+const AttachmentStorage = (props: { title: string }) => {
+  const { title } = props
+  const { colors } = useTheme()
+  const { getAttachmentStorage } = useTool()
+
+  const [totalSize, setTotalSize] = useState(0)
+
+  const usagePercentage = convertBytesToGB(totalSize)
+  const backgroundColor =
+    usagePercentage >= 0.8
+      ? usagePercentage >= 1
+        ? colors.error
+        : colors.warning
+      : colors.primary
+
+  const counting = async () => {
+    const count = await getAttachmentStorage()
+
+    setTotalSize(count)
+  }
+  useEffect(() => {
+    counting()
+  }, [])
+
+  return (
+    <View style={{ width: "100%", marginVertical: 4 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginBottom: 8,
+        }}
+      >
+        <Text
+          text={title + " "}
+          style={{
+            maxWidth: "75%",
+          }}
+        />
+
+        <Text text={`${usagePercentage.toFixed(4)}/1 GB`} />
+      </View>
+
+      <ProgressBar
+        style={{
+          height: 6,
+          borderRadius: 4,
+          backgroundColor: colors.block,
+        }}
+        progressColor={backgroundColor}
+        progress={Math.min(usagePercentage * 100, 100)}
+      />
+    </View>
+  )
+}
+
 export const PlanUsage = () => {
   const { colors } = useTheme()
   const navigation = useNavigation() as any
@@ -123,34 +184,7 @@ export const PlanUsage = () => {
           backgroundColor: colors.background,
         }}
       >
-        {isFreeAccount && <Text preset="bold" text={translate("manage_plan.usage.title")} />}
-        {!isFreeAccount && (
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            <Text preset="default" text={translate("manage_plan.usage.title")} />
-            <View
-              style={{
-                marginLeft: 8,
-                paddingHorizontal: 10,
-                paddingVertical: 3,
-                backgroundColor: colors.primary,
-                borderRadius: 3,
-              }}
-            >
-              <Text
-                preset="bold"
-                text={
-                  user.pwd_user_type === "enterprise"
-                    ? translate("common.enterprise")
-                    : user.plan?.name.toUpperCase()
-                }
-                size="base"
-                style={{
-                  color: colors.background,
-                }}
-              />
-            </View>
-          </View>
-        )}
+        <Text preset="bold" text={translate("manage_plan.usage.title")} />
 
         {items.map((e, index) => (
           <ItemStorage
@@ -161,6 +195,7 @@ export const PlanUsage = () => {
             isUnlimited={!isFreeAccount}
           />
         ))}
+        {!isFreeAccount && <AttachmentStorage title={translate("file_attachment.title")} />}
       </View>
       {isFreeAccount && (
         <Button

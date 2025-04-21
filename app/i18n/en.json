@@ -251,6 +251,7 @@
       "5000": "This item has already been shared. ",
       "5001": "You can only select up to 10000 items at a time.",
       "5002": "The maximum number of items is reached. You can remove items in Trash if any.",
+      "5003": "You have exceeded the 1GB storage limit. Please delete unnecessary files to free up space.",
       "7002": "You need to upgrade your plan to execute this operator.",
       "7003": "You don't need to pay to execute this operator.",
       "7004": "You can not cancel the default plan.",
@@ -306,7 +307,8 @@
     "desc_premium": {
       "one": "All emails to your alias addresses will be forwarded to your root email",
       "two": "You can reply to sender address via Locker Private Email aliases",
-      "three": "You have one customizable alias and one subdomain"
+      "three": "You have one customizable alias and one subdomain",
+      "note": "Note: If your subdomain is inactive for 90 consecutive days (no emails are sent to any address using that subdomain), it will be auto deleted, along with all emails associated with it."
     },
     "copy": "Copy alias",
     "edit": "Edit alias address",
@@ -1036,7 +1038,8 @@
     "list_member_title": "Member you added to the plan will appear at the list below",
     "select_person": "SELECT A PERSON",
     "number_member": "Member on Your plan",
-    "remove": "Remove family member"
+    "remove": "Remove family member",
+    "existing_member": "The user has already been added"
   },
   "outdated_data": {
     "desc": "Looks like you are trying to update an unsynchronized item. Please wait for the synchronization process to finish, or you can manually synchronize your data here",
@@ -1296,5 +1299,39 @@
       "go_premium": "go Premium.",
       "upgrade": "Upgrade now"
     }
+  },
+  "file_attachment": {
+    "title": "File Attachment",
+    "upload_photo": "Upload Photo",
+    "upload_file": "Upload File",
+    "max_size": "Max file size is 50MB",
+    "upload_success": "File uploaded successfully",
+    "download_success": "File download successfully! View in your Files app.",
+    "download_media_success": "File download successfully!",
+    "delete_success": "File deleted successfully",
+    "delete_confirm": "Are you sure you want to delete this file?",
+    "delete_btn": "Delete attachment",
+    "permission_denied": "Permission Denied",
+    "permission_denied_desc": "You have denied {{type}} permission. Grant this permission in '{{type}}' tab to fully using Locker feature",
+    "go_setting": "Go to Setting",
+    "error": {
+      "file_zero": "File is corrupted",
+      "max_size_error": "File size must be under 50 MB",
+      "encrypt_error": "Error encrypting file",
+      "decrypt_error": "Error decrypting file",
+      "download_error": "Download error, please try again",
+      "upload_error": "Upload error, please try again",
+      "upload_limit_error": "You have exceeded the 1GB storage limit. Please delete unnecessary files to free up space."
+    },
+    "android_permission": {
+      "title": "Storage Permission",
+      "message": "App needs access to storage to download files.",
+      "button_neutral": "Ask Me Later",
+      "allert_title": "Storage Permission Required",
+      "allert_sub": "You have permanently denied storage permission. Please enable it in settings to proceed."
+    },
+    "encrypting": "Encrypting file...",
+    "uploading": "Uploading file...",
+    "upgrade": "Upgrade account to Premium to download your file attachments."
   }
 }

@@ -6,13 +6,14 @@ import { useCipherData } from "./useCipherData"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { Logger } from "app/utils/utils"
+import { AccountRole } from "app/static/types"
 
 export function useTool() {
   const { user, toolStore, cipherStore } = useStores()
-  const { passwordGenerationService, auditService } = useCoreService()
+  const { passwordGenerationService, auditService, searchService } = useCoreService()
 
   const { getCiphers, getEncryptedCiphers, getCiphersFromCache } = useCipherData()
-  const { notify, translate } = useHelper()
+  const { notify, translate, getTeam } = useHelper()
 
   // ----------------------------- METHODS ---------------------------
 
@@ -51,6 +52,29 @@ export function useTool() {
     }
     const allCiphers = await getCiphersFromCache(searchConfig)
     return allCiphers.length
+  }
+
+  const getAttachmentStorage = async () => {
+    try {
+      const filters = [(c: CipherView) => c.attachments && c.attachments.length > 0]
+      const cipherWithAttachments: CipherView[] =
+        (await searchService.searchCiphersFromCache("", filters, null)) || []
+      let totial = 0
+      const myCiphers = cipherWithAttachments.filter((c) => {
+        const organizations = cipherStore.organizations
+        const shareRole = getTeam(organizations, c.organizationId).type
+
+        return !c.organizationId || shareRole === AccountRole.OWNER
+      })
+      myCiphers.forEach((c) => {
+        totial += c.attachments.reduce((acc, att) => acc + att.fileSize, 0)
+      })
+      return totial
+    } catch (e) {
+      notify("error", "Can not get attachment storage")
+      Logger.error("getCiphersFromCache: " + e)
+      return 0
+    }
   }
 
   // Load weak passwords
@@ -176,5 +200,6 @@ export function useTool() {
     checkLoginIdExist,
     loadPasswordsHealth,
     getCipherCount,
+    getAttachmentStorage,
   }
 }

@@ -27,7 +27,6 @@ import com.facebook.react.bridge.ReactApplicationContext;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService {
     private static final String TAG = "LockerAutoFillService";
-    private boolean readyToStart = false;
 
     @Override
     public void onConnected() {
@@ -37,7 +36,6 @@ public class LockerAutoFillService extends AutofillService {
         ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
         AutofillDataKeychain keyStore = new AutofillDataKeychain(reactContext);
         if (keyStore.isLoggedInPw) {
-            this.readyToStart = true;
             Utils.InitCredentialsStore(getBaseContext(), keyStore.email, keyStore.hashPass);
         } else {
             Utils.RemoveAllCredential();
@@ -55,7 +53,7 @@ public class LockerAutoFillService extends AutofillService {
         ArrayList<Field> fields = (ArrayList<Field>) parseResult.getFillable();
         String domain = parseResult.getDomain();
 
-        if (fields == null || fields.isEmpty() || Utils.BlacklistedUris.contains(domain) || !this.readyToStart) {
+        if (fields == null || fields.isEmpty() || Utils.BlacklistedUris.contains(domain)) {
             Log.d(TAG, "No autofill hints found");
             callback.onSuccess(null);
             return;

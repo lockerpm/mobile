@@ -1,75 +1,56 @@
-import { AttachmentData } from '../data/attachmentData';
-
-import { AttachmentView } from '../view/attachmentView';
-
-import Domain from './domainBase';
-import { EncString } from './encString';
-import { SymmetricCryptoKey } from './symmetricCryptoKey';
-
-import { CryptoService } from '../../abstractions/crypto.service';
-
-import { Utils } from '../../misc/utils';
-
+import { AttachmentData } from "../data/attachmentData"
+import { AttachmentView } from "../view/attachmentView"
+import Domain from "./domainBase"
+import { EncString } from "./encString"
+import { SymmetricCryptoKey } from "./symmetricCryptoKey"
 export class Attachment extends Domain {
-    id: string;
-    url: string;
-    size: string;
-    sizeName: string;
-    key: EncString;
-    fileName: EncString;
-
-    constructor(obj?: AttachmentData, alreadyEncrypted = false) {
-        super();
-        if (obj == null) {
-            return;
-        }
-
-        this.size = obj.size;
-        this.buildDomainModel(this, obj, {
-            id: null,
-            url: null,
-            sizeName: null,
-            fileName: null,
-            key: null,
-        }, alreadyEncrypted, ['id', 'url', 'sizeName']);
+  id: string
+  size: string
+  url: EncString
+  key: EncString
+  fileName: EncString
+  constructor(obj?: AttachmentData, alreadyEncrypted = false) {
+    super()
+    if (obj == null) {
+      return
     }
+    this.size = obj.size
+    this.id = obj.id
+    this.buildDomainModel(
+      this,
+      obj,
+      {
+        url: null,
+        fileName: null,
+        key: null,
+      },
+      alreadyEncrypted,
+    )
+  }
 
-    async decrypt(orgId: string, encKey?: SymmetricCryptoKey): Promise<AttachmentView> {
-        const view = await this.decryptObj(new AttachmentView(this), {
-            fileName: null,
-        }, orgId, encKey);
+  async decrypt(orgId: string, encKey?: SymmetricCryptoKey): Promise<AttachmentView> {
+    const view = await this.decryptObj(
+      new AttachmentView(this),
+      {
+        key: null,
+        fileName: null,
+        url: null,
+      },
+      orgId,
+      encKey,
+    )
+    return view
+  }
 
-        if (this.key != null) {
-            let cryptoService: CryptoService;
-            const containerService = (Utils.global as any).cyStackContainerService;
-            if (containerService) {
-                cryptoService = containerService.getCryptoService();
-            } else {
-                throw new Error('global cyStackContainerService not initialized.');
-            }
-
-            try {
-                const orgKey = await cryptoService.getOrgKey(orgId);
-                const decValue = await cryptoService.decryptToBytes(this.key, orgKey ?? encKey);
-                view.key = new SymmetricCryptoKey(decValue);
-            } catch (e) {
-                // TODO: error?
-            }
-        }
-
-        return view;
-    }
-
-    toAttachmentData(): AttachmentData {
-        const a = new AttachmentData();
-        a.size = this.size;
-        this.buildDataModel(this, a, {
-            id: null,
-            url: null,
-            sizeName: null,
-            fileName: null,
-            key: null,
-        }, ['id', 'url', 'sizeName']);
-        return a;
-    }
+  toAttachmentData(): AttachmentData {
+    const a = new AttachmentData()
+    a.size = this.size
+    a.id = this.id
+    this.buildDataModel(this, a, {
+      url: null,
+      fileName: null,
+      key: null,
+    })
+    return a
+  }
 }

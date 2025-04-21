@@ -50,7 +50,7 @@ export const NewActionSheet = (props: Props) => {
     onClose,
     children,
     isDisableCancelButton,
-    footer
+    footer,
   } = props
   const safeAreaEdges = useSafeAreaInsetsStyle(["bottom"])
   const $containerStyle: StyleProp<ViewStyle> = [
@@ -66,6 +66,7 @@ export const NewActionSheet = (props: Props) => {
       animationOut="slideOutDown"
       isVisible={isOpen}
       onModalHide={onClose}
+      avoidKeyboard
       style={$containerStyle}
       customBackdrop={
         <TouchableWithoutFeedback onPress={onClose}>
@@ -164,7 +165,7 @@ export const NewActionSheetItem = (props: ItemProps) => {
 
   const $containerStyle: StyleProp<ViewStyle> = [
     { padding: 16, opacity: touchableProps?.disabled ? 0.5 : 1 },
-    {  justifyContent: "center" },
+    { justifyContent: "center" },
   ]
 
   return (

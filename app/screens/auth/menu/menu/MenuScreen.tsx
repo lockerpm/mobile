@@ -23,7 +23,7 @@ export const MenuScreen = observer(() => {
 
   const appVersion = `${getVersion()}`
   const isFreeAccount = user.isFreePlan
-  const isPremiumAccount = user.isShowPremiumFeature
+  const isPremiumAccount = user.isPremiumPlan
 
   const [showFingerprint, setShowFingerprint] = useState(false)
   const [referLink, setReferLink] = useState<string>(null)
@@ -71,7 +71,7 @@ export const MenuScreen = observer(() => {
 
   const items: MenuItemProps[] = [
     {
-      family: user.plan?.alias !== PlanType.FAMILY,
+      family: [PlanType.FREE, PlanType.PREMIUM].includes(user.plan?.alias),
       icon: "invite",
       name: translate("menu.invite"),
       onPress: () => {
@@ -90,7 +90,8 @@ export const MenuScreen = observer(() => {
       hide:
         user.pwd_user_type === "enterprise" ||
         user.isLifeTimePremiumPlan ||
-        user.isLifeTimeFamilyPlan,
+        user.isLifeTimeFamilyPlan ||
+        user.isLifeTimeTeamFamilyPlan,
     },
     {
       icon: "gear",
@@ -134,6 +135,9 @@ export const MenuScreen = observer(() => {
     pm_lifetime_family: {
       node: <Text text="LIFETIME FAMILY" style={$planName} color={colors.primary} />,
     },
+    pm_lifetime_team: {
+      node: <Text text="LIFETIME TEAM" style={$planName} color={colors.primary} />,
+    },
 
     pm_lifetime_premium: {
       node: <Text text="LIFETIME PREMIUM" style={$planName} color={colors.primary} />,
@@ -145,14 +149,16 @@ export const MenuScreen = observer(() => {
       node: (
         <View style={{ flexDirection: isSmallWidth ? "column" : "row" }}>
           <Text text="PREMIUM" color={colors.primary} style={$planName} />
-          <Text
-            text={
-              translate("menu.expired_time") +
-              ": " +
-              moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")
-            }
-            style={[$planName, { marginLeft: isSmallWidth ? 0 : 8 }]}
-          />
+          {!user.plan?.is_family && (
+            <Text
+              text={
+                translate("menu.expired_time") +
+                ": " +
+                moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")
+              }
+              style={[$planName, { marginLeft: isSmallWidth ? 0 : 8 }]}
+            />
+          )}
         </View>
       ),
     },

@@ -87,6 +87,7 @@ import { YotiCsvImporter } from "../importers/yotiCsvImporter"
 import { ZohoVaultCsvImporter } from "../importers/zohoVaultCsvImporter"
 import { SafariCsvImporter } from "../importers/safariCsvImporter"
 import { HeyLoginCsvImporter } from "../importers/heyloginCsvImport"
+import { ProtonPassCsvImporter } from "core/importers/protonPassCsvImporter"
 
 export class ImportService implements ImportServiceAbstraction {
   featuredImportOptions = [
@@ -154,6 +155,7 @@ export class ImportService implements ImportServiceAbstraction {
     { id: "1password1pif", name: "1Password (1pif)" },
     { id: "dashlanejson", name: "Dashlane (json)" },
     { id: "heylogincsv", name: "HeyLogin (csv)" },
+    { id: "protonpasscsv", name: "Proton Pass (csv)" },
   ]
 
   constructor(
@@ -164,7 +166,7 @@ export class ImportService implements ImportServiceAbstraction {
     private collectionService: CollectionService,
     private platformUtilsService: PlatformUtilsService,
     private cryptoService: CryptoService,
-  ) { }
+  ) {}
 
   getImportOptions(): ImportOption[] {
     return this.featuredImportOptions.concat(this.regularImportOptions)
@@ -341,6 +343,8 @@ export class ImportService implements ImportServiceAbstraction {
         return new SafariCsvImporter()
       case "heylogincsv":
         return new HeyLoginCsvImporter()
+      case "protonpasscsv":
+        return new ProtonPassCsvImporter()
       default:
         return null
     }

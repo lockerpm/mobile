@@ -28,7 +28,7 @@ import { CollectionRequest } from "core/models/request/collectionRequest"
 import { CipherData, FolderData } from "core/models/data"
 import { OrganizationData } from "core/models/data/organizationData"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
-import { IosAutofillPassword, iosKeyChain } from "app/utils/iosAutofillData"
+import { IosAutofillPassword, autofillKeyChain } from "app/utils/autofillData"
 
 export function useCipherData() {
   const { cipherStore, folderStore, uiStore, collectionStore, user, enterpriseStore } = useStores()
@@ -143,7 +143,6 @@ export function useCipherData() {
       try {
         cipherStore.setIsSynching(true)
         messagingService.send("syncStarted")
-
         // Sync api
         const res = await cipherStore.syncData()
         if (res.kind !== "ok") {
@@ -151,7 +150,6 @@ export function useCipherData() {
           messagingService.send("syncCompleted", { successfully: false })
           return res
         }
-
         // Start sync
         cipherStore.setLastSync(bumpTimestamp)
         await syncService.setLastSync(new Date(bumpTimestamp))
@@ -215,10 +213,8 @@ export function useCipherData() {
         // Set last sync
         cipherStore.setLastSync(bumpTimestamp)
         await syncService.setLastSync(new Date(bumpTimestamp))
-
         // Sync service with data from first page
         const userId = await userService.getUserId()
-
         await syncService.syncProfile(res.data.profile)
         await syncService.syncFolders(userId, res.data.folders)
         await syncService.syncCollections(res.data.collections)
@@ -227,13 +223,10 @@ export function useCipherData() {
         await syncService.syncSettings(userId, res.data.domains)
         await syncService.syncPolicies(res.data.policies)
         await syncQuickShares()
-
         cipherIds = res.data.ciphers.map((c) => c.id)
-
         // Load all loaded data
         loadOrganizations()
         cipherStore.setLastCacheUpdate()
-
         // Sync other ciphers
         const totalCipherCount = res.data.count.ciphers
         while (page * pageSize < totalCipherCount) {
@@ -259,7 +252,6 @@ export function useCipherData() {
         }
         await storageService.save(`ciphers_${userId}`, storageRes)
         await cipherService.csDeleteFromDecryptedCache(deletedIds)
-
         // Load folders
         loadFolders()
         loadCollections()
@@ -268,14 +260,12 @@ export function useCipherData() {
         cipherStore.clearNotUpdate()
         folderStore.clearNotUpdate()
         collectionStore.clearNotUpdate()
-
         // Save fingerprint
         const fingerprint = await cryptoService.getFingerprint(userId)
         user.setFingerprint(fingerprint.join("-"))
 
         // Save to shared keychain for autofill service
         await _updateAutofillData()
-
         // Reload password health
         EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
 
@@ -395,7 +385,7 @@ export function useCipherData() {
       otp: c.login.totp || "",
     }))
 
-    await iosKeyChain.savePassword(passwordData)
+    await autofillKeyChain.savePassword(passwordData)
   }
 
   // Sync autofill data
@@ -408,7 +398,7 @@ export function useCipherData() {
       cipherStore.setIsSynchingAutofill(true)
 
       // sync temporary passwords
-      const tempPasswords = await iosKeyChain.getTempPassword()
+      const tempPasswords = await autofillKeyChain.getTempPassword()
       if (tempPasswords && Array.isArray(tempPasswords)) {
         const ciphers: CipherRequest[] = []
 
@@ -446,7 +436,7 @@ export function useCipherData() {
         }
       }
 
-      await iosKeyChain.resetTempPassword()
+      await autofillKeyChain.resetTempPassword()
       await _updateAutofillData()
     } catch (e) {
       Logger.error("syncAutofillData: " + e)
@@ -1072,7 +1062,9 @@ export function useCipherData() {
 
       // Online
       const cipherEnc = await cipherService.encrypt(cipher)
+
       const data = new CipherRequest(cipherEnc)
+      // return { kind: "unknown" }
       const res = await cipherStore.updateCipher(id, data, score, collectionIds)
       if (res.kind === "ok") {
         await _offlineUpdateCipher({
@@ -1306,6 +1298,7 @@ export function useCipherData() {
 
       // Prepare cipher
       const cipherEnc = await cipherService.encrypt(cipher, orgKey)
+
       const data = new CipherRequest(cipherEnc)
 
       // Get public keys

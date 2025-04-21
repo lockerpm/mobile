@@ -14,6 +14,7 @@ export const MASTER_PW_MIN_LENGTH = 8
 
 // FAMILY
 export const FAMILY_MEMBER_LIMIT = 6
+export const FAMILY_MEMBER_LIMIT_TEAM = 15
 
 // FREE
 export const FREE_PLAN_LIMIT = {

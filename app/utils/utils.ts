@@ -262,3 +262,29 @@ export const momentRelativeTime = (lang: string) => {
       moment.locale("en")
   }
 }
+
+
+/**
+ * A debounce utility function that ensures the callback is executed only once
+ * during rapid successive calls within the specified delay.
+ * This implementation includes a "leading" behavior, meaning it executes
+ * immediately on the first call.
+ *
+ * @param fn - The callback function to be debounced
+ * @param delay - The delay in milliseconds before allowing another execution
+ * @returns A debounced version of the callback function
+ */
+export const debounce = (fn: () => void, delay: number) => {
+  let timeout: NodeJS.Timeout
+  let isLeading = true
+  return () => {
+    if (isLeading) {
+      fn()
+      isLeading = false
+    }
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      isLeading = true
+    }, delay)
+  }
+}

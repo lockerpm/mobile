@@ -17,7 +17,7 @@ import {
   SessionOtpLoginRequest,
   SocialLoginRequest,
   UserInvitations,
-  UserSubscripePlan,
+  UserPlan,
   UserTeam,
 } from "app/static/types"
 import {
@@ -70,7 +70,7 @@ export const UserModel = types
     enterprise: types.maybeNull(types.frozen<Enterprise>()),
     teams: types.array(types.frozen<UserTeam>()),
     plan: types.maybeNull(
-      types.frozen<UserSubscripePlan>({
+      types.frozen<UserPlan>({
         name: "Free",
         is_family: false,
         alias: PlanType.FREE,
@@ -78,6 +78,7 @@ export const UserModel = types
         duration: PlanTypeDuration.MONTHLY,
         next_billing_time: 0,
         payment_method: null,
+        max_number: 0,
       }),
     ),
     invitations: types.array(types.frozen<UserInvitations>()),
@@ -112,7 +113,10 @@ export const UserModel = types
     get isLifeTimeFamilyPlan() {
       return self.plan?.alias === PlanType.LIFETIME_FAMILY
     },
-    get isShowPremiumFeature() {
+    get isLifeTimeTeamFamilyPlan() {
+      return self.plan?.alias === PlanType.LIFETIME_FAMILY_TEAM
+    },
+    get isPremiumPlan() {
       return self.plan?.alias === PlanType.PREMIUM
     },
     get isEnterprise() {
@@ -180,7 +184,7 @@ export const UserModel = types
     setTeams: (teams: UserTeam[]) => {
       self.teams = cast(teams)
     },
-    setPlan: (plan: UserSubscripePlan) => {
+    setPlan: (plan: UserPlan) => {
       self.plan = cast(plan)
     },
     setInvitations: (invitations: any[]) => {
@@ -560,6 +564,7 @@ export const UserModel = types
           duration: PlanTypeDuration.MONTHLY,
           next_billing_time: 0,
           payment_method: "mobile",
+          max_number: 0,
         })
         return null
       }
@@ -726,7 +731,7 @@ export const UserModel = types
       return res
     },
   }))
-  .postProcessSnapshot(omit(["isLoggedInPw", "isPasswordlessLogin"]))
+  .postProcessSnapshot(omit(["isLoggedInPw", "saveIosAutofillInfor", "isPasswordlessLogin"]))
 
 export interface User extends Instance<typeof UserModel> {}
 export interface UserSnapshotOut extends SnapshotOut<typeof UserModel> {}

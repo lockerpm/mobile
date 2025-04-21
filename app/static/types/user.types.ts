@@ -51,15 +51,6 @@ export type UserTeam = {
   organization_id: string
 }
 
-export type UserPlan = {
-  name: string
-  alias: PlanType
-  is_family: boolean
-  cancel_at_period_end: boolean
-  duration: PlanTypeDuration
-  next_billing_time: number
-  payment_method: string
-}
 
 export type UserInvitations = {
   access_time: number
@@ -354,7 +345,8 @@ export type UpdateFCMRequest = {
   device_identifier: string
 }
 
-export type UserSubscripePlan = {
+
+export type UserPlan = {
   name: string
   alias: PlanType
   is_family: boolean
@@ -362,7 +354,9 @@ export type UserSubscripePlan = {
   duration: PlanTypeDuration
   next_billing_time: number
   payment_method: string
+  max_number: number
 }
+
 
 export type OnPremiseIdentifierData = {
   host: string

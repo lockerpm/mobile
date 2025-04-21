@@ -17,7 +17,7 @@ export const SignUpWithPinCode: FC<RootStackScreenProps<"signup_pin_code">> = ob
     },
   }) => {
     const { colors } = useTheme()
-    const { translate, setApiTokens, notify } = useHelper()
+    const { translate, setApiTokens, notify, randomString } = useHelper()
     const { user } = useStores()
 
     const [code, setCode] = useState("")
@@ -233,14 +233,4 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
       </Text>
     </View>
   )
-}
-
-export const randomString = (length: number) => {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-  let result = ""
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length)
-    result += characters[randomIndex]
-  }
-  return result
 }

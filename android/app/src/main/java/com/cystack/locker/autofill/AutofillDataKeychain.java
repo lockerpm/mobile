@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 public class AutofillDataKeychain {
     private static final String TAG = "AutofillDataKeychain";
-    private static final String service = "W7S57TNBH5.com.cystack.lockerapp";
+    private static final String service = "W7S57TNBH5.com.cystack.lockerapp.info";
 
     private final PrefsStorage prefsStorage;
     private final CipherStorage cipherStorage;
@@ -30,15 +30,8 @@ public class AutofillDataKeychain {
 
     public String email;
     public String hashPass;
-    public String avatar;
-    public boolean faceIdEnabled = false;
     public boolean isLoggedInPw = false;
 
-    public String language = "en";
-    public boolean isDarkTheme = false;
-
-    public ArrayList<AutofillItem> passwords = new ArrayList<>();
-    // public ArrayList<AutofillItem> otherCredentials = new ArrayList<>();
 
     public AutofillDataKeychain(ReactApplicationContext reactContext) {
         cipherStorage = new CipherStorageKeystoreAesCbc();
@@ -56,33 +49,15 @@ public class AutofillDataKeychain {
     public void getAutoFillEntriesForDomain() {
         try {
             String itemString = getAutoFillItems();
+            Log.d(TAG, "getAutoFillEntriesForDomain " + itemString);
             if (itemString == null) {
                 return;
             }
             JSONObject jsonObject = new JSONObject(itemString);
-            JSONArray jsonArray = jsonObject.getJSONArray("passwords");
-            List<Object> itemList = toList(jsonArray);
-            for (Object item : itemList) {
-                if (item instanceof HashMap) {
-                    HashMap map = (HashMap) item;
-                    String username = (String) map.get("username");
-                    String password = (String) map.get("password");
-                    String uri = (String) map.get("uri");
-                    String name = (String) map.get("name");
-                    String id = (String) map.get("id");
 
-                    this.passwords.add(new AutofillItem(id, username, password, name, uri));
-                }
-                ;
-            }
-            ;
             this.email = jsonObject.getString("email");
             this.hashPass = jsonObject.getString("hashPass");
-            this.avatar = jsonObject.getString("avatar");
-            this.language = jsonObject.getString("language");
-            this.faceIdEnabled = jsonObject.getBoolean("faceIdEnabled");
-            this.isLoggedInPw = jsonObject.getBoolean("isLoggedInPw");
-            this.isDarkTheme = jsonObject.getBoolean("isDarkTheme");
+            this.isLoggedInPw = true;
 
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
@@ -91,6 +66,7 @@ public class AutofillDataKeychain {
 
     private String getAutoFillItems() throws Exception {
         PrefsStorage.ResultSet resultSet = prefsStorage.getEncryptedEntry(service);
+        Log.e(TAG, "getAutoFillItems" +resultSet.toString());
         if (resultSet == null) {
             Log.e(TAG, "No entry found");
             return "[]";
