@@ -248,7 +248,6 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<"cryptoWallets__info
           label={translate("common.notes")}
           value={cryptoWalletData.notes}
           editable={false}
-          copyAble
           style={{ marginTop: 20 }}
         />
 
