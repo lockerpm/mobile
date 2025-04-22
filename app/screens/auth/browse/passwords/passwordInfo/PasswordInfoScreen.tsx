@@ -159,13 +159,14 @@ export const PasswordInfoScreen: FC<AppStackScreenProps<"passwords__info">> = ob
 
       {!lockerMasterPassword && (
         <>
-          <Textarea
-            label={translate("common.notes")}
-            value={selectedCipher.notes}
-            editable={false}
-            copyAble
-            style={{ marginTop: 12 }}
-          />
+          {!!selectedCipher.notes && (
+            <Textarea
+              label={translate("common.notes")}
+              value={selectedCipher.notes}
+              editable={false}
+              style={{ marginTop: 12 }}
+            />
+          )}
 
           <CipherInfoCommon cipher={selectedCipher} />
         </>

@@ -76,12 +76,7 @@ export const NoteInfoScreen: FC<AppStackScreenProps<"notes__info">> = observer((
         )}
       </Text>
 
-      <Textarea
-        label={translate("common.notes")}
-        value={selectedCipher.notes}
-        editable={false}
-        copyAble
-      />
+      <Textarea label={translate("common.notes")} value={selectedCipher.notes} editable={false} />
 
       <CipherInfoCommon cipher={selectedCipher} />
     </Screen>

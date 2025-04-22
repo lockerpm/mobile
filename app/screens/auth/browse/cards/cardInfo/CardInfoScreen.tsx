@@ -130,7 +130,6 @@ export const CardInfoScreen: FC<AppStackScreenProps<"cards__info">> = observer((
         label={translate("common.notes")}
         value={selectedCipher.notes || "123"}
         editable={false}
-        copyAble
         style={{ marginTop: 10 }}
       />
 

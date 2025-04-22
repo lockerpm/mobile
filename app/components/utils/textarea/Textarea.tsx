@@ -5,29 +5,16 @@ import { ScrollView } from "react-native-gesture-handler"
 import { useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 
-
 interface Props extends TextInputProps {
   outerRef?: any
   style?: StyleProp<ViewStyle>
   inputStyle?: StyleProp<ViewStyle>
   label: string
-  copyAble?: boolean
-  buttonRight?: JSX.Element
   value: string
 }
 
-
 export const Textarea = (props: Props) => {
-  const {
-    outerRef,
-    style,
-    inputStyle,
-    label,
-    copyAble,
-    value,
-    buttonRight,
-    ...rest
-  } = props
+  const { outerRef, style, inputStyle, editable = true, label, value, ...rest } = props
   const { colors } = useTheme()
   const { copyToClipboard } = useHelper()
 
@@ -44,21 +31,6 @@ export const Textarea = (props: Props) => {
     padding: 12,
   }
 
-  const BUTTON_CONTAINER: ViewStyle = {
-    position: 'absolute',
-    zIndex: 100,
-    top: 20,
-    right: 0,
-    flexDirection: 'row',
-    alignItems: 'center'
-  }
-
-
-  const INPUT_CONTENT_CONTAINER = {
-    paddingRight: 35 * ((copyAble ? 1 : 0) + (buttonRight ? 1 : 0)),
-    maxHeight: 100
-  }
-
   return (
     <View style={style}>
       <Text
@@ -66,81 +38,62 @@ export const Textarea = (props: Props) => {
         size="base"
         text={label}
         style={{
-          marginBottom: 5
+          marginBottom: 5,
         }}
       />
 
-      {
-        (props.editable === false) ? (
-          <ScrollView style={INPUT_CONTENT_CONTAINER}>
-            <Text
-              text={value}
-            />
-          </ScrollView>
-        ) : (
-          <View style={$containerStyle}>
-            <TextInput
-              multiline
-              ref={outerRef}
-              value={value}
-              autoCapitalize="none"
-              selectionColor={colors.primary}
-              onFocus={() => {
-                setIsFocus(true)
-              }}
-              onBlur={() => {
-                setIsFocus(false)
-              }}
-              placeholderTextColor={colors.secondaryText}
-              style={[INPUT_CONTENT_CONTAINER, {
+      {!editable && (
+        <ScrollView bounces={false} style={$containerStyle}>
+          <Text text={value} />
+          <Icon
+            icon="copy"
+            size={18}
+            onPress={() => {
+              copyToClipboard(value)
+            }}
+            containerStyle={$icon}
+          />
+        </ScrollView>
+      )}
+      {editable && (
+        <View style={$containerStyle}>
+          <TextInput
+            multiline
+            ref={outerRef}
+            value={value}
+            autoCapitalize="none"
+            selectionColor={colors.primary}
+            onFocus={() => {
+              setIsFocus(true)
+            }}
+            onBlur={() => {
+              setIsFocus(false)
+            }}
+            placeholderTextColor={colors.secondaryText}
+            style={[
+              {
                 fontSize: 16,
                 color: colors.title,
-                textAlignVertical: 'top',
+                textAlignVertical: "top",
                 paddingVertical: 0,
-                minHeight: 50
-              }, inputStyle]}
-              {...rest}
-            />
-          </View>
-        )
-      }
-      {/* Input end */}
-
-
-      {/* Button right */}
-      <View style={BUTTON_CONTAINER}>
-        {
-          copyAble && (
-
-            <Icon
-              icon="copy"
-              size={18}
-              onPress={() => {
-                copyToClipboard(value)
-              }}
-              containerStyle={{
-                width: 35,
-                height: 35,
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            />
-          )
-        }
-        {
-          buttonRight && (
-            <View style={{
-              width: 35,
-              height: 35,
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              {buttonRight}
-            </View>
-          )
-        }
-      </View>
-      {/* Button right end */}
+                minHeight: 50,
+              },
+              inputStyle,
+            ]}
+            {...rest}
+          />
+        </View>
+      )}
     </View>
   )
+}
+
+const $icon: ViewStyle = {
+  position: "absolute",
+  zIndex: 100,
+  top: 0,
+  right: 0,
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
 }

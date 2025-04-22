@@ -167,7 +167,6 @@ export const IdentityInfoScreen: FC<AppStackScreenProps<"identities__info">> = o
         label={translate("common.notes")}
         value={selectedCipher.notes}
         editable={false}
-        copyAble
         style={{ marginTop: 10 }}
       />
 
