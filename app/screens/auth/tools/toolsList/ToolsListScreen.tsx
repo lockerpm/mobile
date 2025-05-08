@@ -35,6 +35,9 @@ export const ToolsListScreen = observer(() => {
       case "privateRelay":
         navigation.navigate("toolsStack", { screen: "privateRelay" })
         break
+      case "callerId":
+        navigation.navigate("toolsStack", { screen: "callerId" })
+        break
       default:
         navigation.navigate(item.routeName, { fromTools: true })
     }

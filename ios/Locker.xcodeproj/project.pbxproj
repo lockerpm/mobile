@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -34,6 +34,10 @@
 		7C39140F2B87321900213EEB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C39140E2B87321900213EEB /* User.swift */; };
 		7C3914112B87338E00213EEB /* LockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3914102B87338E00213EEB /* LockScreen.swift */; };
 		7C3914132B8737DC00213EEB /* CredentialsListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3914122B8737DC00213EEB /* CredentialsListScreen.swift */; };
+		7C3AD25C2DC9B18900D92241 /* CallerIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3AD25B2DC9B18000D92241 /* CallerIDManager.swift */; };
+		7C3AD25E2DC9B1AB00D92241 /* CallerIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C3AD25D2DC9B1A900D92241 /* CallerIDManager.m */; };
+		7C3AD26A2DC9B1F800D92241 /* CallerIDExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7C3AD2632DC9B1F800D92241 /* CallerIDExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7C3AD2712DC9CC5C00D92241 /* CallerIDError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3AD2702DC9CC4D00D92241 /* CallerIDError.swift */; };
 		7C6D58A52C6C955C0059ACAC /* PrivateEmailList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A42C6C955C0059ACAC /* PrivateEmailList.swift */; };
 		7C6D58A72C6DC2340059ACAC /* PrivateEmailApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A62C6DC2340059ACAC /* PrivateEmailApiService.swift */; };
 		7C6D58A92C6DC6D70059ACAC /* PrivateEmailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A82C6DC6D70059ACAC /* PrivateEmailModel.swift */; };
@@ -82,6 +86,13 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = Locker;
 		};
+		7C3AD2682DC9B1F800D92241 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C3AD2622DC9B1F800D92241;
+			remoteInfo = CallerIDExtension;
+		};
 		7C973A472A93055500875FBA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
@@ -109,6 +120,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				7C3AD26A2DC9B1F800D92241 /* CallerIDExtension.appex in Embed Foundation Extensions */,
 				7C973A492A93055500875FBA /* LockerAutofill.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
@@ -149,6 +161,10 @@
 		7C39140E2B87321900213EEB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7C3914102B87338E00213EEB /* LockScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreen.swift; sourceTree = "<group>"; };
 		7C3914122B8737DC00213EEB /* CredentialsListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsListScreen.swift; sourceTree = "<group>"; };
+		7C3AD25B2DC9B18000D92241 /* CallerIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerIDManager.swift; sourceTree = "<group>"; };
+		7C3AD25D2DC9B1A900D92241 /* CallerIDManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CallerIDManager.m; sourceTree = "<group>"; };
+		7C3AD2632DC9B1F800D92241 /* CallerIDExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CallerIDExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C3AD2702DC9CC4D00D92241 /* CallerIDError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerIDError.swift; sourceTree = "<group>"; };
 		7C6D58A42C6C955C0059ACAC /* PrivateEmailList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailList.swift; sourceTree = "<group>"; };
 		7C6D58A62C6DC2340059ACAC /* PrivateEmailApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailApiService.swift; sourceTree = "<group>"; };
 		7C6D58A82C6DC6D70059ACAC /* PrivateEmailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailModel.swift; sourceTree = "<group>"; };
@@ -196,6 +212,20 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7C3AD26B2DC9B1F800D92241 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7C3AD2622DC9B1F800D92241 /* CallerIDExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		7C3AD2642DC9B1F800D92241 /* CallerIDExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7C3AD26B2DC9B1F800D92241 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = CallerIDExtension; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		00E356EB1AD99517003FC87E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -212,6 +242,13 @@
 				7C8FB3752ADD298800DA5BCE /* VinCSSFido2ClientSDK.xcframework in Frameworks */,
 				86E9828D2AD5AD9300EB485E /* StoreKit.framework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-Locker.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C3AD2602DC9B1F800D92241 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,6 +289,7 @@
 			children = (
 				7C973A362A93019C00875FBA /* Locker.entitlements */,
 				7CEB32062A932AAE007F6051 /* LockerRelease.entitlements */,
+				7C3AD25A2DC9B0E300D92241 /* CallerID */,
 				7CED251A2ADD1FF100142D59 /* RNVinSSO */,
 				7CEB31F22A932780007F6051 /* RNAutofillService */,
 				7CEB31EE2A932780007F6051 /* RNCryptoService */,
@@ -323,6 +361,16 @@
 				7C8043E42D51B315003B7FD9 /* ru.strings */,
 			);
 			path = Localize;
+			sourceTree = "<group>";
+		};
+		7C3AD25A2DC9B0E300D92241 /* CallerID */ = {
+			isa = PBXGroup;
+			children = (
+				7C3AD2702DC9CC4D00D92241 /* CallerIDError.swift */,
+				7C3AD25D2DC9B1A900D92241 /* CallerIDManager.m */,
+				7C3AD25B2DC9B18000D92241 /* CallerIDManager.swift */,
+			);
+			path = CallerID;
 			sourceTree = "<group>";
 		};
 		7C973A3F2A93055500875FBA /* LockerAutofill */ = {
@@ -445,6 +493,7 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* LockerTests */,
 				7C973A3F2A93055500875FBA /* LockerAutofill */,
+				7C3AD2642DC9B1F800D92241 /* CallerIDExtension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -462,6 +511,7 @@
 				13B07F961A680F5B00A75B9A /* Locker.app */,
 				00E356EE1AD99517003FC87E /* LockerTests.xctest */,
 				7C973A3C2A93055500875FBA /* LockerAutofill.appex */,
+				7C3AD2632DC9B1F800D92241 /* CallerIDExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -540,11 +590,34 @@
 			);
 			dependencies = (
 				7C973A482A93055500875FBA /* PBXTargetDependency */,
+				7C3AD2692DC9B1F800D92241 /* PBXTargetDependency */,
 			);
 			name = Locker;
 			productName = Locker;
 			productReference = 13B07F961A680F5B00A75B9A /* Locker.app */;
 			productType = "com.apple.product-type.application";
+		};
+		7C3AD2622DC9B1F800D92241 /* CallerIDExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7C3AD26C2DC9B1F800D92241 /* Build configuration list for PBXNativeTarget "CallerIDExtension" */;
+			buildPhases = (
+				7C3AD25F2DC9B1F800D92241 /* Sources */,
+				7C3AD2602DC9B1F800D92241 /* Frameworks */,
+				7C3AD2612DC9B1F800D92241 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7C3AD2642DC9B1F800D92241 /* CallerIDExtension */,
+			);
+			name = CallerIDExtension;
+			packageProductDependencies = (
+			);
+			productName = CallerIDExtension;
+			productReference = 7C3AD2632DC9B1F800D92241 /* CallerIDExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		7C973A3B2A93055500875FBA /* LockerAutofill */ = {
 			isa = PBXNativeTarget;
@@ -575,7 +648,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1340;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -584,6 +657,9 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1120;
+					};
+					7C3AD2622DC9B1F800D92241 = {
+						CreatedOnToolsVersion = 16.2;
 					};
 					7C973A3B2A93055500875FBA = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -614,6 +690,7 @@
 				13B07F861A680F5B00A75B9A /* Locker */,
 				00E356ED1AD99517003FC87E /* LockerTests */,
 				7C973A3B2A93055500875FBA /* LockerAutofill */,
+				7C3AD2622DC9B1F800D92241 /* CallerIDExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -635,6 +712,13 @@
 				4D1804180C27433DAC77EA9B /* Inter-Medium.ttf in Resources */,
 				0D0A772BA7EA41E69827AAFD /* Inter-Regular.ttf in Resources */,
 				7AFE8CFE79B347BB8A6EC2F7 /* Inter-SemiBold.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C3AD2612DC9B1F800D92241 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -854,12 +938,22 @@
 				7CED25202ADD1FF100142D59 /* VinSsoWebViewController.swift in Sources */,
 				7CED251E2ADD1FF100142D59 /* RCTVinSSO.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				7C3AD25E2DC9B1AB00D92241 /* CallerIDManager.m in Sources */,
+				7C3AD2712DC9CC5C00D92241 /* CallerIDError.swift in Sources */,
 				7CEB31FA2A932780007F6051 /* RCTCryptoServiceIos.m in Sources */,
 				7C1027742DA4C70B00E83A2A /* FileEncryptorBridge.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				7CED251F2ADD1FF100142D59 /* RNVinSSO.swift in Sources */,
+				7C3AD25C2DC9B18900D92241 /* CallerIDManager.swift in Sources */,
 				7CEB31FC2A932780007F6051 /* RNAutofillServiceIos.swift in Sources */,
 				7CEB31FD2A932780007F6051 /* RCTAutofillServiceIos.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C3AD25F2DC9B1F800D92241 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -905,6 +999,11 @@
 			isa = PBXTargetDependency;
 			target = 13B07F861A680F5B00A75B9A /* Locker */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+		7C3AD2692DC9B1F800D92241 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C3AD2622DC9B1F800D92241 /* CallerIDExtension */;
+			targetProxy = 7C3AD2682DC9B1F800D92241 /* PBXContainerItemProxy */;
 		};
 		7C973A482A93055500875FBA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1059,6 +1158,90 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		7C3AD26D2DC9B1F800D92241 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = CallerIDExtension/CallerIDExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = W7S57TNBH5;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CallerIDExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CallerIDExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.CallerIDExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7C3AD26E2DC9B1F800D92241 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = CallerIDExtension/CallerIDExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = W7S57TNBH5;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CallerIDExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CallerIDExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.CallerIDExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1304,6 +1487,15 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7C3AD26C2DC9B1F800D92241 /* Build configuration list for PBXNativeTarget "CallerIDExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C3AD26D2DC9B1F800D92241 /* Debug */,
+				7C3AD26E2DC9B1F800D92241 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -8,6 +8,7 @@ import {
   PrivateRelay,
   ManageSubdomainScreen,
   AliasStatisticScreen,
+  CallerIDScreen,
 } from "../../screens"
 import { observer } from "mobx-react-lite"
 import { ToolsParamList } from "../navigators.types"
@@ -30,6 +31,7 @@ export const ToolsNavigator = observer(() => {
       <Stack.Screen name="privateRelay" component={PrivateRelay} />
       <Stack.Screen name="manageSubdomain" component={ManageSubdomainScreen} />
       <Stack.Screen name="aliasStatistic" component={AliasStatisticScreen} />
+      <Stack.Screen name="callerId" component={CallerIDScreen} />
     </Stack.Navigator>
   )
 })

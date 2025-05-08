@@ -1333,5 +1333,9 @@
     "encrypting": "Encrypting file...",
     "uploading": "Uploading file...",
     "upgrade": "Upgrade account to Premium to download your file attachments."
+  },
+  "caller_id": {
+    "title": "Caller ID",
+    "desc": "Check spam calls and block unwanted numbers"
   }
 }

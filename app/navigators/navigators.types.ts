@@ -114,6 +114,7 @@ export type ToolsParamList = {
   aliasStatistic: {
     alias: RelayAddress
   }
+  callerId: undefined
 }
 
 export type ToolsStackScreenProps<T extends keyof ToolsParamList> = StackScreenProps<
