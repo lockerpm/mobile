@@ -38,6 +38,7 @@
 		7C3AD25E2DC9B1AB00D92241 /* CallerIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C3AD25D2DC9B1A900D92241 /* CallerIDManager.m */; };
 		7C3AD26A2DC9B1F800D92241 /* CallerIDExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7C3AD2632DC9B1F800D92241 /* CallerIDExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7C3AD2712DC9CC5C00D92241 /* CallerIDError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3AD2702DC9CC4D00D92241 /* CallerIDError.swift */; };
+		7C3AD2822DCC9ACE00D92241 /* LiveCallerIDExtension.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = 7C3AD27B2DCC9ACE00D92241 /* LiveCallerIDExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7C6D58A52C6C955C0059ACAC /* PrivateEmailList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A42C6C955C0059ACAC /* PrivateEmailList.swift */; };
 		7C6D58A72C6DC2340059ACAC /* PrivateEmailApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A62C6DC2340059ACAC /* PrivateEmailApiService.swift */; };
 		7C6D58A92C6DC6D70059ACAC /* PrivateEmailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6D58A82C6DC6D70059ACAC /* PrivateEmailModel.swift */; };
@@ -93,6 +94,13 @@
 			remoteGlobalIDString = 7C3AD2622DC9B1F800D92241;
 			remoteInfo = CallerIDExtension;
 		};
+		7C3AD2802DCC9ACE00D92241 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C3AD27A2DCC9ACE00D92241;
+			remoteInfo = LiveCallerIDExtension;
+		};
 		7C973A472A93055500875FBA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
@@ -103,6 +111,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		7C3AD2872DCC9ACE00D92241 /* Embed ExtensionKit Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				7C3AD2822DCC9ACE00D92241 /* LiveCallerIDExtension.appex in Embed ExtensionKit Extensions */,
+			);
+			name = "Embed ExtensionKit Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7C8FB3772ADD298900DA5BCE /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
@@ -165,6 +184,7 @@
 		7C3AD25D2DC9B1A900D92241 /* CallerIDManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CallerIDManager.m; sourceTree = "<group>"; };
 		7C3AD2632DC9B1F800D92241 /* CallerIDExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CallerIDExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C3AD2702DC9CC4D00D92241 /* CallerIDError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerIDError.swift; sourceTree = "<group>"; };
+		7C3AD27B2DCC9ACE00D92241 /* LiveCallerIDExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = LiveCallerIDExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C6D58A42C6C955C0059ACAC /* PrivateEmailList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailList.swift; sourceTree = "<group>"; };
 		7C6D58A62C6DC2340059ACAC /* PrivateEmailApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailApiService.swift; sourceTree = "<group>"; };
 		7C6D58A82C6DC6D70059ACAC /* PrivateEmailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEmailModel.swift; sourceTree = "<group>"; };
@@ -220,10 +240,18 @@
 			);
 			target = 7C3AD2622DC9B1F800D92241 /* CallerIDExtension */;
 		};
+		7C3AD2832DCC9ACE00D92241 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7C3AD27A2DCC9ACE00D92241 /* LiveCallerIDExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7C3AD2642DC9B1F800D92241 /* CallerIDExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7C3AD26B2DC9B1F800D92241 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = CallerIDExtension; sourceTree = "<group>"; };
+		7C3AD27C2DCC9ACE00D92241 /* LiveCallerIDExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7C3AD2832DCC9ACE00D92241 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LiveCallerIDExtension; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,6 +274,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7C3AD2602DC9B1F800D92241 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C3AD2782DCC9ACE00D92241 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -494,6 +529,7 @@
 				00E356EF1AD99517003FC87E /* LockerTests */,
 				7C973A3F2A93055500875FBA /* LockerAutofill */,
 				7C3AD2642DC9B1F800D92241 /* CallerIDExtension */,
+				7C3AD27C2DCC9ACE00D92241 /* LiveCallerIDExtension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -512,6 +548,7 @@
 				00E356EE1AD99517003FC87E /* LockerTests.xctest */,
 				7C973A3C2A93055500875FBA /* LockerAutofill.appex */,
 				7C3AD2632DC9B1F800D92241 /* CallerIDExtension.appex */,
+				7C3AD27B2DCC9ACE00D92241 /* LiveCallerIDExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -583,6 +620,7 @@
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
 				7C8FB3772ADD298900DA5BCE /* Embed Frameworks */,
 				7C973A4D2A93055500875FBA /* Embed Foundation Extensions */,
+				7C3AD2872DCC9ACE00D92241 /* Embed ExtensionKit Extensions */,
 				CF3B00BA8CC8BB2FB9155EAF /* [CP-User] [RNFB] Core Configuration */,
 				868061382ACB0AAA0029A08E /* ShellScript */,
 			);
@@ -591,6 +629,7 @@
 			dependencies = (
 				7C973A482A93055500875FBA /* PBXTargetDependency */,
 				7C3AD2692DC9B1F800D92241 /* PBXTargetDependency */,
+				7C3AD2812DCC9ACE00D92241 /* PBXTargetDependency */,
 			);
 			name = Locker;
 			productName = Locker;
@@ -618,6 +657,28 @@
 			productName = CallerIDExtension;
 			productReference = 7C3AD2632DC9B1F800D92241 /* CallerIDExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		7C3AD27A2DCC9ACE00D92241 /* LiveCallerIDExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7C3AD2842DCC9ACE00D92241 /* Build configuration list for PBXNativeTarget "LiveCallerIDExtension" */;
+			buildPhases = (
+				7C3AD2772DCC9ACE00D92241 /* Sources */,
+				7C3AD2782DCC9ACE00D92241 /* Frameworks */,
+				7C3AD2792DCC9ACE00D92241 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7C3AD27C2DCC9ACE00D92241 /* LiveCallerIDExtension */,
+			);
+			name = LiveCallerIDExtension;
+			packageProductDependencies = (
+			);
+			productName = LiveCallerIDExtension;
+			productReference = 7C3AD27B2DCC9ACE00D92241 /* LiveCallerIDExtension.appex */;
+			productType = "com.apple.product-type.extensionkit-extension";
 		};
 		7C973A3B2A93055500875FBA /* LockerAutofill */ = {
 			isa = PBXNativeTarget;
@@ -661,6 +722,9 @@
 					7C3AD2622DC9B1F800D92241 = {
 						CreatedOnToolsVersion = 16.2;
 					};
+					7C3AD27A2DCC9ACE00D92241 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					7C973A3B2A93055500875FBA = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
@@ -691,6 +755,7 @@
 				00E356ED1AD99517003FC87E /* LockerTests */,
 				7C973A3B2A93055500875FBA /* LockerAutofill */,
 				7C3AD2622DC9B1F800D92241 /* CallerIDExtension */,
+				7C3AD27A2DCC9ACE00D92241 /* LiveCallerIDExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -716,6 +781,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7C3AD2612DC9B1F800D92241 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C3AD2792DCC9ACE00D92241 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -957,6 +1029,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7C3AD2772DCC9ACE00D92241 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7C973A382A93055500875FBA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1004,6 +1083,11 @@
 			isa = PBXTargetDependency;
 			target = 7C3AD2622DC9B1F800D92241 /* CallerIDExtension */;
 			targetProxy = 7C3AD2682DC9B1F800D92241 /* PBXContainerItemProxy */;
+		};
+		7C3AD2812DCC9ACE00D92241 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C3AD27A2DCC9ACE00D92241 /* LiveCallerIDExtension */;
+			targetProxy = 7C3AD2802DCC9ACE00D92241 /* PBXContainerItemProxy */;
 		};
 		7C973A482A93055500875FBA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1181,9 +1265,9 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CallerIDExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = CallerIDExtension;
+				INFOPLIST_KEY_CFBundleDisplayName = Spam;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1225,9 +1309,9 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CallerIDExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = CallerIDExtension;
+				INFOPLIST_KEY_CFBundleDisplayName = Spam;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1237,6 +1321,86 @@
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.CallerIDExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7C3AD2852DCC9ACE00D92241 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = W7S57TNBH5;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LiveCallerIDExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Locker;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.LiveCallerIDExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7C3AD2862DCC9ACE00D92241 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = W7S57TNBH5;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LiveCallerIDExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Locker;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.LiveCallerIDExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1496,6 +1660,15 @@
 			buildConfigurations = (
 				7C3AD26D2DC9B1F800D92241 /* Debug */,
 				7C3AD26E2DC9B1F800D92241 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7C3AD2842DCC9ACE00D92241 /* Build configuration list for PBXNativeTarget "LiveCallerIDExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C3AD2852DCC9ACE00D92241 /* Debug */,
+				7C3AD2862DCC9ACE00D92241 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
