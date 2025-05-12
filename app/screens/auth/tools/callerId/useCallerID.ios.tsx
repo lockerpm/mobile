@@ -1,8 +1,8 @@
 import { callerID } from "app/services/callerID/CallerID"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { AppState } from "react-native"
 
-export const useIosCallerExtension = () => {
+export const useCallerID = () => {
   const appState = useRef(AppState.currentState)
   const [appStateVisible, setAppStateVisible] = useState(appState.current)
   const [isExtensionEnabled, setIsExtensionEnabled] = useState(false)
@@ -14,10 +14,9 @@ export const useIosCallerExtension = () => {
     setIsExtensionEnabled(isEnabled)
   }
 
-  const reloadExtension = useCallback(async () => {
-    await callerID.iosProcessAndSaveCSV()
-    await callerID.iosProcessAndSaveCSV()
-  }, [isExtensionEnabled])
+  // const reloadExtension = useCallback(async () => {
+  //   await callerID.iosProcessAndSaveCSV()
+  // }, [isExtensionEnabled])
 
   // ---------------------------EFFECT-----------------------
   useEffect(() => {

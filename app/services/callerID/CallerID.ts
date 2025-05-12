@@ -5,6 +5,32 @@ import { callerData } from "./data"
 const { CallerIDManager } = NativeModules
 
 class CallerID {
+  public async isOverlayPermissionEnabled() {
+    if (Platform.OS !== "android") {
+      console.warn("isOverlayPermissionEnabled is android-only.")
+      return false
+    }
+    try {
+      return await CallerIDManager.isOverlayPermissionEnabled()
+    } catch (err) {
+      console.error("❌ Reload Error:", err)
+    }
+    return false
+  }
+
+  public async androidRequestOverlayPermission() {
+    if (Platform.OS !== "android") {
+      console.warn("androidRequestOverlayPermission is android-only.")
+      return false
+    }
+    try {
+      return await CallerIDManager.requestOverlayPermission()
+    } catch (err) {
+      console.error("❌ Reload Error:", err)
+    }
+    return false
+  }
+
   public async iosReloadCallDirectoryExtension() {
     if (Platform.OS !== "ios") {
       return

@@ -2,7 +2,6 @@ import { observer } from "mobx-react-lite"
 import React from "react"
 import { Screen, Header } from "app/components/cores"
 import { useNavigation } from "@react-navigation/native"
-import { StyleSheet } from "react-native"
 
 // @ts-ignore
 import { CallerContent } from "./CallerContent"

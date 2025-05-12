@@ -1,4 +1,5 @@
 package com.cystack.locker;
+import com.cystack.locker.callerID.CallerIDManager;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -26,6 +27,7 @@ public class RNPackagesManager implements ReactPackage {
         modules.add(new RNManufacturerSettingsAndroid(reactContext));
         modules.add(new RNVinCssSsoLogin(reactContext));
         modules.add(new RNFileEncryptor(reactContext));
+        modules.add(new CallerIDManager(reactContext));
         return modules;
     }
 

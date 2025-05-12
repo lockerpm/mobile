@@ -2,13 +2,15 @@ import { useTheme } from "@react-navigation/native"
 import { Button, ImageIcon, Text, Toggle } from "app/components/cores"
 import React from "react"
 import { StyleSheet, View, Image, Linking } from "react-native"
-import { useIosCallerExtension } from "./useIosCallerExtension"
+
+// @ts-ignore
+import { useCallerID } from "./useCallerID"
 
 const IOS_CALLER_ID_TUTORIAL = require("assets/images/ios-caller-id-setting.png")
 
 export const CallerContent = () => {
   const { colors } = useTheme()
-  const { isExtensionEnabled } = useIosCallerExtension()
+  const { isExtensionEnabled } = useCallerID()
 
   return (
     <View style={styles.container}>
@@ -69,7 +71,7 @@ export const CallerContent = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingHorizontal: 20,
   },
   content: {
     borderRadius: 12,
