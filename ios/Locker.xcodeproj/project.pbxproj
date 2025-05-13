@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -233,14 +233,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7C3AD26B2DC9B1F800D92241 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		7C3AD26B2DC9B1F800D92241 /* Exceptions for "CallerIDExtension" folder in "CallerIDExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = 7C3AD2622DC9B1F800D92241 /* CallerIDExtension */;
 		};
-		7C3AD2832DCC9ACE00D92241 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		7C3AD2832DCC9ACE00D92241 /* Exceptions for "LiveCallerIDExtension" folder in "LiveCallerIDExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -250,8 +250,30 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		7C3AD2642DC9B1F800D92241 /* CallerIDExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7C3AD26B2DC9B1F800D92241 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = CallerIDExtension; sourceTree = "<group>"; };
-		7C3AD27C2DCC9ACE00D92241 /* LiveCallerIDExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7C3AD2832DCC9ACE00D92241 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LiveCallerIDExtension; sourceTree = "<group>"; };
+		7C3AD2642DC9B1F800D92241 /* CallerIDExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7C3AD26B2DC9B1F800D92241 /* Exceptions for "CallerIDExtension" folder in "CallerIDExtension" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = CallerIDExtension;
+			sourceTree = "<group>";
+		};
+		7C3AD27C2DCC9ACE00D92241 /* LiveCallerIDExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7C3AD2832DCC9ACE00D92241 /* Exceptions for "LiveCallerIDExtension" folder in "LiveCallerIDExtension" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = LiveCallerIDExtension;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -652,8 +674,6 @@
 				7C3AD2642DC9B1F800D92241 /* CallerIDExtension */,
 			);
 			name = CallerIDExtension;
-			packageProductDependencies = (
-			);
 			productName = CallerIDExtension;
 			productReference = 7C3AD2632DC9B1F800D92241 /* CallerIDExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -674,8 +694,6 @@
 				7C3AD27C2DCC9ACE00D92241 /* LiveCallerIDExtension */,
 			);
 			name = LiveCallerIDExtension;
-			packageProductDependencies = (
-			);
 			productName = LiveCallerIDExtension;
 			productReference = 7C3AD27B2DCC9ACE00D92241 /* LiveCallerIDExtension.appex */;
 			productType = "com.apple.product-type.extensionkit-extension";

@@ -4,7 +4,7 @@ import React from "react"
 import { StyleSheet, View, Image, Linking } from "react-native"
 
 // @ts-ignore
-import { useCallerID } from "./useCallerID"
+import { useCallerID } from "app/services/callerID/useCallerID"
 
 const IOS_CALLER_ID_TUTORIAL = require("assets/images/ios-caller-id-setting.png")
 

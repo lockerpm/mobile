@@ -16,21 +16,23 @@
             android:layout_height="24dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/ic_logo"
+            android:src="@drawable/assets_images_logo_locker"
             android:contentDescription="Logo" />
 
         <!-- Close button (right) -->
-        <ImageButton
-            android:id="@+id/close_button"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/transparent"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
-            android:contentDescription="Close" />
 
         <!-- Carrier text (centered vertically between logo and close button) -->
+        <ImageButton
+            android:id="@+id/close_button"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="4dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Close"
+            android:src="@drawable/x" />
+
         <TextView
             android:id="@+id/carrier"
             android:layout_width="wrap_content"

@@ -1,10 +1,11 @@
-import { useTheme } from "@react-navigation/native"
 import { Button, ImageIcon, Text, Toggle } from "app/components/cores"
 import React from "react"
 import { StyleSheet, View } from "react-native"
 
 // @ts-ignore
-import { useCallerID } from "./useCallerID"
+import { useCallerID } from "app/services/callerID/useCallerID"
+import { ProgressBar } from "react-native-ui-lib"
+import { useTheme } from "app/services/context"
 
 const LiveCallerLookUp = () => {
   const { colors } = useTheme()
@@ -35,7 +36,32 @@ const LiveCallerLookUp = () => {
             </View>
           </View>
         )}
+        {isEnabledOverlayPermission && <EnablePermissionView />}
       </View>
+    </View>
+  )
+}
+
+const EnablePermissionView = () => {
+  const { colors } = useTheme()
+  const { updateData, isUpdateLocalDatabase, updateProgress } = useCallerID()
+  return (
+    <View style={{ marginTop: 12 }}>
+      <Text text="Mores then 30.000 numbers" />
+      {isUpdateLocalDatabase && (
+        <ProgressBar
+          style={{
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: colors.block,
+          }}
+          progressColor={colors.primary}
+          progress={Math.min(updateProgress * 100, 100)}
+        />
+      )}
+      {!isUpdateLocalDatabase && (
+        <Button text="Update List spams" onPress={updateData} style={{ marginTop: 12 }} />
+      )}
     </View>
   )
 }
