@@ -68,9 +68,18 @@ public class CallerIDManager extends ReactContextBaseJavaModule {
         Cursor cursor = null;
 
         try {
+             String[] projection = {
+                CallLog.Calls._ID,
+                CallLog.Calls.NUMBER,
+                CallLog.Calls.CACHED_NAME,   // Tên nếu có trong danh bạ
+                CallLog.Calls.DATE,
+                CallLog.Calls.TYPE,
+                CallLog.Calls.DURATION
+            };
+    
             cursor = reactContext.getContentResolver().query(
                     CallLog.Calls.CONTENT_URI,
-                    null,
+                    projection,
                     null,
                     null,
                     CallLog.Calls.DATE + " DESC" // No LIMIT/OFFSET here
@@ -85,21 +94,24 @@ public class CallerIDManager extends ReactContextBaseJavaModule {
             int count = 0;
             int index = 0;
 
-            int number = cursor.getColumnIndex(CallLog.Calls.NUMBER);
-            int type = cursor.getColumnIndex(CallLog.Calls.TYPE);
-            int date = cursor.getColumnIndex(CallLog.Calls.DATE);
-            int duration = cursor.getColumnIndex(CallLog.Calls.DURATION);
-
             while (cursor.moveToNext()) {
                 if (index++ < offset) continue; // Skip to the page start
-
                 if (count++ >= pageSize) break; // Stop after pageSize
+
+                int number = cursor.getColumnIndex(CallLog.Calls.NUMBER);
+                int type = cursor.getColumnIndex(CallLog.Calls.TYPE);
+                int date = cursor.getColumnIndex(CallLog.Calls.DATE);
+                int duration = cursor.getColumnIndex(CallLog.Calls.DURATION);
+                int name = cursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
+                int id = cursor.getColumnIndex(CallLog.Calls._ID);
 
                 WritableMap call = Arguments.createMap();
                 call.putString("number", cursor.getString(number));
                 call.putInt("type", cursor.getInt(type));
                 call.putDouble("date", cursor.getLong(date));
                 call.putInt("duration", cursor.getInt(duration));
+                call.putString("name", cursor.getString(name));
+                call.putString("id", cursor.getString(id));
                 callLogs.pushMap(call);
             }
 

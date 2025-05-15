@@ -5,6 +5,15 @@ import { callerData } from "./data"
 const { CallerIDManager } = NativeModules
 
 class CallerID {
+  public PAGE_SIZE = 30
+  public async getAndroidCallLogsHistory(page: number) {
+    if (Platform.OS !== "android") {
+      console.warn("getAndroidCallLogsHistory is android-only.")
+      return false
+    }
+    return await CallerIDManager.getCallLogs(page, this.PAGE_SIZE)
+  }
+
   public async isOverlayPermissionEnabled() {
     if (Platform.OS !== "android") {
       console.warn("isOverlayPermissionEnabled is android-only.")
@@ -79,14 +88,10 @@ class CallerID {
     }
     try {
       // Parse and reformat: keep only phone number and label
-      const outputLines = callerData
-        .sort((a, b) => (a[0] as number) - (b[0] as number))
-        .map((parts) => {
-          const phone = parts[0] // Remove non-digits
-          const label = parts[1] // In case label has commas
-          return `${phone},${label}`
-        })
-        .filter(Boolean)
+      const outputLines = []
+      callerData.forEach((label, number) => {
+        outputLines.push(`${number},${label}`)
+      })
 
       // Convert to string
       const outputCSV = outputLines.join("\n")

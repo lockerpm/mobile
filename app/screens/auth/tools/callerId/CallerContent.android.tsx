@@ -1,15 +1,28 @@
 import { Button, ImageIcon, Text, Toggle } from "app/components/cores"
-import React from "react"
-import { StyleSheet, View } from "react-native"
-
-// @ts-ignore
-import { useCallerID } from "app/services/callerID/useCallerID"
+import React, { useEffect, useState } from "react"
+import { ActivityIndicator, StyleSheet, View } from "react-native"
 import { ProgressBar } from "react-native-ui-lib"
 import { useTheme } from "app/services/context"
 
+// @ts-ignore
+import { useCallerID } from "app/services/callerID/useCallerID"
+// @ts-ignore
+import { useHistoryCallerID } from "app/services/callerID/useHistoryCallerID"
+// @ts-ignore
+import { HistoryCallLogItem } from "./HistoryCallLogItem"
+
+import { FlatList } from "react-native-gesture-handler"
+import { callerID } from "app/services/callerID/CallerID"
+import { callerData } from "app/services/callerID/data"
+
 const LiveCallerLookUp = () => {
   const { colors } = useTheme()
-  const { isEnabledOverlayPermission, requestPermission } = useCallerID()
+  const { isEnabledOverlayPermission, requestLiveCallPermission, checkEnabledOverlayPermission } =
+    useCallerID()
+
+  useEffect(() => {
+    checkEnabledOverlayPermission()
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -28,11 +41,27 @@ const LiveCallerLookUp = () => {
               style={{ marginTop: 12 }}
             />
             <Text
-              text="To enable this feature, please follow the allow locker to :"
+              text="To enable this feature, please allow permission:"
+              style={{ marginTop: 12 }}
+            />
+            <Text
+              text="1. Allow Locker to make and manage Phone calls: Detect phone incomming"
+              style={{ marginTop: 12 }}
+            />
+            <Text
+              text="2. Allow Locker display over other apps: show the caller label on the screen"
+              style={{ marginTop: 12 }}
+            />
+            <Text
+              text="3. Allow Locker display over other apps: show the caller label on the screen"
               style={{ marginTop: 12 }}
             />
             <View style={{ marginTop: 12 }}>
-              <Button text="Open Settings" onPress={requestPermission} style={{ marginTop: 12 }} />
+              <Button
+                text="Enable Permission"
+                onPress={requestLiveCallPermission}
+                style={{ marginTop: 12 }}
+              />
             </View>
           </View>
         )}
@@ -47,7 +76,7 @@ const EnablePermissionView = () => {
   const { updateData, isUpdateLocalDatabase, updateProgress } = useCallerID()
   return (
     <View style={{ marginTop: 12 }}>
-      <Text text="Mores then 30.000 numbers" />
+      <Text text="Update 30.000 spams" />
       {isUpdateLocalDatabase && (
         <ProgressBar
           style={{
@@ -59,8 +88,122 @@ const EnablePermissionView = () => {
           progress={Math.min(updateProgress * 100, 100)}
         />
       )}
-      {!isUpdateLocalDatabase && (
-        <Button text="Update List spams" onPress={updateData} style={{ marginTop: 12 }} />
+      <Button
+        text="Update List spams"
+        disabled={isUpdateLocalDatabase}
+        loading={isUpdateLocalDatabase}
+        onPress={updateData}
+        style={{ marginTop: 12 }}
+      />
+    </View>
+  )
+}
+
+interface AndroidCallLog {
+  number: string
+  date: number
+  duration: number
+  type: number
+  name: string
+  id: string
+  repeat?: number
+  label?: string
+}
+
+function normalizePhoneNumber(raw: string): number {
+  if (raw.startsWith("0")) {
+    return parseInt("84" + raw.slice(1))
+  } else if (raw.startsWith("+84")) {
+    return parseInt(raw.slice(1)) // "+84" → "84"
+  }
+  return parseInt(raw)
+}
+
+const prepareData = (prev: AndroidCallLog[], newData: AndroidCallLog[]) => {
+  const data = [...prev]
+
+  for (let i = 0; i < newData.length; i++) {
+    if (data.length === 0) {
+      data.push(newData[i])
+    } else {
+      const lastIndex = data.length - 1
+      if (data[lastIndex].number === newData[i].number) {
+        data[lastIndex].repeat = data[lastIndex].repeat || 0 + 1
+      } else {
+        data.push(newData[i])
+      }
+    }
+  }
+  return data
+    .map((item) => ({ ...item, label: callerData.get(normalizePhoneNumber(item.number)) }))
+    .filter((item) => !!item.label)
+}
+
+const ListCallLogs = () => {
+  const { isPermissionEnabled, requestEnabledPermission } = useHistoryCallerID()
+
+  // ---------------------------PARAMS-----------------------
+  const [data, setData] = useState<AndroidCallLog[]>([])
+  const [page, setPage] = useState(0)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [hasMoreData, setHasMoreData] = useState(true)
+
+  // ---------------------------METHOD-----------------------
+  const loadData = async (page: number) => {
+    if (isLoadingMore || !hasMoreData) return
+
+    setIsLoadingMore(true)
+
+    // Simulate API call
+    setTimeout(async () => {
+      try {
+        const newItems = await callerID.getAndroidCallLogsHistory(page)
+
+        if (newItems.length < callerID.PAGE_SIZE) {
+          setHasMoreData(false) // No more data
+        }
+
+        setData(prepareData(data, newItems))
+        setIsLoadingMore(false)
+      } catch (error) {
+        console.error("Error fetching call logs:", error)
+      }
+    }, 500)
+  }
+  const handleEndReached = () => {
+    if (!isLoadingMore && hasMoreData) {
+      setPage((prev) => prev + 1)
+    }
+  }
+
+  useEffect(() => {
+    loadData(page)
+  }, [page])
+
+  const renderFooter = () => {
+    if (!isLoadingMore) return null
+    return <ActivityIndicator size="small" style={styles.mt12} />
+  }
+
+  return (
+    <View style={styles.listContainer}>
+      <Text text="Lịch sử cuộc gọi" />
+      {!isPermissionEnabled && (
+        <Button
+          text="show lich sử cuộc gọi "
+          onPress={requestEnabledPermission}
+          style={styles.mt12}
+        />
+      )}
+      {isPermissionEnabled && (
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <HistoryCallLogItem {...item} />}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={renderFooter}
+        />
       )}
     </View>
   )
@@ -68,8 +211,9 @@ const EnablePermissionView = () => {
 
 export const CallerContent = () => {
   return (
-    <View>
+    <View style={styles.flex1}>
       <LiveCallerLookUp />
+      <ListCallLogs />
     </View>
   )
 }
@@ -83,8 +227,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 16,
   },
+  flex1: {
+    flex: 1,
+  },
+  listContainer: {
+    flex: 1,
+    marginTop: 12,
+    paddingHorizontal: 16,
+  },
   mr12: {
     marginRight: 12,
+  },
+  mt12: {
+    marginTop: 12,
   },
   row: {
     alignItems: "center",

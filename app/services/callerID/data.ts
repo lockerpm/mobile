@@ -1,4 +1,4 @@
-export const callerData = [
+export const callerData = new Map([
   [84393666229, "Testing - Calling from thinhnn"],
   [842886852220, "Spam - nhá máy asdasdasdasdasdasdasdasd"],
   [84365521368, "Spam - nhá máy asdasdasdasdasdasdasdasd"],
@@ -11363,4 +11363,4 @@ export const callerData = [
   [842871076553, "Lừa Đảo"],
   [842871004508, "Lừa Đảo"],
   [842468861939, "Spam"],
-]
+])

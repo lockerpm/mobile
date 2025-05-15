@@ -10,11 +10,13 @@ export const CallerIDScreen = observer(() => {
   const navigation = useNavigation() as any
   return (
     <Screen
-      preset="auto"
       safeAreaEdges={["bottom"]}
       header={
         <Header leftIcon="arrow-left" titleTx={"caller_id.title"} onLeftPress={navigation.goBack} />
       }
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
       <CallerContent />
     </Screen>

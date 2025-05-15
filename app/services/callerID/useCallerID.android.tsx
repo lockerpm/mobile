@@ -1,9 +1,50 @@
 import { callerID } from "app/services/callerID/CallerID"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { PermissionsAndroid } from "react-native"
 import SQLite from "react-native-sqlite-storage"
 import { callerData } from "./data"
+
 SQLite.enablePromise(true)
+
+const requestLiveCallPermissions = async () => {
+  try {
+    const granted = await PermissionsAndroid.requestMultiple([
+      PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE,
+      PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
+    ])
+
+    const phoneStateGranted =
+      granted["android.permission.READ_PHONE_STATE"] === PermissionsAndroid.RESULTS.GRANTED
+    const callLogGranted =
+      granted["android.permission.READ_CALL_LOG"] === PermissionsAndroid.RESULTS.GRANTED
+
+    if (phoneStateGranted && callLogGranted) {
+      return true
+    } else {
+      return false
+    }
+  } catch (err) {
+    console.warn(err)
+    return false
+  }
+}
+
+const checkLiveCallPermissions = async (): Promise<boolean> => {
+  try {
+    const phoneStateGranted = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE,
+    )
+
+    const callLogGranted = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
+    )
+
+    return phoneStateGranted && callLogGranted
+  } catch (err) {
+    console.warn("Permission check error:", err)
+    return false
+  }
+}
 
 export const useCallerID = () => {
   const [isEnabledOverlayPermission, setEnabledOverlayPermission] = useState(false)
@@ -13,16 +54,13 @@ export const useCallerID = () => {
   // ---------------------------METHOD-----------------------
   const initLocalDatabase = useCallback(async () => {
     try {
-      console.log("initLocalDatabase 1  ")
       const db = await SQLite.openDatabase({ name: "callerid.db", location: "default" })
-      console.log("initLocalDatabase 2  ")
       await db.executeSql(`
         CREATE TABLE IF NOT EXISTS caller (
           number TEXT PRIMARY KEY,
           label TEXT
         );
       `)
-      console.log("initLocalDatabase 32  ")
       return db
     } catch (e) {
       console.error("DB error:", e)
@@ -36,10 +74,11 @@ export const useCallerID = () => {
       const db = await initLocalDatabase()
 
       const batchSize = 1000
+      const entries = Array.from(callerData.entries())
 
       await db.transaction((tx) => {
-        for (let i = 0; i < callerData.length; i += batchSize) {
-          const batch = callerData.slice(i, i + batchSize)
+        for (let i = 0; i < entries.length; i += batchSize) {
+          const batch = entries.slice(i, i + batchSize)
 
           const values = batch.map(() => "(?, ?)").join(", ")
           const flatValues = batch.flatMap(([number, label]) => [String(number), label])
@@ -50,8 +89,7 @@ export const useCallerID = () => {
             sql,
             flatValues,
             () => {
-              console.log(`Inserted batch ${i / batchSize + 1}`)
-              setUpdateProgress(i / callerData.length)
+              setUpdateProgress(i / entries.length)
             },
             (tx, error) => {
               console.error("Batch insert error:", error)
@@ -68,31 +106,8 @@ export const useCallerID = () => {
     }
   }, [])
 
-  const requestCallPermissions = useCallback(async () => {
-    try {
-      const granted = await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE,
-        PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
-      ])
-
-      const phoneStateGranted =
-        granted["android.permission.READ_PHONE_STATE"] === PermissionsAndroid.RESULTS.GRANTED
-      const callLogGranted =
-        granted["android.permission.READ_CALL_LOG"] === PermissionsAndroid.RESULTS.GRANTED
-
-      if (phoneStateGranted && callLogGranted) {
-        return true
-      } else {
-        return false
-      }
-    } catch (err) {
-      console.warn(err)
-      return false
-    }
-  }, [])
-
-  const requestPermission = useCallback(async () => {
-    const result = await requestCallPermissions()
+  const requestLiveCallPermission = useCallback(async () => {
+    const result = await requestLiveCallPermissions()
     if (result) {
       const isEnabled = await callerID.androidRequestOverlayPermission()
       setEnabledOverlayPermission(isEnabled)
@@ -100,22 +115,21 @@ export const useCallerID = () => {
   }, [])
 
   const checkEnabledOverlayPermission = useCallback(async () => {
-    const result = await requestCallPermissions()
-    const isEnabled = await callerID.isOverlayPermissionEnabled()
-    setEnabledOverlayPermission(isEnabled && result)
+    const isOverlayEnabled = await callerID.isOverlayPermissionEnabled()
+    if (isOverlayEnabled) {
+      const result = await checkLiveCallPermissions()
+      setEnabledOverlayPermission(result)
+    }
   }, [])
 
   // ---------------------------EFFECT-----------------------
-
-  useEffect(() => {
-    checkEnabledOverlayPermission()
-  }, [])
 
   return {
     isUpdateLocalDatabase,
     updateProgress,
     isEnabledOverlayPermission,
-    requestPermission,
+    requestLiveCallPermission,
+    checkEnabledOverlayPermission,
     updateData: updateDataFast,
   }
 }
