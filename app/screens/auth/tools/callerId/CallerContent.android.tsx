@@ -1,6 +1,6 @@
 import { Button, ImageIcon, Text, Toggle } from "app/components/cores"
-import React, { useEffect, useState } from "react"
-import { ActivityIndicator, StyleSheet, View } from "react-native"
+import React, { useEffect, useRef, useState } from "react"
+import { ActivityIndicator, AppState, StyleSheet, View } from "react-native"
 import { ProgressBar } from "react-native-ui-lib"
 import { useTheme } from "app/services/context"
 
@@ -14,62 +14,6 @@ import { HistoryCallLogItem } from "./HistoryCallLogItem"
 import { FlatList } from "react-native-gesture-handler"
 import { callerID } from "app/services/callerID/CallerID"
 import { callerData } from "app/services/callerID/data"
-
-const LiveCallerLookUp = () => {
-  const { colors } = useTheme()
-  const { isEnabledOverlayPermission, requestLiveCallPermission, checkEnabledOverlayPermission } =
-    useCallerID()
-
-  useEffect(() => {
-    checkEnabledOverlayPermission()
-  }, [])
-
-  return (
-    <View style={styles.container}>
-      <View style={[styles.content, { borderColor: colors.border }]}>
-        <View style={styles.row}>
-          <View style={styles.rowShrink}>
-            <ImageIcon icon="phone-list" containerStyle={styles.mr12} size={32} />
-            <Text text="Live Call lookup" />
-          </View>
-          <Toggle variant="switch" value={isEnabledOverlayPermission} />
-        </View>
-        {!isEnabledOverlayPermission && (
-          <View>
-            <Text
-              text="Live Call look up is a feature that allows you to identify the caller's name when the phone is ringing."
-              style={{ marginTop: 12 }}
-            />
-            <Text
-              text="To enable this feature, please allow permission:"
-              style={{ marginTop: 12 }}
-            />
-            <Text
-              text="1. Allow Locker to make and manage Phone calls: Detect phone incomming"
-              style={{ marginTop: 12 }}
-            />
-            <Text
-              text="2. Allow Locker display over other apps: show the caller label on the screen"
-              style={{ marginTop: 12 }}
-            />
-            <Text
-              text="3. Allow Locker display over other apps: show the caller label on the screen"
-              style={{ marginTop: 12 }}
-            />
-            <View style={{ marginTop: 12 }}>
-              <Button
-                text="Enable Permission"
-                onPress={requestLiveCallPermission}
-                style={{ marginTop: 12 }}
-              />
-            </View>
-          </View>
-        )}
-        {isEnabledOverlayPermission && <EnablePermissionView />}
-      </View>
-    </View>
-  )
-}
 
 const EnablePermissionView = () => {
   const { colors } = useTheme()
@@ -93,7 +37,7 @@ const EnablePermissionView = () => {
         disabled={isUpdateLocalDatabase}
         loading={isUpdateLocalDatabase}
         onPress={updateData}
-        style={{ marginTop: 12 }}
+        style={styles.mt12}
       />
     </View>
   )
@@ -177,8 +121,9 @@ const ListCallLogs = () => {
   }
 
   useEffect(() => {
+    if (!isPermissionEnabled) return
     loadData(page)
-  }, [page])
+  }, [page, isPermissionEnabled])
 
   const renderFooter = () => {
     if (!isLoadingMore) return null
@@ -210,10 +155,66 @@ const ListCallLogs = () => {
 }
 
 export const CallerContent = () => {
+  const { colors } = useTheme()
+  const { isEnabledOverlayPermission, requestLiveCallPermission, checkEnabledOverlayPermission } =
+    useCallerID()
+
+  const appState = useRef(AppState.currentState)
+  const [appStateVisible, setAppStateVisible] = useState(appState.current)
+
+  useEffect(() => {
+    checkEnabledOverlayPermission()
+  }, [appStateVisible])
+
+  useEffect(() => {
+    AppState.addEventListener("change", (nextAppState) => {
+      setAppStateVisible(nextAppState)
+    })
+  }, [])
+
   return (
     <View style={styles.flex1}>
-      <LiveCallerLookUp />
-      <ListCallLogs />
+      <View style={styles.container}>
+        <View style={[styles.content, { borderColor: colors.border }]}>
+          <View style={styles.row}>
+            <View style={styles.rowShrink}>
+              <ImageIcon icon="phone-list" containerStyle={styles.mr12} size={32} />
+              <Text text="Live Call lookup" />
+            </View>
+            <Toggle variant="switch" value={isEnabledOverlayPermission} />
+          </View>
+          {!isEnabledOverlayPermission && (
+            <View>
+              <Text
+                text="Live Call look up is a feature that allows you to identify the caller's name when the phone is ringing."
+                style={styles.mt12}
+              />
+              <Text text="To enable this feature, please allow permission:" style={styles.mt12} />
+              <Text
+                text="1. Allow Locker to make and manage Phone calls: Detect phone incomming"
+                style={styles.mt12}
+              />
+              <Text
+                text="2. Allow Locker display over other apps: show the caller label on the screen"
+                style={styles.mt12}
+              />
+              <Text
+                text="3. Allow Locker display over other apps: show the caller label on the screen"
+                style={styles.mt12}
+              />
+              <View style={styles.mt12}>
+                <Button
+                  text="Enable Permission"
+                  onPress={requestLiveCallPermission}
+                  style={styles.mt12}
+                />
+              </View>
+            </View>
+          )}
+          {isEnabledOverlayPermission && <EnablePermissionView />}
+        </View>
+      </View>
+      {isEnabledOverlayPermission && <ListCallLogs />}
     </View>
   )
 }

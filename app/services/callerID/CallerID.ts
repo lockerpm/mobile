@@ -81,6 +81,14 @@ class CallerID {
     return false
   }
 
+  public async iosOpenSetting() {
+    if (Platform.OS !== "ios") {
+      console.warn("iosOpenSetting is iOS-only.")
+      return
+    }
+    await CallerIDManager.openSetting()
+  }
+
   public async iosProcessAndSaveCSV() {
     if (Platform.OS !== "ios") {
       console.warn("Caller ID saving is iOS-only.")

@@ -21,15 +21,12 @@ export const HistoryCallLogItem = (item: Props) => {
     <View style={styles.container}>
       <View style={styles.contentContainer}>
         <View
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: 18,
-            backgroundColor: colors.secondaryText,
-            justifyContent: "center",
-            alignItems: "center",
-            marginRight: 12,
-          }}
+          style={[
+            styles.avatar,
+            {
+              backgroundColor: colors.secondaryText,
+            },
+          ]}
         >
           {item.name && <Text text={item.name[0]} size="large" color={colors.background} />}
           {!item.name && <Icon icon="user" size={20} color={colors.background} />}
@@ -56,6 +53,14 @@ export const HistoryCallLogItem = (item: Props) => {
 }
 
 const styles = StyleSheet.create({
+  avatar: {
+    alignItems: "center",
+    borderRadius: 18,
+    height: 36,
+    justifyContent: "center",
+    marginRight: 12,
+    width: 36,
+  },
   border: {
     flexGrow: 1,
     flexShrink: 1,

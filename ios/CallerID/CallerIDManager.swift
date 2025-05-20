@@ -100,6 +100,37 @@ class CallerIDManager: NSObject {
   }
   
   @objc
+  func openSetting(_ resolve: @escaping RCTPromiseResolveBlock,
+                   rejecter reject: @escaping RCTPromiseRejectBlock) {
+    DispatchQueue.main.async {
+      let manager = CXCallDirectoryManager.sharedInstance
+      
+      guard let appBundleId = Bundle.main.bundleIdentifier else {
+        let callerError = CallerIDError.extensionError
+        reject(callerError.code, callerError.description, nil)
+        return
+      }
+      
+      // Auto-generate the extension ID
+      let extensionId = "\(appBundleId).CallerIDExtension"
+      
+      
+      manager.getEnabledStatusForExtension(withIdentifier: extensionId) { status, error in
+        if let error = error {
+          let callerError = CallerIDError.extensionError
+          reject(callerError.code, callerError.description, error)
+          return
+        }
+        
+        manager.openSettings {_ in 
+          resolve(true)
+        }
+      }
+    }
+  }
+  
+  
+  @objc
   static func requiresMainQueueSetup() -> Bool {
     return false
   }

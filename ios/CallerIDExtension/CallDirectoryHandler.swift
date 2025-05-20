@@ -4,7 +4,7 @@ import CallKit
 class CallDirectoryHandler: CXCallDirectoryProvider {
   override func beginRequest(with context: CXCallDirectoryExtensionContext) {
     do {
-      try addAllIdentificationPhoneNumbers(to: context)
+      try addAllIdentificationPhoneNumbersRaw(to: context)
       context.completeRequest()
     } catch {
       NSLog("❌ CallDirectory Error: \(error.localizedDescription)")
@@ -43,6 +43,50 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     } catch {
       NSLog("❌ Read file Error: \(error.localizedDescription)")
     }
+  }
+  private func addAllIdentificationPhoneNumbersRaw(to context: CXCallDirectoryExtensionContext) throws {
+    NSLog("addAllIdentificationPhoneNumbers")
+    
+    guard let fileURL = Bundle.main.url(forResource: "caller_ids", withExtension: "csv"),
+          let reader = CSVLineReader(fileURL: fileURL) else {
+      NSLog("❌ Failed to open file")
+      return
+    }
+    var i = 1
+    var j = 1
+    do {
+      while let lines = reader.readNextLines(limit: 1000) {
+        NSLog("-------------------- %d", i)
+      
+        for line in lines {
+          if (j == 1) {
+            NSLog("-------------------- %s", line)
+          }
+          let components = line.components(separatedBy: ",")
+          if (j == 1) {
+            NSLog("\(components)")
+          }
+          guard components.count >= 3,
+                let phoneNumber = Int64(components[1]) else {
+            continue
+          }
+          if (j == 1) {
+            NSLog("\(phoneNumber)")
+          }
+          let label = components[2...].joined(separator: ",").trimmingCharacters(in: .whitespaces)
+          
+          if (j == 1) {
+            NSLog("\(label)")
+          }
+          context.addIdentificationEntry(withNextSequentialPhoneNumber: phoneNumber, label: label)
+          j += 1
+        }
+        i += 1
+      }
+    } catch {
+      NSLog("❌ Read file Error: \(error.localizedDescription)")
+    }
+    NSLog("✅ Finished loading paged caller IDs")
   }
 }
 

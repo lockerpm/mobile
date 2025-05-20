@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native"
 
 // @ts-ignore
 import { CallerContent } from "./CallerContent"
+import { ViewStyle } from "react-native"
 
 export const CallerIDScreen = observer(() => {
   const navigation = useNavigation() as any
@@ -14,11 +15,13 @@ export const CallerIDScreen = observer(() => {
       header={
         <Header leftIcon="arrow-left" titleTx={"caller_id.title"} onLeftPress={navigation.goBack} />
       }
-      contentContainerStyle={{
-        flex: 1,
-      }}
+      contentContainerStyle={container}
     >
       <CallerContent />
     </Screen>
   )
 })
+
+const container: ViewStyle = {
+  flex: 1,
+}

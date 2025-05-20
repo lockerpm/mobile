@@ -25,4 +25,10 @@ RCT_EXTERN_METHOD(getExtensionStatus:
   rejecter:(RCTPromiseRejectBlock)reject
 )
 
+RCT_EXTERN_METHOD(openSetting:
+  (RCTPromiseResolveBlock)resolve
+  rejecter:(RCTPromiseRejectBlock)reject
+)
+
+
 @end
