@@ -7,8 +7,6 @@ import {
   MarketingContent,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
-  RelayAddress,
-  SubdomainData,
   TrustedContact,
 } from "app/static/types"
 import { AndroidAutofillServiceData } from "app/utils/autofillHelper"
@@ -108,12 +106,6 @@ export type ToolsParamList = {
   reusePasswordList: undefined
   exposedPasswordList: undefined
   privateRelay: undefined
-  manageSubdomain: {
-    subdomain: SubdomainData
-  }
-  aliasStatistic: {
-    alias: RelayAddress
-  }
 }
 
 export type ToolsStackScreenProps<T extends keyof ToolsParamList> = StackScreenProps<

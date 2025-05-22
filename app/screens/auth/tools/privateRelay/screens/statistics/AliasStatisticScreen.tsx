@@ -1,19 +1,21 @@
 import React, { FC } from "react"
 import moment from "moment"
-import { View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { Screen, Header, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { useHelper } from "app/services/hook"
-import { ToolsStackScreenProps } from "app/navigators/navigators.types"
+import { PrivateRelayScreenProps } from "../../route"
+import { useTheme } from "app/services/context"
 
-export const AliasStatisticScreen: FC<ToolsStackScreenProps<"aliasStatistic">> = observer(
-  (props) => {
-    const navigation = props.navigation
-    const route = props.route
-
+export const AliasStatisticScreen: FC<PrivateRelayScreenProps<"aliasStatistic">> = observer(
+  ({
+    navigation,
+    route: {
+      params: { alias },
+    },
+  }) => {
+    const { colors } = useTheme()
     const { translate } = useHelper()
-
-    const alias = route.params.alias
 
     const data = [
       {
@@ -47,25 +49,24 @@ export const AliasStatisticScreen: FC<ToolsStackScreenProps<"aliasStatistic">> =
         }
       >
         {data.map((item, index) => (
-          <View key={index}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginVertical: 16,
-              }}
-            >
-              <Text preset="label" text={item.label} />
-              <Text
-                text={item.data}
-                style={{
-                  maxWidth: "50%",
-                }}
-              />
-            </View>
+          <View key={index} style={[styles.item, { borderColor: colors.border }]}>
+            <Text preset="label" text={item.label} />
+            <Text text={item.data} style={styles.halfWidth} />
           </View>
         ))}
       </Screen>
     )
   },
 )
+
+const styles = StyleSheet.create({
+  halfWidth: {
+    maxWidth: "50%",
+  },
+  item: {
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 16,
+  },
+})

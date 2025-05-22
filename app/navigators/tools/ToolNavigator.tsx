@@ -5,9 +5,7 @@ import {
   WeakPasswordListScreen,
   ReusePasswordList,
   ExposedPasswordList,
-  PrivateRelay,
-  ManageSubdomainScreen,
-  AliasStatisticScreen,
+  PrivateRelayStack,
 } from "../../screens"
 import { observer } from "mobx-react-lite"
 import { ToolsParamList } from "../navigators.types"
@@ -27,9 +25,8 @@ export const ToolsNavigator = observer(() => {
       <Stack.Screen name="weakPasswordList" component={WeakPasswordListScreen} />
       <Stack.Screen name="reusePasswordList" component={ReusePasswordList} />
       <Stack.Screen name="exposedPasswordList" component={ExposedPasswordList} />
-      <Stack.Screen name="privateRelay" component={PrivateRelay} />
-      <Stack.Screen name="manageSubdomain" component={ManageSubdomainScreen} />
-      <Stack.Screen name="aliasStatistic" component={AliasStatisticScreen} />
+
+      <Stack.Screen name="privateRelay" component={PrivateRelayStack} />
     </Stack.Navigator>
   )
 })
