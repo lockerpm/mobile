@@ -34,10 +34,8 @@ export const BrowseNavigator = observer(() => {
       <Stack.Screen name="passwords" component={PasswordsScreen} />
       <Stack.Screen name="notes" component={NotesScreen} />
       <Stack.Screen name="identities" component={IdentitiesScreen} />
-
       <Stack.Screen name="trash" component={TrashScreen} />
       <Stack.Screen name="cryptoWallets" component={CryptoAssetsScreen} />
-
       <Stack.Screen name="shares" component={SharesScreen} />
       <Stack.Screen name="sharedItems" component={SharedItemsScreen} />
       <Stack.Screen name="shareItems" component={ShareItemsScreen} />

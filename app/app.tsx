@@ -35,6 +35,7 @@ import { IS_IOS } from "./config/constants"
 import { AndroidAutofillServiceType } from "./utils/autofillHelper"
 import SplashScreen from "react-native-splash-screen"
 import BootSplash from "react-native-bootsplash"
+import { ViewStyle } from "react-native"
 
 enableScreens()
 Settings.initializeSDK()
@@ -107,16 +108,8 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
       }
     }
   }
-  // const monitorApiRequest = (request: any) => async () => {
-  //   Logger.debug(
-  //     `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
-  //       request.params ? JSON.stringify(request.params) : ""
-  //     }`,
-  //   )
-  // }
 
   api.apisauce.addMonitor(monitorApiResponse)
-  // api.apisauce.addAsyncRequestTransform(monitorApiRequest)
 
   // if app start from android autofill service. navigate to autofill screen
   if (!IS_IOS) {
@@ -148,14 +141,9 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
 
   // otherwise, we're ready to render the app
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={container}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-        <CombineContext
-          childProps={{
-            navigationRef,
-          }}
-          components={[ThemeContextProvider]}
-        >
+        <CombineContext components={[ThemeContextProvider]}>
           <RootNavigator
             ref={navigationRef}
             initialState={initialNavigationState}
@@ -168,3 +156,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
 }
 
 export default __DEV__ ? App : Sentry.wrap(App)
+
+const container: ViewStyle = {
+  flex: 1,
+}

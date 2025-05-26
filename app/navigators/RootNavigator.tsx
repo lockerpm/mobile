@@ -1,124 +1,32 @@
-/**
- * The root navigator is used to switch between major navigation flows of your app.
- * Generally speaking, it will contain an auth flow (registration, login, forgot password)
- * and a "main" flow (which is contained in your MainNavigator) which the user
- * will use once logged in.
- */
-import React, { useEffect, useState } from "react"
-import { AppState, Modal, Platform, View } from "react-native"
+import React, { useEffect } from "react"
+import { View } from "react-native"
 import NetInfo from "@react-native-community/netinfo"
 import { DefaultTheme, NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 import Toast, { BaseToastProps } from "react-native-toast-message"
-import dynamicLinks from "@react-native-firebase/dynamic-links"
-import WebView from "react-native-webview"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../models"
 import { ErrorToast, InfoToast, SuccessToast } from "app/components/utils"
-import {
-  IntroScreen,
-  InitScreen,
-  OnboardingScreen,
-  LockScreen,
-  LoginScreen,
-  SignupScreen,
-  CreateMasterPasswordScreen,
-  ForgotPasswordScreen,
-  LockType,
-  SignUpWithPinCode,
-  SignUpWithPassword,
-  PinCodeLoginScreen,
-} from "../screens"
+import { SplashScreen, LockScreen } from "../screens"
 import { MainNavigator } from "./MainNavigator"
-import { useAuthentication, useHelper } from "app/services/hook"
+import { useAuthentication } from "app/services/hook"
 import { useTheme } from "app/services/context"
-import { NotifeeNotificationData, PushNotifier } from "app/utils/pushNotification"
 import { AppEventType, EventBus } from "app/utils/eventBus"
-import { StorageKey, save } from "app/utils/storage"
 import { Logger } from "app/utils/utils"
-import { Icon } from "app/components/cores"
-import { SSOIdentifierScreen } from "app/screens/unauth/sso/SSOIdentifierScreen"
-import { SSOEmailLoginScreen } from "app/screens/unauth/sso/SSOEmailLoginScreen"
 import { RootParamList } from "./navigators.types"
-import { colorTransparency } from "app/theme"
-
-const IS_IOS = Platform.OS === "ios"
+import { LockType } from "app/static/types"
 
 const Stack = createStackNavigator<RootParamList>()
 
-type Props = {
-  navigationRef: any
-}
-const RootStack = observer((props: Props) => {
-  const { navigationRef } = props
+const RootStack = observer(() => {
   const { colors, setIsDark } = useTheme()
-  const { parsePushNotiData } = useHelper()
-  const { clearAllData, handleDynamicLink } = useAuthentication()
-  const { uiStore, user } = useStores()
-  const insets = useSafeAreaInsets()
-
-  const [updateBlogUrl, setUpdateBlogUrl] = useState("")
-  // ------------------- METHODS -------------------
-
-  const androidHandleNotiPress = async () => {
-    const res = await parsePushNotiData({
-      tipTrick: true,
-    })
-    if (res.url) setUpdateBlogUrl(res.url)
-  }
-  // Notification
-  const handleForegroundNotiPress = async (data: NotifeeNotificationData) => {
-    if (!data) {
-      return
-    }
-
-    const res = await parsePushNotiData({
-      notifeeData: data,
-      tipTrick: true,
-    })
-    if (res.url) setUpdateBlogUrl(res.url)
-
-    if (user.isLoggedInPw) {
-      // Close all modals before navigate
-      EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
-      if (navigationRef.current) {
-        navigationRef.current.navigate(res.path, res.params)
-      }
-    } else {
-      !res.url &&
-        save(StorageKey.PUSH_NOTI_DATA, {
-          type: data.type,
-          // url: data.url,
-        })
-    }
-  }
-
-  const fethDynamicLink = (link) => {
-    Logger.debug(`DYNAMIC LINK BACKGROUND: ${JSON.stringify(link)}`)
-    link?.url && handleDynamicLink(link.url, navigationRef.current)
-  }
-
-  // App state change
-  const _handleAppStateChange = async (nextAppState: string) => {
-    Logger.debug(nextAppState)
-
-    // Ohter state (background/inactive)
-    if (nextAppState !== "active") {
-      return
-    }
-
-    const link = await dynamicLinks().getInitialLink()
-    fethDynamicLink(link)
-  }
+  const { clearAllData } = useAuthentication()
+  const { uiStore } = useStores()
 
   // ------------------- EFFECTS -------------------
 
   useEffect(() => {
-    !IS_IOS && androidHandleNotiPress()
     setIsDark(uiStore.isDark)
-
-    AppState.addEventListener("change", _handleAppStateChange)
 
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isConnected
@@ -126,18 +34,10 @@ const RootStack = observer((props: Props) => {
       uiStore.setIsOffline(offline)
     })
 
-    const unsubscribe = dynamicLinks().onLink(fethDynamicLink)
-
-    const unsubscribePush = PushNotifier.setupForegroundHandler({
-      handleForegroundPress: handleForegroundNotiPress,
-    })
-
     const listener = EventBus.createListener(AppEventType.CLEAR_ALL_DATA, () => {
       clearAllData(true)
     })
     return () => {
-      unsubscribe()
-      unsubscribePush()
       removeNetInfoSubscription()
       EventBus.removeListener(listener)
     }
@@ -154,21 +54,12 @@ const RootStack = observer((props: Props) => {
           headerShown: false,
         }}
       >
-        <Stack.Screen name="init" component={InitScreen} />
-        <Stack.Screen name="intro" component={IntroScreen} />
-        <Stack.Screen name="onBoarding" component={OnboardingScreen} />
+        <Stack.Screen name="init" component={SplashScreen} />
         <Stack.Screen
           name="lock"
           component={LockScreen}
           initialParams={{ type: LockType.Individual }}
         />
-        <Stack.Screen name="login" component={LoginScreen} />
-        <Stack.Screen name="login_by_pincode" component={PinCodeLoginScreen} />
-        <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
-        <Stack.Screen name="signup" component={SignupScreen} />
-        <Stack.Screen name="signup_pin_code" component={SignUpWithPinCode} />
-        <Stack.Screen name="signup_password" component={SignUpWithPassword} />
-        <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
         <Stack.Screen
           name="mainStack"
           component={MainNavigator}
@@ -177,64 +68,7 @@ const RootStack = observer((props: Props) => {
             gestureEnabled: false,
           }}
         />
-
-        <Stack.Screen name="ssoIdentifier" component={SSOIdentifierScreen} />
-        <Stack.Screen
-          name="ssoLogin"
-          component={SSOEmailLoginScreen}
-          initialParams={{
-            host: "",
-            use_sso: false,
-            identifier: "",
-          }}
-        />
       </Stack.Navigator>
-      <Modal
-        visible={!!updateBlogUrl}
-        animationType="slide"
-        onRequestClose={() => {
-          setUpdateBlogUrl("")
-        }}
-        supportedOrientations={["portrait", "landscape"]}
-      >
-        <View
-          style={{
-            paddingTop: IS_IOS ? insets.top : 0,
-            paddingBottom: insets.bottom,
-            flex: 1,
-            backgroundColor: colors.background,
-          }}
-        >
-          <WebView
-            incognito
-            startInLoadingState
-            source={{ uri: updateBlogUrl }}
-            originWhitelist={["https://*", "com.cystack.locker://*"]}
-          />
-          <View
-            style={{
-              left: 0,
-              right: 0,
-              bottom: 0,
-              paddingVertical: 12,
-              paddingHorizontal: 16,
-              paddingBottom: 16 + insets.bottom,
-              backgroundColor: colorTransparency(colors.primaryText, 80),
-              position: "absolute",
-              borderBottomColor: colors.border,
-              borderBottomWidth: 0.5,
-            }}
-          >
-            <Icon
-              icon="arrow-left"
-              onPress={() => {
-                setUpdateBlogUrl("")
-              }}
-              color={colors.white}
-            />
-          </View>
-        </View>
-      </Modal>
     </View>
   )
 })
@@ -260,7 +94,7 @@ export const RootNavigator = React.forwardRef<
 
   return (
     <NavigationContainer {...props} theme={MyTheme} ref={ref}>
-      <RootStack navigationRef={ref} />
+      <RootStack />
       <Toast config={toastConfig} />
     </NavigationContainer>
   )

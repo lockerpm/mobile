@@ -1,15 +1,14 @@
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
-import { MenuRoute } from "app/screens"
-import { LockType } from "app/screens/unauth/lock/lock.types"
+import { MenuRoute, UnAuthRoute } from "app/screens"
 import {
   AppNotification,
-  LOGIN_METHOD,
+  LockType,
   MarketingContent,
-  OnPremiseIdentifierData,
   OnPremisePreloginData,
 } from "app/static/types"
+
 import { AndroidAutofillServiceData } from "app/utils/autofillHelper"
 import { CipherView } from "core/models/view/cipherView"
 import { CollectionView } from "core/models/view/collectionView"
@@ -18,10 +17,6 @@ import { SendView } from "core/models/view/sendView"
 // ---------------------------ROOT Navigator---------------------------
 export type RootParamList = {
   init: undefined
-  intro: {
-    preview?: boolean
-  }
-  onBoarding: undefined
   lock: {
     temporaryLock?: boolean
     type?: LockType
@@ -29,32 +24,8 @@ export type RootParamList = {
     data?: OnPremisePreloginData
     email?: string
   }
-  login: {
-    initMethod?: LOGIN_METHOD
-    email?: string
-  }
-  login_by_pincode: {
-    email: string
-    // user register by password of not
-    havePassword: boolean
-  }
-  forgotPassword: {
-    email?: string
-  }
-  signup: undefined
-  signup_pin_code: {
-    email: string
-    getNews: boolean
-  }
-  signup_password: {
-    email: string
-  }
-  createMasterPassword: undefined
+  unAuthStack: NavigatorScreenParams<UnAuthRoute>
   mainStack: NavigatorScreenParams<PrimaryParamList>
-
-  // vinsso
-  ssoIdentifier: undefined
-  ssoLogin: OnPremiseIdentifierData
 }
 
 export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
