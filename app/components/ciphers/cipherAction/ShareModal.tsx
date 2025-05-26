@@ -14,7 +14,7 @@ import { useTheme } from "app/services/context"
 import { CipherView } from "core/models/view"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { Button, Header, Icon, Text, TextInput } from "app/components/cores"
-import { SharedUsers } from "app/screens/auth/shareCipher/SharedUser"
+import { SharedUsers } from "app/screens/auth/browse/shareCipher/SharedUser"
 
 interface Props {
   isOpen?: boolean

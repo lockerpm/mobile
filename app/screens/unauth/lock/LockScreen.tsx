@@ -107,6 +107,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
     return true
   }
 
+  console.log(user.fcmToken)
   const refreshFCM = async () => {
     if (!user.disablePushNotifications) {
       let isSuccess = true
@@ -136,7 +137,6 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
       }
       if (!isAutofillAnroid) {
         Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
-
       }
       // Parse push noti data
       const navigationRequest = await parsePushNotiData()

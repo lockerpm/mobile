@@ -25,40 +25,19 @@ import {
   NoteEditScreen,
   CardEditScreen,
   IdentityEditScreen,
-  SettingsScreen,
-  ChangeMasterPasswordScreen,
-  HelpScreen,
   CardInfoScreen,
   IdentityInfoScreen,
   NoteInfoScreen,
   FolderCiphersScreen,
   DataBreachDetailScreen,
   DataBreachListScreen,
-  ImportScreen,
-  ExportScreen,
   QRScannerScreen,
   AuthenticatorEditScreen,
   CryptoWalletEditScreen,
   CryptoWalletInfoScreen,
-  WelcomePremiumScreen,
-  AutoFillScreen,
-  NotificationSettingsScreen,
   ShareMultipleScreen,
-  PaymentScreen,
-  ManagePlanScreen,
-  InviteMemberScreen,
-  ReferFriendScreen,
   FolderSharedUsersManagementScreen,
-  PushEmailSettingsScreen,
-  PushNotificationSettingsScreen,
   InAppListNotificationScreen,
-  EmergencyAccessScreen,
-  YourTrustedContactScreen,
-  ContactsTrustedYouScreen,
-  ViewEAScreen,
-  TakeoverEAScreen,
-  // @ts-ignore
-  AutofillServiceScreen,
   EnterpriseInvitedScreen,
   NormalSharesScreen,
   QuickSharesScreen,
@@ -66,15 +45,17 @@ import {
   QuickSharesDetailScreen,
   PasswordHistoryScreen,
   AttachmentScreen,
+  MarketingScreen,
+  MenuStack,
 } from "../screens"
 import { useCipherData, useHelper } from "app/services/hook"
 import { Logger } from "app/utils/utils"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { observer } from "mobx-react-lite"
-import { withIAPContext } from "react-native-iap"
+
 import { PrimaryParamList, RootStackScreenProps } from "./navigators.types"
-import { MarketingScreen } from "app/screens/auth/marketing/MarketingScreen"
 import { useFocusEffect } from "@react-navigation/native"
+import { AutoFillScreen } from "app/screens/autofill"
 
 const Stack = createStackNavigator<PrimaryParamList>()
 
@@ -475,34 +456,9 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
           component={CryptoWalletEditScreen}
           initialParams={{ mode: "add" }}
         />
-
-        <Stack.Screen name="refer_friend" component={ReferFriendScreen} />
-        <Stack.Screen name="invite_member" component={InviteMemberScreen} />
-        <Stack.Screen name="manage_plan" component={ManagePlanScreen} />
-        <Stack.Screen
-          name="payment"
-          component={withIAPContext(PaymentScreen)}
-          initialParams={{ benefitTab: 0 }}
-        />
-        <Stack.Screen name="settings" component={SettingsScreen} />
-        <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
-        <Stack.Screen name="help" component={HelpScreen} />
-        <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
-        <Stack.Screen name="import" component={ImportScreen} />
-        <Stack.Screen name="export" component={ExportScreen} />
-        <Stack.Screen name="notificationSettings" component={NotificationSettingsScreen} />
-        <Stack.Screen name="emailNotiSettings" component={PushEmailSettingsScreen} />
-        <Stack.Screen name="deviceNotiSettings" component={PushNotificationSettingsScreen} />
-
-        <Stack.Screen name="welcome_premium" component={WelcomePremiumScreen} />
         <Stack.Screen name="autofill" component={AutoFillScreen} />
-
-        <Stack.Screen name="emergencyAccess" component={EmergencyAccessScreen} />
-        <Stack.Screen name="yourTrustedContact" component={YourTrustedContactScreen} />
-        <Stack.Screen name="contactsTrustedYou" component={ContactsTrustedYouScreen} />
-        <Stack.Screen name="viewEA" component={ViewEAScreen} />
-        <Stack.Screen name="takeoverEA" component={TakeoverEAScreen} />
         <Stack.Screen name="attachment" component={AttachmentScreen} />
+        <Stack.Screen name="menuStack" component={MenuStack} />
       </Stack.Navigator>
     </UserInactivity>
   )

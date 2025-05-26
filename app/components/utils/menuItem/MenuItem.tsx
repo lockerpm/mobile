@@ -2,11 +2,20 @@ import React from "react"
 import { TouchableOpacity, View, ViewProps, Image } from "react-native"
 import { Icon, IconTypes, Text } from "app/components/cores"
 import { useTheme } from "app/services/context"
+import { useHelper } from "app/services/hook"
+import { TxKeyPath } from "app/i18n"
 
 export type MenuItemProps = {
+  /**
+   * Icon name
+   */
   icon: IconTypes
+  /**
+   * Custom image instead of icon
+   */
   imageSource?: string
   name: string
+
   onPress?: () => void
   disabled?: boolean
   hide?: boolean
@@ -68,19 +77,28 @@ export const MenuItem = ({
 
 interface ContainerProps extends ViewProps {
   title?: string
+  titleTx?: TxKeyPath
   children?: React.ReactNode | React.ReactNode[]
 }
 
-export const MenuItemContainer = ({ title, children, style, ...viewProps }: ContainerProps) => {
+export const MenuItemContainer = ({
+  title,
+  titleTx,
+  children,
+  style,
+  ...viewProps
+}: ContainerProps) => {
   const { colors } = useTheme()
+  const { translate } = useHelper()
+  const titleText = title || translate(titleTx)
   const arrayLength = Array.isArray(children) ? children.length : 1
   return (
     <View style={{ marginTop: 16 }}>
-      {!!title && (
+      {!!titleText && (
         <Text
           preset="bold"
           color={colors.secondaryText}
-          text={title.toUpperCase()}
+          text={titleText.toUpperCase()}
           style={{ marginVertical: 2 }}
         />
       )}

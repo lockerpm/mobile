@@ -35,3 +35,6 @@ export * from "./folders/folderSelect/FolderSelectScreen"
 export * from "./folders/folderCiphers/FolderCiphersScreen"
 
 export * from "./attachment/AttachmentScreen"
+
+export * from "./shareCipher/NormalSharesScreen"
+export * from "./shareCipher/QuickSharesScreen"

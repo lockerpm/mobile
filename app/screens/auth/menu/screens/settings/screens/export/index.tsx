@@ -1,0 +1,114 @@
+import React, { FC, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { ConfirmPassModal } from "./ConfirmPassModal"
+import { useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { useCoreService } from "app/services/coreService"
+
+import { Screen, Header } from "app/components/cores"
+import { MenuItemContainer, SettingsItem } from "app/components/utils"
+import { SettingsScreenProps } from "../../route"
+
+export const ExportScreen: FC<SettingsScreenProps<"export">> = observer(({ navigation }) => {
+  const { colors } = useTheme()
+  const { notify, translate } = useHelper()
+  const { platformUtilsService, exportService } = useCoreService()
+
+  // ----------------------- PARAMS -----------------------
+
+  const formats = ["csv", "json"]
+  const [format, setFormat] = useState("")
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+
+  // ----------------------- METHODS -----------------------
+
+  const handleExport = async () => {
+    // @ts-ignore
+    const data = await exportService.getExport(format)
+    const isSuccess = await downloadFile(data)
+    if (isSuccess) {
+      notify("success", translate("export.success"))
+    } else {
+      notify("error", translate("error.something_went_wrong"))
+    }
+  }
+
+  const navigateToLock = () => {
+    navigation.navigate("lock" as never)
+  }
+
+  const downloadFile = (csv) => {
+    const fileName = createFileName(null)
+    return platformUtilsService.saveFile(csv, "utf8", fileName)
+  }
+
+  const createFileName = (prefix) => {
+    let extension = format
+    if (format === "encrypted_json") {
+      if (prefix == null) {
+        prefix = "encrypted"
+      } else {
+        prefix = "encrypted_" + prefix
+      }
+      extension = "json"
+    }
+    return getFileName(prefix, extension)
+  }
+
+  const getFileName = (prefix = null, extension = "csv") => {
+    const now = new Date()
+    const dateString =
+      now.getFullYear() +
+      "" +
+      padNumber(now.getMonth() + 1, 2) +
+      "" +
+      padNumber(now.getDate(), 2) +
+      padNumber(now.getHours(), 2) +
+      "" +
+      padNumber(now.getMinutes(), 2) +
+      padNumber(now.getSeconds(), 2)
+
+    return "cystack" + (prefix ? "_" + prefix : "") + "_export_" + dateString + "." + extension
+  }
+
+  const padNumber = (num: number, width: number, padCharacter = "0") => {
+    const numString = num.toString()
+    return numString.length >= width
+      ? numString
+      : new Array(width - numString.length + 1).join(padCharacter) + numString
+  }
+
+  // ----------------------- EFFECT -----------------------
+
+  // ----------------------- RENDER -----------------------
+
+  return (
+    <Screen
+      padding
+      header={
+        <Header leftIcon="arrow-left" onLeftPress={navigation.goBack} titleTx={"settings.export"} />
+      }
+      backgroundColor={colors.block}
+    >
+      <ConfirmPassModal
+        navigateToLock={navigateToLock}
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={handleExport}
+      />
+
+      <MenuItemContainer>
+        {formats.map((f) => (
+          <SettingsItem
+            key={f}
+            text={f.toUpperCase()}
+            onPress={() => {
+              setFormat(f)
+              setShowConfirmModal(true)
+            }}
+          />
+        ))}
+      </MenuItemContainer>
+    </Screen>
+  )
+})

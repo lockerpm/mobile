@@ -3,7 +3,7 @@ import React from "react"
 import { Image } from "react-native"
 import { BottomModal, Button, Text } from "app/components/cores"
 import { useTheme } from "app/services/context"
-import { PREMIUM_FEATURES_IMG } from "../../menu/managePlan/PremiumFeature"
+import { PREMIUM_FEATURES_IMG } from "../../menu/screens/managePlan/PremiumFeature"
 import { useHelper } from "app/services/hook"
 
 interface Props {

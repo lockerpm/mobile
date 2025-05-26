@@ -6,8 +6,7 @@ import { useTheme } from "app/services/context"
 import { useStores } from "../models"
 import { Icon, Text } from "app/components/cores"
 import { BrowseNavigator } from "./browse/BrowseNavigator"
-import { MenuNavigator } from "./menu/MenuNavigator"
-import { HomeTabScreen, ToolsListScreen, AuthenticatorScreen } from "../screens"
+import { HomeTabScreen, ToolsListScreen, AuthenticatorScreen, MenuListScreen } from "../screens"
 import { SharingStatus } from "app/static/types"
 import { observer } from "mobx-react-lite"
 import { useHelper } from "app/services/hook"
@@ -212,7 +211,7 @@ export const MainTabNavigator = observer(() => {
       <Tab.Screen name="browseTab" component={BrowseNavigator} />
       <Tab.Screen name="authenticatorTab" component={AuthenticatorScreen} />
       <Tab.Screen name="toolsTab" component={ToolsListScreen} />
-      <Tab.Screen name="menuTab" component={MenuNavigator} />
+      <Tab.Screen name="menuTab" component={MenuListScreen} />
     </Tab.Navigator>
   )
 })

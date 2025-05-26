@@ -1,17 +1,16 @@
-import { Instance, SnapshotIn, SnapshotOut, types } from 'mobx-state-tree'
-import { withSetPropAction } from '../helpers/withSetPropAction'
-import { omit } from 'ramda'
-import { AndroidAutofillServiceData } from 'app/utils/autofillHelper'
+import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
+import { withSetPropAction } from "../helpers/withSetPropAction"
+import { omit } from "ramda"
+import { AndroidAutofillServiceData } from "app/utils/autofillHelper"
 /**
  * Model description here for TypeScript hints.
  */
 export const UiStoreModel = types
-  .model('UiStore')
+  .model("UiStore")
   .props({
     // Data
     isDark: types.maybeNull(types.boolean),
     lockResendOtpResetPasswordTime: types.maybeNull(types.number),
-    showWelcomePremium: false,
     isShowedAppReview: false,
     inAppReviewShowDate: types.maybeNull(types.number),
     inAppNotiUnreadCount: types.maybeNull(types.number),
@@ -46,10 +45,6 @@ export const UiStoreModel = types
 
     setIsShowedPopupMarketing: (val: boolean) => {
       self.isShowedPopupMarketing = val
-    },
-
-    setShowWelcomePremium: (val: boolean) => {
-      self.showWelcomePremium = val
     },
 
     setIsShowedAppReview: (val: boolean) => {
@@ -103,18 +98,18 @@ export const UiStoreModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .postProcessSnapshot(
     omit([
-      'isSelecting',
-      'isOffline',
-      'isPerformOverlayTask',
-      'selectedCountry',
-      'hasNoMasterPwItem',
-      'isDeeplinkShares',
-      'isDeeplinkEmergencyAccess',
-      'isShowedPopupMarketing',
-      'isStartFromPasswordLess',
-      'isAndroidAutofillService',
-      'androidAutofillServiceData',
-    ])
+      "isSelecting",
+      "isOffline",
+      "isPerformOverlayTask",
+      "selectedCountry",
+      "hasNoMasterPwItem",
+      "isDeeplinkShares",
+      "isDeeplinkEmergencyAccess",
+      "isShowedPopupMarketing",
+      "isStartFromPasswordLess",
+      "isAndroidAutofillService",
+      "androidAutofillServiceData",
+    ]),
   )
 
 export interface UiStore extends Instance<typeof UiStoreModel> {}

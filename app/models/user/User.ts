@@ -7,7 +7,6 @@ import {
   Enterprise,
   LoginData,
   LoginPinCodeData,
-  NotificationSettingData,
   OnpremisePreloginPayload,
   RegisterLockerRequest,
   RegisterPasskeyOptionRequest,
@@ -95,7 +94,6 @@ export const UserModel = types
     appTimeout: types.optional(types.number, AppTimeoutType.APP_CLOSE),
     appTimeoutAction: types.optional(types.string, TimeoutActionType.LOCK),
     defaultTab: types.optional(types.string, "homeTab"),
-    notificationSettings: types.maybeNull(types.frozen<NotificationSettingData[]>()),
     disablePushNotifications: types.maybeNull(types.boolean),
     saveIosAutofillInfor: types.maybeNull(types.boolean),
   })
@@ -232,9 +230,6 @@ export const UserModel = types
     },
     setPushNotificationsSetting: (val: boolean) => {
       self.disablePushNotifications = val
-    },
-    setNotificationSettings: (val: NotificationSettingData[]) => {
-      self.notificationSettings = val
     },
     clearUser: () => {
       self.apiToken = ""
@@ -623,9 +618,6 @@ export const UserModel = types
     // NOTIFICATION SETTING
     getNotificationSettings: async () => {
       const res = await userApi.getNotificationSettings(self.apiToken)
-      if (res.kind === "ok") {
-        self.setNotificationSettings(res.data)
-      }
       return res
     },
     updateNotiSettings: async (categoryId: string, mail: boolean, notification: boolean) => {

@@ -1,5 +1,7 @@
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
+import { MenuRoute } from "app/screens"
 import { LockType } from "app/screens/unauth/lock/lock.types"
 import {
   AppNotification,
@@ -7,7 +9,6 @@ import {
   MarketingContent,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
-  TrustedContact,
 } from "app/static/types"
 import { AndroidAutofillServiceData } from "app/utils/autofillHelper"
 import { CipherView } from "core/models/view/cipherView"
@@ -67,7 +68,7 @@ export type TabsParamList = {
   toolsTab: undefined
   menuTab: NavigatorScreenParams<MenuParamList>
 }
-
+export type TabsScreenProps<T extends keyof TabsParamList> = BottomTabScreenProps<TabsParamList, T>
 // ---------------------------BROWSE Navigator---------------------------
 
 export type BrowseParamList = {
@@ -119,9 +120,7 @@ export type PrimaryParamList = {
     data: MarketingContent
   }
 
-  mainTab: {
-    screen?: string
-  }
+  mainTab: NavigatorScreenParams<TabsParamList>
   toolsStack: NavigatorScreenParams<ToolsParamList>
   // start: undefined
 
@@ -212,49 +211,19 @@ export type PrimaryParamList = {
   shareFolder: {
     collectionId: string
   }
-  manage_plan: undefined
-  payment: {
-    benefitTab?: 0 | 1 | 2 | 3
-    family?: boolean
-    premium?: boolean
-  }
-  refer_friend: {
-    referLink: string | null
-  }
-  invite_member: undefined
-  settings: undefined
-  changeMasterPassword: undefined
-  help: undefined
-  autofillService: undefined
-  import: undefined
-  export: undefined
+
   autofill: {
     data: AndroidAutofillServiceData
   }
-  notificationSettings: undefined
-  emailNotiSettings: undefined
-  deviceNotiSettings: undefined
   shareMultiple: undefined
-
-  welcome_premium: undefined
 
   app_list_noti: {
     notifications: AppNotification
   }
-
-  emergencyAccess: undefined
-  yourTrustedContact: undefined
-  contactsTrustedYou: undefined
-  viewEA: {
-    trusted: TrustedContact
-  }
-  takeoverEA: {
-    trusted: TrustedContact
-    reset_pw: boolean
-  }
   attachment: {
     isShared?: boolean
   }
+  menuStack: NavigatorScreenParams<MenuRoute>
 }
 
 export type AppStackScreenProps<T extends keyof PrimaryParamList> = StackScreenProps<

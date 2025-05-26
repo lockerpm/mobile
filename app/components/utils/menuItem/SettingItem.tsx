@@ -2,9 +2,11 @@ import React from "react"
 import { ActivityIndicator, TouchableOpacity, ViewStyle } from "react-native"
 import { Icon, Text } from "app/components/cores"
 import { useTheme } from "app/services/context"
+import { TxKeyPath } from "app/i18n"
 
 type SettingsItemProps = {
-  name: string
+  text?: string
+  textTx?: TxKeyPath
   RightAccessory?: JSX.Element
   color?: string
   onPress?: () => void
@@ -17,7 +19,8 @@ type SettingsItemProps = {
 }
 
 export const SettingsItem = ({
-  name,
+  text,
+  textTx,
   RightAccessory,
   color,
   onPress,
@@ -49,7 +52,8 @@ export const SettingsItem = ({
       ]}
     >
       <Text
-        text={name}
+        text={text}
+        tx={textTx}
         color={color}
         style={{
           flex: 1,
