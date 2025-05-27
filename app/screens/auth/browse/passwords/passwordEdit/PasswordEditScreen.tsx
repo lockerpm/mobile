@@ -2,8 +2,8 @@ import React, { useState, useEffect, FC } from "react"
 import { observer } from "mobx-react-lite"
 import { BackHandler, TouchableOpacity, View, Image } from "react-native"
 import find from "lodash/find"
-import { useTheme } from "app/services/context"
-import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
 import { useStores } from "app/models"
 import { CollectionView } from "core/models/view/collectionView"
 import { CipherView, FieldView, LoginUriView, LoginView } from "core/models/view"
@@ -25,7 +25,7 @@ export const PasswordEditScreen: FC<AppStackScreenProps<"passwords__edit">> = ob
 
   const { colors } = useTheme()
   const { shareFolderAddItem } = useFolder()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { createCipher, updateCipher } = useCipherData()
   const { getPasswordStrength, newCipher, checkPasswordPolicy } = useCipherHelper()
   const { cipherStore, user, collectionStore, uiStore } = useStores()

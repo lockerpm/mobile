@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native"
 import moment from "moment"
 import { Screen, Header, Text, Toggle } from "app/components/cores"
 import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { PrivateRelayScreenProps } from "../../route"
 
@@ -14,7 +14,8 @@ export const ManageSubdomainScreen: FC<PrivateRelayScreenProps<"manageSubdomain"
   },
 }) => {
   const { colors } = useTheme()
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { toolStore } = useStores()
 
   const [useSubdomain, setUseSubdomain] = useState(false)

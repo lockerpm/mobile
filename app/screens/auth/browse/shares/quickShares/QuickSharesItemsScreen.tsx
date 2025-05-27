@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
@@ -7,14 +6,14 @@ import { PushNotifier } from "app/utils/pushNotification"
 import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
 import { useStores } from "app/models"
 import { Screen } from "app/components/cores"
-import { useHelper } from "app/services/hook"
+import { useAppLocale } from "app/services/context"
 
 const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")
 
 export const QuickShareItemsScreen = observer(() => {
   const navigation = useNavigation() as any
   const { user } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   // --------------------- PARAMS -------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)

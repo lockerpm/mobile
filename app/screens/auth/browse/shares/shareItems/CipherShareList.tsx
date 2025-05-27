@@ -15,6 +15,7 @@ import { CollectionView } from "core/models/view/collectionView"
 import { AccountRole, AccountRoleText, SharedGroupType, SharedMemberType } from "app/static/types"
 import { Organization } from "core/models/domain/organization"
 import { CipherView } from "core/models/view"
+import { useAppLocale } from "app/services/context"
 
 type Props = {
   emptyContent?: JSX.Element
@@ -34,7 +35,8 @@ export const CipherShareList = observer((props: Props) => {
   const { emptyContent, navigation, onLoadingChange, searchText, sortList } = props
   const { getCiphersFromCache } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
-  const { translate, getTeam } = useHelper()
+  const { getTeam } = useHelper()
+  const { translate } = useAppLocale()
   const { cipherStore, collectionStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -135,7 +137,9 @@ export const CipherShareList = observer((props: Props) => {
             break
         }
 
-        data.description =  `${translate("shares.shared_with")} ${m.full_name || m.email} - ${shareType}`
+        data.description = `${translate("shares.shared_with")} ${
+          m.full_name || m.email
+        } - ${shareType}`
         data.status = m.status
         data.member = m
 
@@ -154,7 +158,7 @@ export const CipherShareList = observer((props: Props) => {
             break
         }
 
-        data.description =  `${translate("shares.shared_with")} ${group.name} - ${shareType}`
+        data.description = `${translate("shares.shared_with")} ${group.name} - ${shareType}`
         // data.status = m.status
         data.group = group
 
@@ -218,7 +222,6 @@ export const CipherShareList = observer((props: Props) => {
     const cipherInfo = getCipherInfo(item)
     navigation.navigate(`${cipherInfo.path}__info`)
   }
-
 
   const sharesCollection = collectionStore.collections.filter((i) => {
     // Computed

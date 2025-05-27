@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import QRCodeScanner from 'react-native-qrcode-scanner'
-import { View, Dimensions } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { useAuthentication, useHelper } from 'app/services/hook'
-import { Header, Text } from 'app/components/cores'
+import React, { useEffect, useState } from "react"
+import QRCodeScanner from "react-native-qrcode-scanner"
+import { View, Dimensions } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import { useAuthentication } from "app/services/hook"
+import { Header, Text } from "app/components/cores"
+import { useAppLocale } from "app/services/context"
 
 interface Props {
   index: number
   otp: number
   goBack: () => void
-  handleUnlock:  () => Promise<void>
+  handleUnlock: () => Promise<void>
 }
 
 export const PasswordlessQrScan = ({ otp, goBack, index, handleUnlock }: Props) => {
-  const { translate } = useHelper()
-  const { width, height } = Dimensions.get('screen')
+  const { translate } = useAppLocale()
+  const { width, height } = Dimensions.get("screen")
   const navigation = useNavigation() as any
   const [onScanQR, setonScanQR] = useState(false)
   const { sessionQrLogin } = useAuthentication()
@@ -22,10 +23,10 @@ export const PasswordlessQrScan = ({ otp, goBack, index, handleUnlock }: Props) 
   const onSuccess = async (e) => {
     const res = await sessionQrLogin(e.data, otp.toString(), true)
 
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       handleUnlock()
-    } else if (res.kind === 'unauthorized') {
-      navigation.navigate('login', { type: 'onPremise' })
+    } else if (res.kind === "unauthorized") {
+      navigation.navigate("login", { type: "onPremise" })
     }
   }
 
@@ -38,7 +39,7 @@ export const PasswordlessQrScan = ({ otp, goBack, index, handleUnlock }: Props) 
       <Header
         leftIcon="arrow-left"
         onLeftPress={goBack}
-        title={translate('onpremise_passwordless.qr_scan')}
+        title={translate("onpremise_passwordless.qr_scan")}
       />
       <View
         style={{
@@ -51,18 +52,18 @@ export const PasswordlessQrScan = ({ otp, goBack, index, handleUnlock }: Props) 
       </View>
       <View
         style={{
-          alignItems: 'center',
+          alignItems: "center",
           marginTop: 86,
           padding: 20,
         }}
       >
         <Text
           preset="bold"
-          text={translate('onpremise_passwordless.more_step')}
+          text={translate("onpremise_passwordless.more_step")}
           style={{ marginBottom: 16 }}
           size="xl"
         />
-        <Text text={translate('onpremise_passwordless.point_camera')} />
+        <Text text={translate("onpremise_passwordless.point_camera")} />
       </View>
     </View>
   )

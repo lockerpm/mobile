@@ -1,8 +1,7 @@
 import React, { FC } from "react"
 import { StyleSheet, View } from "react-native"
 import { PrivateRelayScreenProps } from "../../route"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 import { Button, Text } from "app/components/cores"
 import { debounce } from "app/utils/utils"
@@ -15,7 +14,7 @@ export const RelayInfoScreen: FC<PrivateRelayScreenProps<"relayInfo">> = ({
   },
 }) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const rootEmailDesc = freeAccount
     ? [

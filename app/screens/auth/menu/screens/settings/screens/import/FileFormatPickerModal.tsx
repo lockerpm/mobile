@@ -3,8 +3,8 @@ import { View } from "react-native"
 import Modal from "react-native-modal"
 import { Text, Screen, Header } from "app/components/cores"
 import { SettingsItem } from "app/components/utils"
-import { useHelper } from "app/services/hook"
 import { FormatList } from "./FormatList"
+import { useAppLocale } from "app/services/context"
 
 interface Props {
   format: string
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const FileFormatPickerModal = ({ format, setFormat, formats }: Props) => {
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const [isOpen, setIsOpen] = useState(false)
 
   const onClose = () => setIsOpen(false)

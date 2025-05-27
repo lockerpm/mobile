@@ -2,9 +2,8 @@ import React, { FC } from "react"
 import { View, Image, ColorValue } from "react-native"
 import LottieView from "lottie-react-native"
 import { Screen, Text, Button, Icon } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
-import { useHelper } from "app/services/hook"
 import { MenuScreenProps } from "../../route"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 import { useNavigation } from "@react-navigation/native"
@@ -16,7 +15,7 @@ const PREMIUM = require("assets/images/welcomePremium/LockerPremium.png")
 export const WelcomePremiumScreen: FC<MenuScreenProps<"welcomePremium">> = observer(() => {
   const navigation = useNavigation<AppStackScreenProps<"mainTab">["navigation"]>()
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const backgroundSecondary: ColorValue = "#21632F"
 

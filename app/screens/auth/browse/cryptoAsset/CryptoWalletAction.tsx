@@ -1,7 +1,8 @@
 import { ActionItem } from "app/components/ciphers/actionsSheet/ActionSheetItem"
 import { CipherAction } from "app/components/ciphers/cipherAction/CipherAction"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
+import { useAppLocale } from "app/services/context"
+import { useClipboard } from "app/services/utils"
 import { toCryptoWalletData } from "app/utils/crypto"
 import { observer } from "mobx-react-lite"
 import React from "react"
@@ -16,9 +17,9 @@ type Props = {
 }
 
 export const CryptoWalletAction = observer((props: Props) => {
-  const { copyToClipboard } = useHelper()
+  const { copyToClipboard } = useClipboard()
   const { cipherStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const selectedCipher = cipherStore.cipherView
 
   const data = toCryptoWalletData(selectedCipher.notes)

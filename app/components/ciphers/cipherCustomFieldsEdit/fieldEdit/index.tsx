@@ -1,13 +1,12 @@
-import React, { memo } from 'react'
-import { View } from 'react-native'
-import { FieldType } from 'core/enums'
-import { shouldRerenderItem } from 'app/utils/utils'
-import { Icon } from '../../../cores'
-import { LabelInput } from './LabelInput'
-import { TextField } from './TextField'
-import { DateField } from './DateField'
-import { useTheme } from 'app/services/context'
-import { useHelper } from 'app/services/hook'
+import React, { memo } from "react"
+import { View } from "react-native"
+import { FieldType } from "core/enums"
+import { shouldRerenderItem } from "app/utils/utils"
+import { Icon } from "../../../cores"
+import { LabelInput } from "./LabelInput"
+import { TextField } from "./TextField"
+import { DateField } from "./DateField"
+import { useAppLocale, useTheme } from "app/services/context"
 
 type Props = {
   type: FieldType
@@ -20,14 +19,14 @@ type Props = {
 export const FieldEdit = memo(function FieldEdit(props: Props) {
   const { type, name, value, onChange, onDelete } = props
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   return (
     <View
       style={{
         marginBottom: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
       }}
     >
       <View style={{ flex: 1 }}>
@@ -37,14 +36,14 @@ export const FieldEdit = memo(function FieldEdit(props: Props) {
             type={type}
             value={value}
             onChange={(val) => onChange({ type, name, value: val })}
-            placeholder={translate('common.value')}
+            placeholder={translate("common.value")}
           />
         ) : (
           <TextField
             type={type}
             value={value}
             onChange={(val) => onChange({ type, name, value: val })}
-            placeholder={translate('common.value')}
+            placeholder={translate("common.value")}
           />
         )}
       </View>
@@ -59,4 +58,4 @@ export const FieldEdit = memo(function FieldEdit(props: Props) {
       />
     </View>
   )
-}, shouldRerenderItem(['onChange']))
+}, shouldRerenderItem(["onChange"]))

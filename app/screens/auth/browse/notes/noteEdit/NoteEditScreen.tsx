@@ -5,8 +5,8 @@ import find from "lodash/find"
 import { PlanStorageLimitModal } from "../../planStorageLimitModal"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
-import { useTheme } from "app/services/context"
-import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
 import { Button, Header, Screen, TextInput, Text } from "app/components/cores"
 import { Textarea } from "app/components/utils"
 import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
@@ -20,7 +20,7 @@ export const NoteEditScreen: FC<AppStackScreenProps<"notes__edit">> = observer((
   const route = props.route
   const { mode } = route.params
   const { cipherStore, collectionStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const selectedCipher: CipherView = cipherStore.cipherView
   const { colors } = useTheme()

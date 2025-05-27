@@ -3,9 +3,8 @@ import moment from "moment"
 import { StyleSheet, View } from "react-native"
 import { Screen, Header, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { useHelper } from "app/services/hook"
 import { PrivateRelayScreenProps } from "../../route"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 
 export const AliasStatisticScreen: FC<PrivateRelayScreenProps<"aliasStatistic">> = observer(
   ({
@@ -15,7 +14,7 @@ export const AliasStatisticScreen: FC<PrivateRelayScreenProps<"aliasStatistic">>
     },
   }) => {
     const { colors } = useTheme()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
 
     const data = [
       {

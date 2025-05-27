@@ -10,6 +10,7 @@ import { AddUserShareFolderModal } from "./ShareUserModal"
 import { SharedUsers } from "./SharedUser"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 import { ConfirmShareModal } from "./ConfirmShareModal"
+import { useAppLocale } from "app/services/context"
 
 export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFolder">> = observer(
   (props) => {
@@ -17,7 +18,8 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFol
     const route = props.route
 
     const { cipherStore, collectionStore } = useStores()
-    const { notifyApiError, translate } = useHelper()
+    const { notifyApiError } = useHelper()
+    const { translate } = useAppLocale()
     const { shareFolderRemoveMember } = useFolder()
     const collection: CollectionView = collectionStore.collections.find(
       (c) => c.id === route.params.collectionId,

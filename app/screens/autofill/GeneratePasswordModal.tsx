@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Text, BottomModal, Button, Icon } from "app/components/cores"
 import { NativeModules, View, ViewStyle } from "react-native"
-import { useCipherHelper, useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useCipherHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 import { PasswordStrength } from "app/components/utils"
 import { Slider, Checkbox } from "react-native-ui-lib"
 import { useCoreService } from "app/services/coreService"
-
+import { useClipboard } from "app/services/utils"
 
 interface Props {
   isOpen: boolean
@@ -15,10 +15,10 @@ interface Props {
 
 const { RNAutofillServiceAndroid } = NativeModules
 
-
 export const GeneratePasswordModal = ({ isOpen, onClose }: Props) => {
   const { colors } = useTheme()
-  const { copyToClipboard, translate } = useHelper()
+  const { copyToClipboard } = useClipboard()
+  const { translate } = useAppLocale()
   const { getPasswordStrength } = useCipherHelper()
   const { passwordGenerationService } = useCoreService()
 
@@ -146,17 +146,20 @@ export const GeneratePasswordModal = ({ isOpen, onClose }: Props) => {
           alignItems: "center",
         }}
       >
-        <Button preset="secondary" text={translate("common.regenerate")} onPress={regenerate} style={{flex: 1}} />
+        <Button
+          preset="secondary"
+          text={translate("common.regenerate")}
+          onPress={regenerate}
+          style={{ flex: 1 }}
+        />
         <View style={{ width: 8 }} />
-        <Button text={translate("pass_generator.use_password")}  style={{flex: 1}} onPress={() => {
-           RNAutofillServiceAndroid.addAutofillValue(
-            '',
-            '',
-            password,
-            '',
-           ''
-          )
-        }} />
+        <Button
+          text={translate("pass_generator.use_password")}
+          style={{ flex: 1 }}
+          onPress={() => {
+            RNAutofillServiceAndroid.addAutofillValue("", "", password, "", "")
+          }}
+        />
       </View>
     </BottomModal>
   )

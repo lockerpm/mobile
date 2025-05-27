@@ -1,6 +1,6 @@
 import { ActionItem, ActionSheet } from "app/components/ciphers"
 import { useStores } from "app/models"
-import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useCipherData, useCipherHelper } from "app/services/hook"
 import { CipherView } from "core/models/view"
 import React from "react"
 import { View } from "react-native"
@@ -8,6 +8,7 @@ import { Text } from "app/components/cores"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
+import { useAppLocale } from "app/services/context"
 
 type Props = {
   isOpen: boolean
@@ -23,7 +24,7 @@ export const PendingSharedAction = (props: Props) => {
   const { acceptShareInvitation, rejectShareInvitation } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
   const { cipherStore, uiStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   // Params
 

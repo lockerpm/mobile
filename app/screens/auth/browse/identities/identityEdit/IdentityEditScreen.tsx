@@ -3,8 +3,8 @@ import { observer } from "mobx-react-lite"
 import { Image, View } from "react-native"
 import find from "lodash/find"
 import { PlanStorageLimitModal } from "../../planStorageLimitModal"
-import { useTheme } from "app/services/context"
-import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
 import { useStores } from "app/models"
 import { CipherView, IdentityView } from "core/models/view"
 import { CollectionView } from "core/models/view/collectionView"
@@ -28,7 +28,7 @@ export const IdentityEditScreen: FC<AppStackScreenProps<"identities__edit">> = o
   const route = props.route
   const { mode } = route.params
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { shareFolderAddItem } = useFolder()
   const { createCipher, updateCipher } = useCipherData()
   const { newCipher } = useCipherHelper()
@@ -339,10 +339,7 @@ export const IdentityEditScreen: FC<AppStackScreenProps<"identities__edit">> = o
           paddingBottom: 32,
         }}
       >
-        <SetIDTitle
-          title={title}
-          setTitle={setTitle}
-        />
+        <SetIDTitle title={title} setTitle={setTitle} />
 
         {contactDetails.map((item, index) => (
           <TextInput

@@ -2,9 +2,9 @@ import React, { FC, useEffect } from "react"
 import { TouchableOpacity, View } from "react-native"
 import { Header, Icon, ImageIcon, Screen, Text } from "app/components/cores"
 import { LoadingHeader } from "./LoadingHeader"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
-import { useHelper, useTool } from "app/services/hook"
+import { useTool } from "app/services/hook"
 import { PasswordHealthQueue } from "app/utils/queue"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { observer } from "mobx-react-lite"
@@ -15,7 +15,7 @@ export const PasswordHealthScreen: FC<ToolsStackScreenProps<"passwordHealth">> =
     const navigation = props.navigation
     const { colors } = useTheme()
     const { toolStore, cipherStore } = useStores()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
     const { loadPasswordsHealth } = useTool()
 
     // -------------------- EFFECT ----------------------

@@ -6,6 +6,7 @@ import { useAuthentication, useCipherHelper, useHelper } from "app/services/hook
 import { TrustedContact } from "app/static/types"
 import { PasswordStrength } from "app/components/utils"
 import { EmergencyAccessScreenProps } from "../../route"
+import { useAppLocale } from "app/services/context"
 
 export const TakeoverEAScreen: FC<EmergencyAccessScreenProps<"takeoverEA">> = observer(
   ({
@@ -14,7 +15,8 @@ export const TakeoverEAScreen: FC<EmergencyAccessScreenProps<"takeoverEA">> = ob
       params: { trusted, reset_pw },
     },
   }) => {
-    const { validateMasterPassword, translate } = useHelper()
+    const { translate } = useAppLocale()
+    const { validateMasterPassword } = useHelper()
     const { getPasswordStrength } = useCipherHelper()
     const { updateNewMasterPasswordEA } = useAuthentication()
 

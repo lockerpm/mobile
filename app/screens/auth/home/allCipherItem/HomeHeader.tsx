@@ -3,7 +3,7 @@ import { View } from "react-native"
 
 import { Text, Icon, Logo } from "app/components/cores"
 import { AppNotification } from "app/static/types"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { SearchBar } from "app/components/utils"
 
 import { DeleteConfirmModal } from "../../browse/trash/DeleteConfirmModal"
@@ -40,7 +40,8 @@ export const HomeHeader = (props: Props) => {
     toggleSelectAll,
   } = props
   const { colors, isDark } = useTheme()
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { toTrashCiphers } = useDeleteCipher()
   const { user, uiStore } = useStores()
 

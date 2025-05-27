@@ -5,13 +5,12 @@ import { View, Image } from "react-native"
 import { CardAction } from "../CardAction"
 import { CARD_BRANDS } from "../constants"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale } from "app/services/context"
 import { CipherView } from "core/models/view"
 
 import { Header, Icon, Screen, Text, TextInput } from "app/components/cores"
 import { CipherInfoCommon, DeletedAction } from "app/components/ciphers"
 import { Textarea } from "app/components/utils"
-import { useHelper } from "app/services/hook"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 
@@ -20,8 +19,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<"cards__info">> = observer((
   const route = props.route
 
   const { cipherStore } = useStores()
-  const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const selectedCipher: CipherView = cipherStore.cipherView
 

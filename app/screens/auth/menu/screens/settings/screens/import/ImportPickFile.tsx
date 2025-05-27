@@ -3,12 +3,11 @@ import { View } from "react-native"
 import DocumentPicker from "react-native-document-picker"
 import { useHelper } from "app/services/hook"
 import { useCoreService } from "app/services/coreService"
-import { useStores } from "app/models"
 import { Logger } from "app/utils/utils"
 import { Button, Text } from "app/components/cores"
 import { SettingsItem } from "app/components/utils"
 import { FileData } from "app/static/types"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { FileFormatPickerModal } from "./FileFormatPickerModal"
 
 interface Props {
@@ -22,8 +21,8 @@ interface Props {
 export const ImportPickFile = (props: Props) => {
   const { colors } = useTheme()
   const { importService } = useCoreService()
-  const { notify, translate } = useHelper()
-  const { uiStore } = useStores()
+  const { notify } = useHelper()
+  const { translate } = useAppLocale()
 
   const { format, setFormat, file, setFile, handleImport } = props
 
@@ -60,9 +59,6 @@ export const ImportPickFile = (props: Props) => {
 
   const pickFile = async () => {
     try {
-      // Mark as overlay task to prevent lock when return
-      uiStore.setIsPerformOverlayTask(true)
-
       const targetFormat = formats.find((i) => i.value === format)
       const targetExtension = targetFormat.label?.split(" (")[1]?.split(")")[0]
 

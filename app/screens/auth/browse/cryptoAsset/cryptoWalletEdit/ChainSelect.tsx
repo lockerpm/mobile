@@ -1,9 +1,8 @@
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { CHAIN_LIST } from "app/utils/crypto/chainlist"
 import React, { useState } from "react"
 import { ImageStyle, View, ViewStyle, Image, FlatList } from "react-native"
 import { Icon, Text, Screen, Header } from "app/components/cores"
-import { useHelper } from "app/services/hook"
 import Modal from "react-native-modal"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
@@ -18,7 +17,7 @@ type Props = {
 export const ChainSelect = (props: Props) => {
   const { onChange, selected } = props
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   // ------------------ METHODS ------------------
 
@@ -76,7 +75,9 @@ export const ChainSelect = (props: Props) => {
           />
         </View>
         <Text text={item.name} style={{ flex: 1, marginRight: 20 }} />
-        {selected?.find((c) => c.alias === item.alias) && <Icon icon="check" color={colors.primary} size={24} />}
+        {selected?.find((c) => c.alias === item.alias) && (
+          <Icon icon="check" color={colors.primary} size={24} />
+        )}
       </View>
     </TouchableOpacity>
   )

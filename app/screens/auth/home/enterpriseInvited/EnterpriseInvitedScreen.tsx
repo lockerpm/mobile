@@ -3,9 +3,8 @@ import { Text, Screen, Button, Icon } from "app/components/cores"
 import { ColorValue, ImageSourcePropType, TouchableOpacity, View, Image } from "react-native"
 import { EnterpriseInvitation } from "app/static/types"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
-import { useHelper } from "app/services/hook"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 const ASSETS = {
@@ -17,11 +16,11 @@ export const EnterpriseInvitedScreen: FC<AppStackScreenProps<"enterpriseInvited"
   (props) => {
     const navigation = props.navigation
     const { enterpriseStore, user } = useStores()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
     const { colors } = useTheme()
 
     const onNext = () => {
-      navigation.navigate("mainTab", { screen: user.defaultTab })
+      navigation.navigate("mainTab")
     }
     // ----------------------- PARAMS ----------------------
 

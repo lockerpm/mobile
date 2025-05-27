@@ -4,13 +4,13 @@ import { observer } from "mobx-react-lite"
 import orderBy from "lodash/orderBy"
 import { AutofillListItem } from "./AutofillListItem"
 import { Text } from "app/components/cores"
-import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useCipherData, useCipherHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { AutoFillItemAction } from "./AutofillItemAction"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
 interface AutoFillListProps {
@@ -30,7 +30,7 @@ interface AutoFillListProps {
  */
 export const AutoFillList = observer((props: AutoFillListProps) => {
   const { emptyContent, navigation, searchText, sortList, suggestSearch, setSearchText } = props
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { getWebsiteLogo } = useCipherHelper()
   const { getCiphersFromCache } = useCipherData()
   const { colors } = useTheme()
@@ -70,7 +70,7 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
         imgLogo: null,
         svg: null,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-          c.id
+          c.id,
         ),
         isDeleted: c.isDeleted,
       }
@@ -93,7 +93,7 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
         orderBy(
           res,
           [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order]
+          [order],
         ) || []
     }
 
@@ -108,7 +108,6 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
   }
 
   // ------------------------ RENDER ----------------------------
-
 
   return ciphers.length ? (
     <View style={{ flex: 1 }}>

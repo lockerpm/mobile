@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
@@ -7,8 +6,9 @@ import { NativeModules } from "react-native"
 import { IS_IOS, VIN_AUTH_CALLBACK, VIN_AUTH_ENDPOINT } from "app/config/constants"
 import { getUrlParameterByName } from "app/utils/utils"
 import { Button, Header, Logo, Screen, Text, TextInput } from "app/components/cores"
-import { UnAuthScreenProps } from "../../../route"
+import { UnAuthScreenProps } from "../../../../route"
 import { LockType } from "app/static/types"
+import { useAppLocale } from "app/services/context"
 
 const { VinCssSsoLoginModule } = NativeModules
 
@@ -16,7 +16,8 @@ export const SSOEmailLoginScreen: FC<UnAuthScreenProps<"ssoLogin">> = observer((
   const navigation = props.navigation
   const route = props.route
   const { user } = useStores()
-  const { translate, notify, notifyApiError } = useHelper()
+  const { notify, notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
 
   const [username, setUsername] = useState("")
   const [nfcAuthen, setNfcAuthen] = useState(false)

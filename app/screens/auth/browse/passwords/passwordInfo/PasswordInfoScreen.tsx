@@ -4,7 +4,7 @@ import { Linking, View } from "react-native"
 import { PasswordAction } from "../PasswordAction"
 import { PasswordOtp } from "../passwordEdit/Otp"
 import { Text, Screen, Header, Icon, TextInput } from "app/components/cores"
-import { useCipherHelper, useHelper } from "app/services/hook"
+import { useCipherHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
@@ -14,13 +14,14 @@ import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
+import { useAppLocale } from "app/services/context"
 
 export const PasswordInfoScreen: FC<AppStackScreenProps<"passwords__info">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
   const { getWebsiteLogo, getPasswordStrength } = useCipherHelper()
   const { cipherStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const selectedCipher: CipherView = cipherStore.cipherView
 
   const [showAction, setShowAction] = useState(false)

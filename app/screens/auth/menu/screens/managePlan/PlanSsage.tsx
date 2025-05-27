@@ -4,8 +4,8 @@ import { Text, Button } from "app/components/cores"
 import { useNavigation } from "@react-navigation/native"
 import ProgressBar from "react-native-ui-lib/progressBar"
 import { CipherType } from "core/enums"
-import { useTheme } from "app/services/context"
-import { useHelper, useTool } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useTool } from "app/services/hook"
 import { useStores } from "app/models"
 import { FREE_PLAN_LIMIT } from "app/static/constants"
 
@@ -46,7 +46,6 @@ const ItemStorage = (props: PlanStorageProps) => {
     }
     counting()
   }, [])
-
 
   return (
     <View style={[{ width: "100%", marginVertical: 4 }, style]}>
@@ -101,11 +100,7 @@ const AttachmentStorage = (props: { title: string }) => {
 
   const usagePercentage = convertBytesToGB(totalSize)
   const backgroundColor =
-    usagePercentage >= 0.8
-      ? usagePercentage >= 1
-        ? colors.error
-        : colors.warning
-      : colors.primary
+    usagePercentage >= 0.8 ? (usagePercentage >= 1 ? colors.error : colors.warning) : colors.primary
 
   const counting = async () => {
     const count = await getAttachmentStorage()
@@ -152,7 +147,7 @@ export const PlanUsage = () => {
   const { colors } = useTheme()
   const navigation = useNavigation() as any
   const { user } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const isFreeAccount = user.isFreePlan
   const items: PlanItemUsage[] = [

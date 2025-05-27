@@ -3,8 +3,8 @@ import { TouchableOpacity, View } from "react-native"
 import isEqual from "lodash/isEqual"
 import moment from "moment"
 import { SendView } from "core/models/view/sendView"
-import { useTheme } from "app/services/context"
-import { useCipherHelper, useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCipherHelper } from "app/services/hook"
 import { Text } from "app/components/cores"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
@@ -20,7 +20,7 @@ export const QuickSharesCipherListItem = memo(
     const { openActionMenu, item } = props
     const { colors } = useTheme()
     const { getCipherInfo } = useCipherHelper()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
 
     const cipherInfo = getCipherInfo(item.cipher)
 

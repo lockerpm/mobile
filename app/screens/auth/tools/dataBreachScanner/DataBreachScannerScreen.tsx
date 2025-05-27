@@ -3,13 +3,14 @@ import { observer } from "mobx-react-lite"
 import { Text, Screen, Header, TextInput, Button } from "app/components/cores"
 import { useNavigation } from "@react-navigation/core"
 import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 
 export const DataBreachScannerScreen = observer(() => {
   const { colors } = useTheme()
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const navigation = useNavigation() as any
   const { toolStore, user } = useStores()
 

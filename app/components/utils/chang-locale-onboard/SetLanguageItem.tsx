@@ -3,14 +3,13 @@ import { NewActionSheet, NewActionSheetItem } from "app/components/utils/action-
 import { observer } from "mobx-react-lite"
 import { View, ViewProps } from "react-native"
 import { Button, Icon } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 
 export const SetLanguage = observer((props: ViewProps) => {
   const { colors } = useTheme()
   const { user } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const [isLanguageSelect, setIsLanguageSelect] = useState(false)
 
   const options: { label: string; value: "vi" | "en" | "zh" | "ru" }[] = [

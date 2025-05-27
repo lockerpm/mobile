@@ -1,10 +1,10 @@
-import React, { useState, useRef, useCallback } from 'react'
-import { View } from 'react-native'
-import { Text, Button, Icon } from 'app/components/cores'
-import { useStores } from 'app/models'
-import { useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { RecaptchaChecker } from 'app/components/utils'
+import React, { useState, useRef, useCallback } from "react"
+import { View } from "react-native"
+import { Text, Button, Icon } from "app/components/cores"
+import { useStores } from "app/models"
+import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { RecaptchaChecker } from "app/components/utils"
 
 type Props = {
   methods: {
@@ -17,7 +17,8 @@ type Props = {
 export const MethodSelection = (props: Props) => {
   const { user, uiStore } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { methods, onSelect } = props
 
   const captchaRef = useRef(null)
@@ -34,16 +35,16 @@ export const MethodSelection = (props: Props) => {
 
   const sendEmail = async (data: any, captchaToken: string) => {
     if (uiStore.lockResendOtpResetPasswordTime) {
-      onSelect('mail', data)
+      onSelect("mail", data)
       return
     }
 
     setIsSendingEmail(true)
-    const res = await user.resetPassword(data[0], 'mail', captchaToken)
+    const res = await user.resetPassword(data[0], "mail", captchaToken)
     setIsSendingEmail(false)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       uiStore.setLockResendOtpResetPasswordTime(Date.now() + 60 * 1000)
-      onSelect('mail', data)
+      onSelect("mail", data)
     } else {
       notifyApiError(res)
     }
@@ -58,34 +59,34 @@ export const MethodSelection = (props: Props) => {
       <Text
         preset="bold"
         size="xl"
-        text={translate('login.verify_your_identity')}
+        text={translate("login.verify_your_identity")}
         style={{
           marginBottom: 30,
-          textAlign: 'center',
+          textAlign: "center",
         }}
       />
 
-      <Text text={translate('forgot_password.select_method')} style={{ marginBottom: 12 }} />
+      <Text text={translate("forgot_password.select_method")} style={{ marginBottom: 12 }} />
 
       {methods.map((item, index) => (
         <Button
           key={index}
           preset="secondary"
-          disabled={item.type === 'mail' && sendingEmail}
-          loading={item.type === 'mail' && sendingEmail}
+          disabled={item.type === "mail" && sendingEmail}
+          loading={item.type === "mail" && sendingEmail}
           onPress={() =>
-            item.type === 'mail'
+            item.type === "mail"
               ? getCaptchaToken().then((token) => sendEmail(item.data, token))
               : onSelect(item.type, item.data)
           }
           style={{
-            width: '100%',
+            width: "100%",
             marginBottom: 12,
           }}
         >
-          {item.type === 'mail' && (
-            <View style={{ marginHorizontal: 5, flexDirection: 'row', alignItems: 'center' }}>
-              <Icon icon={'envelope-simple'} size={20} color={colors.primary} />
+          {item.type === "mail" && (
+            <View style={{ marginHorizontal: 5, flexDirection: "row", alignItems: "center" }}>
+              <Icon icon={"envelope-simple"} size={20} color={colors.primary} />
               <Text
                 style={{
                   color: colors.primary,
@@ -96,16 +97,16 @@ export const MethodSelection = (props: Props) => {
               </Text>
             </View>
           )}
-          {item.type === 'smart_otp' && (
-            <View style={{ marginHorizontal: 5, flexDirection: 'row', alignItems: 'center' }}>
-              <Icon icon={'device-mobile'} size={20} color={colors.primary} />
+          {item.type === "smart_otp" && (
+            <View style={{ marginHorizontal: 5, flexDirection: "row", alignItems: "center" }}>
+              <Icon icon={"device-mobile"} size={20} color={colors.primary} />
               <Text
                 style={{
                   color: colors.primary,
                   marginLeft: 10,
                 }}
               >
-                {translate('common.authentication_app')}
+                {translate("common.authentication_app")}
               </Text>
             </View>
           )}

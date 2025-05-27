@@ -2,10 +2,9 @@ import React, { memo, useCallback, useMemo, useState } from "react"
 import { AttachmentType } from "../usePickAttachment"
 import { Keyboard, View, ViewStyle } from "react-native"
 import { ThemedColors } from "app/theme"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { Icon, Text, TextInput, Button } from "app/components/cores"
 import { convertBytes } from "./utils"
-import { useHelper } from "app/services/hook"
 
 interface Props {
   item: AttachmentType
@@ -15,7 +14,7 @@ interface Props {
 
 export const FilePreview = memo(({ item, addAttachment, setItem }: Props) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const $styles = useMemo(() => styles(colors), [colors])
 
   const [name, setName] = useState(item.fileName)

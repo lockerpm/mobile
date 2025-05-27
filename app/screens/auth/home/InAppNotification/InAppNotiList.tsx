@@ -4,14 +4,14 @@ import { Screen, Header, Text } from "app/components/cores"
 import { NotiListItem } from "./InAppNotiItem"
 import { useStores } from "app/models"
 import { observer } from "mobx-react-lite"
-import { useHelper } from "app/services/hook"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { useAppLocale } from "app/services/context"
 
 export const InAppListNotificationScreen: FC<AppStackScreenProps<"app_list_noti">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
     const { user } = useStores()
 
     return (
@@ -42,12 +42,9 @@ export const InAppListNotificationScreen: FC<AppStackScreenProps<"app_list_noti"
             paddingHorizontal: 20,
           }}
           keyExtractor={(_, index) => String(index)}
-          renderItem={({ item }) => 
-            <NotiListItem 
-              lang={user.language === "zh" ? "en" : user.language} 
-              {...item} 
-            />
-          }
+          renderItem={({ item }) => (
+            <NotiListItem lang={user.language === "zh" ? "en" : user.language} {...item} />
+          )}
         />
       </Screen>
     )

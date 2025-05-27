@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react"
 import { View, Platform } from "react-native"
 import { EditShareModal } from "./EditShareModal"
 import { SharedGroupType, SharedMemberType } from "app/static/types"
-import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useCipherData, useCipherHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { ActionItem, ActionSheet } from "app/components/ciphers"
 import { Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
@@ -28,7 +28,7 @@ export const ShareItemAction = (props: Props) => {
   const { isOpen, onClose, onLoadingChange, member, goToDetail, group } = props
   const { stopShareCipher, stopShareCipherForGroup } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { cipherStore, uiStore } = useStores()
   const { colors } = useTheme()
   // Params

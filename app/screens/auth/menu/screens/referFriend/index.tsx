@@ -2,17 +2,18 @@ import React, { FC } from "react"
 import { View, Share, TouchableOpacity, Image, SafeAreaView, Platform } from "react-native"
 import { Button, Icon, Text } from "app/components/cores"
 import LinearGradient from "react-native-linear-gradient"
-import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
 import { MenuScreenProps } from "../../route"
+import { useClipboard } from "app/services/utils"
 
 const IS_IOS = Platform.OS === "ios"
 
 export const ReferFriendScreen: FC<MenuScreenProps<"referFriend">> = observer(
   ({ navigation, route }) => {
     const { colors } = useTheme()
-    const { copyToClipboard, translate } = useHelper()
+    const { copyToClipboard } = useClipboard()
+    const { translate } = useAppLocale()
 
     const gradientColor = IS_IOS
       ? ["#F1F2F3", "#D5EBD920", "#26833460"]

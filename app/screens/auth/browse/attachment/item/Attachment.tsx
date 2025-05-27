@@ -2,11 +2,10 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { AttachmentType, UploadStatus, usePickAttachment } from "../usePickAttachment"
 import { ActivityIndicator, Alert, View, ViewStyle } from "react-native"
 import { ThemedColors } from "app/theme"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { Icon, Text } from "app/components/cores"
 import { convertBytes } from "./utils"
 import { useAttachmentActions } from "./useAttachmentActions"
-import { useHelper } from "app/services/hook"
 
 interface Props {
   isFree: boolean
@@ -17,7 +16,7 @@ interface Props {
 
 export const Attachment = ({ item, updateAttachments, isFree, isShared }: Props) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { encryptAndUploadFile } = usePickAttachment()
 
   const $styles = useMemo(() => styles(colors), [colors])
@@ -86,7 +85,11 @@ export const Attachment = ({ item, updateAttachments, isFree, isShared }: Props)
   return (
     <View style={$styles.constainer}>
       <View style={row}>
-        <Icon icon="file-text" size={40} color={isError ? colors.error : isLoading ? colors.disable : colors.primary} />
+        <Icon
+          icon="file-text"
+          size={40}
+          color={isError ? colors.error : isLoading ? colors.disable : colors.primary}
+        />
         <View
           style={{
             flexGrow: 1,

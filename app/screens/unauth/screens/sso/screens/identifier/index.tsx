@@ -3,12 +3,14 @@ import React, { FC, useState } from "react"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { Text, TextInput, Button, Screen, Header, Logo } from "app/components/cores"
-import { UnAuthScreenProps } from "../../../route"
+import { UnAuthScreenProps } from "../../../../route"
+import { useAppLocale } from "app/services/context"
 
 export const SSOIdentifierScreen: FC<UnAuthScreenProps<"ssoIdentifier">> = observer((props) => {
   const navigation = props.navigation
   const { user } = useStores()
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
 
   const [ssoId, setSsoId] = useState("")
 

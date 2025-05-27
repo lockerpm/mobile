@@ -17,6 +17,7 @@ import { useHelper } from "app/services/hook"
 import { AccountRole } from "app/static/types"
 import { Screen } from "app/components/cores"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { useAppLocale } from "app/services/context"
 
 const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
 
@@ -25,11 +26,12 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<"folders__ciphers">> = 
     const navigation = props.navigation
     const route = props.route
     const { folderId, collectionId, organizationId } = route.params
-    const { folderStore, collectionStore, user, uiStore, cipherStore } = useStores()
+    const { folderStore, collectionStore, user, cipherStore } = useStores()
     const folders: FolderView[] = folderStore.folders
     const collections: CollectionView[] = collectionStore.collections
 
-    const { getTeam, translate } = useHelper()
+    const { translate } = useAppLocale()
+    const { getTeam } = useHelper()
 
     // Params
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -63,7 +65,6 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<"folders__ciphers">> = 
 
     // Close select before leave
     useEffect(() => {
-      uiStore.setIsSelecting(isSelecting)
       const checkSelectBeforeLeaving = () => {
         if (isSelecting) {
           setIsSelecting(false)

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
@@ -13,6 +12,7 @@ import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { useAppLocale } from "app/services/context"
 
 interface Props {
   navigation: any
@@ -46,7 +46,8 @@ export const OtpList = observer((props: Props) => {
     setSelectedItems,
     setAllItems,
   } = props
-  const { notify, translate } = useHelper()
+  const { notify } = useHelper()
+  const { translate } = useAppLocale()
   const { getCiphersFromCache } = useCipherData()
   const { cipherStore, toolStore } = useStores()
 
@@ -92,7 +93,7 @@ export const OtpList = observer((props: Props) => {
       const data = {
         ...c,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-          c.id
+          c.id,
         ),
       }
       return data
@@ -105,7 +106,7 @@ export const OtpList = observer((props: Props) => {
         orderBy(
           res,
           [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order]
+          [order],
         ) || []
     }
 

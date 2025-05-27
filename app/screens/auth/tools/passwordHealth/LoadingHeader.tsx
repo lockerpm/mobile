@@ -1,9 +1,8 @@
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { Text } from "app/components/cores"
-import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 
 type Props = {
@@ -14,7 +13,7 @@ export const LoadingHeader = observer((props: Props) => {
   const { style } = props
   const { toolStore } = useStores()
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const isLoadingHealth = toolStore.isLoadingHealth
   const isDataLoading = toolStore.isDataLoading

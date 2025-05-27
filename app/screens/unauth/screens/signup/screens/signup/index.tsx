@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, FC } from "react"
 import { BackHandler, Linking, Platform, TouchableOpacity, View } from "react-native"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { Checkbox } from "react-native-ui-lib"
 import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
 import {
@@ -24,7 +24,8 @@ import { SignUpScreenProps } from "../../route"
 export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigation }) => {
   const { colors } = useTheme()
   const { user } = useStores()
-  const { notify, notifyApiError, translate } = useHelper()
+  const { notify, notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
 
   // ---------------- PARAMS ---------------------
 

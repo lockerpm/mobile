@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { StyleSheet, TextInput, View } from "react-native"
 import { BottomModal, Button, Text } from "app/components/cores"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { SubdomainData } from "app/static/types"
 
@@ -15,7 +15,8 @@ interface Props {
 export const CreateSubdomainModal = (props: Props) => {
   const { isOpen, onClose } = props
   const { colors } = useTheme()
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { toolStore } = useStores()
 
   const [isLoading, setIsLoading] = useState(false)

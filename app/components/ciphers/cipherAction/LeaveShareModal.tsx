@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { View, Image, TouchableOpacity } from "react-native"
 import { BottomModal, Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useCipherData, useHelper } from "app/services/hook"
 
 interface Props {
@@ -15,7 +15,8 @@ const TRASH = require("assets/images/intro/trash.png")
 
 export const LeaveShareModal = (props: Props) => {
   const { colors } = useTheme()
-  const { notify, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { notify } = useHelper()
   const { isOpen, onClose, cipherId, organizationId } = props
   const { leaveShare } = useCipherData()
 

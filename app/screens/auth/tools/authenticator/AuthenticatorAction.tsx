@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react"
 import { Platform, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Text } from "app/components/cores"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { CipherView } from "core/models/view"
 import { useStores } from "app/models"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
 import { ActionItem, ActionSheet } from "app/components/ciphers"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { DeleteOtpModal } from "./DeleteOtpModal"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
+import { useClipboard } from "app/services/utils"
 
 type Props = {
   navigation: any
@@ -22,7 +23,8 @@ type Props = {
 export const AuthenticatorAction = observer((props: Props) => {
   const { navigation, isOpen, onClose, onLoadingChange, cipher } = props
   const { colors } = useTheme()
-  const { copyToClipboard, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { copyToClipboard } = useClipboard()
   const { deleteCiphers } = useCipherData()
   const { cipherStore, user } = useStores()
 
@@ -56,7 +58,7 @@ export const AuthenticatorAction = observer((props: Props) => {
     setNextModal(null)
   }
 
-    // Render
+  // Render
   useEffect(() => {
     if (Platform.OS === "android" && !isOpen) {
       switch (nextModal) {
@@ -67,7 +69,7 @@ export const AuthenticatorAction = observer((props: Props) => {
       setNextModal(null)
     }
   }, [isOpen, nextModal])
-    
+
   // ---------------- RENDER -----------------
 
   return (
@@ -78,7 +80,7 @@ export const AuthenticatorAction = observer((props: Props) => {
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
-        title={translate('trash.perma_delete')}
+        title={translate("trash.perma_delete")}
         desc={translate("trash.delete_desc")}
         btnText={translate("common.delete")}
       />

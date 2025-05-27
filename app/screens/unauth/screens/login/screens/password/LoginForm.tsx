@@ -8,7 +8,7 @@ import { DividerText, IosPasswordlessOptions, SocialLogin } from "app/components
 import { useHelper } from "app/services/hook"
 import { Logo, Text, Button, TextInput } from "app/components/cores"
 import Animated, { FadeInUp } from "react-native-reanimated"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { LOGIN_METHOD } from "app/static/types"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
@@ -31,7 +31,8 @@ export const LoginForm = observer(
 
     const { user } = useStores()
     const { colors } = useTheme()
-    const { notify, notifyApiError, setApiTokens, translate } = useHelper()
+    const { notify, notifyApiError, setApiTokens } = useHelper()
+    const { translate } = useAppLocale()
     const initMethod = params?.initMethod
     const initEmail = params?.email || ""
     // ------------------ Params -----------------------

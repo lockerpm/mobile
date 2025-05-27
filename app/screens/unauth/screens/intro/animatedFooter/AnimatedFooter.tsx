@@ -1,14 +1,13 @@
-import { observer } from 'mobx-react-lite'
-import React from 'react'
-import { TouchableOpacity, View, ViewStyle } from 'react-native'
-import Animated, { FadeIn } from 'react-native-reanimated'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { observer } from "mobx-react-lite"
+import React from "react"
+import { TouchableOpacity, View, ViewStyle } from "react-native"
+import Animated, { FadeIn } from "react-native-reanimated"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { Icon, Text } from 'app/components/cores'
-import { AnimatedTitle } from './AnimatedText'
-import { AnimatedTabIndicator } from './Indicator'
-import { useTheme } from 'app/services/context'
-import { useHelper } from 'app/services/hook'
+import { Icon, Text } from "app/components/cores"
+import { AnimatedTitle } from "./AnimatedText"
+import { AnimatedTabIndicator } from "./Indicator"
+import { useAppLocale, useTheme } from "app/services/context"
 
 interface Props {
   animIndex: Animated.SharedValue<number>
@@ -20,7 +19,7 @@ const INTRO_LENGTH = 4
 
 export const AnimatedFooter = observer(({ animIndex, scrollTo, index, goStart }: Props) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const insert = useSafeAreaInsets()
 
   const goNext = () => {
@@ -41,7 +40,7 @@ export const AnimatedFooter = observer(({ animIndex, scrollTo, index, goStart }:
   return (
     <Animated.View
       style={{
-        height: '35%',
+        height: "35%",
         paddingHorizontal: 26,
         paddingBottom: insert.bottom + 10,
       }}
@@ -55,7 +54,7 @@ export const AnimatedFooter = observer(({ animIndex, scrollTo, index, goStart }:
           <TouchableOpacity
             onPress={goBack}
             style={{
-              justifyContent: 'center',
+              justifyContent: "center",
               paddingRight: 25,
               minWidth: 49,
             }}
@@ -84,11 +83,11 @@ export const AnimatedFooter = observer(({ animIndex, scrollTo, index, goStart }:
             style={[$goNextStyle, { backgroundColor: colors.primary }]}
           >
             <Text
-              text={index !== 3 ? translate('common.next') : translate('common.get_start')}
+              text={index !== 3 ? translate("common.next") : translate("common.get_start")}
               color={colors.white}
               preset="bold"
               style={{
-                textAlign: 'center',
+                textAlign: "center",
               }}
             />
           </TouchableOpacity>
@@ -102,7 +101,7 @@ const $goNextStyle: ViewStyle = {
   height: 70,
   width: 70,
   borderRadius: 35,
-  shadowColor: '#306966',
+  shadowColor: "#306966",
   shadowOffset: {
     width: 0,
     height: 10,
@@ -110,21 +109,21 @@ const $goNextStyle: ViewStyle = {
   shadowOpacity: 0.2,
   shadowRadius: 10,
   elevation: 9,
-  justifyContent: 'center',
-  alignContent: 'center',
+  justifyContent: "center",
+  alignContent: "center",
 }
 
 const $actionContainer: ViewStyle = {
   flex: 1,
-  justifyContent: 'flex-end',
+  justifyContent: "flex-end",
 }
 
 const $rowCenter: ViewStyle = {
-  flexDirection: 'row',
-  alignItems: 'center',
+  flexDirection: "row",
+  alignItems: "center",
 }
 
 const $rowSpace: ViewStyle = {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
+  flexDirection: "row",
+  justifyContent: "space-between",
 }

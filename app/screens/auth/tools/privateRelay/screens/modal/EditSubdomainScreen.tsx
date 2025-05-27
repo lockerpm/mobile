@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from "react"
 import { View, TextInput, KeyboardAvoidingView, StyleSheet } from "react-native"
 import { Text, Button } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { PrivateRelayScreenProps } from "../../route"
@@ -19,7 +19,8 @@ export const EditSubdomainScreen: FC<PrivateRelayScreenProps<"editSubdomain">> =
 }) => {
   const { colors } = useTheme()
   const { toolStore } = useStores()
-  const { translate, notifyApiError } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
 
   const inputRef = useRef<TextInput>(null)
   const [isLoading, setIsLoading] = useState(false)

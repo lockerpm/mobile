@@ -4,8 +4,7 @@ import isEqual from "lodash/isEqual"
 import { Icon, Text, Toggle } from "app/components/cores"
 import { AccountRole } from "app/static/types"
 import { CipherView } from "core/models/view"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
@@ -37,7 +36,7 @@ export const CipherSharedListItem = memo(
   (props: Prop) => {
     const { item, isSelecting, toggleItemSelection, openActionMenu, isSelected, org } = props
     const { colors } = useTheme()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
 
     const getDescription = (item: CipherSharedType) => {
       if (item.isShared) {
@@ -104,7 +103,11 @@ export const CipherSharedListItem = memo(
                   }}
                 >
                   <Text
-                    text={item.isAccepted? translate("shares.wait_confirm") :translate("common.pending")}
+                    text={
+                      item.isAccepted
+                        ? translate("shares.wait_confirm")
+                        : translate("common.pending")
+                    }
                     preset="bold"
                     size="small"
                     color={colors.background}

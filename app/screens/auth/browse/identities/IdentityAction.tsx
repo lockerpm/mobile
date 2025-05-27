@@ -1,7 +1,8 @@
 import { ActionItem } from "app/components/ciphers/actionsSheet/ActionSheetItem"
 import { CipherAction } from "app/components/ciphers/cipherAction/CipherAction"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
+import { useAppLocale } from "app/services/context"
+import { useClipboard } from "app/services/utils"
 import { CipherView } from "core/models/view"
 import React from "react"
 
@@ -15,7 +16,8 @@ type Props = {
 }
 
 export const IdentityAction = (props: Props) => {
-  const { copyToClipboard, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { copyToClipboard } = useClipboard()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 

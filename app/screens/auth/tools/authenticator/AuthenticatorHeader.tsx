@@ -2,10 +2,10 @@ import React, { useState } from "react"
 import { View } from "react-native"
 
 import { Text, Icon } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { SearchBar } from "app/components/utils"
 
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { ShareModal } from "app/components/ciphers"
 import { DeleteOtpModal } from "./DeleteOtpModal"
 
@@ -36,7 +36,7 @@ export const AuthenticatorHeader = (props: Props) => {
     setSelectedItems,
     toggleSelectAll,
   } = props
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { colors } = useTheme()
   const { deleteCiphers } = useCipherData()
 

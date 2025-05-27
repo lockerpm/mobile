@@ -2,7 +2,7 @@ import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { ConfirmPassModal } from "./ConfirmPassModal"
 import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useCoreService } from "app/services/coreService"
 
 import { Screen, Header } from "app/components/cores"
@@ -11,7 +11,8 @@ import { SettingsScreenProps } from "../../route"
 
 export const ExportScreen: FC<SettingsScreenProps<"export">> = observer(({ navigation }) => {
   const { colors } = useTheme()
-  const { notify, translate } = useHelper()
+  const { notify } = useHelper()
+  const { translate } = useAppLocale()
   const { platformUtilsService, exportService } = useCoreService()
 
   // ----------------------- PARAMS -----------------------

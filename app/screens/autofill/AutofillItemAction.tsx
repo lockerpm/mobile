@@ -3,7 +3,7 @@ import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Text } from "app/components/cores"
 import { useCipherHelper, useDeleteCipher, useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { AccountRoleText } from "app/static/types"
@@ -26,13 +26,13 @@ interface Props {
 export const AutoFillItemAction = observer(function AutoFillItemAction(props: Props) {
   const { navigation, isOpen, onClose } = props
 
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [nextModal, setNextModal] = useState<"trashConfirm" | null>(null)
 
   const { colors } = useTheme()
   const { toTrashCiphers } = useDeleteCipher()
-  const { getTeam, copyToClipboard } = useHelper()
+  const { getTeam } = useHelper()
   const { getWebsiteLogo } = useCipherHelper()
   const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView

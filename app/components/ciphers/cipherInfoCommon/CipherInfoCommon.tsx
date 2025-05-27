@@ -1,6 +1,6 @@
 import { TextInput, Text, ImageIcon } from "app/components/cores"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { SharedMemberType } from "app/static/types"
 import { FieldType } from "core/enums"
@@ -25,7 +25,8 @@ export interface CipherInfoCommonProps {
  */
 export const CipherInfoCommon = (props: CipherInfoCommonProps) => {
   const { style, cipher } = props
-  const { getTeam, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { getTeam } = useHelper()
   const { user, folderStore, collectionStore, cipherStore } = useStores()
 
   const [showFullShareMember, setShowFullShareMember] = React.useState<boolean>(false)
@@ -131,7 +132,7 @@ export const CipherInfoCommon = (props: CipherInfoCommonProps) => {
 
 const SharedWith = ({ shareMember, show, setShow }) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   return (
     shareMember.isShared && (
       <View>

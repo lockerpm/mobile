@@ -6,6 +6,7 @@ import { NotificationCategory } from "app/static/types"
 import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { ImageIcon, ImageIconTypes, Text } from "app/components/cores"
+import { useAppLocale } from "app/services/context"
 
 interface Props {
   lang: string
@@ -20,7 +21,8 @@ interface Props {
 export const NotiListItem = (props: Props) => {
   const { type, title, lang, id, metadata, publish_time } = props
   const navigation = useNavigation() as any
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { user } = useStores()
 
   const markRead = async () => {

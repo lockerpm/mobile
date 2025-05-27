@@ -1,9 +1,8 @@
 import React, { useState } from "react"
 import { View, FlatList, TouchableOpacity } from "react-native"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import Modal from "react-native-modal"
 import { Text, Screen, Header, Icon } from "app/components/cores"
-import { useHelper } from "app/services/hook"
 import { CARD_BRANDS } from "../constants"
 
 interface Props {
@@ -13,7 +12,7 @@ interface Props {
 
 export const BrandSelectItem = ({ brand, setBrand }: Props) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -25,9 +24,7 @@ export const BrandSelectItem = ({ brand, setBrand }: Props) => {
   }
   // render
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => handleSelect(item.value)}
-    >
+    <TouchableOpacity onPress={() => handleSelect(item.value)}>
       <View
         style={{
           flexDirection: "row",
@@ -37,7 +34,7 @@ export const BrandSelectItem = ({ brand, setBrand }: Props) => {
           height: 52.2,
         }}
       >
-        <Text text={item.label} style={{ flexGrow: 1}} />
+        <Text text={item.label} style={{ flexGrow: 1 }} />
         {brand === item.value && <Icon icon="check" size={16} color={colors.primary} />}
       </View>
     </TouchableOpacity>
@@ -77,16 +74,12 @@ export const BrandSelectItem = ({ brand, setBrand }: Props) => {
         onBackdropPress={onClose}
         style={{
           margin: 0,
-          justifyContent: "flex-start"
+          justifyContent: "flex-start",
         }}
       >
         <Screen
           header={
-            <Header
-              leftIcon="arrow-left"
-              onLeftPress={onClose}
-              title={translate("card.brand")}
-            />
+            <Header leftIcon="arrow-left" onLeftPress={onClose} title={translate("card.brand")} />
           }
           contentContainerStyle={{
             flex: 1,

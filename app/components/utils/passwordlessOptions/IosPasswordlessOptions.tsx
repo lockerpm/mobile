@@ -2,9 +2,8 @@ import React from "react"
 import { StyleProp, TouchableOpacity, View, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Button, Icon, ImageIconTypes, ImageIcon, Text, Logo, Toggle } from "../../cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { Dialog } from "react-native-ui-lib"
-import { useHelper } from "app/services/hook"
 
 interface Props {
   /**
@@ -43,7 +42,7 @@ export const IosPasswordlessOptions = ({
   action,
 }: Props) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const inset = useSafeAreaInsets()
   const $containerStyle: StyleProp<ViewStyle> = [
     {

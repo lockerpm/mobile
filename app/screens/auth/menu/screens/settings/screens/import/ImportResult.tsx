@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
-import { View, TouchableOpacity, Image } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { useTheme } from 'app/services/context'
-import { useStores } from 'app/models'
-import { BottomModal, Button, Icon, Text } from 'app/components/cores'
-import { useHelper } from 'app/services/hook'
+import React, { useState } from "react"
+import { View, TouchableOpacity, Image } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useStores } from "app/models"
+import { BottomModal, Button, Icon, Text } from "app/components/cores"
 
 interface Props {
   imported: number
@@ -13,12 +12,12 @@ interface Props {
   setIsLimited: (val: boolean) => void
 }
 
-const LOCKER_IMG = require('assets/images/intro/locker.png')
+const LOCKER_IMG = require("assets/images/intro/locker.png")
 
 export const ImportResult = (props: Props) => {
   const navigation = useNavigation() as any
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { user } = useStores()
   const { imported, total, isLimited, setIsLimited } = props
   const isFreeAccount = user.isFreePlan
@@ -29,30 +28,30 @@ export const ImportResult = (props: Props) => {
     <View>
       <View
         style={{
-          alignItems: 'center',
+          alignItems: "center",
         }}
       >
         <Icon icon="check" size={32} color={colors.primary} />
         <Text
           preset="bold"
-          text={translate('import.imported')}
+          text={translate("import.imported")}
           style={{ marginTop: 8, marginBottom: 16 }}
         />
 
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
           {isAllImported ? (
-            <Icon icon={'check'} size={24} color={colors.primary} />
+            <Icon icon={"check"} size={24} color={colors.primary} />
           ) : (
-            <Icon icon={'warning'} size={24} color={colors.error} />
+            <Icon icon={"warning"} size={24} color={colors.error} />
           )}
           <Text
             preset="bold"
-            text={`${props.imported}/${props.total} ` + translate('import.imported_free.result')}
+            text={`${props.imported}/${props.total} ` + translate("import.imported_free.result")}
             style={{
               color: isAllImported ? colors.primary : colors.error,
               marginLeft: 10,
@@ -61,8 +60,8 @@ export const ImportResult = (props: Props) => {
         </View>
         {isAllImported && (
           <Button
-            text={translate('import.result_btn')}
-            onPress={() => navigation.navigate('mainTab', {})}
+            text={translate("import.result_btn")}
+            onPress={() => navigation.navigate("mainTab", {})}
             style={{
               marginHorizontal: 20,
               marginTop: 30,
@@ -79,18 +78,18 @@ export const ImportResult = (props: Props) => {
             borderWidth: 1,
             borderColor: colors.palette.orange10,
             backgroundColor: colors.palette.orange4,
-            flexDirection: 'row',
-            justifyContent: 'space-around',
+            flexDirection: "row",
+            justifyContent: "space-around",
             paddingVertical: 16,
             paddingHorizontal: 20,
-            width: '100%',
+            width: "100%",
           }}
         >
           <View style={{ marginRight: 36 }}>
-            <Text text={translate('import.imported_free.guild')} style={{ color: colors.black }} />
+            <Text text={translate("import.imported_free.guild")} style={{ color: colors.black }} />
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('payment')
+                navigation.navigate("payment")
               }}
             >
               <Text
@@ -108,32 +107,36 @@ export const ImportResult = (props: Props) => {
               setIsFree(false)
             }}
           >
-            <Icon icon="x" size={24} color={'black'} />
+            <Icon icon="x" size={24} color={"black"} />
           </TouchableOpacity>
         </View>
       )}
 
       <BottomModal
-        title={translate('import.limited')}
+        title={translate("import.limited")}
         isOpen={isLimited && isFreeAccount}
         onClose={() => {
           setIsLimited(false)
         }}
       >
-        <View style={{ alignItems: 'center' }}>
-          <Image resizeMode='contain' source={LOCKER_IMG} style={{ height: 60, width: 60, marginBottom: 12 }} />
+        <View style={{ alignItems: "center" }}>
+          <Image
+            resizeMode="contain"
+            source={LOCKER_IMG}
+            style={{ height: 60, width: 60, marginBottom: 12 }}
+          />
           <Text
-            text={`${imported}/${total} ` + translate('import.imported_free.note')}
-            style={{ maxWidth: '90%', textAlign: 'center', marginBottom: 16 }}
+            text={`${imported}/${total} ` + translate("import.imported_free.note")}
+            style={{ maxWidth: "90%", textAlign: "center", marginBottom: 16 }}
           />
 
           <Button
             text="Get Unlimited"
             onPress={() => {
               setIsLimited(false)
-              navigation.navigate('payment')
+              navigation.navigate("payment")
             }}
-            style={{ marginBottom: 50, width: '90%' }}
+            style={{ marginBottom: 50, width: "90%" }}
           />
         </View>
       </BottomModal>

@@ -8,6 +8,8 @@ import { Button, Screen, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { useCoreService } from "app/services/coreService"
 import { autofillKeyChain } from "app/utils/autofillData"
+import { useBiometricType } from "app/services/utils"
+import { useAppLocale } from "app/services/context"
 
 const FACEID = require("assets/images/intro/faceid.png")
 
@@ -15,7 +17,9 @@ export const BiometricUnlockIntroScreen = observer(() => {
   const { cryptoService } = useCoreService()
   const navigation = useNavigation() as any
   const { user } = useStores()
-  const { isBiometricAvailable, notify, translate } = useHelper()
+  const { notify } = useHelper()
+  const { translate } = useAppLocale()
+  const { isBiometricAvailable } = useBiometricType()
 
   // ----------------------- PARAMS ----------------------
 
@@ -46,7 +50,7 @@ export const BiometricUnlockIntroScreen = observer(() => {
     notify("success", translate("success.biometric_enabled"))
     user.setBiometricIntroShown(true)
     setIsLoading(false)
-    navigation.navigate("mainTab", { screen: user.defaultTab })
+    navigation.navigate("mainTab")
   }
 
   const handleSkip = async () => {

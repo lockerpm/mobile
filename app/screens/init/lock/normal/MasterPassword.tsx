@@ -10,10 +10,9 @@ import {
 } from "react-native"
 import { useAuthentication, useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
-import { EnterpriseInvitation } from "app/static/types"
-import { BiometricsType } from "../lock.types"
+import { BiometricsType, EnterpriseInvitation } from "app/static/types"
 import { useNavigation } from "@react-navigation/native"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useCoreService } from "app/services/coreService"
 import { Logo, Button, Screen, Text, TextInput, Header, Icon } from "app/components/cores"
 import { EnterpriseInvitationModal } from "./EnterpriseInvitationModal"
@@ -30,7 +29,8 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
   const { colors } = useTheme()
   const navigation = useNavigation() as any
   const { user, uiStore, enterpriseStore } = useStores()
-  const { notify, notifyApiError, translate } = useHelper()
+  const { notify, notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { sessionLogin, biometricLogin } = useAuthentication()
   const { createMasterPasswordItem } = useCipherData()
   const { getPasswordStrength } = useCipherHelper()

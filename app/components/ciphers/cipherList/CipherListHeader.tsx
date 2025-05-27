@@ -1,6 +1,6 @@
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
-import { useCipherData, useDeleteCipher, useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCipherData, useDeleteCipher } from "app/services/hook"
 import React, { useState } from "react"
 import { View, BackHandler } from "react-native"
 import { Text, Icon, TabHeader } from "app/components/cores"
@@ -57,7 +57,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
     isShared,
   } = props
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { restoreCiphers, deleteCiphers } = useCipherData()
   const { user, uiStore } = useStores()
   const { toTrashCiphers } = useDeleteCipher()

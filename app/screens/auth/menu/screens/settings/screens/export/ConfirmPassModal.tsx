@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { BottomModal, Button, TextInput } from "app/components/cores"
 import { useAuthentication, useHelper } from "app/services/hook"
 import { useCoreService } from "app/services/coreService"
+import { useAppLocale } from "app/services/context"
 
 interface Props {
   isOpen: boolean
@@ -12,7 +13,8 @@ interface Props {
 
 export const ConfirmPassModal = (props: Props) => {
   const { isOpen, onClose, onConfirm, navigateToLock } = props
-  const { notify, translate } = useHelper()
+  const { notify } = useHelper()
+  const { translate } = useAppLocale()
   const { lock } = useAuthentication()
   const { cryptoService } = useCoreService()
 

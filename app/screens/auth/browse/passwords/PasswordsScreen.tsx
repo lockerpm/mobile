@@ -1,42 +1,40 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { BackHandler } from 'react-native'
+import React, { useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { BackHandler } from "react-native"
 import {
   CipherList,
   CipherListHeader,
   EmptyCipherList,
   SortActionConfigModal,
-} from 'app/components/ciphers'
-import { useStores } from 'app/models'
-import { Screen } from 'app/components/cores'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { CipherType } from 'core/enums'
-import { useHelper } from 'app/services/hook'
+} from "app/components/ciphers"
+import { useStores } from "app/models"
+import { Screen } from "app/components/cores"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { CipherType } from "core/enums"
+import { useAppLocale } from "app/services/context"
 
-const EMPTY_LIST = require('assets/images/emptyCipherList/password-empty-img.png')
+const EMPTY_LIST = require("assets/images/emptyCipherList/password-empty-img.png")
 
 export const PasswordsScreen = observer(() => {
   const navigation = useNavigation() as any
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { uiStore } = useStores()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
 
   // Close select before leave
   useEffect(() => {
-    uiStore.setIsSelecting(isSelecting)
     const checkSelectBeforeLeaving = () => {
       if (isSelecting) {
         setIsSelecting(false)
@@ -45,9 +43,9 @@ export const PasswordsScreen = observer(() => {
       }
       return false
     }
-    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    BackHandler.addEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+      BackHandler.removeEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     }
   }, [isSelecting])
 
@@ -56,26 +54,26 @@ export const PasswordsScreen = observer(() => {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption('most_relevant')
+        setSortOption("most_relevant")
       }
     } else {
       setSortList({
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       })
-      setSortOption('last_updated')
+      setSortOption("last_updated")
     }
   }, [searchText])
 
   return (
     <Screen
-      safeAreaEdges={['top']}
+      safeAreaEdges={["top"]}
       header={
         <CipherListHeader
-          header={translate('common.passwords')}
+          header={translate("common.passwords")}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
-            navigation.navigate('passwords__edit', { mode: 'add' })
+            navigation.navigate("passwords__edit", { mode: "add" })
           }}
           onSearch={setSearchText}
           searchText={searchText}
@@ -124,11 +122,11 @@ export const PasswordsScreen = observer(() => {
           <EmptyCipherList
             img={EMPTY_LIST}
             imgStyle={{ height: 55, width: 120 }}
-            title={translate('password.empty.title')}
-            desc={translate('password.empty.desc')}
-            buttonText={translate('password.empty.btn')}
+            title={translate("password.empty.title")}
+            desc={translate("password.empty.desc")}
+            buttonText={translate("password.empty.btn")}
             addItem={() => {
-              navigation.navigate('passwords__edit', { mode: 'add' })
+              navigation.navigate("passwords__edit", { mode: "add" })
             }}
           />
         }

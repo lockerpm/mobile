@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FC } from "react"
 import { View, Alert, Platform } from "react-native"
 import { observer } from "mobx-react-lite"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { Logger } from "app/utils/utils"
 import { Icon, Logo, Screen } from "app/components/cores"
 
@@ -29,7 +29,8 @@ const IS_ANDROID = Platform.OS === "android"
 export const PaymentScreen: FC<MenuScreenProps<"payment">> = observer(({ navigation, route }) => {
   const { subscriptions, getSubscriptions, currentPurchase, finishTransaction } = useIAP()
   const { user } = useStores()
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { colors, isDark } = useTheme()
 
   // -------------------- STATE ----------------------

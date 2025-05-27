@@ -93,7 +93,6 @@ export const UserModel = types
     isBiometricUnlockList: types.array(types.string), // store user email
     appTimeout: types.optional(types.number, AppTimeoutType.APP_CLOSE),
     appTimeoutAction: types.optional(types.string, TimeoutActionType.LOCK),
-    defaultTab: types.optional(types.string, "homeTab"),
     disablePushNotifications: types.maybeNull(types.boolean),
     saveIosAutofillInfor: types.maybeNull(types.boolean),
   })
@@ -225,9 +224,6 @@ export const UserModel = types
     setAppTimeoutAction: (action: string) => {
       self.appTimeoutAction = action
     },
-    setDefaultTab: (defaultTab: string) => {
-      self.defaultTab = defaultTab
-    },
     setPushNotificationsSetting: (val: boolean) => {
       self.disablePushNotifications = val
     },
@@ -260,7 +256,6 @@ export const UserModel = types
     clearSettings: () => {
       self.appTimeout = AppTimeoutType.APP_CLOSE
       self.appTimeoutAction = TimeoutActionType.LOCK
-      self.defaultTab = "homeTab"
       self.disablePushNotifications = false
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

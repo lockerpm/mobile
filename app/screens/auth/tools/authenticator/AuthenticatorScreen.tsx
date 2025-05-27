@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/core"
@@ -10,14 +9,14 @@ import { Screen } from "app/components/cores"
 import { useStores } from "app/models"
 import { FREE_PLAN_LIMIT, MAX_CIPHER_SELECTION } from "app/static/constants"
 import { AuthenticatorHeader } from "./AuthenticatorHeader"
-import { useHelper } from "app/services/hook"
+import { useAppLocale } from "app/services/context"
 
 const EMPTY = require("assets/images/emptyCipherList/password-empty-img.png")
 
 export const AuthenticatorScreen = observer(() => {
   const navigation = useNavigation() as any
   const { uiStore, user } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   // -------------------- PARAMS ----------------------
 

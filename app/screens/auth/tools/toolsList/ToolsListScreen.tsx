@@ -3,17 +3,16 @@ import { View, TouchableOpacity } from "react-native"
 import { useStores } from "app/models"
 import { Text, Screen, Icon, ImageIcon } from "app/components/cores"
 import { useNavigation } from "@react-navigation/native"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { TabHeader } from "app/components/cores/header/TabHeader"
 import { PremiumTag } from "app/components/utils"
 import { observer } from "mobx-react-lite"
-import { useHelper } from "app/services/hook"
 import { TOOLS_ITEMS, ToolsItem } from "app/navigators/navigators.route"
 
 export const ToolsListScreen = observer(() => {
   const navigation = useNavigation() as any
   const { user } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { colors } = useTheme()
 
   const isFreeAccount = user.isFreePlan

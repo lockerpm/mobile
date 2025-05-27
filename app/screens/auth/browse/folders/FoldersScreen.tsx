@@ -10,7 +10,7 @@ import { FolderAction } from "./FolderAction"
 import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
 import { Icon, ImageIcon, Screen, Text } from "app/components/cores"
 import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { FolderView } from "core/models/view/folderView"
 import { CollectionView } from "core/models/view/collectionView"
@@ -21,7 +21,8 @@ const EMPTY = require("assets/images/emptyCipherList/folder-empty-img.png")
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation() as any
   const { colors } = useTheme()
-  const { getTeam, translate } = useHelper()
+  const { getTeam } = useHelper()
+  const { translate } = useAppLocale()
   const { folderStore, collectionStore, user, uiStore, cipherStore } = useStores()
 
   const folders: FolderView[] = folderStore.folders

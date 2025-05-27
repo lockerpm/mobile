@@ -12,10 +12,10 @@ import ReactNativeBiometrics from "react-native-biometrics"
 import { CipherRequest } from "core/models/request"
 import { CipherType } from "core/enums"
 import { CipherView, LoginUriView, LoginView } from "core/models/view"
-import { Logger, delay, getUrlParameterByName } from "app/utils/utils"
+import { Logger, delay } from "app/utils/utils"
 import { StorageKey, remove, removeSecure } from "app/utils/storage"
-import { setCookiesFromUrl } from "app/utils/analytics"
 import { autofillKeyChain } from "app/utils/autofillData"
+import { useAppLocale } from "../context"
 
 export function useAuthentication() {
   const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore, enterpriseStore } =
@@ -31,7 +31,8 @@ export function useAuthentication() {
     messagingService,
     tokenService,
   } = useCoreService()
-  const { notify, notifyApiError, setApiTokens, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { notify, notifyApiError, setApiTokens } = useHelper()
   const { logoutAllServices } = useSocialLogin()
 
   // -------------------- AUTHENTICATION --------------------
@@ -646,74 +647,6 @@ export function useAuthentication() {
     ])
   }
 
-  // Handle dynamic link
-  const handleDynamicLink = async (url: string, navigation?: any) => {
-    // Set UTM
-    setCookiesFromUrl(url)
-
-    // Redirect
-    const WHITELIST_HOSTS = [
-      "https://locker.io",
-      "https://id.locker.io",
-      "https://staging.locker.io",
-    ]
-    const host = WHITELIST_HOSTS.find((h) => url.startsWith(h))
-    if (host) {
-      const path = url.split(host)[1]
-
-      // Register
-      if (path.startsWith("/register")) {
-        navigation?.navigate("signup")
-        return !!navigation
-      }
-
-      // Authenticate
-      if (path.startsWith("/authenticate")) {
-        const token = getUrlParameterByName("token", url)
-        if (token) {
-          const tempUserRes = await user.getUser({
-            customToken: token,
-            dontSetData: true,
-          })
-
-          // Ignore if token is not valid or current user is correct
-          if (tempUserRes.kind !== "ok" || tempUserRes.user.email === user.email) {
-            return false
-          }
-
-          // Logout if current user is not correct
-          if (user.isLoggedIn) {
-            await logout()
-          }
-          navigation?.navigate("init")
-          setApiTokens(token)
-          const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-          if (userRes.kind === "ok" && userPwRes.kind === "ok") {
-            if (user.is_pwd_manager) {
-              navigation?.navigate("lock")
-            } else {
-              navigation?.navigate("createMasterPassword")
-            }
-            return !!navigation
-          }
-        }
-      }
-
-      // emergencyAccess
-      if (path.startsWith("/settings/security")) {
-        uiStore.setIsDeeplinkEmergencyAccess(true)
-        return false
-      }
-
-      // emergencyAccess
-      if (path.startsWith("/shares")) {
-        uiStore.setIsDeeplinkShares(true)
-        return false
-      }
-    }
-    return false
-  }
-
   return {
     sessionLogin,
     sessionOtpLogin,
@@ -724,7 +657,6 @@ export function useAuthentication() {
     changeMasterPassword,
     updateNewMasterPasswordEA,
     clearAllData,
-    handleDynamicLink,
     sessionQrLogin,
     sessionOtpLoginWithHashPassword,
     sessionBusinessQrLogin,

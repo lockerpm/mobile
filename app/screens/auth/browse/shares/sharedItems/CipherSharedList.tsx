@@ -1,27 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from 'react'
-import { View, SectionList } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import orderBy from 'lodash/orderBy'
+import React, { useState, useEffect } from "react"
+import { View, SectionList } from "react-native"
+import { observer } from "mobx-react-lite"
+import orderBy from "lodash/orderBy"
 
-import { PasswordAction } from '../../passwords/PasswordAction'
-import { CardAction } from '../../cards/CardAction'
-import { NoteAction } from '../../notes/NoteAction'
-import { IdentityAction } from '../../identities/IdentityAction'
-import { PendingSharedAction } from './PendingSharedAction'
-import { CryptoWalletAction } from '../../cryptoAsset/CryptoWalletAction'
-import { CipherSharedListItem, CipherSharedType } from './CipherSharedListItem'
-import { CollectionListItem } from '../shareItems/FolderShareListItem'
-import { FolderAction } from '../../folders/FolderAction'
-import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { CollectionView } from 'core/models/view/collectionView'
-import { AccountRole, AccountRoleText, SharingStatus } from 'app/static/types'
-import { Organization } from 'core/models/domain/organization'
-import { CipherView } from 'core/models/view'
-import { CipherType } from 'core/enums'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { Text } from 'app/components/cores'
+import { PasswordAction } from "../../passwords/PasswordAction"
+import { CardAction } from "../../cards/CardAction"
+import { NoteAction } from "../../notes/NoteAction"
+import { IdentityAction } from "../../identities/IdentityAction"
+import { PendingSharedAction } from "./PendingSharedAction"
+import { CryptoWalletAction } from "../../cryptoAsset/CryptoWalletAction"
+import { CipherSharedListItem, CipherSharedType } from "./CipherSharedListItem"
+import { CollectionListItem } from "../shareItems/FolderShareListItem"
+import { FolderAction } from "../../folders/FolderAction"
+import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { CollectionView } from "core/models/view/collectionView"
+import { AccountRole, AccountRoleText, SharingStatus } from "app/static/types"
+import { Organization } from "core/models/domain/organization"
+import { CipherView } from "core/models/view"
+import { CipherType } from "core/enums"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { Text } from "app/components/cores"
+import { useAppLocale } from "app/services/context"
 
 export interface CipherSharedListProps {
   emptyContent?: JSX.Element
@@ -55,7 +56,8 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     setSelectedItems,
     setAllItems,
   } = props
-  const { notify, getTeam, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { notify, getTeam } = useHelper()
   const { getCiphersFromCache } = useCipherData()
   const { cipherStore, collectionStore, user } = useStores()
   const { newCipher, getCipherInfo } = useCipherHelper()
@@ -73,7 +75,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showPendingAction, setShowPendingAction] = useState(false)
 
-  const [checkedItem, setCheckedItem] = useState('')
+  const [checkedItem, setCheckedItem] = useState("")
 
   // ------------------------ COMPUTED ----------------------------
 
@@ -86,25 +88,24 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     cipher.isShared = true
     cipher.id = i.id
     cipher.organizationId = i.team.id
-    cipher.name = `(${translate('shares.encrypted_content')})`
+    cipher.name = `(${translate("shares.encrypted_content")})`
     cipher.imgLogo = cipherInfo.img
     cipher.isAccepted = i.status === SharingStatus.ACCEPTED
-    let shareType = ''
+    let shareType = ""
     if (i.role === AccountRoleText.MEMBER) {
       // if (i.hide_passwords) {
       //   shareType = translate('shares.share_type.only_fill')
       // } else {
       //   shareType = translate('shares.share_type.view')
       // }
-      shareType = translate('shares.share_type.view')
+      shareType = translate("shares.share_type.view")
     }
     if (i.role === AccountRoleText.ADMIN) {
-      shareType = translate('shares.share_type.edit')
+      shareType = translate("shares.share_type.edit")
     }
     cipher.description = `${i.team.name} - ${shareType}`
     return cipher
   })
-  
 
   const allCiphers = !!searchText.trim() || isSelecting ? ciphers : [...pendingCiphers, ...ciphers]
 
@@ -155,7 +156,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
         ...c,
         imgLogo: cipherInfo.img,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-          c.id
+          c.id,
         ),
       }
       return data
@@ -167,8 +168,8 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       res =
         orderBy(
           res,
-          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order]
+          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order],
         ) || []
     }
 
@@ -225,7 +226,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
       if (selected.length === MAX_CIPHER_SELECTION) {
-        notify('error', translate('error.cannot_select_more', { count: MAX_CIPHER_SELECTION }))
+        notify("error", translate("error.cannot_select_more", { count: MAX_CIPHER_SELECTION }))
         return
       }
       selected.push(id)
@@ -234,7 +235,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     }
     setSelectedItems(selected)
   }
-
 
   // ------------------------ EFFECTS ----------------------------
 
@@ -248,8 +248,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       setCheckedItem(null)
     }
   }, [checkedItem, selectedItems])
-
-
 
   const DATA = [
     {
@@ -349,9 +347,9 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     <View style={{ paddingHorizontal: 20 }}>
       <Text
         preset="label"
-        text={translate('error.no_results_found') + ` '${searchText}'`}
+        text={translate("error.no_results_found") + ` '${searchText}'`}
         style={{
-          textAlign: 'center',
+          textAlign: "center",
         }}
       />
     </View>

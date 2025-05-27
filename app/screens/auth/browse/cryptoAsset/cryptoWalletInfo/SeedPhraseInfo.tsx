@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
-import { Text, Icon } from 'app/components/cores'
-import { View } from 'react-native'
-import { SeedPhraseInput } from '../cryptoWalletEdit/SeedPhraseInput'
-import { useHelper } from 'app/services/hook'
+import React, { useState } from "react"
+import { Text, Icon } from "app/components/cores"
+import { View } from "react-native"
+import { SeedPhraseInput } from "../cryptoWalletEdit/SeedPhraseInput"
+import { useAppLocale } from "app/services/context"
+import { useClipboard } from "app/services/utils"
 
 interface Props {
   seed: string
 }
 export const SeedPhraseInfo = (props: Props) => {
-  const { copyToClipboard, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { copyToClipboard } = useClipboard()
   const [showPassword, setShowPassword] = useState(false)
 
   return (
@@ -19,22 +21,22 @@ export const SeedPhraseInfo = (props: Props) => {
     >
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
           marginBottom: 4,
         }}
       >
-        <Text preset="label" text={translate('crypto_asset.seed')} />
+        <Text preset="label" text={translate("crypto_asset.seed")} />
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
             paddingRight: 14,
           }}
         >
           <Icon
-            icon={showPassword ? 'eye-slash' : 'eye'}
+            icon={showPassword ? "eye-slash" : "eye"}
             size={20}
             onPress={() => {
               setShowPassword(!showPassword)

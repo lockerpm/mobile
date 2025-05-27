@@ -2,14 +2,13 @@ import React, { useCallback } from "react"
 import { StyleProp, TouchableOpacity, View, ViewStyle } from "react-native"
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "../models"
 import { Icon, Text } from "app/components/cores"
 import { BrowseNavigator } from "./browse/BrowseNavigator"
 import { HomeTabScreen, ToolsListScreen, AuthenticatorScreen, MenuListScreen } from "../screens"
 import { SharingStatus } from "app/static/types"
 import { observer } from "mobx-react-lite"
-import { useHelper } from "app/services/hook"
 import { TabsParamList } from "./navigators.types"
 
 const Tab = createBottomTabNavigator<TabsParamList>()
@@ -17,7 +16,7 @@ const Tab = createBottomTabNavigator<TabsParamList>()
 const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) => {
   const { colors } = useTheme()
   const { uiStore, cipherStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const insets = useSafeAreaInsets()
   const mappings = {
     homeTab: {

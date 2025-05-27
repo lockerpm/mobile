@@ -1,11 +1,11 @@
 import React from "react"
 import { BottomModal, Icon, Text } from "app/components/cores"
 import { useStores } from "app/models"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { AccountRoleText, SharedGroupType, SharedMemberType } from "app/static/types"
 import { CipherView } from "core/models/view"
 import { TouchableOpacity, View } from "react-native"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 
 interface Props {
   isOpen?: boolean
@@ -16,7 +16,7 @@ interface Props {
 
 export const EditShareModal = (props: Props) => {
   const { isOpen, onClose, member, group } = props
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { cipherStore } = useStores()
   const { editShareCipher } = useCipherData()
   const { colors } = useTheme()

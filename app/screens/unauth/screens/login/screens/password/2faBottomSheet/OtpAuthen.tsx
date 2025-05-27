@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import { View } from 'react-native'
-import { Checkbox } from 'react-native-ui-lib'
-import { useStores } from 'app/models'
-import { useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { Text, Button, TextInput, Icon } from 'app/components/cores'
+import React, { useState } from "react"
+import { View } from "react-native"
+import { Checkbox } from "react-native-ui-lib"
+import { useStores } from "app/models"
+import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { Text, Button, TextInput, Icon } from "app/components/cores"
 
 type Props = {
   goBack: () => void
@@ -18,14 +18,15 @@ type Props = {
 export const OtpAuthen = (props: Props) => {
   const { user } = useStores()
   const { colors } = useTheme()
-  const { setApiTokens, translate, notifyApiError } = useHelper()
+  const { setApiTokens, notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
 
   const { goBack, method, email, username, password, onLoggedIn } = props
 
   // ------------------ Params -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
-  const [otp, setOtp] = useState('')
+  const [otp, setOtp] = useState("")
   const [saveDevice, setSaveDevice] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
 
@@ -41,10 +42,10 @@ export const OtpAuthen = (props: Props) => {
         otp,
         save_device: saveDevice,
       },
-      true
+      true,
     )
     setIsLoading(false)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       // @ts-ignore
       setApiTokens(res.data?.access_token)
       onLoggedIn()
@@ -59,21 +60,21 @@ export const OtpAuthen = (props: Props) => {
     <View>
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
         <Icon icon="arrow-left" onPress={goBack} />
-        <Text preset="bold" size="xl" text={translate('login.enter_code')} />
+        <Text preset="bold" size="xl" text={translate("login.enter_code")} />
         <View style={{ width: 24, height: 24 }} />
       </View>
 
       <Text
         text={
-          method === 'mail'
-            ? translate('login.from_email', { email })
-            : translate('login.from_authenticator')
+          method === "mail"
+            ? translate("login.from_email", { email })
+            : translate("login.from_authenticator")
         }
         style={{
           marginBottom: 12,
@@ -84,7 +85,7 @@ export const OtpAuthen = (props: Props) => {
       <TextInput
         isError={!!errorMessage}
         helper={errorMessage}
-        placeholder={translate('login.enter_code_here')}
+        placeholder={translate("login.enter_code_here")}
         value={otp}
         onChangeText={(val) => {
           if (errorMessage) {
@@ -98,7 +99,7 @@ export const OtpAuthen = (props: Props) => {
       <Checkbox
         value={saveDevice}
         color={colors.primary}
-        label={translate('login.save_device')}
+        label={translate("login.save_device")}
         onValueChange={setSaveDevice}
         style={{
           marginVertical: 16,
@@ -112,7 +113,7 @@ export const OtpAuthen = (props: Props) => {
       <Button
         loading={isLoading}
         disabled={isLoading || !otp}
-        text={translate('common.authenticate')}
+        text={translate("common.authenticate")}
         onPress={handleAuthenticate}
         style={{
           marginTop: 12,

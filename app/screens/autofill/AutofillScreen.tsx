@@ -11,6 +11,8 @@ import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/co
 import { observer } from "mobx-react-lite"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 import { GeneratePasswordModal } from "./GeneratePasswordModal"
+import { useAppLocale } from "app/services/context"
+import { useClipboard } from "app/services/utils"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
@@ -19,7 +21,9 @@ const EMPTY_CIPHER = require("assets/images/emptyCipherList/autofill-empty-ciphe
 export const AutoFillScreen: FC<AppStackScreenProps<"autofill">> = observer((props) => {
   const navigation = props.navigation
   const { data } = props.route.params
-  const { copyToClipboard, translate, notify } = useHelper()
+  const { notify } = useHelper()
+  const { copyToClipboard } = useClipboard()
+  const { translate } = useAppLocale()
   const { getCiphersFromCache } = useCipherData()
   // -------------------- PARAMS ----------------------------
   const suggestSearch = parseSearchText(data.domain)

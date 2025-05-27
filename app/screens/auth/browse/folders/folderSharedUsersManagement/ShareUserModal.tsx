@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react"
 import { View, TouchableOpacity, Image, Modal } from "react-native"
 import { GroupMemberData, GroupData, AccountRoleText } from "app/static/types"
@@ -8,7 +7,7 @@ import { useStores } from "app/models"
 import { useFolder, useHelper } from "app/services/hook"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { Button, Header, Icon, Text, TextInput } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 
 interface InviteProps {
   isOpen: boolean
@@ -22,7 +21,8 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
   const { isOpen, onClose, sharedUsers, folder } = props
   const { user, enterpriseStore } = useStores()
   const { colors } = useTheme()
-  const { notify, notifyApiError, translate } = useHelper()
+  const { notify, notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { shareFolder, shareFolderAddMember } = useFolder()
 
   // ----------------------- PARAMS -----------------------

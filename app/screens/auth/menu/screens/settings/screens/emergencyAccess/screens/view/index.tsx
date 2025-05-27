@@ -11,12 +11,14 @@ import { CipherView } from "core/models/view"
 import { Header, Screen, Text } from "app/components/cores"
 import { useCoreService } from "app/services/coreService"
 import { EmergencyAccessScreenProps } from "../../route"
+import { useAppLocale } from "app/services/context"
 
 export const ViewEAScreen: FC<EmergencyAccessScreenProps<"viewEA">> = observer(
   ({ navigation, route }) => {
     const { cryptoService, cipherService } = useCoreService()
-    const { translate, notify } = useHelper()
+    const { notify } = useHelper()
     const { user } = useStores()
+    const { translate } = useAppLocale()
 
     const { getEncKeyFromDecryptedKey } = useCipherData()
     const { getCipherInfo } = useCipherHelper()
@@ -126,7 +128,9 @@ export const ViewEAScreen: FC<EmergencyAccessScreenProps<"viewEA">> = observer(
         }}
       >
         <Text
-          text={translate("emergency_access.view_user_vault", { name: trustContact.full_name })}
+          text={translate("emergency_access.view_user_vault", {
+            name: trustContact.full_name,
+          })}
           style={{ marginLeft: 20 }}
         />
 

@@ -5,10 +5,9 @@ import { Image, View } from "react-native"
 import { NoteAction } from "../NoteAction"
 import { useStores } from "app/models"
 import { Header, Icon, Screen, Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { CipherInfoCommon, DeletedAction } from "app/components/ciphers"
 import { Textarea } from "app/components/utils"
-import { useHelper } from "app/services/hook"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 
@@ -17,7 +16,7 @@ export const NoteInfoScreen: FC<AppStackScreenProps<"notes__info">> = observer((
   const route = props.route
 
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView

@@ -1,10 +1,9 @@
 import React, { useState } from "react"
 import { Dimensions, TouchableOpacity, View, Image } from "react-native"
 import { EmergencyAccessStatus, TrustedContact } from "app/static/types"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { BottomModal, Button, Text } from "app/components/cores"
-import { useHelper } from "app/services/hook"
 import { ContactAction } from "./ContactAction"
 
 interface Props {
@@ -17,7 +16,7 @@ export const Contact = (props: Props) => {
   const { trustedContact, setOnAction, isYourTrusted } = props
   const { colors } = useTheme()
   const { user } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   // ----------------------- PARAMS -----------------------
 
@@ -58,7 +57,9 @@ export const Contact = (props: Props) => {
       title={translate("common.confirmation")}
     >
       <Text
-        text={translate("emergency_access.rq_noti", { waitTime: trustedContact.wait_time_days })}
+        text={translate("emergency_access.rq_noti", {
+          waitTime: trustedContact.wait_time_days,
+        })}
         style={{ lineHeight: 20, marginTop: 12 }}
       />
 

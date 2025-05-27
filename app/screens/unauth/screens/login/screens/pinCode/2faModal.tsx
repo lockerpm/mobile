@@ -5,7 +5,7 @@ import { View } from "react-native"
 import Modal from "react-native-modal"
 import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 
 interface Props {
   email: string
@@ -26,7 +26,8 @@ export const TwoFactorAuthentication = ({
   onLoggedIn,
 }: Props) => {
   const { user } = useStores()
-  const { setApiTokens, translate, notifyApiError } = useHelper()
+  const { setApiTokens, notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { colors } = useTheme()
 
   const method = methods[0]

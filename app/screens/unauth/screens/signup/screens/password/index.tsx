@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, FC } from "react"
 import { BackHandler, Linking, TouchableOpacity, View } from "react-native"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
 import { SocialLogin, RecaptchaChecker, DividerText, SetLanguage } from "app/components/utils"
 import { getCookies, logRegisterSuccessEvent } from "app/utils/analytics"
@@ -15,7 +15,8 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
   ({ navigation, route: { params } }) => {
     const { colors } = useTheme()
     const { user } = useStores()
-    const { notify, notifyApiError, translate } = useHelper()
+    const { notify, notifyApiError } = useHelper()
+    const { translate } = useAppLocale()
 
     // ---------------- PARAMS ---------------------
 

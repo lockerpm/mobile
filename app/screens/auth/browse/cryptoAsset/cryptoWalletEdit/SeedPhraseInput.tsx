@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react'
-import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import { Icon, Text } from 'app/components/cores'
-import { useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
+import React, { useState, useRef } from "react"
+import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native"
+import { Icon, Text } from "app/components/cores"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useClipboard } from "app/services/utils"
 
 type Props = {
   seed: string
@@ -24,9 +24,9 @@ export const SeedPhraseInput = (props: Props) => {
   // ---------------- COMPUTED ------------------
 
   const words = (() => {
-    const res = seed?.split(' ')?.map((w) => (w ? w.trim() : ''))
+    const res = seed?.split(" ")?.map((w) => (w ? w.trim() : ""))
     while (res.length < MAX_WORD_COUNT) {
-      res.push('')
+      res.push("")
     }
     return res
   })()
@@ -50,9 +50,9 @@ export const SeedPhraseInput = (props: Props) => {
 
   const handleChange = (val: string, index: number) => {
     const res = [...words]
-    const ws = val.trim()?.split(' ')
-    if (val === '') {
-      res[index] = ''
+    const ws = val.trim()?.split(" ")
+    if (val === "") {
+      res[index] = ""
     } else {
       ws?.forEach((w, i) => {
         if (w.trim() && index + i < MAX_WORD_COUNT) {
@@ -61,7 +61,7 @@ export const SeedPhraseInput = (props: Props) => {
       })
     }
 
-    setSeed(res.join(' '))
+    setSeed(res.join(" "))
     if (ws.length > 1 && index + ws.length - 1 < MAX_WORD_COUNT) {
       if (index + ws.length > wordCount) {
         setWordCount(index + ws.length)
@@ -69,7 +69,7 @@ export const SeedPhraseInput = (props: Props) => {
       setTimeout(() => {
         refs[index + ws.length - 1].current?.focus()
       }, 0)
-    } else if (val.endsWith(' ') && index + 1 < MAX_WORD_COUNT) {
+    } else if (val.endsWith(" ") && index + 1 < MAX_WORD_COUNT) {
       if (index + 1 === wordCount) {
         setWordCount(wordCount + 1)
       }
@@ -97,8 +97,8 @@ export const SeedPhraseInput = (props: Props) => {
         setMaxWidth((width - 20) / 3)
       }}
       style={{
-        flexDirection: 'row',
-        flexWrap: 'wrap',
+        flexDirection: "row",
+        flexWrap: "wrap",
         marginHorizontal: -4,
         marginVertical: 8,
       }}
@@ -153,7 +153,7 @@ type InputProps = {
 export const WordInput = (props: InputProps) => {
   const { value, onChange, index, outerRef, maxWidth, onEmpty, disableEdit, hideSeedPhrase } = props
   const { colors: color } = useTheme()
-  const { copyToClipboard } = useHelper()
+  const { copyToClipboard } = useClipboard()
 
   const [isFocused, setIsFocused] = useState(false)
 
@@ -161,8 +161,8 @@ export const WordInput = (props: InputProps) => {
     <View
       style={{
         flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
         borderRadius: 12,
         borderWidth: 1,
         borderColor: isFocused ? color.primary : color.border,
@@ -182,7 +182,7 @@ export const WordInput = (props: InputProps) => {
         secureTextEntry={hideSeedPhrase}
         onChangeText={onChange}
         onKeyPress={({ nativeEvent }) => {
-          if (nativeEvent.key === 'Backspace' && !value) {
+          if (nativeEvent.key === "Backspace" && !value) {
             onEmpty()
           }
         }}
@@ -216,7 +216,7 @@ type BtnProps = {
 
 export const AddWordBtn = (props: BtnProps) => {
   const { onPress, maxWidth } = props
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { colors } = useTheme()
 
   return (
@@ -224,9 +224,9 @@ export const AddWordBtn = (props: BtnProps) => {
       <View
         style={{
           flex: 1,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "flex-start",
           borderRadius: 12,
           minWidth: 100,
           maxWidth: maxWidth || undefined,
@@ -238,7 +238,7 @@ export const AddWordBtn = (props: BtnProps) => {
         }}
       >
         <Icon icon="plus-circle" color={colors.title} size={20} />
-        <Text text={translate('common.add')} style={{ marginLeft: 4 }} />
+        <Text text={translate("common.add")} style={{ marginLeft: 4 }} />
       </View>
     </TouchableOpacity>
   )

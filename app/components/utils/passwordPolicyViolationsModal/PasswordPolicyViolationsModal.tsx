@@ -1,7 +1,7 @@
-import React from 'react'
-import { Modal } from '../modal/Modal'
-import { Button, Text } from '../../cores'
-import { useHelper } from 'app/services/hook'
+import React from "react"
+import { Modal } from "../modal/Modal"
+import { Button, Text } from "../../cores"
+import { useAppLocale } from "app/services/context"
 
 interface Props {
   isOpen: boolean
@@ -14,16 +14,16 @@ interface Props {
 
 export const PasswordPolicyViolationsModal = (props: Props) => {
   const { isOpen, onClose, onConfirm, violations, teamName, confirmText } = props
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={translate('policy.password_violation_modal.title')}
+      title={translate("policy.password_violation_modal.title")}
     >
       <Text
-        text={`${translate('policy.password_violation_modal.desc')} ${teamName}:`}
+        text={`${translate("policy.password_violation_modal.desc")} ${teamName}:`}
         style={{
           marginTop: 20,
           marginBottom: 10,
@@ -46,7 +46,7 @@ export const PasswordPolicyViolationsModal = (props: Props) => {
         text={confirmText}
         onPress={onConfirm}
         style={{
-          width: '100%',
+          width: "100%",
           marginTop: 30,
         }}
       />

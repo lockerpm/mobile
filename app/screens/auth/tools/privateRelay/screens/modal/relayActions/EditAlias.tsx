@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import { StyleSheet, TextInput, View } from "react-native"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { RelayAddress } from "app/static/types"
 import { Text, Button, Icon } from "app/components/cores"
 import Animated, { FadeInDown } from "react-native-reanimated"
@@ -18,7 +18,8 @@ interface Props {
 export const EditAlias = (props: Props) => {
   const { onClose, item } = props
   const { toolStore } = useStores()
-  const { translate, notify } = useHelper()
+  const { notify } = useHelper()
+  const { translate } = useAppLocale()
 
   // --------------- PARAMS ----------------
 
@@ -118,7 +119,7 @@ const EditView = (item: {
   setConfirmNewAddress: (val: string) => void
 }) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const ref = useRef<TextInput>(null)
   const [addressText, setAddressText] = useState("")
 

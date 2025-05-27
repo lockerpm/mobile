@@ -3,14 +3,13 @@ import { observer } from "mobx-react-lite"
 import { View, Image, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/core"
 import { Text, Screen, Header, Icon } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
 
 export const DataBreachListScreen = observer(() => {
   const { colors } = useTheme()
   const navigation = useNavigation() as any
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { toolStore } = useStores()
 
   return (
@@ -83,14 +82,21 @@ export const DataBreachListScreen = observer(() => {
                   paddingVertical: 16,
                 }}
               >
-                <View style={{ flexDirection: "row", alignItems: "center", flexGrow: 1, maxWidth: "80%" }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    flexGrow: 1,
+                    maxWidth: "80%",
+                  }}
+                >
                   <Image
                     source={{ uri: item.logo_path }}
                     style={{
                       height: 40,
                       width: 40,
                       borderRadius: 4,
-                      marginRight: 10
+                      marginRight: 10,
                     }}
                     resizeMode="contain"
                   />

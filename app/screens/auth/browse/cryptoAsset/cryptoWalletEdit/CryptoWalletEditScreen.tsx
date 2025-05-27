@@ -6,8 +6,8 @@ import { SeedPhraseInput } from "./SeedPhraseInput"
 import { ChainSelect } from "./ChainSelect"
 import { AppSelect } from "./AppSelect"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
-import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
 import { CipherView } from "core/models/view"
 import { CollectionView } from "core/models/view/collectionView"
 import { CryptoWalletData, toCryptoWalletData } from "app/utils/crypto"
@@ -24,7 +24,7 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<"cryptoWallets__edit
     const navigation = props.navigation
     const route = props.route
     const { cipherStore, collectionStore } = useStores()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
     const { colors } = useTheme()
     const { shareFolderAddItem } = useFolder()
     const { newCipher, getPasswordStrength } = useCipherHelper()

@@ -7,7 +7,7 @@ import { ActionSheet } from "../actionsSheet/ActionSheet"
 import { Text } from "app/components/cores"
 import { CipherType } from "core/enums"
 import { ActionItem } from "../actionsSheet/ActionSheetItem"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "../cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
@@ -29,7 +29,8 @@ export const DeletedAction = (props: DeletedActionProps) => {
   const [nextModal, setNextModal] = useState<"deleteConfirm" | null>(null)
 
   const { colors } = useTheme()
-  const { getRouteName, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { getRouteName } = useHelper()
   const { deleteCiphers, restoreCiphers } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
   const { cipherStore, uiStore } = useStores()

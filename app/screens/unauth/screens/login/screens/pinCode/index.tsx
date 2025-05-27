@@ -1,7 +1,7 @@
 import { Button, Header, Logo, Screen, Text } from "app/components/cores"
 import { DividerText, PasscodeInput } from "app/components/utils"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useRef, useState } from "react"
@@ -19,8 +19,9 @@ export const PinCodeLoginScreen: FC<RootStackScreenProps<"login_by_pincode">> = 
     },
   }) => {
     const { colors } = useTheme()
-    const { translate, notifyApiError, setApiTokens, notify, randomString } = useHelper()
+    const { notifyApiError, setApiTokens, notify, randomString } = useHelper()
     const { user } = useStores()
+    const { translate } = useAppLocale()
 
     const [code, setCode] = useState("")
     const [isLoadding, setIsLoading] = useState(false)

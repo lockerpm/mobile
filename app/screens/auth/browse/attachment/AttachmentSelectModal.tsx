@@ -2,8 +2,7 @@ import React, { useCallback, useMemo, useState } from "react"
 import { NewActionSheet, NewActionSheetItem } from "app/components/utils/action-sheet/ActionSheet"
 import { View } from "react-native"
 import { Icon, IconTypes, Text } from "app/components/cores"
-import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { AttachmentType, usePickAttachment } from "./usePickAttachment"
 import { FilePreview } from "./item/FilePreview"
 import { delay } from "app/utils/utils"
@@ -16,7 +15,7 @@ interface Props {
 export const AttachmentSelectIcon = ({ isFree, addAttachment }: Props) => {
   const { colors } = useTheme()
   const navigation = useNavigation() as any
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { pickFile, pickMedia } = usePickAttachment()
 
   const [isAddOpen, setIsAddOpen] = useState(false)

@@ -29,6 +29,7 @@ import { CipherData, FolderData } from "core/models/data"
 import { OrganizationData } from "core/models/data/organizationData"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { IosAutofillPassword, autofillKeyChain } from "app/utils/autofillData"
+import { useAppLocale } from "../context"
 
 export function useCipherData() {
   const { cipherStore, folderStore, uiStore, collectionStore, user, enterpriseStore } = useStores()
@@ -43,7 +44,8 @@ export function useCipherData() {
     syncService,
     cryptoService,
   } = useCoreService()
-  const { notify, randomString, notifyApiError, getTeam, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { notify, randomString, notifyApiError, getTeam } = useHelper()
   const { newCipher } = useCipherHelper()
   const syncQueue = SyncQueue
 

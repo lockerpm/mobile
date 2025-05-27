@@ -4,17 +4,17 @@ import { NewActionSheet, NewActionSheetItem } from "app/components/utils/action-
 import { observer } from "mobx-react-lite"
 import { Linking, TouchableOpacity, View } from "react-native"
 import { Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
 import { autofillKeyChain } from "app/utils/autofillData"
+import { LanguageSupportType } from "app/i18n"
 
 export const SetlanguageItem = observer(() => {
   const { cryptoService } = useCoreService()
   const { colors } = useTheme()
   const { user } = useStores()
-  const { translate } = useHelper()
+  const { translate, setLanguage: setLocalLanguage } = useAppLocale()
   const [isLanguageSelect, setIsLanguageSelect] = useState(false)
 
   const options: { label: string; value: "vi" | "en" | "zh" | "ru" }[] = [
@@ -50,9 +50,9 @@ export const SetlanguageItem = observer(() => {
     })
   }
 
-  const setLanguage = (lang: string) => {
+  const setLanguage = (lang: LanguageSupportType) => {
     user.setLanguage(lang)
-
+    setLocalLanguage(lang)
     // user.changeLanguage()
     updateAutofillLanguage(lang)
     setIsLanguageSelect(false)

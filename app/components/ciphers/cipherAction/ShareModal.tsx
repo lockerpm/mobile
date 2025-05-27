@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react"
 import { View, Modal, TouchableOpacity, Image, FlatList } from "react-native"
 import {
@@ -10,7 +9,7 @@ import {
 } from "app/static/types"
 import { useStores } from "app/models"
 import { useCipherData, useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { CipherView } from "core/models/view"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { Button, Header, Icon, Text, TextInput } from "app/components/cores"
@@ -27,7 +26,9 @@ export const ShareModal = (props: Props) => {
   const { isOpen, onClose, cipherIds, onSuccess } = props
   const { cipherStore, enterpriseStore, user } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError, translate } = useHelper()
+  const { translate } = useAppLocale()
+
+  const { notifyApiError } = useHelper()
   const { shareCipher, shareMultipleCiphers, stopShareCipher } = useCipherData()
 
   const selectedCipher: CipherView = cipherStore.cipherView

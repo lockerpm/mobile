@@ -1,5 +1,5 @@
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import React from "react"
 import { View, Image, StyleProp, ViewStyle, StyleSheet } from "react-native"
@@ -18,7 +18,8 @@ interface Props {
 
 export const SuggestEnableFaceID = observer(({ onClose, style }: Props) => {
   const { cryptoService } = useCoreService()
-  const { notify, translate } = useHelper()
+  const { notify } = useHelper()
+  const { translate } = useAppLocale()
   const { colors } = useTheme()
   const { user } = useStores()
 

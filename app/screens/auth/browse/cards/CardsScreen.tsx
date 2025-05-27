@@ -1,43 +1,42 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { BackHandler } from 'react-native'
+import React, { useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { BackHandler } from "react-native"
 
 import {
   SortActionConfigModal,
   EmptyCipherList,
   CipherList,
   CipherListHeader,
-} from 'app/components/ciphers'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { Screen } from 'app/components/cores'
-import { useStores } from 'app/models'
-import { CipherType } from 'core/enums'
-import { useHelper } from 'app/services/hook'
+} from "app/components/ciphers"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { Screen } from "app/components/cores"
+import { useStores } from "app/models"
+import { CipherType } from "core/enums"
+import { useAppLocale } from "app/services/context"
 
-const CARD_EMPTY = require('assets/images/emptyCipherList/card-empty-img.png')
+const CARD_EMPTY = require("assets/images/emptyCipherList/card-empty-img.png")
 
 export const CardsScreen = observer(() => {
   const navigation = useNavigation() as any
   const { uiStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
 
   // Close select before leave
   useEffect(() => {
-    uiStore.setIsSelecting(isSelecting)
     const checkSelectBeforeLeaving = () => {
       if (isSelecting) {
         setIsSelecting(false)
@@ -46,9 +45,9 @@ export const CardsScreen = observer(() => {
       }
       return false
     }
-    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    BackHandler.addEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+      BackHandler.removeEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     }
   }, [isSelecting])
 
@@ -57,27 +56,27 @@ export const CardsScreen = observer(() => {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption('most_relevant')
+        setSortOption("most_relevant")
       }
     } else {
       setSortList({
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       })
-      setSortOption('last_updated')
+      setSortOption("last_updated")
     }
   }, [searchText])
 
   return (
     <Screen
       preset="fixed"
-      safeAreaEdges={['top']}
+      safeAreaEdges={["top"]}
       header={
         <CipherListHeader
-          header={translate('common.card')}
+          header={translate("common.card")}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
-            navigation.navigate('cards__edit', { mode: 'add' })
+            navigation.navigate("cards__edit", { mode: "add" })
           }}
           searchText={searchText}
           onSearch={setSearchText}
@@ -126,11 +125,11 @@ export const CardsScreen = observer(() => {
           <EmptyCipherList
             img={CARD_EMPTY}
             imgStyle={{ height: 55, width: 120 }}
-            title={translate('card.empty.title')}
-            desc={translate('card.empty.desc')}
-            buttonText={translate('card.empty.btn')}
+            title={translate("card.empty.title")}
+            desc={translate("card.empty.desc")}
+            buttonText={translate("card.empty.btn")}
             addItem={() => {
-              navigation.navigate('cards__edit', { mode: 'add' })
+              navigation.navigate("cards__edit", { mode: "add" })
             }}
           />
         }

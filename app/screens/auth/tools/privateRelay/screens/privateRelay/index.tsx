@@ -1,11 +1,10 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react"
 import { ActivityIndicator, SectionList, StyleSheet, TouchableOpacity } from "react-native"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { RelayAddress, SubdomainData } from "app/static/types"
 import { Screen, Header, Text, Icon } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { useHelper } from "app/services/hook"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { CreateSubdomainModal } from "./CreateSubdomainModal"
 import { PrivateRelayScreenProps } from "../../route"
@@ -22,7 +21,7 @@ const PAGE_SIZE = 10
 export const PrivateRelay: FC<PrivateRelayScreenProps<"relay">> = observer(({ navigation }) => {
   const { colors } = useTheme()
   const { toolStore, user } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const [alias, setAlias] = useState<RelayAddress[]>([])
   const [page, setPage] = useState(1)

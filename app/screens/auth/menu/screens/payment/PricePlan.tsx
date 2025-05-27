@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { View, TouchableOpacity, LayoutAnimation, Dimensions } from "react-native"
 import { SKU } from "./PricePlan.sku"
 import { Subscription } from "react-native-iap"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { Text, Button, Toggle } from "app/components/cores"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
@@ -72,7 +72,8 @@ interface PricePlanProps {
 
 export const PricePlan = (props: PricePlanProps) => {
   const { colors } = useTheme()
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
 
   const [payIndividual, setPayIndividual] = useState(true)
   const [isMonthly, setIsMonthly] = useState(true)

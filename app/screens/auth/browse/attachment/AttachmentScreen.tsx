@@ -15,9 +15,9 @@ import {
 import { Attachment } from "./item/Attachment"
 import { AttachmentType } from "./usePickAttachment"
 import { AttachmentView, CipherView } from "core/models/view"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 
 const EMPTY_IMAGE = require("assets/images/empty_attachment.png")
 
@@ -26,7 +26,7 @@ export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
     const { cipherStore, user } = useStores()
     const { updateCipher } = useCipherData()
     const { colors } = useTheme()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
 
     const isShared = route.params?.isShared ?? false
     const isFree = user.isFreePlan

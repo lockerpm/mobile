@@ -11,12 +11,14 @@ import { CipherRequest } from "core/models/request"
 import { Logger } from "app/utils/utils"
 import { CollectionView } from "core/models/view/collectionView"
 import { AccountRoleText } from "app/static/types"
+import { useAppLocale } from "../context"
 
 export function useFolder() {
   const { cipherStore, folderStore, collectionStore, enterpriseStore, user } = useStores()
   const { cipherService, cryptoService } = useCoreService()
   const { getCiphers, reloadCache } = useCipherData()
-  const { notify, notifyApiError, translate } = useHelper()
+  const { notify, notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
 
   const _generateMemberKey = async (publicKey: string, orgKey: SymmetricCryptoKey) => {
     const pk = Utils.fromB64ToArray(publicKey)

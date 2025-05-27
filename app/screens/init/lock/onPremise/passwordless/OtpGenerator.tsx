@@ -1,9 +1,8 @@
 import React, { memo, useEffect, useState } from "react"
 import { View, useWindowDimensions } from "react-native"
 import { Button, Logo, Screen, Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { DetailInstructionModal } from "./DetailInstructionModal"
-import { useHelper } from "app/services/hook"
 
 const indices = [0, 1, 2, 3, 4, 5]
 
@@ -17,7 +16,7 @@ interface Props {
 const OTP_EXPIRED_COUNTER = 60
 
 export const OtpPasswordlessGenerator = ({ otp, setOtp, goNext, goBack }: Props) => {
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const { colors, isDark } = useTheme()
 

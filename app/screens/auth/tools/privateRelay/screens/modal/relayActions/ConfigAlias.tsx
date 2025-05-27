@@ -6,7 +6,7 @@ import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { ModalHOC } from "./ModalHOC"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 
 interface Props {
@@ -22,7 +22,8 @@ const enum ALIAS_CONFIG {
 
 export const ConfigAlias = ({ onClose, item }: Props) => {
   const { toolStore, user } = useStores()
-  const { translate, notifyApiError } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { colors } = useTheme()
 
   // --------------- PARAMS ----------------

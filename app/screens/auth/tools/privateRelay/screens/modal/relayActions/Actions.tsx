@@ -6,10 +6,11 @@ import moment from "moment"
 import { RelayAddress } from "app/static/types"
 import { useHelper } from "app/services/hook"
 import { ActionItem } from "app/components/ciphers"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { debounce } from "app/utils/utils"
 import { AppEventType, EventBus } from "app/utils/eventBus"
+import { useClipboard } from "app/services/utils"
 
 export enum RelayActionType {
   DEFAULT = "default",
@@ -36,7 +37,9 @@ export const Actions = ({
 }: Props) => {
   const { toolStore } = useStores()
   const { colors } = useTheme()
-  const { translate, copyToClipboard, notifyApiError } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { copyToClipboard } = useClipboard()
+  const { translate } = useAppLocale()
 
   const handleRemove = async () => {
     onClose()

@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react"
 import { Alert, View, Image } from "react-native"
 import { ConfirmCreateMPModal } from "./ConfirmCreateMpModal"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { logCreateMasterPwEvent } from "app/utils/analytics"
 import { useAuthentication, useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { Button, Header, Logo, Screen, Text, TextInput } from "app/components/cores"
@@ -12,6 +12,7 @@ import { observer } from "mobx-react-lite"
 import { PolicyType } from "app/static/types"
 import NetInfo from "@react-native-community/netinfo"
 import { UnAuthScreenProps } from "../../route"
+import { useBiometricType } from "app/services/utils"
 
 export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassword">> = observer(
   ({ navigation }) => {
@@ -19,13 +20,9 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
     const { user, uiStore } = useStores()
     const { getPasswordStrength, checkPasswordPolicy } = useCipherHelper()
     const { logout, registerLocker, sessionLogin } = useAuthentication()
-    const {
-      isBiometricAvailable,
-      boostrapPushNotifier,
-      parsePushNotiData,
-      validateMasterPassword,
-      translate,
-    } = useHelper()
+    const { parsePushNotiData, validateMasterPassword } = useHelper()
+    const { translate } = useAppLocale()
+    const { isBiometricAvailable } = useBiometricType()
     const { loadFolders, loadCollections, loadOrganizations, createMasterPasswordItem } =
       useCipherData()
     // -------------- PARAMS ------------------

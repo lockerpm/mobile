@@ -1,6 +1,6 @@
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
-import { useCipherHelper, useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCipherHelper } from "app/services/hook"
 import moment from "moment"
 import React, { FC } from "react"
 import { TouchableOpacity, View, ViewStyle } from "react-native"
@@ -10,6 +10,7 @@ import { AppStackScreenProps } from "app/navigators/navigators.types"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
+import { useClipboard } from "app/services/utils"
 
 export const QuickSharesDetailScreen: FC<AppStackScreenProps<"quickShareItemsDetail">> = observer(
   (props) => {
@@ -17,7 +18,9 @@ export const QuickSharesDetailScreen: FC<AppStackScreenProps<"quickShareItemsDet
     const route = props.route
 
     const { colors } = useTheme()
-    const { copyToClipboard, translate } = useHelper()
+    const { translate } = useAppLocale()
+    const { copyToClipboard } = useClipboard()
+
     const { getCipherInfo, getCipherDescription } = useCipherHelper()
     const { cipherStore } = useStores()
 

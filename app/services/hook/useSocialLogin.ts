@@ -1,15 +1,17 @@
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
-import { GOOGLE_CLIENT_ID } from '../../config/constants'
-import { Logger } from '../../utils/utils'
-import { LoginManager, AccessToken } from 'react-native-fbsdk-next'
-import { appleAuth } from '@invertase/react-native-apple-authentication'
-import { getCookies, logRegisterSuccessEvent } from '../../utils/analytics'
-import { useStores } from 'app/models'
-import { useHelper } from './useHelper'
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin"
+import { GOOGLE_CLIENT_ID } from "../../config/constants"
+import { Logger } from "../../utils/utils"
+import { LoginManager, AccessToken } from "react-native-fbsdk-next"
+import { appleAuth } from "@invertase/react-native-apple-authentication"
+import { getCookies, logRegisterSuccessEvent } from "../../utils/analytics"
+import { useStores } from "app/models"
+import { useHelper } from "./useHelper"
+import { useAppLocale } from "../context"
 
 export function useSocialLogin() {
   const { user } = useStores()
-  const { notifyApiError, notify, setApiTokens, translate } = useHelper()
+  const { notifyApiError, notify, setApiTokens } = useHelper()
+  const { translate } = useAppLocale()
 
   // Google
   const googleLogin = async (payload: {
@@ -24,22 +26,22 @@ export function useSocialLogin() {
       await GoogleSignin.signIn()
       const tokens = await GoogleSignin.getTokens()
       await _handleSocialLogin({
-        provider: 'google',
+        provider: "google",
         token: tokens.accessToken,
         setIsLoading,
         onLoggedIn,
       })
     } catch (e) {
       setIsLoading && setIsLoading(false)
-      Logger.debug('googleLogin: ' + e)
+      Logger.debug("googleLogin: " + e)
       switch (e.code) {
         case statusCodes.SIGN_IN_CANCELLED:
           break
         case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-          notify('error', translate('error.social_login.google.play_service_not_available'))
+          notify("error", translate("error.social_login.google.play_service_not_available"))
           break
         default:
-          notify('error', translate('error.could_not_complete'))
+          notify("error", translate("error.could_not_complete"))
       }
     }
   }
@@ -53,7 +55,7 @@ export function useSocialLogin() {
     try {
       let res = await AccessToken.getCurrentAccessToken()
       if (!res) {
-        await LoginManager.logInWithPermissions(['email'])
+        await LoginManager.logInWithPermissions(["email"])
         res = await AccessToken.getCurrentAccessToken()
         if (!res) {
           // notify('error', translate('error.something_went_wrong'))
@@ -62,15 +64,15 @@ export function useSocialLogin() {
         }
       }
       await _handleSocialLogin({
-        provider: 'facebook',
+        provider: "facebook",
         token: res.accessToken,
         setIsLoading,
         onLoggedIn,
       })
     } catch (e) {
       setIsLoading && setIsLoading(false)
-      Logger.debug('facebookLogin: ' + e)
-      notify('error', translate('error.could_not_complete'))
+      Logger.debug("facebookLogin: " + e)
+      notify("error", translate("error.could_not_complete"))
     }
   }
 
@@ -82,7 +84,7 @@ export function useSocialLogin() {
   }) => {
     const { setIsLoading, onLoggedIn, code } = payload
     await _handleSocialLogin({
-      provider: 'github',
+      provider: "github",
       code,
       setIsLoading,
       onLoggedIn,
@@ -101,22 +103,22 @@ export function useSocialLogin() {
         requestedScopes: [appleAuth.Scope.EMAIL],
       })
       await _handleSocialLogin({
-        provider: 'apple',
+        provider: "apple",
         token: appleAuthRequestResponse.identityToken,
         setIsLoading,
         onLoggedIn,
       })
     } catch (e) {
       setIsLoading && setIsLoading(false)
-      Logger.debug('appleLogin: ' + e)
+      Logger.debug("appleLogin: " + e)
       switch (e.code) {
-        case '1001':
+        case "1001":
           break
-        case '1000':
-          notify('error', translate('error.social_login.apple.could_not_complete'))
+        case "1000":
+          notify("error", translate("error.social_login.apple.could_not_complete"))
           break
         default:
-          notify('error', translate('error.could_not_complete'))
+          notify("error", translate("error.could_not_complete"))
       }
     }
   }
@@ -142,12 +144,12 @@ export function useSocialLogin() {
       provider,
       access_token: token,
       code,
-      scope: 'pwdmanager',
-      utm_source: await getCookies('utm_source'),
+      scope: "pwdmanager",
+      utm_source: await getCookies("utm_source"),
     })
 
     setIsLoading && setIsLoading(false)
-    if (loginRes.kind !== 'ok') {
+    if (loginRes.kind !== "ok") {
       notifyApiError(loginRes)
       await logoutAllServices()
     } else {
@@ -158,9 +160,9 @@ export function useSocialLogin() {
       setIsLoading && setIsLoading(false)
       const res = await user.getPMToken(accessToken)
 
-      if (res.kind !== 'ok') {
-        if (res.kind === 'bad-data' && res.data.code === '1011') {
-          notify('error', translate('error.social_login.cannot_get_email'))
+      if (res.kind !== "ok") {
+        if (res.kind === "bad-data" && res.data.code === "1011") {
+          notify("error", translate("error.social_login.cannot_get_email"))
         } else {
           notifyApiError(res)
         }
@@ -183,7 +185,7 @@ export function useSocialLogin() {
         await GoogleSignin.signOut()
       }
     } catch (e) {
-      Logger.error('Log out Google: ' + e)
+      Logger.error("Log out Google: " + e)
     }
   }
 
@@ -193,7 +195,7 @@ export function useSocialLogin() {
         LoginManager.logOut()
       }
     } catch (e) {
-      Logger.error('Log out Facebook: ' + e)
+      Logger.error("Log out Facebook: " + e)
     }
   }
 

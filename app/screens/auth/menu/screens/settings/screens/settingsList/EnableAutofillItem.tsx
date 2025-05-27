@@ -7,11 +7,15 @@ import { useCoreService } from "app/services/coreService"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { autofillKeyChain } from "app/utils/autofillData"
 import { observer } from "mobx-react-lite"
+import { useBiometricType } from "app/services/utils"
+import { useAppLocale } from "app/services/context"
 
 export const EnableAutofillItem = observer(() => {
   const { user } = useStores()
   const { cryptoService } = useCoreService()
-  const { notify, isBiometricAvailable, translate } = useHelper()
+  const { notify } = useHelper()
+  const { translate } = useAppLocale()
+  const { isBiometricAvailable } = useBiometricType()
 
   const enableBiometric = async () => {
     const available = await isBiometricAvailable()

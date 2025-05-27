@@ -2,7 +2,7 @@ import { Header, Logo, Screen, Text } from "app/components/cores"
 import { PasscodeInput } from "app/components/utils"
 import { useStores } from "app/models"
 import { idApi } from "app/services/api"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useRef, useState } from "react"
@@ -17,9 +17,9 @@ export const SignUpWithPinCode: FC<SignUpScreenProps<"signupPinCode">> = observe
     },
   }) => {
     const { colors } = useTheme()
-    const { translate, setApiTokens, notify, randomString } = useHelper()
+    const { setApiTokens, notify, randomString } = useHelper()
     const { user } = useStores()
-
+    const { translate } = useAppLocale()
     const [code, setCode] = useState("")
     const [isLoadding, setIsLoading] = useState(false)
     const [errorText, setErrorText] = useState("")

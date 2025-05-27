@@ -1,42 +1,38 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { BackHandler } from 'react-native'
+import React, { useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { BackHandler } from "react-native"
 import {
   SortActionConfigModal,
   EmptyCipherList,
   CipherList,
   CipherListHeader,
-} from 'app/components/ciphers'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { Screen } from 'app/components/cores'
-import { useStores } from 'app/models'
-import { CipherType } from 'core/enums'
-import { useHelper } from 'app/services/hook'
+} from "app/components/ciphers"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { Screen } from "app/components/cores"
+import { CipherType } from "core/enums"
+import { useAppLocale } from "app/services/context"
 
-const EMPTY_IMG = require('assets/images/emptyCipherList/crypto-empty-img.png')
+const EMPTY_IMG = require("assets/images/emptyCipherList/crypto-empty-img.png")
 
 export const CryptoAssetsScreen = observer(() => {
   const navigation = useNavigation() as any
-  const { translate } = useHelper()
-  const { uiStore } = useStores()
+  const { translate } = useAppLocale()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
 
   // Close select before leave
   useEffect(() => {
-    uiStore.setIsSelecting(isSelecting)
     const checkSelectBeforeLeaving = () => {
       if (isSelecting) {
         setIsSelecting(false)
@@ -45,9 +41,9 @@ export const CryptoAssetsScreen = observer(() => {
       }
       return false
     }
-    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    BackHandler.addEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+      BackHandler.removeEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     }
   }, [isSelecting])
 
@@ -56,29 +52,29 @@ export const CryptoAssetsScreen = observer(() => {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption('most_relevant')
+        setSortOption("most_relevant")
       }
     } else {
       setSortList({
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       })
-      setSortOption('last_updated')
+      setSortOption("last_updated")
     }
   }, [searchText])
 
   return (
     <Screen
-      safeAreaEdges={['top']}
+      safeAreaEdges={["top"]}
       contentContainerStyle={{
         flex: 1,
       }}
       header={
         <CipherListHeader
-          header={translate('common.crypto_asset')}
+          header={translate("common.crypto_asset")}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
-            navigation.navigate('cryptoWallets__edit', { mode: 'add' })
+            navigation.navigate("cryptoWallets__edit", { mode: "add" })
           }}
           onSearch={setSearchText}
           searchText={searchText}
@@ -124,11 +120,11 @@ export const CryptoAssetsScreen = observer(() => {
           <EmptyCipherList
             img={EMPTY_IMG}
             imgStyle={{ height: 55, width: 55 }}
-            title={translate('crypto_asset.empty.title')}
-            desc={translate('crypto_asset.empty.desc')}
-            buttonText={translate('crypto_asset.empty.btn')}
+            title={translate("crypto_asset.empty.title")}
+            desc={translate("crypto_asset.empty.desc")}
+            buttonText={translate("crypto_asset.empty.btn")}
             addItem={() => {
-              navigation.navigate('cryptoWallets__edit', { mode: 'add' })
+              navigation.navigate("cryptoWallets__edit", { mode: "add" })
             }}
           />
         }

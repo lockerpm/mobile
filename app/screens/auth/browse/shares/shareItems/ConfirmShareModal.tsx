@@ -1,12 +1,12 @@
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import { useCoreService } from 'app/services/coreService'
-import { Utils } from 'app/services/coreService/utils'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { SharedMemberType } from 'app/static/types'
-import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
-import { Text, BottomModal, Button } from 'app/components/cores'
+import { useStores } from "app/models"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCoreService } from "app/services/coreService"
+import { Utils } from "app/services/coreService/utils"
+import { useCipherData, useHelper } from "app/services/hook"
+import { SharedMemberType } from "app/static/types"
+import React, { useEffect, useState } from "react"
+import { View } from "react-native"
+import { Text, BottomModal, Button } from "app/components/cores"
 
 interface Props {
   isOpen?: boolean
@@ -18,7 +18,8 @@ export const ConfirmShareModal = (props: Props) => {
   const { isOpen, onClose, member } = props
   const { cipherStore } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { confirmShareCipher } = useCipherData()
   const { cryptoService } = useCoreService()
 
@@ -26,8 +27,8 @@ export const ConfirmShareModal = (props: Props) => {
   // --------------- PARAMS ----------------
 
   const [isLoading, setIsLoading] = useState(false)
-  const [fingerprint, setFingerprint] = useState('')
-  const [publicKey, setPublicKey] = useState('')
+  const [fingerprint, setFingerprint] = useState("")
+  const [publicKey, setPublicKey] = useState("")
 
   // --------------- COMPUTED ----------------
 
@@ -38,7 +39,7 @@ export const ConfirmShareModal = (props: Props) => {
     const res = await confirmShareCipher(organizationId, member.id, publicKey)
     setIsLoading(false)
 
-    if (res.kind === 'ok' || res.kind === 'unauthorized') {
+    if (res.kind === "ok" || res.kind === "unauthorized") {
       onClose()
     }
   }
@@ -46,7 +47,7 @@ export const ConfirmShareModal = (props: Props) => {
   const loadFingerprint = async () => {
     setIsLoading(true)
     const res = await cipherStore.getSharingPublicKey(member.email)
-    if (res.kind !== 'ok') {
+    if (res.kind !== "ok") {
       notifyApiError(res)
       setIsLoading(false)
       return
@@ -54,15 +55,15 @@ export const ConfirmShareModal = (props: Props) => {
     setPublicKey(res.data.public_key)
     const pubKey = Utils.fromB64ToArray(res.data.public_key)
     const fp = await cryptoService.getFingerprint(member.pwd_user_id, pubKey.buffer)
-    setFingerprint(fp.join('-'))
+    setFingerprint(fp.join("-"))
     setIsLoading(false)
   }
 
   // --------------- EFFECT ----------------
   useEffect(() => {
     if (isOpen) {
-      setFingerprint('')
-      setPublicKey('')
+      setFingerprint("")
+      setPublicKey("")
       loadFingerprint()
     }
   }, [isOpen])
@@ -73,10 +74,10 @@ export const ConfirmShareModal = (props: Props) => {
     <BottomModal
       isOpen={isOpen}
       onClose={onClose}
-      title={translate('shares.confirm_share.verify_fingerprint')}
+      title={translate("shares.confirm_share.verify_fingerprint")}
     >
       <Text
-        text={translate('shares.confirm_share.verification_desc')}
+        text={translate("shares.confirm_share.verification_desc")}
         style={{
           marginTop: 20,
           marginBottom: 20,
@@ -102,7 +103,7 @@ export const ConfirmShareModal = (props: Props) => {
       <Text
         preset="label"
         size="base"
-        text={translate('shares.confirm_share.fingerprint_desc')}
+        text={translate("shares.confirm_share.fingerprint_desc")}
         style={{
           marginTop: 20,
           marginBottom: 10,
@@ -110,12 +111,12 @@ export const ConfirmShareModal = (props: Props) => {
       />
 
       <Button
-        text={translate('common.confirm')}
+        text={translate("common.confirm")}
         disabled={isLoading}
         loading={isLoading}
         onPress={handleConfirmShare}
         style={{
-          width: '100%',
+          width: "100%",
           marginTop: 20,
         }}
       />

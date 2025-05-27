@@ -9,8 +9,7 @@ import {
 } from "react-native"
 import { Text, AutoImage as Image, Icon, Screen, Header } from "app/components/cores"
 import { WALLET_APP_LIST } from "app/utils/crypto/applist"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 import Modal from "react-native-modal"
 
 type Props = {
@@ -21,7 +20,7 @@ type Props = {
 export const AppSelect = (props: Props) => {
   const { onChange, alias } = props
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   // ------------------ METHODS ------------------
   const [isSelect, setIsSelect] = useState(false)

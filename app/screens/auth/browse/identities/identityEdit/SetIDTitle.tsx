@@ -2,8 +2,7 @@ import React, { useState } from "react"
 import { NewActionSheet, NewActionSheetItem } from "app/components/utils/action-sheet/ActionSheet"
 import { TouchableOpacity, View } from "react-native"
 import { Icon, Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 
 interface Props {
   title: string
@@ -12,7 +11,7 @@ interface Props {
 
 export const SetIDTitle = ({ title, setTitle }: Props) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const [isSelect, setIsSelect] = useState(false)
 

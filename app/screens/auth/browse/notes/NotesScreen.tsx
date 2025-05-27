@@ -1,35 +1,34 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { BackHandler } from 'react-native'
+import React, { useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { BackHandler } from "react-native"
 import {
   CipherList,
   CipherListHeader,
   EmptyCipherList,
   SortActionConfigModal,
-} from 'app/components/ciphers'
-import { Screen } from 'app/components/cores'
-import { useStores } from 'app/models'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { CipherType } from 'core/enums'
-import { useHelper } from 'app/services/hook'
+} from "app/components/ciphers"
+import { Screen } from "app/components/cores"
+import { useStores } from "app/models"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { CipherType } from "core/enums"
+import { useAppLocale } from "app/services/context"
 
-const EMPTY_LIST = require('assets/images/emptyCipherList/note-empty-img.png')
+const EMPTY_LIST = require("assets/images/emptyCipherList/note-empty-img.png")
 
 export const NotesScreen = observer(() => {
   const navigation = useNavigation() as any
   const { uiStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
@@ -45,9 +44,9 @@ export const NotesScreen = observer(() => {
       }
       return false
     }
-    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    BackHandler.addEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+      BackHandler.removeEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     }
   }, [isSelecting])
 
@@ -56,27 +55,27 @@ export const NotesScreen = observer(() => {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption('most_relevant')
+        setSortOption("most_relevant")
       }
     } else {
       setSortList({
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       })
-      setSortOption('last_updated')
+      setSortOption("last_updated")
     }
   }, [searchText])
 
   return (
     <Screen
-      safeAreaEdges={['top']}
+      safeAreaEdges={["top"]}
       preset="fixed"
       header={
         <CipherListHeader
-          header={translate('common.note')}
+          header={translate("common.note")}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
-            navigation.navigate('notes__edit', { mode: 'add' })
+            navigation.navigate("notes__edit", { mode: "add" })
           }}
           onSearch={setSearchText}
           searchText={searchText}
@@ -125,11 +124,11 @@ export const NotesScreen = observer(() => {
           <EmptyCipherList
             img={EMPTY_LIST}
             imgStyle={{ height: 55, width: 55 }}
-            title={translate('note.empty.title')}
-            desc={translate('note.empty.desc')}
-            buttonText={translate('note.empty.btn')}
+            title={translate("note.empty.title")}
+            desc={translate("note.empty.desc")}
+            buttonText={translate("note.empty.btn")}
             addItem={() => {
-              navigation.navigate('notes__edit', { mode: 'add' })
+              navigation.navigate("notes__edit", { mode: "add" })
             }}
           />
         }

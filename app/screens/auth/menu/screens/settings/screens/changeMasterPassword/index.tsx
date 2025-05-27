@@ -8,10 +8,12 @@ import { Screen, Header, TextInput, Button } from "app/components/cores"
 import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/utils"
 import { StyleSheet, View } from "react-native"
 import { SettingsScreenProps } from "../../route"
+import { useAppLocale } from "app/services/context"
 
 export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPassword">> = observer(
   ({ navigation }) => {
-    const { validateMasterPassword, translate } = useHelper()
+    const { translate } = useAppLocale()
+    const { validateMasterPassword } = useHelper()
     const { getPasswordStrength, checkPasswordPolicy } = useCipherHelper()
     const { changeMasterPassword } = useAuthentication()
     const { user } = useStores()

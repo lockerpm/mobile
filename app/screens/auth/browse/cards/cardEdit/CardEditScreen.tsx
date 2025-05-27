@@ -4,8 +4,8 @@ import { observer } from "mobx-react-lite"
 import { View, Image } from "react-native"
 import { TextInputMaskOptionProp, TextInputMaskTypeProp } from "react-native-masked-text"
 import { CARD_BRANDS } from "../constants"
-import { useTheme } from "app/services/context"
-import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
 import { useStores } from "app/models"
 import { CardView, CipherView } from "core/models/view"
 import { CollectionView } from "core/models/view/collectionView"
@@ -38,7 +38,7 @@ export const CardEditScreen: FC<AppStackScreenProps<"cards__edit">> = observer((
   const { mode } = route.params
   const { colors } = useTheme()
 
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { shareFolderAddItem } = useFolder()
   const { createCipher, updateCipher } = useCipherData()
   const { newCipher } = useCipherHelper()

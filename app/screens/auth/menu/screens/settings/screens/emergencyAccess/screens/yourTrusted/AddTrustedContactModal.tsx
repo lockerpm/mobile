@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react"
 import { View, TouchableOpacity, Modal } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, Toggle, TextInput } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCipherData } from "app/services/hook"
 import { EmergencyAccessType } from "app/static/types"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 
@@ -15,7 +15,7 @@ interface InviteProps {
 export const AddTrustedContactModal = observer((props: InviteProps) => {
   const { isShow, onClose } = props
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { inviteEA } = useCipherData()
 
   // ----------------------- PARAMS -----------------------

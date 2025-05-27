@@ -1,15 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Image, View } from "react-native"
 import { IdentityAction } from "../IdentityAction"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { Header, Icon, Screen, Text, TextInput } from "app/components/cores"
 import { CipherInfoCommon, DeletedAction } from "app/components/ciphers"
 import { Textarea } from "app/components/utils"
-import { useHelper } from "app/services/hook"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 
@@ -18,9 +16,8 @@ export const IdentityInfoScreen: FC<AppStackScreenProps<"identities__info">> = o
   const route = props.route
 
   const { cipherStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const selectedCipher: CipherView = cipherStore.cipherView
-  const { colors } = useTheme()
 
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
     selectedCipher.id,

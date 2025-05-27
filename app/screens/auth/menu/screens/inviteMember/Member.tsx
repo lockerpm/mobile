@@ -1,8 +1,7 @@
 import React, { useState } from "react"
 import { View, Image, TouchableOpacity } from "react-native"
 import { BottomModal, Icon, Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 
 export interface FamilyMemberProp {
   id?: number
@@ -24,7 +23,7 @@ export const Member = (props: MemberProps) => {
   const { member, family, add, onRemove } = props
   const { id, email, avatar, full_name } = member
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const owner = id === null
   // ----------------------- PARAMS -----------------------

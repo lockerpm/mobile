@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
-import { Dimensions, View } from 'react-native'
-import { Icon, Text } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { MAX_MULTIPLE_SHARE_COUNT } from 'app/static/constants'
-import { SearchBar } from 'app/components/utils'
-import { ShareModal } from 'app/components/ciphers'
-import { useHelper } from 'app/services/hook'
+import React, { useState } from "react"
+import { Dimensions, View } from "react-native"
+import { Icon, Text } from "app/components/cores"
+import { useAppLocale, useTheme } from "app/services/context"
+import { MAX_MULTIPLE_SHARE_COUNT } from "app/static/constants"
+import { SearchBar } from "app/components/utils"
+import { ShareModal } from "app/components/ciphers"
 
 interface Props {
   openSort: () => void
@@ -30,7 +29,7 @@ export const ShareMultipleHeader = (props: Props) => {
     toggleSelectAll,
   } = props
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   // ----------------------- PARAMS ------------------------
 
@@ -46,16 +45,21 @@ export const ShareMultipleHeader = (props: Props) => {
   const renderHeaderSelectRight = () => (
     <View
       style={{
-        justifyContent: 'space-between',
+        justifyContent: "space-between",
         marginRight: -8,
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
       }}
     >
       <Icon icon="check-bold" size={24} onPress={toggleSelectAll} containerStyle={{ padding: 8 }} />
 
       {selectedItems.length > 0 && !isExceeded && (
-        <Icon icon="share" size={20} onPress={() => setShowShareModal(true)} containerStyle={{ padding: 8 }} />
+        <Icon
+          icon="share"
+          size={20}
+          onPress={() => setShowShareModal(true)}
+          containerStyle={{ padding: 8 }}
+        />
       )}
 
       <Icon
@@ -75,7 +79,7 @@ export const ShareMultipleHeader = (props: Props) => {
 
   // Select left
   const renderHeaderSelectLeft = () => (
-    <View style={{ marginLeft: -8, flexDirection: 'row', alignItems: 'center' }}>
+    <View style={{ marginLeft: -8, flexDirection: "row", alignItems: "center" }}>
       <Icon
         icon="x"
         size={26}
@@ -86,19 +90,19 @@ export const ShareMultipleHeader = (props: Props) => {
       />
 
       <Text
-        preset='bold'
+        preset="bold"
         color={isExceeded ? colors.error : colors.title}
         text={
           selectedItems.length
-            ? `${selectedItems.length} ${translate('common.selected')} (${translate(
-              'common.max'
-            )} ${MAX_MULTIPLE_SHARE_COUNT})`
-            : translate('common.select')
+            ? `${selectedItems.length} ${translate("common.selected")} (${translate(
+                "common.max",
+              )} ${MAX_MULTIPLE_SHARE_COUNT})`
+            : translate("common.select")
         }
-        ellipsizeMode='tail'
+        ellipsizeMode="tail"
         style={{
           marginLeft: 5,
-          maxWidth: Dimensions.get('screen').width / 2
+          maxWidth: Dimensions.get("screen").width / 2,
         }}
       />
     </View>
@@ -117,9 +121,9 @@ export const ShareMultipleHeader = (props: Props) => {
       <View
         style={{
           height: 56,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
           paddingHorizontal: 20,
         }}
       >

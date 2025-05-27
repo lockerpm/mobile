@@ -6,6 +6,7 @@ import { useCoreService } from "../coreService"
 import { useHelper } from "./useHelper"
 import { Logger } from "app/utils/utils"
 import { useCipherHelper } from "./useCipherHelper"
+import { useAppLocale } from "../context"
 
 export const useDeleteCipher = () => {
   const { cipherStore, uiStore } = useStores()
@@ -18,7 +19,8 @@ export const useDeleteCipher = () => {
     updateCipher,
   } = useCipherData()
   const { shareFolderRemoveItem } = useFolder()
-  const { notify, notifyApiError, translate } = useHelper()
+  const { notify, notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { getPasswordStrength } = useCipherHelper()
 
   const removeItemFromFolder = async (selectedCipher: CipherView) => {

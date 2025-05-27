@@ -8,10 +8,12 @@ import { TrustedContact } from "app/static/types"
 import { observer } from "mobx-react-lite"
 import { EmergencyAccessScreenProps } from "../../route"
 import { Contact } from "../Contact"
+import { useAppLocale } from "app/services/context"
 
 export const YourTrustedContactScreen: FC<EmergencyAccessScreenProps<"yourTrustedContact">> =
   observer(({ navigation }) => {
-    const { notifyApiError, translate } = useHelper()
+    const { notifyApiError } = useHelper()
+    const { translate } = useAppLocale()
     const { user } = useStores()
 
     const isFree = user.isFreePlan

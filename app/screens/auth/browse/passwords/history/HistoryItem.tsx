@@ -1,10 +1,9 @@
 import React, { useState } from "react"
 import { View, TextInput } from "react-native"
 import { Text, Icon } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { typography } from "app/theme"
 import moment from "moment"
-import { useHelper } from "app/services/hook"
 
 interface Props {
   password: string
@@ -14,14 +13,14 @@ interface Props {
 
 export const HistoryItem = ({ password, createAt, setSelectHistory }: Props) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const [showText, setShowText] = useState(false)
   const updateTime = createAt.getTime()
     ? translate("password_history.updated_password") +
       moment(createAt).format("HH:mm, MMMM Do YYYY")
     : ""
-    
+
   return (
     <View
       style={{

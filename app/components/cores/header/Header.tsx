@@ -11,8 +11,7 @@ import { spacing } from "../../../theme"
 import { Icon, IconTypes } from "../icon/Icon"
 import { Text, TextProps } from "../text/Text"
 import { ExtendedEdge, useSafeAreaInsetsStyle } from "app/utils/useSafeAreaInsetsStyle"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 
 export interface HeaderProps {
   /**
@@ -156,7 +155,7 @@ export function Header(props: HeaderProps) {
     titleStyle: $titleStyleOverride,
     containerStyle: $containerStyleOverride,
   } = props
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
 
   const titleContent = titleTx ? translate(titleTx, titleTxOptions) : title

@@ -4,7 +4,7 @@ import { TouchableOpacity, View, SectionList } from "react-native"
 import { NewFolderModal } from "../NewFolderModal"
 import { useStores } from "app/models"
 import { useFolder, useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { Button, Header, Icon, ImageIcon, Screen, Text } from "app/components/cores"
 import { AccountRole } from "app/static/types"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
@@ -15,7 +15,8 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
   const { mode, initialId, cipherIds = [] } = route.params
   const { folderStore, cipherStore, collectionStore } = useStores()
   const { colors } = useTheme()
-  const { notify, notifyApiError, getTeam, translate } = useHelper()
+  const { notify, notifyApiError, getTeam } = useHelper()
+  const { translate } = useAppLocale()
   const { shareFolderAddMultipleItems } = useFolder()
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)

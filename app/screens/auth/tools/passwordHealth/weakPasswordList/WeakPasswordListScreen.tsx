@@ -3,19 +3,20 @@ import { FlatList } from "react-native"
 import { LoadingHeader } from "../LoadingHeader"
 import { ListItem } from "./ListItem"
 import { useStores } from "app/models"
-import { useCipherHelper, useHelper } from "app/services/hook"
+import { useCipherHelper } from "app/services/hook"
 import { CipherView } from "core/models/view"
 import { Header, Screen, Text } from "app/components/cores"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { ToolsStackScreenProps } from "app/navigators/navigators.types"
+import { useAppLocale } from "app/services/context"
 
 export const WeakPasswordListScreen: FC<ToolsStackScreenProps<"weakPasswordList">> = observer(
   () => {
     const navigation = useNavigation() as any
     const { toolStore, cipherStore } = useStores()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
     const { getWebsiteLogo } = useCipherHelper()
 
     // -------------- COMPUTED ------------------

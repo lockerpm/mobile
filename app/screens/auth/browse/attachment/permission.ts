@@ -1,10 +1,10 @@
 /* eslint-disable react-native/split-platform-components */
-import { useHelper } from "app/services/hook"
 import { Platform, PermissionsAndroid, Alert, Linking } from "react-native"
 import { Logger } from "app/utils/utils"
+import { useAppLocale } from "app/services/context"
 
 export const usePermission = () => {
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const handleUserDeniedPermission = (type: string, onCancel?: () => void) => {
     Alert.alert(
@@ -109,7 +109,10 @@ export const usePermission = () => {
       translate("file_attachment.android_permission.allert_sub"),
       [
         { text: translate("common.cancel"), style: "cancel" },
-        { text: translate("file_attachment.go_setting"), onPress: () => Linking.openSettings() },
+        {
+          text: translate("file_attachment.go_setting"),
+          onPress: () => Linking.openSettings(),
+        },
       ],
     )
   }

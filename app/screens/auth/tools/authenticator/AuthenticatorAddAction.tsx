@@ -1,5 +1,5 @@
 import { ActionItem, ActionSheet } from "app/components/ciphers"
-import { useHelper } from "app/services/hook"
+import { useAppLocale } from "app/services/context"
 import React from "react"
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const AuthenticatorAddAction = (props: Props) => {
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   return (
     <ActionSheet isOpen={props.isOpen} onClose={props.onClose}>
       <ActionItem

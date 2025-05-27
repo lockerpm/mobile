@@ -29,7 +29,7 @@ import { Settings } from "react-native-fbsdk-next"
 import { Logger } from "app/utils/utils"
 import { AppEventType, EventBus } from "./utils/eventBus"
 import { api } from "./services/api"
-import { ThemeContextProvider } from "./services/context/useTheme"
+import { ThemeContextProvider, LocaleContextProvider } from "./services/context"
 import CombineContext from "./services/context/useCombineContext"
 import { IS_IOS } from "./config/constants"
 import { AndroidAutofillServiceType } from "./utils/autofillHelper"
@@ -143,7 +143,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
   return (
     <GestureHandlerRootView style={container}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-        <CombineContext components={[ThemeContextProvider]}>
+        <CombineContext components={[ThemeContextProvider, LocaleContextProvider]}>
           <RootNavigator
             ref={navigationRef}
             initialState={initialNavigationState}

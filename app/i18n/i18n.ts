@@ -20,6 +20,8 @@ I18nManager.forceRTL(false)
  */
 type DefaultLocale = typeof en
 export type TxKeyPath = RecursiveKeyOf<DefaultLocale>
+export type TOptions = i18n.TranslateOptions
+export type LanguageSupportType = "vi" | "en" | "zh" | "ru"
 
 type RecursiveKeyOf<TObj extends Record<string, any>> = {
   [TKey in keyof TObj & string]: TObj[TKey] extends Record<string, any>

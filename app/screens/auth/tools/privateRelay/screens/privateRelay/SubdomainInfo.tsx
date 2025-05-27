@@ -1,10 +1,9 @@
 import React, { memo } from "react"
 import { StyleSheet, View } from "react-native"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { Text, PressableScale, Icon, Button } from "app/components/cores"
 import { colorTransparency } from "app/theme"
 import { SubdomainData } from "app/static/types"
-import { useHelper } from "app/services/hook"
 
 interface ItemProps {
   subdomain: SubdomainData
@@ -17,7 +16,7 @@ interface ItemProps {
 export const SubdomainInfo = memo(
   ({ subdomain, onPressInfo, onCreate, onManage, onEdit }: ItemProps) => {
     const { colors } = useTheme()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
     const title = subdomain ? `${subdomain.subdomain}.maily.org` : ""
     return (
       <PressableScale onPress={onPressInfo}>

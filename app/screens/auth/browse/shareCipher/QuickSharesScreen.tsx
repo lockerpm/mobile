@@ -13,17 +13,20 @@ import { SendRequest } from "core/models/request/sendRequest"
 import { Logger } from "app/utils/utils"
 import { Utils } from "app/services/coreService/utils"
 import { Button, Header, Icon, Screen, Text, Toggle, TextInput } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { ActionSheet } from "app/components/ciphers"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
+import { useClipboard } from "app/services/utils"
 
 const { width } = Dimensions.get("screen")
 
 export const QuickSharesScreen: FC<AppStackScreenProps<"quick_shares">> = observer((props) => {
-  const { copyToClipboard, notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
+  const { copyToClipboard } = useClipboard()
   const { sendService } = useCoreService()
   const { getCipherDescription, getCipherInfo } = useCipherHelper()
   const { cipherStore } = useStores()

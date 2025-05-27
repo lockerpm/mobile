@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-import { View } from 'react-native'
-import { Button, TextInput } from 'app/components/cores'
-import { useStores } from 'app/models'
-import { useHelper } from 'app/services/hook'
+import React, { useState } from "react"
+import { View } from "react-native"
+import { Button, TextInput } from "app/components/cores"
+import { useStores } from "app/models"
+import { useHelper } from "app/services/hook"
+import { useAppLocale } from "app/services/context"
 
 type Props = {
   nextStep: () => void
@@ -11,15 +12,16 @@ type Props = {
 
 export const ChangePassword = (props: Props) => {
   const { user } = useStores()
-  const { notify, notifyApiError, translate } = useHelper()
+  const { notify, notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { nextStep, token } = props
 
   // ------------------ Params -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
 
   // ------------------ Methods ----------------------
 
@@ -28,10 +30,10 @@ export const ChangePassword = (props: Props) => {
     setIsLoading(true)
     const res = await user.setNewPassword(password, token)
     setIsLoading(false)
-    if (res.kind !== 'ok') {
+    if (res.kind !== "ok") {
       notifyApiError(res)
     } else {
-      notify('success', translate('forgot_password.password_updated'))
+      notify("success", translate("forgot_password.password_updated"))
       nextStep()
     }
   }
@@ -44,7 +46,7 @@ export const ChangePassword = (props: Props) => {
         isPassword
         animated
         isError={isError}
-        label={translate('forgot_password.new_password')}
+        label={translate("forgot_password.new_password")}
         value={password}
         onChangeText={setPassword}
       />
@@ -53,7 +55,7 @@ export const ChangePassword = (props: Props) => {
         animated
         isPassword
         isError={isError || (password && confirmPassword && password !== confirmPassword)}
-        label={translate('forgot_password.confirm_new_password')}
+        label={translate("forgot_password.confirm_new_password")}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
       />
@@ -61,10 +63,10 @@ export const ChangePassword = (props: Props) => {
       <Button
         loading={isLoading}
         disabled={isLoading || !(password && confirmPassword === password)}
-        text={translate('common.submit')}
+        text={translate("common.submit")}
         onPress={handleSubmitNewPassword}
         style={{
-          width: '100%',
+          width: "100%",
           marginTop: 40,
         }}
       />

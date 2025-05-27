@@ -12,8 +12,8 @@ import {
 import Modal from "react-native-modal"
 import { useSafeAreaInsetsStyle } from "app/utils/useSafeAreaInsetsStyle"
 import { Text, Icon, IconTypes } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+
 interface Props {
   /**
    * Bottom sheet title header
@@ -43,7 +43,7 @@ interface Props {
  */
 export const NewActionSheet = (props: Props) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const {
     closeText = translate("common.cancel"),
     isOpen,

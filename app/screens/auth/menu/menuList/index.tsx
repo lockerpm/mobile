@@ -3,7 +3,7 @@ import React, { useState, useEffect, FC } from "react"
 import { View, TextStyle, Dimensions } from "react-native"
 import { CommonActions } from "@react-navigation/native"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useAuthentication, useHelper } from "app/services/hook"
 import { ChatWootUser, PlanType } from "app/static/types"
 import { Screen, Text, TabHeader } from "app/components/cores"
@@ -19,7 +19,8 @@ import { useMenuListNavigation } from "./useMenuListNavigation"
 export const MenuListScreen: FC<TabsScreenProps<"menuTab">> = observer(({ navigation }) => {
   const { user } = useStores()
   const { colors, isDark } = useTheme()
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { lock, logout } = useAuthentication()
 
   const {

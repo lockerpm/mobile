@@ -2,14 +2,15 @@ import React, { useState, useEffect, FC, useRef } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Slider, Checkbox } from "react-native-ui-lib"
-import { useTheme } from "app/services/context"
-import { useCipherHelper, useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCipherHelper } from "app/services/hook"
 import { useCoreService } from "app/services/coreService"
 import { useStores } from "app/models"
 import { Button, Header, Icon, Screen, Text } from "app/components/cores"
 import { PasswordStrength } from "app/components/utils"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
+import { useClipboard } from "app/services/utils"
 
 export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator">> = observer(
   (props) => {
@@ -17,7 +18,8 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator"
     const route = props.route
 
     const { colors } = useTheme()
-    const { copyToClipboard, translate } = useHelper()
+    const { translate } = useAppLocale()
+    const { copyToClipboard } = useClipboard()
     const { getPasswordStrength } = useCipherHelper()
     const { passwordGenerationService } = useCoreService()
     const { cipherStore, user } = useStores()

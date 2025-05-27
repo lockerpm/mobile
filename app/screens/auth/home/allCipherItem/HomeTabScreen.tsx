@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { Alert } from "react-native"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { useStores } from "app/models"
-import { useAuthentication, useHelper } from "app/services/hook"
+import { useAuthentication } from "app/services/hook"
 import { useNavigation } from "@react-navigation/native"
 import { Screen } from "app/components/cores"
 
@@ -11,11 +11,12 @@ import { SortActionConfigModal, CipherList, AddCipherActionModal } from "app/com
 import { observer } from "mobx-react-lite"
 import { HomeSlider } from "./slider-bar/HomeSlider"
 import { EmptyCipherList } from "./EmptyCipherList"
+import { useAppLocale } from "app/services/context"
 
 export const HomeTabScreen = observer(() => {
   const navigation: any = useNavigation()
   const { uiStore, user } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { lock } = useAuthentication()
   // -------------- PARAMS ------------------
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

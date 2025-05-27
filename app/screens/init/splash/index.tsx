@@ -1,27 +1,22 @@
 import React, { FC, useState } from "react"
-import { Alert, Linking, View } from "react-native"
-import VersionCheck from "react-native-version-check"
-import dynamicLinks from "@react-native-firebase/dynamic-links"
+import { StyleSheet, View } from "react-native"
 import NetInfo from "@react-native-community/netinfo"
 import DeviceInfo from "react-native-device-info"
 import JailMonkey from "jail-monkey"
 import { useStores } from "app/models"
-import { IS_PROD } from "app/config/constants"
-import { Logger } from "app/utils/utils"
-import { useAuthentication, useHelper } from "app/services/hook"
 import { Text } from "app/components/cores"
 import { MotionLoading } from "app/components/utils"
 import { observer } from "mobx-react-lite"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
+import { LockType } from "app/static/types"
+import { useAppUpdate } from "./useAppUpdate"
+import { LanguageSupportType } from "app/i18n"
 
 export const SplashScreen: FC<RootStackScreenProps<"init">> = observer(({ navigation }) => {
-  const { translate } = useHelper()
+  const { setLanguage } = useAppLocale()
   const { colors } = useTheme()
-  const { user, cipherStore } = useStores()
-
-  const { boostrapPushNotifier } = useHelper()
-  const { handleDynamicLink } = useAuthentication()
+  const { user } = useStores()
 
   // ------------------ METHODS ---------------------
 
@@ -45,50 +40,10 @@ export const SplashScreen: FC<RootStackScreenProps<"init">> = observer(({ naviga
         navigation.replace("lock", { type: LockType.Individual })
       }
     } else {
-      navigation.replace("createMasterPassword")
+      navigation.replace("unAuthStack", {
+        screen: "createMasterPassword",
+      })
     }
-  }
-
-  const checkAppUpdate = () => {
-    !__DEV__ &&
-      IS_PROD &&
-      VersionCheck.needUpdate()
-        .then(async (res) => {
-          const showAlert = () => {
-            Alert.alert(
-              translate("alert.update.title"),
-              translate("alert.update.content", { version: res.latestVersion }),
-              [
-                {
-                  text: translate("alert.update.later"),
-                  style: "cancel",
-                  onPress: () => null,
-                },
-                {
-                  text: translate("alert.update.now"),
-                  style: "destructive",
-                  onPress: async () => {
-                    Linking.openURL(res.storeUrl) // open store if update is needed.
-                  },
-                },
-              ],
-            )
-          }
-
-          const { currentVersion, latestVersion } = res
-          try {
-            if (parseFloat(currentVersion) < parseFloat(latestVersion)) {
-              showAlert()
-            }
-          } catch (e) {
-            if (res.isNeeded) {
-              showAlert()
-            }
-          }
-        })
-        .catch((e) => {
-          Logger.error(e)
-        })
   }
 
   // Mounted
@@ -99,39 +54,23 @@ export const SplashScreen: FC<RootStackScreenProps<"init">> = observer(({ naviga
     const connectionState = await NetInfo.fetch()
 
     // Setup basic data
-    user.setLanguage(user.language)
+    setLanguage(user.language as LanguageSupportType)
 
     if (!user.deviceId) {
       user.setDeviceId(await DeviceInfo.getUniqueId())
-    }
-    cipherStore.setIsSynching(false)
-
-    // Reload FCM
-    if (connectionState.isConnected) {
-      await boostrapPushNotifier()
-    }
-
-    checkAppUpdate()
-
-    // Check dynamic link
-    const link = await dynamicLinks().getInitialLink()
-    if (link) {
-      Logger.debug(`DYNAMIC LINK INIT: ${JSON.stringify(link)}`)
-      if (link.url) {
-        const isNavigated = await handleDynamicLink(link.url, navigation)
-        if (isNavigated) {
-          return
-        }
-      }
     }
 
     // Logged in?
     if (!user.isLoggedIn) {
       if (!user.introShown) {
         user.setIntroShown(true)
-        navigation.replace("intro")
+        navigation.replace("unAuthStack", {
+          screen: "intro",
+        })
       } else {
-        navigation.replace("onBoarding")
+        navigation.replace("unAuthStack", {
+          screen: "onBoarding",
+        })
       }
       return
     }
@@ -152,7 +91,9 @@ export const SplashScreen: FC<RootStackScreenProps<"init">> = observer(({ naviga
             email: user.email,
           })
         } else {
-          navigation.replace("login")
+          navigation.replace("unAuthStack", {
+            screen: "loginStack",
+          })
         }
         return
       }
@@ -165,10 +106,14 @@ export const SplashScreen: FC<RootStackScreenProps<"init">> = observer(({ naviga
     ) {
       goLockOrCreatePassword()
     } else {
-      navigation.replace("login")
+      navigation.replace("unAuthStack", {
+        screen: "loginStack",
+      })
     }
   }
   // ------------------ EFFECTS ---------------------
+  useAppUpdate()
+
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       mounted()
@@ -183,24 +128,24 @@ export const SplashScreen: FC<RootStackScreenProps<"init">> = observer(({ naviga
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       {isRooted && (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            paddingHorizontal: 20,
-            paddingVertical: 16,
-          }}
-        >
-          <Text
-            text={translate("error.rooted_device")}
-            style={{
-              textAlign: "center",
-            }}
-          />
+        <View style={styles.rootContainer}>
+          <Text tx={"error.rooted_device"} style={styles.centerText} />
         </View>
       )}
       {!isRooted && <MotionLoading />}
     </View>
   )
+})
+
+const styles = StyleSheet.create({
+  centerText: {
+    textAlign: "center",
+  },
+  rootContainer: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
 })

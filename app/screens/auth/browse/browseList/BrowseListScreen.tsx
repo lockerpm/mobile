@@ -3,9 +3,9 @@ import { View, Image, TouchableOpacity } from "react-native"
 import { Text, Screen, TabHeader, Icon } from "app/components/cores"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
-import { useHelper, useTool } from "app/services/hook"
+import { useTool } from "app/services/hook"
 import { SharingStatus } from "app/static/types"
 import { CipherType } from "core/enums"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
@@ -15,7 +15,7 @@ export const BrowseListScreen = observer(() => {
   const { colors } = useTheme()
   const { cipherStore, folderStore, collectionStore } = useStores()
   const { getCipherCount } = useTool()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const shareNotiCount =
     cipherStore.sharingInvitationsIgnoreAccept.length +

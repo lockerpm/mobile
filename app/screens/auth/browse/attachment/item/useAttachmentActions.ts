@@ -9,6 +9,7 @@ import { Platform } from "react-native"
 import { usePermission } from "../permission"
 import Share, { ShareOptions } from "react-native-share"
 import { CameraRoll } from "@react-native-camera-roll/camera-roll"
+import { useAppLocale } from "app/services/context"
 
 const DOWNLOAD_PATH =
   Platform.OS === "android"
@@ -24,7 +25,8 @@ export const useAttachmentActions = (
 ) => {
   const { cipherStore } = useStores()
   const { attachmentService } = useCoreService()
-  const { notify, notifyApiError, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { notify, notifyApiError } = useHelper()
   const { requestStoragePermission, hasAndroidGalleryPermission } = usePermission()
 
   const onDownloadAttachment = async () => {

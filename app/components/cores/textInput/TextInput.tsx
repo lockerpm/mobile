@@ -29,13 +29,14 @@ import { bin } from "react-native-redash"
 import { Icon } from "../icon/Icon"
 import { Text, TextProps } from "../text/Text"
 import { typography } from "app/theme"
-import { useHelper } from "app/services/hook"
 import {
   MaskService,
   TextInputMaskTypeProp,
   TextInputMaskOptionProp,
 } from "react-native-masked-text"
 import { useTheme } from "app/services/context/useTheme"
+import { useAppLocale } from "app/services/context"
+import { useClipboard } from "app/services/utils"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
@@ -159,16 +160,15 @@ export const TextInput = forwardRef(function TextField(
     value = "",
     ...TextInputProps
   } = props
-  const { translate, copyToClipboard } = useHelper()
+  const { translate } = useAppLocale()
+  const { copyToClipboard } = useClipboard()
   const { colors } = useTheme()
   const [isFocus, setIsFocus] = useState(false)
   const [isRequired, setIsRequired] = useState(false)
   const [isShowText, setIsShowText] = useState(false)
   const input = useRef<RNTextInput>()
   const status = (() => {
-    if (
-      (isRequired || isError) 
-    ) {
+    if (isRequired || isError) {
       return "error"
     }
     if (isDisabled) {

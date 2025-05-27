@@ -12,7 +12,7 @@ import { useCipherData, useFolder, useHelper } from "app/services/hook"
 import { AccountRole, AccountRoleText } from "app/static/types"
 import { GeneralApiProblem } from "app/services/api/apiProblem"
 import { ActionItem, ActionSheet, LeaveShareModal } from "app/components/ciphers"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { ActionPremiumItem } from "app/components/ciphers/actionsSheet/ActionSheetPremiumItem"
 
 type Props = {
@@ -28,7 +28,8 @@ export const FolderAction = (props: Props) => {
   const navigation = useNavigation() as any
   const { cipherStore, user, uiStore } = useStores()
   const { colors } = useTheme()
-  const { getTeam, notifyApiError, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { getTeam, notifyApiError } = useHelper()
   const { deleteCollection, deleteFolder } = useCipherData()
   const { stopShareFolder } = useFolder()
 

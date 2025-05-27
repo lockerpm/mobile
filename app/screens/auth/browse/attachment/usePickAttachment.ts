@@ -9,6 +9,7 @@ import { Platform } from "react-native"
 import { Logger } from "app/utils/utils"
 import crypto from "react-native-crypto"
 import { attachmentApi } from "app/services/api"
+import { useAppLocale } from "app/services/context"
 
 export const MAX_UPLOAD_SIZE = 52428800 // 50MB
 export const IS_ANDROID = Platform.OS === "android"
@@ -28,7 +29,8 @@ export type AttachmentType = {
 }
 
 export const usePickAttachment = () => {
-  const { notify, notifyApiError, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { notify, notifyApiError } = useHelper()
   const { handleUserDeniedPermission } = usePermission()
   const { attachmentService } = useCoreService()
   const { cipherStore } = useStores()

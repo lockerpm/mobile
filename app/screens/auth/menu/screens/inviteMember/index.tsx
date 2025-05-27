@@ -5,7 +5,7 @@ import { FamilyMemberProp, Member } from "./Member"
 import { InviteMemberModal } from "./InviteModal"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
 import { MenuScreenProps } from "../../route"
 
@@ -13,7 +13,8 @@ export const InviteMemberScreen: FC<MenuScreenProps<"inviteMember">> = observer(
   ({ navigation }) => {
     const { user } = useStores()
     const { colors } = useTheme()
-    const { notifyApiError, notify, translate } = useHelper()
+    const { notifyApiError, notify } = useHelper()
+    const { translate } = useAppLocale()
 
     // ----------------------- PARAMS -----------------------
     const [reload, setRelad] = useState<boolean>(true)

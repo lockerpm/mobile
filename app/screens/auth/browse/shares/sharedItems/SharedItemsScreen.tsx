@@ -1,33 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { BackHandler } from 'react-native'
-import { CipherSharedList } from './CipherSharedList'
-import { PushNotifier } from 'app/utils/pushNotification/pushNotifier'
-import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
-import { useStores } from 'app/models'
-import { Screen } from 'app/components/cores'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { useHelper } from 'app/services/hook'
+import React, { useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { BackHandler } from "react-native"
+import { CipherSharedList } from "./CipherSharedList"
+import { PushNotifier } from "app/utils/pushNotification/pushNotifier"
+import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
+import { useStores } from "app/models"
+import { Screen } from "app/components/cores"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { useAppLocale } from "app/services/context"
 
-const SHARE_EMPTY = require('assets/images/emptyCipherList/share-empty-img.png')
+const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")
 
 export const SharedItemsScreen = observer(() => {
   const navigation = useNavigation()
   const { uiStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   // ------------------------ PARAMS -------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
@@ -36,8 +35,7 @@ export const SharedItemsScreen = observer(() => {
 
   // Close select before leave
   useEffect(() => {
-    uiStore.setIsSelecting(isSelecting)
-    const checkSelectBeforeLeaving = () => {
+s    const checkSelectBeforeLeaving = () => {
       if (isSelecting) {
         setIsSelecting(false)
         setSelectedItems([])
@@ -45,15 +43,15 @@ export const SharedItemsScreen = observer(() => {
       }
       return false
     }
-    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    BackHandler.addEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+      BackHandler.removeEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     }
   }, [isSelecting])
 
   // Clear noti
   useEffect(() => {
-    PushNotifier.cancelNotification('share_new')
+    PushNotifier.cancelNotification("share_new")
   }, [navigation])
 
   useEffect(() => {
@@ -61,14 +59,14 @@ export const SharedItemsScreen = observer(() => {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption('most_relevant')
+        setSortOption("most_relevant")
       }
     } else {
       setSortList({
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       })
-      setSortOption('last_updated')
+      setSortOption("last_updated")
     }
   }, [searchText])
 
@@ -76,11 +74,11 @@ export const SharedItemsScreen = observer(() => {
 
   return (
     <Screen
-      safeAreaEdges={['top']}
+      safeAreaEdges={["top"]}
       header={
         <CipherListHeader
           isShared
-          header={translate('shares.shared_items')}
+          header={translate("shares.shared_items")}
           openSort={() => setIsSortOpen(true)}
           onSearch={setSearchText}
           searchText={searchText}
@@ -128,8 +126,8 @@ export const SharedItemsScreen = observer(() => {
           <EmptyCipherList
             img={SHARE_EMPTY}
             imgStyle={{ height: 55, width: 55 }}
-            title={translate('shares.empty.title')}
-            desc={translate('shares.empty.desc_shared')}
+            title={translate("shares.empty.title")}
+            desc={translate("shares.empty.desc_shared")}
           />
         }
       />

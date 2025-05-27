@@ -10,13 +10,15 @@ import { CipherType } from "core/enums"
 import { TOOLS_ITEMS } from "app/navigators/navigators.route"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
+import { useAppLocale } from "app/services/context"
 
 export const AuthenticatorEditScreen: FC<AppStackScreenProps<"authenticator__edit">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route
 
-    const { notify, translate } = useHelper()
+    const { notify } = useHelper()
+    const { translate } = useAppLocale()
 
     const { createCipher, updateCipher } = useCipherData()
     const { newCipher } = useCipherHelper()

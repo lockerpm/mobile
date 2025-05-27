@@ -11,7 +11,7 @@ import {
   AccountRoleText,
 } from "app/static/types"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useCipherData, useHelper } from "app/services/hook"
 import { CipherView } from "core/models/view"
 import { observer } from "mobx-react-lite"
@@ -26,7 +26,8 @@ export const NormalSharesScreen: FC<AppStackScreenProps<"normal_shares">> = obse
   const { ciphers } = route.params
   const { cipherStore, enterpriseStore, user } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { shareCipher, shareMultipleCiphers, stopShareCipherForGroup, stopShareCipher } =
     useCipherData()
 

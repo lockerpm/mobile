@@ -4,7 +4,7 @@ import { Member } from "./Member"
 import { Icon, Text, Button, TextInput } from "app/components/cores"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 
 interface InviteProps {
@@ -18,7 +18,8 @@ export const InviteMemberModal = (props: InviteProps) => {
   const { limit, isShow, onClose, familyMembers, setRelad } = props
   const { user } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError, notify, translate } = useHelper()
+  const { notifyApiError, notify } = useHelper()
+  const { translate } = useAppLocale()
 
   // ----------------------- PARAMS -----------------------
   const [email, setEmail] = useState<string>("")

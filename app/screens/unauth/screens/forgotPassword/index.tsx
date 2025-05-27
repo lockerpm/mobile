@@ -9,11 +9,13 @@ import Animated, { SlideInUp } from "react-native-reanimated"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { UnAuthScreenProps } from "../../route"
+import { useAppLocale } from "app/services/context"
 
 export const ForgotPasswordScreen: FC<UnAuthScreenProps<"forgotPassword">> = observer(
   ({ navigation, route: { params } }) => {
     const { user } = useStores()
-    const { notify, notifyApiError, translate } = useHelper()
+    const { notify, notifyApiError } = useHelper()
+    const { translate } = useAppLocale()
     // ------------------------------ PARAMS -------------------------------
 
     const [isError, setIsError] = useState(false)

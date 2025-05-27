@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Text, Icon } from "app/components/cores"
 import { View } from "react-native"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { ActionItem } from "app/components/ciphers"
 import { PrivateEmailList } from "./PrivateEmailList"
@@ -20,7 +20,8 @@ interface Props {
 
 export const PrivateEmailModal = ({ isOpen, onClose, onSelectEmail }: Props) => {
   const navigation = useNavigation() as any
-  const { translate, notifyApiError } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { colors } = useTheme()
   const { toolStore, user } = useStores()
   const insets = useSafeAreaInsets()

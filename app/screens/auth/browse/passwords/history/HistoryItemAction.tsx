@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { BottomModal, Button, Text, TextInput } from "app/components/cores"
 import { ActionItem } from "app/components/ciphers"
-import { useTheme } from "app/services/context"
-import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useCipherData, useCipherHelper } from "app/services/hook"
 import { CipherView, LoginView } from "core/models/view"
-import Animated, { FadeIn} from "react-native-reanimated"
+import Animated, { FadeIn } from "react-native-reanimated"
+import { useClipboard } from "app/services/utils"
 
 interface Props {
   isOpen: boolean
@@ -22,7 +23,8 @@ export const HistoryItemAction = ({
   onRestore,
 }: Props) => {
   const { colors } = useTheme()
-  const { translate, copyToClipboard } = useHelper()
+  const { translate } = useAppLocale()
+  const { copyToClipboard } = useClipboard()
   const { updateCipher } = useCipherData()
   const { getPasswordStrength } = useCipherHelper()
 
@@ -45,7 +47,7 @@ export const HistoryItemAction = ({
     data.password = selectPassword
     data.totp = payload.login.totp
     data.uris = payload.login.uris
-    
+
     payload.login = data
     const passwordStrength = getPasswordStrength(selectPassword).score
     const res = await updateCipher(

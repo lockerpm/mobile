@@ -1,10 +1,9 @@
 import React from "react"
 import { StyleProp, View, ViewStyle, StyleSheet } from "react-native"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useNavigation } from "@react-navigation/native"
 import { Icon, Text, TouchableText } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { useHelper } from "app/services/hook"
 
 interface Props {
   onClose: () => void
@@ -13,7 +12,7 @@ interface Props {
 
 export const SuggestEnableAutofill = observer(({ onClose, style }: Props) => {
   const navigation = useNavigation() as any
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { colors } = useTheme()
   return (
     <View style={style}>

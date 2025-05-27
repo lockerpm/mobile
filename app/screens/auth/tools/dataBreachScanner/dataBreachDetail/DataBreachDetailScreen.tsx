@@ -1,19 +1,18 @@
-import React from 'react'
-import { observer } from 'mobx-react-lite'
-import { useWindowDimensions, View, Image } from 'react-native'
-import { useNavigation } from '@react-navigation/core'
-import moment from 'moment'
-import numeral from 'numeral'
-import RenderHtml from 'react-native-render-html'
-import { Text, Screen, Header } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { useStores } from 'app/models'
-import { useHelper } from 'app/services/hook'
+import React from "react"
+import { observer } from "mobx-react-lite"
+import { useWindowDimensions, View, Image } from "react-native"
+import { useNavigation } from "@react-navigation/core"
+import moment from "moment"
+import numeral from "numeral"
+import RenderHtml from "react-native-render-html"
+import { Text, Screen, Header } from "app/components/cores"
+import { useAppLocale, useTheme } from "app/services/context"
+import { useStores } from "app/models"
 
 export const DataBreachDetailScreen = observer(() => {
   const { colors } = useTheme()
   const navigation = useNavigation()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { toolStore } = useStores()
 
   const { width } = useWindowDimensions()
@@ -23,7 +22,7 @@ export const DataBreachDetailScreen = observer(() => {
     <Screen
       preset="auto"
       padding
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={["bottom"]}
       header={
         <Header
           leftIcon="arrow-left"
@@ -33,9 +32,9 @@ export const DataBreachDetailScreen = observer(() => {
       }
     >
       {data && (
-        <View  > 
+        <View>
           {/* Logo */}
-          <View style={{ justifyContent: 'center' }}>
+          <View style={{ justifyContent: "center" }}>
             <View
               style={{
                 height: 60,
@@ -64,11 +63,11 @@ export const DataBreachDetailScreen = observer(() => {
               marginBottom: 7,
             }}
           >
-            {translate('common.website')}:
+            {translate("common.website")}:
             <Text
-              text={'  ' + data.domain}
+              text={"  " + data.domain}
               style={{
-                fontWeight: 'normal',
+                fontWeight: "normal",
               }}
             />
           </Text>
@@ -79,11 +78,11 @@ export const DataBreachDetailScreen = observer(() => {
               marginBottom: 7,
             }}
           >
-            {translate('data_breach_scanner.pwn_count')}:
+            {translate("data_breach_scanner.pwn_count")}:
             <Text
-              text={'  ' + numeral(data.pwn_count).format('0,0.[00]')}
+              text={"  " + numeral(data.pwn_count).format("0,0.[00]")}
               style={{
-                fontWeight: 'normal',
+                fontWeight: "normal",
               }}
             />
           </Text>
@@ -94,11 +93,11 @@ export const DataBreachDetailScreen = observer(() => {
               marginBottom: 7,
             }}
           >
-            {translate('data_breach_scanner.breach_date')}:
+            {translate("data_breach_scanner.breach_date")}:
             <Text
-              text={'  ' + moment(data.breach_date).format('DD/MM/YYYY')}
+              text={"  " + moment(data.breach_date).format("DD/MM/YYYY")}
               style={{
-                fontWeight: 'normal',
+                fontWeight: "normal",
               }}
             />
           </Text>
@@ -109,11 +108,11 @@ export const DataBreachDetailScreen = observer(() => {
               marginBottom: 20,
             }}
           >
-            {translate('data_breach_scanner.added_date')}:
+            {translate("data_breach_scanner.added_date")}:
             <Text
-              text={'  ' + moment(data.added_date).format('DD/MM/YYYY')}
+              text={"  " + moment(data.added_date).format("DD/MM/YYYY")}
               style={{
-                fontWeight: 'normal',
+                fontWeight: "normal",
               }}
             />
           </Text>
@@ -130,7 +129,7 @@ export const DataBreachDetailScreen = observer(() => {
               },
               a: {
                 color: colors.primary,
-                textDecorationLine: 'none',
+                textDecorationLine: "none",
               },
             }}
           />
@@ -138,7 +137,7 @@ export const DataBreachDetailScreen = observer(() => {
 
           {/* Data classes */}
           <Text
-            text={`${translate('data_breach_scanner.data_classes')}:`}
+            text={`${translate("data_breach_scanner.data_classes")}:`}
             style={{
               marginTop: 20,
             }}

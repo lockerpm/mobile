@@ -2,8 +2,7 @@ import * as React from "react"
 import { Icon, IconTypes, Text } from "../../cores"
 import { StyleProp, ViewStyle, View } from "react-native"
 import ProgressBar from "react-native-ui-lib/progressBar"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 
 export interface PasswordStrengthProps {
   style?: StyleProp<ViewStyle>
@@ -17,7 +16,7 @@ export interface PasswordStrengthProps {
 export const PasswordStrength = function PasswordStrength(props: PasswordStrengthProps) {
   const { value, style, preset = "progress" } = props
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const config: {
     [name: string]: {

@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react"
 import { View, Image } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { EmergencyAccessStatus, EmergencyAccessType, TrustedContact } from "app/static/types"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { Text } from "app/components/cores"
 import { ActionItem, ActionSheet } from "app/components/ciphers"
-import { useHelper } from "app/services/hook"
 
 interface Props {
   isYourTrusted: boolean
@@ -21,7 +20,7 @@ export const ContactAction = (props: Props) => {
   const { isShow, onClose, trustedContact, setOnAction, isYourTrusted, setShowRequestModal } = props
   const { colors } = useTheme()
   const { user } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const navigation = useNavigation() as any
 
   const [nextModal, setNextModal] = useState<"rq_modal" | null>(null)

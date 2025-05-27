@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { View, Image } from "react-native"
 import { Screen, Header, Text, TextInput, Icon } from "app/components/cores"
 import { CryptoWalletAction } from "../CryptoWalletAction"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { toCryptoWalletData } from "app/utils/crypto"
 import { WALLET_APP_LIST } from "app/utils/crypto/applist"
@@ -12,7 +12,6 @@ import { CHAIN_LIST } from "app/utils/crypto/chainlist"
 import { CipherInfoCommon, DeletedAction } from "app/components/ciphers"
 import { SeedPhraseInfo } from "./SeedPhraseInfo"
 import { Textarea } from "app/components/utils"
-import { useHelper } from "app/services/hook"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 
@@ -21,7 +20,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<"cryptoWallets__info
     const navigation = props.navigation
     const route = props.route
 
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
     const { colors } = useTheme()
     const { cipherStore } = useStores()
 

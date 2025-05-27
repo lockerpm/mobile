@@ -7,13 +7,15 @@ import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { Logger } from "app/utils/utils"
 import { AccountRole } from "app/static/types"
+import { useAppLocale } from "../context"
 
 export function useTool() {
   const { user, toolStore, cipherStore } = useStores()
   const { passwordGenerationService, auditService, searchService } = useCoreService()
 
   const { getCiphers, getEncryptedCiphers, getCiphersFromCache } = useCipherData()
-  const { notify, translate, getTeam } = useHelper()
+  const { notify, getTeam } = useHelper()
+  const { translate } = useAppLocale()
 
   // ----------------------------- METHODS ---------------------------
 

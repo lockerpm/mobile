@@ -6,9 +6,8 @@ import * as Animatable from "react-native-animatable"
 import { AutofillServiceEnabled } from "app/utils/autofillHelper"
 import Accordion from "react-native-collapsible/Accordion"
 import { Button, Header, Icon, Screen, Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
-import { useHelper } from "app/services/hook"
 import { SettingsScreenProps } from "../../route"
 
 const HINT = require("assets/images/autofill/androidHint.png")
@@ -18,7 +17,7 @@ const ACTIVE = require("assets/images/autofill/autofillActive.png")
 export const AutofillServiceScreen: FC<SettingsScreenProps<"autofillService">> = observer(
   ({ navigation }) => {
     const { colors } = useTheme()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
 
     const { RNManufacturerSettings } = NativeModules
 

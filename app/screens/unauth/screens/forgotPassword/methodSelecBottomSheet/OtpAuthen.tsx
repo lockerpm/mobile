@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
-import { useStores } from 'app/models'
-import { useHelper } from 'app/services/hook'
-import { Text, Button, TextInput, Icon } from 'app/components/cores'
+import React, { useEffect, useState } from "react"
+import { View } from "react-native"
+import { useStores } from "app/models"
+import { useHelper } from "app/services/hook"
+import { Text, Button, TextInput, Icon } from "app/components/cores"
+import { useAppLocale } from "app/services/context"
 
 type Props = {
   goBack: () => void
@@ -12,7 +13,8 @@ type Props = {
 
 export const OtpAuthen = (props: Props) => {
   const { user, uiStore } = useStores()
-  const { notify, notifyApiError, translate } = useHelper()
+  const { notify, notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
 
   const { goBack, username, nextStep } = props
 
@@ -20,7 +22,7 @@ export const OtpAuthen = (props: Props) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [code, setCode] = useState('')
+  const [code, setCode] = useState("")
   const [remainingLockTime, setRemainingLockTime] = useState(0)
   const [sendingEmail, setIsSendingEmail] = useState(false)
   let countdown = null
@@ -32,11 +34,11 @@ export const OtpAuthen = (props: Props) => {
     setIsLoading(true)
     const res = await user.resetPasswordWithCode(username, code)
     setIsLoading(false)
-    if (res.kind !== 'ok') {
+    if (res.kind !== "ok") {
       setIsError(true)
-      notify('error', translate('error.invalid_authorization_code'))
+      notify("error", translate("error.invalid_authorization_code"))
     } else {
-      const urlArray = res.data.reset_password_url?.split('/')
+      const urlArray = res.data.reset_password_url?.split("/")
       nextStep(urlArray[urlArray.length - 1])
     }
   }
@@ -47,12 +49,12 @@ export const OtpAuthen = (props: Props) => {
 
   const resendEmail = async () => {
     setIsSendingEmail(true)
-    const res = await user.resetPassword(username, 'mail')
-    if (res.kind === 'ok') {
+    const res = await user.resetPassword(username, "mail")
+    if (res.kind === "ok") {
       uiStore.setLockResendOtpResetPasswordTime(Date.now() + 60 * 1000)
       startInterval()
       setRemainingLockTime(getRemainingLockTime())
-      notify('success', translate('forgot_password.resend_success'))
+      notify("success", translate("forgot_password.resend_success"))
     } else {
       notifyApiError(res)
     }
@@ -91,22 +93,22 @@ export const OtpAuthen = (props: Props) => {
     <View>
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
         <Icon icon="arrow-left" onPress={goBack} />
-        <Text preset="bold" size="xl" text={translate('forgot_password.enter_code')} />
+        <Text preset="bold" size="xl" text={translate("forgot_password.enter_code")} />
         <View style={{ width: 24, height: 24 }} />
       </View>
 
-      <Text text={translate('forgot_password.enter_code_desc')} style={{ marginVertical: 20 }} />
+      <Text text={translate("forgot_password.enter_code_desc")} style={{ marginVertical: 20 }} />
 
       <TextInput
         animated
         isError={isError}
-        label={translate('forgot_password.enter_code_here')}
+        label={translate("forgot_password.enter_code_here")}
         value={code}
         onChangeText={setCode}
         onSubmitEditing={handleRequest}
@@ -115,10 +117,10 @@ export const OtpAuthen = (props: Props) => {
       <Button
         loading={isLoading}
         disabled={isLoading || !code}
-        text={translate('common.authenticate')}
+        text={translate("common.authenticate")}
         onPress={handleRequest}
         style={{
-          width: '100%',
+          width: "100%",
           marginTop: 30,
         }}
       />
@@ -128,11 +130,11 @@ export const OtpAuthen = (props: Props) => {
         disabled={!!remainingLockTime || sendingEmail}
         loading={sendingEmail}
         onPress={resendEmail}
-        text={`${translate('forgot_password.resend_email')}${
-          remainingLockTime ? ` (${remainingLockTime}s)` : ''
+        text={`${translate("forgot_password.resend_email")}${
+          remainingLockTime ? ` (${remainingLockTime}s)` : ""
         }`}
         style={{
-          width: '100%',
+          width: "100%",
           marginTop: 15,
         }}
       />

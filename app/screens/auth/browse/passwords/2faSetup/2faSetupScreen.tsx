@@ -4,11 +4,11 @@ import { OtpList } from "./OtpList"
 import { Text, Screen, Header, Icon } from "app/components/cores"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { AuthenticatorAddAction } from "app/screens/auth/tools/authenticator/AuthenticatorAddAction"
 import { SearchBar } from "app/components/utils"
 import { observer } from "mobx-react-lite"
-import { useHelper, useTool } from "app/services/hook"
+import { useTool } from "app/services/hook"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 import { CipherType } from "core/enums"
 import { FREE_PLAN_LIMIT } from "app/static/constants"
@@ -24,7 +24,7 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<"passwords_2fa_setup
     const [searchText, setSearchText] = useState("")
     const [selectedOtp, setSelectedOtp] = useState<CipherView>(null)
     const [isAddOpen, setIsAddOpen] = useState(false)
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
     const { colors } = useTheme()
     const { getCipherCount } = useTool()
 

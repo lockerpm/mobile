@@ -1,8 +1,7 @@
 import React from "react"
 import { TouchableOpacity, View, ViewProps, Image } from "react-native"
 import { Icon, IconTypes, Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 import { TxKeyPath } from "app/i18n"
 
 export type MenuItemProps = {
@@ -89,7 +88,7 @@ export const MenuItemContainer = ({
   ...viewProps
 }: ContainerProps) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const titleText = title || translate(titleTx)
   const arrayLength = Array.isArray(children) ? children.length : 1
   return (

@@ -2,7 +2,7 @@ import orderBy from "lodash/orderBy"
 import React, { useState, useEffect, useCallback, useMemo } from "react"
 import { View, FlatList, ActivityIndicator } from "react-native"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { AccountRole, CipherAppView } from "app/static/types"
@@ -64,7 +64,8 @@ export const CipherList = observer((props: CipherListProps) => {
     setAllItems,
   } = props
   const { colors } = useTheme()
-  const { getTeam, notify, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { getTeam, notify } = useHelper()
   const { getCiphersFromCache } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
 

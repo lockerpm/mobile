@@ -4,15 +4,14 @@ import { NewActionSheet, NewActionSheetItem } from "app/components/utils/action-
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { AppTimeoutType } from "app/static/types"
 
 export const SetTimeOutItem = observer(() => {
   const { colors } = useTheme()
   const { user } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const [isTimeOutSelect, setIsTimeOutSelect] = useState(false)
 

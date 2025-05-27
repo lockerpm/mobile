@@ -3,8 +3,9 @@ import { observer } from "mobx-react-lite"
 import { FolderView } from "core/models/view/folderView"
 import { CollectionView } from "core/models/view/collectionView"
 import { useStores } from "app/models"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { BottomModal, Button, TextInput } from "app/components/cores"
+import { useAppLocale } from "app/services/context"
 
 interface Props {
   isOpen?: boolean
@@ -16,7 +17,7 @@ export const RenameFolderModal = observer((props: Props) => {
   const { isOpen, onClose, folder } = props
   const { folderStore, collectionStore } = useStores()
   const { updateFolder, updateCollection } = useCipherData()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   // --------------- PARAMS ----------------
 

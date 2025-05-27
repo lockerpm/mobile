@@ -157,6 +157,10 @@ export const enum BiometricsType {
    * Enum for generic biometrics (this is the only value available on android)
    */
   Biometrics = "biometric",
+  /**
+   * Biometrics not available
+   */
+  None = "none",
 }
 
 export const enum LockType {

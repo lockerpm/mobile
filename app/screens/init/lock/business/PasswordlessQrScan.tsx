@@ -2,20 +2,21 @@ import React, { useEffect, useState } from "react"
 import QRCodeScanner from "react-native-qrcode-scanner"
 import { View, Dimensions } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { useAuthentication, useHelper } from "app/services/hook"
+import { useAuthentication } from "app/services/hook"
 import { Header, Text } from "app/components/cores"
 import { useStores } from "app/models"
+import { useAppLocale } from "app/services/context"
 
 interface Props {
   index: number
   otp: number
   goBack: () => void
-  handleUnlock:  () => Promise<void>
+  handleUnlock: () => Promise<void>
 }
 
 export const BusinessPasswordlessQrScan = ({ otp, goBack, index, handleUnlock }: Props) => {
   const { uiStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { width, height } = Dimensions.get("screen")
   const navigation = useNavigation() as any
   const [onScanQR, setonScanQR] = useState(false)

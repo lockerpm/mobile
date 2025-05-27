@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import { BottomModal, Button, Text } from 'app/components/cores'
-import { useStores } from 'app/models'
-import { useCoreService } from 'app/services/coreService'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { View } from 'react-native'
-import { useTheme } from 'app/services/context'
-import { CollectionView } from 'core/models/view/collectionView'
+import React, { useEffect, useState } from "react"
+import { BottomModal, Button, Text } from "app/components/cores"
+import { useStores } from "app/models"
+import { useCipherData } from "app/services/hook"
+import { View } from "react-native"
+import { useAppLocale, useTheme } from "app/services/context"
+import { CollectionView } from "core/models/view/collectionView"
 
 interface Props {
   isOpen?: boolean
@@ -19,15 +17,14 @@ export const ConfirmShareFolderModal = (props: Props) => {
   const { cipherStore } = useStores()
   const { colors } = useTheme()
   const { confirmShareCipher } = useCipherData()
-  const { translate } = useHelper()
-  const { cryptoService } = useCoreService()
+  const { translate } = useAppLocale()
 
   const organizationId = cipherStore.cipherView?.organizationId
   // --------------- PARAMS ----------------
 
   const [isLoading, setIsLoading] = useState(false)
-  const [fingerprint, setFingerprint] = useState('')
-  const [publicKey, setPublicKey] = useState('')
+  const [fingerprint, setFingerprint] = useState("")
+  const [publicKey, setPublicKey] = useState("")
 
   // --------------- COMPUTED ----------------
 
@@ -37,7 +34,7 @@ export const ConfirmShareFolderModal = (props: Props) => {
     setIsLoading(true)
     const res = await confirmShareCipher(organizationId, item.id, publicKey)
     setIsLoading(false)
-    if (res.kind === 'ok' || res.kind === 'unauthorized') {
+    if (res.kind === "ok" || res.kind === "unauthorized") {
       onClose()
     }
   }
@@ -46,8 +43,8 @@ export const ConfirmShareFolderModal = (props: Props) => {
 
   useEffect(() => {
     if (isOpen) {
-      setFingerprint('')
-      setPublicKey('')
+      setFingerprint("")
+      setPublicKey("")
     }
   }, [isOpen])
   // --------------- RENDER ----------------
@@ -56,10 +53,10 @@ export const ConfirmShareFolderModal = (props: Props) => {
     <BottomModal
       isOpen={isOpen}
       onClose={onClose}
-      title={translate('shares.confirm_share.verify_fingerprint')}
+      title={translate("shares.confirm_share.verify_fingerprint")}
     >
       <Text
-        text={translate('shares.confirm_share.verification_desc')}
+        text={translate("shares.confirm_share.verification_desc")}
         style={{
           marginTop: 20,
           marginBottom: 20,
@@ -85,7 +82,7 @@ export const ConfirmShareFolderModal = (props: Props) => {
       <Text
         preset="label"
         size="base"
-        text={translate('shares.confirm_share.fingerprint_desc')}
+        text={translate("shares.confirm_share.fingerprint_desc")}
         style={{
           marginTop: 20,
           marginBottom: 10,
@@ -93,12 +90,12 @@ export const ConfirmShareFolderModal = (props: Props) => {
       />
 
       <Button
-        text={translate('common.confirm')}
+        text={translate("common.confirm")}
         loading={isLoading}
         disabled={isLoading}
         onPress={handleConfirmShare}
         style={{
-          width: '100%',
+          width: "100%",
           marginTop: 20,
         }}
       />

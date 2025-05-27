@@ -4,8 +4,7 @@ import isEqual from "lodash/isEqual"
 import { Icon, Text } from "app/components/cores"
 import { CipherView } from "core/models/view"
 import { SharedGroupType, SharedMemberType, SharingStatus } from "app/static/types"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
@@ -31,7 +30,7 @@ export const CipherShareListItem = memo(
   (props: Prop) => {
     const { item, openActionMenu, setShowConfirmModal } = props
     const { colors } = useTheme()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
 
     // Get cipher description
     const getDescription = (item: CipherShareType) => {
@@ -78,52 +77,54 @@ export const CipherShareListItem = memo(
 
                 {/* Sharing status */}
                 {item.status && (
-                  <View style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}>
-                  {
-                    item.status === SharingStatus.ACCEPTED && (
-                      <View style={{
-                        marginRight: 4, borderRadius: 15,
-                        width: 20,
-                        height: 20,
-                        backgroundColor: colors.error,
-                        justifyContent: "center",
-                        alignItems: "center"
-                      }}>
-                        <Text text="1" size="small" color={colors.white} preset="bold" />
-                      </View>
-                    )
-                  }
                   <View
                     style={{
-                      paddingHorizontal: 10,
-                      paddingVertical: 2,
-                      backgroundColor:
-                        item.status === SharingStatus.INVITED
-                          ? colors.warning
-                          : item.status === SharingStatus.ACCEPTED
-                          ? colors.title
-                          : colors.primary,
-                      borderRadius: 3,
+                      flexDirection: "row",
+                      alignItems: "center",
                     }}
                   >
-                    <Text
-                      size="small"
-                      text={
-                        item.status === SharingStatus.ACCEPTED
-                          ? translate("shares.wait_confirm")
-                          // @ts-ignore
-                          : translate(`shares.status.${item.status.toLowerCase()}`)
-                      }
+                    {item.status === SharingStatus.ACCEPTED && (
+                      <View
+                        style={{
+                          marginRight: 4,
+                          borderRadius: 15,
+                          width: 20,
+                          height: 20,
+                          backgroundColor: colors.error,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text text="1" size="small" color={colors.white} preset="bold" />
+                      </View>
+                    )}
+                    <View
                       style={{
-                        fontWeight: "bold",
-                        color: colors.background,
+                        paddingHorizontal: 10,
+                        paddingVertical: 2,
+                        backgroundColor:
+                          item.status === SharingStatus.INVITED
+                            ? colors.warning
+                            : item.status === SharingStatus.ACCEPTED
+                            ? colors.title
+                            : colors.primary,
+                        borderRadius: 3,
                       }}
-                    />
-                  </View>
-                
+                    >
+                      <Text
+                        size="small"
+                        text={
+                          item.status === SharingStatus.ACCEPTED
+                            ? translate("shares.wait_confirm")
+                            : // @ts-ignore
+                              translate(`shares.status.${item.status.toLowerCase()}`)
+                        }
+                        style={{
+                          fontWeight: "bold",
+                          color: colors.background,
+                        }}
+                      />
+                    </View>
                   </View>
                 )}
                 {/* Sharing status */}

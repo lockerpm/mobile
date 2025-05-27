@@ -5,11 +5,12 @@ import { QuickSharesCipherListItem } from "./QuickSharesListItem"
 import { QuickSharesItemAction } from "./QuickSharesItemAction"
 import { useCoreService } from "app/services/coreService"
 import { useStores } from "app/models"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { SendView } from "core/models/view/sendView"
 import { Logger } from "app/utils/utils"
 import { Screen, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
+import { useAppLocale } from "app/services/context"
 
 type Props = {
   emptyContent?: JSX.Element
@@ -26,7 +27,7 @@ export const QuickSharesList = observer((props: Props) => {
   const { emptyContent, navigation, onLoadingChange, searchText, sortList } = props
   const { sendService } = useCoreService()
   const { cipherStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { syncQuickShares } = useCipherData()
 
   // ------------------------ PARAMS ----------------------------

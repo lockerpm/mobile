@@ -18,12 +18,7 @@ export const UiStoreModel = types
     // Cache
     isAndroidAutofillService: types.maybeNull(types.boolean),
     androidAutofillServiceData: types.maybeNull(types.frozen<AndroidAutofillServiceData>()),
-    isDeeplinkShares: types.maybeNull(types.boolean),
-    isDeeplinkEmergencyAccess: types.maybeNull(types.boolean),
-    selectedCountry: types.maybeNull(types.string),
     isOffline: types.maybeNull(types.boolean),
-    isSelecting: types.maybeNull(types.boolean),
-    isPerformOverlayTask: types.maybeNull(types.boolean),
     hasNoMasterPwItem: types.maybeNull(types.boolean),
     isShowedPopupMarketing: types.maybeNull(types.boolean),
     isStartFromPasswordLess: types.maybeNull(types.boolean),
@@ -63,26 +58,6 @@ export const UiStoreModel = types
       self.isDark = isDark
     },
 
-    setIsSelecting: (isSelecting: boolean) => {
-      self.isSelecting = isSelecting
-    },
-
-    setIsPerformOverlayTask: (isPerformOverlayTask: boolean) => {
-      self.isPerformOverlayTask = isPerformOverlayTask
-    },
-
-    setSelectedCountry(countryCode: string) {
-      self.selectedCountry = countryCode
-    },
-
-    setIsDeeplinkEmergencyAccess(val: boolean) {
-      self.isDeeplinkEmergencyAccess = val
-    },
-
-    setIsDeeplinkShares(val: boolean) {
-      self.isDeeplinkShares = val
-    },
-
     setIsAndroidAutofillService(val: boolean) {
       self.isAndroidAutofillService = val
     },
@@ -98,13 +73,8 @@ export const UiStoreModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .postProcessSnapshot(
     omit([
-      "isSelecting",
       "isOffline",
-      "isPerformOverlayTask",
-      "selectedCountry",
       "hasNoMasterPwItem",
-      "isDeeplinkShares",
-      "isDeeplinkEmergencyAccess",
       "isShowedPopupMarketing",
       "isStartFromPasswordLess",
       "isAndroidAutofillService",

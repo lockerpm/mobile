@@ -7,19 +7,19 @@ import { CipherView } from "core/models/view"
 import { CipherIconImage, SortActionConfigModal } from "app/components/ciphers"
 import { IS_IOS } from "app/config/constants"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { useCipherHelper, useHelper } from "app/services/hook"
+import { useCipherHelper } from "app/services/hook"
 import { TouchableOpacity, View } from "react-native"
 import { HistoryItem } from "./HistoryItem"
 import { PasswordHistoryView } from "core/models/view/passwordHistoryView"
 import { HistoryItemAction } from "./HistoryItemAction"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 
 export const PasswordHistoryScreen: FC<AppStackScreenProps<"passwords_history">> = observer(
   (props) => {
     const { cipherStore, user } = useStores()
     const { getWebsiteLogo } = useCipherHelper()
     const { colors } = useTheme()
-    const { translate } = useHelper()
+    const { translate } = useAppLocale()
 
     const [sortOrder, setSortOrder] = useState("last_updated")
     const [isOpenModalSortStrategy, setOpenModalSortStrategy] = useState(false)
@@ -37,13 +37,13 @@ export const PasswordHistoryScreen: FC<AppStackScreenProps<"passwords_history">>
       return BROWSE_ITEMS.password.icon
     })()
 
-    const data = user.isFreePlan ?  selectedCipher.passwordHistory?.slice(Math.max(selectedCipher.passwordHistory.length - 3, 0)) : selectedCipher.passwordHistory
+    const data = user.isFreePlan
+      ? selectedCipher.passwordHistory?.slice(
+          Math.max(selectedCipher.passwordHistory.length - 3, 0),
+        )
+      : selectedCipher.passwordHistory
 
-
-    const passwordHistories =
-      sortOrder === "last_updated"
-        ? [...data]?.reverse() || []
-        : data
+    const passwordHistories = sortOrder === "last_updated" ? [...data]?.reverse() || [] : data
 
     return (
       <Screen

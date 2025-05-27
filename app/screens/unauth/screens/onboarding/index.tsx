@@ -1,15 +1,14 @@
 import React, { FC } from "react"
 import { View } from "react-native"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { Button, Screen, Text, Logo, Header } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { useHelper } from "app/services/hook"
 import { SetLanguage } from "app/components/utils"
 import { UnAuthScreenProps } from "../../route"
 
 export const OnboardingScreen: FC<UnAuthScreenProps<"onBoarding">> = observer((props) => {
   const { colors, isDark } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const navigateLogin = () => {
     props.navigation.replace("login")

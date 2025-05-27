@@ -56,6 +56,7 @@ import { observer } from "mobx-react-lite"
 import { PrimaryParamList, RootStackScreenProps } from "./navigators.types"
 import { useFocusEffect } from "@react-navigation/native"
 import { AutoFillScreen } from "app/screens/autofill"
+import { useAppLocale } from "app/services/context"
 
 const Stack = createStackNavigator<PrimaryParamList>()
 
@@ -72,7 +73,7 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
     syncQuickShares,
   } = useCipherData()
   const { uiStore, user, cipherStore, toolStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   // ------------------ PARAMS --------------------
 

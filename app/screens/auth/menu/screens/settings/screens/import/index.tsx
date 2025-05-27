@@ -10,7 +10,7 @@ import JSZip from "jszip"
 
 import { Screen, Header } from "app/components/cores"
 import { useCipherData, useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useCoreService } from "app/services/coreService"
 import { useStores } from "app/models"
 import { Logger } from "app/utils/utils"
@@ -23,7 +23,8 @@ const DOMParser = require("react-native-html-parser").DOMParser
 
 export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navigation }) => {
   const { colors } = useTheme()
-  const { notify, translate } = useHelper()
+  const { notify } = useHelper()
+  const { translate } = useAppLocale()
   const { importCiphers } = useCipherData()
   const { importService } = useCoreService()
   const { user } = useStores()

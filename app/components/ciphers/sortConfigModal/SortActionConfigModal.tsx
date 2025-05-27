@@ -1,8 +1,7 @@
 import React from "react"
 import { View } from "react-native"
 import { Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 import { ActionSheet } from "../actionsSheet/ActionSheet"
 import { ActionItem } from "../actionsSheet/ActionSheetItem"
 
@@ -18,7 +17,7 @@ interface Props {
 export const SortActionConfigModal = (props: Props) => {
   const { isOpen, onClose, onSelect, value, byNameOnly, byTimeOnly } = props
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const lastUpdateOptions = [
     {
       label: translate("all_items.last_updated"),

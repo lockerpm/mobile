@@ -3,7 +3,7 @@ import { TouchableOpacity, View, Platform } from "react-native"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/DeleteConfirmModal"
 import { LeaveShareModal } from "./LeaveShareModal"
 import { useCipherHelper, useDeleteCipher, useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
@@ -41,7 +41,8 @@ export const CipherAction = (props: CipherActionProps) => {
   const [showShareOptions, setShowShareOptions] = useState(false)
 
   const { colors } = useTheme()
-  const { getRouteName, getTeam, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { getRouteName, getTeam } = useHelper()
   const { toTrashCiphers } = useDeleteCipher()
   const { getCipherDescription, getCipherInfo } = useCipherHelper()
   const { cipherStore, user, uiStore } = useStores()

@@ -6,10 +6,11 @@ import sortBy from "lodash/sortBy"
 import DraggableFlatList from "react-native-draggable-flatlist"
 import { OtpListItem } from "./OtpListItem"
 import { CipherView } from "core/models/view"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { useStores } from "app/models"
 import { CipherType } from "core/enums"
 import { Text } from "app/components/cores"
+import { useAppLocale } from "app/services/context"
 
 interface Props {
   searchText: string
@@ -28,7 +29,7 @@ export const OtpList = observer((props: Props) => {
   const { searchText, sortList, selectedOtp, setSelectedOtp } = props
   const { getCiphersFromCache } = useCipherData()
   const { cipherStore, toolStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   // ------------------------ PARAMS ----------------------------
 

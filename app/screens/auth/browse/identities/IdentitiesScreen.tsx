@@ -13,14 +13,14 @@ import { useStores } from 'app/models'
 import { Screen } from 'app/components/cores'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { CipherType } from 'core/enums'
-import { useHelper } from 'app/services/hook'
+import { useAppLocale } from 'app/services/context'
 
 const EMPTY_LIST = require('assets/images/emptyCipherList/identity-empty-img.png')
 
 export const IdentitiesScreen = observer(() => {
   const navigation = useNavigation() as any
   const { uiStore } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -36,8 +36,7 @@ export const IdentitiesScreen = observer(() => {
 
   // Close select before leave
   useEffect(() => {
-    uiStore.setIsSelecting(isSelecting)
-    const checkSelectBeforeLeaving = () => {
+s    const checkSelectBeforeLeaving = () => {
       if (isSelecting) {
         setIsSelecting(false)
         setSelectedItems([])

@@ -1,12 +1,14 @@
 import { SettingsItem } from "app/components/utils"
 import { useStores } from "app/models"
+import { useAppLocale } from "app/services/context"
 import { useCipherData, useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import React from "react"
 
 export const SyncDataItem = observer(() => {
   const { uiStore, cipherStore } = useStores()
-  const { translate, notify } = useHelper()
+  const { notify } = useHelper()
+  const { translate } = useAppLocale()
   const { startSyncProcess } = useCipherData()
 
   const syncDataManually = async () => {

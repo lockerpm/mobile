@@ -2,8 +2,7 @@ import React from "react"
 import { View, Image } from "react-native"
 import { SKU } from "../PricePlan.sku"
 import { Text, Button, Icon } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppLocale, useTheme } from "app/services/context"
 
 interface Props {
   purchase: (subID: string) => void
@@ -13,7 +12,7 @@ const SECURITY = require("assets/images/intro/intro1.png")
 
 export const FamilyPayment = (props: Props) => {
   const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const benefits = [
     {

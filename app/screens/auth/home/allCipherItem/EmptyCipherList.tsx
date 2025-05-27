@@ -1,8 +1,8 @@
 import * as React from "react"
 import { View, Image, StyleSheet } from "react-native"
 import { Button, Text } from "app/components/cores"
-import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
+import { useAppLocale } from "app/services/context"
 
 export interface EmptyCipherListProps {
   onAdd: () => void
@@ -13,7 +13,7 @@ const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-ciph
 
 export const EmptyCipherList = observer((props: EmptyCipherListProps) => {
   const { onAdd, onImport } = props
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   return (
     <View style={{ alignItems: "center", marginTop: "10%" }}>

@@ -2,9 +2,8 @@ import React from "react"
 import { TouchableOpacity, View, ViewStyle, Image } from "react-native"
 import { Text } from "app/components/cores"
 import { useNavigation } from "@react-navigation/native"
-import { useTheme } from "app/services/context"
+import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
 
 export const PREMIUM_FEATURES_IMG = {
   locker: require("assets/images/intro/locker.png"),
@@ -15,7 +14,7 @@ export const PREMIUM_FEATURES_IMG = {
 
 export const PremiumFeature = () => {
   const { user } = useStores()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const navigation = useNavigation() as any
   const isFreeAccount = user.isFreePlan
 
