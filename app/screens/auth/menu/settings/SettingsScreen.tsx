@@ -123,6 +123,13 @@ export const SettingsScreen = observer(() => {
       },
     },
 
+    masterPassword: {
+      value: user.hide_master_password,
+      onChage: (isActive: boolean) => {
+        user.hideUserMassterPassword(isActive)
+      },
+    },
+
     timeout: {
       value: user.appTimeout || 0,
       onChange: user.setAppTimeout,
@@ -195,6 +202,18 @@ export const SettingsScreen = observer(() => {
         <SettingsItem
           name={translate("passkey.login_passkey_setting")}
           onPress={settings.passkey.onChage}
+        />
+
+        <SettingsItem
+          name={"Hide Master Password"}
+          onPress={() => settings.masterPassword.onChage(!settings.masterPassword.value)}
+          RightAccessory={
+            <Toggle
+              variant="switch"
+              value={settings.masterPassword.value}
+              onValueChange={settings.masterPassword.onChage}
+            />
+          }
         />
 
         <SettingsItem

@@ -843,6 +843,7 @@
     "delete_all_items_warning": "請點下方以刪除您保險庫中的所有項目和資料夾。屬於您和其他公司/群組分享之組織的項目並不會被刪除。",
     "delete_all_items_success": "您的保險庫已被清除！",
     "on_app_close": "應用程式關閉時",
+    "hide_mp": "從庫存中隱藏主密碼",
     "on_screen_off": "螢幕關閉時",
     "timeout": "逾時",
     "timeout_action": "逾時動作",

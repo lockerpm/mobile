@@ -897,6 +897,7 @@
     "delete_all_items_warning": "Mục này để xóa tất cả dữ liệu trong không gian Locker của bạn. Dữ liệu tổ chức, nếu có, sẽ không được xóa.",
     "delete_all_items_success": "Xoá dữ liệu thành công!",
     "on_app_close": "Khi tắt ứng dụng",
+    "hide_mp": "Không hiện mục Mật khẩu chính",
     "on_screen_off": "Khi tắt màn hình",
     "timeout": "Tự động khoá",
     "timeout_action": "Tự động khoá",

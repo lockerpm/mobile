@@ -61,7 +61,7 @@ export const UserModel = types
     pwd_user_id: types.maybeNull(types.string),
     pwd_user_type: types.maybeNull(types.string),
     is_pwd_manager: types.maybeNull(types.boolean),
-    default_team_id: types.maybeNull(types.string),
+    hide_master_password: types.maybeNull(types.boolean),
     fingerprint: types.maybeNull(types.string),
     language: types.optional(types.string, "en"),
     customer_language: types.optional(types.string, "en"),
@@ -155,14 +155,11 @@ export const UserModel = types
       self.username = userSnapshot.username
       self.full_name = userSnapshot.full_name
       self.avatar = userSnapshot.avatar
-      // sync language with server
-      // self.customer_language = userSnapshot.customer_language
-      // self.language = userSnapshot.customer_language
     },
     saveUserPw: (userSnapshot: UserSnapshotIn) => {
       self.pwd_user_id = userSnapshot.pwd_user_id
       self.is_pwd_manager = userSnapshot.is_pwd_manager
-      self.default_team_id = userSnapshot.default_team_id
+      self.hide_master_password = userSnapshot.hide_master_password
       self.pwd_user_type = userSnapshot.pwd_user_type
       save(StorageKey.APP_CURRENT_USER, {
         language: self.language,
@@ -189,6 +186,9 @@ export const UserModel = types
     },
     setInvitations: (invitations: any[]) => {
       self.invitations = cast(invitations)
+    },
+    setHideMasterPassword: (value: boolean) => {
+      self.hide_master_password = value
     },
     setIntroShown: (val: boolean) => {
       self.introShown = val
@@ -251,8 +251,7 @@ export const UserModel = types
       self.pwd_user_id = ""
       self.pwd_user_type = ""
       self.is_pwd_manager = false
-      self.default_team_id = ""
-
+      self.hide_master_password = false
       self.teams = cast([])
       self.enterprise = null
       self.invitations = cast([])
@@ -511,9 +510,16 @@ export const UserModel = types
       return res
     },
     getEnterprise: async () => {
-      const _res = await userApi.getEnterprise(self.apiToken)
-      if (_res.kind === "ok") {
-        self.saveEnterprise(_res.data)
+      const res = await userApi.getEnterprise(self.apiToken)
+      if (res.kind === "ok") {
+        self.saveEnterprise(res.data)
+      }
+    },
+
+    hideUserMassterPassword: async (hide: boolean) => {
+      const res = await userApi.hideUserMassterPassword(self.apiToken, hide)
+      if (res.kind === "ok") {
+        self.setHideMasterPassword(hide)
       }
     },
 

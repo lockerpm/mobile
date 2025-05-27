@@ -108,6 +108,9 @@ export const CipherList = observer((props: CipherListProps) => {
         filters.push((c: CipherView) => props.cipherType.includes(c.type))
       }
     }
+    if (user.hide_master_password) {
+      filters.push((c: CipherView) => c.type !== CipherType.MasterPassword)
+    }
 
     // Search
     const searchRes = await getCiphersFromCache({
@@ -236,7 +239,7 @@ export const CipherList = observer((props: CipherListProps) => {
   const lastSync = cipherStore.lastSync
   const lastCacheUpdate = cipherStore.lastCacheUpdate
   const notSynchedCiphers = cipherStore.notSynchedCiphers
-
+  const hideMP = user.hide_master_password
   useEffect(() => {
     if (searchText) setIsSearching(true)
     if (!searchText && isSearching) {
@@ -244,7 +247,7 @@ export const CipherList = observer((props: CipherListProps) => {
     }
 
     loadData()
-  }, [searchText, lastSync, lastCacheUpdate, sortList, notSynchedCiphers])
+  }, [searchText, lastSync, lastCacheUpdate, sortList, notSynchedCiphers, hideMP])
 
   useEffect(() => {
     if (checkedItem) {

@@ -151,6 +151,34 @@ class UserApi {
     }
   }
 
+  async hideUserMassterPassword(
+    token: string,
+    hide: boolean,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(
+        "/cystack_platform/pm/users/me",
+        {
+          hide_master_password: hide,
+        },
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
   async getEnterprise(
     token: string,
   ): Promise<{ kind: "ok"; data: Enterprise[] } | GeneralApiProblem> {
