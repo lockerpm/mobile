@@ -179,88 +179,6 @@ export function useHelper() {
     return ""
   }
 
-  // Parse storage push notification data
-  const parsePushNotiData = async (params?: {
-    notifeeData?: NotifeeNotificationData
-    tipTrick?: boolean
-  }) => {
-    const { notifeeData, tipTrick } = params || {}
-    const res = {
-      path: "",
-      params: {},
-      tempParams: {},
-      url: "",
-    }
-    let data: PushNotiData | NotifeeNotificationData = notifeeData
-    if (!data) {
-      data = await load(StorageKey.PUSH_NOTI_DATA)
-    }
-    if (data) {
-      switch (data.type) {
-        case PushEvent.SHARE_NEW:
-          res.path = "mainStack"
-          res.params = {
-            screen: "mainTab",
-            params: {
-              screen: "browseTab",
-              params: {
-                screen: "sharedItems",
-              },
-            },
-          }
-          res.tempParams = {
-            screen: "mainTab",
-            params: {
-              screen: "browseTab",
-            },
-          }
-          break
-        case PushEvent.SHARE_CONFIRM:
-        case PushEvent.SHARE_ACCEPT:
-        case PushEvent.SHARE_REJECT:
-          res.path = "mainStack"
-          res.params = {
-            screen: "mainTab",
-            params: {
-              screen: "browseTab",
-              params: {
-                screen: "shareItems",
-              },
-            },
-          }
-          res.tempParams = {
-            screen: "mainTab",
-            params: {
-              screen: "browseTab",
-            },
-          }
-          break
-
-        case PushEvent.EMERGENCY_INVITE:
-        case PushEvent.EMERGENCY_REJECT_REQUEST:
-        case PushEvent.EMERGENCY_APPROVE_REQUEST:
-          res.path = "mainStack"
-          res.params = {
-            screen: "contactsTrustedYou",
-          }
-          break
-        case PushEvent.EMERGENCY_INITIATE:
-        case PushEvent.EMERGENCY_ACCEPT_INVITATION:
-        case PushEvent.EMERGENCY_REJECT_INVITATION:
-          res.path = "mainStack"
-          res.params = {
-            screen: "yourTrustedContact",
-          }
-          break
-        case PushEvent.TIP_TRICK:
-          res.url = data.url
-      }
-      if (data.type !== PushEvent.TIP_TRICK || (tipTrick && data.type === PushEvent.TIP_TRICK)) {
-        await remove(StorageKey.PUSH_NOTI_DATA)
-      }
-    }
-    return res
-  }
   // Validate master password
   const validateMasterPassword = (password: string) => {
     let isValid = true
@@ -285,7 +203,6 @@ export function useHelper() {
     getTeam,
     getRouteName,
     notifyApiError,
-    parsePushNotiData,
     validateMasterPassword,
   }
 }

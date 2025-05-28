@@ -6,6 +6,7 @@ import { useAuthentication } from "app/services/hook"
 import { Header, Text } from "app/components/cores"
 import { useStores } from "app/models"
 import { useAppLocale } from "app/services/context"
+import { RootStackScreenProps } from "app/navigators/navigators.types"
 
 interface Props {
   index: number
@@ -14,11 +15,12 @@ interface Props {
   handleUnlock: () => Promise<void>
 }
 
+const { width, height } = Dimensions.get("screen")
+
 export const BusinessPasswordlessQrScan = ({ otp, goBack, index, handleUnlock }: Props) => {
   const { uiStore } = useStores()
   const { translate } = useAppLocale()
-  const { width, height } = Dimensions.get("screen")
-  const navigation = useNavigation() as any
+  const navigation = useNavigation<RootStackScreenProps<"lock">["navigation"]>()
   const [onScanQR, setonScanQR] = useState(false)
   const { sessionBusinessQrLogin } = useAuthentication()
 
@@ -27,9 +29,11 @@ export const BusinessPasswordlessQrScan = ({ otp, goBack, index, handleUnlock }:
 
     if (res.kind === "ok") {
       uiStore.setStartFromPasswordLess(true)
-      handleUnlock()
+      await handleUnlock()
     } else if (res.kind === "unauthorized") {
-      navigation.navigate("login", { type: "onPremise" })
+      navigation.navigate("unAuthStack", {
+        screen: "loginStack",
+      })
     }
   }
 

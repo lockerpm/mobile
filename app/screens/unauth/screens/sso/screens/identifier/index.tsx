@@ -3,10 +3,10 @@ import React, { FC, useState } from "react"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { Text, TextInput, Button, Screen, Header, Logo } from "app/components/cores"
-import { UnAuthScreenProps } from "../../../../route"
 import { useAppLocale } from "app/services/context"
+import { SSOScreenProps } from "../../route"
 
-export const SSOIdentifierScreen: FC<UnAuthScreenProps<"ssoIdentifier">> = observer((props) => {
+export const SSOIdentifierScreen: FC<SSOScreenProps<"ssoIdentifier">> = observer((props) => {
   const navigation = props.navigation
   const { user } = useStores()
   const { notifyApiError } = useHelper()

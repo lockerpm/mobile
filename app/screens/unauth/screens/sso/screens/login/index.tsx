@@ -6,13 +6,13 @@ import { NativeModules } from "react-native"
 import { IS_IOS, VIN_AUTH_CALLBACK, VIN_AUTH_ENDPOINT } from "app/config/constants"
 import { getUrlParameterByName } from "app/utils/utils"
 import { Button, Header, Logo, Screen, Text, TextInput } from "app/components/cores"
-import { UnAuthScreenProps } from "../../../../route"
 import { LockType } from "app/static/types"
 import { useAppLocale } from "app/services/context"
+import { SSOScreenProps } from "../../route"
 
 const { VinCssSsoLoginModule } = NativeModules
 
-export const SSOEmailLoginScreen: FC<UnAuthScreenProps<"ssoLogin">> = observer((props) => {
+export const SSOEmailLoginScreen: FC<SSOScreenProps<"ssoLogin">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
   const { user } = useStores()

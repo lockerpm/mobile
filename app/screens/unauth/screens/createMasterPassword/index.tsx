@@ -13,6 +13,7 @@ import { PolicyType } from "app/static/types"
 import NetInfo from "@react-native-community/netinfo"
 import { UnAuthScreenProps } from "../../route"
 import { useBiometricType } from "app/services/utils"
+import { RootNavigation } from "app/navigators"
 
 export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassword">> = observer(
   ({ navigation }) => {
@@ -20,7 +21,7 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
     const { user, uiStore } = useStores()
     const { getPasswordStrength, checkPasswordPolicy } = useCipherHelper()
     const { logout, registerLocker, sessionLogin } = useAuthentication()
-    const { parsePushNotiData, validateMasterPassword } = useHelper()
+    const { validateMasterPassword } = useHelper()
     const { translate } = useAppLocale()
     const { isBiometricAvailable } = useBiometricType()
     const { loadFolders, loadCollections, loadOrganizations, createMasterPasswordItem } =
@@ -53,7 +54,7 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
     // Logout
     const handleLogout = async () => {
       await logout()
-      navigation.navigate("login")
+      navigation.navigate("loginStack")
     }
 
     // Load teams to check master password policy
@@ -94,46 +95,20 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
         if (sessionRes.kind === "ok") {
           handleUnlock()
         } else {
-          navigation.navigate("lock")
+          RootNavigation.navigate("lock")
         }
       }
       setIsCreating(false)
-    }
-
-    const refreshFCM = async () => {
-      if (!user.disablePushNotifications) {
-        let isSuccess = true
-        if (!user.fcmToken) {
-          isSuccess = await boostrapPushNotifier()
-        }
-        if (isSuccess) {
-          user.updateFCM(user.fcmToken)
-        }
-      }
     }
 
     const handleUnlock = async () => {
       const connectionState = await NetInfo.fetch()
       // Sync
       if (connectionState.isConnected) {
-        // Refresh FCM
-        refreshFCM()
         await user.loadTeams()
         await user.loadPlan()
       }
       Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
-      // Parse push noti data
-      const navigationRequest = await parsePushNotiData()
-      if (navigationRequest.path) {
-        // handle navigate browse
-
-        navigationRequest.tempParams &&
-          // @ts-ignore TODO
-          navigation.replace(navigationRequest.path, navigationRequest.tempParams)
-        // @ts-ignore TODO
-        navigation.replace(navigationRequest.path, navigationRequest.params)
-        return
-      }
 
       if (
         (!user.biometricIntroShown || uiStore.isStartFromPasswordLess) &&
@@ -147,7 +122,7 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
         }
       }
 
-      navigation.replace("mainStack", { screen: "mainTab", params: { screen: user.defaultTab } })
+      navigation.replace("mainStack", { screen: "mainTab" })
     }
 
     // -------------- EFFECT ------------------
@@ -175,10 +150,7 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
           {
             text: translate("common.logout"),
             style: "destructive",
-            onPress: async () => {
-              await logout()
-              navigation.navigate("login")
-            },
+            onPress: handleLogout,
           },
         ])
       }

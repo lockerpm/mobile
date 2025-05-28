@@ -47,7 +47,7 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigat
   // ---------------- METHODS ---------------------
 
   const navigateLogin = () => {
-    navigation.replace("login")
+    navigation.replace("loginStack")
   }
 
   const handleRegisterWebauth = async (
@@ -86,7 +86,7 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigat
         if (res.kind === "ok") {
           logRegisterSuccessEvent()
           notify("success", translate("signup.signup_successful"), 5000)
-          navigation.replace("login")
+          navigation.replace("loginStack")
         } else {
           notifyApiError(res)
           onRegisterWithPinCode()
@@ -129,7 +129,7 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigat
   }
 
   const onRegisterWithPinCode = () => {
-    navigation.navigate("signup_pin_code", {
+    navigation.navigate("signupPinCode", {
       email,
       getNews,
     })
@@ -155,7 +155,7 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigat
 
   useEffect(() => {
     const onBackPress = () => {
-      navigation.replace("login")
+      navigation.replace("loginStack")
       return true
     }
 

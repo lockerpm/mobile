@@ -1,41 +1,30 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import {
-  Alert,
-  BackHandler,
-  View,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-} from "react-native"
+import { Alert, BackHandler, View, Image, StyleSheet, Dimensions } from "react-native"
 import { useAuthentication, useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
-import { BiometricsType, EnterpriseInvitation } from "app/static/types"
+import { EnterpriseInvitation } from "app/static/types"
 import { useNavigation } from "@react-navigation/native"
 import { useAppLocale, useTheme } from "app/services/context"
-import { useCoreService } from "app/services/coreService"
-import { Logo, Button, Screen, Text, TextInput, Header, Icon } from "app/components/cores"
+import { Logo, Button, Screen, Text, TextInput, Header } from "app/components/cores"
 import { EnterpriseInvitationModal } from "./EnterpriseInvitationModal"
+import { RootStackScreenProps } from "app/navigators/navigators.types"
 
 interface Props {
-  biometryType: BiometricsType
   handleLogout: () => void
   handleUnlock: () => Promise<void>
 }
 
 const SCREEN_HEIGHT = Dimensions.get("window").height
 const hideLogo = SCREEN_HEIGHT < 700
-export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock }: Props) => {
+export const LockByMasterPassword = ({ handleLogout, handleUnlock }: Props) => {
   const { colors } = useTheme()
-  const navigation = useNavigation() as any
+  const navigation = useNavigation<RootStackScreenProps<"lock">["navigation"]>()
   const { user, uiStore, enterpriseStore } = useStores()
   const { notify, notifyApiError } = useHelper()
   const { translate } = useAppLocale()
-  const { sessionLogin, biometricLogin } = useAuthentication()
+  const { sessionLogin } = useAuthentication()
   const { createMasterPasswordItem } = useCipherData()
   const { getPasswordStrength } = useCipherHelper()
-
-  const { cryptoService } = useCoreService()
 
   // ---------------------- PARAMS -------------------------
 
@@ -52,14 +41,8 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
   // ---------------------- METHODS -------------------------
 
   const isAutofillAnroid = uiStore.isAndroidAutofillService
-  const showInvitation = enterpeiseInvitations.length > 0
 
   // ---------------------- METHODS -------------------------
-  // first check is crypto keyu exist
-  const checkKey = async () => {
-    const key = await cryptoService.getKey()
-    return !!key
-  }
 
   const unlock = async () => {
     setIsUnlocking(true)
@@ -69,7 +52,9 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
     if (res.kind === "ok") {
       await handleUnlock()
     } else if (res.kind === "unauthorized") {
-      navigation.replace("login", { type: "individual" })
+      navigation.navigate("unAuthStack", {
+        screen: "loginStack",
+      })
     } else if (res.kind === "enterprise-lock") {
       Alert.alert("", translate("alert.enterprise_lock"), [
         {
@@ -90,30 +75,6 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
       await fetchEnterpriseInvitation()
     } else {
       setIsError(true)
-    }
-    setIsUnlocking(false)
-  }
-
-  const handleUnlockBiometric = async (init?: boolean) => {
-    if (!user.isBiometricUnlock) {
-      notify("error", translate("error.biometric_not_enable"))
-      return
-    }
-    const hadKey = await checkKey()
-    if (!hadKey) {
-      !init && notify("info", translate("error.not_valid_for_biometric"))
-      return
-    }
-
-    if (showInvitation) {
-      setIsShowInvitation(true)
-      return
-    }
-    setIsUnlocking(true)
-
-    const res = await biometricLogin()
-    if (res.kind === "ok") {
-      await handleUnlock()
     }
     setIsUnlocking(false)
   }
@@ -145,12 +106,6 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
   // -------------- EFFECT ------------------
   useEffect(() => {
     fetchEnterpriseInvitation()
-    const unsubscribe = navigation.addListener("focus", () => {
-      if (user.isBiometricUnlock) {
-        handleUnlockBiometric(true)
-      }
-    })
-    return unsubscribe
   }, [])
 
   // ---------------------- RENDER -------------------------
@@ -246,16 +201,6 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, handleUnlock 
         preset="primary"
       />
 
-      <TouchableOpacity
-        disabled={isUnlocking}
-        onPress={() => handleUnlockBiometric()}
-        style={styles.faceIdContainer}
-      >
-        <View style={styles.faceId}>
-          <Icon icon={biometryType === BiometricsType.FaceID ? "face-id" : "fingerprint"} />
-          <Text text={translate(`common.${biometryType}_unlocking`)} />
-        </View>
-      </TouchableOpacity>
       <Button
         preset="teriatary"
         disabled={isSendingHint}
@@ -277,15 +222,6 @@ const styles = StyleSheet.create({
   },
   container: {
     justifyContent: "space-between",
-  },
-  faceId: {
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  faceIdContainer: {
-    alignItems: "center",
-    marginVertical: 25,
-    width: "100%",
   },
   logo: { alignSelf: "center", height: 70, marginBottom: 10, width: 70 },
   mgTop20: {

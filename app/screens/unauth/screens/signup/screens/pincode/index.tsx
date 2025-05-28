@@ -104,42 +104,6 @@ export const SignUpWithPinCode: FC<SignUpScreenProps<"signupPinCode">> = observe
         />
 
         <ResendOtp email={email} language={user.language} nonce={nonce.current} />
-
-        {/* <DividerText
-          tx="login_email_code.or"
-          style={{ marginHorizontal: 8 }}
-          color={colors.secondaryText}
-          size="base"
-          containerStyle={{
-            marginVertical: 12,
-          }}
-        />
-
-        <Text
-          preset="label"
-          tx="login_email_code.not_familiar"
-          size="base"
-          style={{ textAlign: "center", marginBottom: 16 }}
-        />
-
-        <TouchableOpacity
-          disabled={isLoadding}
-          style={{
-            alignItems: "center",
-            borderWidth: 1,
-            borderColor: colors.palette.neutral5,
-            borderRadius: 8,
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-          }}
-          onPress={() => {
-            navigation.replace("signup_password", {
-              email,
-            })
-          }}
-        >
-          <Text preset="bold" tx="login_email_code.use_password" />
-        </TouchableOpacity> */}
       </Screen>
     )
   },
@@ -151,7 +115,8 @@ interface Props {
   nonce: string
 }
 export const ResendOtp = ({ email, language, nonce }: Props) => {
-  const { notifyApiError, translate } = useHelper()
+  const { notifyApiError } = useHelper()
+  const { translate } = useAppLocale()
   const { colors } = useTheme()
   const [timerCount, setTimer] = useState(60)
   const [enableResendBtn, setEnableResendBtn] = useState(true)

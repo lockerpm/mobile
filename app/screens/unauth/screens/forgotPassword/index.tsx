@@ -94,7 +94,7 @@ export const ForgotPasswordScreen: FC<UnAuthScreenProps<"forgotPassword">> = obs
             <ChangePassword
               token={token}
               nextStep={() => {
-                navigation.navigate("login")
+                navigation.navigate("loginStack")
               }}
             />
           </Animated.View>

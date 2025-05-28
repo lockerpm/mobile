@@ -36,7 +36,7 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
     // ---------------- METHODS ---------------------
 
     const navigateLogin = () => {
-      navigation.replace("login")
+      navigation.replace("loginStack")
     }
 
     const getCaptchaToken = useCallback(async () => {
@@ -60,7 +60,7 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
       if (res.kind === "ok") {
         logRegisterSuccessEvent()
         notify("success", translate("signup.signup_successful"), 5000)
-        navigation.replace("login")
+        navigation.replace("loginStack")
       } else {
         notifyApiError(res)
       }
@@ -81,7 +81,7 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
 
     useEffect(() => {
       const onBackPress = () => {
-        navigation.replace("login")
+        navigation.replace("loginStack")
         return true
       }
 

@@ -6,12 +6,12 @@ import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useRef, useState } from "react"
 import { View } from "react-native"
-import { ResendOtp } from "../../signup/SignUpWithPinCode"
-import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { LOGIN_METHOD } from "app/static/types"
 import { TwoFactorAuthentication } from "./2faModal"
+import { LoginScreenProps } from "../../route"
+import { ResendOtp } from "../../../signup/screens"
 
-export const PinCodeLoginScreen: FC<RootStackScreenProps<"login_by_pincode">> = observer(
+export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observer(
   ({
     navigation,
     route: {

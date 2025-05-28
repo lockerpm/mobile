@@ -1,7 +1,7 @@
 import React, { FC, useRef, useState } from "react"
 import { Dimensions, StyleSheet } from "react-native"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { Icon, Screen } from "app/components/cores"
+import { Screen } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { AnimatedFooter } from "./animatedFooter/AnimatedFooter"
 import { Wave } from "./Wave"
@@ -10,11 +10,9 @@ import { UnAuthScreenProps } from "../../route"
 
 const SCREEN_WIDTH = Dimensions.get("screen").width
 
-export const IntroScreen: FC<UnAuthScreenProps<"intro">> = observer(({ navigation, route }) => {
+export const IntroScreen: FC<UnAuthScreenProps<"intro">> = observer(({ navigation }) => {
   const [index, setIndex] = useState(0)
   const scrollViewRef = useRef(null)
-
-  const isPreview = route.params?.preview
 
   // ------------------ METHODS ---------------------
   const animIndex = useSharedValue(0)
@@ -51,17 +49,6 @@ export const IntroScreen: FC<UnAuthScreenProps<"intro">> = observer(({ navigatio
         justifyContent: "space-between",
       }}
     >
-      {isPreview && (
-        <Icon
-          onPress={() => {
-            navigation.goBack()
-          }}
-          icon="arrow-left"
-          size={24}
-          style={{ zIndex: 10, position: "absolute", left: 20, top: 16 }}
-        />
-      )}
-
       <Wave color={"#Dbf5dd"} style={StyleSheet.absoluteFill} />
 
       <Animated.ScrollView

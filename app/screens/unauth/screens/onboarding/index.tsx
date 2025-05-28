@@ -11,11 +11,11 @@ export const OnboardingScreen: FC<UnAuthScreenProps<"onBoarding">> = observer((p
   const { translate } = useAppLocale()
 
   const navigateLogin = () => {
-    props.navigation.replace("login")
+    props.navigation.replace("loginStack")
   }
 
   const navigateSignup = () => {
-    props.navigation.replace("signup")
+    props.navigation.replace("signupStack")
   }
 
   const footer = () => (
