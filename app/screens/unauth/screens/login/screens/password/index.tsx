@@ -3,15 +3,15 @@ import { BASE_URL } from "app/config/constants"
 import { useStores } from "app/models"
 import { api } from "app/services/api"
 import { LoginForm } from "./LoginForm"
-import { TwoFAAuthenSheet } from "./password/2faBottomSheet/BottomSheetModal"
 import { Header, Screen } from "app/components/cores"
 import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import { SetLanguage } from "app/components/utils"
-import { UnAuthScreenProps } from "../../../route"
 import { useAppLocale } from "app/services/context"
+import { LoginScreenProps } from "../../route"
+import { TwoFAAuthenSheet } from "./2faBottomSheet/BottomSheetModal"
 
-export const LoginScreen: FC<UnAuthScreenProps<"login">> = observer(({ navigation }) => {
+export const LoginScreen: FC<LoginScreenProps<"login">> = observer(({ navigation }) => {
   const { user } = useStores()
   const { notify } = useHelper()
   const { translate } = useAppLocale()

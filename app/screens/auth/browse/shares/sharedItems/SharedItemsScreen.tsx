@@ -35,7 +35,7 @@ export const SharedItemsScreen = observer(() => {
 
   // Close select before leave
   useEffect(() => {
-s    const checkSelectBeforeLeaving = () => {
+    const checkSelectBeforeLeaving = () => {
       if (isSelecting) {
         setIsSelecting(false)
         setSelectedItems([])

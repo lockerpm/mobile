@@ -9,12 +9,12 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated"
-import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
 import { autofillKeyChain } from "app/utils/autofillData"
 import { AutofillServiceEnabled } from "app/utils/autofillHelper"
 import { observer } from "mobx-react-lite"
+import { useBiometricType } from "app/services/utils"
 
 enum SliderEnum {
   SuggestEnableFaceID = "SuggestEnableFaceID",
@@ -33,7 +33,7 @@ export const HomeSlider = observer(() => {
   const { user } = useStores()
   const { colors } = useTheme()
   const { cryptoService } = useCoreService()
-  const { isBiometricAvailable } = useHelper()
+  const { isBiometricAvailable } = useBiometricType()
 
   const styles = themedStyle(colors)
   // -------------- PARAMS ------------------

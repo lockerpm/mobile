@@ -9,7 +9,6 @@ import {
   SortActionConfigModal,
 } from "app/components/ciphers"
 import { Screen } from "app/components/cores"
-import { useStores } from "app/models"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { CipherType } from "core/enums"
 import { useAppLocale } from "app/services/context"
@@ -18,7 +17,6 @@ const EMPTY_LIST = require("assets/images/emptyCipherList/note-empty-img.png")
 
 export const NotesScreen = observer(() => {
   const navigation = useNavigation() as any
-  const { uiStore } = useStores()
   const { translate } = useAppLocale()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
@@ -35,7 +33,6 @@ export const NotesScreen = observer(() => {
 
   // Close select before leave
   useEffect(() => {
-    uiStore.setIsSelecting(isSelecting)
     const checkSelectBeforeLeaving = () => {
       if (isSelecting) {
         setIsSelecting(false)

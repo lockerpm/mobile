@@ -15,7 +15,7 @@ const EMPTY = require("assets/images/emptyCipherList/password-empty-img.png")
 
 export const AuthenticatorScreen = observer(() => {
   const navigation = useNavigation() as any
-  const { uiStore, user } = useStores()
+  const { user } = useStores()
   const { translate } = useAppLocale()
 
   // -------------------- PARAMS ----------------------
@@ -38,7 +38,6 @@ export const AuthenticatorScreen = observer(() => {
 
   // Close select before leave
   useEffect(() => {
-    uiStore.setIsSelecting(isSelecting)
     const checkSelectBeforeLeaving = () => {
       if (isSelecting) {
         setIsSelecting(false)

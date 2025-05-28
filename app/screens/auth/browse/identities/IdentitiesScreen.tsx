@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { BackHandler } from 'react-native'
+import React, { useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { BackHandler } from "react-native"
 import {
   CipherList,
   CipherListHeader,
   EmptyCipherList,
   SortActionConfigModal,
-} from 'app/components/ciphers'
-import { useStores } from 'app/models'
-import { Screen } from 'app/components/cores'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { CipherType } from 'core/enums'
-import { useAppLocale } from 'app/services/context'
+} from "app/components/ciphers"
+import { useStores } from "app/models"
+import { Screen } from "app/components/cores"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { CipherType } from "core/enums"
+import { useAppLocale } from "app/services/context"
 
-const EMPTY_LIST = require('assets/images/emptyCipherList/identity-empty-img.png')
+const EMPTY_LIST = require("assets/images/emptyCipherList/identity-empty-img.png")
 
 export const IdentitiesScreen = observer(() => {
   const navigation = useNavigation() as any
@@ -23,20 +23,20 @@ export const IdentitiesScreen = observer(() => {
   const { translate } = useAppLocale()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
 
   // Close select before leave
   useEffect(() => {
-s    const checkSelectBeforeLeaving = () => {
+    const checkSelectBeforeLeaving = () => {
       if (isSelecting) {
         setIsSelecting(false)
         setSelectedItems([])
@@ -44,9 +44,9 @@ s    const checkSelectBeforeLeaving = () => {
       }
       return false
     }
-    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    BackHandler.addEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+      BackHandler.removeEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     }
   }, [isSelecting])
 
@@ -55,27 +55,27 @@ s    const checkSelectBeforeLeaving = () => {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption('most_relevant')
+        setSortOption("most_relevant")
       }
     } else {
       setSortList({
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       })
-      setSortOption('last_updated')
+      setSortOption("last_updated")
     }
   }, [searchText])
 
   return (
     <Screen
       preset="fixed"
-      safeAreaEdges={['top']}
+      safeAreaEdges={["top"]}
       header={
         <CipherListHeader
-          header={translate('common.identity')}
+          header={translate("common.identity")}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
-            navigation.navigate('identities__edit', { mode: 'add' })
+            navigation.navigate("identities__edit", { mode: "add" })
           }}
           onSearch={setSearchText}
           searchText={searchText}
@@ -124,11 +124,11 @@ s    const checkSelectBeforeLeaving = () => {
           <EmptyCipherList
             img={EMPTY_LIST}
             imgStyle={{ height: 55, width: 55 }}
-            title={translate('identity.empty.title')}
-            desc={translate('identity.empty.desc')}
-            buttonText={translate('identity.empty.btn')}
+            title={translate("identity.empty.title")}
+            desc={translate("identity.empty.desc")}
+            buttonText={translate("identity.empty.btn")}
             addItem={() => {
-              navigation.navigate('identities__edit', { mode: 'add' })
+              navigation.navigate("identities__edit", { mode: "add" })
             }}
           />
         }

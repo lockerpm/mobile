@@ -11,8 +11,8 @@ import Animated, { FadeInUp } from "react-native-reanimated"
 import { useAppLocale, useTheme } from "app/services/context"
 import { LOGIN_METHOD } from "app/static/types"
 import { useNavigation, useRoute } from "@react-navigation/native"
-import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { observer } from "mobx-react-lite"
+import { LoginScreenProps } from "../../route"
 
 type Props = {
   isLoading: boolean
@@ -26,8 +26,8 @@ const IS_IOS = Platform.OS === "ios"
 
 export const LoginForm = observer(
   ({ nextStep, onLoggedIn, handleForgot, isLoading, setIsLoading }: Props) => {
-    const { params }: RootStackScreenProps<"login">["route"] = useRoute()
-    const navigation: RootStackScreenProps<"login">["navigation"] = useNavigation()
+    const { params }: LoginScreenProps<"login">["route"] = useRoute()
+    const navigation: LoginScreenProps<"login">["navigation"] = useNavigation()
 
     const { user } = useStores()
     const { colors } = useTheme()
@@ -55,7 +55,7 @@ export const LoginForm = observer(
     // ------------------ Methods ----------------------
 
     const onGoToPinCode = () => {
-      navigation.replace("login_by_pincode", {
+      navigation.replace("loginByPincode", {
         email: username,
         havePassword: enableLoginByPassword.current,
       })
@@ -357,7 +357,7 @@ export const LoginForm = observer(
               size="base"
               color={colors.primary}
               text={translate("common.sign_up")}
-              onPress={() => navigation.replace("signup")}
+              onPress={() => navigation.replace("signupStack")}
             />
           </View>
         </View>
