@@ -61,11 +61,14 @@ export const PrivateRelay: FC<PrivateRelayScreenProps<"relay">> = observer(({ na
   const {
     navigateRootEmailInfo,
     navigateSubdomainInfo,
-    navigateCreateSubdomain,
     navigateManageSubdomain,
     navigateEditSubdomain,
     openRelayActions,
   } = useRelayNavigation(isFreeAccount, user.email, subdomain, navigation)
+
+  const navigateCreateSubdomain = useCallback(() => {
+    setShowCreateSubdomainModal(true)
+  }, [])
 
   const fetchRelayDomain = useCallback(async () => {
     const res = await toolStore.fetchSubdomain()

@@ -28,10 +28,6 @@ export const useRelayNavigation = (
     })
   }, [isFreeAccount, subdomain])
 
-  const navigateCreateSubdomain = useCallback(() => {
-    //
-  }, [])
-
   const navigateManageSubdomain = useCallback(() => {
     if (!subdomain) {
       return
@@ -55,7 +51,6 @@ export const useRelayNavigation = (
   return {
     navigateRootEmailInfo,
     navigateSubdomainInfo,
-    navigateCreateSubdomain,
     navigateManageSubdomain,
     navigateEditSubdomain,
     openRelayActions,
