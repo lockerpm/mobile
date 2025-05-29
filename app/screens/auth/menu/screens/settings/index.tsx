@@ -1,5 +1,5 @@
 import React from "react"
-import { createStackNavigator } from "@react-navigation/stack"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
 import { SettingsRoute } from "./route"
 import {
@@ -10,10 +10,10 @@ import {
   NotificationSettingsStack,
   SettingsScreen,
 } from "./screens"
-// // @ts-ignore
-// import { AutofillServiceScreen } from "./screens/autofillService/AutofillServiceScreen"
+// @ts-ignore
+import { AutofillServiceScreen } from "./screens/autofillService/AutofillServiceScreen"
 
-const Stack = createStackNavigator<SettingsRoute>()
+const Stack = createNativeStackNavigator<SettingsRoute>()
 
 export const SettingsStack = observer(() => {
   // ------------------ RENDER --------------------
@@ -26,12 +26,12 @@ export const SettingsStack = observer(() => {
       }}
     >
       <Stack.Screen name="settings" component={SettingsScreen} />
-      <Stack.Screen name="notificationSettings" component={NotificationSettingsStack} />
+      <Stack.Screen name="notiConfigStack" component={NotificationSettingsStack} />
       <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
       <Stack.Screen name="import" component={ImportScreen} />
-      {/* <Stack.Screen name="autofillService" component={AutofillServiceScreen} /> */}
+      <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
       <Stack.Screen name="export" component={ExportScreen} />
-      <Stack.Screen name="emergencyAccess" component={EmergencyAccessStack} />
+      <Stack.Screen name="emergencyStack" component={EmergencyAccessStack} />
     </Stack.Navigator>
   )
 })

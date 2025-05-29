@@ -1,10 +1,10 @@
 import React from "react"
-import { createStackNavigator } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { SSORoute } from "./route"
 import { SSOIdentifierScreen, SSOEmailLoginScreen } from "./screens"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
-const Stack = createStackNavigator<SSORoute>()
+const Stack = createNativeStackNavigator<SSORoute>()
 
 export const SSOStack = observer(() => {
   // ------------------ RENDER --------------------

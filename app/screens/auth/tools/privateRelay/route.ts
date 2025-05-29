@@ -1,4 +1,4 @@
-import { StackScreenProps } from "@react-navigation/stack"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RelayAddress, SubdomainData } from "app/static/types"
 
 type RelayInfoParams =
@@ -34,7 +34,7 @@ export type PrivateRelayRoute = {
   }
 }
 
-export type PrivateRelayScreenProps<T extends keyof PrivateRelayRoute> = StackScreenProps<
+export type PrivateRelayScreenProps<T extends keyof PrivateRelayRoute> = NativeStackScreenProps<
   PrivateRelayRoute,
   T
 >

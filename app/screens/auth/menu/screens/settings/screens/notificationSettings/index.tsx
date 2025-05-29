@@ -1,9 +1,4 @@
-// export * from './NotificationSettingsScreen'
-// export * from './notification/PushNotificationSettingsScreen'
-// export * from './email/PushEmailSettingsScreen'
-
 import React from "react"
-import { createStackNavigator } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
   NotificationSettingsScreen,
@@ -11,8 +6,9 @@ import {
   PushNotificationSettingsScreen,
 } from "./screens"
 import { NotificationSettingsRoute } from "./route"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
-const Stack = createStackNavigator<NotificationSettingsRoute>()
+const Stack = createNativeStackNavigator<NotificationSettingsRoute>()
 
 export const NotificationSettingsStack = observer(() => {
   // ------------------ RENDER --------------------

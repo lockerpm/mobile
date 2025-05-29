@@ -1,4 +1,4 @@
-import { StackScreenProps } from "@react-navigation/stack"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 
 export type SignupRoute = {
   signup: undefined
@@ -11,4 +11,4 @@ export type SignupRoute = {
   }
 }
 
-export type SignUpScreenProps<T extends keyof SignupRoute> = StackScreenProps<SignupRoute, T>
+export type SignUpScreenProps<T extends keyof SignupRoute> = NativeStackScreenProps<SignupRoute, T>

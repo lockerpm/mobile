@@ -1,5 +1,5 @@
 import React from "react"
-import { createStackNavigator } from "@react-navigation/stack"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
 import { EmergencyAccessRoute } from "./route"
 import {
@@ -10,7 +10,7 @@ import {
   YourTrustedContactScreen,
 } from "./screens"
 
-const Stack = createStackNavigator<EmergencyAccessRoute>()
+const Stack = createNativeStackNavigator<EmergencyAccessRoute>()
 
 export const EmergencyAccessStack = observer(() => {
   // ------------------ RENDER --------------------

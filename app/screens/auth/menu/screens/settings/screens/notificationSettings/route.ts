@@ -1,4 +1,4 @@
-import { StackScreenProps } from "@react-navigation/stack"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 
 export type NotificationSettingsRoute = {
   notiOptions: undefined
@@ -7,4 +7,4 @@ export type NotificationSettingsRoute = {
 }
 
 export type NotificationSettingsScreenProps<T extends keyof NotificationSettingsRoute> =
-  StackScreenProps<NotificationSettingsRoute, T>
+  NativeStackScreenProps<NotificationSettingsRoute, T>

@@ -6,7 +6,7 @@
  */
 import React, { FC, useEffect, useRef, useState } from "react"
 import { AppState } from "react-native"
-import { createStackNavigator } from "@react-navigation/stack"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { MainTabNavigator } from "./MainTabNavigator"
 import { ToolsNavigator } from "./tools/ToolNavigator"
 import UserInactivity from "react-native-user-inactivity"
@@ -52,13 +52,12 @@ import { useCipherData, useHelper } from "app/services/hook"
 import { Logger } from "app/utils/utils"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { observer } from "mobx-react-lite"
-
 import { PrimaryParamList, RootStackScreenProps } from "./navigators.types"
 import { useFocusEffect } from "@react-navigation/native"
 import { AutoFillScreen } from "app/screens/autofill"
 import { useAppLocale } from "app/services/context"
 
-const Stack = createStackNavigator<PrimaryParamList>()
+const Stack = createNativeStackNavigator<PrimaryParamList>()
 
 export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((props) => {
   const navigation = props.navigation
@@ -374,7 +373,6 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
           component={MarketingScreen}
           options={{
             presentation: "transparentModal",
-            detachPreviousScreen: false,
           }}
         />
 

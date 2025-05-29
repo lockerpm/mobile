@@ -1,4 +1,4 @@
-import { StackScreenProps } from "@react-navigation/stack"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { TrustedContact } from "app/static/types"
 
 export type EmergencyAccessRoute = {
@@ -14,7 +14,5 @@ export type EmergencyAccessRoute = {
   }
 }
 
-export type EmergencyAccessScreenProps<T extends keyof EmergencyAccessRoute> = StackScreenProps<
-  EmergencyAccessRoute,
-  T
->
+export type EmergencyAccessScreenProps<T extends keyof EmergencyAccessRoute> =
+  NativeStackScreenProps<EmergencyAccessRoute, T>

@@ -1,13 +1,19 @@
-import { StackScreenProps } from "@react-navigation/stack"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { EmergencyAccessRoute } from "./screens/emergencyAccess/route"
+import { NavigatorScreenParams } from "@react-navigation/native"
+import { NotificationSettingsRoute } from "./screens/notificationSettings/route"
 
 export type SettingsRoute = {
   settings: undefined
-  notificationSettings: undefined
   changeMasterPassword: undefined
   autofillService: undefined
   import: undefined
   export: undefined
-  emergencyAccess: undefined
+  emergencyStack: NavigatorScreenParams<EmergencyAccessRoute>
+  notiConfigStack: NavigatorScreenParams<NotificationSettingsRoute>
 }
 
-export type SettingsScreenProps<T extends keyof SettingsRoute> = StackScreenProps<SettingsRoute, T>
+export type SettingsScreenProps<T extends keyof SettingsRoute> = NativeStackScreenProps<
+  SettingsRoute,
+  T
+>

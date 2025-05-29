@@ -1,10 +1,10 @@
 import React from "react"
-import { createStackNavigator } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { LoginRoute } from "./route"
 import { LoginScreen, PinCodeLoginScreen } from "./screens"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
-const Stack = createStackNavigator<LoginRoute>()
+const Stack = createNativeStackNavigator<LoginRoute>()
 
 export const LoginStack = observer(() => {
   // ------------------ RENDER --------------------

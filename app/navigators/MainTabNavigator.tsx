@@ -140,7 +140,6 @@ const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) 
           return (
             <TouchableOpacity
               key={index}
-              testID={options.tabBarTestID}
               onPress={onPress}
               onLongPress={onLongPress}
               style={{

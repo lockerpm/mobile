@@ -1,10 +1,12 @@
-import { StackScreenProps } from "@react-navigation/stack"
+import { NavigatorScreenParams } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { SettingsRoute } from "./screens/settings/route"
 
 export type MenuRoute = {
   help: undefined
   inviteMember: undefined
   managePlan: undefined
-  settingsStack: undefined
+  settingsStack: NavigatorScreenParams<SettingsRoute>
   payment: {
     benefitTab?: 0 | 1 | 2 | 3
     family?: boolean
@@ -16,4 +18,4 @@ export type MenuRoute = {
   }
 }
 
-export type MenuScreenProps<T extends keyof MenuRoute> = StackScreenProps<MenuRoute, T>
+export type MenuScreenProps<T extends keyof MenuRoute> = NativeStackScreenProps<MenuRoute, T>

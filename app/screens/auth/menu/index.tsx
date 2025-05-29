@@ -1,5 +1,5 @@
 import React from "react"
-import { createStackNavigator } from "@react-navigation/stack"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
 import { MenuRoute } from "./route"
 import {
@@ -13,7 +13,7 @@ import {
 } from "./screens"
 import { withIAPContext } from "react-native-iap"
 
-const Stack = createStackNavigator<MenuRoute>()
+const Stack = createNativeStackNavigator<MenuRoute>()
 
 export const MenuStack = observer(() => {
   // ------------------ RENDER --------------------

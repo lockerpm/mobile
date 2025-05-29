@@ -1,5 +1,4 @@
 import React from "react"
-import { createStackNavigator } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { UnAuthRoute } from "./route"
 import {
@@ -11,8 +10,9 @@ import {
   SignupStack,
   SSOStack,
 } from "./screens"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
-const Stack = createStackNavigator<UnAuthRoute>()
+const Stack = createNativeStackNavigator<UnAuthRoute>()
 
 export const UnAuthStack = observer(() => {
   // ------------------ RENDER --------------------

@@ -1,8 +1,7 @@
 import React, { useEffect } from "react"
-import { View } from "react-native"
 import NetInfo from "@react-native-community/netinfo"
 import { DefaultTheme, NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
-import { createStackNavigator } from "@react-navigation/stack"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import Toast, { BaseToastProps } from "react-native-toast-message"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../models"
@@ -16,7 +15,7 @@ import { Logger } from "app/utils/utils"
 import { RootParamList } from "./navigators.types"
 import { LockType } from "app/static/types"
 
-const Stack = createStackNavigator<RootParamList>()
+const Stack = createNativeStackNavigator<RootParamList>()
 
 const RootStack = observer(() => {
   const { colors, setIsDark } = useTheme()
@@ -26,7 +25,7 @@ const RootStack = observer(() => {
   // ------------------- EFFECTS -------------------
 
   useEffect(() => {
-    setIsDark(uiStore.isDark)
+    setIsDark(uiStore.isDark || false)
 
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isConnected
@@ -46,30 +45,28 @@ const RootStack = observer(() => {
   // -------------------- RENDER ----------------------
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
-      <Stack.Navigator
-        initialRouteName="init"
-        screenOptions={{
-          cardStyle: { backgroundColor: colors.background },
+    <Stack.Navigator
+      initialRouteName="init"
+      screenOptions={{
+        contentStyle: { backgroundColor: colors.background },
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="init" component={SplashScreen} />
+      <Stack.Screen
+        name="lock"
+        component={LockScreen}
+        initialParams={{ type: LockType.Individual }}
+      />
+      <Stack.Screen
+        name="mainStack"
+        component={MainNavigator}
+        options={{
           headerShown: false,
+          gestureEnabled: false,
         }}
-      >
-        <Stack.Screen name="init" component={SplashScreen} />
-        <Stack.Screen
-          name="lock"
-          component={LockScreen}
-          initialParams={{ type: LockType.Individual }}
-        />
-        <Stack.Screen
-          name="mainStack"
-          component={MainNavigator}
-          options={{
-            headerShown: false,
-            gestureEnabled: false,
-          }}
-        />
-      </Stack.Navigator>
-    </View>
+      />
+    </Stack.Navigator>
   )
 })
 

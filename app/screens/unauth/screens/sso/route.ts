@@ -1,4 +1,4 @@
-import { StackScreenProps } from "@react-navigation/stack"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { OnPremiseIdentifierData } from "app/static/types"
 
 export type SSORoute = {
@@ -6,4 +6,4 @@ export type SSORoute = {
   ssoLogin: OnPremiseIdentifierData
 }
 
-export type SSOScreenProps<T extends keyof SSORoute> = StackScreenProps<SSORoute, T>
+export type SSOScreenProps<T extends keyof SSORoute> = NativeStackScreenProps<SSORoute, T>

@@ -1,4 +1,4 @@
-import { StackScreenProps } from "@react-navigation/stack"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { LOGIN_METHOD } from "app/static/types"
 
 export type LoginRoute = {
@@ -13,4 +13,4 @@ export type LoginRoute = {
   }
 }
 
-export type LoginScreenProps<T extends keyof LoginRoute> = StackScreenProps<LoginRoute, T>
+export type LoginScreenProps<T extends keyof LoginRoute> = NativeStackScreenProps<LoginRoute, T>

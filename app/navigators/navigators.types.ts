@@ -1,6 +1,6 @@
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
-import { StackScreenProps } from "@react-navigation/stack"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { MenuRoute, UnAuthRoute } from "app/screens"
 import {
   AppNotification,
@@ -28,16 +28,24 @@ export type RootParamList = {
   mainStack: NavigatorScreenParams<PrimaryParamList>
 }
 
-export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
+export type RootStackScreenProps<T extends keyof RootParamList> = NativeStackScreenProps<
+  RootParamList,
+  T
+>
+
+// CompositeScreenProps<
+//   NativeStackScreenProps<MainParamList, T>,
+//   AppStackScreenProps<keyof AppStackParamList>
+// >
 
 // ---------------------------TABS Navigator---------------------------
 
 export type TabsParamList = {
   homeTab: undefined
-  browseTab: NavigatorScreenParams<BrowseParamList>
+  browseTab: undefined
   authenticatorTab: undefined
   toolsTab: undefined
-  menuTab: NavigatorScreenParams<MenuParamList>
+  menuTab: undefined
 }
 export type TabsScreenProps<T extends keyof TabsParamList> = BottomTabScreenProps<TabsParamList, T>
 // ---------------------------BROWSE Navigator---------------------------
@@ -60,15 +68,10 @@ export type BrowseParamList = {
   cryptoWallets: undefined
 }
 
-export type BrowseStackScreenProps<T extends keyof BrowseParamList> = StackScreenProps<
+export type BrowseStackScreenProps<T extends keyof BrowseParamList> = NativeStackScreenProps<
   BrowseParamList,
   T
 >
-// ---------------------------MENU Navigator---------------------------
-
-export type MenuParamList = {
-  menu: undefined
-}
 
 // ---------------------------TOOLS Navigator---------------------------
 
@@ -80,7 +83,7 @@ export type ToolsParamList = {
   privateRelay: undefined
 }
 
-export type ToolsStackScreenProps<T extends keyof ToolsParamList> = StackScreenProps<
+export type ToolsStackScreenProps<T extends keyof ToolsParamList> = NativeStackScreenProps<
   ToolsParamList,
   T
 >
@@ -93,6 +96,8 @@ export type PrimaryParamList = {
 
   mainTab: NavigatorScreenParams<TabsParamList>
   toolsStack: NavigatorScreenParams<ToolsParamList>
+  menuStack: NavigatorScreenParams<MenuRoute>
+
   // start: undefined
 
   enterpriseInvited: undefined
@@ -194,10 +199,9 @@ export type PrimaryParamList = {
   attachment: {
     isShared?: boolean
   }
-  menuStack: NavigatorScreenParams<MenuRoute>
 }
 
-export type AppStackScreenProps<T extends keyof PrimaryParamList> = StackScreenProps<
+export type AppStackScreenProps<T extends keyof PrimaryParamList> = NativeStackScreenProps<
   PrimaryParamList,
   T
 >
