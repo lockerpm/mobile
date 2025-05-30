@@ -1,4 +1,4 @@
-import { Header, Screen, Text } from "app/components/cores"
+import { Header, PressableScale, Screen, Text } from "app/components/cores"
 import React, { FC, useCallback, useState } from "react"
 import { AttachmentSelectIcon } from "./AttachmentSelectModal"
 import { observer } from "mobx-react-lite"
@@ -38,6 +38,7 @@ export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
     const [attachments, setAttachments] = useState<AttachmentType[]>(
       cipherStore.selectedCipher?.attachments || [],
     )
+    const [isAddOpen, setIsAddOpen] = useState(false)
 
     // -------------- METHODS ------------------
     const goPayment = useCallback(() => {
@@ -87,13 +88,22 @@ export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
     // -------------- RENDER ------------------
     const RightActionComponent = useCallback(() => {
       return !isShared ? (
-        <AttachmentSelectIcon isFree={isFree} addAttachment={addLocalAttachment} />
+        <AttachmentSelectIcon
+          setIsAddOpen={setIsAddOpen}
+          isAddOpen={isAddOpen}
+          isFree={isFree}
+          addAttachment={addLocalAttachment}
+        />
       ) : undefined
-    }, [isShared, isFree])
+    }, [isShared, isFree, setIsAddOpen, isAddOpen])
 
     const EmptyList = useCallback(
-      () => <Image source={EMPTY_IMAGE} style={imageStyle} resizeMode="contain" />,
-      [],
+      () => (
+        <PressableScale onPress={() => setIsAddOpen(true)}>
+          <Image source={EMPTY_IMAGE} style={imageStyle} resizeMode="contain" />
+        </PressableScale>
+      ),
+      [setIsAddOpen],
     )
 
     const ItemSeparatorComponent = useCallback(() => <View style={separator} />, [])

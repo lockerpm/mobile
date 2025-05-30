@@ -10,16 +10,17 @@ import { delay } from "app/utils/utils"
 import { useNavigation } from "@react-navigation/native"
 
 interface Props {
+  isAddOpen: boolean
+  setIsAddOpen: (val: boolean) => void
   isFree: boolean
   addAttachment: (file: AttachmentType) => void
 }
-export const AttachmentSelectIcon = ({ isFree, addAttachment }: Props) => {
+export const AttachmentSelectIcon = ({ isFree, addAttachment, isAddOpen, setIsAddOpen }: Props) => {
   const { colors } = useTheme()
   const navigation = useNavigation() as any
   const { translate } = useHelper()
   const { pickFile, pickMedia } = usePickAttachment()
 
-  const [isAddOpen, setIsAddOpen] = useState(false)
   const [localFile, setLocalFile] = useState<AttachmentType | null>(null)
 
   const openModal = useCallback(() => {
