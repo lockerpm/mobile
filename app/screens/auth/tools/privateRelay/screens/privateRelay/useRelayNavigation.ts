@@ -1,6 +1,6 @@
-import { PrivateRelayScreenProps } from "../../route"
 import { useCallback } from "react"
 import { RelayAddress, SubdomainData } from "app/static/types"
+import { PrivateRelayScreenProps } from "app/navigators"
 
 export const useRelayNavigation = (
   isFreeAccount: boolean,

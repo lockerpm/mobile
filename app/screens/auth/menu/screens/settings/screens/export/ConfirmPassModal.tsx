@@ -1,8 +1,9 @@
 import React, { useState } from "react"
 import { BottomModal, Button, TextInput } from "app/components/cores"
-import { useAuthentication, useHelper } from "app/services/hook"
+import { useAuthentication } from "app/services/hook"
 import { useCoreService } from "app/services/coreService"
 import { useAppLocale } from "app/services/context"
+import { useToast } from "app/services/utils"
 
 interface Props {
   isOpen: boolean
@@ -13,7 +14,7 @@ interface Props {
 
 export const ConfirmPassModal = (props: Props) => {
   const { isOpen, onClose, onConfirm, navigateToLock } = props
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   const { translate } = useAppLocale()
   const { lock } = useAuthentication()
   const { cryptoService } = useCoreService()
@@ -42,7 +43,7 @@ export const ConfirmPassModal = (props: Props) => {
       setIsError(true)
       setCount(count + 1)
       if (count > 5) {
-        notify("error", translate("error.too_many_failed_attempts"))
+        notifyTx("error", "error.too_many_failed_attempts")
         await lock()
         navigateToLock()
       }

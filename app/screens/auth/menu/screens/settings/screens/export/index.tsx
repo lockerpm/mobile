@@ -1,17 +1,17 @@
 import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { ConfirmPassModal } from "./ConfirmPassModal"
-import { useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useCoreService } from "app/services/coreService"
 
 import { Screen, Header } from "app/components/cores"
 import { MenuItemContainer, SettingsItem } from "app/components/utils"
-import { SettingsScreenProps } from "../../route"
+import { SettingsScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 export const ExportScreen: FC<SettingsScreenProps<"export">> = observer(({ navigation }) => {
   const { colors } = useTheme()
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   const { translate } = useAppLocale()
   const { platformUtilsService, exportService } = useCoreService()
 
@@ -28,9 +28,9 @@ export const ExportScreen: FC<SettingsScreenProps<"export">> = observer(({ navig
     const data = await exportService.getExport(format)
     const isSuccess = await downloadFile(data)
     if (isSuccess) {
-      notify("success", translate("export.success"))
+      notifyTx("success", "export.success")
     } else {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
     }
   }
 

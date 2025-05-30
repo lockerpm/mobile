@@ -12,9 +12,9 @@ import { Header, Icon, Screen, Text, TextInput } from "app/components/cores"
 import { CipherInfoCommon, DeletedAction } from "app/components/ciphers"
 import { Textarea } from "app/components/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 
-export const CardInfoScreen: FC<AppStackScreenProps<"cards__info">> = observer((props) => {
+export const CardInfoScreen: FC<AuthStackScreenProps<"cards__info">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 

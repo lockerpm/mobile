@@ -6,7 +6,7 @@ import { HELP_CENTER_URL, PRIVACY_POLICY_URL, REPORT_VULN, TERMS_URL } from "app
 import { Logger } from "app/utils/utils"
 import { MenuItemContainer, SettingsItem } from "app/components/utils"
 import { TxKeyPath } from "app/i18n"
-import { MenuScreenProps } from "../../route"
+import { MenuScreenProps } from "app/navigators"
 
 type Item = {
   name: TxKeyPath

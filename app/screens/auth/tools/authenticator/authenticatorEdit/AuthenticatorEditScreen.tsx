@@ -8,16 +8,17 @@ import { CipherView } from "core/models/view"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
 import { CipherType } from "core/enums"
 import { TOOLS_ITEMS } from "app/navigators/navigators.route"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { useAppLocale } from "app/services/context"
+import { useToast } from "app/services/utils"
 
-export const AuthenticatorEditScreen: FC<AppStackScreenProps<"authenticator__edit">> = observer(
+export const AuthenticatorEditScreen: FC<AuthStackScreenProps<"authenticator__edit">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route
 
-    const { notify } = useHelper()
+    const { notifyTx } = useToast()
     const { translate } = useAppLocale()
 
     const { createCipher, updateCipher } = useCipherData()
@@ -45,11 +46,11 @@ export const AuthenticatorEditScreen: FC<AppStackScreenProps<"authenticator__edi
       try {
         const otp = getTOTP({ secret: secretKey })
         if (!otp) {
-          notify("error", translate("authenticator.invalid_key"))
+          notifyTx("error", "authenticator.invalid_key")
           return
         }
       } catch (e) {
-        notify("error", translate("authenticator.invalid_key"))
+        notifyTx("error", "authenticator.invalid_key")
         return
       }
 

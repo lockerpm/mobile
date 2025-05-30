@@ -2,9 +2,9 @@ import React, { useState, useRef, useCallback } from "react"
 import { View } from "react-native"
 import { Text, Button, Icon } from "app/components/cores"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { RecaptchaChecker } from "app/components/utils"
+import { useToast } from "app/services/utils"
 
 type Props = {
   methods: {
@@ -17,7 +17,7 @@ type Props = {
 export const MethodSelection = (props: Props) => {
   const { user, uiStore } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { methods, onSelect } = props
 

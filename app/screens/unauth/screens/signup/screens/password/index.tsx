@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, FC } from "react"
 import { BackHandler, Linking, TouchableOpacity, View } from "react-native"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
 import { SocialLogin, RecaptchaChecker, DividerText, SetLanguage } from "app/components/utils"
@@ -9,13 +8,14 @@ import { getCookies, logRegisterSuccessEvent } from "app/utils/analytics"
 import { Logger, validateEmail } from "app/utils/utils"
 import { observer } from "mobx-react-lite"
 import { PRIVACY_POLICY_URL, TERMS_URL } from "app/config/constants"
-import { SignUpScreenProps } from "../../route"
+import { SignUpScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = observer(
   ({ navigation, route: { params } }) => {
     const { colors } = useTheme()
     const { user } = useStores()
-    const { notify, notifyApiError } = useHelper()
+    const { notifyTx, notifyApiError } = useToast()
     const { translate } = useAppLocale()
 
     // ---------------- PARAMS ---------------------
@@ -59,7 +59,7 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
       setIsLoading(false)
       if (res.kind === "ok") {
         logRegisterSuccessEvent()
-        notify("success", translate("signup.signup_successful"), 5000)
+        notifyTx("success", "signup.signup_successful")
         navigation.replace("loginStack")
       } else {
         notifyApiError(res)

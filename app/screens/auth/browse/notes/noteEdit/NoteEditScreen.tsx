@@ -13,9 +13,9 @@ import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
 import { CipherType } from "core/enums"
 import { CollectionView } from "core/models/view/collectionView"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 
-export const NoteEditScreen: FC<AppStackScreenProps<"notes__edit">> = observer((props) => {
+export const NoteEditScreen: FC<AuthStackScreenProps<"notes__edit">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
   const { mode } = route.params

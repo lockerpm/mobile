@@ -9,9 +9,9 @@ import { BrowseNavigator } from "./browse/BrowseNavigator"
 import { HomeTabScreen, ToolsListScreen, AuthenticatorScreen, MenuListScreen } from "../screens"
 import { SharingStatus } from "app/static/types"
 import { observer } from "mobx-react-lite"
-import { TabsParamList } from "./navigators.types"
+import { TabsRoute } from "./navigators.types"
 
-const Tab = createBottomTabNavigator<TabsParamList>()
+const Tab = createBottomTabNavigator<TabsRoute>()
 
 const TabBar = observer(({ state, descriptors, navigation }: BottomTabBarProps) => {
   const { colors } = useTheme()

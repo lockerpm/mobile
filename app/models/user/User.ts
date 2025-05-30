@@ -81,7 +81,6 @@ export const UserModel = types
       }),
     ),
     invitations: types.array(types.frozen<UserInvitations>()),
-    introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
 
     // On premise user
@@ -186,9 +185,6 @@ export const UserModel = types
     },
     setInvitations: (invitations: any[]) => {
       self.invitations = cast(invitations)
-    },
-    setIntroShown: (val: boolean) => {
-      self.introShown = val
     },
     setBiometricIntroShown: (val: boolean) => {
       self.biometricIntroShown = val

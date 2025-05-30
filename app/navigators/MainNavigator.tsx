@@ -48,20 +48,20 @@ import {
   MarketingScreen,
   MenuStack,
 } from "../screens"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { Logger } from "app/utils/utils"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { observer } from "mobx-react-lite"
-import { PrimaryParamList, RootStackScreenProps } from "./navigators.types"
+import { AuthRoute, RootStackScreenProps } from "./navigators.types"
 import { useFocusEffect } from "@react-navigation/native"
 import { AutoFillScreen } from "app/screens/autofill"
-import { useAppLocale } from "app/services/context"
+import { useToast } from "app/services/utils"
 
-const Stack = createNativeStackNavigator<PrimaryParamList>()
+const Stack = createNativeStackNavigator<AuthRoute>()
 
 export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((props) => {
   const navigation = props.navigation
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   const {
     getCipherById,
     syncAutofillData,
@@ -72,7 +72,6 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
     syncQuickShares,
   } = useCipherData()
   const { uiStore, user, cipherStore, toolStore } = useStores()
-  const { translate } = useAppLocale()
 
   // ------------------ PARAMS --------------------
 
@@ -113,7 +112,7 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
     // Send request
     const syncRes = await startSyncProcess(bumpTimestamp)
     if (!syncRes || syncRes.kind !== "ok") {
-      notify("error", translate("error.sync_failed"))
+      notifyTx("error", "error.sync_failed")
       return
     }
 

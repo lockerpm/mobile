@@ -5,8 +5,8 @@ import { Button, Header, Screen, Text, TextInput } from "app/components/cores"
 import { useAuthentication, useCipherHelper, useHelper } from "app/services/hook"
 import { TrustedContact } from "app/static/types"
 import { PasswordStrength } from "app/components/utils"
-import { EmergencyAccessScreenProps } from "../../route"
 import { useAppLocale } from "app/services/context"
+import { EmergencyAccessScreenProps } from "app/navigators"
 
 export const TakeoverEAScreen: FC<EmergencyAccessScreenProps<"takeoverEA">> = observer(
   ({

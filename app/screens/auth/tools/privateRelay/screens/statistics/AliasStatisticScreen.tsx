@@ -3,8 +3,8 @@ import moment from "moment"
 import { StyleSheet, View } from "react-native"
 import { Screen, Header, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { PrivateRelayScreenProps } from "../../route"
 import { useAppLocale, useTheme } from "app/services/context"
+import { PrivateRelayScreenProps } from "app/navigators"
 
 export const AliasStatisticScreen: FC<PrivateRelayScreenProps<"aliasStatistic">> = observer(
   ({

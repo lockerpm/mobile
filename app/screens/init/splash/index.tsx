@@ -1,69 +1,114 @@
-import React, { FC, useState } from "react"
+import React, { FC, useState, useEffect } from "react"
 import { StyleSheet, View } from "react-native"
-import NetInfo from "@react-native-community/netinfo"
 import DeviceInfo from "react-native-device-info"
 import JailMonkey from "jail-monkey"
 import { useStores } from "app/models"
 import { Text } from "app/components/cores"
 import { MotionLoading } from "app/components/utils"
-import { observer } from "mobx-react-lite"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { useAppLocale, useTheme } from "app/services/context"
 import { LockType } from "app/static/types"
 import { useAppUpdate } from "./useAppUpdate"
 import { LanguageSupportType } from "app/i18n"
+import { useToast } from "app/services/utils"
 
-export const SplashScreen: FC<RootStackScreenProps<"init">> = observer(({ navigation }) => {
+/**
+ * Init screen for the app, checks if the device is rooted/jailbroken,
+ * Don't need to wrap component with observer, It use data on store only once
+ * @param param0
+ * @returns
+ */
+export const SplashScreen: FC<RootStackScreenProps<"init">> = ({ navigation }) => {
   const { setLanguage } = useAppLocale()
   const { colors } = useTheme()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
+  const { notifyApiError } = useToast()
 
-  // ------------------ METHODS ---------------------
-
+  // -------------- PARAMS ---------------------
   const [isRooted, setIsRooted] = useState(false)
 
-  // ------------------ METHODS ---------------------
-
-  // Check jailbreak/rooted
+  /**
+   * Check if the device is rooted/jailbroken
+   * If it is, set isRooted state to true and show a message
+   * @returns boolean
+   */
   const checkTrustFall = () => {
     const trustfall = JailMonkey.isJailBroken()
     setIsRooted(trustfall)
     return trustfall
   }
 
-  // Create master pass or unlock
-  const goLockOrCreatePassword = () => {
-    if (user.is_pwd_manager) {
-      if (user.onPremiseUser) {
-        navigation.replace("lock", { type: LockType.OnPremise })
+  const navigateToLogin = () => {
+    navigation.replace("unAuthStack", {
+      screen: "loginStack",
+      params: {
+        screen: "login",
+        params: {
+          email: user.email ?? "",
+        },
+      },
+    })
+  }
+
+  /**
+   * If user is not on-premise user, navigate to login screen
+   * If user is on-premise user but not activated, navigate to login screen
+   * If user is on-premise user and activated, navigate to lock screen
+   * @returns
+   */
+  const navigateToOnPremiseLogin = async () => {
+    if (user.email) {
+      const res = await user.onPremisePreLogin({ email: user.email })
+      if (res.kind === "ok") {
+        if (res.data.length > 0 && res.data[0].activated) {
+          navigation.replace("lock", {
+            type: LockType.OnPremise,
+            data: res.data[0],
+            email: user.email,
+          })
+        }
       } else {
-        navigation.replace("lock", { type: LockType.Individual })
+        notifyApiError(res)
       }
+      return
+    }
+    navigateToLogin()
+  }
+
+  /**
+   * If the user is not logged in,  navigate to the Login screen
+   * If the user is logged in, it will navigate to the Lock screen with the type Individual
+   * If the user is unauthorized, it will notify the user with an error and back to the Login screen
+   */
+  const navigateToNormalLogin = async () => {
+    const userRes = await user.getUser()
+    if (
+      ["ok", "unauthorized", "timeout", "cannot-connect", "network-error"].includes(userRes.kind)
+    ) {
+      if (userRes.kind !== "ok") {
+        notifyApiError(userRes)
+      }
+      navigation.replace("lock", { type: LockType.Individual })
     } else {
-      navigation.replace("unAuthStack", {
-        screen: "createMasterPassword",
-      })
+      navigateToLogin()
     }
   }
 
-  // Mounted
   const mounted = async () => {
     if (checkTrustFall()) {
       return
     }
-    const connectionState = await NetInfo.fetch()
-
-    // Setup basic data
     setLanguage(user.language as LanguageSupportType)
 
     if (!user.deviceId) {
       user.setDeviceId(await DeviceInfo.getUniqueId())
     }
 
-    // Logged in?
     if (!user.isLoggedIn) {
-      if (!user.introShown) {
-        user.setIntroShown(true)
+      /**
+       * If the user is not logged in, navigate to the intro screen or onBoarding screen
+       */
+      if (!uiStore.isShowedAppInto) {
         navigation.replace("unAuthStack", {
           screen: "intro",
         })
@@ -72,58 +117,27 @@ export const SplashScreen: FC<RootStackScreenProps<"init">> = observer(({ naviga
           screen: "onBoarding",
         })
       }
-      return
-    }
-
-    // Network connected?
-    if (!connectionState.isConnected) {
-      goLockOrCreatePassword()
-      return
-    }
-
-    if (user.onPremiseUser) {
-      const res = await user.onPremisePreLogin({ email: user.email })
-      if (res.kind === "ok") {
-        if (res.data[0].activated) {
-          navigation.replace("lock", {
-            type: LockType.OnPremise,
-            data: res.data[0],
-            email: user.email,
-          })
+    } else {
+      if (user.is_pwd_manager) {
+        if (user.onPremiseUser) {
+          await navigateToOnPremiseLogin()
         } else {
-          navigation.replace("unAuthStack", {
-            screen: "loginStack",
-          })
+          await navigateToNormalLogin()
         }
-        return
+      } else {
+        navigation.replace("unAuthStack", {
+          screen: "createMasterPassword",
+        })
       }
     }
-
-    const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-    if (
-      ["ok", "unauthorized"].includes(userRes.kind) &&
-      ["ok", "unauthorized"].includes(userPwRes.kind)
-    ) {
-      goLockOrCreatePassword()
-    } else {
-      navigation.replace("unAuthStack", {
-        screen: "loginStack",
-      })
-    }
   }
-  // ------------------ EFFECTS ---------------------
+
   useAppUpdate()
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      mounted()
-    })
-
-    // Return the function to unsubscribe from the event so it gets removed on unmount
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", mounted)
     return unsubscribe
   }, [navigation])
-
-  // ------------------ RENDER ---------------------
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
@@ -135,7 +149,7 @@ export const SplashScreen: FC<RootStackScreenProps<"init">> = observer(({ naviga
       {!isRooted && <MotionLoading />}
     </View>
   )
-})
+}
 
 const styles = StyleSheet.create({
   centerText: {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { Text, Icon } from "app/components/cores"
 import { View } from "react-native"
 import { useAppLocale, useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
 import { ActionItem } from "app/components/ciphers"
 import { PrivateEmailList } from "./PrivateEmailList"
 import Modal from "react-native-modal"
@@ -11,6 +10,7 @@ import { useStores } from "app/models"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { useNavigation } from "@react-navigation/native"
 import { GeneralApiProblem } from "app/services/api/apiProblem"
+import { useToast } from "app/services/utils"
 
 interface Props {
   isOpen: boolean
@@ -20,7 +20,7 @@ interface Props {
 
 export const PrivateEmailModal = ({ isOpen, onClose, onSelectEmail }: Props) => {
   const navigation = useNavigation() as any
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { colors } = useTheme()
   const { toolStore, user } = useStores()
@@ -30,7 +30,6 @@ export const PrivateEmailModal = ({ isOpen, onClose, onSelectEmail }: Props) => 
 
   const generateFailed = (res: GeneralApiProblem) => {
     notifyApiError(res)
-    // @ts-ignore
     if (user.isFreePlan && res.data?.code === "8000") {
       onClose()
       navigation.navigate("payment")

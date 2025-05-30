@@ -5,7 +5,8 @@ import { Screen, Header, Text, Toggle } from "app/components/cores"
 import { useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
-import { PrivateRelayScreenProps } from "../../route"
+import { PrivateRelayScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 export const ManageSubdomainScreen: FC<PrivateRelayScreenProps<"manageSubdomain">> = ({
   navigation,
@@ -14,7 +15,7 @@ export const ManageSubdomainScreen: FC<PrivateRelayScreenProps<"manageSubdomain"
   },
 }) => {
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { toolStore } = useStores()
 

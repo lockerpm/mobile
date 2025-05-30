@@ -8,9 +8,9 @@ import {
   PrivateRelayStack,
 } from "../../screens"
 import { observer } from "mobx-react-lite"
-import { ToolsParamList } from "../navigators.types"
+import { ToolsRoute } from "../navigators.types"
 
-const Stack = createNativeStackNavigator<ToolsParamList>()
+const Stack = createNativeStackNavigator<ToolsRoute>()
 
 export const ToolsNavigator = observer(() => {
   // ------------------ RENDER --------------------

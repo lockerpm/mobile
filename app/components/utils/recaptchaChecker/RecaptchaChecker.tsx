@@ -1,18 +1,18 @@
-import React, { useRef, forwardRef, useImperativeHandle } from 'react'
-import Recaptcha from 'react-native-recaptcha-that-works'
-import { Logger } from 'app/utils/utils'
-import { RECAPTCHA_BASE_URL, RECAPTCHA_SITE_KEY } from 'app/config/constants'
-import { useHelper } from 'app/services/hook'
+import React, { useRef, forwardRef, useImperativeHandle } from "react"
+import Recaptcha from "react-native-recaptcha-that-works"
+import { Logger } from "app/utils/utils"
+import { RECAPTCHA_BASE_URL, RECAPTCHA_SITE_KEY } from "app/config/constants"
+import { useToast } from "app/services/utils"
 
 export const RecaptchaChecker = forwardRef((_props, ref) => {
-  const { notify } = useHelper()
+  const { notify } = useToast()
 
-  const token  = useRef('')
+  const token = useRef("")
   const recaptcha = useRef(null)
 
   const waitForToken = () => {
     return new Promise<string>((resolve) => {
-      token.current = ''
+      token.current = ""
       recaptcha.current.open()
       const interval = setInterval(() => {
         if (token.current) {
@@ -24,12 +24,12 @@ export const RecaptchaChecker = forwardRef((_props, ref) => {
   }
 
   const onVerify = (t: string) => {
-    Logger.debug('Captcha loaded')
+    Logger.debug("Captcha loaded")
     token.current = t
   }
 
   const onExpire = () => {
-    notify('error', 'Captcha expired, please close the app and open again.')
+    notify("error", "Captcha expired, please close the app and open again.")
   }
 
   const onError = (e: string) => {

@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { Screen, Header } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { MenuItemContainer, SettingsItem } from "app/components/utils"
-import { NotificationSettingsScreenProps } from "../../route"
+import { NotificationSettingsScreenProps } from "app/navigators"
 
 export const NotificationSettingsScreen: FC<NotificationSettingsScreenProps<"notiOptions">> =
   observer(({ navigation }) => {

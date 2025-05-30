@@ -1,8 +1,8 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { SignupRoute } from "./route"
 import { SignupScreen, SignUpWithPassword, SignUpWithPinCode } from "./screens"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { SignupRoute } from "app/navigators"
 
 const Stack = createNativeStackNavigator<SignupRoute>()
 

@@ -30,6 +30,7 @@ import { OrganizationData } from "core/models/data/organizationData"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { IosAutofillPassword, autofillKeyChain } from "app/utils/autofillData"
 import { useAppLocale } from "../context"
+import { useToast } from "../utils"
 
 export function useCipherData() {
   const { cipherStore, folderStore, uiStore, collectionStore, user, enterpriseStore } = useStores()
@@ -45,7 +46,8 @@ export function useCipherData() {
     cryptoService,
   } = useCoreService()
   const { translate } = useAppLocale()
-  const { notify, randomString, notifyApiError, getTeam } = useHelper()
+  const { randomString, getTeam } = useHelper()
+  const { notify, notifyTx, notifyApiError } = useToast()
   const { newCipher } = useCipherHelper()
   const syncQueue = SyncQueue
 
@@ -67,7 +69,7 @@ export function useCipherData() {
 
     const res = await createCipher(payload, passwordStrength, [], true)
     if (res.kind !== "ok") {
-      notify("error", translate("error.master_password"))
+      notifyTx("error", "error.master_password")
     }
   }
 
@@ -453,7 +455,7 @@ export function useCipherData() {
       const res = (await userService.getAllOrganizations()) || []
       cipherStore.setOrganizations(res)
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("loadOrganizations: " + e)
     }
   }
@@ -499,7 +501,7 @@ export function useCipherData() {
       folderStore.setFolders(folders)
       folderStore.setLastUpdate()
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("loadFolders: " + e)
     }
   }
@@ -553,7 +555,7 @@ export function useCipherData() {
       collectionStore.setCollections(collections)
       collectionStore.setLastUpdate()
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("loadCollections: " + e)
     }
   }
@@ -573,7 +575,7 @@ export function useCipherData() {
       }
       return (await searchService.searchEncryptedCiphers(filters, null)) || []
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("getEncryptedCiphers: " + e)
       return []
     }
@@ -589,7 +591,7 @@ export function useCipherData() {
       }
       return (await searchService.searchCiphers(params.searchText || "", filters, null)) || []
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("getCiphers: " + e)
       return []
     }
@@ -609,7 +611,7 @@ export function useCipherData() {
         (await searchService.searchCiphersFromCache(params.searchText || "", filters, null)) || []
       )
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("getCiphersFromCache: " + e)
       return []
     }
@@ -632,7 +634,7 @@ export function useCipherData() {
       res = res.filter((item) => item.id)
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("getCollections: " + e)
       return []
     }
@@ -757,7 +759,7 @@ export function useCipherData() {
     }
     // await startSyncProcess(Date.now())
     if (importedCipherCount !== 0) {
-      notify("success", translate("import.success"))
+      notifyTx("success", "import.success")
     }
 
     return { kind: "ok" }
@@ -972,7 +974,7 @@ export function useCipherData() {
       // Check name duplication
       const countDuplicate = await _countDuplicateCipherName(cipher)
       if (countDuplicate > 0) {
-        notify("error", translate("error.duplicate_cipher_name"))
+        notifyTx("error", "error.duplicate_cipher_name")
         return { kind: "bad-data" }
       }
 
@@ -997,14 +999,14 @@ export function useCipherData() {
           cipherRequest: data,
           cipherId: res.data.id,
         })
-        !silent && notify("success", translate("success.cipher_created"))
+        !silent && notifyTx("success", "success.cipher_created")
       } else {
         notifyApiError(res)
       }
       logFirebaseEvent(AnalyticEvents.CREATE_ITEMS, user.email)
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("createCipher: " + e)
       return { kind: "unknown" }
     }
@@ -1075,13 +1077,13 @@ export function useCipherData() {
           isAccepted: true,
           cipherRequest: data,
         })
-        !silent && notify("success", translate("success.cipher_updated"))
+        !silent && notifyTx("success", "success.cipher_updated")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("updateCipher: " + e)
       return { kind: "unknown" }
     }
@@ -1130,7 +1132,7 @@ export function useCipherData() {
       // Offline
       if (uiStore.isOffline) {
         await _offlineDeleteCiphers(ids)
-        notify("success", `${translate("success.cipher_deleted")}`)
+        notifyTx("success", "success.cipher_deleted")
         return { kind: "ok" }
       }
 
@@ -1138,13 +1140,13 @@ export function useCipherData() {
       const res = await cipherStore.deleteCiphers(ids)
       if (res.kind === "ok") {
         await _offlineDeleteCiphers(ids, true)
-        notify("success", translate("success.cipher_deleted"))
+        notifyTx("success", "success.cipher_deleted")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("deleteCiphers: " + e)
       return { kind: "unknown" }
     }
@@ -1185,13 +1187,13 @@ export function useCipherData() {
       const res = await cipherStore.restoreCiphers(ids)
       if (res.kind === "ok") {
         await _offlineRestoreCiphers(ids, true)
-        notify("success", translate("success.cipher_restored"))
+        notifyTx("success", "success.cipher_restored")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("restoreCiphers: " + e)
       return { kind: "unknown" }
     }
@@ -1245,7 +1247,7 @@ export function useCipherData() {
       }
       return { kind: "ok" }
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       return { kind: "bad-data" }
     }
   }
@@ -1336,14 +1338,14 @@ export function useCipherData() {
         groups: groupsPayload,
       })
       if (res.kind === "ok") {
-        notify("success", translate("success.cipher_shared"))
+        notifyTx("success", "success.cipher_shared")
         logFirebaseEvent(AnalyticEvents.SHARE_ITENS, user.email)
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -1462,14 +1464,14 @@ export function useCipherData() {
         sharing_key: shareKey ? shareKey[0].encryptedString : null,
       })
       if (res.kind === "ok") {
-        notify("success", translate("success.cipher_shared"))
+        notifyTx("success", "success.cipher_shared")
         logFirebaseEvent(AnalyticEvents.SHARE_ITENS, user.email)
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("shareMultipleCiphers: " + e)
       return { kind: "unknown" }
     }
@@ -1485,13 +1487,13 @@ export function useCipherData() {
       const key = await _generateOrgKey(organizationId, publicKey)
       const res = await cipherStore.confirmShareCipher(organizationId, memberId, { key })
       if (res.kind === "ok") {
-        notify("success", translate("success.done"))
+        notifyTx("success", "success.done")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("confirmShareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -1520,7 +1522,7 @@ export function useCipherData() {
         },
       })
       if (res.kind === "ok") {
-        notify("success", translate("success.done"))
+        notifyTx("success", "success.done")
 
         // Remove member in local my share first
         const myShares = [...cipherStore.myShares]
@@ -1535,7 +1537,7 @@ export function useCipherData() {
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("stopShareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -1557,7 +1559,7 @@ export function useCipherData() {
         },
       })
       if (res.kind === "ok") {
-        notify("success", translate("success.done"))
+        notifyTx("success", "success.done")
 
         // Remove member in local my share first
         const myShares = [...cipherStore.myShares]
@@ -1572,7 +1574,7 @@ export function useCipherData() {
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("stopShareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -1601,7 +1603,7 @@ export function useCipherData() {
       }
 
       if (res.kind === "ok") {
-        notify("success", translate("success.done"))
+        notifyTx("success", "success.done")
 
         // Update member in local my share first
         const myShares = [...cipherStore.myShares]
@@ -1626,7 +1628,7 @@ export function useCipherData() {
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("editShareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -1651,7 +1653,7 @@ export function useCipherData() {
   const acceptShareInvitation = async (id: string) => {
     const res = await cipherStore.respondShare(id, true)
     if (res.kind === "ok") {
-      notify("success", translate("success.share_invitaion_accepted"))
+      notifyTx("success", "success.share_invitaion_accepted")
       cipherStore.setSharingInvitations(cipherStore.sharingInvitations.filter((i) => i.id !== id))
     } else {
       notifyApiError(res)
@@ -1663,7 +1665,7 @@ export function useCipherData() {
   const rejectShareInvitation = async (id: string) => {
     const res = await cipherStore.respondShare(id, false)
     if (res.kind === "ok") {
-      notify("success", translate("success.done"))
+      notifyTx("success", "success.done")
       cipherStore.setSharingInvitations(cipherStore.sharingInvitations.filter((i) => i.id !== id))
     } else {
       notifyApiError(res)
@@ -1696,13 +1698,13 @@ export function useCipherData() {
           folderRequest: payload,
           folderId: res.data.id,
         })
-        notify("success", translate("folder.folder_created"))
+        notifyTx("success", "folder.folder_created")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("createFolder: " + e)
       return { kind: "unknown" }
     }
@@ -1760,13 +1762,13 @@ export function useCipherData() {
           isAccepted: true,
           folderRequest: payload,
         })
-        notify("success", translate("folder.folder_updated"))
+        notifyTx("success", "folder.folder_updated")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("updateFolder: " + e)
       return { kind: "unknown" }
     }
@@ -1804,7 +1806,7 @@ export function useCipherData() {
       // Offline
       if (uiStore.isOffline) {
         await _offlineDeleteFolder(id)
-        notify("success", translate("folder.folder_deleted"))
+        notifyTx("success", "folder.folder_deleted")
         return { kind: "ok" }
       }
 
@@ -1812,13 +1814,13 @@ export function useCipherData() {
       const res = await folderStore.deleteFolder(id)
       if (res.kind === "ok") {
         await _offlineDeleteFolder(id, true)
-        notify("success", translate("folder.folder_deleted"))
+        notifyTx("success", "folder.folder_deleted")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("deleteFolder: " + e)
       return { kind: "unknown" }
     }
@@ -1845,9 +1847,6 @@ export function useCipherData() {
     try {
       // Offline
       if (uiStore.isOffline) {
-        // await _offlineCreateCollection(collection)
-        // notify('success', `${translate('folder.folder_created')} ${translate('success.will_sync_when_online')}`)
-        // return { kind: 'ok' }
         return { kind: "unknown" }
       }
 
@@ -1862,13 +1861,13 @@ export function useCipherData() {
           collectionRequest: payload,
           collectionId: res.data.id,
         })
-        notify("success", translate("folder.folder_created"))
+        notifyTx("success", "folder.folder_created")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("createCollection: " + e)
       return { kind: "unknown" }
     }
@@ -1908,9 +1907,6 @@ export function useCipherData() {
     try {
       // Offline
       if (uiStore.isOffline) {
-        // await _offlineUpdateCollection(collection)
-        // notify('success', `${translate('folder.folder_updated')} ${translate('success.will_sync_when_online')}`)
-        // return { kind: 'ok' }
         return { kind: "unknown" }
       }
 
@@ -1929,13 +1925,13 @@ export function useCipherData() {
           isAccepted: true,
           collectionRequest: payload,
         })
-        notify("success", translate("folder.folder_updated"))
+        notifyTx("success", "folder.folder_updated")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("updateCollection: " + e)
       return { kind: "unknown" }
     }
@@ -1973,7 +1969,7 @@ export function useCipherData() {
       // Offline
       if (uiStore.isOffline) {
         await _offlineDeleteCollection(collection.id)
-        notify("success", translate("folder.folder_deleted"))
+        notifyTx("success", "folder.folder_deleted")
         return { kind: "ok" }
       }
 
@@ -2009,13 +2005,13 @@ export function useCipherData() {
       })
       if (res.kind === "ok") {
         await _offlineDeleteCollection(collection.id, true)
-        notify("success", translate("folder.folder_deleted"))
+        notifyTx("success", "folder.folder_deleted")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("deleteCollection: " + e)
       return { kind: "unknown" }
     }

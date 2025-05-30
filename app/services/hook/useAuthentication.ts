@@ -16,6 +16,7 @@ import { Logger, delay } from "app/utils/utils"
 import { StorageKey, remove, removeSecure } from "app/utils/storage"
 import { autofillKeyChain } from "app/utils/autofillData"
 import { useAppLocale } from "../context"
+import { useToast } from "../utils"
 
 export function useAuthentication() {
   const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore, enterpriseStore } =
@@ -32,7 +33,8 @@ export function useAuthentication() {
     tokenService,
   } = useCoreService()
   const { translate } = useAppLocale()
-  const { notify, notifyApiError, setApiTokens } = useHelper()
+  const { setApiTokens } = useHelper()
+  const { notify, notifyTx, notifyApiError } = useToast()
   const { logoutAllServices } = useSocialLogin()
 
   // -------------------- AUTHENTICATION --------------------
@@ -58,7 +60,7 @@ export function useAuthentication() {
       email: user.email,
     })
     if (res.kind === "unauthorized") {
-      notify("error", translate("error.token_expired"))
+      notifyTx("error", "error.token_expired")
       return { kind: "unauthorized" }
     }
 
@@ -78,13 +80,13 @@ export function useAuthentication() {
         } else if (res.data.code === "1011") {
           return { kind: "enterprise-belongs" }
         } else if (res.data.code === "0004") {
-          notify("error", translate("error.incorrect_pw"))
+          notifyTx("error", "error.incorrect_pw")
         } else {
           notifyApiError(res)
         }
         return res
       }
-      notify("error", translate("error.session_login_failed"))
+      notifyTx("error", "error.session_login_failed")
       return res
     }
 
@@ -144,11 +146,11 @@ export function useAuthentication() {
       save_device,
     })
     if (res.kind === "unauthorized") {
-      notify("error", translate("error.token_expired"))
+      notifyTx("error", "error.token_expired")
       return { kind: "unauthorized" }
     }
     if (res.kind !== "ok") {
-      notify("error", translate("error.session_login_failed"))
+      notifyTx("error", "error.session_login_failed")
       return res
     }
 
@@ -218,7 +220,7 @@ export function useAuthentication() {
         onPremiseData,
       )
     } catch (e) {
-      notify("error", translate("error.session_login_failed"))
+      notifyTx("error", "error.session_login_failed")
       return { kind: "bad-data" }
     }
   }
@@ -247,7 +249,7 @@ export function useAuthentication() {
       // Online session login
       return _loginUsingApi(key, keyHash, kdf, kdfIterations, "", () => null, onPremise)
     } catch (e) {
-      notify("error", translate("error.session_login_failed"))
+      notifyTx("error", "error.session_login_failed")
       return { kind: "bad-data" }
     }
   }
@@ -273,7 +275,7 @@ export function useAuthentication() {
       // Online session login
       return _loginUsingApi(key, keyHash, kdf, kdfIterations)
     } catch (e) {
-      notify("error", translate("error.session_login_failed"))
+      notifyTx("error", "error.session_login_failed")
       return { kind: "bad-data" }
     }
   }
@@ -303,7 +305,7 @@ export function useAuthentication() {
         save_device,
       )
     } catch (e) {
-      notify("error", translate("error.session_login_failed"))
+      notifyTx("error", "error.session_login_failed")
       return { kind: "bad-data" }
     }
   }
@@ -351,7 +353,7 @@ export function useAuthentication() {
         save_device,
       )
     } catch (e) {
-      notify("error", translate("error.session_login_failed"))
+      notifyTx("error", "error.session_login_failed")
       return { kind: "bad-data" }
     }
   }
@@ -362,7 +364,7 @@ export function useAuthentication() {
       await delay(200)
       const { available } = await ReactNativeBiometrics.isSensorAvailable()
       if (!available) {
-        notify("error", translate("error.biometric_not_support"))
+        notifyTx("error", "error.biometric_not_support")
         return { kind: "bad-data" }
       }
 
@@ -371,14 +373,14 @@ export function useAuthentication() {
         promptMessage: "Unlock Locker",
       })
       if (!success) {
-        notify("error", translate("error.biometric_unlock_failed"))
+        notifyTx("error", "error.biometric_unlock_failed")
         return { kind: "bad-data" }
       }
       // Offline login
       if (uiStore.isOffline) {
         const hasKey = await cryptoService.hasKey()
         if (!hasKey) {
-          notify("error", translate("error.session_login_failed"))
+          notifyTx("error", "error.session_login_failed")
           return { kind: "bad-data" }
         }
         // Fake set key
@@ -445,13 +447,13 @@ export function useAuthentication() {
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
 
       // Success
-      notify("success", translate("success.master_password_updated"))
+      notifyTx("success", "success.master_password_updated")
 
       await delay(500)
 
       return { kind: "ok" }
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       return { kind: "bad-data" }
     }
   }
@@ -471,7 +473,7 @@ export function useAuthentication() {
           return { kind: "bad-data" }
         }
         // Setup service
-        notify("success", translate("success.locker_password_updated"))
+        notifyTx("success", "success.locker_password_updated")
       } else {
         const fetchKeyRes = await user.takeoverEA(eaID)
         if (fetchKeyRes.kind !== "ok") return { kind: "bad-data" }
@@ -501,12 +503,12 @@ export function useAuthentication() {
           return { kind: "bad-data" }
         }
         // Setup service
-        notify("success", translate("success.master_password_updated"))
+        notifyTx("success", "success.master_password_updated")
       }
 
       return { kind: "ok" }
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       return { kind: "bad-data" }
     }
   }
@@ -575,12 +577,12 @@ export function useAuthentication() {
       }
 
       // Setup service
-      notify("success", translate("success.master_password_updated"))
+      notifyTx("success", "success.master_password_updated")
       await cryptoService.clearKeys()
       await logout()
       return { kind: "ok" }
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       return { kind: "bad-data" }
     }
   }
@@ -593,7 +595,7 @@ export function useAuthentication() {
       await clearAllData()
       await logoutAllServices()
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("logout: " + e)
     }
   }

@@ -7,13 +7,13 @@ import { Screen, Header, Text, Icon } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { CreateSubdomainModal } from "./CreateSubdomainModal"
-import { PrivateRelayScreenProps } from "../../route"
 import { RootEmailInfo } from "./RootEmailInfo"
 import { SubdomainInfo } from "./SubdomainInfo"
 import { AliasItem } from "./PrivateRelayItem"
 import { useRelayNavigation } from "./useRelayNavigation"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { debounce } from "app/utils/utils"
+import { PrivateRelayScreenProps } from "app/navigators"
 
 const FREE_PLAM_ALIAS_LIMIT = 1
 const PAGE_SIZE = 10

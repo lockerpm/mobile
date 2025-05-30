@@ -4,6 +4,7 @@ import { Button, TextInput } from "app/components/cores"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { useAppLocale } from "app/services/context"
+import { useToast } from "app/services/utils"
 
 type Props = {
   nextStep: () => void
@@ -12,7 +13,7 @@ type Props = {
 
 export const ChangePassword = (props: Props) => {
   const { user } = useStores()
-  const { notify, notifyApiError } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { nextStep, token } = props
 
@@ -33,7 +34,7 @@ export const ChangePassword = (props: Props) => {
     if (res.kind !== "ok") {
       notifyApiError(res)
     } else {
-      notify("success", translate("forgot_password.password_updated"))
+      notifyTx("success", "forgot_password.password_updated")
       nextStep()
     }
   }
@@ -54,7 +55,7 @@ export const ChangePassword = (props: Props) => {
       <TextInput
         animated
         isPassword
-        isError={isError || (password && confirmPassword && password !== confirmPassword)}
+        isError={isError || (!!password && !!confirmPassword && password !== confirmPassword)}
         label={translate("forgot_password.confirm_new_password")}
         value={confirmPassword}
         onChangeText={setConfirmPassword}

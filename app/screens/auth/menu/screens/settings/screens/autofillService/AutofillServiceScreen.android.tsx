@@ -8,7 +8,7 @@ import Accordion from "react-native-collapsible/Accordion"
 import { Button, Header, Icon, Screen, Text } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
-import { SettingsScreenProps } from "../../route"
+import { SettingsScreenProps } from "app/navigators"
 
 const HINT = require("assets/images/autofill/androidHint.png")
 const PER = require("assets/images/autofill/otherXiaomiPermission.png")

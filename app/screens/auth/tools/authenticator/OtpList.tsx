@@ -7,12 +7,13 @@ import { AuthenticatorAction } from "./AuthenticatorAction"
 import DraggableFlatList from "react-native-draggable-flatlist"
 import { OtpListItem } from "./OtpListItem"
 import { Text } from "app/components/cores"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { useAppLocale } from "app/services/context"
+import { useToast } from "app/services/utils"
 
 interface Props {
   navigation: any
@@ -46,7 +47,7 @@ export const OtpList = observer((props: Props) => {
     setSelectedItems,
     setAllItems,
   } = props
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   const { translate } = useAppLocale()
   const { getCiphersFromCache } = useCipherData()
   const { cipherStore, toolStore } = useStores()
@@ -140,7 +141,7 @@ export const OtpList = observer((props: Props) => {
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
       if (selected.length === MAX_CIPHER_SELECTION) {
-        notify("error", translate("error.cannot_select_more", { count: MAX_CIPHER_SELECTION }))
+        notifyTx("error", "error.cannot_select_more", { count: MAX_CIPHER_SELECTION })
         return
       }
       selected.push(id)

@@ -9,6 +9,7 @@ import { SettingsItem } from "app/components/utils"
 import { FileData } from "app/static/types"
 import { useAppLocale, useTheme } from "app/services/context"
 import { FileFormatPickerModal } from "./FileFormatPickerModal"
+import { useToast } from "app/services/utils"
 
 interface Props {
   format: string
@@ -21,7 +22,7 @@ interface Props {
 export const ImportPickFile = (props: Props) => {
   const { colors } = useTheme()
   const { importService } = useCoreService()
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   const { translate } = useAppLocale()
 
   const { format, setFormat, file, setFile, handleImport } = props
@@ -69,14 +70,14 @@ export const ImportPickFile = (props: Props) => {
       if (getFileName(res).endsWith(`.${targetExtension}`)) {
         setFile(res)
       } else {
-        notify("error", translate("import.pls_select_right_format", { format: targetExtension }))
+        notifyTx("error", "import.pls_select_right_format", { format: targetExtension })
       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
       } else {
         Logger.error("Import pick file: " + err)
-        notify("error", translate("error.something_went_wrong"))
+        notifyTx("error", "error.something_went_wrong")
       }
     }
   }

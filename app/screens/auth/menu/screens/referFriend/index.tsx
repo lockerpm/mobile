@@ -4,8 +4,8 @@ import { Button, Icon, Text } from "app/components/cores"
 import LinearGradient from "react-native-linear-gradient"
 import { useAppLocale, useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
-import { MenuScreenProps } from "../../route"
 import { useClipboard } from "app/services/utils"
+import { MenuScreenProps } from "app/navigators"
 
 const IS_IOS = Platform.OS === "ios"
 

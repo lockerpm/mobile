@@ -7,8 +7,8 @@ import { PolicyType } from "app/static/types"
 import { Screen, Header, TextInput, Button } from "app/components/cores"
 import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/utils"
 import { StyleSheet, View } from "react-native"
-import { SettingsScreenProps } from "../../route"
 import { useAppLocale } from "app/services/context"
+import { SettingsScreenProps } from "app/navigators"
 
 export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPassword">> = observer(
   ({ navigation }) => {

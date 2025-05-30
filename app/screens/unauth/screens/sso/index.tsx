@@ -1,8 +1,8 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { SSORoute } from "./route"
 import { SSOIdentifierScreen, SSOEmailLoginScreen } from "./screens"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { SSORoute } from "app/navigators"
 
 const Stack = createNativeStackNavigator<SSORoute>()
 

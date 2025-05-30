@@ -2,9 +2,9 @@ import React, { useState, useRef, useCallback } from "react"
 import { View } from "react-native"
 import { Text, Button, Icon } from "app/components/cores"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { RecaptchaChecker } from "app/components/utils"
+import { useToast } from "app/services/utils"
 
 type Props = {
   methods: {
@@ -20,7 +20,7 @@ export const MethodSelection = (props: Props) => {
   const { user } = useStores()
   const { colors } = useTheme()
   const { translate } = useAppLocale()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { methods, onSelect, username, password } = props
 
   const captchaRef = useRef(null)

@@ -1,7 +1,6 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
-import { SettingsRoute } from "./route"
 import {
   ChangeMasterPasswordScreen,
   EmergencyAccessStack,
@@ -12,6 +11,7 @@ import {
 } from "./screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "./screens/autofillService/AutofillServiceScreen"
+import { SettingsRoute } from "app/navigators"
 
 const Stack = createNativeStackNavigator<SettingsRoute>()
 

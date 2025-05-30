@@ -11,7 +11,7 @@ import {
 } from "react-native"
 import Modal from "react-native-modal"
 import { useSafeAreaInsetsStyle } from "app/utils/useSafeAreaInsetsStyle"
-import { Text, Icon, IconTypes } from "app/components/cores"
+import { Text, Icon, IconTypes, PressableScale, ModalBackdrop } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
 
 interface Props {
@@ -68,18 +68,7 @@ export const NewActionSheet = (props: Props) => {
       onModalHide={onClose}
       avoidKeyboard
       style={$containerStyle}
-      customBackdrop={
-        <TouchableWithoutFeedback onPress={onClose}>
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: colors.transparentModal,
-              height: "100%",
-              width: "100%",
-            }}
-          />
-        </TouchableWithoutFeedback>
-      }
+      customBackdrop={<ModalBackdrop onPress={onClose} />}
     >
       <View style={{ borderRadius: 12, overflow: "hidden", backgroundColor: colors.background }}>
         {isArray &&
@@ -99,20 +88,20 @@ export const NewActionSheet = (props: Props) => {
       </View>
 
       {!isDisableCancelButton && (
-        <TouchableHighlight
-          underlayColor={colors.border}
-          onPress={onClose}
-          style={{
-            marginTop: 16,
-            backgroundColor: colors.background,
-            borderRadius: 12,
-            padding: 16,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text weight="semibold" text={closeText} color={colors.primaryText} />
-        </TouchableHighlight>
+        <PressableScale onPress={onClose}>
+          <View
+            style={{
+              marginTop: 16,
+              backgroundColor: colors.background,
+              borderRadius: 12,
+              padding: 16,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text weight="semibold" text={closeText} color={colors.primaryText} />
+          </View>
+        </PressableScale>
       )}
     </Modal>
   )

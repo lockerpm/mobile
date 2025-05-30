@@ -1,7 +1,6 @@
 import React, { FC, useCallback } from "react"
 import { KeyboardAvoidingView, StyleSheet, View } from "react-native"
 import { useTheme } from "app/services/context"
-import { PrivateRelayScreenProps } from "../../../route"
 import { BlurView } from "@react-native-community/blur"
 import { debounce } from "app/utils/utils"
 
@@ -9,6 +8,7 @@ import { Actions, RelayActionType } from "./Actions"
 import { EditAlias } from "./EditAlias"
 import { IS_IOS } from "app/config/constants"
 import { ConfigAlias } from "./ConfigAlias"
+import { PrivateRelayScreenProps } from "app/navigators"
 
 export const RelayActionScreen: FC<PrivateRelayScreenProps<"relayAction">> = ({
   navigation,

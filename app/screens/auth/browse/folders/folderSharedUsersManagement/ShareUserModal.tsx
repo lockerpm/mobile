@@ -8,6 +8,7 @@ import { useFolder, useHelper } from "app/services/hook"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { Button, Header, Icon, Text, TextInput } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
+import { useToast } from "app/services/utils"
 
 interface InviteProps {
   isOpen: boolean
@@ -21,7 +22,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
   const { isOpen, onClose, sharedUsers, folder } = props
   const { user, enterpriseStore } = useStores()
   const { colors } = useTheme()
-  const { notify, notifyApiError } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { shareFolder, shareFolderAddMember } = useFolder()
 
@@ -65,7 +66,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
     onClose()
     if (res.kind === "ok" || res.kind === "unauthorized") {
       if (res.kind === "ok") {
-        notify("success", translate("shares.share_folder.success.shared"))
+        notifyTx("success", translate("shares.share_folder.success.shared"))
         setEmails([])
       }
     }

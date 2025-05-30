@@ -11,7 +11,7 @@ import { Utils } from "app/services/coreService/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
-import { useClipboard } from "app/services/utils"
+import { useClipboard, useToast } from "app/services/utils"
 
 type Props = {
   isOpen: boolean
@@ -27,7 +27,7 @@ type Props = {
 export const QuickSharesItemAction = observer((props: Props) => {
   const { isOpen, onClose, selectedCipher, navigation } = props
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { copyToClipboard } = useClipboard()
   const { getCipherInfo } = useCipherHelper()

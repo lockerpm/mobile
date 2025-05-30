@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import { View, Dimensions, StyleProp, ViewStyle, ColorValue } from 'react-native'
-import Svg, {  Path } from 'react-native-svg'
+import React, { useEffect } from "react"
+import { View, Dimensions, StyleProp, ViewStyle, ColorValue } from "react-native"
+import Svg, { Path } from "react-native-svg"
 import Animated, {
   useAnimatedProps,
   useDerivedValue,
@@ -8,9 +8,10 @@ import Animated, {
   withRepeat,
   withTiming,
   Easing,
-} from 'react-native-reanimated'
-import { mix } from 'react-native-redash'
-import { useTheme } from 'app/services/context'
+} from "react-native-reanimated"
+import { mix } from "react-native-redash"
+import { useTheme } from "app/services/context"
+const { width, height } = Dimensions.get("window")
 
 const AnimatedPath = Animated.createAnimatedComponent(Path)
 
@@ -21,13 +22,12 @@ interface Props {
 
 export const Wave = ({ style, color }: Props) => {
   const { colors } = useTheme()
-  const { width, height } = Dimensions.get('window')
   const progress = useSharedValue(0)
   useEffect(() => {
     progress.value = withRepeat(
       withTiming(1, { duration: 5000, easing: Easing.inOut(Easing.ease) }),
       -1,
-      true
+      true,
     )
   }, [progress])
   const data1 = useDerivedValue(() => {
@@ -71,26 +71,23 @@ export const Wave = ({ style, color }: Props) => {
   })
 
   return (
-    <View
-      style={[
-        {
-          width: width,
-          height: height,
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-        },
-        style,
-      ]}
-    >
+    <View style={[container, style]}>
       <Svg
         width={width}
         height={height - 120}
         style={{ backgroundColor: colors.transparent }}
         viewBox="0 0 1 1"
       >
-        <AnimatedPath fill={'#f2ffe6'} animatedProps={path2} />
+        <AnimatedPath fill={"#f2ffe6"} animatedProps={path2} />
         <AnimatedPath fill={color} animatedProps={path1} />
       </Svg>
     </View>
   )
+}
+
+const container: ViewStyle = {
+  width,
+  height,
+  justifyContent: "flex-end",
+  alignItems: "center",
 }

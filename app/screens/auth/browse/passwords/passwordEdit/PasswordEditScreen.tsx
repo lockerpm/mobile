@@ -14,11 +14,11 @@ import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/
 import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
 import { PasswordOtp } from "./Otp"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { CommonActions } from "@react-navigation/native"
 import { PrivateEmailModal } from "./privateEmailModal/PrivateEmail"
 
-export const PasswordEditScreen: FC<AppStackScreenProps<"passwords__edit">> = observer((props) => {
+export const PasswordEditScreen: FC<AuthStackScreenProps<"passwords__edit">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
   const { mode, initialUrl, androidAutofillSavedData } = route.params

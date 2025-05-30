@@ -10,6 +10,7 @@ import { usePermission } from "../permission"
 import Share, { ShareOptions } from "react-native-share"
 import { CameraRoll } from "@react-native-camera-roll/camera-roll"
 import { useAppLocale } from "app/services/context"
+import { useToast } from "app/services/utils"
 
 const DOWNLOAD_PATH =
   Platform.OS === "android"
@@ -26,7 +27,7 @@ export const useAttachmentActions = (
   const { cipherStore } = useStores()
   const { attachmentService } = useCoreService()
   const { translate } = useAppLocale()
-  const { notify, notifyApiError } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
   const { requestStoragePermission, hasAndroidGalleryPermission } = usePermission()
 
   const onDownloadAttachment = async () => {
@@ -59,7 +60,7 @@ export const useAttachmentActions = (
         outputUri: tempEncFile,
       })
       if (!downloadRes) {
-        notify("error", translate("file_attachment.error.download_error"))
+        notifyTx("error", "file_attachment.error.download_error")
         return
       }
 
@@ -70,7 +71,7 @@ export const useAttachmentActions = (
       )
 
       if (!decryptedRes) {
-        notify("error", translate("file_attachment.error.decrypt_error"))
+        notifyTx("error", "file_attachment.error.decrypt_error")
         return
       }
 
@@ -94,7 +95,7 @@ export const useAttachmentActions = (
             }
           }
         } else {
-          notify("success", translate("file_attachment.download_success"))
+          notifyTx("success", "file_attachment.download_success")
         }
       } else {
         try {
@@ -102,13 +103,13 @@ export const useAttachmentActions = (
             return
           }
           await CameraRoll.saveAsset(filePath)
-          notify("success", translate("file_attachment.download_media_success"))
+          notifyTx("success", "file_attachment.download_media_success")
         } catch (error) {
           console.error("Error saving media:", error)
         }
       }
     } catch (error) {
-      notify("error", translate("file_attachment.error.download_error"))
+      notifyTx("error", "file_attachment.error.download_error")
     } finally {
       if (await RNFS.exists(tempEncFile)) {
         await RNFS.unlink(tempEncFile)
@@ -127,7 +128,7 @@ export const useAttachmentActions = (
     }
     updateAttachments(attachment, true)
     setIsLoading(false)
-    notify("success", translate("file_attachment.delete_success"))
+    notifyTx("success", "file_attachment.delete_success")
   }
 
   return { onDownloadAttachment, onDeleteAttachment }

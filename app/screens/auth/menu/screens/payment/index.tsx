@@ -18,8 +18,8 @@ import { PricePlan } from "./PricePlan"
 import { FamilyPayment } from "./familyPayment/FamilyPayment"
 import { PremiumPayment } from "./premiumPayment/PremiumPayment"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
-import { MenuScreenProps } from "../../route"
+import { MenuScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 const subSkus = [SKU.PRE_MON, SKU.PRE_YEAR, SKU.FAM_MON, SKU.FAM_YEAR]
 
@@ -29,7 +29,7 @@ const IS_ANDROID = Platform.OS === "android"
 export const PaymentScreen: FC<MenuScreenProps<"payment">> = observer(({ navigation, route }) => {
   const { subscriptions, getSubscriptions, currentPurchase, finishTransaction } = useIAP()
   const { user } = useStores()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { colors, isDark } = useTheme()
 

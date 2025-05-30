@@ -7,13 +7,14 @@ import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
-import { MenuScreenProps } from "../../route"
+import { MenuScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 export const InviteMemberScreen: FC<MenuScreenProps<"inviteMember">> = observer(
   ({ navigation }) => {
     const { user } = useStores()
     const { colors } = useTheme()
-    const { notifyApiError, notify } = useHelper()
+    const { notifyApiError, notifyTx } = useToast()
     const { translate } = useAppLocale()
 
     // ----------------------- PARAMS -----------------------
@@ -63,7 +64,7 @@ export const InviteMemberScreen: FC<MenuScreenProps<"inviteMember">> = observer(
       const res = await user.removeFamilyMember(id)
       if (res.kind === "ok") {
         setRelad(true)
-        notify("success", translate("invite_member.delete_noti"))
+        notifyTx("success", "invite_member.delete_noti")
       } else {
         notifyApiError(res)
       }

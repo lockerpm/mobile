@@ -2,17 +2,17 @@ import React, { FC, useEffect, useState } from "react"
 import { AddTrustedContactModal } from "./AddTrustedContactModal"
 import { FlatList, View } from "react-native"
 import { Button, Header, Screen, Text } from "app/components/cores"
-import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { TrustedContact } from "app/static/types"
 import { observer } from "mobx-react-lite"
-import { EmergencyAccessScreenProps } from "../../route"
 import { Contact } from "../Contact"
 import { useAppLocale } from "app/services/context"
+import { EmergencyAccessScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 export const YourTrustedContactScreen: FC<EmergencyAccessScreenProps<"yourTrustedContact">> =
   observer(({ navigation }) => {
-    const { notifyApiError } = useHelper()
+    const { notifyApiError } = useToast()
     const { translate } = useAppLocale()
     const { user } = useStores()
 

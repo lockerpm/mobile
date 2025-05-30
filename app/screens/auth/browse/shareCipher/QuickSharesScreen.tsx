@@ -15,16 +15,16 @@ import { Utils } from "app/services/coreService/utils"
 import { Button, Header, Icon, Screen, Text, Toggle, TextInput } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
 import { ActionSheet } from "app/components/ciphers"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
-import { useClipboard } from "app/services/utils"
+import { useClipboard, useToast } from "app/services/utils"
 
 const { width } = Dimensions.get("screen")
 
-export const QuickSharesScreen: FC<AppStackScreenProps<"quick_shares">> = observer((props) => {
-  const { notifyApiError } = useHelper()
+export const QuickSharesScreen: FC<AuthStackScreenProps<"quick_shares">> = observer((props) => {
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { copyToClipboard } = useClipboard()
   const { sendService } = useCoreService()

@@ -16,12 +16,12 @@ import { MAX_CIPHER_SELECTION, TEAM_CIPHER_EDITOR } from "app/static/constants"
 import { useHelper } from "app/services/hook"
 import { AccountRole } from "app/static/types"
 import { Screen } from "app/components/cores"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { useAppLocale } from "app/services/context"
 
 const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
 
-export const FolderCiphersScreen: FC<AppStackScreenProps<"folders__ciphers">> = observer(
+export const FolderCiphersScreen: FC<AuthStackScreenProps<"folders__ciphers">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route

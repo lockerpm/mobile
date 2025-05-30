@@ -18,6 +18,7 @@ import { NoteAction } from "app/screens/auth/browse/notes/NoteAction"
 import { CryptoWalletAction } from "app/screens/auth/browse/cryptoAsset/CryptoWalletAction"
 import { DeletedAction } from "../cipherAction/DeletedAction"
 import { observer } from "mobx-react-lite"
+import { useToast } from "app/services/utils"
 
 export interface CipherListProps {
   navigation: any
@@ -65,7 +66,8 @@ export const CipherList = observer((props: CipherListProps) => {
   } = props
   const { colors } = useTheme()
   const { translate } = useAppLocale()
-  const { getTeam, notify } = useHelper()
+  const { getTeam } = useHelper()
+  const { notifyTx } = useToast()
   const { getCiphersFromCache } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
 
@@ -222,7 +224,7 @@ export const CipherList = observer((props: CipherListProps) => {
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
       if (selected.length === MAX_CIPHER_SELECTION) {
-        notify("error", translate("error.cannot_select_more", { count: MAX_CIPHER_SELECTION }))
+        notifyTx("error", "error.cannot_select_more", { count: MAX_CIPHER_SELECTION })
         return
       }
       selected.push(id)

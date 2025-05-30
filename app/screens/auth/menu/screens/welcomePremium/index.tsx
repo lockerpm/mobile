@@ -4,8 +4,7 @@ import LottieView from "lottie-react-native"
 import { Screen, Text, Button, Icon } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
-import { MenuScreenProps } from "../../route"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps, MenuScreenProps } from "app/navigators/navigators.types"
 import { useNavigation } from "@react-navigation/native"
 
 const LOTTIE_JSON = require("app/static/welcome-premium-bg-lottie.json")
@@ -13,7 +12,7 @@ const HIGH_FIVE = require("assets/images/welcomePremium/HighFive.png")
 const PREMIUM = require("assets/images/welcomePremium/LockerPremium.png")
 
 export const WelcomePremiumScreen: FC<MenuScreenProps<"welcomePremium">> = observer(() => {
-  const navigation = useNavigation<AppStackScreenProps<"mainTab">["navigation"]>()
+  const navigation = useNavigation<AuthStackScreenProps<"mainTab">["navigation"]>()
   const { colors } = useTheme()
   const { translate } = useAppLocale()
 

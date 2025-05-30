@@ -7,6 +7,7 @@ import { useHelper } from "./useHelper"
 import { Logger } from "app/utils/utils"
 import { useCipherHelper } from "./useCipherHelper"
 import { useAppLocale } from "../context"
+import { useToast } from "../utils"
 
 export const useDeleteCipher = () => {
   const { cipherStore, uiStore } = useStores()
@@ -19,7 +20,7 @@ export const useDeleteCipher = () => {
     updateCipher,
   } = useCipherData()
   const { shareFolderRemoveItem } = useFolder()
-  const { notify, notifyApiError } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { getPasswordStrength } = useCipherHelper()
 
@@ -90,13 +91,13 @@ export const useDeleteCipher = () => {
       const res = await cipherStore.toTrashCiphers(ids)
       if (res.kind === "ok") {
         await _offlineToTrashCiphers(ids, true)
-        notify("success", translate("success.cipher_trashed"))
+        notifyTx("success", "success.cipher_trashed")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("toTrashCiphers: " + e)
       return { kind: "unknown" }
     }

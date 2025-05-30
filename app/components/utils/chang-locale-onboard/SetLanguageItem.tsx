@@ -1,50 +1,61 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import { NewActionSheet, NewActionSheetItem } from "app/components/utils/action-sheet/ActionSheet"
-import { observer } from "mobx-react-lite"
-import { View, ViewProps } from "react-native"
-import { Button, Icon } from "app/components/cores"
+import { StyleSheet, TouchableOpacity, View, ViewProps } from "react-native"
+import { Icon, Text } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
+import { LanguageSupportType } from "app/i18n"
 
-export const SetLanguage = observer((props: ViewProps) => {
+export const SetLanguage = ({ style, ...props }: ViewProps) => {
   const { colors } = useTheme()
   const { user } = useStores()
-  const { translate } = useAppLocale()
+  const { translate, setLanguage, lang } = useAppLocale()
+
   const [isLanguageSelect, setIsLanguageSelect] = useState(false)
 
-  const options: { label: string; value: "vi" | "en" | "zh" | "ru" }[] = [
-    {
-      label: "Tiếng Việt",
-      value: "vi",
-    },
-    {
-      label: "English",
-      value: "en",
-    },
-    {
-      label: "繁體中文",
-      value: "zh",
-    },
-    {
-      label: "Русский",
-      value: "ru",
-    },
-  ]
+  const options: { label: string; value: LanguageSupportType }[] = useMemo(
+    () => [
+      {
+        label: "Tiếng Việt",
+        value: "vi",
+      },
+      {
+        label: "English",
+        value: "en",
+      },
+      {
+        label: "繁體中文",
+        value: "zh",
+      },
+      {
+        label: "Русский",
+        value: "ru",
+      },
+    ],
+    [],
+  )
 
-  const setLanguage = (lang: string) => {
+  const handleSetLanguage = (lang: LanguageSupportType) => {
     user.setLanguage(lang)
+    setLanguage(lang)
     setIsLanguageSelect(false)
   }
 
   return (
-    <View {...props}>
-      <Button
-        preset="teriatary"
-        text={user.language.toUpperCase()}
-        onPress={() => setIsLanguageSelect(true)}
-        textStyle={{ color: colors.title }}
-        RightAccessory={(props) => <Icon size={20} icon="caret-down" {...props} />}
-      />
+    <View
+      style={[
+        styles.container,
+        { borderColor: colors.border, backgroundColor: colors.block },
+        style,
+      ]}
+      {...props}
+    >
+      <TouchableOpacity onPress={() => setIsLanguageSelect(true)}>
+        <View style={styles.content}>
+          <Text preset="bold" text={lang.toUpperCase() + " "} />
+          <Icon icon="caret-down" />
+        </View>
+      </TouchableOpacity>
       <NewActionSheet
         isOpen={isLanguageSelect}
         onClose={() => setIsLanguageSelect(false)}
@@ -52,17 +63,34 @@ export const SetLanguage = observer((props: ViewProps) => {
       >
         {options.map((item, index) => (
           <NewActionSheetItem
-            icon={item.value === user.language ? "check" : undefined}
+            icon={item.value === lang ? "check" : undefined}
             iconColor={colors.success}
             key={index}
             text={item.label}
             onPress={() => {
-              setLanguage(item.value)
+              handleSetLanguage(item.value)
             }}
-            textStyle={{ flex: 1 }}
+            textStyle={styles.actionsItem}
           />
         ))}
       </NewActionSheet>
     </View>
   )
+}
+
+const styles = StyleSheet.create({
+  actionsItem: {
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  container: {
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: 8,
+    paddingVertical: 6,
+  },
+  content: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
 })

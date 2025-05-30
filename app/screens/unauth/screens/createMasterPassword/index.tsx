@@ -11,9 +11,8 @@ import Animated, { FadeInUp } from "react-native-reanimated"
 import { observer } from "mobx-react-lite"
 import { PolicyType } from "app/static/types"
 import NetInfo from "@react-native-community/netinfo"
-import { UnAuthScreenProps } from "../../route"
 import { useBiometricType } from "app/services/utils"
-import { RootNavigation } from "app/navigators"
+import { RootNavigation, UnAuthScreenProps } from "app/navigators"
 
 export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassword">> = observer(
   ({ navigation }) => {
@@ -54,7 +53,9 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
     // Logout
     const handleLogout = async () => {
       await logout()
-      navigation.navigate("loginStack")
+      navigation.navigate("loginStack", {
+        screen: "login",
+      })
     }
 
     // Load teams to check master password policy
@@ -122,7 +123,12 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
         }
       }
 
-      navigation.replace("mainStack", { screen: "mainTab" })
+      navigation.replace("mainStack", {
+        screen: "mainTab",
+        params: {
+          screen: "homeTab",
+        },
+      })
     }
 
     // -------------- EFFECT ------------------
@@ -134,7 +140,7 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
 
     // Back handler
     useEffect(() => {
-      const handleBack = (e) => {
+      const handleBack = (e: any) => {
         if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
           navigation.dispatch(e.data.action)
           return
@@ -311,7 +317,7 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
               setShowViolationModal(false)
             }}
             violations={violations}
-            teamName={user.teams.length && user.teams[0]?.name}
+            teamName={user.teams?.length > 0 ? user.teams[0]?.name : ""}
             onConfirm={() => {
               setShowViolationModal(false)
             }}

@@ -9,11 +9,11 @@ import { AuthenticatorAddAction } from "app/screens/auth/tools/authenticator/Aut
 import { SearchBar } from "app/components/utils"
 import { observer } from "mobx-react-lite"
 import { useTool } from "app/services/hook"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { CipherType } from "core/enums"
 import { FREE_PLAN_LIMIT } from "app/static/constants"
 
-export const Password2FASetupScreen: FC<AppStackScreenProps<"passwords_2fa_setup">> = observer(
+export const Password2FASetupScreen: FC<AuthStackScreenProps<"passwords_2fa_setup">> = observer(
   (props) => {
     const navigation: any = props.navigation
     const route = props.route

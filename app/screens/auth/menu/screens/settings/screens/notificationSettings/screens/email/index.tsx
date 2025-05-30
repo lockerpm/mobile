@@ -1,12 +1,12 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { NotificationCategory } from "app/static/types"
 import { Screen, Header, Toggle } from "app/components/cores"
 import { MenuItemContainer, SettingsItem } from "app/components/utils"
-import { NotificationSettingsScreenProps } from "../../route"
+import { NotificationSettingsScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 type AppNotiType = {
   [key in NotificationCategory]: boolean
@@ -16,7 +16,7 @@ export const PushEmailSettingsScreen: FC<NotificationSettingsScreenProps<"emailN
   ({ navigation }) => {
     const { user } = useStores()
     const { colors } = useTheme()
-    const { notifyApiError } = useHelper()
+    const { notifyApiError } = useToast()
 
     // ----------------------- PARAMS -----------------------
 

@@ -4,6 +4,7 @@ import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { Text, Button, TextInput, Icon } from "app/components/cores"
 import { useAppLocale } from "app/services/context"
+import { useToast } from "app/services/utils"
 
 type Props = {
   goBack: () => void
@@ -13,7 +14,7 @@ type Props = {
 
 export const OtpAuthen = (props: Props) => {
   const { user, uiStore } = useStores()
-  const { notify, notifyApiError } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
   const { goBack, username, nextStep } = props
@@ -36,7 +37,7 @@ export const OtpAuthen = (props: Props) => {
     setIsLoading(false)
     if (res.kind !== "ok") {
       setIsError(true)
-      notify("error", translate("error.invalid_authorization_code"))
+      notifyTx("error", "error.invalid_authorization_code")
     } else {
       const urlArray = res.data.reset_password_url?.split("/")
       nextStep(urlArray[urlArray.length - 1])
@@ -54,7 +55,7 @@ export const OtpAuthen = (props: Props) => {
       uiStore.setLockResendOtpResetPasswordTime(Date.now() + 60 * 1000)
       startInterval()
       setRemainingLockTime(getRemainingLockTime())
-      notify("success", translate("forgot_password.resend_success"))
+      notifyTx("success", "forgot_password.resend_success")
     } else {
       notifyApiError(res)
     }

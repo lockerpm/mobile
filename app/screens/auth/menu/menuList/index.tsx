@@ -15,11 +15,12 @@ import ChatWootWidget from "@chatwoot/react-native-widget"
 import { CHATWOOT_BASE_URL, CHATWOOT_WEBSITE_TOKEN } from "app/config/constants"
 import { TabsScreenProps } from "app/navigators/navigators.types"
 import { useMenuListNavigation } from "./useMenuListNavigation"
+import { useToast } from "app/services/utils"
 
 export const MenuListScreen: FC<TabsScreenProps<"menuTab">> = observer(({ navigation }) => {
   const { user } = useStores()
   const { colors, isDark } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { lock, logout } = useAuthentication()
 

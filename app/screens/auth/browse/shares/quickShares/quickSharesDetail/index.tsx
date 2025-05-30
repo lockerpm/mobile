@@ -6,13 +6,13 @@ import React, { FC } from "react"
 import { TouchableOpacity, View, ViewStyle } from "react-native"
 import { Button, Header, Icon, Screen, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
 import { useClipboard } from "app/services/utils"
 
-export const QuickSharesDetailScreen: FC<AppStackScreenProps<"quickShareItemsDetail">> = observer(
+export const QuickSharesDetailScreen: FC<AuthStackScreenProps<"quickShareItemsDetail">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route

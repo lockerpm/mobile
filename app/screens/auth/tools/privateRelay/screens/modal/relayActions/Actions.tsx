@@ -10,7 +10,7 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { debounce } from "app/utils/utils"
 import { AppEventType, EventBus } from "app/utils/eventBus"
-import { useClipboard } from "app/services/utils"
+import { useClipboard, useToast } from "app/services/utils"
 
 export enum RelayActionType {
   DEFAULT = "default",
@@ -37,7 +37,7 @@ export const Actions = ({
 }: Props) => {
   const { toolStore } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { copyToClipboard } = useClipboard()
   const { translate } = useAppLocale()
 

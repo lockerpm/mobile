@@ -1,15 +1,15 @@
 import { observer } from "mobx-react-lite"
 import React, { FC, useState } from "react"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
 import { Text, TextInput, Button, Screen, Header, Logo } from "app/components/cores"
 import { useAppLocale } from "app/services/context"
-import { SSOScreenProps } from "../../route"
+import { SSOScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 export const SSOIdentifierScreen: FC<SSOScreenProps<"ssoIdentifier">> = observer((props) => {
   const navigation = props.navigation
   const { user } = useStores()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
   const [ssoId, setSsoId] = useState("")

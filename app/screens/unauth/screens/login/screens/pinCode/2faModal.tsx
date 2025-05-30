@@ -6,6 +6,7 @@ import Modal from "react-native-modal"
 import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
+import { useToast } from "app/services/utils"
 
 interface Props {
   email: string
@@ -26,7 +27,8 @@ export const TwoFactorAuthentication = ({
   onLoggedIn,
 }: Props) => {
   const { user } = useStores()
-  const { setApiTokens, notifyApiError } = useHelper()
+  const { setApiTokens } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { colors } = useTheme()
 

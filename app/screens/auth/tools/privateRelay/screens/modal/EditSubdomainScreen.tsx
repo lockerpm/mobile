@@ -4,12 +4,13 @@ import { Text, Button } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
-import { PrivateRelayScreenProps } from "../../route"
 import { IS_IOS } from "app/config/constants"
 import { BlurView } from "@react-native-community/blur"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { BottomModalHeader } from "app/components/utils"
+import { PrivateRelayScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 export const EditSubdomainScreen: FC<PrivateRelayScreenProps<"editSubdomain">> = ({
   navigation,
@@ -19,7 +20,7 @@ export const EditSubdomainScreen: FC<PrivateRelayScreenProps<"editSubdomain">> =
 }) => {
   const { colors } = useTheme()
   const { toolStore } = useStores()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
   const inputRef = useRef<TextInput>(null)

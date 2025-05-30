@@ -8,15 +8,16 @@ import { CipherType } from "core/enums"
 import { Logger } from "app/utils/utils"
 import { Header, Screen } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
+import { useToast } from "app/services/utils"
 
-export const QRScannerScreen: FC<AppStackScreenProps<"qrScanner">> = observer((props) => {
+export const QRScannerScreen: FC<AuthStackScreenProps<"qrScanner">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
   const { user, cipherStore } = useStores()
   const { colors } = useTheme()
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   const { translate } = useAppLocale()
   const { newCipher } = useCipherHelper()
   const { createCipher, importCiphers } = useCipherData()
@@ -47,10 +48,10 @@ export const QRScannerScreen: FC<AppStackScreenProps<"qrScanner">> = observer((p
         await createCipher(cipher, 0, [])
         setIsLoading(false)
       } else {
-        notify("error", translate("authenticator.invalid_qr"))
+        notifyTx("error", "authenticator.invalid_qr")
       }
     } catch (e) {
-      notify("error", translate("authenticator.invalid_qr"))
+      notifyTx("error", "authenticator.invalid_qr")
     }
     if (!route.params.passwordTotp) {
       navigation.goBack()
@@ -80,7 +81,7 @@ export const QRScannerScreen: FC<AppStackScreenProps<"qrScanner">> = observer((p
       })
 
       if (!ciphers.length) {
-        notify("error", translate("authenticator.invalid_qr"))
+        notifyTx("error", "authenticator.invalid_qr")
         return
       }
 
@@ -92,18 +93,15 @@ export const QRScannerScreen: FC<AppStackScreenProps<"qrScanner">> = observer((p
         isFreeAccount,
       } as any)
       if (isFreeAccount && ciphers.length > totpCount) {
-        notify(
-          "error",
-          translate("authenticator.limited_import", {
-            imported: ciphers.length - totpCount,
-            total: ciphers.length,
-            s: ciphers.length - totpCount > 1 ? "s" : "",
-          }),
-        )
+        notifyTx("error", "authenticator.limited_import", {
+          imported: ciphers.length - totpCount,
+          total: ciphers.length,
+          s: ciphers.length - totpCount > 1 ? "s" : "",
+        })
       }
     } catch (e) {
       Logger.error("Import google qr: " + e)
-      notify("error", translate("authenticator.invalid_qr"))
+      notifyTx("error", "authenticator.invalid_qr")
     }
     setIsLoading(false)
     if (!route.params.passwordTotp) {

@@ -2,17 +2,18 @@ import React, { FC, useRef, useState } from "react"
 import { Dimensions, StyleSheet } from "react-native"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { Screen } from "app/components/cores"
-import { observer } from "mobx-react-lite"
 import { AnimatedFooter } from "./animatedFooter/AnimatedFooter"
 import { Wave } from "./Wave"
 import { Intro1, Intro2, Intro3, Intro4 } from "./intro/Intro"
-import { UnAuthScreenProps } from "../../route"
+import { UnAuthScreenProps } from "app/navigators"
+import { useStores } from "app/models"
 
 const SCREEN_WIDTH = Dimensions.get("screen").width
 
-export const IntroScreen: FC<UnAuthScreenProps<"intro">> = observer(({ navigation }) => {
+export const IntroScreen: FC<UnAuthScreenProps<"intro">> = ({ navigation }) => {
+  const { uiStore } = useStores()
   const [index, setIndex] = useState(0)
-  const scrollViewRef = useRef(null)
+  const scrollViewRef = useRef<Animated.ScrollView>(null)
 
   // ------------------ METHODS ---------------------
   const animIndex = useSharedValue(0)
@@ -22,6 +23,7 @@ export const IntroScreen: FC<UnAuthScreenProps<"intro">> = observer(({ navigatio
   })
 
   const goStart = () => {
+    uiStore.setIsShowedAppIntro(true)
     navigation.navigate("onBoarding")
   }
 
@@ -42,20 +44,12 @@ export const IntroScreen: FC<UnAuthScreenProps<"intro">> = observer(({ navigatio
   // ------------------ RENDER ---------------------
 
   return (
-    <Screen
-      safeAreaEdges={["top"]}
-      contentContainerStyle={{
-        flex: 1,
-        justifyContent: "space-between",
-      }}
-    >
+    <Screen safeAreaEdges={["top"]} contentContainerStyle={styles.container}>
       <Wave color={"#Dbf5dd"} style={StyleSheet.absoluteFill} />
 
       <Animated.ScrollView
         horizontal
-        style={{
-          marginTop: 68,
-        }}
+        style={styles.contentContainer}
         pagingEnabled
         onMomentumScrollEnd={onMomentumScrollEnd}
         ref={scrollViewRef}
@@ -73,4 +67,14 @@ export const IntroScreen: FC<UnAuthScreenProps<"intro">> = observer(({ navigatio
       <AnimatedFooter animIndex={animIndex} index={index} scrollTo={scrollTo} goStart={goStart} />
     </Screen>
   )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+  contentContainer: {
+    marginTop: 68,
+  },
 })

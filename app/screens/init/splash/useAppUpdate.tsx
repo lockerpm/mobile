@@ -5,6 +5,11 @@ import React from "react"
 import { Alert, Linking } from "react-native"
 import VersionCheck from "react-native-version-check"
 
+/**
+ * Hook to check for app updates
+ * It checks if the app is in production mode and not in development mode.
+ * If an update is needed, it shows an alert to the user with options to update now or later.
+ */
 export const useAppUpdate = () => {
   const { translate } = useAppLocale()
 

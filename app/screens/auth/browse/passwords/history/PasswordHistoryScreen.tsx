@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react"
 import { Screen, Header, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { CipherIconImage, SortActionConfigModal } from "app/components/ciphers"
@@ -14,7 +14,7 @@ import { PasswordHistoryView } from "core/models/view/passwordHistoryView"
 import { HistoryItemAction } from "./HistoryItemAction"
 import { useAppLocale, useTheme } from "app/services/context"
 
-export const PasswordHistoryScreen: FC<AppStackScreenProps<"passwords_history">> = observer(
+export const PasswordHistoryScreen: FC<AuthStackScreenProps<"passwords_history">> = observer(
   (props) => {
     const { cipherStore, user } = useStores()
     const { getWebsiteLogo } = useCipherHelper()

@@ -8,6 +8,7 @@ import { Icon, Text, TouchableText } from "app/components/cores"
 import { useCoreService } from "app/services/coreService"
 import { autofillKeyChain } from "app/utils/autofillData"
 import { observer } from "mobx-react-lite"
+import { useToast } from "app/services/utils"
 
 const FACEID = require("assets/images/intro/faceid.png")
 
@@ -18,7 +19,7 @@ interface Props {
 
 export const SuggestEnableFaceID = observer(({ onClose, style }: Props) => {
   const { cryptoService } = useCoreService()
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   const { translate } = useAppLocale()
   const { colors } = useTheme()
   const { user } = useStores()
@@ -28,13 +29,13 @@ export const SuggestEnableFaceID = observer(({ onClose, style }: Props) => {
       promptMessage: "Verify FaceID/TouchID",
     })
     if (!success) {
-      notify("error", translate("error.biometric_unlock_failed"))
+      notifyTx("error", "error.biometric_unlock_failed")
       onClose()
       return
     }
 
     await _updateAutofillFaceIdSetting()
-    notify("success", translate("success.biometric_enabled"))
+    notifyTx("success", "success.biometric_enabled")
     user.setBiometricIntroShown(true)
     onClose()
   }

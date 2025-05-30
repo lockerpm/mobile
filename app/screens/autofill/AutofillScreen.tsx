@@ -9,19 +9,19 @@ import { getTOTP, parseOTPUri } from "app/utils/totp"
 import { Screen } from "app/components/cores"
 import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
 import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { GeneratePasswordModal } from "./GeneratePasswordModal"
 import { useAppLocale } from "app/services/context"
-import { useClipboard } from "app/services/utils"
+import { useClipboard, useToast } from "app/services/utils"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
 const EMPTY_CIPHER = require("assets/images/emptyCipherList/autofill-empty-cipher.png")
 
-export const AutoFillScreen: FC<AppStackScreenProps<"autofill">> = observer((props) => {
+export const AutoFillScreen: FC<AuthStackScreenProps<"autofill">> = observer((props) => {
   const navigation = props.navigation
   const { data } = props.route.params
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   const { copyToClipboard } = useClipboard()
   const { translate } = useAppLocale()
   const { getCiphersFromCache } = useCipherData()
@@ -74,7 +74,7 @@ export const AutoFillScreen: FC<AppStackScreenProps<"autofill">> = observer((pro
           }
         } else {
           RNAutofillServiceAndroid.removeLastItem()
-          notify("info", translate("autofill_service.deleted"))
+          notifyTx("info", "autofill_service.deleted")
         }
       }
       check()

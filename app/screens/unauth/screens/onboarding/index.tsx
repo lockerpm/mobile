@@ -1,42 +1,32 @@
 import React, { FC } from "react"
-import { View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Button, Screen, Text, Logo, Header } from "app/components/cores"
-import { observer } from "mobx-react-lite"
 import { SetLanguage } from "app/components/utils"
-import { UnAuthScreenProps } from "../../route"
+import { UnAuthScreenProps } from "app/navigators"
 
-export const OnboardingScreen: FC<UnAuthScreenProps<"onBoarding">> = observer((props) => {
+export const OnboardingScreen: FC<UnAuthScreenProps<"onBoarding">> = (props) => {
   const { colors, isDark } = useTheme()
   const { translate } = useAppLocale()
 
   const navigateLogin = () => {
-    props.navigation.replace("loginStack")
+    props.navigation.replace("loginStack", {
+      screen: "login",
+    })
   }
 
   const navigateSignup = () => {
-    props.navigation.replace("signupStack")
+    props.navigation.replace("signupStack", {
+      screen: "signup",
+    })
   }
 
   const footer = () => (
-    <View
-      style={{
-        marginHorizontal: 20,
-      }}
-    >
-      <Button preset="primary" text={translate("common.sign_in")} onPress={navigateLogin} />
-      <Text
-        style={{
-          textAlign: "center",
-          marginVertical: 12,
-        }}
-      >
+    <View style={styles.footer}>
+      <Button preset="primary" tx={"common.sign_in"} onPress={navigateLogin} />
+      <Text style={styles.bottomText}>
         {translate("onBoarding.no_account") + " "}
-        <Text
-          onPress={navigateSignup}
-          style={{ color: colors.primary }}
-          text={translate("common.sign_up")}
-        />
+        <Text onPress={navigateSignup} color={colors.primary} tx={"common.sign_up"} />
       </Text>
     </View>
   )
@@ -49,21 +39,30 @@ export const OnboardingScreen: FC<UnAuthScreenProps<"onBoarding">> = observer((p
       KeyboardAvoidingViewProps={{
         behavior: undefined,
       }}
-      contentContainerStyle={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      contentContainerStyle={styles.container}
     >
-      <Logo
-        preset={isDark ? "vertical-light" : "vertical-dark"}
-        style={{
-          width: 173,
-          height: 158,
-          marginBottom: 16,
-        }}
-      />
-      <Text text={translate("onBoarding.title")} preset="bold" />
+      <Logo preset={isDark ? "vertical-light" : "vertical-dark"} style={styles.logo} />
+      <Text tx={"onBoarding.title"} preset="bold" />
     </Screen>
   )
+}
+
+const styles = StyleSheet.create({
+  bottomText: {
+    marginVertical: 12,
+    textAlign: "center",
+  },
+  container: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
+  },
+  footer: {
+    marginHorizontal: 20,
+  },
+  logo: {
+    height: 158,
+    marginBottom: 16,
+    width: 173,
+  },
 })

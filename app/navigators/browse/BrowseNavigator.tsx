@@ -16,9 +16,9 @@ import {
 } from "../../screens"
 
 import { observer } from "mobx-react-lite"
-import { BrowseParamList } from "../navigators.types"
+import { BrowseRoute } from "../navigators.types"
 
-const Stack = createNativeStackNavigator<BrowseParamList>()
+const Stack = createNativeStackNavigator<BrowseRoute>()
 
 export const BrowseNavigator = observer(() => {
   return (

@@ -1,7 +1,6 @@
 import RNFS from "react-native-fs"
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker"
 import { launchImageLibrary } from "react-native-image-picker"
-import { useHelper } from "app/services/hook"
 import { usePermission } from "./permission"
 import { useCoreService } from "app/services/coreService"
 import { useStores } from "app/models"
@@ -9,7 +8,7 @@ import { Platform } from "react-native"
 import { Logger } from "app/utils/utils"
 import crypto from "react-native-crypto"
 import { attachmentApi } from "app/services/api"
-import { useAppLocale } from "app/services/context"
+import { useToast } from "app/services/utils"
 
 export const MAX_UPLOAD_SIZE = 52428800 // 50MB
 export const IS_ANDROID = Platform.OS === "android"
@@ -29,8 +28,7 @@ export type AttachmentType = {
 }
 
 export const usePickAttachment = () => {
-  const { translate } = useAppLocale()
-  const { notify, notifyApiError } = useHelper()
+  const { notify, notifyTx, notifyApiError } = useToast()
   const { handleUserDeniedPermission } = usePermission()
   const { attachmentService } = useCoreService()
   const { cipherStore } = useStores()
@@ -53,13 +51,13 @@ export const usePickAttachment = () => {
       }
 
       if (!file.size || file.size === 0) {
-        notify("error", translate("file_attachment.error.file_zero"))
+        notifyTx("error", "file_attachment.error.file_zero")
         return null
       }
 
       // Limit size
       if (file.size > MAX_UPLOAD_SIZE) {
-        notify("error", translate("file_attachment.error.max_size_error"))
+        notifyTx("error", "file_attachment.error.max_size_error")
         return null
       }
       // If file name have space or unicode characters, picker will encode it -> need decode
@@ -94,12 +92,12 @@ export const usePickAttachment = () => {
       return null
     }
     if (res.assets.length === 0) {
-      notify("error", translate("file_attachment.error.file_zero"))
+      notifyTx("error", "file_attachment.error.file_zero")
       return null
     }
     // Limit size
     if (res.assets[0].fileSize > MAX_UPLOAD_SIZE) {
-      notify("error", translate("file_attachment.error.max_size_error"))
+      notifyTx("error", "file_attachment.error.max_size_error")
       return null
     }
 
@@ -136,7 +134,7 @@ export const usePickAttachment = () => {
         return null
       }
       if (uploadFormRes.data.limit_size < file.size) {
-        notify("error", translate("file_attachment.error.upload_limit_error"))
+        notifyTx("error", "file_attachment.error.upload_limit_error")
         onStatus(UploadStatus.ERROR)
         return null
       }
@@ -148,14 +146,14 @@ export const usePickAttachment = () => {
         randomKey.toString("base64"),
       )
       if (!encRes) {
-        notify("error", translate("file_attachment.error.encrypt_error"))
+        notifyTx("error", "file_attachment.error.encrypt_error")
         onStatus(UploadStatus.ERROR)
         return null
       }
       onStatus(UploadStatus.UPLOADING)
       const encryptedFileSize = await getFileSize(tempEncFile)
       if (uploadFormRes.data.limit_size < encryptedFileSize) {
-        notify("error", translate("file_attachment.error.upload_limit_error"))
+        notifyTx("error", "file_attachment.error.upload_limit_error")
         onStatus(UploadStatus.ERROR)
         return null
       }
@@ -178,7 +176,7 @@ export const usePickAttachment = () => {
       return attachment
     } catch (error) {
       onStatus(UploadStatus.ERROR)
-      notify("error", translate("file_attachment.error.upload_error"))
+      notifyTx("error", "file_attachment.error.upload_error")
     } finally {
       if (await RNFS.exists(tempEncFile)) {
         await RNFS.unlink(tempEncFile)

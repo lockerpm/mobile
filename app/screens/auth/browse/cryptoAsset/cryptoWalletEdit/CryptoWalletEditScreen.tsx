@@ -17,9 +17,9 @@ import { PlanStorageLimitModal } from "../../planStorageLimitModal"
 import { PasswordStrength } from "app/components/utils"
 import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 
-export const CryptoWalletEditScreen: FC<AppStackScreenProps<"cryptoWallets__edit">> = observer(
+export const CryptoWalletEditScreen: FC<AuthStackScreenProps<"cryptoWallets__edit">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route

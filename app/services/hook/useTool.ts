@@ -8,13 +8,15 @@ import { CipherType } from "core/enums"
 import { Logger } from "app/utils/utils"
 import { AccountRole } from "app/static/types"
 import { useAppLocale } from "../context"
+import { useToast } from "../utils"
 
 export function useTool() {
   const { user, toolStore, cipherStore } = useStores()
   const { passwordGenerationService, auditService, searchService } = useCoreService()
 
   const { getCiphers, getEncryptedCiphers, getCiphersFromCache } = useCipherData()
-  const { notify, getTeam } = useHelper()
+  const { getTeam } = useHelper()
+  const { notifyTx, notify } = useToast()
   const { translate } = useAppLocale()
 
   // ----------------------------- METHODS ---------------------------
@@ -192,7 +194,7 @@ export function useTool() {
       toolStore.setExposedPasswords(exposedPasswordCiphers)
       toolStore.setExposedPasswordMap(exposedPasswordMap)
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("loadPasswordsHealth: " + e)
       toolStore.setLoadingHealth(false)
     }

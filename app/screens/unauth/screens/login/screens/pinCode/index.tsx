@@ -8,8 +8,9 @@ import React, { FC, useEffect, useRef, useState } from "react"
 import { View } from "react-native"
 import { LOGIN_METHOD } from "app/static/types"
 import { TwoFactorAuthentication } from "./2faModal"
-import { LoginScreenProps } from "../../route"
 import { ResendOtp } from "../../../signup/screens"
+import { LoginScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observer(
   ({
@@ -19,7 +20,9 @@ export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observ
     },
   }) => {
     const { colors } = useTheme()
-    const { notifyApiError, setApiTokens, notify, randomString } = useHelper()
+    const { notifyTx } = useToast()
+    const { setApiTokens, randomString } = useHelper()
+    const { notifyApiError } = useToast()
     const { user } = useStores()
     const { translate } = useAppLocale()
 
@@ -63,7 +66,7 @@ export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observ
           navigation.replace("createMasterPassword")
         }
       } else {
-        notify("error", translate("error.something_went_wrong"))
+        notifyTx("error", "error.something_went_wrong")
       }
       setIsLoading(false)
     }

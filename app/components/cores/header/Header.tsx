@@ -180,7 +180,6 @@ export function Header(props: HeaderProps) {
               titleMode === "flex" && $titleWrapperFlex,
               $titleContainerStyleOverride,
             ]}
-            pointerEvents="none"
           >
             <Text weight="medium" text={titleContent} style={[$title, $titleStyleOverride]} />
           </View>

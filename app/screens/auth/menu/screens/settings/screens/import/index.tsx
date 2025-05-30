@@ -17,13 +17,14 @@ import { Logger } from "app/utils/utils"
 import { CipherType } from "core/enums"
 import { Utils } from "core/misc/utils"
 import { FileData } from "app/static/types"
-import { SettingsScreenProps } from "../../route"
+import { SettingsScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 const DOMParser = require("react-native-html-parser").DOMParser
 
 export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navigation }) => {
   const { colors } = useTheme()
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   const { translate } = useAppLocale()
   const { importCiphers } = useCipherData()
   const { importService } = useCoreService()
@@ -72,7 +73,7 @@ export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navig
         if (pre != null) {
           content = pre.textContent
         } else {
-          notify("error", translate("import.invalid_data_format"))
+          notifyTx("error", "import.invalid_data_format")
           setFile(fileData)
           // uiStore.setIsImporting(false)
           return
@@ -82,14 +83,14 @@ export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navig
       try {
         importResult = await importer.parse(content)
       } catch (e) {
-        notify("error", translate("import.invalid_data_format"))
+        notifyTx("error", "import.invalid_data_format")
         setFile(fileData)
         setStep(0)
         return
       }
       if (importResult.success) {
         if (importResult.folders.length === 0 && importResult.ciphers.length === 0) {
-          notify("error", translate("import.no_data"))
+          notifyTx("error", "import.no_data")
           setFile(fileData)
           setStep(0)
           return
@@ -101,7 +102,7 @@ export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navig
             badData(importResult.ciphers[halfway]) &&
             badData(importResult.ciphers[last])
           ) {
-            notify("error", translate("import.invalid_data_format"))
+            notifyTx("error", "import.invalid_data_format")
             setFile(fileData)
             setStep(0)
             return
@@ -119,14 +120,14 @@ export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navig
           setStep(2)
           return
         } catch (error) {
-          notify("error", translate("import.invalid_data_format"))
+          notifyTx("error", "import.invalid_data_format")
         }
       } else {
-        notify("error", translate("import.invalid_data_format"))
+        notifyTx("error", "import.invalid_data_format")
       }
     } catch (e) {
       Logger.error("Handle import: " + e)
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
     }
   }
 

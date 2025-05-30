@@ -8,11 +8,11 @@ import { useCoreService } from "app/services/coreService"
 import { useStores } from "app/models"
 import { Button, Header, Icon, Screen, Text } from "app/components/cores"
 import { PasswordStrength } from "app/components/utils"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { useClipboard } from "app/services/utils"
 
-export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator">> = observer(
+export const PasswordGeneratorScreen: FC<AuthStackScreenProps<"passwordGenerator">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route

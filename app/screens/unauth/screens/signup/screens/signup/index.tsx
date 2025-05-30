@@ -19,12 +19,13 @@ import { IS_IOS, PRIVACY_POLICY_URL, REGISTER_BUSINESS_URL, TERMS_URL } from "ap
 import { getCookies, logRegisterSuccessEvent } from "app/utils/analytics"
 import { Logger, validateEmail } from "app/utils/utils"
 import { observer } from "mobx-react-lite"
-import { SignUpScreenProps } from "../../route"
+import { SignUpScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigation }) => {
   const { colors } = useTheme()
   const { user } = useStores()
-  const { notify, notifyApiError } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
   // ---------------- PARAMS ---------------------
@@ -85,7 +86,7 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigat
         setIsLoading(false)
         if (res.kind === "ok") {
           logRegisterSuccessEvent()
-          notify("success", translate("signup.signup_successful"), 5000)
+          notifyTx("success", "signup.signup_successful")
           navigation.replace("loginStack")
         } else {
           notifyApiError(res)
@@ -95,7 +96,7 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigat
         onRegisterWithPinCode()
 
         // Handle Error...
-        notify("error", translate("passkey.error.user_cancel"), 5000)
+        notifyTx("error", "passkey.error.user_cancel")
       }
     } else {
       notifyApiError(resPassKeyOptions)

@@ -9,9 +9,9 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { CipherInfoCommon, DeletedAction } from "app/components/ciphers"
 import { Textarea } from "app/components/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 
-export const NoteInfoScreen: FC<AppStackScreenProps<"notes__info">> = observer((props) => {
+export const NoteInfoScreen: FC<AuthStackScreenProps<"notes__info">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 

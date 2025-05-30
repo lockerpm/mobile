@@ -7,6 +7,7 @@ import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { ImageIcon, ImageIconTypes, Text } from "app/components/cores"
 import { useAppLocale } from "app/services/context"
+import { useToast } from "app/services/utils"
 
 interface Props {
   lang: string
@@ -21,7 +22,7 @@ interface Props {
 export const NotiListItem = (props: Props) => {
   const { type, title, lang, id, metadata, publish_time } = props
   const navigation = useNavigation() as any
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { user } = useStores()
 

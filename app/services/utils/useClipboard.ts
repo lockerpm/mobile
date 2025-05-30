@@ -1,13 +1,11 @@
-import { useAppLocale } from "../context"
-import { useHelper } from "../hook"
 import Clipboard from "@react-native-clipboard/clipboard"
+import { useToast } from "./useToast"
 
 export const useClipboard = () => {
-  const { translate } = useAppLocale()
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   // Clipboard
   const copyToClipboard = (text: string) => {
-    notify("success", translate("common.copied_to_clipboard"), 1000)
+    notifyTx("success", "common.copied_to_clipboard")
     Clipboard.setString(text)
   }
   return {

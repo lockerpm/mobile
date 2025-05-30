@@ -6,12 +6,12 @@ import { appleAuth } from "@invertase/react-native-apple-authentication"
 import { getCookies, logRegisterSuccessEvent } from "../../utils/analytics"
 import { useStores } from "app/models"
 import { useHelper } from "./useHelper"
-import { useAppLocale } from "../context"
+import { useToast } from "../utils"
 
 export function useSocialLogin() {
   const { user } = useStores()
-  const { notifyApiError, notify, setApiTokens } = useHelper()
-  const { translate } = useAppLocale()
+  const { setApiTokens } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
 
   // Google
   const googleLogin = async (payload: {
@@ -38,10 +38,10 @@ export function useSocialLogin() {
         case statusCodes.SIGN_IN_CANCELLED:
           break
         case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-          notify("error", translate("error.social_login.google.play_service_not_available"))
+          notifyTx("error", "error.social_login.google.play_service_not_available")
           break
         default:
-          notify("error", translate("error.could_not_complete"))
+          notifyTx("error", "error.could_not_complete")
       }
     }
   }
@@ -58,7 +58,6 @@ export function useSocialLogin() {
         await LoginManager.logInWithPermissions(["email"])
         res = await AccessToken.getCurrentAccessToken()
         if (!res) {
-          // notify('error', translate('error.something_went_wrong'))
           setIsLoading && setIsLoading(false)
           return
         }
@@ -72,7 +71,7 @@ export function useSocialLogin() {
     } catch (e) {
       setIsLoading && setIsLoading(false)
       Logger.debug("facebookLogin: " + e)
-      notify("error", translate("error.could_not_complete"))
+      notifyTx("error", "error.could_not_complete")
     }
   }
 
@@ -115,10 +114,10 @@ export function useSocialLogin() {
         case "1001":
           break
         case "1000":
-          notify("error", translate("error.social_login.apple.could_not_complete"))
+          notifyTx("error", "error.social_login.apple.could_not_complete")
           break
         default:
-          notify("error", translate("error.could_not_complete"))
+          notifyTx("error", "error.could_not_complete")
       }
     }
   }
@@ -162,7 +161,7 @@ export function useSocialLogin() {
 
       if (res.kind !== "ok") {
         if (res.kind === "bad-data" && res.data.code === "1011") {
-          notify("error", translate("error.social_login.cannot_get_email"))
+          notifyTx("error", "error.social_login.cannot_get_email")
         } else {
           notifyApiError(res)
         }

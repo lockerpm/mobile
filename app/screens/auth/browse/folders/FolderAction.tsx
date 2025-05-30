@@ -14,6 +14,7 @@ import { GeneralApiProblem } from "app/services/api/apiProblem"
 import { ActionItem, ActionSheet, LeaveShareModal } from "app/components/ciphers"
 import { useAppLocale, useTheme } from "app/services/context"
 import { ActionPremiumItem } from "app/components/ciphers/actionsSheet/ActionSheetPremiumItem"
+import { useToast } from "app/services/utils"
 
 type Props = {
   isOpen?: boolean
@@ -29,7 +30,8 @@ export const FolderAction = (props: Props) => {
   const { cipherStore, user, uiStore } = useStores()
   const { colors } = useTheme()
   const { translate } = useAppLocale()
-  const { getTeam, notifyApiError } = useHelper()
+  const { getTeam } = useHelper()
+  const { notifyApiError } = useToast()
   const { deleteCollection, deleteFolder } = useCipherData()
   const { stopShareFolder } = useFolder()
 
@@ -74,7 +76,6 @@ export const FolderAction = (props: Props) => {
     }
 
     if (res.kind !== "ok") {
-      // @ts-ignore
       notifyApiError(res)
     }
     onLoadingChange && onLoadingChange(false)

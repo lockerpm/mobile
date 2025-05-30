@@ -1,5 +1,4 @@
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useState } from "react"
 import { NativeModules } from "react-native"
@@ -8,14 +7,15 @@ import { getUrlParameterByName } from "app/utils/utils"
 import { Button, Header, Logo, Screen, Text, TextInput } from "app/components/cores"
 import { LockType } from "app/static/types"
 import { useAppLocale } from "app/services/context"
-import { SSOScreenProps } from "../../route"
+import { SSOScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 const { VinCssSsoLoginModule } = NativeModules
 
 export const SSOEmailLoginScreen: FC<SSOScreenProps<"ssoLogin">> = observer(
   ({ navigation, route }) => {
     const { user } = useStores()
-    const { notify, notifyApiError } = useHelper()
+    const { notify, notifyTx, notifyApiError } = useToast()
     const { translate } = useAppLocale()
 
     const [username, setUsername] = useState("")
@@ -40,7 +40,7 @@ export const SSOEmailLoginScreen: FC<SSOScreenProps<"ssoLogin">> = observer(
         }
       } else {
         if (res.data.length === 0) {
-          notify("error", translate("error.onpremise_login_failed"))
+          notifyTx("error", "error.onpremise_login_failed")
         }
         if (res.data[0]?.activated) {
           navigation.navigate("lock", {
@@ -105,7 +105,7 @@ export const SSOEmailLoginScreen: FC<SSOScreenProps<"ssoLogin">> = observer(
         notifyApiError(res)
       } else {
         if (res.data.length === 0) {
-          notify("error", translate("error.onpremise_login_failed"))
+          notifyTx("error", "error.onpremise_login_failed")
         }
         if (res.data[0]?.activated) {
           setLoadingAuth(0)

@@ -7,11 +7,11 @@ import { observer } from "mobx-react-lite"
 import { SetlanguageItem } from "./SetLanguageItem"
 import { SetThemeItem } from "./SetThemeItem"
 import { SetTimeOutItem } from "./SetTimeOutItem"
-import { SettingsScreenProps } from "../../route"
 import { SyncDataItem } from "./SyncDataItem"
 import { EnableAutofillItem } from "./EnableAutofillItem"
 import { useSettingListNavigation } from "./useSettingListNavigation"
 import { Linking } from "react-native"
+import { SettingsScreenProps } from "app/navigators"
 
 export const SettingsScreen: FC<SettingsScreenProps<"settings">> = observer(({ navigation }) => {
   const { user } = useStores()

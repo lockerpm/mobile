@@ -1,6 +1,5 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { PrivateRelayRoute } from "./route"
 import {
   AliasStatisticScreen,
   EditSubdomainScreen,
@@ -10,6 +9,7 @@ import {
   RelayInfoScreen,
 } from "./screens"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { PrivateRelayRoute } from "app/navigators"
 
 const Stack = createNativeStackNavigator<PrivateRelayRoute>()
 

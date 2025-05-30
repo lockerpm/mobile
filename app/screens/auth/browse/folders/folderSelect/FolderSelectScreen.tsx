@@ -7,15 +7,17 @@ import { useFolder, useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Button, Header, Icon, ImageIcon, Screen, Text } from "app/components/cores"
 import { AccountRole } from "app/static/types"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
+import { useToast } from "app/services/utils"
 
-export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = observer((props) => {
+export const FolderSelectScreen: FC<AuthStackScreenProps<"folders__select">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
   const { mode, initialId, cipherIds = [] } = route.params
   const { folderStore, cipherStore, collectionStore } = useStores()
   const { colors } = useTheme()
-  const { notify, notifyApiError, getTeam } = useHelper()
+  const { getTeam } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { shareFolderAddMultipleItems } = useFolder()
 
@@ -43,7 +45,7 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
         folderId: selectedFolder,
       })
       if (res.kind === "ok") {
-        notify("success", translate("folder.item_moved"))
+        notifyTx("success", "folder.item_moved")
       } else {
         notifyApiError(res)
       }
@@ -60,7 +62,7 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
         cipherIds,
       )
       if (res.kind === "ok") {
-        notify("success", translate("folder.item_moved"))
+        notifyTx("success", "folder.item_moved")
       }
     } else {
       cipherStore.setSelectedCollection(selectedFolder)

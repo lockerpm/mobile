@@ -3,20 +3,21 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { CipherList } from "./CipherList"
 import { useStores } from "app/models"
-import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useCipherData, useCipherHelper } from "app/services/hook"
 import { TrustedContact } from "app/static/types"
 import { CipherData } from "core/models/data"
 import { Cipher, EncString, SymmetricCryptoKey } from "core/models/domain"
 import { CipherView } from "core/models/view"
 import { Header, Screen, Text } from "app/components/cores"
 import { useCoreService } from "app/services/coreService"
-import { EmergencyAccessScreenProps } from "../../route"
 import { useAppLocale } from "app/services/context"
+import { EmergencyAccessScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 export const ViewEAScreen: FC<EmergencyAccessScreenProps<"viewEA">> = observer(
   ({ navigation, route }) => {
     const { cryptoService, cipherService } = useCoreService()
-    const { notify } = useHelper()
+    const { notify } = useToast()
     const { user } = useStores()
     const { translate } = useAppLocale()
 

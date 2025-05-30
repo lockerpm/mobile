@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import { SettingsScreenProps } from "../../route"
+import { SettingsScreenProps } from "app/navigators"
 
 export const useSettingListNavigation = () => {
   const navigation = useNavigation<SettingsScreenProps<"settings">["navigation"]>()

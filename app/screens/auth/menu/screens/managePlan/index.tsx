@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite"
 import { PremiumFeature } from "./PremiumFeature"
 import { PlanUsage } from "./PlanSsage"
 import { useTheme } from "app/services/context"
-import { MenuScreenProps } from "../../route"
+import { MenuScreenProps } from "app/navigators"
 
 const map = {
   pm_lifetime_family: "Lifetime Family",

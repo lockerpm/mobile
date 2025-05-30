@@ -4,10 +4,10 @@ import { Screen, Header, Text } from "app/components/cores"
 import { NotiListItem } from "./InAppNotiItem"
 import { useStores } from "app/models"
 import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { useAppLocale } from "app/services/context"
 
-export const InAppListNotificationScreen: FC<AppStackScreenProps<"app_list_noti">> = observer(
+export const InAppListNotificationScreen: FC<AuthStackScreenProps<"app_list_noti">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route

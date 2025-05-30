@@ -1,19 +1,18 @@
 import React from "react"
 import { SettingsItem } from "app/components/utils"
-import { useHelper } from "app/services/hook"
 import { Toggle } from "app/components/cores"
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { autofillKeyChain } from "app/utils/autofillData"
 import { observer } from "mobx-react-lite"
-import { useBiometricType } from "app/services/utils"
+import { useBiometricType, useToast } from "app/services/utils"
 import { useAppLocale } from "app/services/context"
 
 export const EnableAutofillItem = observer(() => {
   const { user } = useStores()
   const { cryptoService } = useCoreService()
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   const { translate } = useAppLocale()
   const { isBiometricAvailable } = useBiometricType()
 
@@ -21,7 +20,7 @@ export const EnableAutofillItem = observer(() => {
     const available = await isBiometricAvailable()
 
     if (!available) {
-      notify("error", translate("error.biometric_not_support"))
+      notifyTx("error", "error.biometric_not_support")
       return
     }
 
@@ -30,14 +29,14 @@ export const EnableAutofillItem = observer(() => {
     })
 
     if (!success) {
-      notify("error", translate("error.biometric_unlock_failed"))
+      notifyTx("error", "error.biometric_unlock_failed")
       return
     }
 
     // Update autofill settings
     await updateAutofillFaceIdSetting(true)
 
-    notify("success", translate("success.biometric_enabled"))
+    notifyTx("success", "success.biometric_enabled")
   }
 
   const updateAutofillFaceIdSetting = async (enabled: boolean) => {

@@ -8,6 +8,7 @@ import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { ModalHOC } from "./ModalHOC"
 import { useAppLocale, useTheme } from "app/services/context"
 import { AppEventType, EventBus } from "app/utils/eventBus"
+import { useToast } from "app/services/utils"
 
 interface Props {
   onClose?: () => void
@@ -22,7 +23,7 @@ const enum ALIAS_CONFIG {
 
 export const ConfigAlias = ({ onClose, item }: Props) => {
   const { toolStore, user } = useStores()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { colors } = useTheme()
 

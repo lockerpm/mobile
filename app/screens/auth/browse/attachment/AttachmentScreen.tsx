@@ -16,12 +16,12 @@ import { Attachment } from "./item/Attachment"
 import { AttachmentType } from "./usePickAttachment"
 import { AttachmentView, CipherView } from "core/models/view"
 import { useCipherData } from "app/services/hook"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { useAppLocale, useTheme } from "app/services/context"
 
 const EMPTY_IMAGE = require("assets/images/empty_attachment.png")
 
-export const AttachmentScreen: FC<AppStackScreenProps<"attachment">> = observer(
+export const AttachmentScreen: FC<AuthStackScreenProps<"attachment">> = observer(
   ({ navigation, route }) => {
     const { cipherStore, user } = useStores()
     const { updateCipher } = useCipherData()

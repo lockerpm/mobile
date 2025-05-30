@@ -1,5 +1,4 @@
-import { observer } from "mobx-react-lite"
-import React, { ComponentType } from "react"
+import React from "react"
 import {
   Pressable,
   PressableProps,
@@ -12,10 +11,8 @@ import {
   ActivityIndicator,
   ColorValue,
 } from "react-native"
-import { spacing } from "../../../theme"
 import { Text, TextProps } from "../text/Text"
 import { useTheme } from "app/services/context"
-import { Icon, IconProps, IconTypes } from "../icon/Icon"
 
 type Presets = "primary" | "secondary" | "teriatary"
 type Sizes = keyof typeof $sizeStyles
@@ -44,6 +41,14 @@ export interface ButtonProps extends PressableProps {
    */
   text?: TextProps["text"]
   /**
+   * The text to display if not using `tx` or nested components.
+   */
+  tx?: TextProps["tx"]
+  /**
+   * The text to display if not using `tx` or nested components.
+   */
+  txOptions?: TextProps["txOptions"]
+  /**
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
@@ -64,26 +69,6 @@ export interface ButtonProps extends PressableProps {
    */
   preset?: Presets
   /**
-   * An optional Icon component to render on the right side of the text.
-   */
-  leftIcon?: IconTypes
-  leftIconProps?: IconProps
-  /**
-   * An optional Icon component to render on the left side of the text.
-   */
-  rightIcon?: IconTypes
-  rightIconProps?: IconProps
-  /**
-   * An optional component to render on the right side of the text.
-   * Example: `RightAccessory={(props) => <View {...props} />}`
-   */
-  RightAccessory?: ComponentType<ButtonAccessoryProps>
-  /**
-   * An optional component to render on the left side of the text.
-   * Example: `LeftAccessory={(props) => <View {...props} />}`
-   */
-  LeftAccessory?: ComponentType<ButtonAccessoryProps>
-  /**
    * Text which is looked up via i18n.
    */
   teriataryBackground?: ColorValue
@@ -97,25 +82,22 @@ export interface ButtonProps extends PressableProps {
  * A component that allows users to take actions and make choices.
  * Wraps the Text component with a Pressable component.
  */
-export const Button = observer((props: ButtonProps) => {
+export const Button = (props: ButtonProps) => {
   const { colors } = useTheme()
 
   const {
     text,
+    tx,
+    txOptions,
     disabled,
     loading,
+    preset = "primary",
     size = "medium",
     style: $viewStyleOverride,
     pressedStyle: $pressedViewStyleOverride,
     textStyle: $textStyleOverride,
     pressedTextStyle: $pressedTextStyleOverride,
     children,
-    leftIcon,
-    leftIconProps,
-    rightIcon,
-    rightIconProps,
-    RightAccessory,
-    LeftAccessory,
     teriataryBackground = colors.background,
     ...rest
   } = props
@@ -189,9 +171,7 @@ export const Button = observer((props: ButtonProps) => {
     teriatary: colors.primary,
   }
 
-  const preset: Presets = $viewPresets[props.preset] ? props.preset : "primary"
-
-  function $viewStyle({ pressed }) {
+  function $viewStyle({ pressed }: PressableStateCallbackType) {
     return [
       $viewPresets[preset],
       $sizeStyles[size],
@@ -200,7 +180,7 @@ export const Button = observer((props: ButtonProps) => {
       // $viewStyleOverride,
     ]
   }
-  function $textStyle({ pressed }) {
+  function $textStyle({ pressed }: PressableStateCallbackType) {
     return [
       $textPresets[preset],
       $sizeStyles[size],
@@ -210,33 +190,20 @@ export const Button = observer((props: ButtonProps) => {
     ]
   }
 
-  const LeftIcon = (state) => {
-    if (leftIcon)
-      return <Icon containerStyle={$leftAccessoryStyle} {...leftIconProps} icon={leftIcon} />
-    if (LeftAccessory) return <LeftAccessory style={$leftAccessoryStyle} pressableState={state} />
-    return null
-  }
-
-  const RightIcon = (state) => {
-    if (rightIcon)
-      return <Icon containerStyle={$rightAccessoryStyle} {...rightIconProps} icon={rightIcon} />
-    if (RightAccessory)
-      return <RightAccessory style={$rightAccessoryStyle} pressableState={state} />
-    return null
-  }
-
   return (
     <View style={$viewStyleOverride}>
       <Pressable disabled={disabled} style={$viewStyle} accessibilityRole="button" {...rest}>
         {(state) => (
           <>
-            <LeftIcon state={state} />
-
-            <Text preset="bold" text={text} style={$textStyle(state)} />
+            <Text
+              preset="bold"
+              text={text}
+              tx={tx}
+              txOptions={txOptions}
+              style={$textStyle(state)}
+            />
 
             {children}
-
-            <RightIcon state={state} />
           </>
         )}
       </Pressable>
@@ -247,7 +214,7 @@ export const Button = observer((props: ButtonProps) => {
       )}
     </View>
   )
-})
+}
 
 const $baseViewStyle: ViewStyle = {
   paddingHorizontal: 12,
@@ -280,6 +247,3 @@ const $sizeStyles = {
   medium: { paddingVertical: 6 } as ViewStyle,
   small: { paddingVertical: 4 } as ViewStyle,
 }
-
-const $rightAccessoryStyle: ViewStyle = { marginLeft: spacing.smaller }
-const $leftAccessoryStyle: ViewStyle = { marginRight: spacing.smaller }

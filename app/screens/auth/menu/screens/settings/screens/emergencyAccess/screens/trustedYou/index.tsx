@@ -3,15 +3,15 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
 import { Header, Screen, Text } from "app/components/cores"
-import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { TrustedContact } from "app/static/types"
-import { EmergencyAccessScreenProps } from "../../route"
 import { Contact } from "../Contact"
+import { EmergencyAccessScreenProps } from "app/navigators"
+import { useToast } from "app/services/utils"
 
 export const ContactsTrustedYouScreen: FC<EmergencyAccessScreenProps<"contactsTrustedYou">> =
   observer(({ navigation }) => {
-    const { notifyApiError } = useHelper()
+    const { notifyApiError } = useToast()
     const { user } = useStores()
 
     // ----------------------- PARAMS -----------------------

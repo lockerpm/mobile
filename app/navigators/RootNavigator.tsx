@@ -6,14 +6,16 @@ import Toast, { BaseToastProps } from "react-native-toast-message"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../models"
 import { ErrorToast, InfoToast, SuccessToast } from "app/components/utils"
-import { SplashScreen, LockScreen } from "../screens"
-import { MainNavigator } from "./MainNavigator"
+import { SplashScreen, LockScreen } from "../screens/init"
+// import { MainNavigator } from "./MainNavigator"
 import { useAuthentication } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { Logger } from "app/utils/utils"
 import { RootParamList } from "./navigators.types"
 import { LockType } from "app/static/types"
+import { MainNavigator } from "./MainNavigator"
+import { UnAuthStack } from "app/screens"
 
 const Stack = createNativeStackNavigator<RootParamList>()
 
@@ -66,6 +68,7 @@ const RootStack = observer(() => {
           gestureEnabled: false,
         }}
       />
+      <Stack.Screen name="unAuthStack" component={UnAuthStack} />
     </Stack.Navigator>
   )
 })

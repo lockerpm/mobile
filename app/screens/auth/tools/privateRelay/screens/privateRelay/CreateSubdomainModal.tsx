@@ -3,8 +3,8 @@ import { StyleSheet, TextInput, View } from "react-native"
 import { BottomModal, Button, Text } from "app/components/cores"
 import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
 import { SubdomainData } from "app/static/types"
+import { useToast } from "app/services/utils"
 
 interface Props {
   isOpen: boolean
@@ -15,7 +15,7 @@ interface Props {
 export const CreateSubdomainModal = (props: Props) => {
   const { isOpen, onClose } = props
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { toolStore } = useStores()
 

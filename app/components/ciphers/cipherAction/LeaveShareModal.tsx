@@ -1,12 +1,13 @@
 import React, { useState } from "react"
 import { View, Image, TouchableOpacity } from "react-native"
 import { BottomModal, Text } from "app/components/cores"
-import { useAppLocale, useTheme } from "app/services/context"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { useCipherData } from "app/services/hook"
+import { useToast } from "app/services/utils"
 
 interface Props {
-  isOpen?: boolean
-  onClose?: () => void
+  isOpen: boolean
+  onClose: () => void
   cipherId?: string
   organizationId: string
 }
@@ -15,8 +16,7 @@ const TRASH = require("assets/images/intro/trash.png")
 
 export const LeaveShareModal = (props: Props) => {
   const { colors } = useTheme()
-  const { translate } = useAppLocale()
-  const { notify } = useHelper()
+  const { notifyTx } = useToast()
   const { isOpen, onClose, cipherId, organizationId } = props
   const { leaveShare } = useCipherData()
 
@@ -28,7 +28,7 @@ export const LeaveShareModal = (props: Props) => {
     if (res.kind === "ok") {
       setIsLoading(false)
       onClose()
-      notify("success", translate("success.done"))
+      notifyTx("success", "success.done")
     } else {
       setIsLoading(false)
     }
@@ -41,15 +41,10 @@ export const LeaveShareModal = (props: Props) => {
         <Text
           preset="bold"
           size="xl"
-          text={translate("common.warning")}
+          tx={"common.warning"}
           style={{ marginBottom: 10, marginTop: 20 }}
         />
-        <Text
-          preset="label"
-          size="base"
-          text={translate("shares.leave_desc")}
-          style={{ textAlign: "center" }}
-        />
+        <Text preset="label" size="base" tx={"shares.leave_desc"} style={{ textAlign: "center" }} />
       </View>
 
       <TouchableOpacity
@@ -65,7 +60,7 @@ export const LeaveShareModal = (props: Props) => {
           alignItems: "center",
         }}
       >
-        <Text text={translate("shares.leave")} style={{ color: colors.white }} />
+        <Text tx={"shares.leave"} style={{ color: colors.white }} />
       </TouchableOpacity>
     </BottomModal>
   )

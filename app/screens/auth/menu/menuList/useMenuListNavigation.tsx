@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
 import { RootNavigation } from "app/navigators"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 
 export const useMenuListNavigation = () => {
-  const navigation = useNavigation<AppStackScreenProps<"mainTab">["navigation"]>()
+  const navigation = useNavigation<AuthStackScreenProps<"mainTab">["navigation"]>()
 
   const navigateToManagePlan = () => {
     navigation.navigate("menuStack", {

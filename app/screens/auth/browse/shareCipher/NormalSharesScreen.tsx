@@ -12,21 +12,22 @@ import {
 } from "app/static/types"
 import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { CipherView } from "core/models/view"
 import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
+import { useToast } from "app/services/utils"
 
 const SHARE_AVATAR = require("assets/images/icons/avatar-2.png")
 const SHARE_GROUP = require("assets/images/icons/group.png")
 
-export const NormalSharesScreen: FC<AppStackScreenProps<"normal_shares">> = observer((props) => {
+export const NormalSharesScreen: FC<AuthStackScreenProps<"normal_shares">> = observer((props) => {
   const route = props.route
   const navigation = props.navigation
   const { ciphers } = route.params
   const { cipherStore, enterpriseStore, user } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { shareCipher, shareMultipleCiphers, stopShareCipherForGroup, stopShareCipher } =
     useCipherData()

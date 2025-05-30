@@ -5,20 +5,20 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { RelayAddress } from "app/static/types"
 import { Text, Button, Icon } from "app/components/cores"
 import Animated, { FadeInDown } from "react-native-reanimated"
-import { useHelper } from "app/services/hook"
 import { ModalHOC } from "./ModalHOC"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { IS_IOS } from "app/config/constants"
+import { useToast } from "app/services/utils"
 
 interface Props {
-  onClose?: () => void
+  onClose: () => void
   item: RelayAddress
 }
 
 export const EditAlias = (props: Props) => {
   const { onClose, item } = props
   const { toolStore } = useStores()
-  const { notify } = useHelper()
+  const { notify } = useToast()
   const { translate } = useAppLocale()
 
   // --------------- PARAMS ----------------

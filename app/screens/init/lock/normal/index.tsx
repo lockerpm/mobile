@@ -8,6 +8,7 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { Logo, Button, Screen, Text, TextInput, Header } from "app/components/cores"
 import { EnterpriseInvitationModal } from "./EnterpriseInvitationModal"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
+import { useToast } from "app/services/utils"
 
 interface Props {
   handleLogout: () => void
@@ -20,7 +21,7 @@ export const LockByMasterPassword = ({ handleLogout, handleUnlock }: Props) => {
   const { colors } = useTheme()
   const navigation = useNavigation<RootStackScreenProps<"lock">["navigation"]>()
   const { user, uiStore, enterpriseStore } = useStores()
-  const { notify, notifyApiError } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { sessionLogin } = useAuthentication()
   const { createMasterPasswordItem } = useCipherData()
@@ -86,7 +87,7 @@ export const LockByMasterPassword = ({ handleLogout, handleUnlock }: Props) => {
     const res = await user.sendPasswordHint(user.email)
     setIsSendingHint(false)
     if (res.kind === "ok") {
-      notify("success", translate("lock.hint_sent"), 5000)
+      notifyTx("success", "lock.hint_sent")
     } else {
       notifyApiError(res)
     }

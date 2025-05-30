@@ -1,4 +1,3 @@
-import { observer } from "mobx-react-lite"
 import React from "react"
 import { TouchableOpacity, View, ViewStyle } from "react-native"
 import Animated, { FadeIn } from "react-native-reanimated"
@@ -17,7 +16,7 @@ interface Props {
 }
 const INTRO_LENGTH = 4
 
-export const AnimatedFooter = observer(({ animIndex, scrollTo, index, goStart }: Props) => {
+export const AnimatedFooter = ({ animIndex, scrollTo, index, goStart }: Props) => {
   const { colors } = useTheme()
   const { translate } = useAppLocale()
   const insert = useSafeAreaInsets()
@@ -95,7 +94,7 @@ export const AnimatedFooter = observer(({ animIndex, scrollTo, index, goStart }:
       </View>
     </Animated.View>
   )
-})
+}
 
 const $goNextStyle: ViewStyle = {
   height: 70,

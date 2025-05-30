@@ -23,6 +23,7 @@ import { CipherType } from "core/enums"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { Text } from "app/components/cores"
 import { useAppLocale } from "app/services/context"
+import { useToast } from "app/services/utils"
 
 export interface CipherSharedListProps {
   emptyContent?: JSX.Element
@@ -57,7 +58,8 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     setAllItems,
   } = props
   const { translate } = useAppLocale()
-  const { notify, getTeam } = useHelper()
+  const { getTeam } = useHelper()
+  const { notifyTx } = useToast()
   const { getCiphersFromCache } = useCipherData()
   const { cipherStore, collectionStore, user } = useStores()
   const { newCipher, getCipherInfo } = useCipherHelper()
@@ -226,7 +228,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
       if (selected.length === MAX_CIPHER_SELECTION) {
-        notify("error", translate("error.cannot_select_more", { count: MAX_CIPHER_SELECTION }))
+        notifyTx("error", "error.cannot_select_more", { count: MAX_CIPHER_SELECTION })
         return
       }
       selected.push(id)

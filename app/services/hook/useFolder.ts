@@ -12,12 +12,13 @@ import { Logger } from "app/utils/utils"
 import { CollectionView } from "core/models/view/collectionView"
 import { AccountRoleText } from "app/static/types"
 import { useAppLocale } from "../context"
+import { useToast } from "../utils"
 
 export function useFolder() {
   const { cipherStore, folderStore, collectionStore, enterpriseStore, user } = useStores()
   const { cipherService, cryptoService } = useCoreService()
   const { getCiphers, reloadCache } = useCipherData()
-  const { notify, notifyApiError } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
   const _generateMemberKey = async (publicKey: string, orgKey: SymmetricCryptoKey) => {
@@ -143,14 +144,14 @@ export function useFolder() {
       })
 
       if (res.kind === "ok") {
-        notify("success", translate("shares.share_folder.success.shared"))
+        notifyTx("success", "shares.share_folder.success.shared")
         await reloadCache()
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -191,13 +192,13 @@ export function useFolder() {
       const res = await collectionStore.addShareMember(collection.organizationId, members)
 
       if (res.kind === "ok") {
-        notify("success", translate("shares.share_folder.success.add_member"))
+        notifyTx("success", "shares.share_folder.success.add_member")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("shareFolder " + e)
       return { kind: "unknown" }
     }
@@ -234,13 +235,13 @@ export function useFolder() {
       )
 
       if (res.kind === "ok") {
-        notify("success", translate("shares.share_folder.success.remove_member"))
+        notifyTx("success", "shares.share_folder.success.remove_member")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -267,13 +268,13 @@ export function useFolder() {
 
       if (res.kind === "ok") {
         await reloadCache()
-        notify("success", translate("shares.share_folder.success.add_items"))
+        notifyTx("success", "shares.share_folder.success.add_items")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -291,7 +292,7 @@ export function useFolder() {
         })) || []
 
       if (ciphers.some((c) => c.organizationId)) {
-        notify("error", translate("error.share_folder_move_item"))
+        notifyTx("error", "error.share_folder_move_item")
         return { kind: "unknown" }
       }
 
@@ -303,7 +304,7 @@ export function useFolder() {
 
       return { kind: "ok" }
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -326,13 +327,12 @@ export function useFolder() {
 
       if (res.kind === "ok") {
         await reloadCache()
-        // notify('success', 'Remove shared item  success')
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -362,13 +362,13 @@ export function useFolder() {
 
       if (res.kind === "ok") {
         await reloadCache()
-        notify("success", translate("shares.share_folder.success.stop"))
+        notifyTx("success", "shares.share_folder.success.stop")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error.something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }

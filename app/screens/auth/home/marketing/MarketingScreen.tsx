@@ -1,9 +1,9 @@
-import { Icon } from 'app/components/cores'
-import { useStores } from 'app/models'
-import { AppStackScreenProps } from 'app/navigators/navigators.types'
-import { useTheme } from 'app/services/context'
-import { observer } from 'mobx-react-lite'
-import React, { FC, useEffect, useRef } from 'react'
+import { Icon } from "app/components/cores"
+import { useStores } from "app/models"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
+import { useTheme } from "app/services/context"
+import { observer } from "mobx-react-lite"
+import React, { FC, useEffect, useRef } from "react"
 import {
   Dimensions,
   Image,
@@ -11,14 +11,14 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-} from 'react-native'
+} from "react-native"
 
-export const MarketingScreen: FC<AppStackScreenProps<'marketing'>> = observer((props) => {
+export const MarketingScreen: FC<AuthStackScreenProps<"marketing">> = observer((props) => {
   const navigation = props.navigation
   const data = props.route.params.data
   const { colors } = useTheme()
   const { uiStore } = useStores()
-  const { width, height } = Dimensions.get('screen')
+  const { width, height } = Dimensions.get("screen")
 
   const isGoBack = useRef(false)
 
@@ -36,8 +36,8 @@ export const MarketingScreen: FC<AppStackScreenProps<'marketing'>> = observer((p
     <View
       style={{
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: "center",
+        alignItems: "center",
         padding: 20,
         backgroundColor: colors.transparentModal,
       }}
@@ -62,8 +62,8 @@ export const MarketingScreen: FC<AppStackScreenProps<'marketing'>> = observer((p
 
       <TouchableOpacity
         style={{
-          position: 'absolute',
-          top: '10%',
+          position: "absolute",
+          top: "10%",
           right: 0,
           padding: 20,
         }}

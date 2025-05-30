@@ -11,12 +11,12 @@ import { CipherType } from "core/enums"
 import { CipherInfoCommon, DeletedAction } from "app/components/ciphers"
 import { PasswordStrength, Textarea } from "app/components/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
 import { useAppLocale } from "app/services/context"
 
-export const PasswordInfoScreen: FC<AppStackScreenProps<"passwords__info">> = observer((props) => {
+export const PasswordInfoScreen: FC<AuthStackScreenProps<"passwords__info">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
   const { getWebsiteLogo, getPasswordStrength } = useCipherHelper()

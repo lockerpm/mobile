@@ -5,6 +5,7 @@ import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Text, Button, TextInput, Icon } from "app/components/cores"
+import { useToast } from "app/services/utils"
 
 type Props = {
   goBack: () => void
@@ -18,7 +19,8 @@ type Props = {
 export const OtpAuthen = (props: Props) => {
   const { user } = useStores()
   const { colors } = useTheme()
-  const { setApiTokens, notifyApiError } = useHelper()
+  const { setApiTokens } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
   const { goBack, method, email, username, password, onLoggedIn } = props
@@ -46,7 +48,6 @@ export const OtpAuthen = (props: Props) => {
     )
     setIsLoading(false)
     if (res.kind === "ok") {
-      // @ts-ignore
       setApiTokens(res.data?.access_token)
       onLoggedIn()
     } else {

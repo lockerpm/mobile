@@ -11,6 +11,7 @@ export const UiStoreModel = types
     // Data
     isDark: types.maybeNull(types.boolean),
     lockResendOtpResetPasswordTime: types.maybeNull(types.number),
+    isShowedAppInto: false,
     isShowedAppReview: false,
     inAppReviewShowDate: types.maybeNull(types.number),
     inAppNotiUnreadCount: types.maybeNull(types.number),
@@ -45,7 +46,9 @@ export const UiStoreModel = types
     setIsShowedAppReview: (val: boolean) => {
       self.isShowedAppReview = val
     },
-
+    setIsShowedAppIntro: (val: boolean) => {
+      self.isShowedAppInto = val
+    },
     setInAppReviewShowDate: (val: number) => {
       self.inAppReviewShowDate = val
     },

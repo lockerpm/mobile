@@ -4,8 +4,8 @@ import { View, Image, Linking, AppState } from "react-native"
 import { AutofillServiceEnabled } from "app/utils/autofillHelper"
 import { Step } from "./EnableAutofillStep"
 import { Button, Header, Screen, Text } from "app/components/cores"
-import { SettingsScreenProps } from "../../route"
 import { useAppLocale } from "app/services/context"
+import { SettingsScreenProps } from "app/navigators"
 
 const ACTIVE = require("assets/images/autofill/autofillActive.png")
 const IOS_HINT = require("assets/images/autofill/IosHint.png")

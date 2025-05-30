@@ -10,6 +10,7 @@ import { DeleteConfirmModal } from "../../browse/trash/DeleteConfirmModal"
 import { useDeleteCipher, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { ShareModal } from "app/components/ciphers"
+import { useToast } from "app/services/utils"
 
 interface Props {
   openSort: () => void
@@ -40,7 +41,7 @@ export const HomeHeader = (props: Props) => {
     toggleSelectAll,
   } = props
   const { colors, isDark } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { toTrashCiphers } = useDeleteCipher()
   const { user, uiStore } = useStores()

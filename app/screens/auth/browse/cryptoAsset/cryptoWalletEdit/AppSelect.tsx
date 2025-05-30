@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
+  Image,
 } from "react-native"
-import { Text, AutoImage as Image, Icon, Screen, Header } from "app/components/cores"
+import { Text, Icon, Screen, Header } from "app/components/cores"
 import { WALLET_APP_LIST } from "app/utils/crypto/applist"
 import { useAppLocale, useTheme } from "app/services/context"
 import Modal from "react-native-modal"

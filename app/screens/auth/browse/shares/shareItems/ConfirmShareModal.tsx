@@ -2,11 +2,12 @@ import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useCoreService } from "app/services/coreService"
 import { Utils } from "app/services/coreService/utils"
-import { useCipherData, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { SharedMemberType } from "app/static/types"
 import React, { useEffect, useState } from "react"
 import { View } from "react-native"
 import { Text, BottomModal, Button } from "app/components/cores"
+import { useToast } from "app/services/utils"
 
 interface Props {
   isOpen?: boolean
@@ -18,7 +19,7 @@ export const ConfirmShareModal = (props: Props) => {
   const { isOpen, onClose, member } = props
   const { cipherStore } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { confirmShareCipher } = useCipherData()
   const { cryptoService } = useCoreService()

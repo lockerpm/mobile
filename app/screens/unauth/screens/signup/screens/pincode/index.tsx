@@ -1,13 +1,14 @@
 import { Header, Logo, Screen, Text } from "app/components/cores"
 import { PasscodeInput } from "app/components/utils"
 import { useStores } from "app/models"
+import { SignUpScreenProps } from "app/navigators"
 import { idApi } from "app/services/api"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
+import { useToast } from "app/services/utils"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useRef, useState } from "react"
 import { AppState, View } from "react-native"
-import { SignUpScreenProps } from "../../route"
 
 export const SignUpWithPinCode: FC<SignUpScreenProps<"signupPinCode">> = observer(
   ({
@@ -17,7 +18,8 @@ export const SignUpWithPinCode: FC<SignUpScreenProps<"signupPinCode">> = observe
     },
   }) => {
     const { colors } = useTheme()
-    const { setApiTokens, notify, randomString } = useHelper()
+    const { setApiTokens, randomString } = useHelper()
+    const { notifyTx } = useToast()
     const { user } = useStores()
     const { translate } = useAppLocale()
     const [code, setCode] = useState("")
@@ -54,7 +56,7 @@ export const SignUpWithPinCode: FC<SignUpScreenProps<"signupPinCode">> = observe
           navigation.navigate("createMasterPassword")
         }
       } else {
-        notify("error", translate("error.something_went_wrong"))
+        notifyTx("error", "error.something_went_wrong")
       }
       setIsLoading(false)
     }
@@ -115,7 +117,7 @@ interface Props {
   nonce: string
 }
 export const ResendOtp = ({ email, language, nonce }: Props) => {
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { colors } = useTheme()
   const [timerCount, setTimer] = useState(60)

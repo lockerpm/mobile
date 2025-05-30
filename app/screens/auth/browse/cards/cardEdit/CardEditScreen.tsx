@@ -14,7 +14,7 @@ import { Button, Header, Screen, TextInput, Text } from "app/components/cores"
 import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
 import { PlanStorageLimitModal } from "../../planStorageLimitModal"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { AuthStackScreenProps } from "app/navigators/navigators.types"
 import { BrandSelectItem } from "./BrandSelectItem"
 
 type InputItem = {
@@ -31,7 +31,7 @@ type InputItem = {
   options?: { label: string; value: string | number | null }[]
 }
 
-export const CardEditScreen: FC<AppStackScreenProps<"cards__edit">> = observer((props) => {
+export const CardEditScreen: FC<AuthStackScreenProps<"cards__edit">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 

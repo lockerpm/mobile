@@ -1,27 +1,28 @@
 import React, { FC, useState } from "react"
 import { Button, Header, Screen, TextInput } from "app/components/cores"
 
-import { useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { ChangePassword } from "./ChangePassword"
 import { MethodSelectSheet } from "./methodSelecBottomSheet/BottomSheetModal"
 import Animated, { SlideInUp } from "react-native-reanimated"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { UnAuthScreenProps } from "../../route"
 import { useAppLocale } from "app/services/context"
+import { UnAuthScreenProps } from "app/navigators"
+import { AccountRecovery } from "app/static/types"
+import { useToast } from "app/services/utils"
 
 export const ForgotPasswordScreen: FC<UnAuthScreenProps<"forgotPassword">> = observer(
   ({ navigation, route: { params } }) => {
     const { user } = useStores()
-    const { notify, notifyApiError } = useHelper()
+    const { notifyTx, notifyApiError } = useToast()
     const { translate } = useAppLocale()
     // ------------------------------ PARAMS -------------------------------
 
     const [isError, setIsError] = useState(false)
     const [username, setUsername] = useState(params?.email || "")
 
-    const [methods, setMethods] = useState([])
+    const [methods, setMethods] = useState<AccountRecovery[]>([])
 
     const [token, setToken] = useState("")
 
@@ -40,7 +41,7 @@ export const ForgotPasswordScreen: FC<UnAuthScreenProps<"forgotPassword">> = obs
           return
         }
         setIsError(true)
-        notify("error", translate("error.no_associated_account"))
+        notifyTx("error", "error.no_associated_account")
       } else {
         setMethods(res.data)
         setShowMethodSelectSheet(true)
@@ -94,7 +95,9 @@ export const ForgotPasswordScreen: FC<UnAuthScreenProps<"forgotPassword">> = obs
             <ChangePassword
               token={token}
               nextStep={() => {
-                navigation.navigate("loginStack")
+                navigation.navigate("loginStack", {
+                  screen: "login",
+                })
               }}
             />
           </Animated.View>

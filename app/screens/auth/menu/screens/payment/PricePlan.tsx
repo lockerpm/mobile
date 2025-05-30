@@ -6,6 +6,7 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { Text, Button, Toggle } from "app/components/cores"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
+import { useToast } from "app/services/utils"
 
 interface PricePlanItemProps {
   onPress: () => void
@@ -72,7 +73,7 @@ interface PricePlanProps {
 
 export const PricePlan = (props: PricePlanProps) => {
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
   const [payIndividual, setPayIndividual] = useState(true)

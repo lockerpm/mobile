@@ -6,6 +6,7 @@ import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { AppEventType, EventBus } from "app/utils/eventBus"
+import { useToast } from "app/services/utils"
 
 interface InviteProps {
   limit: number
@@ -18,7 +19,7 @@ export const InviteMemberModal = (props: InviteProps) => {
   const { limit, isShow, onClose, familyMembers, setRelad } = props
   const { user } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError, notify } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
   // ----------------------- PARAMS -----------------------
@@ -58,7 +59,7 @@ export const InviteMemberModal = (props: InviteProps) => {
     const res = await user.addFamilyMember(emails)
     onClose(false)
     if (res.kind === "ok") {
-      notify("success", translate("invite_member.add_noti"))
+      notifyTx("success", "invite_member.add_noti")
       setEmails([])
       setRelad(true)
     } else {
