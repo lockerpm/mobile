@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef, useCallback, FC } from "react"
-import { BackHandler, Linking, TouchableOpacity, View } from "react-native"
+import { BackHandler, TouchableOpacity, View } from "react-native"
 import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
 import { SocialLogin, RecaptchaChecker, DividerText, SetLanguage } from "app/components/utils"
 import { getCookies, logRegisterSuccessEvent } from "app/utils/analytics"
-import { Logger, validateEmail } from "app/utils/utils"
+import { validateEmail } from "app/utils/utils"
 import { observer } from "mobx-react-lite"
-import { PRIVACY_POLICY_URL, TERMS_URL } from "app/config/constants"
 import { SignUpScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
+import { openPrivacyPolicy, openTerms } from "app/utils/externalLink"
 
 export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = observer(
   ({ navigation, route: { params } }) => {
@@ -163,26 +163,14 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
               size="base"
               color={colors.link}
               text={translate("signup.terms")}
-              onPress={() => {
-                Linking.canOpenURL(TERMS_URL)
-                  .then((val) => {
-                    if (val) Linking.openURL(TERMS_URL)
-                  })
-                  .catch((e) => Logger.error(e))
-              }}
+              onPress={openTerms}
             />
             <Text size="base" text={" " + translate("common.and") + " "} />
             <Text
               size="base"
               text={translate("signup.conditions")}
               color={colors.link}
-              onPress={() => {
-                Linking.canOpenURL(PRIVACY_POLICY_URL)
-                  .then((val) => {
-                    if (val) Linking.openURL(PRIVACY_POLICY_URL)
-                  })
-                  .catch((e) => Logger.error(e))
-              }}
+              onPress={openPrivacyPolicy}
             />
           </Text>
 
@@ -225,12 +213,7 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
             <Text size="base" preset="label" tx="new_signup.has_account" />
 
             <TouchableOpacity onPress={navigateLogin}>
-              <Text
-                size="base"
-                weight="medium"
-                style={{ color: colors.primary }}
-                tx="new_signup.sign_in"
-              />
+              <Text size="base" weight="medium" color={colors.primary} tx="new_signup.sign_in" />
             </TouchableOpacity>
           </View>
         </View>
@@ -238,3 +221,5 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
     )
   },
 )
+
+const styles = StyleSheet.create({})

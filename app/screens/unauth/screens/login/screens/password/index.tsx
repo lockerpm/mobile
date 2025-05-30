@@ -52,7 +52,7 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
 
     // ------------------------------ METHODS -------------------------------
 
-    const onLoggedIn = async (_newUser?: boolean, _token?: string) => {
+    const onLoggedIn = async () => {
       const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
       if (userRes.kind === "ok" && userPwRes.kind === "ok") {
         if (user.is_pwd_manager) {

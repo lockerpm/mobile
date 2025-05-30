@@ -124,7 +124,7 @@ export function useSocialLogin() {
 
   // Log out all service
   const logoutAllServices = async () => {
-    await Promise.all([_logoutGoogle(), _logoutFacebook(), _logoutGitHub()])
+    await Promise.all([_logoutGoogle(), _logoutFacebook()])
   }
 
   // ------------------ PRIVATE METHODS ---------------------
@@ -196,10 +196,6 @@ export function useSocialLogin() {
     } catch (e) {
       Logger.error("Log out Facebook: " + e)
     }
-  }
-
-  const _logoutGitHub = async () => {
-    // TODO
   }
 
   return {

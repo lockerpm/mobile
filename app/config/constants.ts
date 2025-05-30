@@ -21,12 +21,6 @@ export const GOOGLE_CLIENT_ID = IS_IOS
   ? Config.GOOGLE_CLIENT_ID_IOS
   : Config.GOOGLE_CLIENT_ID_ANDROID
 
-export const TERMS_URL = Config.TERMS_URL
-export const PRIVACY_POLICY_URL = Config.PRIVACY_POLICY_URL
-export const HELP_CENTER_URL = Config.HELP_CENTER_URL
-export const MANAGE_PLAN_URL = Config.MANAGE_PLAN_URL
-export const REPORT_VULN = Config.REPORT_VULN
-
 export const SHARED_KEYCHAIN_SERVICE = Config.SHARED_KEYCHAIN_SERVICE
 export const SHARED_KEYCHAIN_ACCESS_GROUP = Config.SHARED_KEYCHAIN_ACCESS_GROUP
 
@@ -55,6 +49,3 @@ export const VIN_AUTH_CALLBACK = Config.VIN_AUTH_CALLBACK
 // Chat woot
 export const CHATWOOT_WEBSITE_TOKEN = Config.CHATWOOT_WEBSITE_TOKEN
 export const CHATWOOT_BASE_URL = Config.CHATWOOT_BASE_URL
-
-export const REGISTER_BUSINESS_URL =
-  "https://id.locker.io/register/locker-enterprise-trial?next=register&SERVICE_SCOPE=pwdmanager"

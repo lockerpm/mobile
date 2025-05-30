@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef, FC } from "react"
-import { BackHandler, Linking, Platform, TouchableOpacity, View } from "react-native"
+import React, { useState, useEffect, useRef, FC, useCallback } from "react"
+import { BackHandler, Platform, StyleSheet, TouchableOpacity, View } from "react-native"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Checkbox } from "react-native-ui-lib"
 import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
@@ -12,20 +11,18 @@ import {
   DividerText,
   SetLanguage,
 } from "app/components/utils"
-import { Passkey, PasskeyRegistrationResult } from "react-native-passkey"
-import { PasskeyRegistrationRequest } from "react-native-passkey/lib/typescript/Passkey"
-import { credentialCreationOptions, publicKeyCredentialWithAttestation } from "app/utils/passkey"
-import { IS_IOS, PRIVACY_POLICY_URL, REGISTER_BUSINESS_URL, TERMS_URL } from "app/config/constants"
-import { getCookies, logRegisterSuccessEvent } from "app/utils/analytics"
-import { Logger, validateEmail } from "app/utils/utils"
-import { observer } from "mobx-react-lite"
+import { Passkey } from "react-native-passkey"
+import { validateEmail } from "app/utils/utils"
 import { SignUpScreenProps } from "app/navigators"
-import { useToast } from "app/services/utils"
+import { openPrivacyPolicy, openRegisterBusiness, openTerms } from "app/utils/externalLink"
+import { useSignupWebauth } from "./useWebauth"
+import { LockType } from "app/static/types"
 
-export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigation }) => {
+const IS_IOS = Platform.OS === "ios"
+
+export const SignupScreen: FC<SignUpScreenProps<"signup">> = ({ navigation }) => {
   const { colors } = useTheme()
   const { user } = useStores()
-  const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
   // ---------------- PARAMS ---------------------
@@ -35,9 +32,6 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigat
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [getNews, setGesNews] = useState(false)
-
-  const [isPasskeySupported, setIsPasskeySupported] = useState(true)
-
   const [isShowCreatePasskeyOptions, setIsShowCreatePasskeyOptions] = useState(false)
   const [isIcloudSelected, setIsIcloudSelected] = useState(true)
 
@@ -47,64 +41,28 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigat
 
   // ---------------- METHODS ---------------------
 
-  const navigateLogin = () => {
-    navigation.replace("loginStack")
-  }
-
-  const handleRegisterWebauth = async (
-    email: string,
-    fullname: string,
-    withSecurityKey?: boolean,
-  ) => {
-    const resPassKeyOptions = await user.registerPasskeyOptions({
-      email,
-      full_name: fullname,
-      algorithms: ["es256", "rs256"],
+  const navigateLogin = useCallback(() => {
+    navigation.replace("loginStack", {
+      screen: "login",
     })
-    if (resPassKeyOptions.kind === "ok") {
-      try {
-        const requestJson: PasskeyRegistrationRequest = credentialCreationOptions(
-          resPassKeyOptions.data,
-        )
+  }, [])
 
-        // @ts-ignore
-        const result: PasskeyRegistrationResult = await Passkey.register(requestJson, {
-          withSecurityKey,
-        })
+  const onRegisterWithPinCode = useCallback(() => {
+    navigation.navigate("signupPinCode", {
+      email,
+      getNews,
+    })
+  }, [])
 
-        const res = await user.registerPasskey({
-          email,
-          password: "",
-          country: "vi",
-          confirm_password: "",
-          full_name: fullname,
-          request_code: "",
-          scope: "pwdmanager",
-          utm_source: await getCookies("utm_source"),
-          response: publicKeyCredentialWithAttestation(result),
-        })
-        setIsLoading(false)
-        if (res.kind === "ok") {
-          logRegisterSuccessEvent()
-          notifyTx("success", "signup.signup_successful")
-          navigation.replace("loginStack")
-        } else {
-          notifyApiError(res)
-          onRegisterWithPinCode()
-        }
-      } catch (error) {
-        onRegisterWithPinCode()
-
-        // Handle Error...
-        notifyTx("error", "passkey.error.user_cancel")
-      }
-    } else {
-      notifyApiError(resPassKeyOptions)
-      onRegisterWithPinCode()
-    }
-  }
+  const { handleRegisterWebauth } = useSignupWebauth({
+    setIsLoading,
+    navigateLogin,
+    onRegisterWithPinCode,
+  })
 
   const onRegisterWebauth = async () => {
+    setIsShowCreatePasskeyOptions(false)
+
     if (isIcloudSelected) {
       handleRegisterWebauth(email, fullname)
     } else {
@@ -112,32 +70,21 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigat
     }
   }
 
-  const onLoggedIn = async (_newUser: boolean, _token: string) => {
+  const onLoggedIn = useCallback(async () => {
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
     if (userRes.kind === "ok" && userPwRes.kind === "ok") {
-      if (user.is_pwd_manager) {
-        navigation.navigate("lock")
+      if (userPwRes.user.is_pwd_manager) {
+        navigation.navigate("lock", {
+          type: LockType.Individual,
+        })
       } else {
         navigation.navigate("createMasterPassword")
       }
     }
-  }
-  const checkPasskeySupported = async () => {
-    const res = await Passkey.isSupported()
-    if (!res) {
-      setIsPasskeySupported(false)
-    }
-  }
-
-  const onRegisterWithPinCode = () => {
-    navigation.navigate("signupPinCode", {
-      email,
-      getNews,
-    })
-  }
+  }, [])
 
   const onRegister = () => {
-    if (isPasskeySupported) {
+    if (Passkey.isSupported()) {
       if (Platform.OS === "ios") {
         setIsShowCreatePasskeyOptions(true)
       } else {
@@ -151,18 +98,11 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigat
   // ---------------- EFFECT --------------------
 
   useEffect(() => {
-    checkPasskeySupported()
-  }, [])
-
-  useEffect(() => {
-    const onBackPress = () => {
-      navigation.replace("loginStack")
+    const listener = BackHandler.addEventListener("hardwareBackPress", () => {
+      navigateLogin()
       return true
-    }
-
-    BackHandler.addEventListener("hardwareBackPress", onBackPress)
-
-    return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress)
+    })
+    return () => listener.remove()
   }, [navigation])
   // ---------------- RENDER ---------------------
 
@@ -186,131 +126,79 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = observer(({ navigat
           label={translate("passkey.sign_up.passkey_options")}
           isIcloudSelected={isIcloudSelected}
           setIsIcloudSelected={setIsIcloudSelected}
-          action={async () => {
-            setIsShowCreatePasskeyOptions(false)
-            await onRegisterWebauth()
-          }}
+          action={onRegisterWebauth}
         />
       )}
 
-      <View style={{ paddingHorizontal: 20 }}>
-        <Logo
-          preset={"cystack-logo"}
-          style={{ height: 70, width: 70, marginBottom: 10, alignSelf: "center" }}
-        />
-        <Text
-          weight="semibold"
-          size="xl"
-          tx="new_signup.title"
-          style={{ textAlign: "center", marginBottom: 4 }}
-        />
+      <View style={styles.container}>
+        <Logo preset="cystack-logo" style={styles.logo} />
+        <Text weight="semibold" size="xl" tx="new_signup.title" style={styles.title} />
 
-        <Text
-          preset="label"
-          size="medium"
-          tx="new_signup.sub_title"
-          style={{ textAlign: "center" }}
-        />
+        <Text preset="label" size="medium" tx="new_signup.sub_title" style={styles.centerText} />
 
         <SocialLogin
           isSingIn={false}
           onLoggedIn={onLoggedIn}
           setIsLoading={setIsLoading}
-          style={{
-            marginTop: 32,
-            marginBottom: 24,
-          }}
+          style={styles.social}
         />
 
         <DividerText
           tx="new_signup.other_signup"
-          style={{ marginHorizontal: 8 }}
+          style={styles.mh8}
           color={colors.secondaryText}
           size="base"
         />
 
-        <TextInput
-          isRequired
-          animated
-          label={translate("common.email")}
-          value={email}
-          onChangeText={setEmail}
-        />
+        <TextInput isRequired animated labelTx="common.email" onChangeText={setEmail} />
 
         <TermAndConditions agreed={getNews} setAgreed={setGesNews} />
 
         <Text size="base">
           {translate("signup.agree_with") + " "}
-          <Text
-            size="base"
-            color={colors.primary}
-            text={translate("signup.terms")}
-            onPress={() => {
-              Linking.canOpenURL(TERMS_URL)
-                .then((val) => {
-                  if (val) Linking.openURL(TERMS_URL)
-                })
-                .catch((e) => Logger.error(e))
-            }}
-          />
+          <Text size="base" color={colors.primary} tx="signup.terms" onPress={openTerms} />
           <Text size="base" text={" " + translate("common.and") + " "} />
           <Text
             size="base"
-            text={translate("signup.conditions")}
+            tx="signup.conditions"
             color={colors.primary}
-            onPress={() => {
-              Linking.canOpenURL(PRIVACY_POLICY_URL)
-                .then((val) => {
-                  if (val) Linking.openURL(PRIVACY_POLICY_URL)
-                })
-                .catch((e) => Logger.error(e))
-            }}
+            onPress={openPrivacyPolicy}
           />
         </Text>
 
         <Button
           loading={isLoading}
           disabled={isLoading || !isEmail}
-          text={translate("new_signup.sign_up_email")}
+          tx="new_signup.sign_up_email"
           onPress={onRegister}
-          style={{
-            width: "100%",
-            marginTop: 24,
-            marginBottom: 20,
-          }}
+          style={styles.signUpEmail}
         />
 
-        <Text size="base" preset="label" style={{ textAlign: "center", marginVertical: 12 }}>
+        <Text size="base" preset="label" style={styles.centerSignupBussinessText}>
           {translate("new_signup.sign_up_business.title")}
           <Text
             weight="medium"
             size="base"
-            style={{ color: colors.primary }}
-            onPress={() => {
-              Linking.canOpenURL(REGISTER_BUSINESS_URL)
-                .then((val) => {
-                  if (val) Linking.openURL(REGISTER_BUSINESS_URL)
-                })
-                .catch((e) => Logger.error(e))
-            }}
+            color={colors.primary}
+            onPress={openRegisterBusiness}
             tx="new_signup.sign_up_business.free_trial"
           />
         </Text>
 
-        <Text size="base" preset="label" style={{ textAlign: "center" }}>
+        <Text size="base" preset="label" style={styles.centerText}>
           {translate("new_signup.has_account")}
           <Text
             size="base"
             weight="medium"
             onPress={navigateLogin}
-            style={{ color: colors.primary }}
+            color={colors.primary}
             tx="new_signup.sign_in"
           />
         </Text>
       </View>
     </Screen>
   )
-})
+}
 
 const TermAndConditions = ({
   agreed,
@@ -321,26 +209,18 @@ const TermAndConditions = ({
 }) => {
   const { colors } = useTheme()
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        marginTop: 10,
-        marginBottom: 8,
-      }}
-    >
+    <View style={styles.termContainer}>
       <Checkbox
         borderRadius={4}
         value={agreed}
         color={colors.primary}
         onValueChange={setAgreed}
-        style={{
-          marginVertical: 7,
-          marginRight: 8,
-          borderColor: colors.secondaryText,
-          borderRadius: 4,
-        }}
+        style={[
+          styles.checkBox,
+          {
+            borderColor: colors.secondaryText,
+          },
+        ]}
         size={18}
       />
       <TouchableOpacity onPress={() => setAgreed(!agreed)}>
@@ -349,3 +229,48 @@ const TermAndConditions = ({
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  centerSignupBussinessText: {
+    marginVertical: 12,
+    textAlign: "center",
+  },
+  centerText: {
+    textAlign: "center",
+  },
+  checkBox: {
+    borderRadius: 4,
+    marginRight: 8,
+    marginVertical: 7,
+  },
+  container: {
+    paddingHorizontal: 20,
+  },
+  logo: {
+    alignSelf: "center",
+    height: 70,
+    marginBottom: 10,
+    width: 70,
+  },
+  mh8: { marginHorizontal: 8 },
+  signUpEmail: {
+    marginBottom: 20,
+    marginTop: 24,
+    width: "100%",
+  },
+  social: {
+    marginBottom: 24,
+    marginTop: 32,
+  },
+  termContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    marginBottom: 8,
+    marginTop: 10,
+  },
+  title: {
+    marginBottom: 4,
+    textAlign: "center",
+  },
+})

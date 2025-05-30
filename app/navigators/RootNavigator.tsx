@@ -60,14 +60,7 @@ const RootStack = observer(() => {
         component={LockScreen}
         initialParams={{ type: LockType.Individual }}
       />
-      <Stack.Screen
-        name="mainStack"
-        component={MainNavigator}
-        options={{
-          headerShown: false,
-          gestureEnabled: false,
-        }}
-      />
+      <Stack.Screen name="mainStack" component={MainNavigator} />
       <Stack.Screen name="unAuthStack" component={UnAuthStack} />
     </Stack.Navigator>
   )

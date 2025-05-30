@@ -41,7 +41,6 @@ import { useClipboard } from "app/services/utils"
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
   status: TextFieldProps["status"]
-  multiline: boolean
   editable: boolean
 }
 
@@ -79,6 +78,14 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
    * Title
    */
   label?: TextProps["text"]
+  /**
+   * Title tx
+   */
+  labelTx?: TextProps["tx"]
+  /**
+   * Title txoptions
+   */
+  labelTxOption?: TextProps["txOptions"]
   /**
    * Pass any additional props directly to the label Text component.
    */
@@ -133,7 +140,7 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
  */
 export const TextInput = forwardRef(function TextField(
   props: TextFieldProps,
-  ref: Ref<RNTextInput>,
+  ref: Ref<RNTextInput | null>,
 ) {
   const {
     isRequired: isRequiredProps,
@@ -148,6 +155,8 @@ export const TextInput = forwardRef(function TextField(
     maskType,
     maskOptions,
     label,
+    labelTx,
+    labelTxOption,
     RightAccessory,
     LeftAccessory,
     HelperTextProps,
@@ -166,7 +175,7 @@ export const TextInput = forwardRef(function TextField(
   const [isFocus, setIsFocus] = useState(false)
   const [isRequired, setIsRequired] = useState(false)
   const [isShowText, setIsShowText] = useState(false)
-  const input = useRef<RNTextInput>()
+  const input = useRef<RNTextInput>(null)
   const status = (() => {
     if (isRequired || isError) {
       return "error"
@@ -181,6 +190,7 @@ export const TextInput = forwardRef(function TextField(
   const helper = value ? helperProps : isRequired && translate("common.required_text")
   const placeholderContent = placeholder && placeholder + (isRequiredProps ? " (*)" : "")
 
+  const labelProps = label || (labelTx && translate(labelTx, labelTxOption))
   const $containerStyles: StyleProp<ViewStyle> = [
     { width: "100%", alignItems: "flex-start", marginVertical: 2 },
     $containerStyleOverride,
@@ -289,20 +299,15 @@ export const TextInput = forwardRef(function TextField(
       onPress={focusInput}
       accessibilityState={{ disabled }}
     >
-      {!!label && (
+      {!!labelProps && (
         <Animated.Text style={[$labelStyles, $titleAnim]} {...LabelTextProps}>
-          {label + (isRequiredProps ? " (*)" : "")}
+          {labelProps + (isRequiredProps ? " (*)" : "")}
         </Animated.Text>
       )}
 
       <View style={$inputWrapperStyles}>
         {!!LeftAccessory && (
-          <LeftAccessory
-            style={$leftAccessoryStyle}
-            status={status}
-            editable={!disabled}
-            multiline={TextInputProps.multiline}
-          />
+          <LeftAccessory style={$leftAccessoryStyle} status={status} editable={!disabled} />
         )}
 
         <RNTextInput
@@ -345,12 +350,7 @@ export const TextInput = forwardRef(function TextField(
         )}
 
         {!!RightAccessory && !isPassword && !isCopyable && (
-          <RightAccessory
-            style={$rightAccessoryStyle}
-            status={status}
-            editable={!disabled}
-            multiline={TextInputProps.multiline}
-          />
+          <RightAccessory style={$rightAccessoryStyle} status={status} editable={!disabled} />
         )}
       </View>
 

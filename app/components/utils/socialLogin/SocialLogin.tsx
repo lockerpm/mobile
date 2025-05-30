@@ -17,7 +17,7 @@ interface Props {
   /**
    * Callback when social authen success
    */
-  onLoggedIn: (_newUser: boolean, _token: string) => Promise<void>
+  onLoggedIn: () => Promise<void>
 
   style?: StyleProp<ViewStyle>
 }
