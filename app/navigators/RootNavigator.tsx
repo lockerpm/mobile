@@ -50,6 +50,7 @@ const RootStack = observer(() => {
     <Stack.Navigator
       initialRouteName="init"
       screenOptions={{
+        PointerEvents: "none",
         contentStyle: { backgroundColor: colors.background },
         headerShown: false,
       }}

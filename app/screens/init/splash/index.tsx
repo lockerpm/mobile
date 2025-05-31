@@ -104,32 +104,41 @@ export const SplashScreen: FC<RootStackScreenProps<"init">> = ({ navigation }) =
       user.setDeviceId(await DeviceInfo.getUniqueId())
     }
 
+    /**
+     * If the user is not logged in, navigate to the Intro screen
+     * If the Intro screen was showned, navigate to the OnBoarding screen
+     */
     if (!user.isLoggedIn) {
-      /**
-       * If the user is not logged in, navigate to the intro screen or onBoarding screen
-       */
       if (!uiStore.isShowedAppInto) {
         navigation.replace("unAuthStack", {
           screen: "intro",
         })
-      } else {
-        navigation.replace("unAuthStack", {
-          screen: "onBoarding",
-        })
+        return
       }
-    } else {
-      if (user.is_pwd_manager) {
-        if (user.onPremiseUser) {
-          await navigateToOnPremiseLogin()
-        } else {
-          await navigateToNormalLogin()
-        }
-      } else {
-        navigation.replace("unAuthStack", {
-          screen: "createMasterPassword",
-        })
-      }
+
+      navigation.replace("unAuthStack", {
+        screen: "onBoarding",
+      })
+      return
     }
+
+    /**
+     * If the user is logged in, check if the user is a password manager
+     * If the user is a password manager, navigate to the OnPremiseLogin or NormalLogin screen
+     * If the user is not a password manager, navigate to the CreateMasterPassword screen
+     */
+    if (user.is_pwd_manager) {
+      if (user.onPremiseUser) {
+        await navigateToOnPremiseLogin()
+      } else {
+        await navigateToNormalLogin()
+      }
+      return
+    }
+
+    navigation.replace("unAuthStack", {
+      screen: "createMasterPassword",
+    })
   }
 
   useAppUpdate()

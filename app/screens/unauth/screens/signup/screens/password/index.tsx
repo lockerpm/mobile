@@ -1,15 +1,23 @@
 import React, { useState, useEffect, useRef, useCallback, FC } from "react"
-import { BackHandler, TouchableOpacity, View } from "react-native"
+import { BackHandler, TouchableOpacity, View, StyleSheet } from "react-native"
 import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
-import { SocialLogin, RecaptchaChecker, DividerText, SetLanguage } from "app/components/utils"
+import {
+  SocialLogin,
+  RecaptchaChecker,
+  DividerText,
+  SetLanguage,
+  RecaptchaCheckerRef,
+} from "app/components/utils"
 import { getCookies, logRegisterSuccessEvent } from "app/utils/analytics"
 import { validateEmail } from "app/utils/utils"
 import { observer } from "mobx-react-lite"
 import { SignUpScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
 import { openPrivacyPolicy, openTerms } from "app/utils/externalLink"
+import { CommonActions } from "@react-navigation/native"
+import { useLoggedIn } from "../../../hook/useLoggedIn"
 
 export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = observer(
   ({ navigation, route: { params } }) => {
@@ -20,7 +28,7 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
 
     // ---------------- PARAMS ---------------------
 
-    const captchaRef = useRef(null)
+    const captchaRef = useRef<RecaptchaCheckerRef>(null)
 
     const [isLoading, setIsLoading] = useState(false)
     const [email, setEmail] = useState(params.email || "")
@@ -34,16 +42,30 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
       validateEmail(email) && password && password === confirmPassword && fullname
 
     // ---------------- METHODS ---------------------
+    const { onLoggedIn } = useLoggedIn()
 
     const navigateLogin = () => {
-      navigation.replace("loginStack")
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: "unAuthStack",
+              params: { screen: "loginStack", params: { screen: "login" } },
+            },
+          ],
+        }),
+      )
     }
 
     const getCaptchaToken = useCallback(async () => {
-      return await captchaRef.current.waitForToken()
+      return (await captchaRef.current?.waitForToken()) || ""
     }, [])
 
     const handleRegister = async (captchaToken: string) => {
+      if (captchaToken) {
+        return
+      }
       setIsLoading(true)
       const res = await user.register({
         email,
@@ -60,34 +82,21 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
       if (res.kind === "ok") {
         logRegisterSuccessEvent()
         notifyTx("success", "signup.signup_successful")
-        navigation.replace("loginStack")
+        navigateLogin()
       } else {
         notifyApiError(res)
-      }
-    }
-
-    const onLoggedIn = async (_newUser: boolean, _token: string) => {
-      const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-      if (userRes.kind === "ok" && userPwRes.kind === "ok") {
-        if (user.is_pwd_manager) {
-          navigation.navigate("lock")
-        } else {
-          navigation.navigate("createMasterPassword")
-        }
       }
     }
 
     // ---------------- EFFECT --------------------
 
     useEffect(() => {
-      const onBackPress = () => {
-        navigation.replace("loginStack")
+      const listener = BackHandler.addEventListener("hardwareBackPress", () => {
+        navigateLogin()
         return true
-      }
+      })
 
-      BackHandler.addEventListener("hardwareBackPress", onBackPress)
-
-      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress)
+      return () => listener.remove()
     }, [navigation])
     // ---------------- RENDER ---------------------
 
@@ -105,48 +114,18 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
       >
         <RecaptchaChecker ref={captchaRef} />
 
-        <View style={{ paddingHorizontal: 20 }}>
-          <Logo
-            preset={"cystack-logo"}
-            style={{ height: 70, width: 70, marginBottom: 10, alignSelf: "center" }}
-          />
-          <Text
-            weight="semibold"
-            size="xl"
-            tx="new_signup.title"
-            style={{ textAlign: "center", marginBottom: 4 }}
-          />
-
-          <Text
-            preset="label"
-            size="medium"
-            tx="new_signup.sub_title"
-            style={{ textAlign: "center" }}
-          />
-
-          <TextInput
-            isRequired
-            animated
-            label={translate("common.email")}
-            value={email}
-            onChangeText={setEmail}
-          />
-
-          <TextInput
-            isRequired
-            animated
-            label={translate("common.fullname")}
-            value={fullname}
-            onChangeText={setFullname}
-          />
-
+        <View style={styles.container}>
+          <Logo preset={"cystack-logo"} style={styles.logo} />
+          <Text weight="semibold" size="xl" tx="new_signup.title" style={styles.title} />
+          <Text preset="label" size="medium" tx="new_signup.sub_title" style={styles.centerText} />
+          <TextInput isRequired animated labelTx="common.email" onChangeText={setEmail} />
+          <TextInput isRequired animated labelTx="common.fullname" onChangeText={setFullname} />
           <TextInput
             animated
             isRequired
             isPassword
-            label={translate("common.password")}
+            labelTx="common.password"
             onChangeText={setPassword}
-            value={password}
           />
           <TextInput
             animated
@@ -154,21 +133,14 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
             isPassword
             label={translate("signup.confirm_password")}
             onChangeText={setConfirmPassword}
-            value={confirmPassword}
           />
-
-          <Text size="base" style={{ textAlign: "center", marginTop: 24, marginBottom: 12 }}>
+          <Text size="base" style={styles.termContainer}>
             {translate("signup.agree_with") + " "}
-            <Text
-              size="base"
-              color={colors.link}
-              text={translate("signup.terms")}
-              onPress={openTerms}
-            />
+            <Text size="base" color={colors.link} tx="signup.terms" onPress={openTerms} />
             <Text size="base" text={" " + translate("common.and") + " "} />
             <Text
               size="base"
-              text={translate("signup.conditions")}
+              tx="signup.conditions"
               color={colors.link}
               onPress={openPrivacyPolicy}
             />
@@ -177,19 +149,16 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
           <Button
             loading={isLoading}
             disabled={isLoading || !formValidated}
-            text={translate("common.sign_up")}
+            tx="common.sign_up"
             onPress={() => {
               getCaptchaToken().then(handleRegister)
             }}
-            style={{
-              width: "100%",
-              marginBottom: 20,
-            }}
+            style={styles.signUpEmail}
           />
 
           <DividerText
             tx="new_signup.sign_up_with"
-            style={{ marginHorizontal: 8 }}
+            style={styles.mh8}
             color={colors.secondaryText}
             size="base"
           />
@@ -198,18 +167,10 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
             isSingIn={false}
             onLoggedIn={onLoggedIn}
             setIsLoading={setIsLoading}
-            style={{
-              marginVertical: 12,
-            }}
+            style={styles.signUpEmail}
           />
 
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <View style={styles.term}>
             <Text size="base" preset="label" tx="new_signup.has_account" />
 
             <TouchableOpacity onPress={navigateLogin}>
@@ -222,4 +183,42 @@ export const SignUpWithPassword: FC<SignUpScreenProps<"signupPassword">> = obser
   },
 )
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  centerSignupBussinessText: {
+    marginVertical: 12,
+    textAlign: "center",
+  },
+  centerText: {
+    textAlign: "center",
+  },
+  container: {
+    paddingHorizontal: 20,
+  },
+  logo: {
+    alignSelf: "center",
+    height: 70,
+    marginBottom: 10,
+    width: 70,
+  },
+  mh8: { marginHorizontal: 8 },
+  signUpEmail: {
+    marginBottom: 20,
+    width: "100%",
+  },
+  term: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  termContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    marginBottom: 8,
+    marginTop: 10,
+  },
+  title: {
+    marginBottom: 4,
+    textAlign: "center",
+  },
+})

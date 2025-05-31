@@ -1,34 +1,23 @@
-import React, { useState, useEffect, useRef, FC, useCallback } from "react"
+import React, { useState, useEffect, FC, useCallback } from "react"
 import { BackHandler, Platform, StyleSheet, TouchableOpacity, View } from "react-native"
-import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Checkbox } from "react-native-ui-lib"
 import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
-import {
-  SocialLogin,
-  RecaptchaChecker,
-  IosPasswordlessOptions,
-  DividerText,
-  SetLanguage,
-} from "app/components/utils"
+import { SocialLogin, IosPasswordlessOptions, DividerText, SetLanguage } from "app/components/utils"
 import { Passkey } from "react-native-passkey"
 import { validateEmail } from "app/utils/utils"
 import { SignUpScreenProps } from "app/navigators"
 import { openPrivacyPolicy, openRegisterBusiness, openTerms } from "app/utils/externalLink"
 import { useSignupWebauth } from "./useWebauth"
-import { LockType } from "app/static/types"
+import { useLoggedIn } from "../../../hook/useLoggedIn"
 
 const IS_IOS = Platform.OS === "ios"
 
 export const SignupScreen: FC<SignUpScreenProps<"signup">> = ({ navigation }) => {
   const { colors } = useTheme()
-  const { user } = useStores()
   const { translate } = useAppLocale()
 
   // ---------------- PARAMS ---------------------
-
-  const captchaRef = useRef(null)
-
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [getNews, setGesNews] = useState(false)
@@ -40,7 +29,7 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = ({ navigation }) =>
   const isEmail = validateEmail(email)
 
   // ---------------- METHODS ---------------------
-
+  const { onLoggedIn } = useLoggedIn()
   const navigateLogin = useCallback(() => {
     navigation.replace("loginStack", {
       screen: "login",
@@ -69,20 +58,6 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = ({ navigation }) =>
       handleRegisterWebauth(email, fullname, true)
     }
   }
-
-  const onLoggedIn = useCallback(async () => {
-    const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-    if (userRes.kind === "ok" && userPwRes.kind === "ok") {
-      if (userPwRes.user.is_pwd_manager) {
-        navigation.navigate("lock", {
-          type: LockType.Individual,
-        })
-      } else {
-        navigation.navigate("createMasterPassword")
-      }
-    }
-  }, [])
-
   const onRegister = () => {
     if (Passkey.isSupported()) {
       if (Platform.OS === "ios") {
@@ -113,8 +88,6 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = ({ navigation }) =>
       header={<Header RightActionComponent={<SetLanguage />} />}
       keyboardOffset={0}
     >
-      <RecaptchaChecker ref={captchaRef} />
-
       {IS_IOS && (
         <IosPasswordlessOptions
           isOpen={isShowCreatePasskeyOptions}

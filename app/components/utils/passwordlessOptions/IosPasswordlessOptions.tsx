@@ -79,7 +79,7 @@ export const IosPasswordlessOptions = ({
       containerStyle={$containerStyle}
       renderPannableHeader={header}
       supportedOrientations={["portrait", "landscape"]}
-      panDirection={null}
+      panDirection={undefined}
     >
       <View style={{ paddingHorizontal: 16, backgroundColor: colors.block }}>
         <Logo
