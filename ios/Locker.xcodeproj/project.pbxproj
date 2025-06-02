@@ -991,7 +991,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
 				CURRENT_PROJECT_VERSION = 246;
-				DEVELOPMENT_TEAM = W7S57TNBH5;
+				DEVELOPMENT_TEAM = "";
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -1032,7 +1032,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
 				CURRENT_PROJECT_VERSION = 246;
-				DEVELOPMENT_TEAM = W7S57TNBH5;
+				DEVELOPMENT_TEAM = "";
 				DISPLAY_NAME = Locker;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				INFOPLIST_FILE = Locker/Info.plist;
