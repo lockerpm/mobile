@@ -1,6 +1,5 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
-import { ModalHOC } from "./ModalHOC"
 import { Text } from "app/components/cores"
 import moment from "moment"
 import { RelayAddress } from "app/static/types"
@@ -11,6 +10,7 @@ import { useStores } from "app/models"
 import { debounce } from "app/utils/utils"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { useClipboard, useToast } from "app/services/utils"
+import { BottomModalContainer } from "app/components/utils"
 
 export enum RelayActionType {
   DEFAULT = "default",
@@ -52,7 +52,7 @@ export const Actions = ({
   }
 
   return (
-    <ModalHOC>
+    <BottomModalContainer>
       <View style={styles.headerContainer}>
         <View style={styles.row}>
           <View>
@@ -106,7 +106,7 @@ export const Actions = ({
         color={colors.error}
         action={debounce(handleRemove, 300)}
       />
-    </ModalHOC>
+    </BottomModalContainer>
   )
 }
 

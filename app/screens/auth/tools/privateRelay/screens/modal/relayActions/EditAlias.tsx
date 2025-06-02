@@ -5,10 +5,10 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { RelayAddress } from "app/static/types"
 import { Text, Button, Icon } from "app/components/cores"
 import Animated, { FadeInDown } from "react-native-reanimated"
-import { ModalHOC } from "./ModalHOC"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { IS_IOS } from "app/config/constants"
 import { useToast } from "app/services/utils"
+import { BottomModalContainer } from "app/components/utils"
 
 interface Props {
   onClose: () => void
@@ -66,7 +66,7 @@ export const EditAlias = (props: Props) => {
   // --------------- RENDER ----------------
 
   return (
-    <ModalHOC>
+    <BottomModalContainer>
       <View style={styles.header}>
         <Text
           preset="bold"
@@ -109,7 +109,7 @@ export const EditAlias = (props: Props) => {
           </View>
         </Animated.View>
       )}
-    </ModalHOC>
+    </BottomModalContainer>
   )
 }
 

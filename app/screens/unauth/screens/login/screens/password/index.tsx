@@ -3,14 +3,13 @@ import { BASE_URL, IS_IOS } from "app/config/constants"
 import { useStores } from "app/models"
 import { api } from "app/services/api"
 import { Passkey } from "react-native-passkey"
-import { Button, Header, Logo, Screen, Text, TextInput } from "app/components/cores"
+import { Button, Logo, Screen, Text, TextInput } from "app/components/cores"
 import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import { DividerText, IosPasswordlessOptions, SetLanguage, SocialLogin } from "app/components/utils"
 import { useAppLocale, useTheme } from "app/services/context"
-import { TwoFAAuthenSheet } from "./2faBottomSheet/BottomSheetModal"
 import { LoginScreenProps } from "app/navigators"
-import { LOGIN_METHOD, User2FAConfig } from "app/static/types"
+import { LOGIN_METHOD, User2FAPasswordConfig, User2FAMethod } from "app/static/types"
 import { useWebAuth } from "./useWebAuth"
 import { useLoginPassword } from "./useLoginPassword"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
@@ -30,18 +29,11 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
     const initEmail = params?.email || ""
     // ------------------------------ PARAMS -------------------------------
 
-    const [credential, setCredential] = useState<User2FAConfig>({
-      username: "",
-      password: "",
-      methods: [],
-    })
-    const [isShow2FASheet, setIsShow2FASheet] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
     const [username, setUsername] = useState(initEmail)
     const [password, setPassword] = useState("")
     const [loginMethodLoading, setLoginMethodLoading] = useState<LOGIN_METHOD>(LOGIN_METHOD.NONE)
-    const [isTextInputForcus, setIsTextInputFocus] = useState<LOGIN_METHOD>(LOGIN_METHOD.NONE)
 
     const [loginMethod, setLoginMethod] = useState<LOGIN_METHOD>(initMethod || LOGIN_METHOD.NONE)
 
@@ -54,9 +46,16 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
     // ------------------------------ METHODS -------------------------------
     const { onLoggedIn } = useLoggedIn()
 
-    const handleForgot = useCallback(() => {
-      navigation.navigate("forgotPassword", {
-        email: "",
+    const navigateTo2FA = useCallback((credential: User2FAPasswordConfig) => {
+      navigation.navigate("twoFA", {
+        credential,
+        type: "password",
+      })
+    }, [])
+
+    const navigateToForgot = useCallback(() => {
+      navigation.navigate("forgotPasswordStack", {
+        screen: "methodSelect",
       })
     }, [])
 
@@ -92,35 +91,31 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
       }
     }
 
-    const handleLogiSuccess = (data: {
+    const handleLoginSuccess = (data: {
       is_factor2: boolean
-      methods: {
-        type: string
-        data: any
-      }[]
+      methods: User2FAMethod[]
       access_token: string
     }) => {
-      setPassword("")
       setIsLoading(false)
       if (data.is_factor2) {
-        setCredential({ username, password, methods: data.methods })
-        setIsShow2FASheet(true)
+        navigateTo2FA({ username, password, methods: data.methods })
       } else {
         setApiTokens(data.access_token)
         onLoggedIn()
+        setPassword("")
       }
     }
 
     const { handleWebAuthLogin } = useWebAuth({
       setLoginMethodLoading,
       onGoToPinCode,
-      handleLogiSuccess,
+      handleLoginSuccess,
     })
 
     const { handlePasswordLogin } = useLoginPassword({
       setLoginMethodLoading,
       setIsError,
-      handleLogiSuccess,
+      handleLoginSuccess,
     })
 
     // -------------- EFFECT ------------------
@@ -134,14 +129,6 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
 
     return (
       <Screen preset="auto" padding safeAreaEdges={["top", "bottom"]} keyboardOffset={0}>
-        <TwoFAAuthenSheet
-          credential={credential}
-          isOpen={isShow2FASheet}
-          onClose={() => {
-            setIsShow2FASheet(false)
-          }}
-          onLoggedIn={onLoggedIn}
-        />
         {IS_IOS && (
           <IosPasswordlessOptions
             isOpen={isShowCreatePasskeyOptions}
@@ -159,7 +146,7 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
             }}
           />
         )}
-        <View style={{ alignItems: "flex-end" }}>
+        <View style={styles.setLanguage}>
           <SetLanguage />
         </View>
         <Logo preset={"cystack-logo"} style={styles.logo} />
@@ -218,8 +205,8 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
               }}
             />
 
-            <TouchableOpacity onPress={handleForgot} style={styles.forgotPW}>
-              <Text text={translate("login.forgot_password")} color={colors.link} />
+            <TouchableOpacity onPress={navigateToForgot} style={styles.forgotPW}>
+              <Text tx={"login.forgot_password"} color={colors.link} />
             </TouchableOpacity>
             <Button
               loading={loginMethodLoading === LOGIN_METHOD.PASSWORD || isLoading}
@@ -301,6 +288,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginVertical: 12,
+  },
+  setLanguage: {
+    alignItems: "flex-end",
   },
   social: {
     marginBottom: 24,

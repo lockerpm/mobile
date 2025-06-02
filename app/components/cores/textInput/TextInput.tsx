@@ -103,6 +103,10 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
    */
   placeholder?: TextProps["text"]
   /**
+   * The placeholder tx to display if not using .
+   */
+  placeholderTx?: TextProps["tx"]
+  /**
    * Optional input style override.
    */
   style?: StyleProp<TextStyle>
@@ -150,6 +154,7 @@ export const TextInput = forwardRef(function TextField(
     isCopyable,
     animated,
     placeholder,
+    placeholderTx,
     helper: helperProps,
     status: statusProps,
     maskType,
@@ -188,7 +193,8 @@ export const TextInput = forwardRef(function TextField(
   const disabled = TextInputProps.editable === false || status === "disabled"
 
   const helper = value ? helperProps : isRequired && translate("common.required_text")
-  const placeholderContent = placeholder && placeholder + (isRequiredProps ? " (*)" : "")
+  const placeholderText = placeholder || (placeholderTx && translate(placeholderTx))
+  const placeholderContent = placeholderText && placeholderText + (isRequiredProps ? " (*)" : "")
 
   const labelProps = label || (labelTx && translate(labelTx, labelTxOption))
   const $containerStyles: StyleProp<ViewStyle> = [

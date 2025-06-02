@@ -1,6 +1,6 @@
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps, NavigatorScreenParams } from "@react-navigation/native"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { StackScreenProps } from "@react-navigation/stack"
 import {
   AppNotification,
   LockType,
@@ -11,6 +11,8 @@ import {
   RelayAddress,
   SubdomainData,
   TrustedContact,
+  User2FAPasswordConfig,
+  User2FAPincodeConfig,
 } from "app/static/types"
 
 import { AndroidAutofillServiceData } from "app/utils/autofillHelper"
@@ -36,10 +38,7 @@ export type RootParamList = {
   mainStack: NavigatorScreenParams<AuthRoute>
 }
 
-export type RootStackScreenProps<T extends keyof RootParamList> = NativeStackScreenProps<
-  RootParamList,
-  T
->
+export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
 
 // ---------------------------Login---------------------------
 
@@ -55,10 +54,19 @@ export type LoginRoute = {
     // user register by password of not
     havePassword: boolean
   }
+  twoFA:
+    | {
+        type: "password"
+        credential: User2FAPasswordConfig
+      }
+    | {
+        type: "pincode"
+        credential: User2FAPincodeConfig
+      }
 }
 
 export type LoginScreenProps<T extends keyof LoginRoute> = CompositeScreenProps<
-  NativeStackScreenProps<LoginRoute, T>,
+  StackScreenProps<LoginRoute, T>,
   UnAuthScreenProps<keyof UnAuthRoute>
 >
 // --------------------------Signup--------------------------
@@ -75,7 +83,7 @@ export type SignupRoute = {
 }
 
 export type SignUpScreenProps<T extends keyof SignupRoute> = CompositeScreenProps<
-  NativeStackScreenProps<SignupRoute, T>,
+  StackScreenProps<SignupRoute, T>,
   UnAuthScreenProps<keyof UnAuthRoute>
 >
 // --------------------------SSO--------------------------
@@ -86,7 +94,25 @@ export type SSORoute = {
 }
 
 export type SSOScreenProps<T extends keyof SSORoute> = CompositeScreenProps<
-  NativeStackScreenProps<SSORoute, T>,
+  StackScreenProps<SSORoute, T>,
+  UnAuthScreenProps<keyof UnAuthRoute>
+>
+
+// --------------------------Forgot password--------------------------
+export type ForgotPasswordRoute = {
+  methodSelect: undefined
+  otp: {
+    email: string // for get OTP
+    username: string
+  }
+  changePassword: {
+    username: string
+    token: string
+  }
+}
+
+export type ForgotPasswordScreenProps<T extends keyof ForgotPasswordRoute> = CompositeScreenProps<
+  StackScreenProps<ForgotPasswordRoute, T>,
   UnAuthScreenProps<keyof UnAuthRoute>
 >
 
@@ -96,16 +122,14 @@ export type UnAuthRoute = {
   intro: undefined
   onBoarding: undefined
   createMasterPassword: undefined
-  forgotPassword: {
-    email?: string
-  }
+  forgotPasswordStack: NavigatorScreenParams<ForgotPasswordRoute>
   loginStack: NavigatorScreenParams<LoginRoute>
   signupStack: NavigatorScreenParams<SignupRoute>
   ssoStack: NavigatorScreenParams<SSORoute>
 }
 
 export type UnAuthScreenProps<T extends keyof UnAuthRoute> = CompositeScreenProps<
-  NativeStackScreenProps<UnAuthRoute, T>,
+  StackScreenProps<UnAuthRoute, T>,
   RootStackScreenProps<keyof RootParamList>
 >
 
@@ -224,7 +248,7 @@ export type AuthRoute = {
 }
 
 export type AuthStackScreenProps<T extends keyof AuthRoute> = CompositeScreenProps<
-  NativeStackScreenProps<AuthRoute, T>,
+  StackScreenProps<AuthRoute, T>,
   RootStackScreenProps<keyof RootParamList>
 >
 
@@ -263,7 +287,7 @@ export type BrowseRoute = {
 }
 
 export type BrowseStackScreenProps<T extends keyof BrowseRoute> = CompositeScreenProps<
-  NativeStackScreenProps<BrowseRoute, T>,
+  StackScreenProps<BrowseRoute, T>,
   AuthStackScreenProps<keyof AuthRoute>
 >
 
@@ -278,7 +302,7 @@ export type ToolsRoute = {
 }
 
 export type ToolsStackScreenProps<T extends keyof ToolsRoute> = CompositeScreenProps<
-  NativeStackScreenProps<ToolsRoute, T>,
+  StackScreenProps<ToolsRoute, T>,
   AuthStackScreenProps<keyof AuthRoute>
 >
 
@@ -315,7 +339,7 @@ export type PrivateRelayRoute = {
   }
 }
 
-export type PrivateRelayScreenProps<T extends keyof PrivateRelayRoute> = NativeStackScreenProps<
+export type PrivateRelayScreenProps<T extends keyof PrivateRelayRoute> = StackScreenProps<
   PrivateRelayRoute,
   T
 >
@@ -339,7 +363,7 @@ export type MenuRoute = {
 }
 
 export type MenuScreenProps<T extends keyof MenuRoute> = CompositeScreenProps<
-  NativeStackScreenProps<MenuRoute, T>,
+  StackScreenProps<MenuRoute, T>,
   AuthStackScreenProps<keyof AuthRoute>
 >
 
@@ -356,7 +380,7 @@ export type SettingsRoute = {
 }
 
 export type SettingsScreenProps<T extends keyof SettingsRoute> = CompositeScreenProps<
-  NativeStackScreenProps<SettingsRoute, T>,
+  StackScreenProps<SettingsRoute, T>,
   MenuScreenProps<keyof MenuRoute>
 >
 
@@ -370,7 +394,7 @@ export type NotificationSettingsRoute = {
 
 export type NotificationSettingsScreenProps<T extends keyof NotificationSettingsRoute> =
   CompositeScreenProps<
-    NativeStackScreenProps<NotificationSettingsRoute, T>,
+    StackScreenProps<NotificationSettingsRoute, T>,
     SettingsScreenProps<keyof SettingsRoute>
   >
 // -------------------------Emergency access-------------------------
@@ -389,6 +413,6 @@ export type EmergencyAccessRoute = {
 }
 
 export type EmergencyAccessScreenProps<T extends keyof EmergencyAccessRoute> = CompositeScreenProps<
-  NativeStackScreenProps<EmergencyAccessRoute, T>,
+  StackScreenProps<EmergencyAccessRoute, T>,
   SettingsScreenProps<keyof SettingsRoute>
 >

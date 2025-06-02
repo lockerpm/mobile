@@ -2,7 +2,7 @@ import React, { useState, useEffect, FC, useCallback } from "react"
 import { BackHandler, Platform, StyleSheet, TouchableOpacity, View } from "react-native"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Checkbox } from "react-native-ui-lib"
-import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
+import { Screen, Text, Button, TextInput, Logo } from "app/components/cores"
 import { SocialLogin, IosPasswordlessOptions, DividerText, SetLanguage } from "app/components/utils"
 import { Passkey } from "react-native-passkey"
 import { validateEmail } from "app/utils/utils"
@@ -30,6 +30,7 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = ({ navigation }) =>
 
   // ---------------- METHODS ---------------------
   const { onLoggedIn } = useLoggedIn()
+
   const navigateLogin = useCallback(() => {
     navigation.replace("loginStack", {
       screen: "login",
@@ -82,12 +83,7 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = ({ navigation }) =>
   // ---------------- RENDER ---------------------
 
   return (
-    <Screen
-      preset="scroll"
-      safeAreaEdges={["bottom"]}
-      header={<Header RightActionComponent={<SetLanguage />} />}
-      keyboardOffset={0}
-    >
+    <Screen preset="scroll" padding safeAreaEdges={["top", "bottom"]} keyboardOffset={0}>
       {IS_IOS && (
         <IosPasswordlessOptions
           isOpen={isShowCreatePasskeyOptions}
@@ -103,72 +99,73 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = ({ navigation }) =>
         />
       )}
 
-      <View style={styles.container}>
-        <Logo preset="cystack-logo" style={styles.logo} />
-        <Text weight="semibold" size="xl" tx="new_signup.title" style={styles.title} />
-
-        <Text preset="label" size="medium" tx="new_signup.sub_title" style={styles.centerText} />
-
-        <SocialLogin
-          isSingIn={false}
-          onLoggedIn={onLoggedIn}
-          setIsLoading={setIsLoading}
-          style={styles.social}
-        />
-
-        <DividerText
-          tx="new_signup.other_signup"
-          style={styles.mh8}
-          color={colors.secondaryText}
-          size="base"
-        />
-
-        <TextInput isRequired animated labelTx="common.email" onChangeText={setEmail} />
-
-        <TermAndConditions agreed={getNews} setAgreed={setGesNews} />
-
-        <Text size="base">
-          {translate("signup.agree_with") + " "}
-          <Text size="base" color={colors.primary} tx="signup.terms" onPress={openTerms} />
-          <Text size="base" text={" " + translate("common.and") + " "} />
-          <Text
-            size="base"
-            tx="signup.conditions"
-            color={colors.primary}
-            onPress={openPrivacyPolicy}
-          />
-        </Text>
-
-        <Button
-          loading={isLoading}
-          disabled={isLoading || !isEmail}
-          tx="new_signup.sign_up_email"
-          onPress={onRegister}
-          style={styles.signUpEmail}
-        />
-
-        <Text size="base" preset="label" style={styles.centerSignupBussinessText}>
-          {translate("new_signup.sign_up_business.title")}
-          <Text
-            weight="medium"
-            size="base"
-            color={colors.primary}
-            onPress={openRegisterBusiness}
-            tx="new_signup.sign_up_business.free_trial"
-          />
-        </Text>
-
-        <Text size="base" preset="label" style={styles.centerText}>
-          {translate("new_signup.has_account")}
-          <Text
-            size="base"
-            weight="medium"
-            onPress={navigateLogin}
-            color={colors.primary}
-            tx="new_signup.sign_in"
-          />
-        </Text>
+      <View style={styles.setLanguage}>
+        <SetLanguage />
       </View>
+      <Logo preset="cystack-logo" style={styles.logo} />
+      <Text weight="semibold" size="xl" tx="new_signup.title" style={styles.title} />
+
+      <Text preset="label" size="medium" tx="new_signup.sub_title" style={styles.centerText} />
+
+      <SocialLogin
+        isSingIn={false}
+        onLoggedIn={onLoggedIn}
+        setIsLoading={setIsLoading}
+        style={styles.social}
+      />
+
+      <DividerText
+        tx="new_signup.other_signup"
+        style={styles.mh8}
+        color={colors.secondaryText}
+        size="base"
+      />
+
+      <TextInput isRequired animated labelTx="common.email" onChangeText={setEmail} />
+
+      <TermAndConditions agreed={getNews} setAgreed={setGesNews} />
+
+      <Text size="base">
+        {translate("signup.agree_with") + " "}
+        <Text size="base" color={colors.primary} tx="signup.terms" onPress={openTerms} />
+        <Text size="base" text={" " + translate("common.and") + " "} />
+        <Text
+          size="base"
+          tx="signup.conditions"
+          color={colors.primary}
+          onPress={openPrivacyPolicy}
+        />
+      </Text>
+
+      <Button
+        loading={isLoading}
+        disabled={isLoading || !isEmail}
+        tx="new_signup.sign_up_email"
+        onPress={onRegister}
+        style={styles.signUpEmail}
+      />
+
+      <Text size="base" preset="label" style={styles.centerSignupBussinessText}>
+        {translate("new_signup.sign_up_business.title")}
+        <Text
+          weight="medium"
+          size="base"
+          color={colors.primary}
+          onPress={openRegisterBusiness}
+          tx="new_signup.sign_up_business.free_trial"
+        />
+      </Text>
+
+      <Text size="base" preset="label" style={styles.centerText}>
+        {translate("new_signup.has_account")}
+        <Text
+          size="base"
+          weight="medium"
+          onPress={navigateLogin}
+          color={colors.primary}
+          tx="new_signup.sign_in"
+        />
+      </Text>
     </Screen>
   )
 }
@@ -216,9 +213,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
     marginVertical: 7,
   },
-  container: {
-    paddingHorizontal: 20,
-  },
   logo: {
     alignSelf: "center",
     height: 70,
@@ -226,6 +220,9 @@ const styles = StyleSheet.create({
     width: 70,
   },
   mh8: { marginHorizontal: 8 },
+  setLanguage: {
+    alignItems: "flex-end",
+  },
   signUpEmail: {
     marginBottom: 20,
     marginTop: 24,

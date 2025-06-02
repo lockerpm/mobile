@@ -1,117 +1,26 @@
-import React, { FC, useState } from "react"
-import { Button, Header, Screen, TextInput } from "app/components/cores"
+import React from "react"
+import { createStackNavigator } from "@react-navigation/stack"
+import { ForgotPasswordRoute } from "app/navigators"
+import {
+  ForgotChangePasswordScreen,
+  ForgotMethodSelectScreen,
+  ForgotOtpAuthenScreen,
+} from "./screens"
 
-import { useStores } from "app/models"
-import { ChangePassword } from "./ChangePassword"
-import { MethodSelectSheet } from "./methodSelecBottomSheet/BottomSheetModal"
-import Animated, { SlideInUp } from "react-native-reanimated"
-import { View } from "react-native"
-import { observer } from "mobx-react-lite"
-import { useAppLocale } from "app/services/context"
-import { UnAuthScreenProps } from "app/navigators"
-import { AccountRecovery } from "app/static/types"
-import { useToast } from "app/services/utils"
+const Stack = createStackNavigator<ForgotPasswordRoute>()
 
-export const ForgotPasswordScreen: FC<UnAuthScreenProps<"forgotPassword">> = observer(
-  ({ navigation, route: { params } }) => {
-    const { user } = useStores()
-    const { notifyTx, notifyApiError } = useToast()
-    const { translate } = useAppLocale()
-    // ------------------------------ PARAMS -------------------------------
+export const ForgotPasswordStack = () => {
+  // ------------------ RENDER --------------------
 
-    const [isError, setIsError] = useState(false)
-    const [username, setUsername] = useState(params?.email || "")
-
-    const [methods, setMethods] = useState<AccountRecovery[]>([])
-
-    const [token, setToken] = useState("")
-
-    const [isLoading, setIsLoading] = useState(false)
-    const [showMethodSelectSheet, setShowMethodSelectSheet] = useState(false)
-
-    // ------------------------------ METHODS -------------------------------
-
-    const handleRequest = async () => {
-      setIsLoading(true)
-      const res = await user.recoverAccount(username)
-      setIsLoading(false)
-      if (res.kind !== "ok") {
-        if (res.kind === "rejected") {
-          notifyApiError(res)
-          return
-        }
-        setIsError(true)
-        notifyTx("error", "error.no_associated_account")
-      } else {
-        setMethods(res.data)
-        setShowMethodSelectSheet(true)
-      }
-    }
-
-    // ------------------------------ RENDER -------------------------------
-
-    return (
-      <Screen
-        safeAreaEdges={["bottom"]}
-        padding
-        header={
-          <Header
-            leftIcon="arrow-left"
-            onLeftPress={() => navigation.goBack()}
-            title={
-              !token
-                ? translate("forgot_password.title")
-                : translate("forgot_password.set_new_password")
-            }
-          />
-        }
-      >
-        {!token && (
-          <View>
-            <TextInput
-              animated
-              isError={isError}
-              label={translate("forgot_password.username_or_email")}
-              value={username}
-              onChangeText={setUsername}
-              onSubmitEditing={handleRequest}
-            />
-
-            <Button
-              loading={isLoading}
-              disabled={isLoading || !username}
-              text={translate("forgot_password.request")}
-              onPress={handleRequest}
-              style={{
-                width: "100%",
-                marginTop: 16,
-              }}
-            />
-          </View>
-        )}
-
-        {!!token && (
-          <Animated.View entering={SlideInUp} style={{ marginTop: 12 }}>
-            <ChangePassword
-              token={token}
-              nextStep={() => {
-                navigation.navigate("loginStack", {
-                  screen: "login",
-                })
-              }}
-            />
-          </Animated.View>
-        )}
-
-        <MethodSelectSheet
-          methods={methods}
-          setToken={setToken}
-          isOpen={showMethodSelectSheet}
-          onClose={() => {
-            setShowMethodSelectSheet(false)
-          }}
-        />
-      </Screen>
-    )
-  },
-)
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="methodSelect" component={ForgotMethodSelectScreen} />
+      <Stack.Screen name="otp" component={ForgotOtpAuthenScreen} />
+      <Stack.Screen name="changePassword" component={ForgotChangePasswordScreen} />
+    </Stack.Navigator>
+  )
+}

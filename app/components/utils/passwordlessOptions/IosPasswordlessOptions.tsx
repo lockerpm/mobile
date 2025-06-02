@@ -1,7 +1,16 @@
 import React from "react"
-import { StyleProp, TouchableOpacity, View, ViewStyle } from "react-native"
+import { StyleProp, View, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { Button, Icon, ImageIconTypes, ImageIcon, Text, Logo, Toggle } from "../../cores"
+import {
+  Button,
+  Icon,
+  ImageIconTypes,
+  ImageIcon,
+  Text,
+  Logo,
+  Toggle,
+  PressableScale,
+} from "../../cores"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Dialog } from "react-native-ui-lib"
 
@@ -94,7 +103,7 @@ export const IosPasswordlessOptions = ({
           icon="keychain"
           isSelect={isIcloudSelected}
           action={() => {
-            setIsIcloudSelected(!isIcloudSelected)
+            setIsIcloudSelected(true)
           }}
         />
         <Options
@@ -103,7 +112,7 @@ export const IosPasswordlessOptions = ({
           icon="security-key"
           isSelect={!isIcloudSelected}
           action={() => {
-            setIsIcloudSelected(!isIcloudSelected)
+            setIsIcloudSelected(false)
           }}
         />
       </View>
@@ -133,7 +142,7 @@ interface OptionsProps {
 const Options = ({ title, label, icon, isSelect, action }: OptionsProps) => {
   const { colors } = useTheme()
   return (
-    <TouchableOpacity onPress={action}>
+    <PressableScale onPress={action}>
       <View
         style={{
           marginTop: 12,
@@ -166,6 +175,6 @@ const Options = ({ title, label, icon, isSelect, action }: OptionsProps) => {
 
         <Toggle disabled={true} value={isSelect} />
       </View>
-    </TouchableOpacity>
+    </PressableScale>
   )
 }

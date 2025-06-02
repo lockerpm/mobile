@@ -7,7 +7,6 @@ import {
   Enterprise,
   LoginData,
   LoginPinCodeData,
-  OnpremisePreloginPayload,
   RegisterLockerRequest,
   RegisterPasskeyOptionRequest,
   RegisterPasskeyRequest,
@@ -273,11 +272,6 @@ export const UserModel = types
       return res
     },
 
-    recoverAccount: async (username: string) => {
-      const res = await idApi.recoverAccount({ username })
-      return res
-    },
-
     resetPassword: async (username: string, method: string, request_code?: string) => {
       const res = await idApi.resetPassword({ username, method, request_code })
       return res
@@ -285,16 +279,6 @@ export const UserModel = types
 
     resetPasswordWithCode: async (username: string, code: string) => {
       const res = await idApi.resetPasswordWithCode({ username, code })
-      return res
-    },
-
-    setNewPassword: async (new_password: string, token: string) => {
-      const res = await idApi.setNewPassword({ new_password, token })
-      return res
-    },
-
-    setSocialPassword: async (new_password: string, token: string, username?: string) => {
-      const res = await idApi.setPassword({ new_password, token, username })
       return res
     },
 
@@ -678,17 +662,6 @@ export const UserModel = types
       const res = await idApi.businessLoginMethod()
       return res
     },
-    // On Premise
-    // user is on premise
-    onPremisePreLogin: async (payload: OnpremisePreloginPayload) => {
-      const res = await idApi.onPremisePreLogin(payload)
-      return res
-    },
-    onPremiseIdentifier: async (identifier: string) => {
-      const res = await idApi.onPremiseIdentifier(identifier)
-      return res
-    },
-
     // Marketing
     fetchMarketingContent: async () => {
       const res = await userApi.fetchMarketingContent(self.apiToken, self.language)

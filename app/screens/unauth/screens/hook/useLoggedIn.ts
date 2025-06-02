@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native"
+import { CommonActions, useNavigation } from "@react-navigation/native"
 import { useStores } from "app/models"
 import { RootStackScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
@@ -19,13 +19,25 @@ export const useLoggedIn = () => {
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
     if (userRes.kind === "ok" && userPwRes.kind === "ok") {
       if (userRes.user.is_pwd_manager) {
-        navigation.navigate("lock", {
-          type: LockType.Individual,
-        })
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "lock", params: { type: LockType.Individual } }],
+          }),
+        )
       } else {
-        navigation.navigate("unAuthStack", {
-          screen: "createMasterPassword",
-        })
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [
+              { name: "init" },
+              {
+                name: "unAuthStack",
+                params: { screen: "createMasterPassword" },
+              },
+            ],
+          }),
+        )
       }
     } else {
       notifyTx("error", "passkey.error.login_failed")

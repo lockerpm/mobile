@@ -1,7 +1,7 @@
 import React, { FC } from "react"
 import { StyleSheet, View } from "react-native"
 import { useAppLocale, useTheme } from "app/services/context"
-import { Button, Screen, Text, Logo, Header } from "app/components/cores"
+import { Button, Screen, Text, Logo } from "app/components/cores"
 import { SetLanguage } from "app/components/utils"
 import { UnAuthScreenProps } from "app/navigators"
 
@@ -33,16 +33,21 @@ export const OnboardingScreen: FC<UnAuthScreenProps<"onBoarding">> = (props) => 
 
   return (
     <Screen
-      safeAreaEdges={["bottom"]}
+      safeAreaEdges={["top", "bottom"]}
       footer={footer()}
-      header={<Header RightActionComponent={<SetLanguage />} />}
       KeyboardAvoidingViewProps={{
         behavior: undefined,
       }}
-      contentContainerStyle={styles.container}
+      padding
+      contentContainerStyle={styles.flex}
     >
-      <Logo preset={isDark ? "vertical-light" : "vertical-dark"} style={styles.logo} />
-      <Text tx={"onBoarding.title"} preset="bold" />
+      <View style={styles.setLanguage}>
+        <SetLanguage />
+      </View>
+      <View style={styles.container}>
+        <Logo preset={isDark ? "vertical-light" : "vertical-dark"} style={styles.logo} />
+        <Text tx={"onBoarding.title"} preset="bold" />
+      </View>
     </Screen>
   )
 }
@@ -57,6 +62,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
+  flex: {
+    flex: 1,
+  },
   footer: {
     marginHorizontal: 20,
   },
@@ -64,5 +72,8 @@ const styles = StyleSheet.create({
     height: 158,
     marginBottom: 16,
     width: 173,
+  },
+  setLanguage: {
+    alignItems: "flex-end",
   },
 })

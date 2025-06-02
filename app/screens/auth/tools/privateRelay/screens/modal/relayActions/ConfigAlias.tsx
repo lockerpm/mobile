@@ -3,12 +3,11 @@ import { View, StyleSheet } from "react-native"
 import { RelayAddress } from "app/static/types"
 import { Icon, PressableScale, Text } from "app/components/cores"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
-import { ModalHOC } from "./ModalHOC"
 import { useAppLocale, useTheme } from "app/services/context"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { useToast } from "app/services/utils"
+import { BottomModalContainer } from "app/components/utils"
 
 interface Props {
   onClose?: () => void
@@ -73,7 +72,7 @@ export const ConfigAlias = ({ onClose, item }: Props) => {
   // --------------- RENDER ----------------
 
   return (
-    <ModalHOC style={styles.container}>
+    <BottomModalContainer style={styles.container}>
       <View style={styles.header}>
         <Text
           preset="bold"
@@ -112,7 +111,7 @@ export const ConfigAlias = ({ onClose, item }: Props) => {
         style={styles.label}
         text={translate("private_relay.config_modal.note")}
       />
-    </ModalHOC>
+    </BottomModalContainer>
   )
 }
 

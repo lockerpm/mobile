@@ -1,16 +1,13 @@
 import { useStores } from "app/models"
 import { useToast } from "app/services/utils"
-import { LOGIN_METHOD } from "app/static/types"
+import { LOGIN_METHOD, User2FAMethod } from "app/static/types"
 
 type LoginPasswordParams = {
   setIsError: (val: boolean) => void
   setLoginMethodLoading: (val: LOGIN_METHOD) => void
-  handleLogiSuccess: (data: {
+  handleLoginSuccess: (data: {
     is_factor2: boolean
-    methods: {
-      type: string
-      data: any
-    }[]
+    methods: User2FAMethod[]
     access_token: string
   }) => void
 }
@@ -18,7 +15,7 @@ type LoginPasswordParams = {
 export const useLoginPassword = ({
   setLoginMethodLoading,
   setIsError,
-  handleLogiSuccess,
+  handleLoginSuccess,
 }: LoginPasswordParams) => {
   const { user } = useStores()
   const { notifyTx, notifyApiError, notify } = useToast()
@@ -53,7 +50,7 @@ export const useLoginPassword = ({
         notifyApiError(res)
       }
     } else {
-      handleLogiSuccess({
+      handleLoginSuccess({
         is_factor2: res.data.is_factor2 ?? false,
         methods: res.data.methods ?? [],
         access_token: "access_token" in res.data ? res.data.access_token : "",

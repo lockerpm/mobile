@@ -27,6 +27,7 @@ import {
   NotificationSettingData,
   MarketingContent,
   ChatWootUser,
+  User2FAMethod,
 } from "app/static/types"
 import { CipherResponse } from "core/models/response/cipherResponse"
 import { PolicyType } from "app/static/types/enum"
@@ -74,10 +75,7 @@ class UserApi {
           // Clone data here to hide error
           // These data actually not exists
           is_factor2?: boolean
-          methods?: {
-            type: string
-            data: any
-          }[]
+          methods?: User2FAMethod[]
         }
       }
     | GeneralApiProblem

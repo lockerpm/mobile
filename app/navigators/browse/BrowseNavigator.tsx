@@ -1,5 +1,5 @@
 import React from "react"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import {
   BrowseListScreen,
   FoldersScreen,
@@ -18,7 +18,7 @@ import {
 import { observer } from "mobx-react-lite"
 import { BrowseRoute } from "../navigators.types"
 
-const Stack = createNativeStackNavigator<BrowseRoute>()
+const Stack = createStackNavigator<BrowseRoute>()
 
 export const BrowseNavigator = observer(() => {
   return (

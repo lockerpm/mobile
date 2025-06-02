@@ -6,7 +6,7 @@
  */
 import React, { FC, useEffect, useRef, useState } from "react"
 import { AppState } from "react-native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { MainTabNavigator } from "./MainTabNavigator"
 import { ToolsNavigator } from "./tools/ToolNavigator"
 import UserInactivity from "react-native-user-inactivity"
@@ -57,7 +57,7 @@ import { useFocusEffect } from "@react-navigation/native"
 import { AutoFillScreen } from "app/screens/autofill"
 import { useToast } from "app/services/utils"
 
-const Stack = createNativeStackNavigator<AuthRoute>()
+const Stack = createStackNavigator<AuthRoute>()
 
 export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((props) => {
   const navigation = props.navigation

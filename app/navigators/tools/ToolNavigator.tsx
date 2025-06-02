@@ -1,5 +1,5 @@
 import React from "react"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import {
   PasswordHealthScreen,
   WeakPasswordListScreen,
@@ -10,7 +10,7 @@ import {
 import { observer } from "mobx-react-lite"
 import { ToolsRoute } from "../navigators.types"
 
-const Stack = createNativeStackNavigator<ToolsRoute>()
+const Stack = createStackNavigator<ToolsRoute>()
 
 export const ToolsNavigator = observer(() => {
   // ------------------ RENDER --------------------

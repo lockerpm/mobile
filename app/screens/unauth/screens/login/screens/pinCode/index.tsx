@@ -6,7 +6,7 @@ import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import React, { FC, useCallback, useEffect, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import { LOGIN_METHOD } from "app/static/types"
+import { LOGIN_METHOD, User2FAPincodeConfig } from "app/static/types"
 import { LoginScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
 import { ResendOtp } from "../../../signup/screens"
@@ -40,6 +40,13 @@ export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observ
     // ----------------------METHOD--------------------
     const { onLoggedIn } = useLoggedIn()
 
+    const navigateTo2FA = useCallback((credential: User2FAPincodeConfig) => {
+      navigation.navigate("twoFA", {
+        credential,
+        type: "pincode",
+      })
+    }, [])
+
     const navigateToLoginWithPassword = useCallback(() => {
       navigation.navigate("login", {
         initMethod: LOGIN_METHOD.PASSWORD,
@@ -48,28 +55,32 @@ export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observ
     }, [email])
 
     const submitOTP = async () => {
-      if (isEnable) {
-        setIsLoading(true)
-        const res = await user.registerByPinCode(code, nonce.current)
-        if (res.kind === "ok") {
-          if (res.data.is_factor2) {
-            // setMethods(res.data.methods || [])
-          } else {
-            if ("access_token" in res.data) {
-              setApiTokens(res.data.access_token)
-            }
-            onLoggedIn()
-            setCode("")
-          }
+      setIsLoading(true)
+      const res = await user.registerByPinCode(code, nonce.current)
+      if (res.kind === "ok") {
+        if (res.data.is_factor2) {
+          navigateTo2FA({
+            nonce: nonce.current,
+            code,
+            methods: res.data.methods ?? [],
+          })
         } else {
-          setErrorText(notifyApiError(res, true))
+          if ("access_token" in res.data) {
+            setApiTokens(res.data.access_token)
+          }
+          onLoggedIn()
+          setCode("")
         }
-        setIsLoading(false)
+      } else {
+        setErrorText(notifyApiError(res, true))
       }
+      setIsLoading(false)
     }
 
     useEffect(() => {
-      submitOTP()
+      if (isEnable) {
+        submitOTP()
+      }
     }, [isEnable])
 
     return (

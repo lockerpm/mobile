@@ -17,13 +17,26 @@ export type GetPMTokenData = {
   CLIENT: "mobile"
 }
 
-export type User2FAConfig = {
+export type User2FAMethod =
+  | {
+      type: "mail"
+      data: string
+    }
+  | {
+      type: "smart_otp"
+      data: any
+    }
+
+export type User2FAPasswordConfig = {
   username: string
   password: string
-  methods: {
-    type: string
-    data: any
-  }[]
+  methods: User2FAMethod[]
+}
+
+export type User2FAPincodeConfig = {
+  nonce: string
+  code: string
+  methods: User2FAMethod[]
 }
 
 export type Enterprise = {

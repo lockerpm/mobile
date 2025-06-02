@@ -75,7 +75,9 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading, style, isSingIn }: Props
       hide: !isSingIn,
       icon: "sso",
       handler: () => {
-        navigation.navigate("ssoIdentifier")
+        navigation.navigate("unAuthStack", {
+          screen: "ssoStack",
+        })
       },
     },
   }

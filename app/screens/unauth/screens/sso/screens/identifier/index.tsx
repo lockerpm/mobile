@@ -1,21 +1,21 @@
-import { observer } from "mobx-react-lite"
 import React, { FC, useState } from "react"
-import { useStores } from "app/models"
 import { Text, TextInput, Button, Screen, Header, Logo } from "app/components/cores"
 import { useAppLocale } from "app/services/context"
 import { SSOScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
+import { StyleSheet } from "react-native"
+import { idApi } from "app/services/api"
 
-export const SSOIdentifierScreen: FC<SSOScreenProps<"ssoIdentifier">> = observer((props) => {
-  const navigation = props.navigation
-  const { user } = useStores()
+export const SSOIdentifierScreen: FC<SSOScreenProps<"ssoIdentifier">> = ({ navigation }) => {
   const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
+  // ------------------------ PARAMS --------------------------
   const [ssoId, setSsoId] = useState("")
 
+  // ------------------------ METHOD --------------------------
   const onSubmit = async () => {
-    const res = await user.onPremiseIdentifier(ssoId)
+    const res = await idApi.onPremiseIdentifier(ssoId)
     if (res.kind !== "ok") {
       notifyApiError(res)
     } else {
@@ -28,64 +28,50 @@ export const SSOIdentifierScreen: FC<SSOScreenProps<"ssoIdentifier">> = observer
       preset="auto"
       padding
       safeAreaEdges={["bottom"]}
-      header={
-        <Header
-          leftIcon="arrow-left"
-          onLeftPress={() => {
-            navigation.goBack()
-          }}
-        />
-      }
+      header={<Header leftIcon="arrow-left" onLeftPress={navigation.goBack} />}
     >
-      <Logo
-        preset={"default"}
-        style={{ height: 80, width: 70, marginBottom: 10, alignSelf: "center" }}
-      />
+      <Logo preset={"cystack-logo"} style={styles.logo} />
 
-      <Text
-        preset="bold"
-        size="xl"
-        text={translate("sso.id.title")}
-        style={{
-          marginBottom: 20,
-          textAlign: "center",
-        }}
-      />
+      <Text preset="bold" size="xl" tx="sso.id.title" style={styles.title} />
 
       <TextInput
         animated
-        label={translate("sso.id.identifier")}
+        labelTx="sso.id.identifier"
         onChangeText={setSsoId}
         value={ssoId}
-        style={{ marginBottom: 12 }}
-        // onSubmitEditing={() => passwordRef.current && passwordRef.current.focus()}
+        style={styles.input}
       />
 
-      <Button
-        disabled={!ssoId}
-        text={translate("common.continue")}
-        onPress={onSubmit}
-        style={{ marginTop: 24, marginBottom: 16 }}
-      />
+      <Button disabled={!ssoId} tx="common.continue" onPress={onSubmit} style={styles.button} />
 
-      <Text>
-        {translate("sso.id.sso_info")}
-        <Text
-          preset="bold"
-          onPress={() => {
-            navigation.navigate("ssoLogin")
-          }}
-        >
-          {translate("sso.id.enter_email")}
-        </Text>
-      </Text>
-      <Text preset="label" text={translate("sso.id.create_sso")} style={{ marginTop: 4 }} />
-      <Text style={{ marginTop: 4 }}>
+      <Text preset="label" tx="sso.id.create_sso" style={styles.mt4} />
+      <Text preset="label" style={styles.mt4}>
         {translate("sso.id.contact_at")}
-        <Text preset="bold" style={{ textDecorationLine: "underline" }}>
-          {translate("sso.id.contact")}
-        </Text>
+        <Text preset="bold" tx="sso.id.contact" style={{ textDecorationLine: "underline" }} />
       </Text>
     </Screen>
   )
+}
+
+const styles = StyleSheet.create({
+  button: {
+    marginBottom: 16,
+    marginTop: 24,
+  },
+  input: {
+    marginBottom: 12,
+  },
+  logo: {
+    alignSelf: "center",
+    height: 70,
+    marginBottom: 10,
+    width: 70,
+  },
+  mt4: {
+    marginTop: 4,
+  },
+  title: {
+    marginBottom: 20,
+    textAlign: "center",
+  },
 })

@@ -5,10 +5,10 @@ import {
   PushEmailSettingsScreen,
   PushNotificationSettingsScreen,
 } from "./screens"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { NotificationSettingsRoute } from "app/navigators"
 
-const Stack = createNativeStackNavigator<NotificationSettingsRoute>()
+const Stack = createStackNavigator<NotificationSettingsRoute>()
 
 export const NotificationSettingsStack = observer(() => {
   // ------------------ RENDER --------------------

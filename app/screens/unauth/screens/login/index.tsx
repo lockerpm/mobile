@@ -1,11 +1,11 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { LoginScreen, PinCodeLoginScreen } from "./screens"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { LoginScreen, PinCodeLoginScreen, TwoFAAuthenScreen } from "./screens"
+import { createStackNavigator } from "@react-navigation/stack"
 import { LoginRoute } from "app/navigators"
 import { LOGIN_METHOD } from "app/static/types"
 
-const Stack = createNativeStackNavigator<LoginRoute>()
+const Stack = createStackNavigator<LoginRoute>()
 
 export const LoginStack = observer(() => {
   // ------------------ RENDER --------------------
@@ -23,6 +23,13 @@ export const LoginStack = observer(() => {
         initialParams={{ initMethod: LOGIN_METHOD.NONE, email: "" }}
       />
       <Stack.Screen name="loginByPincode" component={PinCodeLoginScreen} />
+      <Stack.Screen
+        name="twoFA"
+        component={TwoFAAuthenScreen}
+        options={{
+          presentation: "transparentModal",
+        }}
+      />
     </Stack.Navigator>
   )
 })

@@ -11,6 +11,7 @@ import { LockType } from "app/static/types"
 import { useAppUpdate } from "./useAppUpdate"
 import { LanguageSupportType } from "app/i18n"
 import { useToast } from "app/services/utils"
+import { idApi } from "app/services/api"
 
 /**
  * Init screen for the app, checks if the device is rooted/jailbroken,
@@ -58,7 +59,7 @@ export const SplashScreen: FC<RootStackScreenProps<"init">> = ({ navigation }) =
    */
   const navigateToOnPremiseLogin = async () => {
     if (user.email) {
-      const res = await user.onPremisePreLogin({ email: user.email })
+      const res = await idApi.onPremisePreLogin({ email: user.email })
       if (res.kind === "ok") {
         if (res.data.length > 0 && res.data[0].activated) {
           navigation.replace("lock", {

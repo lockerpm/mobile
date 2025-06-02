@@ -2,17 +2,17 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import {
   CreateMasterPasswordScreen,
-  ForgotPasswordScreen,
+  ForgotPasswordStack,
   IntroScreen,
   LoginStack,
   OnboardingScreen,
   SignupStack,
   SSOStack,
 } from "./screens"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { UnAuthRoute } from "app/navigators"
 
-const Stack = createNativeStackNavigator<UnAuthRoute>()
+const Stack = createStackNavigator<UnAuthRoute>()
 
 export const UnAuthStack = observer(() => {
   // ------------------ RENDER --------------------
@@ -29,7 +29,7 @@ export const UnAuthStack = observer(() => {
       <Stack.Screen name="signupStack" component={SignupStack} />
       <Stack.Screen name="ssoStack" component={SSOStack} />
       <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
-      <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
+      <Stack.Screen name="forgotPasswordStack" component={ForgotPasswordStack} />
     </Stack.Navigator>
   )
 })

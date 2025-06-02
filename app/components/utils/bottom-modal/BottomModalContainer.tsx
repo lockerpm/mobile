@@ -4,7 +4,7 @@ import { StyleSheet, View, ViewProps } from "react-native"
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
-export const ModalHOC = (props: ViewProps) => {
+export const BottomModalContainer = (props: ViewProps) => {
   const { colors } = useTheme()
   return (
     <Animated.View

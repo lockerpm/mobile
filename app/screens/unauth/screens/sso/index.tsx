@@ -1,12 +1,11 @@
 import React from "react"
-import { observer } from "mobx-react-lite"
 import { SSOIdentifierScreen, SSOEmailLoginScreen } from "./screens"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { SSORoute } from "app/navigators"
 
-const Stack = createNativeStackNavigator<SSORoute>()
+const Stack = createStackNavigator<SSORoute>()
 
-export const SSOStack = observer(() => {
+export const SSOStack = () => {
   // ------------------ RENDER --------------------
 
   return (
@@ -20,4 +19,4 @@ export const SSOStack = observer(() => {
       <Stack.Screen name="ssoLogin" component={SSOEmailLoginScreen} />
     </Stack.Navigator>
   )
-})
+}

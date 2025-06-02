@@ -10,7 +10,6 @@ export const UiStoreModel = types
   .props({
     // Data
     isDark: types.maybeNull(types.boolean),
-    lockResendOtpResetPasswordTime: types.maybeNull(types.number),
     isShowedAppInto: false,
     isShowedAppReview: false,
     inAppReviewShowDate: types.maybeNull(types.number),
@@ -63,10 +62,6 @@ export const UiStoreModel = types
 
     setIsAndroidAutofillService(val: boolean) {
       self.isAndroidAutofillService = val
-    },
-
-    setLockResendOtpResetPasswordTime(val: number) {
-      self.lockResendOtpResetPasswordTime = val
     },
 
     setAndroidAutofillServiceData(isAutofillService: boolean, data: AndroidAutofillServiceData) {

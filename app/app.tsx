@@ -22,7 +22,7 @@ import * as storage from "./utils/storage"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import * as Tracking from "./utils/tracking"
 import * as Sentry from "@sentry/react-native"
-import { enableScreens } from "react-native-screens"
+// import { enableScreens } from "react-native-screens"
 import { ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./services/api/apiProblem"
 import { Settings } from "react-native-fbsdk-next"
@@ -37,7 +37,7 @@ import SplashScreen from "react-native-splash-screen"
 import BootSplash from "react-native-bootsplash"
 import { ViewStyle } from "react-native"
 
-enableScreens()
+// enableScreens()
 Settings.initializeSDK()
 Tracking.initSentry()
 

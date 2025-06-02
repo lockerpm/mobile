@@ -1,14 +1,12 @@
 import React, { FC, useCallback } from "react"
 import { KeyboardAvoidingView, StyleSheet, View } from "react-native"
-import { useTheme } from "app/services/context"
-import { BlurView } from "@react-native-community/blur"
 import { debounce } from "app/utils/utils"
-
 import { Actions, RelayActionType } from "./Actions"
 import { EditAlias } from "./EditAlias"
 import { IS_IOS } from "app/config/constants"
 import { ConfigAlias } from "./ConfigAlias"
 import { PrivateRelayScreenProps } from "app/navigators"
+import { ModalBackdrop } from "app/components/cores"
 
 export const RelayActionScreen: FC<PrivateRelayScreenProps<"relayAction">> = ({
   navigation,
@@ -16,8 +14,6 @@ export const RelayActionScreen: FC<PrivateRelayScreenProps<"relayAction">> = ({
     params: { item, freeAccount, isEditable, isEdit },
   },
 }) => {
-  const { colors } = useTheme()
-
   const [nextAction, setNextAction] = React.useState(
     isEdit ? RelayActionType.EDIT : RelayActionType.DEFAULT,
   )
@@ -37,15 +33,7 @@ export const RelayActionScreen: FC<PrivateRelayScreenProps<"relayAction">> = ({
       style={styles.flex}
     >
       <View style={styles.flex}>
-        <BlurView
-          onTouchEnd={onClose}
-          blurType={"dark"}
-          blurAmount={0}
-          // @ts-ignore
-          blurRadius={10}
-          overlayColor="rgba(0,0,0,0.1)"
-          style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.transparent }]}
-        />
+        <ModalBackdrop onPress={onClose} />
         {nextAction === RelayActionType.DEFAULT && (
           <Actions
             item={item}

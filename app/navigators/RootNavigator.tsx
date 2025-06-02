@@ -1,13 +1,12 @@
 import React, { useEffect } from "react"
 import NetInfo from "@react-native-community/netinfo"
 import { DefaultTheme, NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import Toast, { BaseToastProps } from "react-native-toast-message"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../models"
 import { ErrorToast, InfoToast, SuccessToast } from "app/components/utils"
 import { SplashScreen, LockScreen } from "../screens/init"
-// import { MainNavigator } from "./MainNavigator"
 import { useAuthentication } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { AppEventType, EventBus } from "app/utils/eventBus"
@@ -17,10 +16,10 @@ import { LockType } from "app/static/types"
 import { MainNavigator } from "./MainNavigator"
 import { UnAuthStack } from "app/screens"
 
-const Stack = createNativeStackNavigator<RootParamList>()
+const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = observer(() => {
-  const { colors, setIsDark } = useTheme()
+  const { setIsDark } = useTheme()
   const { clearAllData } = useAuthentication()
   const { uiStore } = useStores()
 
@@ -50,8 +49,6 @@ const RootStack = observer(() => {
     <Stack.Navigator
       initialRouteName="init"
       screenOptions={{
-        PointerEvents: "none",
-        contentStyle: { backgroundColor: colors.background },
         headerShown: false,
       }}
     >

@@ -8,10 +8,10 @@ import {
   RelayActionScreen,
   RelayInfoScreen,
 } from "./screens"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { PrivateRelayRoute } from "app/navigators"
 
-const Stack = createNativeStackNavigator<PrivateRelayRoute>()
+const Stack = createStackNavigator<PrivateRelayRoute>()
 
 export const PrivateRelayStack = observer(() => {
   // ------------------ RENDER --------------------
