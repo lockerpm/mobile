@@ -205,7 +205,7 @@ export const SettingsScreen = observer(() => {
         />
 
         <SettingsItem
-          name={"Hide Master Password"}
+          name={translate("settings.hide_mp")}
           onPress={() => settings.masterPassword.onChage(!settings.masterPassword.value)}
           RightAccessory={
             <Toggle
