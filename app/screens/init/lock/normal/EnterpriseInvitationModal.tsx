@@ -28,12 +28,15 @@ export const EnterpriseInvitationModal = (props: Props) => {
   // ------------------ Params -----------------------
 
   const invitationByDomainAction = async () => {
-    setIsLoading(true)
-    const res = await enterpriseStore.invitationsActions(invitationByDomain?.id, "confirmed")
-    if (res.kind === "ok") {
-      setRequested(true)
+    if (invitationByDomain?.id !== undefined) {
+      setIsLoading(true)
+
+      const res = await enterpriseStore.invitationsActions(invitationByDomain?.id, "confirmed")
+      if (res.kind === "ok") {
+        setRequested(true)
+      }
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   // ------------------ Methods ----------------------

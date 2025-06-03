@@ -20,7 +20,7 @@ export const PasswordlessQrScan = ({ otp, goBack, index, handleUnlock }: Props) 
   const [onScanQR, setonScanQR] = useState(false)
   const { sessionQrLogin } = useAuthentication()
 
-  const onSuccess = async (e) => {
+  const onSuccess = async (e: any) => {
     const res = await sessionQrLogin(e.data, otp.toString(), true)
 
     if (res.kind === "ok") {

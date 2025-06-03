@@ -139,42 +139,40 @@ export type AuthRoute = {
   marketing: {
     data: MarketingContent
   }
+  enterpriseInvited: undefined
+  biometricUnlockIntro: undefined
 
   mainTab: NavigatorScreenParams<TabsRoute>
   toolsStack: NavigatorScreenParams<ToolsRoute>
   menuStack: NavigatorScreenParams<MenuRoute>
-
-  // start: undefined
-
-  enterpriseInvited: undefined
-  biometricUnlockIntro: undefined
-
-  passwordGenerator: {
-    fromTools?: boolean
+  app_list_noti: {
+    notifications: AppNotification
   }
-  authenticator__edit: {
-    mode: "add" | "edit"
-    passwordTotp?: boolean
-    passwordMode?: "add" | "edit" | "clone"
+
+  autofill: {
+    data: AndroidAutofillServiceData
   }
+
+  dataBreachScanner: undefined
+  dataBreachList: undefined
+  dataBreachDetail: undefined
   qrScanner: {
     totpCount?: number
     passwordTotp?: boolean
     passwordMode?: "add" | "edit" | "clone"
   }
-  dataBreachScanner: undefined
-  dataBreachList: undefined
-  dataBreachDetail: undefined
-  countrySelector: undefined
+  passwordGenerator: {
+    fromTools?: boolean
+  }
 
-  normal_shares: {
-    ciphers?: CipherView[]
+  attachment: {
+    isShared?: boolean
   }
-  quick_shares: {
-    cipher: CipherView
-  }
-  quickShareItemsDetail: {
-    send: SendView
+
+  authenticator__edit: {
+    mode: "add" | "edit"
+    passwordTotp?: boolean
+    passwordMode?: "add" | "edit" | "clone"
   }
 
   passwords__info: {
@@ -220,6 +218,16 @@ export type AuthRoute = {
     collection?: CollectionView
   }
 
+  normal_shares: {
+    ciphers?: CipherView[]
+  }
+  quick_shares: {
+    cipher: CipherView
+  }
+  quickShareItemsDetail: {
+    send: SendView
+  }
+
   folders__select: {
     mode: "add" | "move"
     initialId?: string
@@ -234,17 +242,7 @@ export type AuthRoute = {
     collectionId: string
   }
 
-  autofill: {
-    data: AndroidAutofillServiceData
-  }
   shareMultiple: undefined
-
-  app_list_noti: {
-    notifications: AppNotification
-  }
-  attachment: {
-    isShared?: boolean
-  }
 }
 
 export type AuthStackScreenProps<T extends keyof AuthRoute> = CompositeScreenProps<

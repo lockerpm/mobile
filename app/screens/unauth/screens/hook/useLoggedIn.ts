@@ -18,7 +18,7 @@ export const useLoggedIn = () => {
   const onLoggedIn = useCallback(async () => {
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
     if (userRes.kind === "ok" && userPwRes.kind === "ok") {
-      if (userRes.user.is_pwd_manager) {
+      if (userPwRes.user.is_pwd_manager) {
         navigation.dispatch(
           CommonActions.reset({
             index: 0,

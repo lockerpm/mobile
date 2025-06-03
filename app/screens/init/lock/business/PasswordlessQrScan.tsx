@@ -24,7 +24,7 @@ export const BusinessPasswordlessQrScan = ({ otp, goBack, index, handleUnlock }:
   const [onScanQR, setonScanQR] = useState(false)
   const { sessionBusinessQrLogin } = useAuthentication()
 
-  const onSuccess = async (e) => {
+  const onSuccess = async (e: any) => {
     const res = await sessionBusinessQrLogin(e.data, otp.toString())
 
     if (res.kind === "ok") {
@@ -33,6 +33,9 @@ export const BusinessPasswordlessQrScan = ({ otp, goBack, index, handleUnlock }:
     } else if (res.kind === "unauthorized") {
       navigation.navigate("unAuthStack", {
         screen: "loginStack",
+        params: {
+          screen: "login",
+        },
       })
     }
   }

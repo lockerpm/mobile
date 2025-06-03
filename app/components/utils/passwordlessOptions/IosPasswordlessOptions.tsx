@@ -13,6 +13,7 @@ import {
 } from "../../cores"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Dialog } from "react-native-ui-lib"
+import { Checkbox } from "app/components/cores/toggle"
 
 interface Props {
   /**
@@ -159,7 +160,8 @@ const Options = ({ title, label, icon, isSelect, action }: OptionsProps) => {
           style={{
             flexDirection: "row",
             alignItems: "center",
-            maxWidth: "90%",
+            flexGrow: 1,
+            flexShrink: 1,
           }}
         >
           <ImageIcon icon={icon} size={32} />

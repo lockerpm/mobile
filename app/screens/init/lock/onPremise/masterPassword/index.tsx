@@ -39,16 +39,23 @@ export const OnPremiseLockMasterPassword = ({ data, email, handleLogout, handleU
     if (masterPassword) {
       setIsError(false)
       setIsUnlocking(true)
-      const res = await sessionLogin(masterPassword, () => null, true)
+      const res = await sessionLogin(
+        masterPassword,
+        async () => {
+          //
+        },
+        true,
+      )
 
       if (res.kind === "ok") {
         await handleUnlock()
       } else if (res.kind === "unauthorized") {
         navigation.navigate("unAuthStack", {
           screen: "loginStack",
+          params: {
+            screen: "login",
+          },
         })
-      } else if (res.kind === "on-premise-2fa") {
-        //
       } else {
         setIsError(true)
       }

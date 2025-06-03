@@ -16,7 +16,7 @@ export const BusinessLockByPasswordless = ({ handleLogout, handleUnlock }: Props
   const [otp, setOtp] = useState(randomOtpNumber())
   const [scanQrStep, setScanQrStep] = useState(0)
 
-  const scrollViewRef = useRef(null)
+  const scrollViewRef = useRef<ScrollView>(null)
   // ------------------ METHODS ---------------------
 
   const scrollTo = (index: number) => {

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Alert, BackHandler, View, Image, StyleSheet, Dimensions } from "react-native"
-import { useAuthentication, useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useAuthentication, useCipherData, useCipherHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { EnterpriseInvitation } from "app/static/types"
 import { useNavigation } from "@react-navigation/native"
@@ -55,6 +55,9 @@ export const LockByMasterPassword = ({ handleLogout, handleUnlock }: Props) => {
     } else if (res.kind === "unauthorized") {
       navigation.navigate("unAuthStack", {
         screen: "loginStack",
+        params: {
+          screen: "login",
+        },
       })
     } else if (res.kind === "enterprise-lock") {
       Alert.alert("", translate("alert.enterprise_lock"), [
@@ -83,13 +86,15 @@ export const LockByMasterPassword = ({ handleLogout, handleUnlock }: Props) => {
   const forcus = useCallback(() => setIsFocused(true), [])
   const blur = useCallback(() => setIsFocused(false), [])
   const handleGetHint = useCallback(async () => {
-    setIsSendingHint(true)
-    const res = await user.sendPasswordHint(user.email)
-    setIsSendingHint(false)
-    if (res.kind === "ok") {
-      notifyTx("success", "lock.hint_sent")
-    } else {
-      notifyApiError(res)
+    if (user.email) {
+      setIsSendingHint(true)
+      const res = await user.sendPasswordHint(user.email)
+      setIsSendingHint(false)
+      if (res.kind === "ok") {
+        notifyTx("success", "lock.hint_sent")
+      } else {
+        notifyApiError(res)
+      }
     }
   }, [user.email])
 
@@ -170,7 +175,7 @@ export const LockByMasterPassword = ({ handleLogout, handleUnlock }: Props) => {
 
           <Text
             size="base"
-            text={user.email}
+            text={user.email || ""}
             style={{
               marginHorizontal: 10,
             }}

@@ -90,7 +90,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer(({ navigati
   }
 
   const handleUnlock = async () => {
-    logFirebaseEvent(AnalyticEvents.ENTER_MASTER_PW, user.email)
+    logFirebaseEvent(AnalyticEvents.ENTER_MASTER_PW, user.email ?? "")
     if (!route.params.temporaryLock) {
       const connectionState = await NetInfo.fetch()
       // Sync
@@ -116,7 +116,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer(({ navigati
       }
 
       // Done -> navigate
-      if (isAutofillAnroid) {
+      if (isAutofillAnroid && !!uiStore.androidAutofillServiceData) {
         const data = uiStore.androidAutofillServiceData
         if (data.type === AndroidAutofillServiceType.SAVE_REQUEST) {
           navigation.replace("mainStack", {
@@ -131,9 +131,14 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer(({ navigati
 
       if (enterpriseStore.isEnterpriseInvitations) {
         navigation.replace("mainStack", { screen: "enterpriseInvited" })
-      } else {
-        navigation.replace("mainStack", { screen: "mainTab" })
+        return
       }
+      navigation.replace("mainStack", {
+        screen: "mainTab",
+        params: {
+          screen: "homeTab",
+        },
+      })
     } else {
       navigation.pop(1)
     }
@@ -173,7 +178,6 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer(({ navigati
 
   // ---------------------- RENDER -------------------------
   const commonProps = {
-    biometryType,
     handleLogout,
     handleUnlock,
   }
