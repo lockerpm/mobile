@@ -3,6 +3,7 @@ import { CompositeScreenProps, NavigatorScreenParams } from "@react-navigation/n
 import { StackScreenProps } from "@react-navigation/stack"
 import {
   AppNotification,
+  BreanchResult,
   LockType,
   LOGIN_METHOD,
   MarketingContent,
@@ -153,17 +154,17 @@ export type AuthRoute = {
     data: AndroidAutofillServiceData
   }
 
-  dataBreachScanner: undefined
-  dataBreachList: undefined
-  dataBreachDetail: undefined
-  qrScanner: {
-    totpCount?: number
-    passwordTotp?: boolean
-    passwordMode?: "add" | "edit" | "clone"
-  }
-  passwordGenerator: {
-    fromTools?: boolean
-  }
+  // dataBreachScanner: undefined
+  // dataBreachList: undefined
+  // dataBreachDetail: undefined
+  // qrScanner: {
+  //   totpCount?: number
+  //   passwordTotp?: boolean
+  //   passwordMode?: "add" | "edit" | "clone"
+  // }
+  // passwordGenerator: {
+  //   fromTools?: boolean
+  // }
 
   attachment: {
     isShared?: boolean
@@ -291,18 +292,47 @@ export type BrowseStackScreenProps<T extends keyof BrowseRoute> = CompositeScree
 
 // ---------------------------TOOLS---------------------------
 
-export type ToolsRoute = {
+export type PasswordHealthRoute = {
   passwordHealth: undefined
   weakPasswordList: undefined
   reusePasswordList: undefined
   exposedPasswordList: undefined
-  privateRelay: NavigatorScreenParams<PrivateRelayRoute>
+}
+
+export type DataBreachScannerRoute = {
+  emailInput: undefined
+  dataBreachList: {
+    email: string
+    data: BreanchResult[]
+  }
+  dataBreachDetail: {
+    data: BreanchResult
+  }
+}
+
+export type ToolsRoute = {
+  passwordGenerator: undefined
+  passwordHealthStack: NavigatorScreenParams<PasswordHealthRoute> | undefined
+  privateRelayStack: NavigatorScreenParams<PrivateRelayRoute> | undefined
+  dataBreachScannerStack: NavigatorScreenParams<DataBreachScannerRoute> | undefined
 }
 
 export type ToolsStackScreenProps<T extends keyof ToolsRoute> = CompositeScreenProps<
   StackScreenProps<ToolsRoute, T>,
   AuthStackScreenProps<keyof AuthRoute>
 >
+
+export type PasswordHealthStackScreenProps<T extends keyof PasswordHealthRoute> =
+  CompositeScreenProps<
+    StackScreenProps<PasswordHealthRoute, T>,
+    ToolsStackScreenProps<keyof ToolsRoute>
+  >
+
+export type DataBreachScannerStackScreenProps<T extends keyof DataBreachScannerRoute> =
+  CompositeScreenProps<
+    StackScreenProps<DataBreachScannerRoute, T>,
+    ToolsStackScreenProps<keyof ToolsRoute>
+  >
 
 // ---------------------Private Relay------------------------
 
@@ -349,11 +379,13 @@ export type MenuRoute = {
   inviteMember: undefined
   managePlan: undefined
   settingsStack: NavigatorScreenParams<SettingsRoute>
-  payment: {
-    benefitTab?: 0 | 1 | 2 | 3
-    family?: boolean
-    premium?: boolean
-  }
+  payment:
+    | {
+        benefitTab?: 0 | 1 | 2 | 3
+        family?: boolean
+        premium?: boolean
+      }
+    | undefined
   welcomePremium: undefined
   referFriend: {
     referLink: string | null

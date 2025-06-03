@@ -9,11 +9,11 @@ import { Header, Screen, Text } from "app/components/cores"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { ToolsStackScreenProps } from "app/navigators/navigators.types"
+import { PasswordHealthStackScreenProps } from "app/navigators/navigators.types"
 import { useAppLocale } from "app/services/context"
 
-export const WeakPasswordListScreen: FC<ToolsStackScreenProps<"weakPasswordList">> = observer(
-  () => {
+export const WeakPasswordListScreen: FC<PasswordHealthStackScreenProps<"weakPasswordList">> =
+  observer(() => {
     const navigation = useNavigation() as any
     const { toolStore, cipherStore } = useStores()
     const { translate } = useAppLocale()
@@ -87,5 +87,4 @@ export const WeakPasswordListScreen: FC<ToolsStackScreenProps<"weakPasswordList"
         />
       </Screen>
     )
-  },
-)
+  })

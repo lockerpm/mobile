@@ -8,22 +8,18 @@ import { useCoreService } from "app/services/coreService"
 import { useStores } from "app/models"
 import { Button, Header, Icon, Screen, Text } from "app/components/cores"
 import { PasswordStrength } from "app/components/utils"
-import { AuthStackScreenProps } from "app/navigators/navigators.types"
+import { ToolsStackScreenProps } from "app/navigators/navigators.types"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { useClipboard } from "app/services/utils"
 
-export const PasswordGeneratorScreen: FC<AuthStackScreenProps<"passwordGenerator">> = observer(
-  (props) => {
-    const navigation = props.navigation
-    const route = props.route
-
+export const PasswordGeneratorScreen: FC<ToolsStackScreenProps<"passwordGenerator">> = observer(
+  ({ navigation }) => {
     const { colors } = useTheme()
     const { translate } = useAppLocale()
     const { copyToClipboard } = useClipboard()
     const { getPasswordStrength } = useCipherHelper()
     const { passwordGenerationService } = useCoreService()
     const { cipherStore, user } = useStores()
-    const { fromTools } = route.params
 
     const [password, setPassword] = useState("")
     const [sliderValue, setSliderValue] = useState(16)
@@ -105,12 +101,7 @@ export const PasswordGeneratorScreen: FC<AuthStackScreenProps<"passwordGenerator
               text={translate("pass_generator.use_password")}
               onPress={() => {
                 logFirebaseEvent(AnalyticEvents.SHARE_ITENS, user.email)
-                if (fromTools) {
-                  copyToClipboard(password)
-                } else {
-                  cipherStore.setGeneratedPassword(password)
-                  navigation.goBack()
-                }
+                copyToClipboard(password)
               }}
             />
             <Button

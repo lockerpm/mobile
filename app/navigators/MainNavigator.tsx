@@ -20,8 +20,8 @@ import {
   PasswordEditScreen,
   PasswordInfoScreen,
   FolderSelectScreen,
-  PasswordGeneratorScreen,
-  DataBreachScannerScreen,
+  // PasswordGeneratorScreen,
+  // DataBreachScannerScreen,
   NoteEditScreen,
   CardEditScreen,
   IdentityEditScreen,
@@ -29,10 +29,10 @@ import {
   IdentityInfoScreen,
   NoteInfoScreen,
   FolderCiphersScreen,
-  DataBreachDetailScreen,
-  DataBreachListScreen,
-  QRScannerScreen,
-  AuthenticatorEditScreen,
+  // DataBreachDetailScreen,
+  // DataBreachListScreen,
+  // QRScannerScreen,
+  // AuthenticatorEditScreen,
   CryptoWalletEditScreen,
   CryptoWalletInfoScreen,
   ShareMultipleScreen,
@@ -383,16 +383,16 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
 
         <Stack.Screen name="app_list_noti" component={InAppListNotificationScreen} />
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="passwordGenerator"
           component={PasswordGeneratorScreen}
           initialParams={{ fromTools: false }}
           options={{
             gestureEnabled: false,
           }}
-        />
+        /> */}
 
-        <Stack.Screen name="qrScanner" component={QRScannerScreen} />
+        {/* <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen
           name="authenticator__edit"
           component={AuthenticatorEditScreen}
@@ -401,7 +401,7 @@ export const MainNavigator: FC<RootStackScreenProps<"mainStack">> = observer((pr
 
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
         <Stack.Screen name="dataBreachList" component={DataBreachListScreen} />
-        <Stack.Screen name="dataBreachDetail" component={DataBreachDetailScreen} />
+        <Stack.Screen name="dataBreachDetail" component={DataBreachDetailScreen} /> */}
 
         <Stack.Screen
           name="normal_shares"

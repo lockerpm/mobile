@@ -176,6 +176,7 @@
     "@types/i18n-js": "3.8.2",
     "@types/jest": "^29.2.1",
     "@types/lodash": "^4.17.17",
+    "@types/numeral": "^2.0.5",
     "@types/ramda": "^0.29.3",
     "@types/react": "^18.0.24",
     "@types/react-native-version-check": "^3.4.8",

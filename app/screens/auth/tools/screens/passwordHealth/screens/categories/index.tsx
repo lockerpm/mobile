@@ -1,18 +1,17 @@
 import React, { FC, useEffect } from "react"
 import { TouchableOpacity, View } from "react-native"
 import { Header, Icon, ImageIcon, Screen, Text } from "app/components/cores"
-import { LoadingHeader } from "./LoadingHeader"
+import { LoadingHeader } from "../LoadingHeader"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { useTool } from "app/services/hook"
 import { PasswordHealthQueue } from "app/utils/queue"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { observer } from "mobx-react-lite"
-import { ToolsStackScreenProps } from "app/navigators/navigators.types"
+import { PasswordHealthStackScreenProps } from "app/navigators/navigators.types"
 
-export const PasswordHealthScreen: FC<ToolsStackScreenProps<"passwordHealth">> = observer(
-  (props) => {
-    const navigation = props.navigation
+export const PasswordHealthScreen: FC<PasswordHealthStackScreenProps<"passwordHealth">> = observer(
+  ({ navigation }) => {
     const { colors } = useTheme()
     const { toolStore, cipherStore } = useStores()
     const { translate } = useAppLocale()
