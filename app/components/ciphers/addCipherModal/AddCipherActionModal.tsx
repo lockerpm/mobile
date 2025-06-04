@@ -9,13 +9,12 @@ import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 interface Props {
   isOpen: boolean
   onClose: () => void
-  navigation: any
   defaultFolder?: string
   collection?: CollectionView
 }
 
 export const AddCipherActionModal = (props: Props) => {
-  const { isOpen, onClose, navigation, defaultFolder, collection } = props
+  const { isOpen, onClose, defaultFolder, collection } = props
   const { cipherStore } = useStores()
 
   const items = Object.values(BROWSE_ITEMS).filter((item) => item.addable && !item.group)
@@ -32,10 +31,10 @@ export const AddCipherActionModal = (props: Props) => {
               cipherStore.setSelectedFolder(null)
             }
             onClose()
-            navigation.navigate(`${item.routeName}__edit`, {
-              mode: "add",
-              collection,
-            })
+            // navigation.navigate(`${item.routeName}__edit`, {
+            //   mode: "add",
+            //   collection,
+            // })
           }}
         >
           <View

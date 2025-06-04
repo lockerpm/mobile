@@ -1,21 +1,16 @@
-import { Instance, SnapshotIn, SnapshotOut, cast, types } from 'mobx-state-tree'
-import { withSetPropAction } from '../helpers/withSetPropAction'
-import { omit } from 'ramda'
-import { toolApi } from 'app/services/api/toolApi'
-import { BreanchResult } from 'app/static/types'
-import { CipherView } from 'core/models/view'
+import { Instance, SnapshotIn, SnapshotOut, cast, types } from "mobx-state-tree"
+import { withSetPropAction } from "../helpers/withSetPropAction"
+import { omit } from "ramda"
+import { toolApi } from "app/services/api/toolApi"
+import { BreanchResult } from "app/static/types"
+import { CipherView } from "core/models/view"
 /**
  * Model description here for TypeScript hints.
  */
 export const ToolStoreModel = types
-  .model('ToolStore')
+  .model("ToolStore")
   .props({
     apiToken: types.maybeNull(types.string),
-
-    // Data breach scanner
-    breachedEmail: types.maybeNull(types.string),
-    breaches: types.array(types.frozen()),
-    selectedBreach: types.maybeNull(types.frozen()),
 
     // Password health
     isDataLoading: types.maybeNull(types.boolean), // is data synchronizing or decrypting
@@ -39,21 +34,6 @@ export const ToolStoreModel = types
     },
 
     // ----------------- DATA -------------------
-
-    // BREACH
-
-    setBreachedEmail: (email: string) => {
-      self.breachedEmail = email
-    },
-
-    setBreaches: (breaches: BreanchResult[]) => {
-      self.breaches = cast(breaches)
-    },
-
-    setSelectedBreach: (data: BreanchResult) => {
-      self.selectedBreach = cast(data)
-    },
-
     // HEALTH
 
     setLoadingHealth: (val: boolean) => {
@@ -104,11 +84,6 @@ export const ToolStoreModel = types
       if (!dataOnly) {
         self.apiToken = null
       }
-
-      self.breachedEmail = null
-      self.breaches = cast([])
-      self.selectedBreach = null
-
       self.isLoadingHealth = false
       self.lastHealthCheck = null
       self.weakPasswords = cast([])
@@ -122,10 +97,6 @@ export const ToolStoreModel = types
     },
 
     lock: () => {
-      self.breachedEmail = null
-      self.breaches = cast([])
-      self.selectedBreach = null
-
       self.isLoadingHealth = false
       self.lastHealthCheck = null
       self.weakPasswords = cast([])
@@ -164,7 +135,7 @@ export const ToolStoreModel = types
       id: number,
       address: string,
       enabled: boolean,
-      blockSpam: boolean
+      blockSpam: boolean,
     ) => {
       const res = await toolApi.configRelayAddress(self.apiToken, id, address, enabled, blockSpam)
       return res
@@ -202,13 +173,13 @@ export const ToolStoreModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .postProcessSnapshot(
     omit([
-      'isLoadingHealth',
-      'lastHealthCheck',
-      'weakPasswords',
-      'reusedPasswords',
-      'passwordUseMap',
-      'exposedPasswordMap',
-    ])
+      "isLoadingHealth",
+      "lastHealthCheck",
+      "weakPasswords",
+      "reusedPasswords",
+      "passwordUseMap",
+      "exposedPasswordMap",
+    ]),
   )
 
 export interface ToolStore extends Instance<typeof ToolStoreModel> {}

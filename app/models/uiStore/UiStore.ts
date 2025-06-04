@@ -64,7 +64,10 @@ export const UiStoreModel = types
       self.isAndroidAutofillService = val
     },
 
-    setAndroidAutofillServiceData(isAutofillService: boolean, data: AndroidAutofillServiceData) {
+    setAndroidAutofillServiceData(
+      isAutofillService: boolean,
+      data: AndroidAutofillServiceData | null,
+    ) {
       self.isAndroidAutofillService = isAutofillService
       self.androidAutofillServiceData = data
     },

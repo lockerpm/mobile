@@ -1,7 +1,7 @@
-import { useNavigation } from "@react-navigation/native"
 import { Icon, IconTypes, Text } from "app/components/cores"
 import { PremiumTag } from "app/components/utils"
 import { useStores } from "app/models"
+import { navigationRef } from "app/navigators"
 import * as React from "react"
 import { ColorValue, StyleProp, TouchableOpacity, View, ViewStyle } from "react-native"
 
@@ -38,13 +38,17 @@ export interface ActionItemProps {
 }
 
 export const ActionPremiumItem = (props: ActionItemProps) => {
-  const navigation: any = useNavigation()
   const { name, icon, action, onClose, disabled, color, containerStyle, iconColor } = props
 
   const { user } = useStores()
   const onPress = () => {
-    if (user.isFreePlan) {
-      navigation.navigate("payment")
+    if (user.isFreePlan && navigationRef.isReady()) {
+      navigationRef.navigate("authStack", {
+        screen: "menuStack",
+        params: {
+          screen: "payment",
+        },
+      })
       onClose()
       return
     }

@@ -5,14 +5,13 @@ import React, { useState } from "react"
 import { View, BackHandler } from "react-native"
 import { Text, Icon, TabHeader } from "app/components/cores"
 import { SearchBar } from "app/components/utils"
-import { DeleteConfirmModal } from "app/screens/auth/browse/trash/DeleteConfirmModal"
 import { ShareModal } from "../cipherAction/ShareModal"
 import { IS_IOS } from "app/config/constants"
+import { DeleteConfirmModal } from "../cipherAction/DeleteConfirmModal"
 
 export interface CipherListHeaderProps {
   openSort?: () => void
   openAdd?: () => void
-  navigation: any
   header: string
   onSearch?: (text: string) => void
   searchText?: string
@@ -40,7 +39,6 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
   const {
     openAdd,
     openSort,
-    navigation,
     header,
     onSearch,
     searchText,
@@ -84,11 +82,11 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
   }
 
   const handleMoveFolder = () => {
-    navigation.navigate("folders__select", {
-      mode: "move",
-      initialId: null,
-      cipherIds: selectedItems,
-    })
+    // navigation.navigate("folders__select", {
+    //   mode: "move",
+    //   initialId: null,
+    //   cipherIds: selectedItems,
+    // })
     setIsSelecting(false)
     setSelectedItems([])
   }
@@ -259,7 +257,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
     if (isAutoFill) {
       return BackHandler.exitApp()
     }
-    return navigation.goBack()
+    // return navigation.goBack()
   }
 
   const renderHeaderAuthenticatorLeft = () => <TabHeader title={header} />

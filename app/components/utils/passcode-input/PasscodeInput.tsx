@@ -17,7 +17,6 @@ interface PasscodeInputProps {
 
 /**
  * Passcode Input use on set Pin and Confirm Pin Screen
- * Use navigation to set evemt, when user navigate to other screen, it will reset the passcode
  * @param param0
  * @returns
  */

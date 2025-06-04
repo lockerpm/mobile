@@ -7,22 +7,13 @@ if (__DEV__) {
 }
 import "./i18n"
 import "./utils/ignoreWarnings"
-import React, { ComponentType, useRef } from "react"
-import { NavigationContainerRef } from "@react-navigation/native"
+import React, { ComponentType } from "react"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import { useInitialRootStore } from "./models"
-import {
-  useBackButtonHandler,
-  RootNavigator,
-  canExit,
-  setRootNavigation,
-  useNavigationPersistence,
-} from "./navigators"
-import * as storage from "./utils/storage"
+import { RootNavigator, navigationRef } from "./navigators"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import * as Tracking from "./utils/tracking"
 import * as Sentry from "@sentry/react-native"
-// import { enableScreens } from "react-native-screens"
 import { ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./services/api/apiProblem"
 import { Settings } from "react-native-fbsdk-next"
@@ -37,11 +28,8 @@ import SplashScreen from "react-native-splash-screen"
 import BootSplash from "react-native-bootsplash"
 import { ViewStyle } from "react-native"
 
-// enableScreens()
 Settings.initializeSDK()
 Tracking.initSentry()
-
-export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 export interface RootProp extends JSX.IntrinsicAttributes {
   lastFill?: number
@@ -54,14 +42,6 @@ export interface RootProp extends JSX.IntrinsicAttributes {
 }
 
 const App: ComponentType<RootProp> = (props: RootProp) => {
-  const navigationRef = useRef<NavigationContainerRef<any>>(null)
-  setRootNavigation(navigationRef)
-  useBackButtonHandler(navigationRef, canExit)
-  const { initialNavigationState, onNavigationStateChange } = useNavigationPersistence(
-    storage,
-    NAVIGATION_PERSISTENCE_KEY,
-  )
-
   const { rehydrated, rootStore } = useInitialRootStore(() => {
     const hideSplash = IS_IOS ? BootSplash.hide : SplashScreen.hide
     setTimeout(hideSplash, 400)
@@ -85,7 +65,8 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
       if (problem.kind === "unauthorized") {
         const ignoredUrls = ["/users/logout", "/sso/auth"]
         const ignoredRoute = ["init", "intro", "onBoarding", "login", "forgotPassword", "signup"]
-        const currentRoute = navigationRef.current?.getCurrentRoute()
+
+        const currentRoute = navigationRef.getCurrentRoute()
 
         if (
           !ignoredUrls.includes(response.config?.url || "") &&
@@ -101,8 +82,8 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
 
           // Close all modals before navigate
           EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
-          if (navigationRef.current) {
-            navigationRef.current.navigate("init")
+          if (navigationRef.isReady()) {
+            navigationRef.navigate("init")
           }
         }
       }
@@ -144,11 +125,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
     <GestureHandlerRootView style={container}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <CombineContext components={[ThemeContextProvider, LocaleContextProvider]}>
-          <RootNavigator
-            ref={navigationRef}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-          />
+          <RootNavigator />
         </CombineContext>
       </SafeAreaProvider>
     </GestureHandlerRootView>

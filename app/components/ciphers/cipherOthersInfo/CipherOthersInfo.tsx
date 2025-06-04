@@ -7,7 +7,6 @@ import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
 
 export interface CipherOthersInfoProps {
-  navigation: any
   hasNote?: boolean
   note?: string
   onChangeNote?: (val: string) => void
@@ -21,16 +20,7 @@ export interface CipherOthersInfoProps {
  * Describe your component here
  */
 export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
-  const {
-    navigation,
-    hasNote,
-    note,
-    onChangeNote,
-    folderId = null,
-    isDeleted,
-    collectionId,
-    isOwner,
-  } = props
+  const { hasNote, note, onChangeNote, folderId = null, isDeleted, collectionId, isOwner } = props
   const { translate } = useAppLocale()
   const { folderStore, collectionStore } = useStores()
   const { colors } = useTheme()
@@ -66,10 +56,10 @@ export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
           <TouchableOpacity
             disabled={isDeleted}
             onPress={() => {
-              navigation.navigate("folders__select", {
-                mode: "add",
-                initialId: folderId || collectionId,
-              })
+              // navigation.navigate("folders__select", {
+              //   mode: "add",
+              //   initialId: folderId || collectionId,
+              // })
             }}
           >
             <View

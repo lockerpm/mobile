@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import { View, Platform } from "react-native"
-import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/DeleteConfirmModal"
 import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { ActionSheet } from "../actionsSheet/ActionSheet"
@@ -11,19 +10,19 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "../cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
+import { DeleteConfirmModal } from "./DeleteConfirmModal"
 
 export interface DeletedActionProps {
   children?: React.ReactNode
-  isOpen?: boolean
-  onClose?: () => void
-  navigation: any
+  isOpen: boolean
+  onClose: () => void
 }
 
 /**
  * Describe your component here
  */
 export const DeletedAction = (props: DeletedActionProps) => {
-  const { navigation, isOpen, onClose, children } = props
+  const { isOpen, onClose, children } = props
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [nextModal, setNextModal] = useState<"deleteConfirm" | null>(null)
@@ -51,7 +50,7 @@ export const DeletedAction = (props: DeletedActionProps) => {
     if (res.kind === "ok") {
       const routeName = await getRouteName()
       if (routeName.endsWith("__info")) {
-        navigation.goBack()
+        // navigation.goBack()
       }
     }
   }
@@ -61,7 +60,7 @@ export const DeletedAction = (props: DeletedActionProps) => {
     if (res.kind === "ok") {
       const routeName = await getRouteName()
       if (routeName.endsWith("__info")) {
-        navigation.goBack()
+        // navigation.goBack()
       }
     }
   }
@@ -122,16 +121,6 @@ export const DeletedAction = (props: DeletedActionProps) => {
         }
       >
         {children}
-
-        {/* <ActionItem
-          disabled={uiStore.isOffline && !!selectedCipher.organizationId}
-          name={translate("common.edit")}
-          icon="edit"
-          action={() => {
-            onClose()
-            navigation.navigate(`${cipherMapper.path}__edit`, { mode: "edit" })
-          }}
-        /> */}
 
         <ActionItem
           disabled={uiStore.isOffline && !!selectedCipher.organizationId}

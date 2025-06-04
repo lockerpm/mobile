@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import NetInfo from "@react-native-community/netinfo"
-import { DefaultTheme, NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
+import { DefaultTheme, NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import Toast, { BaseToastProps } from "react-native-toast-message"
 import { observer } from "mobx-react-lite"
@@ -13,12 +13,12 @@ import { AppEventType, EventBus } from "app/utils/eventBus"
 import { Logger } from "app/utils/utils"
 import { RootParamList } from "./navigators.types"
 import { LockType } from "app/static/types"
-import { MainNavigator } from "./MainNavigator"
-import { UnAuthStack } from "app/screens"
+import { AuthStack, UnAuthStack } from "app/screens"
+import { navigationRef, useNavigationPersistence } from "./NavigationUtilities"
 
 const Stack = createStackNavigator<RootParamList>()
 
-const RootStack = observer(() => {
+const AppStack = observer(() => {
   const { setIsDark } = useTheme()
   const { clearAllData } = useAuthentication()
   const { uiStore } = useStores()
@@ -58,16 +58,15 @@ const RootStack = observer(() => {
         component={LockScreen}
         initialParams={{ type: LockType.Individual }}
       />
-      <Stack.Screen name="mainStack" component={MainNavigator} />
+      <Stack.Screen name="authStack" component={AuthStack} />
       <Stack.Screen name="unAuthStack" component={UnAuthStack} />
     </Stack.Navigator>
   )
 })
 
-export const RootNavigator = React.forwardRef<
-  NavigationContainerRef<any>,
-  Partial<React.ComponentProps<typeof NavigationContainer>>
->((props, ref) => {
+export const RootNavigator = () => {
+  const { onNavigationStateChange } = useNavigationPersistence()
+
   const { colors } = useTheme()
   const MyTheme = {
     ...DefaultTheme,
@@ -84,19 +83,21 @@ export const RootNavigator = React.forwardRef<
   }
 
   return (
-    <NavigationContainer {...props} theme={MyTheme} ref={ref}>
-      <RootStack />
+    <NavigationContainer
+      ref={navigationRef}
+      theme={MyTheme}
+      onStateChange={onNavigationStateChange}
+    >
+      <AppStack />
       <Toast config={toastConfig} />
     </NavigationContainer>
   )
-})
-
-RootNavigator.displayName = "RootNavigator"
+}
 
 /**
  * This is a list of all the route names that will exit the app if the back button
  * is pressed while in that screen. Only affects Android.
  */
-const exitRoutes: string[] = ["init", "onBoarding"]
+const exitRoutes: string[] = ["init", "onBoarding", "lock", "homeTab"]
 
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)

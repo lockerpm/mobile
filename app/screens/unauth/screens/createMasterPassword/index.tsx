@@ -9,10 +9,10 @@ import { Button, Header, Logo, Screen, Text, TextInput } from "app/components/co
 import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/utils"
 import Animated, { FadeInUp } from "react-native-reanimated"
 import { observer } from "mobx-react-lite"
-import { PolicyType } from "app/static/types"
+import { LockType, PolicyType } from "app/static/types"
 import NetInfo from "@react-native-community/netinfo"
 import { useBiometricType } from "app/services/utils"
-import { RootNavigation, UnAuthScreenProps } from "app/navigators"
+import { UnAuthScreenProps } from "app/navigators"
 
 export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassword">> = observer(
   ({ navigation }) => {
@@ -96,7 +96,9 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
         if (sessionRes.kind === "ok") {
           handleUnlock()
         } else {
-          RootNavigation.navigate("lock")
+          navigation.navigate("lock", {
+            type: LockType.Individual,
+          })
         }
       }
       setIsCreating(false)
@@ -118,12 +120,17 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
         uiStore.setStartFromPasswordLess(false)
         const available = await isBiometricAvailable()
         if (available) {
-          navigation.replace("mainStack", { screen: "biometricUnlockIntro" })
+          navigation.replace("authStack", {
+            screen: "homeStack",
+            params: {
+              screen: "biometricUnlockIntro",
+            },
+          })
           return
         }
       }
 
-      navigation.replace("mainStack", {
+      navigation.replace("authStack", {
         screen: "mainTab",
         params: {
           screen: "homeTab",

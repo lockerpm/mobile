@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import { TouchableOpacity, View, Platform } from "react-native"
-import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/DeleteConfirmModal"
 import { LeaveShareModal } from "./LeaveShareModal"
 import { useCipherHelper, useDeleteCipher, useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
@@ -15,13 +14,13 @@ import { PremiumTag } from "app/components/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "../cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
+import { DeleteConfirmModal } from "./DeleteConfirmModal"
 
 export interface CipherActionProps {
   disableDetail?: boolean
   children?: React.ReactNode
-  isOpen?: boolean
-  onClose?: () => void
-  navigation: any
+  isOpen: boolean
+  onClose: () => void
   onLoadingChange?: (val: boolean) => void
   isEmergencyView?: boolean
 }
@@ -30,7 +29,7 @@ export interface CipherActionProps {
  * Describe your component here
  */
 export const CipherAction = (props: CipherActionProps) => {
-  const { navigation, isOpen, onClose, children, isEmergencyView, disableDetail } = props
+  const { isOpen, onClose, children, isEmergencyView, disableDetail } = props
 
   const [showConfirmTrashModal, setShowConfirmTrashModal] = useState(false)
   const [showConfirmLeaveModal, setShowConfirmLeaveModal] = useState(false)
@@ -75,7 +74,7 @@ export const CipherAction = (props: CipherActionProps) => {
     if (res.kind === "ok") {
       const routeName = await getRouteName()
       if (routeName.endsWith("__info")) {
-        navigation.goBack()
+        // navigation.goBack()
       }
     }
   }
@@ -173,7 +172,7 @@ export const CipherAction = (props: CipherActionProps) => {
             icon="list-bullets"
             action={() => {
               onClose()
-              navigation.navigate(`${cipherMapper.path}__info`)
+              // navigation.navigate(`${cipherMapper.path}__info`)
             }}
           />
         )}
@@ -186,7 +185,7 @@ export const CipherAction = (props: CipherActionProps) => {
                 icon="copy"
                 action={() => {
                   onClose()
-                  navigation.navigate(`${cipherMapper.path}__edit`, { mode: "clone" })
+                  // navigation.navigate(`${cipherMapper.path}__edit`, { mode: "clone" })
                 }}
               />
             )}
@@ -198,11 +197,11 @@ export const CipherAction = (props: CipherActionProps) => {
                 icon="folder-simple"
                 action={() => {
                   onClose()
-                  navigation.navigate("folders__select", {
-                    mode: "move",
-                    initialId: selectedCipher.folderId,
-                    cipherIds: [selectedCipher.id],
-                  })
+                  // navigation.navigate("folders__select", {
+                  //   mode: "move",
+                  //   initialId: selectedCipher.folderId,
+                  //   cipherIds: [selectedCipher.id],
+                  // })
                 }}
               />
             )}
@@ -214,7 +213,7 @@ export const CipherAction = (props: CipherActionProps) => {
                 icon="edit"
                 action={() => {
                   onClose()
-                  navigation.navigate(`${cipherMapper.path}__edit`, { mode: "edit" })
+                  // navigation.navigate(`${cipherMapper.path}__edit`, { mode: "edit" })
                 }}
               />
             )}
@@ -226,7 +225,7 @@ export const CipherAction = (props: CipherActionProps) => {
                 icon="file-arrow-up"
                 action={() => {
                   onClose()
-                  navigation.navigate("attachment")
+                  // navigation.navigate("attachment")
                 }}
               />
             )}
@@ -238,7 +237,7 @@ export const CipherAction = (props: CipherActionProps) => {
                 icon="share"
                 action={() => {
                   onClose()
-                  navigation.navigate("quick_shares", { cipher: selectedCipher })
+                  // navigation.navigate("quick_shares", { cipher: selectedCipher })
                 }}
               />
             )}
@@ -278,9 +277,9 @@ export const CipherAction = (props: CipherActionProps) => {
             icon="file-arrow-up"
             action={() => {
               onClose()
-              navigation.navigate("attachment", {
-                isShared: true,
-              })
+              // navigation.navigate("attachment", {
+              //   isShared: true,
+              // })
             }}
           />
         )}
@@ -307,11 +306,11 @@ export const CipherAction = (props: CipherActionProps) => {
         <TouchableOpacity
           onPress={() => {
             setShowShareOptions(false)
-            if (premiumLock) {
-              navigation.navigate("payment")
-            } else {
-              navigation.navigate("normal_shares", { ciphers: [selectedCipher] })
-            }
+            // if (premiumLock) {
+            //   navigation.navigate("payment")
+            // } else {
+            //   navigation.navigate("normal_shares", { ciphers: [selectedCipher] })
+            // }
           }}
           style={{ borderBottomColor: colors.border, borderBottomWidth: 2, paddingBottom: 12 }}
         >
@@ -338,7 +337,7 @@ export const CipherAction = (props: CipherActionProps) => {
         <TouchableOpacity
           onPress={() => {
             setShowShareOptions(false)
-            navigation.navigate("quick_shares", { cipher: selectedCipher })
+            // navigation.navigate("quick_shares", { cipher: selectedCipher })
           }}
           style={{
             marginTop: 12,

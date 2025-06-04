@@ -6,6 +6,7 @@ import { GITHUB_CONFIG } from "app/config/constants"
 import { getUrlParameterByName } from "app/utils/utils"
 import { WebViewModal } from "../../webviewModal/WebviewModal"
 import { useNavigation } from "@react-navigation/native"
+import { UnAuthScreenProps } from "app/navigators"
 
 const IS_IOS = Platform.OS === "ios"
 const SCREEN_WIDTH = Dimensions.get("screen").width
@@ -23,7 +24,7 @@ interface Props {
 }
 
 export const SocialLogin = ({ onLoggedIn, setIsLoading, style, isSingIn }: Props) => {
-  const navigation = useNavigation() as any
+  const navigation = useNavigation<UnAuthScreenProps<"loginStack">["navigation"]>()
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLogin()
 
@@ -77,6 +78,9 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading, style, isSingIn }: Props
       handler: () => {
         navigation.navigate("unAuthStack", {
           screen: "ssoStack",
+          params: {
+            screen: "ssoIdentifier",
+          },
         })
       },
     },

@@ -11,18 +11,16 @@ import { CipherView } from "core/models/view"
 
 import { CipherListItem } from "./CipherListItem"
 import { Text } from "../../cores"
-import { PasswordAction } from "app/screens/auth/browse/passwords/PasswordAction"
-import { CardAction } from "app/screens/auth/browse/cards/CardAction"
-import { IdentityAction } from "app/screens/auth/browse/identities/IdentityAction"
-import { NoteAction } from "app/screens/auth/browse/notes/NoteAction"
-import { CryptoWalletAction } from "app/screens/auth/browse/cryptoAsset/CryptoWalletAction"
+// import { PasswordAction } from "app/screens/auth/screens/browseStack/passwords/PasswordAction"
+// import { CardAction } from "app/screens/auth/screens/browseStack/cards/CardAction"
+// import { IdentityAction } from "app/screens/auth/screens/browseStack/identities/IdentityAction"
+// import { NoteAction } from "app/screens/auth/screens/browseStack/notes/NoteAction"
+// import { CryptoWalletAction } from "app/screens/auth/screens/browseStack/cryptoAsset/CryptoWalletAction"
 import { DeletedAction } from "../cipherAction/DeletedAction"
 import { observer } from "mobx-react-lite"
 import { useToast } from "app/services/utils"
 
 export interface CipherListProps {
-  navigation: any
-
   emptyContent?: JSX.Element
   searchText?: string
   onLoadingChange?: (val: boolean) => void
@@ -52,7 +50,6 @@ export const CipherList = observer((props: CipherListProps) => {
     emptyContent,
     onLoadingChange,
     searchText,
-    navigation,
     deleted = false,
     sortList,
     folderId,
@@ -313,7 +310,7 @@ export const CipherList = observer((props: CipherListProps) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <PasswordAction
+      {/* <PasswordAction
         isOpen={showPasswordAction}
         onClose={() => setShowPasswordAction(false)}
         navigation={navigation}
@@ -350,7 +347,7 @@ export const CipherList = observer((props: CipherListProps) => {
         isOpen={showDeletedAction}
         onClose={() => setShowDeletedAction(false)}
         navigation={navigation}
-      />
+      /> */}
 
       {masterPassword && (
         <CipherListItem

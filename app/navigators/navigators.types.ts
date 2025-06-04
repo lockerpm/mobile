@@ -36,7 +36,7 @@ export type RootParamList = {
         email: string
       }
   unAuthStack: NavigatorScreenParams<UnAuthRoute>
-  mainStack: NavigatorScreenParams<AuthRoute>
+  authStack: NavigatorScreenParams<AuthRoute>
 }
 
 export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
@@ -137,118 +137,43 @@ export type UnAuthScreenProps<T extends keyof UnAuthRoute> = CompositeScreenProp
 // ---------------------------MAIN Navigator---------------------------
 
 export type AuthRoute = {
-  marketing: {
+  marketingModal: {
     data: MarketingContent
   }
-  enterpriseInvited: undefined
-  biometricUnlockIntro: undefined
-
-  mainTab: NavigatorScreenParams<TabsRoute>
-  toolsStack: NavigatorScreenParams<ToolsRoute>
-  menuStack: NavigatorScreenParams<MenuRoute>
-  app_list_noti: {
-    notifications: AppNotification
-  }
-
-  autofill: {
-    data: AndroidAutofillServiceData
-  }
-
-  // dataBreachScanner: undefined
-  // dataBreachList: undefined
-  // dataBreachDetail: undefined
-  // qrScanner: {
-  //   totpCount?: number
-  //   passwordTotp?: boolean
-  //   passwordMode?: "add" | "edit" | "clone"
-  // }
-  // passwordGenerator: {
-  //   fromTools?: boolean
-  // }
-
-  attachment: {
-    isShared?: boolean
-  }
-
-  authenticator__edit: {
-    mode: "add" | "edit"
+  qrScannerModal: {
+    totpCount?: number
     passwordTotp?: boolean
     passwordMode?: "add" | "edit" | "clone"
   }
 
-  passwords__info: {
-    quickShare?: boolean
+  autofillAndroid: {
+    data: AndroidAutofillServiceData
   }
-  passwords__edit: {
-    mode: "add" | "edit" | "clone"
-    initialUrl?: string
-    collection?: CollectionView
-    androidAutofillSavedData?: AndroidAutofillServiceData
-  }
-  passwords_2fa_setup: {
-    mode: "add" | "edit" | "clone"
-  }
-  passwords_history: undefined
-
-  notes__info: {
-    quickShare?: boolean
-  }
-  notes__edit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-  cards__info: {
-    quickShare?: boolean
-  }
-  cards__edit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-  identities__info: {
-    quickShare?: boolean
-  }
-  identities__edit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-  cryptoWallets__info: {
-    quickShare?: boolean
-  }
-  cryptoWallets__edit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-
-  normal_shares: {
-    ciphers?: CipherView[]
-  }
-  quick_shares: {
-    cipher: CipherView
-  }
-  quickShareItemsDetail: {
-    send: SendView
-  }
-
-  folders__select: {
-    mode: "add" | "move"
-    initialId?: string
-    cipherIds?: string[]
-  }
-  folders__ciphers: {
-    folderId?: string | null
-    collectionId?: string | null
-    organizationId?: string | null
-  }
-  shareFolder: {
-    collectionId: string
-  }
-
-  shareMultiple: undefined
+  mainTab: NavigatorScreenParams<TabsRoute>
+  toolsStack: NavigatorScreenParams<ToolsRoute>
+  menuStack: NavigatorScreenParams<MenuRoute>
+  browseStack: NavigatorScreenParams<BrowseRoute>
+  homeStack: NavigatorScreenParams<HomeRoute>
 }
 
 export type AuthStackScreenProps<T extends keyof AuthRoute> = CompositeScreenProps<
   StackScreenProps<AuthRoute, T>,
   RootStackScreenProps<keyof RootParamList>
+>
+
+// ---------------------------Home Navigator---------------------------
+
+export type HomeRoute = {
+  enterpriseInvited: undefined
+  biometricUnlockIntro: undefined
+  appListNoti: {
+    notifications: AppNotification
+  }
+}
+
+export type HomeStackScreenProps<T extends keyof HomeRoute> = CompositeScreenProps<
+  StackScreenProps<HomeRoute, T>,
+  AuthStackScreenProps<keyof AuthRoute>
 >
 
 // ---------------------------TABS Navigator---------------------------
@@ -268,7 +193,79 @@ export type TabsScreenProps<T extends keyof TabsRoute> = CompositeScreenProps<
 // ---------------------------BROWSE Navigator---------------------------
 
 export type BrowseRoute = {
-  browseList: undefined
+  attachment: {
+    isShared?: boolean
+  }
+  authenticatorEdit: {
+    mode: "add" | "edit"
+    passwordTotp?: boolean
+    passwordMode?: "add" | "edit" | "clone"
+  }
+  passwordsInfo: {
+    quickShare?: boolean
+  }
+  passwordsEdit: {
+    mode: "add" | "edit" | "clone"
+    initialUrl?: string
+    collection?: CollectionView
+    androidAutofillSavedData?: AndroidAutofillServiceData
+  }
+  passwords2faSetup: {
+    mode: "add" | "edit" | "clone"
+  }
+  passwordsHistory: undefined
+
+  notesInfo: {
+    quickShare?: boolean
+  }
+  notesEdit: {
+    mode: "add" | "edit" | "clone"
+    collection?: CollectionView
+  }
+  cardsInfo: {
+    quickShare?: boolean
+  }
+  cardsEdit: {
+    mode: "add" | "edit" | "clone"
+    collection?: CollectionView
+  }
+  identitiesInfo: {
+    quickShare?: boolean
+  }
+  identitiesEdit: {
+    mode: "add" | "edit" | "clone"
+    collection?: CollectionView
+  }
+  cryptoWalletsInfo: {
+    quickShare?: boolean
+  }
+  cryptoWalletsEdit: {
+    mode: "add" | "edit" | "clone"
+    collection?: CollectionView
+  }
+  normalShares: {
+    ciphers?: CipherView[]
+  }
+  quickShares: {
+    cipher: CipherView
+  }
+
+  foldersSelect: {
+    mode: "add" | "move"
+    initialId?: string
+    cipherIds?: string[]
+  }
+  foldersCiphers: {
+    folderId?: string | null
+    collectionId?: string | null
+    organizationId?: string | null
+  }
+  shareFolder: {
+    collectionId: string
+  }
+
+  shareMultiple: undefined
+
   folders: undefined
   cards: undefined
   passwords: undefined

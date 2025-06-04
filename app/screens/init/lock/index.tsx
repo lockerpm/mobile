@@ -109,7 +109,12 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer(({ navigati
         ) {
           uiStore.setStartFromPasswordLess(false)
           if (biometryType !== BiometricsType.None) {
-            navigation.replace("mainStack", { screen: "biometricUnlockIntro" })
+            navigation.replace("authStack", {
+              screen: "homeStack",
+              params: {
+                screen: "biometricUnlockIntro",
+              },
+            })
             return
           }
         }
@@ -119,21 +124,27 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer(({ navigati
       if (isAutofillAnroid && !!uiStore.androidAutofillServiceData) {
         const data = uiStore.androidAutofillServiceData
         if (data.type === AndroidAutofillServiceType.SAVE_REQUEST) {
-          navigation.replace("mainStack", {
-            screen: "passwords__edit",
-            params: { mode: "add", androidAutofillSavedData: data },
+          navigation.replace("authStack", {
+            screen: "browseStack",
+            params: {
+              screen: "passwordsEdit",
+              params: { mode: "add", androidAutofillSavedData: data },
+            },
           })
         } else {
-          navigation.replace("mainStack", { screen: "autofill", params: { data } })
+          navigation.replace("authStack", { screen: "autofillAndroid", params: { data } })
         }
         return
       }
 
       if (enterpriseStore.isEnterpriseInvitations) {
-        navigation.replace("mainStack", { screen: "enterpriseInvited" })
+        navigation.replace("authStack", {
+          screen: "homeStack",
+          params: { screen: "enterpriseInvited" },
+        })
         return
       }
-      navigation.replace("mainStack", {
+      navigation.replace("authStack", {
         screen: "mainTab",
         params: {
           screen: "homeTab",
