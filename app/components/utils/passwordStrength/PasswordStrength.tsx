@@ -13,7 +13,7 @@ export interface PasswordStrengthProps {
 /**
  * Describe your component here
  */
-export const PasswordStrength = function PasswordStrength(props: PasswordStrengthProps) {
+export const PasswordStrength = (props: PasswordStrengthProps) => {
   const { value, style, preset = "progress" } = props
   const { colors } = useTheme()
   const { translate } = useAppLocale()
@@ -80,12 +80,14 @@ export const PasswordStrength = function PasswordStrength(props: PasswordStrengt
           marginTop: 5,
         }}
       >
-        <Icon
-          filled={config[value]?.isFill}
-          icon={config[value]?.icon}
-          size={14}
-          color={config[value]?.color}
-        />
+        {config[value]?.icon && (
+          <Icon
+            filled={config[value]?.isFill}
+            icon={config[value]?.icon}
+            size={14}
+            color={config[value]?.color}
+          />
+        )}
         <Text
           preset="bold"
           size="small"

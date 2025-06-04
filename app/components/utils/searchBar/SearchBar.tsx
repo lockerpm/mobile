@@ -1,27 +1,18 @@
 import * as React from "react"
 import { StyleProp, TextInput, TextInputProps, View, ViewStyle } from "react-native"
-import { SharedValue } from "react-native-reanimated"
-import { Text, Icon } from "../../cores"
+import { Icon } from "../../cores"
 import { useTheme } from "app/services/context"
 import { IS_IOS } from "app/config/constants"
 
 export interface SearchBarProps extends TextInputProps {
   /**
-   * Handle scroll to hide search bar
-   */
-  scrollY?: SharedValue<number>
-  /**
    * override default style
    */
   containerStyle?: StyleProp<ViewStyle>
-  /**
-   * search title
-   */
-  label?: string
 }
 
 export const SearchBar = (props: SearchBarProps) => {
-  const { containerStyle, label, value, onChangeText, ...textInputProps } = props
+  const { containerStyle, value, onChangeText, ...textInputProps } = props
   const { colors } = useTheme()
 
   const CONTAINER: StyleProp<ViewStyle> = [
@@ -38,15 +29,12 @@ export const SearchBar = (props: SearchBarProps) => {
 
   return (
     <View style={CONTAINER}>
-      {!label && (
-        <Icon
-          testID="searchBar.icon"
-          icon="magnifying-glass"
-          size={20}
-          color={colors.secondaryText}
-        />
-      )}
-      <Text text={label} color={colors.primaryText} />
+      <Icon
+        testID="searchBar.icon"
+        icon="magnifying-glass"
+        size={20}
+        color={colors.secondaryText}
+      />
       <TextInput
         testID="searchBar.textInput"
         selectionColor={colors.primary}

@@ -5,7 +5,6 @@ import {
   TextStyle,
   TouchableHighlight,
   TouchableHighlightProps,
-  TouchableWithoutFeedback,
   View,
   ViewStyle,
 } from "react-native"

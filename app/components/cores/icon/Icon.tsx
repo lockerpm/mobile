@@ -4,6 +4,7 @@ import { ComponentType } from "react"
 import {
   ColorValue,
   Image,
+  ImageSourcePropType,
   ImageStyle,
   StyleProp,
   TouchableOpacity,
@@ -73,6 +74,8 @@ export function Icon(props: IconProps) {
   } = props
 
   const isPressable = !!WrapperProps.onPress
+
+  // @ts-ignore
   const Wrapper: ComponentType<TouchableOpacityProps> = WrapperProps?.onPress
     ? TouchableOpacity
     : View
@@ -88,7 +91,7 @@ export function Icon(props: IconProps) {
           style={[
             $imageStyle,
             { tintColor: color },
-            size && { width: size, height: size },
+            { width: size, height: size },
             $imageStyleOverride,
           ]}
           source={
@@ -100,13 +103,13 @@ export function Icon(props: IconProps) {
           }
         />
       ) : (
-        <View style={size && { width: size, height: size }} />
+        <View style={{ width: size, height: size }} />
       )}
     </Wrapper>
   )
 }
 
-export const iconRegularRegistry = {
+export const iconRegularRegistry: Record<string, ImageSourcePropType> = {
   "arrow-left": require("assets/icons/regular/arrow-left.png"),
   "arrow-right": require("assets/icons/regular/arrow-right.png"),
   "caret-left": require("assets/icons/regular/caret-left.png"),
@@ -118,7 +121,7 @@ export const iconRegularRegistry = {
   "shield-check": require("assets/icons/regular/shield-check.png"),
 }
 
-export const iconFillRegistry = {
+export const iconFillRegistry: Record<string, ImageSourcePropType> = {
   "arrow-left": require("assets/icons/fill/arrow-left-fill.png"),
   "arrow-right": require("assets/icons/fill/arrow-right-fill.png"),
   "caret-left": require("assets/icons/fill/caret-left-fill.png"),
@@ -130,7 +133,7 @@ export const iconFillRegistry = {
   "shield-check": require("assets/icons/fill/shield-check-fill.png"),
 }
 
-export const iconRegistry = {
+export const iconRegistry: Record<string, ImageSourcePropType> = {
   "info-fill": require("assets/icons/info-fill.png"),
   "at-fill": require("assets/icons/at-fill.png"),
   "mailbox-fill": require("assets/icons/mailbox-fill.png"),

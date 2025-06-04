@@ -52,6 +52,8 @@ export function Logo(props: LogoProps) {
   } = props
 
   const isPressable = !!WrapperProps.onPress
+
+  // @ts-ignore
   const Wrapper: ComponentType<TouchableOpacityProps> = WrapperProps?.onPress
     ? TouchableOpacity
     : View

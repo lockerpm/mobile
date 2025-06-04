@@ -80,7 +80,7 @@ export function Text(props: TextProps) {
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
 
-  const preset: Presets = $presets[props.preset] ? props.preset : "default"
+  const preset: Presets = props.preset ?? "default"
 
   const $colorPreset = {
     default: { color: colors.primaryText },
@@ -91,8 +91,8 @@ export function Text(props: TextProps) {
   }
   const $styles: StyleProp<TextStyle> = [
     $presets[preset],
-    $fontWeightStyles[weight],
-    $sizeStyles[size],
+    weight && $fontWeightStyles[weight],
+    size && $sizeStyles[size],
     color ? { color } : $colorPreset[preset],
     $styleOverride,
   ]

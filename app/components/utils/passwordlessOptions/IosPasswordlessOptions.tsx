@@ -13,7 +13,6 @@ import {
 } from "../../cores"
 import { useAppLocale, useTheme } from "app/services/context"
 import { Dialog } from "react-native-ui-lib"
-import { Checkbox } from "app/components/cores/toggle"
 
 interface Props {
   /**

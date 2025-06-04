@@ -1,8 +1,7 @@
-import React, { useEffect } from "react"
-import { Modal, View } from "react-native"
+import React from "react"
+import { Modal, View, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { WebView } from "react-native-webview"
-import { AppEventType, EventBus } from "app/utils/eventBus"
 import { useTheme } from "app/services/context"
 import { Icon } from "../cores"
 import { OverlayLoading } from "../utils/loading/Loading"
@@ -17,18 +16,7 @@ type Props = {
 export const WebViewModal = (props: Props) => {
   const { url, isOpen, onClose, onURLChange } = props
   const { colors } = useTheme()
-
   const insets = useSafeAreaInsets()
-
-  // Close on signal
-  useEffect(() => {
-    const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
-      onClose()
-    })
-    return () => {
-      EventBus.removeListener(listener)
-    }
-  }, [])
 
   return (
     <Modal
@@ -45,18 +33,10 @@ export const WebViewModal = (props: Props) => {
           backgroundColor: colors.background,
         }}
       >
-        <View
-          style={{
-            position: "absolute",
-            top: 8,
-            left: 20,
-            zIndex: 2,
-          }}
-        >
+        <View style={$header}>
           <Icon icon="caret-left" onPress={onClose} />
         </View>
 
-        {/* <Header leftIcon="caret-left" onLeftPress={onClose} /> */}
         <WebView
           incognito
           startInLoadingState
@@ -64,7 +44,6 @@ export const WebViewModal = (props: Props) => {
           source={{ uri: url }}
           onShouldStartLoadWithRequest={(request) => {
             onURLChange && onURLChange(request.url)
-
             // Prevent self deep linking
             if (request.url?.startsWith("com.cystack.locker")) {
               return false
@@ -77,4 +56,11 @@ export const WebViewModal = (props: Props) => {
       </View>
     </Modal>
   )
+}
+
+const $header: ViewStyle = {
+  position: "absolute",
+  top: 8,
+  left: 20,
+  zIndex: 2,
 }

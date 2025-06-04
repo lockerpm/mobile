@@ -2,8 +2,8 @@ import React, { useState } from "react"
 import { StyleProp, TextInputProps, View, ViewStyle, TextInput } from "react-native"
 import { Text, Icon } from "../../cores"
 import { ScrollView } from "react-native-gesture-handler"
-import { useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
+import { useClipboard } from "app/services/utils"
 
 interface Props extends TextInputProps {
   outerRef?: any
@@ -16,7 +16,7 @@ interface Props extends TextInputProps {
 export const Textarea = (props: Props) => {
   const { outerRef, style, inputStyle, editable = true, label, value, ...rest } = props
   const { colors } = useTheme()
-  const { copyToClipboard } = useHelper()
+  const { copyToClipboard } = useClipboard()
 
   // ----------------- PARAMS -----------------
 
