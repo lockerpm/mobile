@@ -1,6 +1,7 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
-import { Icon, Text } from "app/components/cores"
+import { Text } from "../text/Text"
+import { Icon } from "../icon/Icon"
 
 interface Props {
   title: string

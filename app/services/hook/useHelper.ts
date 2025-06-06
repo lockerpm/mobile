@@ -42,11 +42,6 @@ export function useHelper() {
     return userService.getAllOrganizations()
   }
 
-  // Get team
-  const getTeam = (teams: any[], orgId: string) => {
-    return find(teams, (e) => e.id === orgId) || { name: "", role: "", type: 0 }
-  }
-
   // Validate master password
   const validateMasterPassword = (password: string) => {
     let isValid = true
@@ -67,7 +62,6 @@ export function useHelper() {
     setApiTokens,
     randomString,
     getAllOrganizations,
-    getTeam,
     getRouteName,
     validateMasterPassword,
   }

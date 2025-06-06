@@ -3,12 +3,12 @@ import React, { memo } from "react"
 import { View, TouchableOpacity } from "react-native"
 import { Icon, Text, Toggle } from "../../cores"
 import { CipherType } from "core/enums"
-import { useCipherHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { CipherAppView } from "app/static/types"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "./CipherIconImage"
 import { IS_IOS } from "app/config/constants"
+import { getCipherDescription } from "app/utils/cipherHelper"
 
 type Prop = {
   item: CipherAppView
@@ -23,7 +23,6 @@ export const CipherListItem = memo(
   (props: Prop) => {
     const { item, isSelecting, toggleItemSelection, openActionMenu, isSelected, isShared } = props
     const { colors } = useTheme()
-    const { getCipherDescription } = useCipherHelper()
 
     // Disable toggleItemSelection for master password item
     const isMasterPwItem = item.type === CipherType.MasterPassword

@@ -1,281 +1,153 @@
 import React, { useEffect, useState } from "react"
-import { View } from "react-native"
-
-import { Text, Icon, Logo } from "app/components/cores"
+import { View, StyleSheet } from "react-native"
+import { Icon, Logo } from "app/components/cores"
 import { AppNotification } from "app/static/types"
-import { useAppLocale, useTheme } from "app/services/context"
-import { SearchBar } from "app/components/utils"
-
-import { useDeleteCipher, useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
 import { useStores } from "app/models"
-import { DeleteConfirmModal, ShareModal } from "app/components/ciphers"
 import { useToast } from "app/services/utils"
+import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated"
+import { CipherListSelectionHeader } from "app/components/newCiphers"
 
 interface Props {
   openSort: () => void
   openAdd: () => void
+  openAppNoti: (notifications: AppNotification) => void
+  openMoveToFolder: () => void
+  openShare: () => void
+  openDelete: () => void
   toggleSelectAll: () => void
-  onSearch: (text: string) => void
-  searchText: string
+
   isSelecting: boolean
   setIsSelecting: (val: boolean) => void
   selectedItems: string[]
   setSelectedItems: (val: any) => void
-  setIsLoading: (val: boolean) => void
-  navigation: any
 }
 
 export const HomeHeader = (props: Props) => {
   const {
     openAdd,
     openSort,
-    onSearch,
-    searchText,
-    setIsLoading,
-    navigation,
+    openAppNoti,
+    openShare,
+    openDelete,
+    toggleSelectAll,
+    openMoveToFolder,
     isSelecting,
     setIsSelecting,
     selectedItems,
     setSelectedItems,
-    toggleSelectAll,
   } = props
   const { colors, isDark } = useTheme()
   const { notifyApiError } = useToast()
-  const { translate } = useAppLocale()
-  const { toTrashCiphers } = useDeleteCipher()
-  const { user, uiStore } = useStores()
+  const { user } = useStores()
 
   // ----------------------- PARAMS ------------------------
 
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [showShareModal, setShowShareModal] = useState(false)
-  const [notifications, setNotifications] = useState<AppNotification>(null)
+  const [notifications, setNotifications] = useState<AppNotification | null>(null)
 
   // ----------------------- COMPUTED ------------------------
-
+  const unreadCount = notifications?.unread_count || 0
   const isFreeAccount = user.isFreePlan
 
   // ----------------------- METHODS ------------------------
 
   const fetchInAppNotification = async () => {
-    if (navigation.isFocused()) {
-      const res = await user.fetchInAppNoti()
-      if (res.kind === "ok") {
-        setNotifications(res.data)
-      } else {
-        notifyApiError(res)
-      }
+    const res = await user.fetchInAppNoti()
+    if (res.kind === "ok") {
+      setNotifications(res.data)
+    } else {
+      notifyApiError(res)
     }
   }
 
   // ----------------------- EFFECT ------------------------
   useEffect(() => {
-    const interval = setInterval(fetchInAppNotification, 1000 * 150)
-    return () => {
-      clearInterval(interval)
-    }
+    fetchInAppNotification()
   }, [])
-
-  // Header right
-  const renderHeaderRight = () => (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-      }}
-    >
-      {/** In app notification */}
-      <View>
-        {notifications?.unread_count > 0 && (
-          <View
-            style={{
-              position: "absolute",
-              top: 10,
-              right: 10,
-              height: 6,
-              width: 6,
-              borderRadius: 3,
-              backgroundColor: colors.error,
-            }}
-          />
-        )}
-        <Icon
-          icon="bell"
-          size={24}
-          color={colors.primaryText}
-          onPress={() => {
-            navigation.navigate("app_list_noti", {
-              notifications,
-            })
-          }}
-          containerStyle={{ padding: 8 }}
-        />
-      </View>
-
-      <Icon
-        icon="sliders-horizontal"
-        size={24}
-        color={colors.primaryText}
-        onPress={openSort}
-        containerStyle={{ padding: 8 }}
-      />
-      <Icon
-        icon="plus"
-        size={24}
-        color={colors.primaryText}
-        onPress={openAdd}
-        containerStyle={{ padding: 8 }}
-      />
-    </View>
-  )
-
-  // Select right
-  const renderHeaderSelectRight = () => (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}
-    >
-      <Icon
-        icon="check-bold"
-        size={24}
-        color={colors.primaryText}
-        onPress={toggleSelectAll}
-        containerStyle={{ padding: 8 }}
-      />
-      {selectedItems.length > 0 && (
-        <>
-          {!uiStore.isOffline && !isFreeAccount && (
-            <Icon
-              icon="share"
-              size={24}
-              color={colors.primaryText}
-              onPress={() => setShowShareModal(true)}
-              containerStyle={{ padding: 8 }}
-            />
-          )}
-          <Icon
-            icon="folder-simple"
-            size={24}
-            color={colors.primaryText}
-            onPress={handleMoveFolder}
-            containerStyle={{ padding: 8 }}
-          />
-          <Icon
-            icon="trash"
-            size={24}
-            color={colors.error}
-            onPress={() => setShowConfirmModal(true)}
-            containerStyle={{ padding: 8 }}
-          />
-        </>
-      )}
-    </View>
-  )
-
-  // Select left
-  const renderHeaderSelectLeft = () => (
-    <View style={{ flexDirection: "row", alignItems: "center" }}>
-      <Icon
-        icon="x"
-        size={24}
-        color={colors.primaryText}
-        onPress={() => {
-          setIsSelecting(false)
-          setSelectedItems([])
-        }}
-      />
-      <Text
-        preset="bold"
-        text={
-          selectedItems.length
-            ? `${selectedItems.length} ${translate("common.selected")}`
-            : translate("common.select")
-        }
-        style={{
-          marginLeft: 8,
-        }}
-      />
-    </View>
-  )
-
-  // Actions
-
-  const handleDelete = async () => {
-    setIsLoading(true)
-    const res = await toTrashCiphers(selectedItems)
-    setIsLoading(false)
-    if (res.kind === "ok") {
-      setIsSelecting(false)
-      setSelectedItems([])
-    }
-  }
-
-  const handleMoveFolder = () => {
-    navigation.navigate("folders__select", {
-      mode: "move",
-      initialId: null,
-      cipherIds: selectedItems,
-    })
-    setIsSelecting(false)
-    setSelectedItems([])
-  }
 
   // ----------------------- RENDER ------------------------
 
   return (
-    <View
-      style={{
-        backgroundColor: colors.background,
-      }}
-    >
-      <View
-        style={{
-          height: 56,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingHorizontal: 20,
-        }}
-      >
-        {isSelecting ? (
-          renderHeaderSelectLeft()
-        ) : (
-          <Logo
-            preset={isDark ? "horizontal-light" : "horizontal-dark"}
-            style={{ height: 35, width: 115 }}
-          />
-        )}
+    <View style={styles.headerContainer}>
+      {!isSelecting && (
+        <Animated.View entering={FadeInUp} exiting={FadeOutDown} style={styles.container}>
+          <Logo preset={isDark ? "horizontal-light" : "horizontal-dark"} style={styles.logo} />
+          <View style={styles.rowContainer}>
+            {!!notifications && (
+              <View>
+                {unreadCount > 0 && (
+                  <View
+                    style={[
+                      styles.noti,
+                      {
+                        backgroundColor: colors.error,
+                      },
+                    ]}
+                  />
+                )}
+                <Icon
+                  icon="bell"
+                  onPress={() => openAppNoti(notifications)}
+                  containerStyle={styles.iconContainer}
+                />
+              </View>
+            )}
 
-        {isSelecting ? renderHeaderSelectRight() : renderHeaderRight()}
-      </View>
-
-      <SearchBar
-        containerStyle={{ marginTop: 10, marginHorizontal: 20, marginBottom: 2 }}
-        onChangeText={onSearch}
-        value={searchText}
-      />
-
-      <DeleteConfirmModal
-        isOpen={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
-        onConfirm={handleDelete}
-        title={translate("trash.to_trash")}
-        desc={translate("trash.to_trash_desc")}
-        btnText="OK"
-      />
-
-      <ShareModal
-        isOpen={showShareModal}
-        onClose={() => setShowShareModal(false)}
-        cipherIds={selectedItems}
-        onSuccess={() => {
-          setIsSelecting(false)
-          setSelectedItems([])
-        }}
-      />
+            <Icon
+              icon="sliders-horizontal"
+              onPress={openSort}
+              containerStyle={styles.iconContainer}
+            />
+            <Icon icon="plus" onPress={openAdd} containerStyle={styles.iconContainer} />
+          </View>
+        </Animated.View>
+      )}
+      {isSelecting && (
+        <CipherListSelectionHeader
+          isFreeAccount={isFreeAccount}
+          selectedCipherIds={selectedItems}
+          onClose={() => {
+            setIsSelecting(false)
+            setSelectedItems([])
+          }}
+          onShare={openShare}
+          onSelectAll={toggleSelectAll}
+          onMoveFolder={openMoveToFolder}
+          onDelete={openDelete}
+        />
+      )}
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  headerContainer: {
+    height: 56,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+  iconContainer: {
+    padding: 8,
+  },
+  logo: {
+    height: 35,
+    width: 115,
+  },
+  noti: {
+    borderRadius: 3,
+    height: 6,
+    position: "absolute",
+    right: 10,
+    top: 10,
+    width: 6,
+  },
+  rowContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+})

@@ -1,6 +1,5 @@
 import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
 import React from "react"
 import { View, Image, StyleProp, ViewStyle, StyleSheet } from "react-native"
 import ReactNativeBiometrics from "react-native-biometrics"

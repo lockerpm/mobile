@@ -14,7 +14,7 @@ import { CipherType, FieldType, SecureNoteType } from "core/enums"
 import { toCryptoWalletData } from "app/utils/crypto"
 import { WALLET_APP_LIST } from "app/utils/crypto/applist"
 import { PolicyType } from "app/static/types/enum"
-import { CipherAppView, MasterPasswordPolicy, PasswordPolicy } from "app/static/types"
+import { MasterPasswordPolicy, PasswordPolicy } from "app/static/types"
 import { ImageSourcePropType } from "react-native"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { useAppLocale } from "../context"
@@ -57,28 +57,6 @@ export function useCipherHelper() {
   // Password strength
   const getPasswordStrength = (password: string) => {
     return passwordGenerationService.passwordStrength(password, ["cystack"]) || { score: 0 }
-  }
-
-  // Get cipher description
-  const getCipherDescription = (item: CipherView | CipherAppView) => {
-    switch (item.type) {
-      case CipherType.MasterPassword:
-      case CipherType.Login:
-        return item.login.username
-      case CipherType.Card:
-        return item.card.brand && item.card.number
-          ? `${item.card.brand}, *${item.card.number.slice(-4)}`
-          : ""
-      case CipherType.Identity:
-        return item.identity.fullName
-      case CipherType.CryptoWallet: {
-        const walletData = toCryptoWalletData(item.notes)
-        return `${walletData.username}${walletData.username ? ", " : ""}${
-          walletData.networks.length
-        } networks`
-      }
-    }
-    return ""
   }
 
   // Get cipher logo
@@ -223,7 +201,6 @@ export function useCipherHelper() {
   return {
     newCipher,
     getPasswordStrength,
-    getCipherDescription,
     getCipherInfo,
     getCustomFieldDataFromType,
     checkPasswordPolicy,

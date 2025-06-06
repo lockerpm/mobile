@@ -1,108 +1,103 @@
-import React, { useState, useEffect } from "react"
-import { Alert } from "react-native"
+import React, { useState, FC, useCallback, useRef } from "react"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
-import { useStores } from "app/models"
-import { useAuthentication } from "app/services/hook"
-import { useNavigation } from "@react-navigation/native"
 import { Screen } from "app/components/cores"
-
 import { HomeHeader } from "./HomeHeader"
-import { SortActionConfigModal, CipherList, AddCipherActionModal } from "app/components/ciphers"
 import { observer } from "mobx-react-lite"
-import { HomeSlider } from "./slider-bar/HomeSlider"
+import { HomeSlider } from "./sliderBar/HomeSlider"
 import { EmptyCipherList } from "./EmptyCipherList"
-import { useAppLocale } from "app/services/context"
+import { TabsScreenProps } from "app/navigators"
+import { useFetchMarketingContent } from "./useFetchMarketingContent"
+import { useHomeBackHandler } from "./useHomeBackHandler"
+import { CipherList, SortActionConfigModal, SortConfigType } from "app/components/newCiphers"
+import { StyleSheet } from "react-native"
+import { CipherType } from "core/enums"
+import { AppNotification } from "app/static/types"
 
-export const HomeScreen = observer(() => {
-  const navigation: any = useNavigation()
-  const { uiStore, user } = useStores()
-  const { translate } = useAppLocale()
-  const { lock } = useAuthentication()
+const cipherTypes = [
+  CipherType.Card,
+  CipherType.Login,
+  CipherType.Identity,
+  CipherType.CryptoWallet,
+  CipherType.MasterPassword,
+  CipherType.SecureNote,
+]
+
+export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation }) => {
   // -------------- PARAMS ------------------
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isLoading, setIsLoading] = useState(true)
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [isAddOpen, setIsAddOpen] = useState(false)
-  const [searchText, setSearchText] = useState("")
-  const [sortList, setSortList] = useState({
-    orderField: "revisionDate",
-    order: "desc",
+  const [sortConfig, setSortConfig] = useState<SortConfigType>({
+    sort: {
+      orderField: "revisionDate",
+      order: "desc",
+    },
+    option: "last_updated",
   })
-  const [sortOption, setSortOption] = useState("last_updated")
-  const [selectedItems, setSelectedItems] = useState([])
+
+  const allCipherIds = useRef<string[]>([])
   const [isSelecting, setIsSelecting] = useState(false)
-  const [allItems, setAllItems] = useState([])
+  const [selectedCipherIds, setSelectedCipherIds] = useState<string[]>([])
 
-  const fetchMarketingContent = async () => {
-    const res = await user.fetchMarketingContent()
-    if (res.kind === "ok" && Object.keys(res.data).length !== 0) {
-      if (!!res.data && res.data.status === "active") {
-        navigation.navigate("marketing", { data: res.data })
-      }
+  // ------------------------ METHODS ------------------------
+
+  const toggleSelectAll = useCallback(() => {
+    const maxLength = Math.min(allCipherIds.current.length, MAX_CIPHER_SELECTION)
+    if (selectedCipherIds.length < maxLength) {
+      setSelectedCipherIds(allCipherIds.current.slice(0, maxLength))
+    } else {
+      setSelectedCipherIds([])
     }
-  }
+  }, [selectedCipherIds, setSelectedCipherIds])
 
-  const onImport = async () => {
-    navigation.navigate("import")
-  }
-
-  // ------------------------ EFFECT ----------------------------
-  useEffect(() => {
-    if (
-      !uiStore.isShowedPopupMarketing &&
-      !user.isLifeTimeFamilyPlan &&
-      !user.isLifeTimePremiumPlan &&
-      user.pwd_user_type !== "enterprise"
-    ) {
-      fetchMarketingContent()
-    }
+  const setAllItems = useCallback((ids: string[]) => {
+    allCipherIds.current = ids
   }, [])
 
-  useEffect(() => {
-    // set Most relevant by defalt when users search
-    if (searchText) {
-      if (searchText.trim().length === 1) {
-        setSortList(null)
-        setSortOption("most_relevant")
-      }
-    } else {
-      setSortList({
-        orderField: "revisionDate",
-        order: "desc",
-      })
-      setSortOption("last_updated")
-    }
-  }, [searchText])
+  const navigateToImport = useCallback(() => {
+    navigation.navigate("menuStack", {
+      screen: "settingsStack",
+      params: {
+        screen: "import",
+      },
+    })
+  }, [])
 
-  // Navigation event listener
-  useEffect(() => {
-    const handleBack = (e) => {
-      if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
-        navigation.dispatch(e.data.action)
-        return
-      }
+  const navigateToAddCipher = useCallback(() => {
+    navigation.navigate("addCipherModal")
+  }, [])
 
-      e.preventDefault()
+  const navigateToAppNoti = useCallback((notifications: AppNotification) => {
+    navigation.navigate("homeStack", {
+      screen: "appListNoti",
+      params: {
+        notifications,
+      },
+    })
+  }, [])
 
-      Alert.alert(translate("alert.lock_app"), "", [
-        {
-          text: translate("common.cancel"),
-          style: "cancel",
-          onPress: () => null,
-        },
-        {
-          text: translate("common.lock"),
-          style: "destructive",
-          onPress: async () => {
-            await lock()
-            navigation.navigate("lock")
-          },
-        },
-      ])
-    }
-    navigation.addListener("beforeRemove", handleBack)
-  }, [navigation])
+  const navigateToFolder = useCallback(() => {
+    // navigation.navigate("moveToFolder")
+  }, [])
 
+  const navigateToShare = useCallback(() => {
+    // navigation.navigate("moveToFolder")
+  }, [])
+
+  const navigateToDelete = useCallback(() => {
+    // navigation.navigate("moveToFolder")
+  }, [])
+
+  const onCloseSortModal = useCallback(() => {
+    setIsSortOpen(false)
+  }, [])
+
+  const onOpenSortModal = useCallback(() => {
+    setIsSortOpen(true)
+  }, [])
+
+  // ------------------------ EFFECT ----------------------------
+
+  useFetchMarketingContent()
+  useHomeBackHandler()
   // -------------- RENDER ------------------
 
   return (
@@ -110,66 +105,48 @@ export const HomeScreen = observer(() => {
       safeAreaEdges={["top"]}
       header={
         <HomeHeader
-          navigation={navigation}
-          openSort={() => setIsSortOpen(true)}
-          openAdd={() => setIsAddOpen(true)}
-          onSearch={setSearchText}
-          searchText={searchText}
+          openAdd={navigateToAddCipher}
+          openSort={onOpenSortModal}
+          openAppNoti={navigateToAppNoti}
+          openMoveToFolder={navigateToFolder}
+          openShare={navigateToShare}
+          openDelete={navigateToDelete}
           isSelecting={isSelecting}
           setIsSelecting={setIsSelecting}
-          selectedItems={selectedItems}
-          setSelectedItems={setSelectedItems}
-          setIsLoading={setIsLoading}
-          toggleSelectAll={() => {
-            const maxLength = Math.min(allItems.length, MAX_CIPHER_SELECTION)
-            if (selectedItems.length < maxLength) {
-              setSelectedItems(allItems.slice(0, maxLength))
-            } else {
-              setSelectedItems([])
-            }
-          }}
+          selectedItems={selectedCipherIds}
+          setSelectedItems={setSelectedCipherIds}
+          toggleSelectAll={toggleSelectAll}
         />
       }
-      contentContainerStyle={{
-        flex: 1,
-      }}
+      contentContainerStyle={styles.flex}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}
-        onClose={() => setIsSortOpen(false)}
-        onSelect={(value: string, obj: { orderField: string; order: string }) => {
-          setSortOption(value)
-          setSortList(obj)
-        }}
-        value={sortOption}
+        onClose={onCloseSortModal}
+        onSelectSortConfig={setSortConfig}
+        option={sortConfig.option}
       />
 
-      <AddCipherActionModal
-        isOpen={isAddOpen}
-        onClose={() => setIsAddOpen(false)}
-        navigation={navigation}
-      />
       <HomeSlider />
 
       <CipherList
-        navigation={navigation}
-        onLoadingChange={setIsLoading}
-        searchText={searchText}
-        sortList={sortList}
+        cipherTypes={cipherTypes}
+        sort={sortConfig.sort}
         isSelecting={isSelecting}
         setIsSelecting={setIsSelecting}
-        selectedItems={selectedItems}
-        setSelectedItems={setSelectedItems}
+        selectedIds={selectedCipherIds}
+        setSelectedIds={setSelectedCipherIds}
         setAllItems={setAllItems}
-        emptyContent={
-          <EmptyCipherList
-            onAdd={() => {
-              setIsAddOpen(true)
-            }}
-            onImport={onImport}
-          />
+        ListEmptyComponent={
+          <EmptyCipherList onAdd={navigateToAddCipher} onImport={navigateToImport} />
         }
       />
     </Screen>
   )
+})
+
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
 })

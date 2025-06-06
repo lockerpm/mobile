@@ -156,7 +156,6 @@ export const HomeSlider = observer(() => {
           }
         }}
       />
-      {/* <AnimatedFooter animIndex={animIndex} length={data.length} /> */}
     </View>
   )
 })
@@ -170,7 +169,7 @@ const themedStyle = (colors: ThemedColors) => ({
     borderWidth: 1,
     flexDirection: "row",
     marginHorizontal: 16,
-    marginVertical: 12,
+    marginTop: 12,
     paddingHorizontal: 12,
     paddingVertical: 12,
   } as ViewStyle,

@@ -1,8 +1,6 @@
 import * as React from "react"
 import { View, Image, StyleSheet } from "react-native"
 import { Button, Text } from "app/components/cores"
-import { observer } from "mobx-react-lite"
-import { useAppLocale } from "app/services/context"
 
 export interface EmptyCipherListProps {
   onAdd: () => void
@@ -11,37 +9,17 @@ export interface EmptyCipherListProps {
 
 const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
 
-export const EmptyCipherList = observer((props: EmptyCipherListProps) => {
-  const { onAdd, onImport } = props
-  const { translate } = useAppLocale()
-
+export const EmptyCipherList = React.memo(({ onAdd, onImport }: EmptyCipherListProps) => {
   return (
-    <View style={{ alignItems: "center", marginTop: "10%" }}>
+    <View style={styles.container}>
       <Image source={HOME_EMPTY_CIPHER} resizeMode="contain" style={{ height: 55, width: 120 }} />
-
-      <Text
-        preset="bold"
-        size="large"
-        style={{ marginBottom: 8, marginTop: 10, textAlign: "center" }}
-        text={translate("all_items.empty.title")}
-      />
-
-      <Text
-        preset="label"
-        text={translate("all_items.empty.desc")}
-        size="base"
-        style={{ textAlign: "center", lineHeight: 21 }}
-      />
-
+      <Text preset="bold" size="large" style={styles.title} tx={"all_items.empty.title"} />
+      <Text preset="label" tx="all_items.empty.desc" size="base" style={styles.label} />
       <View style={styles.buttonContainer}>
-        <Button
-          text={translate("all_items.empty.btn")}
-          onPress={onAdd}
-          style={styles.buttonMargin}
-        />
+        <Button tx="all_items.empty.btn" onPress={onAdd} style={styles.buttonMargin} />
         <Button
           preset="secondary"
-          text={translate("settings.import")}
+          tx={"settings.import"}
           onPress={onImport}
           style={styles.buttonMargin}
         />
@@ -58,5 +36,23 @@ const styles = StyleSheet.create({
   },
   buttonMargin: {
     marginHorizontal: 8,
+  },
+  container: {
+    alignItems: "center",
+    marginTop: "10%",
+    paddingHorizontal: 20,
+  },
+  image: {
+    height: 55,
+    width: 120,
+  },
+  label: {
+    lineHeight: 21,
+    textAlign: "center",
+  },
+  title: {
+    marginBottom: 8,
+    marginTop: 10,
+    textAlign: "center",
   },
 })

@@ -15,6 +15,7 @@ import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "../cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
 import { DeleteConfirmModal } from "./DeleteConfirmModal"
+import { getCipherDescription } from "app/utils/cipherHelper"
 
 export interface CipherActionProps {
   disableDetail?: boolean
@@ -43,7 +44,7 @@ export const CipherAction = (props: CipherActionProps) => {
   const { translate } = useAppLocale()
   const { getRouteName, getTeam } = useHelper()
   const { toTrashCiphers } = useDeleteCipher()
-  const { getCipherDescription, getCipherInfo } = useCipherHelper()
+  const { getCipherInfo } = useCipherHelper()
   const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = { ...cipherStore.cipherView }
   selectedCipher.revisionDate = null

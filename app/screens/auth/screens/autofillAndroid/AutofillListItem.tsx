@@ -2,13 +2,14 @@ import React, { memo } from "react"
 import { NativeModules, TouchableOpacity, View } from "react-native"
 import isEqual from "lodash/isEqual"
 import { Icon, Text } from "app/components/cores"
-import { useCipherHelper, useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { CipherView } from "core/models/view"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
+import { useClipboard } from "app/services/utils"
+import { getCipherDescription } from "app/utils/cipherHelper"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
@@ -21,8 +22,7 @@ export const AutofillListItem = memo(
   (props: Prop) => {
     const { item, openActionMenu } = props
     const { colors } = useTheme()
-    const { copyToClipboard } = useHelper()
-    const { getCipherDescription } = useCipherHelper()
+    const { copyToClipboard } = useClipboard()
 
     const selectForAutoFill = (item: CipherView) => {
       RNAutofillServiceAndroid.addAutofillValue(
@@ -30,7 +30,7 @@ export const AutofillListItem = memo(
         item.login.username,
         item.login.password,
         item.name,
-        item.login.uri
+        item.login.uri,
       )
     }
 
@@ -104,5 +104,5 @@ export const AutofillListItem = memo(
       return val && isEqual(prev[key], next[key])
     }, true)
     return isPropsEqual
-  }
+  },
 )

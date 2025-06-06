@@ -2,7 +2,7 @@ import React from "react"
 import { Dimensions, StyleSheet, View } from "react-native"
 import { BaseToast, BaseToastProps } from "react-native-toast-message"
 import { useTheme } from "app/services/context"
-import { Icon, IconTypes } from ".."
+import { Icon, IconTypes } from "../icon/Icon"
 
 type ToastProps = BaseToastProps & {
   icon: IconTypes

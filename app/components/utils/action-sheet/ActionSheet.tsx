@@ -7,8 +7,8 @@ import {
   TouchableHighlightProps,
   View,
   ViewStyle,
+  Modal,
 } from "react-native"
-import Modal from "react-native-modal"
 import { useSafeAreaInsetsStyle } from "app/utils/useSafeAreaInsetsStyle"
 import { Text, Icon, IconTypes, PressableScale, ModalBackdrop } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
@@ -34,6 +34,8 @@ interface Props {
    * show cancel button.
    */
   isDisableCancelButton?: boolean
+
+  header?: ReactElement
   footer?: ReactElement
 }
 
@@ -50,6 +52,7 @@ export const NewActionSheet = (props: Props) => {
     children,
     isDisableCancelButton,
     footer,
+    header,
   } = props
   const safeAreaEdges = useSafeAreaInsetsStyle(["bottom"])
   const $containerStyle: StyleProp<ViewStyle> = [
@@ -60,16 +63,10 @@ export const NewActionSheet = (props: Props) => {
   const isArray = Array.isArray(children)
 
   return (
-    <Modal
-      animationIn="slideInUp"
-      animationOut="slideOutDown"
-      isVisible={isOpen}
-      onModalHide={onClose}
-      avoidKeyboard
-      style={$containerStyle}
-      customBackdrop={<ModalBackdrop onPress={onClose} />}
-    >
+    <Modal animationType="slide" visible={isOpen} onDismiss={onClose} style={$containerStyle}>
+      <ModalBackdrop onPress={onClose} />
       <View style={{ borderRadius: 12, overflow: "hidden", backgroundColor: colors.background }}>
+        {header}
         {isArray &&
           children.map((child, index) => (
             <View

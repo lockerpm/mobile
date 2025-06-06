@@ -2,11 +2,11 @@ import React, { memo } from "react"
 import { View, TouchableOpacity } from "react-native"
 import { Text } from "app/components/cores"
 import { useTheme } from "app/services/context"
-import { useCipherHelper } from "app/services/hook"
 import { PasswordStrength } from "app/components/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
+import { getCipherDescription } from "app/utils/cipherHelper"
 
 type Prop = {
   item: any
@@ -17,7 +17,6 @@ export const ListItem = memo(
   (props: Prop) => {
     const { item, goToDetail } = props
     const { colors } = useTheme()
-    const { getCipherDescription } = useCipherHelper()
 
     return (
       <TouchableOpacity

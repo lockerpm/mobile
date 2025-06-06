@@ -1,7 +1,7 @@
 import { Icon, IconTypes, Text } from "app/components/cores"
 import { PremiumTag } from "app/components/utils"
 import { useStores } from "app/models"
-import { navigationRef } from "app/navigators"
+import { navigationRef } from "app/navigators/NavigationUtilities"
 import * as React from "react"
 import { ColorValue, StyleProp, TouchableOpacity, View, ViewStyle } from "react-native"
 

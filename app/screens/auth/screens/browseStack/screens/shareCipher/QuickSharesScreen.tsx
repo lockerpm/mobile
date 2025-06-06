@@ -20,6 +20,7 @@ import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconIma
 import { IS_IOS } from "app/config/constants"
 import { useClipboard, useToast } from "app/services/utils"
 import { BrowseStackScreenProps } from "app/navigators"
+import { getCipherDescription } from "app/utils/cipherHelper"
 
 const { width } = Dimensions.get("screen")
 
@@ -28,7 +29,7 @@ export const QuickSharesScreen: FC<BrowseStackScreenProps<"quickShares">> = obse
   const { translate } = useAppLocale()
   const { copyToClipboard } = useClipboard()
   const { sendService } = useCoreService()
-  const { getCipherDescription, getCipherInfo } = useCipherHelper()
+  const { getCipherInfo } = useCipherHelper()
   const { cipherStore } = useStores()
   const route = props.route
   const navigation = props.navigation

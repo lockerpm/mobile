@@ -14,6 +14,7 @@ import { useToast } from "app/services/utils"
 import { AuthRoute, RootStackScreenProps } from "app/navigators"
 import { useStores } from "app/models"
 import {
+  AddCipherModalScreen,
   AutoFillAndroidScreen,
   BrowseStack,
   HomeStack,
@@ -337,6 +338,14 @@ export const AuthStack: FC<RootStackScreenProps<"authStack">> = observer(({ navi
           headerShown: false,
         }}
       >
+        <Stack.Screen
+          name="addCipherModal"
+          component={AddCipherModalScreen}
+          options={{
+            presentation: "transparentModal",
+          }}
+        />
+
         <Stack.Screen
           name="marketingModal"
           component={MarketingScreen}

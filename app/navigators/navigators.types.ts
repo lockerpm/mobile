@@ -137,6 +137,12 @@ export type UnAuthScreenProps<T extends keyof UnAuthRoute> = CompositeScreenProp
 // ---------------------------MAIN Navigator---------------------------
 
 export type AuthRoute = {
+  addCipherModal:
+    | {
+        folderId?: string
+        collectionId?: string
+      }
+    | undefined
   marketingModal: {
     data: MarketingContent
   }

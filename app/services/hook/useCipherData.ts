@@ -31,6 +31,7 @@ import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { IosAutofillPassword, autofillKeyChain } from "app/utils/autofillData"
 import { useAppLocale } from "../context"
 import { useToast } from "../utils"
+import { getTeam } from "app/utils/cipherHelper"
 
 export function useCipherData() {
   const { cipherStore, folderStore, uiStore, collectionStore, user, enterpriseStore } = useStores()
@@ -46,7 +47,7 @@ export function useCipherData() {
     cryptoService,
   } = useCoreService()
   const { translate } = useAppLocale()
-  const { randomString, getTeam } = useHelper()
+  const { randomString } = useHelper()
   const { notify, notifyTx, notifyApiError } = useToast()
   const { newCipher } = useCipherHelper()
   const syncQueue = SyncQueue
@@ -138,64 +139,6 @@ export function useCipherData() {
     if (cipher?.type === CipherType.Login || !!deletedIds) {
       EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
     }
-  }
-
-  // Sync
-  const getSyncData = (bumpTimestamp: number) => {
-    syncQueue.clear()
-    return syncQueue.add(async () => {
-      try {
-        cipherStore.setIsSynching(true)
-        messagingService.send("syncStarted")
-        // Sync api
-        const res = await cipherStore.syncData()
-        if (res.kind !== "ok") {
-          notifyApiError(res)
-          messagingService.send("syncCompleted", { successfully: false })
-          return res
-        }
-        // Start sync
-        cipherStore.setLastSync(bumpTimestamp)
-        await syncService.setLastSync(new Date(bumpTimestamp))
-
-        // Sync service
-        const userId = await userService.getUserId()
-
-        await syncService.syncProfile(res.data.profile)
-        await syncService.syncFolders(userId, res.data.folders)
-        await syncService.syncCollections(res.data.collections)
-        await syncService.syncCiphers(userId, res.data.ciphers)
-        await syncService.syncSends(userId, res.data.sends)
-        await syncService.syncSettings(userId, res.data.domains)
-        await syncService.syncPolicies(res.data.policies)
-        await syncQuickShares()
-
-        messagingService.send("syncCompleted", { successfully: true })
-
-        // Clear not updated list
-        cipherStore.clearNotUpdate()
-        folderStore.clearNotUpdate()
-        collectionStore.clearNotUpdate()
-
-        // Save fingerprint
-        const fingerprint = await cryptoService.getFingerprint(userId)
-        user.setFingerprint(fingerprint.join("-"))
-
-        // Save to shared keychain for autofill service
-        await _updateAutofillData()
-
-        // Reload password health
-        EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
-
-        return { kind: "ok" }
-      } catch (e) {
-        Logger.error("getSyncData: " + e)
-        messagingService.send("syncCompleted", { successfully: false })
-        return { kind: "error" }
-      } finally {
-        cipherStore.setIsSynching(false)
-      }
-    })
   }
 
   // Sync gradually
@@ -471,7 +414,6 @@ export function useCipherData() {
             const ciphers = await getEncryptedCiphers({
               deleted: false,
               searchText: "",
-              // filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name))]
               // exclude share folder item
               filters: [(c: CipherView) => c.collectionIds.length === 0 && !c.folderId],
             })
@@ -483,12 +425,10 @@ export function useCipherData() {
           const ciphers = await getEncryptedCiphers({
             deleted: false,
             searchText: "",
-            // filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name))]
             // exclude share folder item
             filters: [
               (c: CipherView) =>
                 c.collectionIds.length === 0 && c.folderId && c.folderId === folder.id,
-              // : !f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name)
             ],
           })
           return {
@@ -2204,7 +2144,6 @@ export function useCipherData() {
     minimalReloadCache,
     reloadCache,
     startSyncProcess,
-    getSyncData,
     syncOfflineData,
     syncAutofillData,
     getCiphers,
