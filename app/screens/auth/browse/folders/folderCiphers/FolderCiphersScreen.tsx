@@ -57,8 +57,9 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<"folders__ciphers">> = 
       !collectionId || TEAM_CIPHER_EDITOR.includes(getTeam(user.teams, folder?.organizationId).role)
 
     const organizations = cipherStore.organizations
+    const organizationRole = getTeam(organizations, organizationId).type
     const hasAddCollectionPermission =
-      getTeam(organizations, organizationId).type === AccountRole.OWNER
+      organizationRole === AccountRole.OWNER || organizationRole === AccountRole.ADMIN
     const isSharedFolder = !!collectionId
 
     // Close select before leave

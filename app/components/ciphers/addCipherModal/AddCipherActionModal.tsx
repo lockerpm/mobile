@@ -3,8 +3,11 @@ import { useStores } from "app/models"
 import { CollectionView } from "core/models/view/collectionView"
 import { ActionSheet } from "../actionsSheet/ActionSheet"
 import { TouchableOpacity, View, Image } from "react-native"
-import { Text } from "../../cores"
+import { Icon, Text } from "../../cores"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { useHelper } from "app/services/hook"
+import { AccountRole } from "app/static/types"
+import { useTheme } from "app/services/context"
 
 interface Props {
   isOpen: boolean
@@ -17,8 +20,19 @@ interface Props {
 export const AddCipherActionModal = (props: Props) => {
   const { isOpen, onClose, navigation, defaultFolder, collection } = props
   const { cipherStore } = useStores()
+  const { getTeam } = useHelper()
+  const { colors } = useTheme()
 
   const items = Object.values(BROWSE_ITEMS).filter((item) => item.addable && !item.group)
+
+  const hasAddCollectionPermission = (() => {
+    if (collection) {
+      const organizations = cipherStore.organizations
+      const organizationRole = getTeam(organizations, collection.organizationId).type
+      return organizationRole === AccountRole.OWNER || organizationRole === AccountRole.ADMIN
+    }
+    return false
+  })()
 
   return (
     <ActionSheet isOpen={isOpen} onClose={onClose}>
@@ -51,6 +65,25 @@ export const AddCipherActionModal = (props: Props) => {
           </View>
         </TouchableOpacity>
       ))}
+
+      {hasAddCollectionPermission && (
+        <View
+          style={{
+            flexDirection: "row",
+            paddingHorizontal: 16,
+            marginVertical: 12,
+          }}
+        >
+          <Icon icon="info" color={colors.warning} style={{ marginRight: 8 }} />
+          <Text
+            tx="folder.move_to_collection_warning"
+            style={{
+              flexGrow: 1,
+              flexShrink: 1,
+            }}
+          />
+        </View>
+      )}
     </ActionSheet>
   )
 }

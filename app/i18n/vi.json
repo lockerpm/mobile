@@ -591,7 +591,8 @@
       "title": "Sắp xếp tài nguyên vào các thư mục",
       "desc": "Giữ mật khẩu và các mục khác trong nhóm",
       "btn": "Thêm thư mục"
-    }
+    },
+    "move_to_collection_warning": "Đây là thư mục được chia sẻ. Những mục được bạn thêm vào đây sẽ thuộc về chủ sở hữu của thư mục. Khi chủ sở hữu ngừng chia sẻ, các mục trong thư mục sẽ bị xóa khỏi Vault của bạn."
   },
   "identity": {
     "title": "Tiêu đề",

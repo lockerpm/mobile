@@ -592,7 +592,8 @@
       "title": "Organize items in Folders",
       "desc": "Keep passwords and other items in groups",
       "btn": "Add Folder"
-    }
+    },
+    "move_to_collection_warning": "This is a shared folder. Any items added to this folder will belong to the folder's owner. Once the owner stops sharing, the added items will be removed from your Vault."
   },
   "identity": {
     "title": "Title",

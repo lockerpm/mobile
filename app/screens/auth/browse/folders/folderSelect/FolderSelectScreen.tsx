@@ -8,6 +8,7 @@ import { useTheme } from "app/services/context"
 import { Button, Header, Icon, ImageIcon, Screen, Text } from "app/components/cores"
 import { AccountRole } from "app/static/types"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { MoveItemToSharedFolderWarningModal } from "./MoveItemToSharedFolderWarningModal"
 
 export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = observer((props) => {
   const navigation = props.navigation
@@ -22,6 +23,9 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFolder, setSelectedFolder] = useState(initialId)
   const isSelectedCollection = useRef(false)
+
+  const [isOpenMoveItemToSharedFolderWarningModal, setIsOpenMoveItemToSharedFolderWarningModal] =
+    useState(false)
 
   const organizations = cipherStore.organizations
 
@@ -66,6 +70,9 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
     }
     navigation.goBack()
   }
+  const showNofiAddItemToShareFolder = () => {
+    setIsOpenMoveItemToSharedFolderWarningModal(true)
+  }
 
   const renderItem = ({ item, index, section }) => (
     <TouchableOpacity
@@ -102,7 +109,12 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
           )}
         </View>
 
-        {selectedFolder === item.id && <Icon icon="check" size={18} color={colors.primary} />}
+        {section.isCollection && mode === "move" && (
+          <Icon icon="info" onPress={showNofiAddItemToShareFolder} color={colors.warning} />
+        )}
+        {selectedFolder === item.id && (
+          <Icon icon="check" size={18} color={colors.primary} style={{ marginLeft: 8 }} />
+        )}
       </View>
     </TouchableOpacity>
   )
@@ -118,7 +130,7 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
       data:
         collectionStore.collections?.filter((item) => {
           const shareRole = getTeam(organizations, item.organizationId).type
-          return shareRole === AccountRole.OWNER
+          return shareRole === AccountRole.OWNER || shareRole === AccountRole.ADMIN
         }) || [],
       isCollection: true,
     },
@@ -151,6 +163,10 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
         flex: 1,
       }}
     >
+      <MoveItemToSharedFolderWarningModal
+        isOpen={isOpenMoveItemToSharedFolderWarningModal}
+        onClose={() => setIsOpenMoveItemToSharedFolderWarningModal(false)}
+      />
       <NewFolderModal isOpen={showNewFolderModal} onClose={() => setShowNewFolderModal(false)} />
 
       <TouchableOpacity

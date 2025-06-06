@@ -143,20 +143,17 @@ export const PrivateRelay: FC<PrivateRelayScreenProps<"relay">> = observer(({ na
 
   useEffect(() => {
     const listener1 = EventBus.createListener(AppEventType.PRIVATE_RELAY_DELETE, (id: number) => {
-      console.log("PRIVATE_RELAY_DELETE", id)
       deleteRelayAddress(id)
     })
 
     const listener2 = EventBus.createListener(
       AppEventType.PRIVATE_RELAY_UPDATE,
       (data: RelayAddress) => {
-        console.log("PRIVATE_RELAY_UPDATE")
         editRelayAddress(data)
       },
     )
 
     const listener3 = EventBus.createListener(AppEventType.PRIVATE_RELAY_DOMAIN, (data: string) => {
-      console.log("PRIVATE_RELAY_DOMAIN")
       updateSubdomain(data)
     })
 

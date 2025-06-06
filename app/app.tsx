@@ -8,7 +8,7 @@ if (__DEV__) {
 import "./i18n"
 import "./utils/ignoreWarnings"
 import React, { ComponentType, useRef } from "react"
-import { NavigationContainerRef } from "@react-navigation/native"
+import { CommonActions, NavigationContainerRef } from "@react-navigation/native"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import { useInitialRootStore } from "./models"
 import {
@@ -101,7 +101,12 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
           // Close all modals before navigate
           EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
           if (navigationRef.current) {
-            navigationRef.current.navigate("init")
+            navigationRef.current.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "init" }],
+              }),
+            )
           }
         }
       }
