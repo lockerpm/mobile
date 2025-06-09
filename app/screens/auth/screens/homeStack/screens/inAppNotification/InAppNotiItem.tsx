@@ -1,88 +1,94 @@
 import React from "react"
 import { useNavigation } from "@react-navigation/native"
-import { Linking, TouchableOpacity, View } from "react-native"
+import { Linking, StyleSheet, TouchableOpacity, View } from "react-native"
 import { relativeTime } from "app/utils/utils"
-import { NotificationCategory } from "app/static/types"
-import { useStores } from "app/models"
+import { AppNotificationType, NotificationCategory } from "app/static/types"
 import { ImageIcon, ImageIconTypes, Text } from "app/components/cores"
-import { useAppLocale } from "app/services/context"
-import { useToast } from "app/services/utils"
+import { useTheme } from "app/services/context"
+import { HomeStackScreenProps } from "app/navigators"
+import { TxKeyPath } from "app/i18n"
 
 interface Props {
-  lang: string
-  description: any
-  id: string
-  type: NotificationCategory
-  metadata: any
-  title: any
-  read: boolean
-  publish_time: number
+  lang: "vi" | "en"
+  item: AppNotificationType
+  markRead: (id: string) => void
 }
-export const NotiListItem = (props: Props) => {
-  const { type, title, lang, id, metadata, publish_time } = props
-  const navigation = useNavigation() as any
-  const { notifyApiError } = useToast()
-  const { translate } = useAppLocale()
-  const { user } = useStores()
 
-  const markRead = async () => {
-    const res = await user.markReadInAppNoti(id)
-    if (res.kind !== "ok") {
-      notifyApiError(res)
-    }
-  }
+export const NotiListItem = ({
+  lang,
+  markRead,
+  item: { type, title, id, metadata, publish_time, read },
+}: Props) => {
+  const navigation = useNavigation<HomeStackScreenProps<"appListNoti">["navigation"]>()
+  const { colors } = useTheme()
 
   const property: {
-    title?: string
+    title: TxKeyPath
     icon: ImageIconTypes
-    onPress?: () => Promise<void>
+    onPress?: () => void
   } | null = (() => {
     switch (type) {
       case NotificationCategory.ITEM_SHARE:
         return {
-          title: translate("noti_setting.item_sharing"),
+          title: "noti_setting.item_sharing",
           icon: "share-item",
-          onPress: async () => {
-            await markRead()
-            navigation.navigate("mainTab", {
-              screen: "browseTab",
-            })
-            navigation.navigate("mainTab", {
-              screen: "browseTab",
-              params: {
-                screen: "sharedItems",
-              },
-            })
+          onPress: () => {
+            // navigation.navigate("mainTab", {
+            //   screen: "browseTab",
+            //   params: {
+            //     screen: "sharedItems",
+            //   },
+            // })
           },
         }
       case NotificationCategory.EMERGENCY:
         return {
-          title: translate("noti_setting.emergency"),
+          title: "noti_setting.emergency",
           icon: "emergency",
           onPress: async () => {
             const { is_grantor } = metadata
             if (is_grantor === undefined) {
-              navigation.navigate("emergencyAccess")
+              navigation.navigate("menuStack", {
+                screen: "settingsStack",
+                params: {
+                  screen: "emergencyStack",
+                  params: {
+                    screen: "emergencyOptions",
+                  },
+                },
+              })
             } else {
-              navigation.navigate(is_grantor ? "yourTrustedContact" : "contactsTrustedYou")
+              navigation.navigate("menuStack", {
+                screen: "settingsStack",
+                params: {
+                  screen: "emergencyStack",
+                  params: {
+                    screen: is_grantor ? "yourTrustedContact" : "contactsTrustedYou",
+                  },
+                },
+              })
             }
           },
         }
       case NotificationCategory.DATA_BREACH:
         return {
+          title: "noti_setting.breach_scan",
           icon: "data-breach-scanner",
         }
       case NotificationCategory.MARKETING:
         return {
+          title: "noti_setting.marketing",
           icon: "marketing",
         }
       case NotificationCategory.PW_TIPS:
         return {
-          title: translate("noti_setting.tips"),
+          title: "noti_setting.tips",
           icon: "pw-tips",
           onPress: async () => {
             const { link } = metadata
-            Linking.openURL(link[user.language])
+            if (link) {
+              Linking.openURL(link[lang])
+            }
           },
         }
       default:
@@ -92,19 +98,58 @@ export const NotiListItem = (props: Props) => {
 
   return property ? (
     <TouchableOpacity
-      style={{
-        flexDirection: "row",
-        marginBottom: 12,
+      style={[
+        styles.container,
+        {
+          borderColor: colors.border,
+          backgroundColor: read ? colors.block : colors.background,
+          opacity: read ? 0.8 : 1,
+        },
+      ]}
+      onPress={() => {
+        markRead(id)
+        property?.onPress && property.onPress()
       }}
-      onPress={property?.onPress}
     >
       <ImageIcon icon={property.icon} size={40} />
-      <View style={{ marginLeft: 16, flex: 1 }}>
-        <Text preset="bold" text={property.title} style={{ marginBottom: 4 }} />
 
-        <Text text={title[lang]} style={{ marginBottom: 4 }} />
-        <Text preset="label" text={relativeTime(publish_time * 1000, lang)} />
+      <View style={styles.content}>
+        <View style={styles.titleContainer}>
+          <Text preset="bold" tx={property.title} style={styles.title} />
+          <Text preset="label" text={relativeTime(publish_time * 1000, lang)} />
+        </View>
+
+        <Text text={title[lang]} style={styles.mb4} />
       </View>
     </TouchableOpacity>
   ) : null
 }
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 12,
+    borderWidth: 1,
+    flexDirection: "row",
+    marginVertical: 6,
+    padding: 12,
+  },
+  content: {
+    flexGrow: 1,
+    flexShrink: 1,
+    marginLeft: 16,
+  },
+  mb4: {
+    marginBottom: 4,
+  },
+  title: {
+    flexGrow: 1,
+    flexShrink: 1,
+    marginBottom: 4,
+    marginRight: 8,
+  },
+  titleContainer: {
+    alignContent: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+})

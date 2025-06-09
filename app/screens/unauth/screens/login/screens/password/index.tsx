@@ -9,7 +9,7 @@ import { observer } from "mobx-react-lite"
 import { DividerText, IosPasswordlessOptions, SetLanguage, SocialLogin } from "app/components/utils"
 import { useAppLocale, useTheme } from "app/services/context"
 import { LoginScreenProps } from "app/navigators"
-import { LOGIN_METHOD, User2FAPasswordConfig, User2FAMethod } from "app/static/types"
+import { LoginOptions, User2FAPasswordConfig, User2FAMethod } from "app/static/types"
 import { useWebAuth } from "./useWebAuth"
 import { useLoginPassword } from "./useLoginPassword"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
@@ -33,9 +33,9 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
     const [isError, setIsError] = useState(false)
     const [username, setUsername] = useState(initEmail)
     const [password, setPassword] = useState("")
-    const [loginMethodLoading, setLoginMethodLoading] = useState<LOGIN_METHOD>(LOGIN_METHOD.NONE)
+    const [loginMethodLoading, setLoginMethodLoading] = useState<LoginOptions>(LoginOptions.NONE)
 
-    const [loginMethod, setLoginMethod] = useState<LOGIN_METHOD>(initMethod || LOGIN_METHOD.NONE)
+    const [loginMethod, setLoginMethod] = useState<LoginOptions>(initMethod || LoginOptions.NONE)
 
     const [isShowCreatePasskeyOptions, setIsShowCreatePasskeyOptions] = useState(false)
     const [isIcloudSelected, setIsIcloudSelected] = useState(true)
@@ -74,7 +74,7 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
       const res = await user.loginMethod(username)
       if (res.kind === "ok") {
         if (res.data.webauthn && Passkey.isSupported()) {
-          setLoginMethod(LOGIN_METHOD.PASSKEY)
+          setLoginMethod(LoginOptions.PASSKEY)
           if (IS_IOS) {
             setIsShowCreatePasskeyOptions(true)
           } else {
@@ -154,7 +154,7 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
 
         <Text preset="label" size="medium" tx="login.title" style={styles.label} />
 
-        {loginMethod === LOGIN_METHOD.NONE && !initEmail && (
+        {loginMethod === LoginOptions.NONE && !initEmail && (
           <>
             <SocialLogin
               isSingIn
@@ -181,8 +181,8 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
           keyboardType="email-address"
           value={username}
           onChangeText={(val) => {
-            if (loginMethod !== LOGIN_METHOD.NONE) {
-              setLoginMethod(LOGIN_METHOD.NONE)
+            if (loginMethod !== LoginOptions.NONE) {
+              setLoginMethod(LoginOptions.NONE)
             }
             setUsername(val)
           }}
@@ -190,7 +190,7 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
         />
 
         {/* Password input */}
-        {loginMethod === LOGIN_METHOD.PASSWORD && (
+        {loginMethod === LoginOptions.PASSWORD && (
           <Animated.View entering={FadeInUp}>
             <TextInput
               ref={passwordRef}
@@ -209,8 +209,8 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
               <Text tx={"login.forgot_password"} color={colors.link} />
             </TouchableOpacity>
             <Button
-              loading={loginMethodLoading === LOGIN_METHOD.PASSWORD || isLoading}
-              disabled={loginMethodLoading !== LOGIN_METHOD.NONE || !(username && password)}
+              loading={loginMethodLoading === LoginOptions.PASSWORD || isLoading}
+              disabled={loginMethodLoading !== LoginOptions.NONE || !(username && password)}
               tx={"common.signin"}
               onPress={() => {
                 handlePasswordLogin(username, password)
@@ -221,7 +221,7 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
         )}
         {/* Password input end */}
 
-        {loginMethod !== LOGIN_METHOD.PASSWORD && (
+        {loginMethod !== LoginOptions.PASSWORD && (
           <Button
             loading={isLoading}
             disabled={!username}
@@ -231,7 +231,7 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
           />
         )}
 
-        {(loginMethod === LOGIN_METHOD.PASSWORD || !!initEmail) && (
+        {(loginMethod === LoginOptions.PASSWORD || !!initEmail) && (
           <>
             <DividerText tx="login_email_code.or" style={styles.divider} size="base" />
             <SocialLogin

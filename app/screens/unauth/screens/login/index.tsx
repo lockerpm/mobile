@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { LoginScreen, PinCodeLoginScreen, TwoFAAuthenScreen } from "./screens"
 import { createStackNavigator } from "@react-navigation/stack"
 import { LoginRoute } from "app/navigators"
-import { LOGIN_METHOD } from "app/static/types"
+import { LoginOptions } from "app/static/types"
 
 const Stack = createStackNavigator<LoginRoute>()
 
@@ -20,7 +20,7 @@ export const LoginStack = observer(() => {
       <Stack.Screen
         name="login"
         component={LoginScreen}
-        initialParams={{ initMethod: LOGIN_METHOD.NONE, email: "" }}
+        initialParams={{ initMethod: LoginOptions.NONE, email: "" }}
       />
       <Stack.Screen name="loginByPincode" component={PinCodeLoginScreen} />
       <Stack.Screen

@@ -4,8 +4,9 @@ import { StackScreenProps } from "@react-navigation/stack"
 import {
   AppNotification,
   BreanchResult,
+  CipherActionsModal,
   LockType,
-  LOGIN_METHOD,
+  LoginOptions,
   MarketingContent,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
@@ -46,7 +47,7 @@ export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenPro
 export type LoginRoute = {
   login:
     | {
-        initMethod?: LOGIN_METHOD
+        initMethod?: LoginOptions
         email?: string
       }
     | undefined
@@ -137,6 +138,17 @@ export type UnAuthScreenProps<T extends keyof UnAuthRoute> = CompositeScreenProp
 // ---------------------------MAIN Navigator---------------------------
 
 export type AuthRoute = {
+  cipherActionsModal: {
+    mode: CipherActionsModal
+    item?: CipherView
+
+    /**
+     * Delete ids for multiple ciphers, if start with CipherActionsModal.DEFAULT
+     * it will be item.id
+     */
+    deleteIds: string[]
+  }
+
   addCipherModal:
     | {
         folderId?: string

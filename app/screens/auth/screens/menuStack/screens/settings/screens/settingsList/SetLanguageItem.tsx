@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { SettingsItem } from "app/components/utils"
-import { NewActionSheet, NewActionSheetItem } from "app/components/utils/action-sheet/ActionSheet"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils/actionSheet/ActionSheet"
 import { observer } from "mobx-react-lite"
 import { Linking, TouchableOpacity, View } from "react-native"
 import { Text } from "app/components/cores"

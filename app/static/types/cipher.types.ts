@@ -1,6 +1,6 @@
-import { CipherRequest } from 'core/models/request/cipherRequest'
-import { AccountRoleText, SharingStatus, SharingType } from './enum'
-import { FolderRequest } from 'core/models/request/folderRequest'
+import { CipherRequest } from "core/models/request/cipherRequest"
+import { AccountRoleText, SharingStatus, SharingType } from "./enum"
+import { FolderRequest } from "core/models/request/folderRequest"
 import {
   AttachmentView,
   CardView,
@@ -9,11 +9,18 @@ import {
   IdentityView,
   LoginView,
   SecureNoteView,
-} from 'core/models/view'
-import { ImageSourcePropType } from 'react-native'
-import { CipherType } from 'core/enums'
-import { PasswordHistoryView } from 'core/models/view/passwordHistoryView'
-import { CipherRepromptType } from 'core/enums/cipherRepromptType'
+} from "core/models/view"
+import { ImageSourcePropType } from "react-native"
+import { CipherType } from "core/enums"
+import { PasswordHistoryView } from "core/models/view/passwordHistoryView"
+import { CipherRepromptType } from "core/enums/cipherRepromptType"
+
+export enum CipherActionsModal {
+  DEFAULT = "default",
+  SHARE = "share",
+  DELETE = "delete",
+  PREMIUM_ACTION = "premium_action",
+}
 
 export type EditShareCipherData = {
   role: AccountRoleText

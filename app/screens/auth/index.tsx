@@ -17,6 +17,7 @@ import {
   AddCipherModalScreen,
   AutoFillAndroidScreen,
   BrowseStack,
+  CipherActionsModalScreen,
   HomeStack,
   MarketingScreen,
   MenuStack,
@@ -338,29 +339,14 @@ export const AuthStack: FC<RootStackScreenProps<"authStack">> = observer(({ navi
           headerShown: false,
         }}
       >
-        <Stack.Screen
-          name="addCipherModal"
-          component={AddCipherModalScreen}
-          options={{
-            presentation: "transparentModal",
-          }}
-        />
+        {/** Main stack modal */}
+        <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
+          <Stack.Screen name="cipherActionsModal" component={CipherActionsModalScreen} />
+          <Stack.Screen name="addCipherModal" component={AddCipherModalScreen} />
+          <Stack.Screen name="marketingModal" component={MarketingScreen} />
+          <Stack.Screen name="qrScannerModal" component={QRScannerScreen} />
+        </Stack.Group>
 
-        <Stack.Screen
-          name="marketingModal"
-          component={MarketingScreen}
-          options={{
-            presentation: "transparentModal",
-          }}
-        />
-
-        <Stack.Screen
-          name="qrScannerModal"
-          component={QRScannerScreen}
-          options={{
-            presentation: "transparentModal",
-          }}
-        />
         <Stack.Screen name="mainTab" component={TabNavigator} />
         <Stack.Screen name="homeStack" component={HomeStack} />
         <Stack.Screen name="toolsStack" component={ToolStack} />

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { NewActionSheet, NewActionSheetItem } from "app/components/utils/action-sheet/ActionSheet"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils/actionSheet/ActionSheet"
 import { View } from "react-native"
 import { Icon, IconTypes, Text } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"

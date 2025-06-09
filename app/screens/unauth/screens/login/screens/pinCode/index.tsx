@@ -6,7 +6,7 @@ import { useHelper } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import React, { FC, useCallback, useEffect, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import { LOGIN_METHOD, User2FAPincodeConfig } from "app/static/types"
+import { LoginOptions, User2FAPincodeConfig } from "app/static/types"
 import { LoginScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
 import { ResendOtp } from "../../../signup/screens"
@@ -49,7 +49,7 @@ export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observ
 
     const navigateToLoginWithPassword = useCallback(() => {
       navigation.navigate("login", {
-        initMethod: LOGIN_METHOD.PASSWORD,
+        initMethod: LoginOptions.PASSWORD,
         email,
       })
     }, [email])

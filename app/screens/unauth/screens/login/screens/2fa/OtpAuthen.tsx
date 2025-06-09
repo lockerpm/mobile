@@ -3,11 +3,10 @@ import { StyleSheet, TouchableOpacity, View } from "react-native"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
 import { useAppLocale } from "app/services/context"
-import { Text, Button, TextInput, Icon, Toggle } from "app/components/cores"
+import { Text, Button, TextInput, Icon, Toggle, BottomModalContainer } from "app/components/cores"
 import { useToast } from "app/services/utils"
 import { User2FAMethod, User2FAPasswordConfig, User2FAPincodeConfig } from "app/static/types"
 import { useLoggedIn } from "../../../hook/useLoggedIn"
-import { BottomModalContainer } from "app/components/utils"
 
 type Props = {
   params:

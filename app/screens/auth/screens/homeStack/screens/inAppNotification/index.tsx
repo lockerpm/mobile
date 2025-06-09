@@ -1,16 +1,18 @@
 import React, { FC } from "react"
-import { FlatList, View } from "react-native"
-import { Screen, Header, Text } from "app/components/cores"
+import { FlatList, StyleSheet } from "react-native"
+import { Screen, Header } from "app/components/cores"
 import { NotiListItem } from "./InAppNotiItem"
 import { useStores } from "app/models"
 import { observer } from "mobx-react-lite"
-import { useAppLocale } from "app/services/context"
 import { HomeStackScreenProps } from "app/navigators"
 
 export const InAppListNotificationScreen: FC<HomeStackScreenProps<"appListNoti">> = observer(
   ({ navigation, route }) => {
-    const { translate } = useAppLocale()
     const { user } = useStores()
+
+    const markRead = async (id: string) => {
+      await user.markReadInAppNoti(id)
+    }
 
     return (
       <Screen
@@ -18,33 +20,34 @@ export const InAppListNotificationScreen: FC<HomeStackScreenProps<"appListNoti">
         header={
           <Header
             leftIcon="arrow-left"
-            onLeftPress={() => {
-              navigation.goBack()
-            }}
-            title={translate("common.notifications")}
+            onLeftPress={navigation.goBack}
+            titleTx={"common.notifications"}
           />
         }
-        contentContainerStyle={{
-          flex: 1,
-        }}
+        contentContainerStyle={styles.container}
       >
         <FlatList
-          data={route.params?.notifications?.results}
-          ListEmptyComponent={() => (
-            <View style={{ alignItems: "center" }}>
-              <Text text="(no data)" />
-            </View>
-          )}
-          ListFooterComponent={() => <View style={{ height: 50 }} />}
-          style={{
-            paddingHorizontal: 20,
-          }}
-          keyExtractor={(_, index) => String(index)}
+          data={route.params.notifications.results}
+          style={styles.listContainer}
+          keyExtractor={(_, index) => index.toString()}
           renderItem={({ item }) => (
-            <NotiListItem lang={user.language === "zh" ? "en" : user.language} {...item} />
+            <NotiListItem
+              lang={user.language === "vi" ? "vi" : "en"}
+              item={item}
+              markRead={markRead}
+            />
           )}
         />
       </Screen>
     )
   },
 )
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  listContainer: {
+    paddingHorizontal: 16,
+  },
+})

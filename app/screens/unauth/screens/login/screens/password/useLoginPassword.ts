@@ -1,10 +1,10 @@
 import { useStores } from "app/models"
 import { useToast } from "app/services/utils"
-import { LOGIN_METHOD, User2FAMethod } from "app/static/types"
+import { LoginOptions, User2FAMethod } from "app/static/types"
 
 type LoginPasswordParams = {
   setIsError: (val: boolean) => void
-  setLoginMethodLoading: (val: LOGIN_METHOD) => void
+  setLoginMethodLoading: (val: LoginOptions) => void
   handleLoginSuccess: (data: {
     is_factor2: boolean
     methods: User2FAMethod[]
@@ -21,11 +21,11 @@ export const useLoginPassword = ({
   const { notifyTx, notifyApiError, notify } = useToast()
 
   const handlePasswordLogin = async (username: string, password: string) => {
-    setLoginMethodLoading(LOGIN_METHOD.PASSWORD)
+    setLoginMethodLoading(LoginOptions.PASSWORD)
     setIsError(false)
 
     const res = await user.login({ username, password })
-    setLoginMethodLoading(LOGIN_METHOD.NONE)
+    setLoginMethodLoading(LoginOptions.NONE)
     if (res.kind !== "ok") {
       setIsError(true)
       if (res.kind === "unauthorized" && res.data) {

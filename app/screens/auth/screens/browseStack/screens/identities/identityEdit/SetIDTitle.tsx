@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NewActionSheet, NewActionSheetItem } from "app/components/utils/action-sheet/ActionSheet"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils/actionSheet/ActionSheet"
 import { TouchableOpacity, View } from "react-native"
 import { Icon, Text } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"

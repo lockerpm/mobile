@@ -3,12 +3,11 @@ import { StyleSheet, TextInput, View } from "react-native"
 import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
 import { RelayAddress } from "app/static/types"
-import { Text, Button, Icon } from "app/components/cores"
+import { Text, Button, Icon, BottomModalContainer } from "app/components/cores"
 import Animated, { FadeInDown } from "react-native-reanimated"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { IS_IOS } from "app/config/constants"
 import { useToast } from "app/services/utils"
-import { BottomModalContainer } from "app/components/utils"
 
 interface Props {
   onClose: () => void

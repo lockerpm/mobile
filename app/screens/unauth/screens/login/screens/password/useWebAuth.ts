@@ -1,4 +1,4 @@
-import { LOGIN_METHOD, User2FAMethod } from "app/static/types"
+import { LoginOptions, User2FAMethod } from "app/static/types"
 import { credentialAuthOptions, publicKeyCredentialWithAssertion } from "app/utils/passkey"
 import { PasskeyAuthenticationRequest } from "react-native-passkey/lib/typescript/Passkey"
 import { Passkey, PasskeyAuthenticationResult } from "react-native-passkey"
@@ -6,7 +6,7 @@ import { useStores } from "app/models"
 import { useToast } from "app/services/utils"
 
 type WebAuthParams = {
-  setLoginMethodLoading: (val: LOGIN_METHOD) => void
+  setLoginMethodLoading: (val: LoginOptions) => void
   onGoToPinCode: () => void
   handleLoginSuccess: (data: {
     is_factor2: boolean
@@ -24,7 +24,7 @@ export const useWebAuth = ({
   const { notifyTx, notifyApiError } = useToast()
 
   const handleWebAuthLogin = async (username: string, withSecurityKey = false) => {
-    setLoginMethodLoading(LOGIN_METHOD.PASSKEY)
+    setLoginMethodLoading(LoginOptions.PASSKEY)
     const resAuthPasskeyOptions = await user.authPasskeyOptions(username)
     if (resAuthPasskeyOptions.kind === "ok") {
       try {
@@ -71,7 +71,7 @@ export const useWebAuth = ({
     } else {
       notifyApiError(resAuthPasskeyOptions)
     }
-    setLoginMethodLoading(LOGIN_METHOD.NONE)
+    setLoginMethodLoading(LoginOptions.NONE)
   }
 
   return {

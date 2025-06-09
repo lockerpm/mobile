@@ -3,7 +3,7 @@ import { Button, TextInput, Screen, Header } from "app/components/cores"
 import { useToast } from "app/services/utils"
 import { ForgotPasswordScreenProps } from "app/navigators"
 import { CommonActions } from "@react-navigation/native"
-import { LOGIN_METHOD } from "app/static/types"
+import { LoginOptions } from "app/static/types"
 import { ViewStyle } from "react-native"
 import { idApi } from "app/services/api"
 
@@ -47,7 +47,7 @@ export const ForgotChangePasswordScreen: FC<ForgotPasswordScreenProps<"changePas
             params: {
               screen: "login",
               params: {
-                initMethod: LOGIN_METHOD.PASSWORD,
+                initMethod: LoginOptions.PASSWORD,
                 email: username,
               },
             },

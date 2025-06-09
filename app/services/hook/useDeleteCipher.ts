@@ -3,7 +3,6 @@ import { useCipherData } from "./useCipherData"
 import { useFolder } from "./useFolder"
 import { useStores } from "app/models"
 import { useCoreService } from "../coreService"
-import { useHelper } from "./useHelper"
 import { Logger } from "app/utils/utils"
 import { useCipherHelper } from "./useCipherHelper"
 import { useAppLocale } from "../context"
@@ -19,13 +18,14 @@ export const useDeleteCipher = () => {
     minimalReloadCache,
     updateCipher,
   } = useCipherData()
+  const { notify } = useToast()
   const { shareFolderRemoveItem } = useFolder()
   const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { getPasswordStrength } = useCipherHelper()
 
   const removeItemFromFolder = async (selectedCipher: CipherView) => {
-    selectedCipher.folderId = null
+    selectedCipher.folderId = ""
     const passwordStrength = getPasswordStrength(selectedCipher.login.password).score
     await updateCipher(
       selectedCipher.id,
@@ -66,11 +66,13 @@ export const useDeleteCipher = () => {
         } else {
           const share = cipherStore.myShares.find((s) => s.id === selectedCipher.organizationId)
 
-          if (share.members.length > 0) {
-            await stopShareCipher(selectedCipher, share.members[0].id)
-          }
-          if (share.groups.length) {
-            await stopShareCipherForGroup(selectedCipher, share.groups[0].id)
+          if (share) {
+            if (share.members.length > 0) {
+              await stopShareCipher(selectedCipher, share.members[0].id)
+            }
+            if (share.groups.length) {
+              await stopShareCipherForGroup(selectedCipher, share.groups[0].id)
+            }
           }
         }
       }

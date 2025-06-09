@@ -1,6 +1,6 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
-import { Text } from "app/components/cores"
+import { BottomModalContainer, Text } from "app/components/cores"
 import moment from "moment"
 import { RelayAddress } from "app/static/types"
 import { ActionItem } from "app/components/ciphers"
@@ -9,7 +9,6 @@ import { useStores } from "app/models"
 import { debounce } from "app/utils/utils"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { useClipboard, useToast } from "app/services/utils"
-import { BottomModalContainer } from "app/components/utils"
 
 export enum RelayActionType {
   DEFAULT = "default",

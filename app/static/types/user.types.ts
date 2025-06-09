@@ -254,47 +254,54 @@ export type AppNotificationCodeWithMetadata = {
   }
 }
 
+export type AppNotificationMetadata = {
+  is_grantee?: boolean
+  is_grantor?: boolean
+
+  // v2
+  grantee_name?: string
+  grantee_email?: string
+  link?: {
+    vi: string
+    en: string
+  }
+  title?: string
+  team_id?: string
+  payment_id?: string
+  owner_name?: string
+  owner_email?: string
+  cipher_type?: string
+  member_joined_text_vi?: string
+  member_joined_text_en?: string
+  member_joined_text?: string
+  sharing_id?: string
+  emails?: string
+  group_id?: string
+  group_name?: string
+  recipient_name?: string
+}
+
+export type AppNotificationType = {
+  id: string
+  type: NotificationCategory
+  notification_code: keyof AppNotificationCodeWithMetadata
+  publish_time: number
+  title: {
+    en: string
+    vi: string
+  }
+  description: {
+    en: string
+    vi: string
+  }
+  metadata: AppNotificationMetadata
+  read: boolean
+}
+
 export type AppNotification = {
   count: number
   unread_count: number
-  results: {
-    description: any
-    id: string
-    notification_code: keyof AppNotificationCodeWithMetadata
-    metadata: {
-      is_grantee?: boolean
-      is_grantor?: boolean
-
-      // v2
-      grantee_name?: string
-      grantee_email?: string
-      link?: {
-        vi: string
-        en: string
-      }
-      title?: string
-      team_id?: string
-      payment_id?: string
-      owner_name?: string
-      owner_email?: string
-      cipher_type?: string
-      member_joined_text_vi?: string
-      member_joined_text_en?: string
-      member_joined_text?: string
-      sharing_id?: string
-      emails?: string
-      group_id?: string
-      group_name?: string
-      recipient_name?: string
-    }
-    publish_time: number
-    read: boolean
-    title: {
-      en: string
-      vi: string
-    }
-    type: NotificationCategory
-  }[]
+  results: AppNotificationType[]
 }
 
 export type TrustedContact = {

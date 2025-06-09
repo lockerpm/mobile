@@ -29,7 +29,7 @@ export const LockByMasterPassword = ({ handleLogout, handleUnlock }: Props) => {
 
   // ---------------------- PARAMS -------------------------
 
-  const [masterPassword, setMasterPassword] = useState("demo@1234")
+  const [masterPassword, setMasterPassword] = useState("demo@123")
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isFocused, setIsFocused] = useState(false)

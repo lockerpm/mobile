@@ -1,13 +1,12 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
 import { RelayAddress } from "app/static/types"
-import { Icon, PressableScale, Text } from "app/components/cores"
+import { Icon, PressableScale, Text, BottomModalContainer } from "app/components/cores"
 import { useStores } from "app/models"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { useAppLocale, useTheme } from "app/services/context"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { useToast } from "app/services/utils"
-import { BottomModalContainer } from "app/components/utils"
 
 interface Props {
   onClose: () => void

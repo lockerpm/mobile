@@ -132,7 +132,7 @@ export enum LoginMethod {
 }
 
 // use only on Login screen
-export enum LOGIN_METHOD {
+export enum LoginOptions {
   PASSKEY = 0,
   PASSWORD = 1,
   NONE = 2,

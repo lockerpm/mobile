@@ -1,9 +1,9 @@
 import React, { useState, useRef, useCallback } from "react"
 import { StyleSheet, View } from "react-native"
-import { Text, Button, Icon } from "app/components/cores"
+import { Text, Button, Icon, BottomModalContainer } from "app/components/cores"
 import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
-import { BottomModalContainer, RecaptchaChecker, RecaptchaCheckerRef } from "app/components/utils"
+import { RecaptchaChecker, RecaptchaCheckerRef } from "app/components/utils"
 import { useToast } from "app/services/utils"
 import { User2FAMethod, User2FAPasswordConfig } from "app/static/types"
 

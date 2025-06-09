@@ -11,7 +11,7 @@ import { useHomeBackHandler } from "./useHomeBackHandler"
 import { CipherList, SortActionConfigModal, SortConfigType } from "app/components/newCiphers"
 import { StyleSheet } from "react-native"
 import { CipherType } from "core/enums"
-import { AppNotification } from "app/static/types"
+import { AppNotification, CipherActionsModal } from "app/static/types"
 
 const cipherTypes = [
   CipherType.Card,
@@ -83,8 +83,11 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
   }, [])
 
   const navigateToDelete = useCallback(() => {
-    // navigation.navigate("moveToFolder")
-  }, [])
+    navigation.navigate("cipherActionsModal", {
+      mode: CipherActionsModal.DELETE,
+      deleteIds: selectedCipherIds,
+    })
+  }, [selectedCipherIds])
 
   const onCloseSortModal = useCallback(() => {
     setIsSortOpen(false)
