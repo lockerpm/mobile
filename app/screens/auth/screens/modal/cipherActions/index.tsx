@@ -7,6 +7,9 @@ import { ModalBackdrop } from "app/components/cores"
 import { Actions } from "./Actions"
 import { CipherActionsModal } from "app/static/types"
 import { Delete } from "./Delete"
+import { ShareOptions } from "./ShareOptions"
+import { Premium } from "./Premium"
+import { LeaveShared } from "./LeaveShared"
 
 export const CipherActionsModalScreen: FC<AuthStackScreenProps<"cipherActionsModal">> = ({
   navigation,
@@ -32,6 +35,16 @@ export const CipherActionsModalScreen: FC<AuthStackScreenProps<"cipherActionsMod
 
         {targetModal === CipherActionsModal.DELETE && (
           <Delete deleteIds={deleteIds} onClose={onClose} />
+        )}
+
+        {targetModal === CipherActionsModal.SHARE && !!item && (
+          <ShareOptions cipherId={item.id} onClose={onClose} setNextModal={setTargetModal} />
+        )}
+
+        {targetModal === CipherActionsModal.PREMIUM_ACTION && <Premium />}
+
+        {targetModal === CipherActionsModal.LEAVE_SHARE && !!item && (
+          <LeaveShared onClose={onClose} cipherId={item.id} organizationId={item.organizationId} />
         )}
       </View>
     </KeyboardAvoidingView>

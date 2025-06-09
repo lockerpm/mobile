@@ -42,7 +42,6 @@ export function useCipherData() {
     storageService,
     collectionService,
     searchService,
-    messagingService,
     syncService,
     cryptoService,
   } = useCoreService()

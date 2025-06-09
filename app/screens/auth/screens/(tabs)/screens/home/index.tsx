@@ -11,7 +11,7 @@ import { useHomeBackHandler } from "./useHomeBackHandler"
 import { CipherList, SortActionConfigModal, SortConfigType } from "app/components/newCiphers"
 import { StyleSheet } from "react-native"
 import { CipherType } from "core/enums"
-import { AppNotification, CipherActionsModal } from "app/static/types"
+import { AppNotification, CipherActionsModal, CipherAppView } from "app/static/types"
 
 const cipherTypes = [
   CipherType.Card,
@@ -89,6 +89,18 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
     })
   }, [selectedCipherIds])
 
+  const navigateToCipherActions = useCallback((item: CipherAppView) => {
+    const data: CipherAppView = {
+      ...item,
+      revisionDate: null,
+    }
+    navigation.navigate("cipherActionsModal", {
+      mode: CipherActionsModal.DEFAULT,
+      item: data,
+      deleteIds: [item.id],
+    })
+  }, [])
+
   const onCloseSortModal = useCallback(() => {
     setIsSortOpen(false)
   }, [])
@@ -140,6 +152,7 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
         selectedIds={selectedCipherIds}
         setSelectedIds={setSelectedCipherIds}
         setAllItems={setAllItems}
+        openActionsMenu={navigateToCipherActions}
         ListEmptyComponent={
           <EmptyCipherList onAdd={navigateToAddCipher} onImport={navigateToImport} />
         }

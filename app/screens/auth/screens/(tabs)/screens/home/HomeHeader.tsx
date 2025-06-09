@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     height: 56,
     justifyContent: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
   iconContainer: {
     padding: 8,

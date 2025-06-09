@@ -1,41 +1,158 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
 import { BottomModalContainer, Text } from "app/components/cores"
-import { ActionItem } from "app/components/ciphers"
-import { useAppLocale, useTheme } from "app/services/context"
-import { debounce } from "app/utils/utils"
-import { useClipboard } from "app/services/utils"
-import { CipherView } from "core/models/view"
-import { CipherActionsModal } from "app/static/types"
+import { useTheme } from "app/services/context"
+import { AccountRole, CipherActionsModal, CipherAppView } from "app/static/types"
+import { useStores } from "app/models"
+import { CipherType } from "core/enums"
+import { getCipherDescription, getTeam } from "app/utils/cipherHelper"
+import { CipherIconImage } from "app/components/newCiphers"
+import { NewActionSheetItem } from "app/components/utils"
 
 interface Props {
-  item: CipherView
+  item: CipherAppView
   setNextModal: (action: CipherActionsModal) => void
   onClose: () => void
 }
 
 export const Actions = ({ item, setNextModal, onClose }: Props) => {
   const { colors } = useTheme()
-  const { copyToClipboard } = useClipboard()
-  const { translate } = useAppLocale()
+  const { cipherStore } = useStores()
+
+  // ------------------------COMPUTED------------------------
+
+  const organizations = cipherStore.organizations
+  const cipherDescription = getCipherDescription(item)
+  const lockerMasterPassword = item.type === CipherType.MasterPassword
+
+  // Share role and editable status
+  const shareRole = getTeam(organizations, item.organizationId).type
+  const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
+  const isInFolderShare = item.collectionIds?.length > 0
+  const editable =
+    !item.organizationId || shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER
 
   return (
     <BottomModalContainer>
       <View style={styles.headerContainer}>
-        <View style={styles.row}>
-          {/* <View>
-            <Text preset="bold" text={item.full_address} style={{ marginBottom: 4 }} />
-            <Text text={moment.unix(item.created_time).format("DD/MM/YYYY")} />
-          </View> */}
+        <CipherIconImage cipherType={item.type} source={item.imgLogo} resizeMode="contain" />
+        <View style={styles.headerContent}>
+          <Text preset="bold" text={item.name} numberOfLines={2} />
+          {!!cipherDescription && (
+            <Text
+              preset="label"
+              size="base"
+              text={cipherDescription}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            />
+          )}
         </View>
       </View>
-
-      <ActionItem
-        bottomDivider
-        name={translate("private_relay.copy")}
+      <NewActionSheetItem
+        bottomBorder
+        tx="common.details"
+        icon="list-bullets"
+        onPress={() => {
+          onClose()
+          // navigation.navigate(`${cipherMapper.path}__info`)
+        }}
+      />
+      <NewActionSheetItem
+        bottomBorder
+        hide={lockerMasterPassword || !editable}
+        tx="common.clone"
         icon="copy"
-        action={() => {
-          copyToClipboard("")
+        onPress={() => {
+          onClose()
+          // navigation.navigate(`${cipherMapper.path}__edit`, { mode: "clone" })
+        }}
+      />
+      <NewActionSheetItem
+        bottomBorder
+        hide={lockerMasterPassword || isInFolderShare || !editable}
+        tx="folder.move_to_folder"
+        icon="folder-simple"
+        onPress={() => {
+          onClose()
+          // navigation.navigate("folders__select", {
+          //   mode: "move",
+          //   initialId: selectedCipher.folderId,
+          //   cipherIds: [selectedCipher.id],
+          // })
+        }}
+      />
+      <NewActionSheetItem
+        bottomBorder
+        hide={lockerMasterPassword || !editable}
+        tx="common.edit"
+        icon="edit"
+        onPress={() => {
+          onClose()
+          // navigation.navigate(`${cipherMapper.path}__edit`, { mode: "edit" })
+        }}
+      />
+      <NewActionSheetItem
+        bottomBorder
+        hide={lockerMasterPassword || isShared || !editable}
+        tx="file_attachment.title"
+        icon="file-arrow-up"
+        onPress={() => {
+          onClose()
+          // navigation.navigate("attachment")
+        }}
+      />
+      <NewActionSheetItem
+        bottomBorder
+        hide={lockerMasterPassword || !(isInFolderShare || isShared) || !editable}
+        tx="quick_shares.share_option.quick.tl"
+        icon="share"
+        onPress={() => {
+          onClose()
+          // navigation.navigate("quick_shares", { cipher: selectedCipher })
+        }}
+      />
+      <NewActionSheetItem
+        bottomBorder
+        hide={lockerMasterPassword || isInFolderShare || isShared || !editable}
+        tx="common.share"
+        icon="share"
+        onPress={() => {
+          setNextModal(CipherActionsModal.SHARE)
+        }}
+      />
+      <NewActionSheetItem
+        bottomBorder
+        hide={!isShared}
+        tx="file_attachment.title"
+        icon="file-arrow-up"
+        onPress={() => {
+          onClose()
+          // navigation.navigate("attachment", {
+          //   isShared: true,
+          // })
+        }}
+      />
+      <NewActionSheetItem
+        bottomBorder
+        hide={!isShared}
+        tx="shares.leave"
+        icon="sign-out"
+        color={colors.error}
+        iconColor={colors.error}
+        onPress={() => {
+          setNextModal(CipherActionsModal.LEAVE_SHARE)
+        }}
+      />
+      <NewActionSheetItem
+        bottomBorder
+        hide={lockerMasterPassword || !editable}
+        tx="trash.to_trash"
+        icon="trash"
+        color={colors.error}
+        iconColor={colors.error}
+        onPress={() => {
+          setNextModal(CipherActionsModal.DELETE)
         }}
       />
     </BottomModalContainer>
@@ -44,11 +161,14 @@ export const Actions = ({ item, setNextModal, onClose }: Props) => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    paddingHorizontal: 20,
-    width: "100%",
-  },
-  row: {
     alignItems: "center",
     flexDirection: "row",
+    paddingHorizontal: 16,
+    width: "100%",
+  },
+  headerContent: {
+    flexGrow: 1,
+    flexShrink: 1,
+    marginLeft: 12,
   },
 })

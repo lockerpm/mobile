@@ -1,8 +1,10 @@
 import { useTheme } from "app/services/context"
 import React from "react"
-import { StyleSheet, View, ViewProps } from "react-native"
+import { Dimensions, ScrollView, StyleSheet, View, ViewProps } from "react-native"
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+
+const height = Dimensions.get("window").height
 
 export const BottomModalContainer = (props: ViewProps) => {
   const { colors } = useTheme()
@@ -12,8 +14,16 @@ export const BottomModalContainer = (props: ViewProps) => {
       exiting={FadeOutDown}
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <View style={styles.handleContainer} />
-      <View {...props} />
+      <ScrollView
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+        style={{
+          maxHeight: height * 0.8,
+        }}
+      >
+        <View style={styles.handleContainer} />
+        <View {...props} />
+      </ScrollView>
     </Animated.View>
   )
 }

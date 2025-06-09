@@ -19,6 +19,7 @@ export enum CipherActionsModal {
   DEFAULT = "default",
   SHARE = "share",
   DELETE = "delete",
+  LEAVE_SHARE = "leave_share",
   PREMIUM_ACTION = "premium_action",
 }
 
@@ -186,7 +187,7 @@ export type CipherAppView = {
   fields: FieldView[]
   passwordHistory: PasswordHistoryView[]
   collectionIds: string[]
-  revisionDate: Date
+  revisionDate: Date | null
   deletedDate: Date
   reprompt: CipherRepromptType
   imgLogo: ImageSourcePropType

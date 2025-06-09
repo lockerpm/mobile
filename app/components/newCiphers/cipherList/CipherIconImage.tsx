@@ -1,7 +1,7 @@
 import { VAULT_LOGO } from "app/static/vault"
 import { CipherType } from "core/enums"
 import React, { useEffect, useState } from "react"
-import { ImageProps, Image } from "react-native"
+import { ImageProps, Image, ImageStyle } from "react-native"
 
 const getDefaultLogo = (type: CipherType) => {
   switch (type) {
@@ -26,6 +26,7 @@ const getDefaultLogo = (type: CipherType) => {
 export const CipherIconImage = ({
   cipherType,
   source,
+  style,
   ...otherProps
 }: ImageProps & { cipherType: CipherType }) => {
   const [imageSource, setImageSource] = useState(source)
@@ -40,7 +41,14 @@ export const CipherIconImage = ({
       onError={() => {
         setImageSource(getDefaultLogo(cipherType))
       }}
+      style={[$imageStyle, style]}
       {...otherProps}
     />
   )
+}
+
+const $imageStyle: ImageStyle = {
+  width: 40,
+  height: 40,
+  borderRadius: 8,
 }

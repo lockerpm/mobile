@@ -5,6 +5,7 @@ import {
   AppNotification,
   BreanchResult,
   CipherActionsModal,
+  CipherAppView,
   LockType,
   LoginOptions,
   MarketingContent,
@@ -140,7 +141,7 @@ export type UnAuthScreenProps<T extends keyof UnAuthRoute> = CompositeScreenProp
 export type AuthRoute = {
   cipherActionsModal: {
     mode: CipherActionsModal
-    item?: CipherView
+    item?: CipherAppView
 
     /**
      * Delete ids for multiple ciphers, if start with CipherActionsModal.DEFAULT

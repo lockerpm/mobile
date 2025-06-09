@@ -2,8 +2,17 @@ import React from "react"
 import { ColorValue, StyleSheet, View } from "react-native"
 import { Text, Icon, IconTypes, PressableScale } from "app/components/cores"
 import { TOptions, TxKeyPath } from "app/i18n"
+import { useTheme } from "app/services/context"
 
 interface ItemProps {
+  /**
+   * Show bottom border
+   */
+  bottomBorder?: boolean
+  /**
+   * Hide item from the action sheet
+   */
+  hide?: boolean
   /**
    * Item onPress callback
    */
@@ -29,17 +38,24 @@ interface ItemProps {
 }
 
 export const NewActionSheetItem = (props: ItemProps) => {
-  const { icon, iconColor, text, tx, txOptions, color, ...touchableProps } = props
+  const { colors } = useTheme()
+  const { hide, icon, iconColor, text, tx, txOptions, color, onPress } = props
 
-  return (
-    <PressableScale {...touchableProps}>
-      <View style={styles.container}>
+  return !hide ? (
+    <PressableScale onPress={onPress}>
+      <View
+        style={[
+          styles.container,
+          { borderBottomWidth: props.bottomBorder ? 1 : 0, borderBottomColor: colors.border },
+        ]}
+      >
         <Text text={text} tx={tx} txOptions={txOptions} color={color} style={styles.text} />
         {!!icon && <Icon icon={icon} color={iconColor} />}
       </View>
     </PressableScale>
-  )
+  ) : null
 }
+
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",

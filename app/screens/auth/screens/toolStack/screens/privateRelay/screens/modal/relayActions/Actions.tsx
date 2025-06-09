@@ -68,6 +68,15 @@ export const Actions = ({
           copyToClipboard(item.full_address)
         }}
       />
+
+      <ActionItem
+        bottomDivider
+        name={translate("private_relay.copy")}
+        icon="copy"
+        action={() => {
+          copyToClipboard(item.full_address)
+        }}
+      />
       {isEditable && (
         <ActionItem
           bottomDivider
@@ -110,7 +119,7 @@ export const Actions = ({
 
 const styles = StyleSheet.create({
   headerContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     width: "100%",
   },
   row: {

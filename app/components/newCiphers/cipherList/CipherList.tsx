@@ -60,7 +60,11 @@ export interface CipherListProps {
   /**
    * Store all items IDs for selection all action in header
    */
-  setAllItems: (val: any) => void
+  setAllItems: (val: string[]) => void
+  /**
+   * Open Item actions
+   */
+  openActionsMenu: (item: CipherAppView) => void
 }
 
 /**
@@ -80,6 +84,7 @@ export const CipherList = observer(
     selectedIds,
     setSelectedIds,
     setAllItems,
+    openActionsMenu,
   }: CipherListProps) => {
     const { cipherStore } = useStores()
     const { colors } = useTheme()
@@ -201,12 +206,6 @@ export const CipherList = observer(
       setIsLoadingDone(true)
     }
 
-    // Handle action menu open
-    const openActionMenu = (item: CipherAppView) => {
-      console.log(item)
-      // cipherStore.setSelectedCipher(item)
-    }
-
     // Toggle item selection
     const toggleItemSelection = (id: string) => {
       if (!isSelecting) {
@@ -272,7 +271,7 @@ export const CipherList = observer(
                 item={item}
                 isSelecting={isSelecting}
                 toggleItemSelection={toggleItemSelection}
-                openActionMenu={openActionMenu}
+                openActionMenu={openActionsMenu}
                 isSelected={selectedIds.includes(item.id)}
                 isShared={isShared(item.organizationId)}
               />
@@ -290,7 +289,7 @@ export const CipherList = observer(
                   item={masterPassword}
                   isSelecting={false}
                   toggleItemSelection={toggleItemSelection}
-                  openActionMenu={openActionMenu}
+                  openActionMenu={openActionsMenu}
                   isSelected={false}
                   isShared={false}
                 />
