@@ -1,7 +1,5 @@
-import React, { FC, useEffect, useState } from "react"
-import { NativeModules, StyleSheet } from "react-native"
-import { IS_IOS, VIN_AUTH_CALLBACK, VIN_AUTH_ENDPOINT } from "app/config/constants"
-import { getUrlParameterByName } from "app/utils/utils"
+import React, { FC, useState } from "react"
+import { StyleSheet } from "react-native"
 import { Button, Header, Logo, Screen, Text, TextInput } from "app/components/cores"
 import { LockType } from "app/static/types"
 import { useAppLocale } from "app/services/context"
@@ -9,19 +7,14 @@ import { SSOScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
 import { idApi } from "app/services/api"
 
-const { VinCssSsoLoginModule } = NativeModules
-
-export const SSOEmailLoginScreen: FC<SSOScreenProps<"ssoLogin">> = ({ navigation, route }) => {
+export const SSOEmailLoginScreen: FC<SSOScreenProps<"ssoLogin">> = ({ navigation }) => {
   const { notify, notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
   // ------------------PARAMS--------------------
   const [username, setUsername] = useState("")
-  const [nfcAuthen, setNfcAuthen] = useState(false)
-  const [usbAuthen, setUsbAuthen] = useState(false)
 
   const [isError, setIsError] = useState(false)
-  const [loaddingAuthen, setLoadingAuth] = useState(0) // 0: none, 1: usb, 2: nfc, 3: ios
 
   // ------------------METHODS--------------------
   const handleLogin = async () => {
@@ -52,78 +45,6 @@ export const SSOEmailLoginScreen: FC<SSOScreenProps<"ssoLogin">> = ({ navigation
     }
   }
 
-  const showWebauthOpeions = async () => {
-    const { FEATURE_USB_HOST, FEATURE_NFC } = VinCssSsoLoginModule.getConstants()
-
-    const nfcUsable = await VinCssSsoLoginModule.hasSystemFeature(FEATURE_NFC)
-    if (nfcUsable) {
-      setNfcAuthen(true)
-    }
-    const usbUsable = await VinCssSsoLoginModule.hasSystemFeature(FEATURE_USB_HOST)
-    if (usbUsable) {
-      setUsbAuthen(true)
-    }
-  }
-
-  const handleWebauthLoginAndroid = async (method: "nfc" | "usb") => {
-    setLoadingAuth(method === "usb" ? 1 : 2)
-    const startWebauth =
-      method === "nfc" ? VinCssSsoLoginModule.startNFCAuthen : VinCssSsoLoginModule.startUSBAuthen
-
-    const result = await startWebauth(VIN_AUTH_ENDPOINT, VIN_AUTH_CALLBACK)
-
-    if (result.error_code) {
-      notify("error", result.error_message)
-      setLoadingAuth(0)
-      return
-    }
-
-    const code = getUrlParameterByName("code", result.url)
-
-    await loginWithCode(code)
-    setLoadingAuth(0)
-  }
-
-  const handleWebauthLoginIOS = async () => {
-    setLoadingAuth(3)
-
-    const result = await VinCssSsoLoginModule.startWebauth(VIN_AUTH_ENDPOINT, VIN_AUTH_CALLBACK)
-    if (!result) {
-      notify("error", "Unknow error")
-      setLoadingAuth(0)
-      return
-    }
-    const code = getUrlParameterByName("code", result)
-
-    await loginWithCode(code)
-    setLoadingAuth(0)
-  }
-
-  const loginWithCode = async (code: string) => {
-    const res = await idApi.onPremisePreLogin({ identifier: route.params.identifier, code })
-    if (res.kind !== "ok") {
-      notifyApiError(res)
-    } else {
-      if (res.data.length === 0) {
-        notifyTx("error", "error.onpremise_login_failed")
-      }
-      if (res.data[0]?.activated) {
-        setLoadingAuth(0)
-        navigation.navigate("lock", {
-          type: LockType.OnPremise,
-          data: res.data[0],
-          email: res.data[0].email,
-        })
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (route.params.use_sso) {
-      !IS_IOS && showWebauthOpeions()
-    }
-  }, [])
-
   return (
     <Screen
       preset="auto"
@@ -151,39 +72,6 @@ export const SSOEmailLoginScreen: FC<SSOScreenProps<"ssoLogin">> = ({ navigation
         style={styles.continue}
       />
 
-      {IS_IOS && (
-        <Button
-          loading={loaddingAuthen === 3}
-          tx="sso.email.ble"
-          onPress={() => {
-            handleWebauthLoginIOS()
-          }}
-          style={styles.button}
-        />
-      )}
-
-      {usbAuthen && (
-        <Button
-          loading={loaddingAuthen === 1}
-          tx="sso.email.usb"
-          onPress={() => {
-            handleWebauthLoginAndroid("usb")
-          }}
-          style={styles.button}
-        />
-      )}
-
-      {nfcAuthen && (
-        <Button
-          loading={loaddingAuthen === 2}
-          tx="sso.email.nfc"
-          onPress={() => {
-            handleWebauthLoginAndroid("nfc")
-          }}
-          style={styles.button}
-        />
-      )}
-
       <Text preset="label" tx="sso.id.create_sso" style={styles.mt4} />
       <Text preset="label" style={styles.mt4}>
         {translate("sso.id.contact_at")}
@@ -194,10 +82,6 @@ export const SSOEmailLoginScreen: FC<SSOScreenProps<"ssoLogin">> = ({ navigation
 }
 
 const styles = StyleSheet.create({
-  button: {
-    flex: 1,
-    marginTop: 12,
-  },
   continue: {
     marginBottom: 16,
     marginTop: 24,

@@ -6,8 +6,7 @@
 
 #import <React/RCTBridgeModule.h>
 
-// vinsso
-#import <VinCSSFido2ClientSDK/VinCSSFido2ClientSDK-Swift.h>
+
 
 // AES-256-GCM.h
 #include <openssl/evp.h>
