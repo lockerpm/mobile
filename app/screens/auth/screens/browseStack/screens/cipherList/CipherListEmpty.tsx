@@ -1,15 +1,25 @@
 import * as React from "react"
-import { View, Image, StyleSheet } from "react-native"
+import { View, Image, StyleSheet, ImageSourcePropType } from "react-native"
 import { Button, Text } from "app/components/cores"
+import { CipherType } from "core/enums"
+import { TxKeyPath } from "app/i18n"
 
-export interface EmptyCipherListProps {
+interface EmptyCipherListProps {
   onAdd: () => void
-  onImport: () => void
+  cipherTypes: CipherType[]
+}
+
+type EmptyCipherListType = {
+  titleTx: TxKeyPath
+  descTx: TxKeyPath
+  buttonTx: TxKeyPath
+  image: ImageSourcePropType
+  type: CipherType
 }
 
 const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
 
-export const EmptyCipherList = React.memo(({ onAdd, onImport }: EmptyCipherListProps) => {
+export const CipherListEmpty = React.memo(({ onAdd }: EmptyCipherListProps) => {
   return (
     <View style={styles.container}>
       <Image source={HOME_EMPTY_CIPHER} resizeMode="contain" style={{ height: 55, width: 120 }} />

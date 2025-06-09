@@ -1,0 +1,117 @@
+import React from "react"
+import { View, StyleSheet } from "react-native"
+import { Icon, Text } from "app/components/cores"
+import { useStores } from "app/models"
+import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated"
+import { CipherListSelectionHeader } from "app/components/newCiphers"
+import { TxKeyPath } from "app/i18n"
+
+interface Props {
+  /**
+   * Show Header title
+   */
+  header?: string
+  headerTx?: TxKeyPath
+
+  /**
+   * Cipher List actions
+   */
+  openSort: () => void
+  openAdd: () => void
+  openMoveToFolder: () => void
+  openShare: () => void
+  openDelete: () => void
+  toggleSelectAll: () => void
+  goBack: () => void
+
+  isSelecting: boolean
+  setIsSelecting: (val: boolean) => void
+  selectedItems: string[]
+  setSelectedItems: (val: any) => void
+}
+
+export const CipherListHeader = (props: Props) => {
+  const {
+    header,
+    headerTx,
+    goBack,
+    openAdd,
+    openSort,
+    openShare,
+    openDelete,
+    toggleSelectAll,
+    openMoveToFolder,
+    isSelecting,
+    setIsSelecting,
+    selectedItems,
+    setSelectedItems,
+  } = props
+  const { user } = useStores()
+
+  // ----------------------- PARAMS ------------------------
+
+  // ----------------------- COMPUTED ------------------------
+  const isFreeAccount = user.isFreePlan
+
+  // ----------------------- METHODS ------------------------
+
+  // ----------------------- RENDER ------------------------
+
+  return (
+    <View style={styles.headerContainer}>
+      {!isSelecting && (
+        <Animated.View entering={FadeInUp} exiting={FadeOutDown} style={styles.container}>
+          <View style={styles.rowContainer}>
+            <Icon icon={"arrow-left"} onPress={goBack} style={styles.mr8} />
+            <Text preset="bold" size="xxl" weight="semibold" text={header} tx={headerTx} />
+          </View>
+          <View style={styles.rowContainer}>
+            <Icon
+              icon="sliders-horizontal"
+              onPress={openSort}
+              containerStyle={styles.iconContainer}
+            />
+            <Icon icon="plus" onPress={openAdd} containerStyle={styles.iconContainer} />
+          </View>
+        </Animated.View>
+      )}
+      {isSelecting && (
+        <CipherListSelectionHeader
+          isFreeAccount={isFreeAccount}
+          selectedCipherIds={selectedItems}
+          onClose={() => {
+            setIsSelecting(false)
+            setSelectedItems([])
+          }}
+          onShare={openShare}
+          onSelectAll={toggleSelectAll}
+          onMoveFolder={openMoveToFolder}
+          onDelete={openDelete}
+        />
+      )}
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  headerContainer: {
+    height: 56,
+    justifyContent: "center",
+    paddingHorizontal: 16,
+  },
+  iconContainer: {
+    padding: 8,
+  },
+  mr8: {
+    marginRight: 8,
+  },
+  rowContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+})

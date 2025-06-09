@@ -1,6 +1,7 @@
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps, NavigatorScreenParams } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
+import { TxKeyPath } from "app/i18n"
 import {
   AppNotification,
   BreanchResult,
@@ -19,6 +20,7 @@ import {
 } from "app/static/types"
 
 import { AndroidAutofillServiceData } from "app/utils/autofillHelper"
+import { CipherType } from "core/enums"
 import { CipherView } from "core/models/view/cipherView"
 import { CollectionView } from "core/models/view/collectionView"
 import { SendView } from "core/models/view/sendView"
@@ -215,6 +217,16 @@ export type BrowseRoute = {
   attachment: {
     isShared?: boolean
   }
+
+  cipherList: {
+    cipherTypes: CipherType[]
+    headerTx?: TxKeyPath
+    folderId?: string
+    collectionId?: string
+  }
+
+  // --------------- OLDS ---------------
+
   authenticatorEdit: {
     mode: "add" | "edit"
     passwordTotp?: boolean

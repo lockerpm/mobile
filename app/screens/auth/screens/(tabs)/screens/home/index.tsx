@@ -4,7 +4,7 @@ import { Screen } from "app/components/cores"
 import { HomeHeader } from "./HomeHeader"
 import { observer } from "mobx-react-lite"
 import { HomeSlider } from "./sliderBar/HomeSlider"
-import { EmptyCipherList } from "./EmptyCipherList"
+import { HomeEmpty } from "./HomeEmpty"
 import { TabsScreenProps } from "app/navigators"
 import { useFetchMarketingContent } from "./useFetchMarketingContent"
 import { useHomeBackHandler } from "./useHomeBackHandler"
@@ -153,9 +153,7 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
         setSelectedIds={setSelectedCipherIds}
         setAllItems={setAllItems}
         openActionsMenu={navigateToCipherActions}
-        ListEmptyComponent={
-          <EmptyCipherList onAdd={navigateToAddCipher} onImport={navigateToImport} />
-        }
+        ListEmptyComponent={<HomeEmpty onAdd={navigateToAddCipher} onImport={navigateToImport} />}
       />
     </Screen>
   )
