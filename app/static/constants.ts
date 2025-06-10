@@ -12,13 +12,21 @@ export const BACKGROUND_DECRYPT_REINDEX_EVERY = 2
 export const MAX_CIPHER_SELECTION = 10000
 export const MASTER_PW_MIN_LENGTH = 8
 
-// FAMILY
-export const FAMILY_MEMBER_LIMIT = 6
-export const FAMILY_MEMBER_LIMIT_TEAM = 15
-
 // FREE
 export const FREE_PLAN_LIMIT = {
   ITEMS: 100,
   OTP: 10,
   PRIVATE_EMAIL: 10,
 }
+
+export const CARD_BRANDS = [
+  { label: "Visa", value: "Visa" },
+  { label: "Mastercard", value: "Mastercard" },
+  { label: "American Express", value: "Amex" },
+  { label: "Discover", value: "Discover" },
+  { label: "Diners Club", value: "Diners Club" },
+  { label: "JCB", value: "JCB" },
+  { label: "Maestro", value: "Maestro" },
+  { label: "UnionPay", value: "UnionPay" },
+  { label: "Other", value: "Other" },
+]

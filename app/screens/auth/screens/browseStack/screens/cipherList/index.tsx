@@ -3,15 +3,11 @@ import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { Screen } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { BrowseStackScreenProps } from "app/navigators"
-import {
-  CipherList,
-  EmptyCipherList,
-  SortActionConfigModal,
-  SortConfigType,
-} from "app/components/newCiphers"
+import { CipherList, SortActionConfigModal, SortConfigType } from "app/components/newCiphers"
 import { StyleSheet } from "react-native"
 import { CipherActionsModal, CipherAppView } from "app/static/types"
 import { CipherListHeader } from "./CipherListHeader"
+import { CipherListEmpty } from "./CipherListEmpty"
 
 /**
  * Render the Cipher List screen with target ciphertype
@@ -53,8 +49,10 @@ export const CipherListScreen: FC<BrowseStackScreenProps<"cipherList">> = observ
     }, [])
 
     const navigateToAddCipher = useCallback(() => {
-      navigation.navigate("addCipherModal")
-    }, [])
+      if (cipherTypes.length > 2) {
+        navigation.navigate("addCipherModal")
+      }
+    }, [cipherTypes])
 
     const navigateToFolder = useCallback(() => {
       // navigation.navigate("moveToFolder")
@@ -131,12 +129,7 @@ export const CipherListScreen: FC<BrowseStackScreenProps<"cipherList">> = observ
           setAllItems={setAllItems}
           openActionsMenu={navigateToCipherActions}
           ListEmptyComponent={
-            <EmptyCipherList
-              titleTx="password.empty.title"
-              descTx="password.empty.desc"
-              buttonTx="password.empty.btn"
-              addItem={navigateToAddCipher}
-            />
+            <CipherListEmpty cipherTypes={cipherTypes} onAdd={navigateToAddCipher} />
           }
         />
       </Screen>

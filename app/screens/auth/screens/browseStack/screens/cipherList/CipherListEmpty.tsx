@@ -14,26 +14,78 @@ type EmptyCipherListType = {
   descTx: TxKeyPath
   buttonTx: TxKeyPath
   image: ImageSourcePropType
-  type: CipherType
 }
 
-const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
+const HOME_EMPTY = require("assets/images/emptyCipherList/home-empty-cipher.png")
+const CRYPTO_EMPTY = require("assets/images/emptyCipherList/crypto-empty-img.png")
+const CARD_EMPTY = require("assets/images/emptyCipherList/card-empty-img.png")
+const IDENTITIES_EMPTY = require("assets/images/emptyCipherList/identity-empty-img.png")
+const PASSWORD_EMPTY = require("assets/images/emptyCipherList/password-empty-img.png")
+const NOTE_EMPTY = require("assets/images/emptyCipherList/note-empty-img.png")
 
-export const CipherListEmpty = React.memo(({ onAdd }: EmptyCipherListProps) => {
+const emptyTypeContent: Record<number, EmptyCipherListType> = {
+  [CipherType.Login]: {
+    titleTx: "password.empty.title",
+    descTx: "password.empty.desc",
+    buttonTx: "password.empty.btn",
+    image: PASSWORD_EMPTY,
+  },
+  [CipherType.CryptoWallet]: {
+    titleTx: "crypto_asset.empty.title",
+    descTx: "crypto_asset.empty.desc",
+    buttonTx: "crypto_asset.empty.btn",
+    image: CRYPTO_EMPTY,
+  },
+  [CipherType.Card]: {
+    titleTx: "card.empty.title",
+    descTx: "card.empty.desc",
+    buttonTx: "card.empty.btn",
+    image: CARD_EMPTY,
+  },
+  [CipherType.Identity]: {
+    titleTx: "identity.empty.title",
+    descTx: "identity.empty.desc",
+    buttonTx: "identity.empty.btn",
+    image: IDENTITIES_EMPTY,
+  },
+  [CipherType.SecureNote]: {
+    titleTx: "note.empty.title",
+    descTx: "note.empty.desc",
+    buttonTx: "note.empty.btn",
+    image: NOTE_EMPTY,
+  },
+}
+
+const emptyAll: EmptyCipherListType = {
+  titleTx: "all_items.empty.title",
+  descTx: "all_items.empty.desc",
+  buttonTx: "all_items.empty.btn",
+  image: HOME_EMPTY,
+}
+
+const parseEmptyCipherContent = (cipherTypes: CipherType[]): EmptyCipherListType => {
+  if (cipherTypes.length > 2) {
+    // for all types
+    return emptyAll
+  }
+  if (cipherTypes.length === 2) {
+    // for password and master password
+    return emptyTypeContent[CipherType.Login] || emptyAll
+  }
+  if (cipherTypes.length === 1) {
+    return emptyTypeContent[cipherTypes[0]] || emptyAll
+  }
+  return emptyAll
+}
+
+export const CipherListEmpty = React.memo(({ onAdd, cipherTypes }: EmptyCipherListProps) => {
+  const content = parseEmptyCipherContent(cipherTypes)
   return (
     <View style={styles.container}>
-      <Image source={HOME_EMPTY_CIPHER} resizeMode="contain" style={{ height: 55, width: 120 }} />
-      <Text preset="bold" size="large" style={styles.title} tx={"all_items.empty.title"} />
-      <Text preset="label" tx="all_items.empty.desc" size="base" style={styles.label} />
-      <View style={styles.buttonContainer}>
-        <Button tx="all_items.empty.btn" onPress={onAdd} style={styles.buttonMargin} />
-        <Button
-          preset="secondary"
-          tx={"settings.import"}
-          onPress={onImport}
-          style={styles.buttonMargin}
-        />
-      </View>
+      <Image source={content.image} resizeMode="contain" style={{ height: 55, width: 120 }} />
+      <Text preset="bold" size="large" style={styles.title} tx={content.titleTx} />
+      <Text preset="label" tx={content.descTx} size="base" style={styles.label} />
+      <Button tx={content.buttonTx} onPress={onAdd} />
     </View>
   )
 })
@@ -44,9 +96,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 26,
   },
-  buttonMargin: {
-    marginHorizontal: 8,
-  },
+
   container: {
     alignItems: "center",
     marginTop: "10%",

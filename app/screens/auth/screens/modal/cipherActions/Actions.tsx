@@ -6,7 +6,7 @@ import { AccountRole, CipherActionsModal, CipherAppView } from "app/static/types
 import { useStores } from "app/models"
 import { CipherType } from "core/enums"
 import { getCipherDescription, getTeam } from "app/utils/cipherHelper"
-import { CipherIconImage } from "app/components/newCiphers"
+import { CipherActionsByType, CipherIconImage } from "app/components/newCiphers"
 import { NewActionSheetItem } from "app/components/utils"
 
 interface Props {
@@ -49,6 +49,18 @@ export const Actions = ({ item, setNextModal, onClose }: Props) => {
           )}
         </View>
       </View>
+
+      <CipherActionsByType item={item} onClose={onClose} />
+
+      <NewActionSheetItem
+        hide={!editable || item.passwordHistory?.length === 0}
+        tx="password_history.view"
+        icon="clock-clockwise"
+        onPress={() => {
+          onClose()
+          // navigation.navigate("passwords_history")
+        }}
+      />
       <NewActionSheetItem
         bottomBorder
         tx="common.details"

@@ -906,7 +906,7 @@ export function useCipherData() {
   const createCipher = async (
     cipher: CipherView,
     score: number,
-    collectionIds: string[],
+    collectionIds: string[] = [],
     silent?: boolean,
   ) => {
     try {
@@ -989,7 +989,7 @@ export function useCipherData() {
     id: string,
     cipher: CipherView,
     score: number,
-    collectionIds: string[],
+    collectionIds: string[] = [],
     silent?: boolean,
   ) => {
     try {

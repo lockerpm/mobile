@@ -167,6 +167,8 @@ export type GetCiphersParams = {
   includeExtensions?: boolean
 }
 
+export type CipherEditMode = "add" | "edit" | "clone"
+
 export type CipherAppView = {
   id: string
   organizationId: string

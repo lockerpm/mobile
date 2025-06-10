@@ -4,17 +4,18 @@ import { Text, Icon } from "../../cores"
 import { ScrollView } from "react-native-gesture-handler"
 import { useTheme } from "app/services/context"
 import { useClipboard } from "app/services/utils"
+import { TxKeyPath } from "app/i18n"
 
 interface Props extends TextInputProps {
-  outerRef?: any
   style?: StyleProp<ViewStyle>
   inputStyle?: StyleProp<ViewStyle>
-  label: string
+  label?: string
+  labelTx?: TxKeyPath
   value: string
 }
 
 export const Textarea = (props: Props) => {
-  const { outerRef, style, inputStyle, editable = true, label, value, ...rest } = props
+  const { style, inputStyle, editable = true, label, value, ...rest } = props
   const { colors } = useTheme()
   const { copyToClipboard } = useClipboard()
 
@@ -59,7 +60,6 @@ export const Textarea = (props: Props) => {
         <View style={$containerStyle}>
           <TextInput
             multiline
-            ref={outerRef}
             value={value}
             autoCapitalize="none"
             selectionColor={colors.primary}

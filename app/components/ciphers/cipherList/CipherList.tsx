@@ -11,11 +11,6 @@ import { CipherView } from "core/models/view"
 
 import { CipherListItem } from "./CipherListItem"
 import { Text } from "../../cores"
-// import { PasswordAction } from "app/screens/auth/screens/browseStack/passwords/PasswordAction"
-// import { CardAction } from "app/screens/auth/screens/browseStack/cards/CardAction"
-// import { IdentityAction } from "app/screens/auth/screens/browseStack/identities/IdentityAction"
-// import { NoteAction } from "app/screens/auth/screens/browseStack/notes/NoteAction"
-// import { CryptoWalletAction } from "app/screens/auth/screens/browseStack/cryptoAsset/CryptoWalletAction"
 import { DeletedAction } from "../cipherAction/DeletedAction"
 import { observer } from "mobx-react-lite"
 import { useToast } from "app/services/utils"
@@ -69,13 +64,6 @@ export const CipherList = observer((props: CipherListProps) => {
   const { getCipherInfo } = useCipherHelper()
 
   // ------------------------ PARAMS ----------------------------
-
-  const [showPasswordAction, setShowPasswordAction] = useState(false)
-  const [showNoteAction, setShowNoteAction] = useState(false)
-  const [showIdentityAction, setShowIdentityAction] = useState(false)
-  const [showCardAction, setShowCardAction] = useState(false)
-  const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
-  const [showDeletedAction, setShowDeletedAction] = useState(false)
 
   const [ciphers, setCiphers] = useState<CipherAppView[]>([])
 
@@ -186,31 +174,6 @@ export const CipherList = observer((props: CipherListProps) => {
   // Handle action menu open
   const openActionMenu = (item: CipherView) => {
     cipherStore.setSelectedCipher(item)
-    if (deleted) {
-      setShowDeletedAction(true)
-      return
-    }
-
-    switch (item.type) {
-      case CipherType.MasterPassword:
-      case CipherType.Login:
-        setShowPasswordAction(true)
-        break
-      case CipherType.Card:
-        setShowCardAction(true)
-        break
-      case CipherType.Identity:
-        setShowIdentityAction(true)
-        break
-      case CipherType.SecureNote:
-        setShowNoteAction(true)
-        break
-      case CipherType.CryptoWallet:
-        setShowCryptoWalletAction(true)
-        break
-      default:
-        break
-    }
   }
 
   // Toggle item selection
@@ -310,45 +273,6 @@ export const CipherList = observer((props: CipherListProps) => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* <PasswordAction
-        isOpen={showPasswordAction}
-        onClose={() => setShowPasswordAction(false)}
-        navigation={navigation}
-      />
-
-      <CardAction
-        isOpen={showCardAction}
-        onClose={() => setShowCardAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <IdentityAction
-        isOpen={showIdentityAction}
-        onClose={() => setShowIdentityAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <NoteAction
-        isOpen={showNoteAction}
-        onClose={() => setShowNoteAction(false)}
-        navigation={navigation}
-      />
-
-      <CryptoWalletAction
-        isOpen={showCryptoWalletAction}
-        onClose={() => setShowCryptoWalletAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <DeletedAction
-        isOpen={showDeletedAction}
-        onClose={() => setShowDeletedAction(false)}
-        navigation={navigation}
-      /> */}
-
       {masterPassword && (
         <CipherListItem
           item={masterPassword}

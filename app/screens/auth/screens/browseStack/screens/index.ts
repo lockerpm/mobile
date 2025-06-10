@@ -1,24 +1,5 @@
-export * from "./cards/CardsScreen"
-export * from "./cards/cardInfo/CardInfoScreen"
-export * from "./cards/cardEdit/CardEditScreen"
-
-export * from "./cryptoAsset/CryptoAssetsScreen"
-export * from "./cryptoAsset/cryptoWalletEdit/CryptoWalletEditScreen"
-export * from "./cryptoAsset/cryptoWalletInfo/CryptoWalletInfoScreen"
-
-export * from "./identities/IdentitiesScreen"
-export * from "./identities/identityEdit/IdentityEditScreen"
-export * from "./identities/identityInfo/IdentityInfoScreen"
-
-export * from "./notes/NotesScreen"
-export * from "./notes/noteEdit/NoteEditScreen"
-export * from "./notes/noteInfo/NoteInfoScreen"
-
-export * from "./passwords/PasswordsScreen"
-export * from "./passwords/passwordEdit/PasswordEditScreen"
-export * from "./passwords/passwordInfo/PasswordInfoScreen"
-export * from "./passwords/2faSetup/2faSetupScreen"
-export * from "./passwords/history/PasswordHistoryScreen"
+export * from "./2faSetup/2faSetupScreen"
+export * from "./history/PasswordHistoryScreen"
 
 export * from "./shares/SharesScreen"
 export * from "./shares/shareItems/ShareItemsScreen"
@@ -39,3 +20,9 @@ export * from "./shareCipher/NormalSharesScreen"
 export * from "./shareCipher/QuickSharesScreen"
 
 export * from "./authenticatorEdit/AuthenticatorEditScreen"
+
+// ---- new ------
+
+export * from "./cipherList"
+export * from "./cipherDetail"
+export * from "./cipherEdit"

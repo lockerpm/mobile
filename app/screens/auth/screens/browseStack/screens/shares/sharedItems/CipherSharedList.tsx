@@ -4,12 +4,6 @@ import { View, SectionList } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from "lodash/orderBy"
 
-import { PasswordAction } from "../../passwords/PasswordAction"
-import { CardAction } from "../../cards/CardAction"
-import { NoteAction } from "../../notes/NoteAction"
-import { IdentityAction } from "../../identities/IdentityAction"
-import { PendingSharedAction } from "./PendingSharedAction"
-import { CryptoWalletAction } from "../../cryptoAsset/CryptoWalletAction"
 import { CipherSharedListItem, CipherSharedType } from "./CipherSharedListItem"
 import { CollectionListItem } from "../shareItems/FolderShareListItem"
 import { FolderAction } from "../../folders/FolderAction"
@@ -70,11 +64,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const [selectedCollection, setSelectedCollection] = useState<CollectionView>(null)
 
   const [ciphers, setCiphers] = useState<CipherSharedType[]>([])
-  const [showPasswordAction, setShowPasswordAction] = useState(false)
-  const [showNoteAction, setShowNoteAction] = useState(false)
-  const [showIdentityAction, setShowIdentityAction] = useState(false)
-  const [showCardAction, setShowCardAction] = useState(false)
-  const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showPendingAction, setShowPendingAction] = useState(false)
 
   const [checkedItem, setCheckedItem] = useState("")
@@ -191,26 +180,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     cipherStore.setSelectedCipher(item)
     if (item.isShared) {
       setShowPendingAction(true)
-      return
-    }
-    switch (item.type) {
-      case CipherType.MasterPassword:
-      case CipherType.Login:
-        setShowPasswordAction(true)
-        break
-      case CipherType.Card:
-        setShowCardAction(true)
-        break
-      case CipherType.Identity:
-        setShowIdentityAction(true)
-        break
-      case CipherType.SecureNote:
-        setShowNoteAction(true)
-        break
-      case CipherType.CryptoWallet:
-        setShowCryptoWalletAction(true)
-        break
-      default:
     }
   }
 
@@ -266,39 +235,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   return allCiphers.length ? (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
-
-      <PasswordAction
-        isOpen={showPasswordAction}
-        onClose={() => setShowPasswordAction(false)}
-        navigation={navigation}
-      />
-
-      <CardAction
-        isOpen={showCardAction}
-        onClose={() => setShowCardAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <IdentityAction
-        isOpen={showIdentityAction}
-        onClose={() => setShowIdentityAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <NoteAction
-        isOpen={showNoteAction}
-        onClose={() => setShowNoteAction(false)}
-        navigation={navigation}
-      />
-
-      <CryptoWalletAction
-        isOpen={showCryptoWalletAction}
-        onClose={() => setShowCryptoWalletAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
 
       <PendingSharedAction
         isOpen={showPendingAction}

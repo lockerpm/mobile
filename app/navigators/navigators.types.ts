@@ -225,6 +225,17 @@ export type BrowseRoute = {
     collectionId?: string
   }
 
+  cipherDetail: {
+    cipher: CipherAppView
+
+    // If cipher is from quick share
+    quickShare?: boolean
+  }
+
+  cipherEdit: {
+    cipher: CipherAppView
+  }
+
   // --------------- OLDS ---------------
 
   authenticatorEdit: {
@@ -298,10 +309,6 @@ export type BrowseRoute = {
   shareMultiple: undefined
 
   folders: undefined
-  cards: undefined
-  passwords: undefined
-  notes: undefined
-  identities: undefined
   shares: undefined
   sharedItems: undefined
   quickShareItems: undefined
@@ -310,7 +317,6 @@ export type BrowseRoute = {
   }
   shareItems: undefined
   trash: undefined
-  cryptoWallets: undefined
 }
 
 export type BrowseStackScreenProps<T extends keyof BrowseRoute> = CompositeScreenProps<
