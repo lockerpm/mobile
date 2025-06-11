@@ -1,0 +1,304 @@
+import React, { useEffect, useState } from "react"
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native"
+import { Text, Button, BottomModalContainer, TextInput, Icon } from "app/components/cores"
+import { useAppLocale, useTheme } from "app/services/context"
+import { CollectionView } from "core/models/view/collectionView"
+import { AccountRoleText, GroupData, GroupMemberData } from "app/static/types"
+import { useStores } from "app/models"
+import { useToast } from "app/services/utils"
+import { useFolder } from "app/services/hook"
+
+interface Props {
+  onClose: () => void
+  collection: CollectionView
+}
+type Suggest = GroupData | GroupMemberData
+
+const GROUP = require("assets/images/icons/group.png")
+const AVATAR = require("assets/images/icons/avatar-2.png")
+
+export const AddUserSharedFolder = ({ collection, onClose }: Props) => {
+  const { user, enterpriseStore } = useStores()
+  const { colors } = useTheme()
+  const { notifyTx, notifyApiError } = useToast()
+  const { translate } = useAppLocale()
+  const { shareFolder, shareFolderAddMember } = useFolder()
+
+  // ----------------------- PARAMS -----------------------
+
+  const [email, setEmail] = useState<string>("")
+  const [emails, setEmails] = useState<string[]>([])
+
+  const [groups, setGroups] = useState<{ name: string; id: string }[]>([])
+  const [suggestions, setSuggestions] = useState<Suggest[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  // ----------------------- METHODS -----------------------
+
+  const addEmailToShare = (email: string) => {
+    const e = email.trim().toLowerCase()
+    if (!e) return
+
+    const isOwner = user?.email === e
+
+    if (!emails.includes(e) && !isOwner) {
+      setEmails([...emails, e])
+      setEmail("")
+    }
+  }
+
+  const removeEmailFromList = (val: string) => {
+    setEmails(emails.filter((e) => e !== val))
+  }
+
+  const addFolderMember = async (emails?: string[]) => {
+    setIsLoading(true)
+    let res
+    if (folder instanceof CollectionView) {
+      res = await shareFolderAddMember(folder, emails, AccountRoleText.MEMBER, true, groups)
+    } else {
+      res = await shareFolder(folder, emails, AccountRoleText.MEMBER, true, groups)
+    }
+
+    onClose()
+    if (res.kind === "ok" || res.kind === "unauthorized") {
+      if (res.kind === "ok") {
+        notifyTx("success", translate("shares.share_folder.success.shared"))
+        setEmails([])
+      }
+    }
+    setIsLoading(false)
+  }
+
+  const searchGroupOrMember = async (query: string) => {
+    const res = await enterpriseStore.searchGroupOrMember(user.enterprise.id, query)
+    if (res.kind === "ok") {
+      setSuggestions([...res.data.groups, ...res.data.members].slice(0, 4))
+    } else {
+      notifyApiError(res)
+    }
+  }
+
+  // ----------------------- EFFECTS -----------------------
+
+  useEffect(() => {
+    if (user.isEnterprise) {
+      const timeout = setTimeout(() => {
+        if (email) {
+          searchGroupOrMember(email)
+        } else {
+          setSuggestions([])
+        }
+      }, 500)
+      return () => {
+        clearTimeout(timeout)
+      }
+    }
+    return undefined
+  }, [email])
+
+  return (
+    <BottomModalContainer style={styles.container}>
+      <Button
+        loading={isLoading}
+        preset="teriatary"
+        disabled={(emails?.length < 1 && groups.length < 1) || isLoading}
+        onPress={() => {
+          addFolderMember(emails)
+        }}
+        text={translate("common.done")}
+      />
+
+      <View style={{ flex: 1, backgroundColor: colors.background, paddingHorizontal: 16 }}>
+        <View style={{ marginTop: 8 }}>
+          <Text preset="bold" size="xl" text={translate("shares.share_folder.select_member")} />
+        </View>
+
+        <View
+          style={{
+            borderBottomColor: colors.border,
+            borderBottomWidth: 1,
+          }}
+        >
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              marginVertical: 12,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                addEmailToShare(email)
+              }}
+              style={{ marginRight: 16, marginVertical: 16 }}
+            >
+              <Icon icon="user-plus" size={24} color={colors.title} />
+            </TouchableOpacity>
+            <TextInput
+              placeholder={translate("shares.share_folder.add_email")}
+              onChangeText={setEmail}
+              value={email}
+              clearButtonMode="unless-editing"
+              clearTextOnFocus={true}
+              onSubmitEditing={() => {
+                addEmailToShare(email)
+              }}
+              containerStyle={{
+                flex: 1,
+              }}
+            />
+          </View>
+          <View>
+            {emails.map((e, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    borderRadius: 8,
+                    borderWidth: 0.5,
+                    borderColor: colors.border,
+                    backgroundColor: colors.block,
+                    paddingLeft: 10,
+                    marginBottom: 16,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    paddingVertical: 4,
+                  }}
+                >
+                  <Text text={e} />
+
+                  <Icon
+                    icon="x-circle"
+                    size={20}
+                    color={colors.title}
+                    containerStyle={{
+                      paddingHorizontal: 12,
+                    }}
+                    onPress={() => removeEmailFromList(e)}
+                  />
+                </View>
+              )
+            })}
+          </View>
+
+          <View>
+            {groups.map((e, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    borderRadius: 8,
+                    borderWidth: 0.5,
+                    borderColor: colors.border,
+                    backgroundColor: colors.block,
+                    paddingLeft: 10,
+                    marginBottom: 16,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    paddingVertical: 4,
+                  }}
+                >
+                  <Text text={e.name} />
+                  <Icon
+                    icon="x-circle"
+                    size={20}
+                    color={colors.title}
+                    containerStyle={{
+                      paddingHorizontal: 12,
+                    }}
+                    onPress={() => setGroups(groups.filter((group) => group.id !== e.id))}
+                  />
+                </View>
+              )
+            })}
+          </View>
+        </View>
+
+        <View style={{ marginTop: 20, marginBottom: 20 }}>
+          <Text>{translate("invite_member.select_person")}</Text>
+        </View>
+        {!!email && (
+          <TouchableOpacity onPress={() => addEmailToShare(email)}>
+            <View
+              style={{
+                borderBottomColor: colors.border,
+                borderBottomWidth: 1,
+                width: "100%",
+                flexDirection: "row",
+                marginBottom: 15,
+                paddingVertical: 14,
+                justifyContent: "flex-start",
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                source={AVATAR}
+                style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
+              />
+
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text text={email}></Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
+
+        {/* Enterprise suggestion */}
+        {suggestions.length > 0 && (
+          <View style={{ marginTop: 20, marginBottom: 20 }}>
+            <Text style={{ marginBottom: 8 }}>{"User or group in Enterprise".toUpperCase()}</Text>
+            {suggestions.map((e, index) => (
+              <TouchableOpacity
+                key={e + index.toString()}
+                onPress={() => {
+                  if (e.email) {
+                    addEmailToShare(e.email)
+                  } else {
+                    if (groups.some((g) => g.id === e.id)) {
+                      return
+                    }
+                    setGroups([
+                      ...groups,
+                      {
+                        name: e.name,
+                        id: e.id,
+                      },
+                    ])
+                  }
+                }}
+              >
+                <View
+                  style={{
+                    borderBottomColor: colors.border,
+                    borderBottomWidth: 1,
+                    width: "100%",
+                    flexDirection: "row",
+                    paddingVertical: 8,
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={e.email ? { uri: e.avatar } : GROUP}
+                    style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
+                  />
+
+                  <View style={{ flex: 1, justifyContent: "center" }}>
+                    <Text text={e.email || e.name}></Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+      </View>
+    </BottomModalContainer>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 16,
+  },
+})

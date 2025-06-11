@@ -16,6 +16,8 @@ interface Props {
   onRemove: (collection: CollectionView, id: string, isGroup?: boolean) => void
 }
 
+const GROUP = require("assets/images/icons/group.png")
+
 export const SharedUsers = (props: Props) => {
   const { item, collection, reload, setReload, onRemove, setShowConfirmModal } = props
 
@@ -71,7 +73,7 @@ export const SharedUsers = (props: Props) => {
       >
         <Image
           resizeMode="contain"
-          source={item.avatar ? { uri: item.avatar } : require("./group.png")}
+          source={item.avatar ? { uri: item.avatar } : GROUP}
           style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
         />
 
@@ -133,7 +135,7 @@ export const SharedUsers = (props: Props) => {
               <View style={{ flexDirection: "row", marginBottom: 16 }}>
                 <Image
                   resizeMode="contain"
-                  source={item.avatar ? { uri: item.avatar } : require("./group.png")}
+                  source={item.avatar ? { uri: item.avatar } : GROUP}
                   style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
                 />
 

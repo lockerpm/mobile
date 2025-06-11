@@ -1,7 +1,7 @@
 import React, { FC, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { TouchableOpacity, View, SectionList } from "react-native"
-import { NewFolderModal } from "../NewFolderModal"
+// import { NewFolderModal } from "../NewFolderModal"
 import { useStores } from "app/models"
 import { useFolder, useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
@@ -9,6 +9,7 @@ import { Button, Header, Icon, ImageIcon, Screen, Text } from "app/components/co
 import { AccountRole } from "app/static/types"
 import { useToast } from "app/services/utils"
 import { BrowseStackScreenProps } from "app/navigators"
+import { getTeam } from "app/utils/cipherHelper"
 
 export const FolderSelectScreen: FC<BrowseStackScreenProps<"foldersSelect">> = observer((props) => {
   const navigation = props.navigation
@@ -16,7 +17,6 @@ export const FolderSelectScreen: FC<BrowseStackScreenProps<"foldersSelect">> = o
   const { mode, initialId, cipherIds = [] } = route.params
   const { folderStore, cipherStore, collectionStore } = useStores()
   const { colors } = useTheme()
-  const { getTeam } = useHelper()
   const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const { shareFolderAddMultipleItems } = useFolder()
@@ -154,7 +154,7 @@ export const FolderSelectScreen: FC<BrowseStackScreenProps<"foldersSelect">> = o
         flex: 1,
       }}
     >
-      <NewFolderModal isOpen={showNewFolderModal} onClose={() => setShowNewFolderModal(false)} />
+      {/* <NewFolderModal isOpen={showNewFolderModal} onClose={() => setShowNewFolderModal(false)} /> */}
 
       <TouchableOpacity
         onPress={() => setSelectedFolder("unassigned")}

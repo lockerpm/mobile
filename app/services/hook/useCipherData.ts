@@ -1585,6 +1585,8 @@ export function useCipherData() {
     }
     await minimalReloadCache({})
     cipherStore.setOrganizations(cipherStore.organizations.filter((o) => o.id !== organizationId))
+
+    notifyTx("success", "success.done")
     return apiRes
   }
 

@@ -22,7 +22,8 @@ interface Props {
   cipherIds?: string[]
   onSuccess?: () => void
 }
-
+const GROUP = require("assets/images/icons/group.png")
+const AVATAR = require("assets/images/icons/avatar-2.png")
 export const ShareModal = (props: Props) => {
   const { isOpen, onClose, cipherIds, onSuccess } = props
   const { cipherStore, enterpriseStore, user } = useStores()
@@ -352,7 +353,7 @@ export const ShareModal = (props: Props) => {
           >
             <Image
               resizeMode="contain"
-              source={require("./assets/avatar.png")}
+              source={AVATAR}
               style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
             />
 
@@ -399,7 +400,7 @@ export const ShareModal = (props: Props) => {
               >
                 <Image
                   resizeMode="contain"
-                  source={e.email ? { uri: e.avatar } : require("./assets/group.png")}
+                  source={e.email ? { uri: e.avatar } : GROUP}
                   style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
                 />
 

@@ -1,38 +1,24 @@
-import React, { useEffect, useState } from "react"
-import { Platform, View } from "react-native"
-import { RenameFolderModal } from "./RenameFolderModal"
-import { AddUserShareFolderModal } from "./folderSharedUsersManagement/ShareUserModal"
-import { useNavigation } from "@react-navigation/native"
+import React from "react"
+import { View } from "react-native"
 import { BottomModalContainer, ImageIcon, Text } from "app/components/cores"
-import { FolderView } from "core/models/view/folderView"
 import { CollectionView } from "core/models/view/collectionView"
 import { useStores } from "app/models"
-import { useCipherData, useFolder, useHelper } from "app/services/hook"
+import { useFolder } from "app/services/hook"
 import { AccountRole, AccountRoleText, FolderActionsModal } from "app/static/types"
-import { GeneralApiProblem } from "app/services/api/apiProblem"
-import {
-  ActionItem,
-  ActionSheet,
-  DeleteConfirmModal,
-  LeaveShareModal,
-} from "app/components/ciphers"
-import { useAppLocale, useTheme } from "app/services/context"
-import { ActionPremiumItem } from "app/components/ciphers/actionsSheet/ActionSheetPremiumItem"
-import { useToast } from "app/services/utils"
+
+import { useTheme } from "app/services/context"
 import { getTeam } from "app/utils/cipherHelper"
 import { NewActionSheetItem } from "app/components/utils"
 
 type Props = {
   collection: CollectionView
   setNextModal: (action: FolderActionsModal) => void
+  onClose: () => void
 }
 
-export const CollectionActions = (props: Props) => {
-  const { collection, setNextModal } = props
-  const { cipherStore, user, uiStore } = useStores()
+export const CollectionActions = ({ collection, setNextModal, onClose }: Props) => {
+  const { cipherStore, user } = useStores()
   const { colors } = useTheme()
-  const { translate } = useAppLocale()
-  const { deleteCollection } = useCipherData()
   const { stopShareFolder } = useFolder()
 
   // ---------------- PARAMS -----------------
@@ -40,7 +26,6 @@ export const CollectionActions = (props: Props) => {
   // ---------------- COMPUTED -----------------
 
   const organizationId = collection.organizationId
-  const isCollection = !!organizationId
 
   // Computed
   const organizations = cipherStore.organizations
@@ -55,10 +40,6 @@ export const CollectionActions = (props: Props) => {
     shareRole === AccountRole.OWNER
 
   // ---------------- METHODS -----------------
-
-  const handleDelete = async () => {
-    await deleteCollection(collection)
-  }
 
   // ---------------- RENDER -----------------
 
@@ -79,76 +60,62 @@ export const CollectionActions = (props: Props) => {
           />
         </View>
       </View>
-      {editable && (
-        <>
-          <NewActionSheetItem
-            tx="common.rename"
-            icon="edit"
-            onPress={() => {
-              setNextModal(FolderActionsModal.RENAME)
-            }}
-          />
+      <NewActionSheetItem
+        hide={!editable}
+        tx="common.rename"
+        icon="edit"
+        onPress={() => {
+          setNextModal(FolderActionsModal.RENAME)
+        }}
+      />
 
-          {isCollection && isOwner && (
-            <ActionItem
-              name={translate("shares.share_folder.manage_user")}
-              icon="users-three"
-              action={() => {
-                // navigation.navigate("shareFolder", { collectionId: folder?.id })
-                // onClose()
-              }}
-            />
-          )}
-          {isOwner && isCollection && (
-            <ActionItem
-              name={translate("shares.stop_sharing")}
-              icon="x-circle"
-              action={() => {
-                stopShareFolder(collection)
-                // onClose()
-              }}
-            />
-          )}
+      <NewActionSheetItem
+        hide={!editable || !isOwner}
+        tx="shares.share_folder.manage_user"
+        icon="users-three"
+        onPress={() => {
+          setNextModal(FolderActionsModal.ADD_MEMBER)
+        }}
+      />
+      <NewActionSheetItem
+        hide={!editable || !isOwner}
+        tx="shares.stop_sharing"
+        icon="x-circle"
+        onPress={async () => {
+          await stopShareFolder(collection)
+          onClose()
+        }}
+      />
 
-          {isShared && (
-            <ActionItem
-              disabled={uiStore.isOffline}
-              name={translate("shares.leave")}
-              icon="sign-out"
-              color={colors.error}
-              action={() => {
-                setNextModal("leaveConfirm")
-                onClose()
-              }}
-            />
-          )}
+      <NewActionSheetItem
+        hide={!editable || !isShared}
+        tx="shares.leave"
+        icon="sign-out"
+        color={colors.error}
+        onPress={() => {
+          setNextModal(FolderActionsModal.LEAVE_SHARE)
+        }}
+      />
 
-          {isOwner && (
-            <ActionItem
-              name={translate("folder.delete_folder")}
-              icon="trash"
-              color={colors.error}
-              action={() => {
-                setNextModal("deleteConfirm")
-                onClose()
-              }}
-            />
-          )}
-        </>
-      )}
+      <NewActionSheetItem
+        hide={!editable || !isOwner}
+        tx="folder.delete_folder"
+        icon="trash"
+        color={colors.error}
+        onPress={() => {
+          setNextModal(FolderActionsModal.DELETE)
+        }}
+      />
 
-      {!editable && isShared && (
-        <ActionItem
-          disabled={uiStore.isOffline}
-          name={translate("shares.leave")}
-          icon="sign-out"
-          color={colors.error}
-          action={() => {
-            setNextModal("leaveConfirm")
-            onClose()
-          }}
-        />
-      )}
+      <NewActionSheetItem
+        hide={editable || !isShared}
+        tx="shares.leave"
+        icon="sign-out"
+        color={colors.error}
+        onPress={() => {
+          setNextModal(FolderActionsModal.LEAVE_SHARE)
+        }}
+      />
     </BottomModalContainer>
   )
 }

@@ -19,6 +19,7 @@ import {
 import { useAppLocale, useTheme } from "app/services/context"
 import { ActionPremiumItem } from "app/components/ciphers/actionsSheet/ActionSheetPremiumItem"
 import { useToast } from "app/services/utils"
+import { getTeam } from "app/utils/cipherHelper"
 
 type Props = {
   isOpen?: boolean
@@ -34,7 +35,6 @@ export const FolderAction = (props: Props) => {
   const { cipherStore, user, uiStore } = useStores()
   const { colors } = useTheme()
   const { translate } = useAppLocale()
-  const { getTeam } = useHelper()
   const { notifyApiError } = useToast()
   const { deleteCollection, deleteFolder } = useCipherData()
   const { stopShareFolder } = useFolder()

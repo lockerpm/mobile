@@ -18,6 +18,9 @@ interface InviteProps {
   isLoading?: boolean
 }
 
+const GROUP = require("assets/images/icons/group.png")
+const AVATAR = require("assets/images/icons/avatar-2.png")
+
 export const AddUserShareFolderModal = (props: InviteProps) => {
   const { isOpen, onClose, sharedUsers, folder } = props
   const { user, enterpriseStore } = useStores()
@@ -267,7 +270,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
             >
               <Image
                 resizeMode="contain"
-                source={require("./avatar.png")}
+                source={AVATAR}
                 style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
               />
 
@@ -314,7 +317,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
                 >
                   <Image
                     resizeMode="contain"
-                    source={e.email ? { uri: e.avatar } : require("./group.png")}
+                    source={e.email ? { uri: e.avatar } : GROUP}
                     style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
                   />
 

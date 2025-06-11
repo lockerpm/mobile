@@ -5,8 +5,17 @@ import { FolderActionsModal } from "app/static/types"
 import { debounce } from "app/utils/utils"
 import { observable } from "mobx"
 import React, { FC } from "react"
-import { KeyboardAvoidingView, View } from "react-native"
+import { KeyboardAvoidingView, View, StyleSheet } from "react-native"
+
+// action
 import { FolderAction } from "./FolderActions"
+import { CollectionActions } from "./CollectionActions"
+import { Delete } from "./Delete"
+import { Premium } from "./Premium"
+import { LeaveShare } from "./LeaveShare"
+import { NewFolder } from "./NewFolder"
+import { RenameFolder } from "./RenameFolder"
+import { RenameCollection } from "./RenameCollection"
 
 export const FolderActionsModalScreen: FC<BrowseStackScreenProps<"folderActionModal">> = observable(
   ({
@@ -31,19 +40,37 @@ export const FolderActionsModalScreen: FC<BrowseStackScreenProps<"folderActionMo
             <FolderAction folder={folder} setNextModal={setTargetModal} />
           )}
 
-          {/* {targetModal === FolderActionsModal.DELETE && (
-            <Delete deleteIds={deleteIds} onClose={onClose} />
+          {targetModal === FolderActionsModal.DEFAULT && !!collection && (
+            <CollectionActions
+              collection={collection}
+              setNextModal={setTargetModal}
+              onClose={onClose}
+            />
           )}
-  
-          {targetModal === FolderActionsModal.SHARE && !!item && (
-            <ShareOptions cipherId={item.id} onClose={onClose} setNextModal={setTargetModal} />
+
+          {targetModal === FolderActionsModal.CREATE && <NewFolder onClose={onClose} />}
+
+          {targetModal === FolderActionsModal.RENAME && folder && (
+            <RenameFolder folder={folder} onClose={onClose} />
           )}
-  
+
+          {targetModal === FolderActionsModal.RENAME && collection && (
+            <RenameCollection collection={collection} onClose={onClose} />
+          )}
+
+          {targetModal === FolderActionsModal.DELETE && (
+            <Delete folder={folder} collection={collection} onClose={onClose} />
+          )}
+
           {targetModal === FolderActionsModal.PREMIUM_ACTION && <Premium />}
-  
-          {targetModal === FolderActionsModal.LEAVE_SHARE && !!item && (
-            <LeaveShared onClose={onClose} cipherId={item.id} organizationId={item.organizationId} />
+
+          {/* {targetModal === FolderActionsModal.SHARE && !!item && (
+            <ShareOptions cipherId={item.id} onClose={onClose} setNextModal={setTargetModal} />
           )} */}
+
+          {targetModal === FolderActionsModal.LEAVE_SHARE && !!collection && (
+            <LeaveShare onClose={onClose} organizationId={collection.organizationId} />
+          )}
         </View>
       </KeyboardAvoidingView>
     )

@@ -94,6 +94,7 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
    * The helper text to display if not using .
    */
   helper?: TextProps["text"]
+  helperTx?: TextProps["tx"]
   /**
    * Pass any additional props directly to the helper Text component.
    */
@@ -360,8 +361,14 @@ export const TextInput = forwardRef(function TextField(
         )}
       </View>
 
-      {!!helper && status === "error" && (
-        <Text preset="label" text={helper} {...HelperTextProps} style={$helperStyles} />
+      {(helper || props.helperTx) && status === "error" && (
+        <Text
+          preset="label"
+          tx={props.helperTx}
+          text={helper || undefined}
+          {...HelperTextProps}
+          style={$helperStyles}
+        />
       )}
     </TouchableOpacity>
   )

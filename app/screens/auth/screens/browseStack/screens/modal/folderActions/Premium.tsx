@@ -2,12 +2,12 @@ import React from "react"
 import { Image, StyleSheet } from "react-native"
 import { Text, Button, BottomModalContainer } from "app/components/cores"
 import { useNavigation } from "@react-navigation/native"
-import { AuthStackScreenProps } from "app/navigators"
+import { BrowseStackScreenProps } from "app/navigators"
 
 const TRASH = require("assets/images/intro/share-password.png")
 
 export const Premium = () => {
-  const navigation = useNavigation<AuthStackScreenProps<"cipherActionsModal">["navigation"]>()
+  const navigation = useNavigation<BrowseStackScreenProps<"folderActionModal">["navigation"]>()
 
   // --------------------PARAMS---------------------
 

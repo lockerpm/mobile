@@ -1,17 +1,17 @@
 import React, { useState } from "react"
 import { BottomModalContainer, Text, TextInput, Button } from "app/components/cores"
-import { FolderView } from "core/models/view/folderView"
 import { useStores } from "app/models"
 import { useCipherData } from "app/services/hook"
+import { CollectionView } from "core/models/view/collectionView"
 
 type Props = {
   onClose: () => void
-  folder: FolderView
+  collection: CollectionView
 }
 
-export const RenameFolder = ({ onClose, folder }: Props) => {
-  const { folderStore } = useStores()
-  const { updateFolder } = useCipherData()
+export const RenameCollection = ({ onClose, collection }: Props) => {
+  const { collectionStore } = useStores()
+  const { updateCollection } = useCipherData()
 
   // ---------------- PARAMS -----------------
 
@@ -19,24 +19,27 @@ export const RenameFolder = ({ onClose, folder }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
 
   // --------------- COMPUTED ---------------
+
   const isExisted = (() => {
     if (!name.trim()) {
       return false
     }
-    return folderStore.folders.some((f) => f.name && f.name === name)
+
+    return collectionStore.collections.some((f) => f.name && f.name === name)
   })()
+
   // --------------- METHODS ----------------
 
-  const renameFolder = async () => {
+  const renameCollection = async () => {
     if (!name.trim() || isExisted) {
       return
     }
 
     setIsLoading(true)
 
-    const data = { ...folder }
+    const data = { ...collection }
     data.name = name
-    const res = await updateFolder(data)
+    const res = await updateCollection(data)
 
     setIsLoading(false)
 
@@ -62,14 +65,14 @@ export const RenameFolder = ({ onClose, folder }: Props) => {
         placeholder={name}
         value={name}
         onChangeText={setName}
-        onSubmitEditing={renameFolder}
+        onSubmitEditing={renameCollection}
       />
 
       <Button
         tx="common.save"
         disabled={isLoading || !name.trim() || isExisted}
         loading={isLoading}
-        onPress={renameFolder}
+        onPress={renameCollection}
         style={{
           width: "100%",
           marginTop: 30,

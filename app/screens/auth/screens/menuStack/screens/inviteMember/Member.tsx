@@ -19,6 +19,8 @@ interface MemberProps {
   onRemove?: (id: string) => Promise<void>
 }
 
+const AVATAR = require("assets/images/icons/avatar-2.png")
+
 export const Member = (props: MemberProps) => {
   const { member, family, add, onRemove } = props
   const { id, email, avatar, full_name } = member
@@ -46,7 +48,7 @@ export const Member = (props: MemberProps) => {
     >
       <Image
         resizeMode="contain"
-        source={avatar ? { uri: avatar } : require("./avatar.png")}
+        source={avatar ? { uri: avatar } : AVATAR}
         style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
       />
 
@@ -87,7 +89,7 @@ export const Member = (props: MemberProps) => {
         >
           <Image
             resizeMode="contain"
-            source={avatar ? { uri: avatar } : require("./avatar.png")}
+            source={avatar ? { uri: avatar } : AVATAR}
             style={{ height: 40, width: 40, borderRadius: 20, marginRight: 12 }}
           />
           <Text ellipsizeMode="tail" style={{ maxWidth: "70%" }}>
