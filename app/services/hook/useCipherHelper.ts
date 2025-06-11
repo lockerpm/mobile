@@ -28,7 +28,7 @@ export function useCipherHelper() {
 
   const newCipher = (type: CipherType) => {
     const cipher = new CipherView()
-    cipher.organizationId = null
+    cipher.organizationId = ""
     cipher.type = type
     cipher.login = new LoginView()
     cipher.login.uris = [new LoginUriView()]
@@ -36,7 +36,7 @@ export function useCipherHelper() {
     cipher.identity = new IdentityView()
     cipher.secureNote = new SecureNoteView()
     cipher.secureNote.type = SecureNoteType.Generic
-    cipher.folderId = null
+    cipher.folderId = ""
     cipher.collectionIds = []
     return cipher
   }

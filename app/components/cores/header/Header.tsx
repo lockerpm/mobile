@@ -67,6 +67,7 @@ export interface HeaderProps {
    * Can be used with `onLeftPress`. Overrides `leftIcon`.
    */
   leftText?: TextProps["text"]
+  leftTx?: TextProps["tx"]
   /**
    * Left action text color
    */
@@ -94,6 +95,8 @@ export interface HeaderProps {
    * Can be used with `onRightPress`. Overrides `rightIcon`.
    */
   rightText?: TextProps["text"]
+  rightTx?: TextProps["tx"]
+
   /**
    * Right action text color
    */
@@ -118,6 +121,7 @@ interface HeaderActionProps {
   icon?: IconTypes
   iconColor?: string
   text?: TextProps["text"]
+  tx?: TextProps["tx"]
   textColor?: string
   onPress?: TouchableOpacityProps["onPress"]
   ActionComponent?: ReactElement
@@ -159,6 +163,7 @@ export function Header(props: HeaderProps) {
       <View style={[$wrapper, $styleOverride]}>
         <HeaderAction
           text={leftText}
+          tx={props.leftTx}
           textColor={leftTextColor}
           icon={leftIcon}
           iconColor={leftIconColor}
@@ -181,6 +186,7 @@ export function Header(props: HeaderProps) {
 
         <HeaderAction
           text={rightText}
+          tx={props.rightTx}
           textColor={rightTextColor}
           icon={rightIcon}
           iconColor={rightIconColor}

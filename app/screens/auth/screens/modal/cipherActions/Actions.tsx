@@ -8,6 +8,8 @@ import { CipherType } from "core/enums"
 import { getCipherDescription, getTeam } from "app/utils/cipherHelper"
 import { CipherActionsByType, CipherIconImage } from "app/components/newCiphers"
 import { NewActionSheetItem } from "app/components/utils"
+import { useNavigation } from "@react-navigation/native"
+import { AuthStackScreenProps } from "app/navigators"
 
 interface Props {
   item: CipherAppView
@@ -16,6 +18,8 @@ interface Props {
 }
 
 export const Actions = ({ item, setNextModal, onClose }: Props) => {
+  const navigation = useNavigation<AuthStackScreenProps<"cipherActionsModal">["navigation"]>()
+
   const { colors } = useTheme()
   const { cipherStore } = useStores()
 
@@ -53,7 +57,7 @@ export const Actions = ({ item, setNextModal, onClose }: Props) => {
       <CipherActionsByType item={item} onClose={onClose} />
 
       <NewActionSheetItem
-        hide={!editable || item.passwordHistory?.length === 0}
+        hide={!editable || !item.passwordHistory || item.passwordHistory?.length === 0}
         tx="password_history.view"
         icon="clock-clockwise"
         onPress={() => {
@@ -67,7 +71,14 @@ export const Actions = ({ item, setNextModal, onClose }: Props) => {
         icon="list-bullets"
         onPress={() => {
           onClose()
-          // navigation.navigate(`${cipherMapper.path}__info`)
+          setTimeout(() => {
+            navigation.navigate("browseStack", {
+              screen: "cipherDetail",
+              params: {
+                cipher: item,
+              },
+            })
+          }, 50)
         }}
       />
       <NewActionSheetItem

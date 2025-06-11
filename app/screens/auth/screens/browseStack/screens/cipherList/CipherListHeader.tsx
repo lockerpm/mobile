@@ -2,7 +2,13 @@ import React from "react"
 import { View, StyleSheet } from "react-native"
 import { Icon, Text } from "app/components/cores"
 import { useStores } from "app/models"
-import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated"
+import Animated, {
+  FadeInDown,
+  FadeOutDown,
+  FadeOutUp,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
 import { CipherListSelectionHeader } from "app/components/newCiphers"
 import { TxKeyPath } from "app/i18n"
 
@@ -53,17 +59,33 @@ export const CipherListHeader = (props: Props) => {
   // ----------------------- COMPUTED ------------------------
   const isFreeAccount = user.isFreePlan
 
+  // disable entering animation for first render
+  const enabledEnteringAnimation = useSharedValue(false)
+
   // ----------------------- METHODS ------------------------
+  const FadeInUp = () => {
+    "worklet"
+    return {
+      initialValues: {
+        opacity: enabledEnteringAnimation.value ? 0 : 1,
+        transform: [{ translateY: enabledEnteringAnimation.value ? -30 : 0 }],
+      },
+      animations: {
+        opacity: withTiming(1, { duration: 300 }),
+        transform: [{ translateY: withTiming(0, { duration: 300 }) }],
+      },
+    }
+  }
 
   // ----------------------- RENDER ------------------------
 
   return (
     <View style={styles.headerContainer}>
       {!isSelecting && (
-        <Animated.View entering={FadeInUp} exiting={FadeOutDown} style={styles.container}>
+        <Animated.View entering={FadeInUp} exiting={FadeOutUp} style={styles.container}>
           <View style={styles.rowContainer}>
             <Icon icon={"arrow-left"} onPress={goBack} style={styles.mr8} />
-            <Text preset="bold" size="xxl" weight="semibold" text={header} tx={headerTx} />
+            <Text preset="bold" size="xl" weight="semibold" text={header} tx={headerTx} />
           </View>
           <View style={styles.rowContainer}>
             <Icon
@@ -76,18 +98,25 @@ export const CipherListHeader = (props: Props) => {
         </Animated.View>
       )}
       {isSelecting && (
-        <CipherListSelectionHeader
-          isFreeAccount={isFreeAccount}
-          selectedCipherIds={selectedItems}
-          onClose={() => {
-            setIsSelecting(false)
-            setSelectedItems([])
-          }}
-          onShare={openShare}
-          onSelectAll={toggleSelectAll}
-          onMoveFolder={openMoveToFolder}
-          onDelete={openDelete}
-        />
+        <Animated.View
+          entering={FadeInDown.withCallback((finished) => {
+            enabledEnteringAnimation.value = finished
+          })}
+          exiting={FadeOutDown}
+        >
+          <CipherListSelectionHeader
+            isFreeAccount={isFreeAccount}
+            selectedCipherIds={selectedItems}
+            onClose={() => {
+              setIsSelecting(false)
+              setSelectedItems([])
+            }}
+            onShare={openShare}
+            onSelectAll={toggleSelectAll}
+            onMoveFolder={openMoveToFolder}
+            onDelete={openDelete}
+          />
+        </Animated.View>
       )}
     </View>
   )

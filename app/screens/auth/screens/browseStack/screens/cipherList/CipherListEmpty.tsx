@@ -82,7 +82,7 @@ export const CipherListEmpty = React.memo(({ onAdd, cipherTypes }: EmptyCipherLi
   const content = parseEmptyCipherContent(cipherTypes)
   return (
     <View style={styles.container}>
-      <Image source={content.image} resizeMode="contain" style={{ height: 55, width: 120 }} />
+      <Image source={content.image} resizeMode="contain" style={styles.image} />
       <Text preset="bold" size="large" style={styles.title} tx={content.titleTx} />
       <Text preset="label" tx={content.descTx} size="base" style={styles.label} />
       <Button tx={content.buttonTx} onPress={onAdd} />

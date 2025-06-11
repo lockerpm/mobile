@@ -1,7 +1,6 @@
 import React, { FC } from "react"
-import { KeyboardAvoidingView, StyleSheet, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { debounce } from "app/utils/utils"
-import { IS_IOS } from "app/config/constants"
 import { AuthStackScreenProps } from "app/navigators"
 import { ModalBackdrop } from "app/components/cores"
 import { Actions } from "./Actions"
@@ -22,32 +21,26 @@ export const CipherActionsModalScreen: FC<AuthStackScreenProps<"cipherActionsMod
   const onClose = debounce(navigation.goBack, 400)
 
   return (
-    <KeyboardAvoidingView
-      behavior={IS_IOS ? "padding" : undefined}
-      keyboardVerticalOffset={16}
-      style={styles.flex}
-    >
-      <View style={styles.flex}>
-        <ModalBackdrop onPress={onClose} />
-        {targetModal === CipherActionsModal.DEFAULT && !!item && (
-          <Actions item={item} setNextModal={setTargetModal} onClose={onClose} />
-        )}
+    <View style={styles.flex}>
+      <ModalBackdrop onPress={onClose} />
+      {targetModal === CipherActionsModal.DEFAULT && !!item && (
+        <Actions item={item} setNextModal={setTargetModal} onClose={onClose} />
+      )}
 
-        {targetModal === CipherActionsModal.DELETE && (
-          <Delete deleteIds={deleteIds} onClose={onClose} />
-        )}
+      {targetModal === CipherActionsModal.DELETE && (
+        <Delete deleteIds={deleteIds} onClose={onClose} />
+      )}
 
-        {targetModal === CipherActionsModal.SHARE && !!item && (
-          <ShareOptions cipherId={item.id} onClose={onClose} setNextModal={setTargetModal} />
-        )}
+      {targetModal === CipherActionsModal.SHARE && !!item && (
+        <ShareOptions cipherId={item.id} onClose={onClose} setNextModal={setTargetModal} />
+      )}
 
-        {targetModal === CipherActionsModal.PREMIUM_ACTION && <Premium />}
+      {targetModal === CipherActionsModal.PREMIUM_ACTION && <Premium />}
 
-        {targetModal === CipherActionsModal.LEAVE_SHARE && !!item && (
-          <LeaveShared onClose={onClose} cipherId={item.id} organizationId={item.organizationId} />
-        )}
-      </View>
-    </KeyboardAvoidingView>
+      {targetModal === CipherActionsModal.LEAVE_SHARE && !!item && (
+        <LeaveShared onClose={onClose} cipherId={item.id} organizationId={item.organizationId} />
+      )}
+    </View>
   )
 }
 

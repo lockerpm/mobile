@@ -204,7 +204,7 @@ export const Screen = observer((props: ScreenProps) => {
   const {
     backgroundColor = colors.background,
     KeyboardAvoidingViewProps,
-    keyboardOffset = 16,
+    keyboardOffset = 0,
     safeAreaEdges,
   } = props
 

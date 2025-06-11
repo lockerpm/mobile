@@ -2,7 +2,6 @@ import { Icon, Text } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
 import React from "react"
 import { StyleSheet, View } from "react-native"
-import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated"
 
 type Props = {
   /**
@@ -48,7 +47,7 @@ export const CipherListSelectionHeader = ({
   const { translate } = useAppLocale()
 
   return (
-    <Animated.View entering={FadeInDown} exiting={FadeOutUp} style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.rowContainer}>
         <Icon icon="x" color={colors.primaryText} onPress={onClose} />
         <Text
@@ -84,7 +83,7 @@ export const CipherListSelectionHeader = ({
           </>
         )}
       </View>
-    </Animated.View>
+    </View>
   )
 }
 

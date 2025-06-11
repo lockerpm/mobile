@@ -19,8 +19,8 @@ export enum CipherActionsModal {
   DEFAULT = "default",
   SHARE = "share",
   DELETE = "delete",
-  LEAVE_SHARE = "leave_share",
-  PREMIUM_ACTION = "premium_action",
+  LEAVE_SHARE = "leaveShare",
+  PREMIUM_ACTION = "premiumAction",
 }
 
 export type EditShareCipherData = {

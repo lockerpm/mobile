@@ -14,8 +14,13 @@ import { observer } from "mobx-react-lite"
 import { useToast } from "app/services/utils"
 import { SearchBar } from "app/components/utils"
 import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
 export interface CipherListProps {
+  /**
+   * add safe padding bottom
+   */
+  safeBottom?: boolean
   /**
    * List empty component
    */
@@ -72,6 +77,7 @@ export interface CipherListProps {
  */
 export const CipherList = observer(
   ({
+    safeBottom,
     ListEmptyComponent,
     deleted = false,
     cipherTypes,
@@ -296,6 +302,9 @@ export const CipherList = observer(
               )}
             </>
           }
+          contentContainerStyle={{
+            paddingBottom: safeBottom ? StaticSafeAreaInsets.safeAreaInsetsBottom : 0,
+          }}
           ItemSeparatorComponent={itemDivider}
           ListEmptyComponent={renderEmptyComponents}
           getItemLayout={(data, index) => ({

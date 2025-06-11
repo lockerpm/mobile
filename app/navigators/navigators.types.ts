@@ -7,6 +7,8 @@ import {
   BreanchResult,
   CipherActionsModal,
   CipherAppView,
+  CipherEditMode,
+  FolderActionsModal,
   LockType,
   LoginOptions,
   MarketingContent,
@@ -23,6 +25,7 @@ import { AndroidAutofillServiceData } from "app/utils/autofillHelper"
 import { CipherType } from "core/enums"
 import { CipherView } from "core/models/view/cipherView"
 import { CollectionView } from "core/models/view/collectionView"
+import { FolderView } from "core/models/view/folderView"
 import { SendView } from "core/models/view/sendView"
 
 // ---------------------------ROOT Navigator---------------------------
@@ -214,15 +217,31 @@ export type TabsScreenProps<T extends keyof TabsRoute> = CompositeScreenProps<
 // ---------------------------BROWSE Navigator---------------------------
 
 export type BrowseRoute = {
+  folderActionModal: {
+    mode: FolderActionsModal
+
+    folder?: FolderView
+    collection?: CollectionView
+  }
+
   attachment: {
+    // open attachmet screen from shared cipher or not
     isShared?: boolean
   }
 
   cipherList: {
-    cipherTypes: CipherType[]
+    cipherTypes?: CipherType[]
+
+    // cipherList header
+    header?: string
     headerTx?: TxKeyPath
+
+    // Open from folder item in FolderList
     folderId?: string
+
+    // Open from collection item in FolderList
     collectionId?: string
+    organizationId?: string
   }
 
   cipherDetail: {
@@ -233,8 +252,27 @@ export type BrowseRoute = {
   }
 
   cipherEdit: {
-    cipher: CipherAppView
+    // mode: "add" | "edit" | "clone"
+    mode: CipherEditMode
+
+    // cipher type to add or edit
+    cipherType: CipherType
+
+    // cipher to edit, if mode is "edit" or "clone"
+    cipher?: CipherAppView
+
+    // add cipher from Collection Ciphers view
+    initCollectionIds?: string[]
+
+    // add cipher from Folder Ciphers view
+    initFolderId?: string
+
+    // add password from android Autofill Service
+    initialUrl?: string // app domain
+    androidAutofillSavedData?: AndroidAutofillServiceData
   }
+
+  folderList: undefined
 
   // --------------- OLDS ---------------
 
@@ -308,7 +346,6 @@ export type BrowseRoute = {
 
   shareMultiple: undefined
 
-  folders: undefined
   shares: undefined
   sharedItems: undefined
   quickShareItems: undefined

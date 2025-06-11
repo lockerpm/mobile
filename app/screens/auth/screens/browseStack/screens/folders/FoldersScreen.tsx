@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import groupBy from "lodash/groupBy"
@@ -6,22 +5,21 @@ import orderBy from "lodash/orderBy"
 import { useNavigation } from "@react-navigation/native"
 import { SectionList, TouchableOpacity, View } from "react-native"
 import { NewFolderModal } from "./NewFolderModal"
-import { FolderAction } from "./FolderAction"
 import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
 import { Icon, ImageIcon, Screen, Text } from "app/components/cores"
-import { useHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { FolderView } from "core/models/view/folderView"
 import { CollectionView } from "core/models/view/collectionView"
 import { TEAM_COLLECTION_EDITOR } from "app/static/constants"
+import { getTeam } from "app/utils/cipherHelper"
+import { FolderAction } from "./FolderAction"
 
 const EMPTY = require("assets/images/emptyCipherList/folder-empty-img.png")
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation() as any
   const { colors } = useTheme()
-  const { getTeam } = useHelper()
   const { translate } = useAppLocale()
   const { folderStore, collectionStore, user, uiStore, cipherStore } = useStores()
 

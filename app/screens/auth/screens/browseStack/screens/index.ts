@@ -23,6 +23,7 @@ export * from "./authenticatorEdit/AuthenticatorEditScreen"
 
 // ---- new ------
 
+export * from "./folderList"
 export * from "./cipherList"
 export * from "./cipherDetail"
 export * from "./cipherEdit"

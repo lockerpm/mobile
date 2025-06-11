@@ -86,7 +86,7 @@ export const CipherDetailScreen: FC<BrowseStackScreenProps<"cipherDetail">> = ob
         />
 
         <View style={styles.title}>
-          <Text preset="bold" size="xxl" text={cipher.name} />
+          <Text preset="bold" size="xxl" text={cipher.name} style={styles.name} />
 
           {notSync && <Icon icon="wifi-slash" size={22} containerStyle={styles.ml10} />}
         </View>
@@ -108,6 +108,9 @@ const styles = StyleSheet.create({
   },
   ml10: {
     marginLeft: 10,
+  },
+  name: {
+    textAlign: "center",
   },
 
   title: {

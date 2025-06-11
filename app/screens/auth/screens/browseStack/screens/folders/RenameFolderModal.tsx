@@ -8,8 +8,8 @@ import { BottomModal, Button, TextInput } from "app/components/cores"
 import { useAppLocale } from "app/services/context"
 
 interface Props {
-  isOpen?: boolean
-  onClose?: () => void
+  isOpen: boolean
+  onClose: () => void
   folder: FolderView | CollectionView
 }
 

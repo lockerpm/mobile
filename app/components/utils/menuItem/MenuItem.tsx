@@ -89,7 +89,7 @@ export const MenuItemContainer = ({
 }: ContainerProps) => {
   const { colors } = useTheme()
   const { translate } = useAppLocale()
-  const titleText = title || translate(titleTx)
+  const titleText = title || (titleTx && translate(titleTx))
   const arrayLength = Array.isArray(children) ? children.length : 1
   return (
     <View style={{ marginTop: 16 }}>

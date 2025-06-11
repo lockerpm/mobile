@@ -1,7 +1,6 @@
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 import {
-  FoldersScreen,
   SharesScreen,
   TrashScreen,
   ShareItemsScreen,
@@ -20,6 +19,7 @@ import {
   AttachmentScreen,
   CipherDetailScreen,
   CipherEditScreen,
+  FolderListScreen,
 } from "./screens"
 import { observer } from "mobx-react-lite"
 import { BrowseRoute } from "app/navigators"
@@ -38,9 +38,9 @@ export const BrowseStack = observer(() => {
       <Stack.Screen name="cipherEdit" component={CipherEditScreen} />
       <Stack.Screen name="cipherDetail" component={CipherDetailScreen} />
 
-      {/** OLD */}
+      <Stack.Screen name="folderList" component={FolderListScreen} />
+      {/**  ------------------------ OLD ------------------------- */}
 
-      <Stack.Screen name="folders" component={FoldersScreen} />
       <Stack.Screen name="trash" component={TrashScreen} />
       <Stack.Screen name="shares" component={SharesScreen} />
       <Stack.Screen name="sharedItems" component={SharedItemsScreen} />

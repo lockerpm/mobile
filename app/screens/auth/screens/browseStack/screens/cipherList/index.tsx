@@ -8,7 +8,16 @@ import { StyleSheet } from "react-native"
 import { CipherActionsModal, CipherAppView } from "app/static/types"
 import { CipherListHeader } from "./CipherListHeader"
 import { CipherListEmpty } from "./CipherListEmpty"
+import { CipherType } from "core/enums"
 
+const allTypes = [
+  CipherType.Card,
+  CipherType.Login,
+  CipherType.Identity,
+  CipherType.CryptoWallet,
+  CipherType.MasterPassword,
+  CipherType.SecureNote,
+]
 /**
  * Render the Cipher List screen with target ciphertype
  */
@@ -16,7 +25,7 @@ export const CipherListScreen: FC<BrowseStackScreenProps<"cipherList">> = observ
   ({
     navigation,
     route: {
-      params: { cipherTypes, headerTx },
+      params: { cipherTypes = allTypes, header },
     },
   }) => {
     // -------------- PARAMS ------------------
@@ -96,7 +105,7 @@ export const CipherListScreen: FC<BrowseStackScreenProps<"cipherList">> = observ
         safeAreaEdges={["top"]}
         header={
           <CipherListHeader
-            headerTx={headerTx}
+            header={header}
             goBack={navigation.goBack}
             openAdd={navigateToAddCipher}
             openSort={onOpenSortModal}
@@ -120,6 +129,7 @@ export const CipherListScreen: FC<BrowseStackScreenProps<"cipherList">> = observ
         />
 
         <CipherList
+          safeBottom
           cipherTypes={cipherTypes}
           sort={sortConfig.sort}
           isSelecting={isSelecting}
