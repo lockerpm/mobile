@@ -6,7 +6,7 @@ import orderBy from "lodash/orderBy"
 
 import { CipherSharedListItem, CipherSharedType } from "./CipherSharedListItem"
 import { CollectionListItem } from "../shareItems/FolderShareListItem"
-import { FolderAction } from "../../folders/FolderAction"
+import { FolderAction } from "../../../folders/FolderAction"
 import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { CollectionView } from "core/models/view/collectionView"

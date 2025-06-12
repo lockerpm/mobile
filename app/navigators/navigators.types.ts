@@ -221,6 +221,27 @@ export type TabsScreenProps<T extends keyof TabsRoute> = CompositeScreenProps<
 
 // ---------------------------BROWSE Navigator---------------------------
 
+export type ShareRoute = {
+  sharesHome: undefined
+
+  normalShares: {
+    ciphers?: CipherView[]
+  }
+  quickShares: {
+    cipher: CipherView
+  }
+  shareFolder: {
+    collectionId: string
+  }
+  shareMultiple: undefined
+  sharedItems: undefined
+  quickShareItems: undefined
+  quickShareItemsDetail: {
+    send: SendView
+  }
+  shareItems: undefined
+}
+
 export type BrowseRoute = {
   folderActionModal: {
     mode: FolderActionsModal
@@ -282,91 +303,34 @@ export type BrowseRoute = {
 
   folderList: undefined
 
+  shareStack: NavigatorScreenParams<ShareRoute>
+
   // --------------- OLDS ---------------
+  foldersSelect: {
+    mode: "add" | "move"
+    initialId?: string
+    cipherIds?: string[]
+  }
 
   authenticatorEdit: {
     mode: "add" | "edit"
     passwordTotp?: boolean
     passwordMode?: "add" | "edit" | "clone"
   }
-  passwordsInfo: {
-    quickShare?: boolean
-  }
-  passwordsEdit: {
-    mode: "add" | "edit" | "clone"
-    initialUrl?: string
-    collection?: CollectionView
-    androidAutofillSavedData?: AndroidAutofillServiceData
-  }
   passwords2faSetup: {
     mode: "add" | "edit" | "clone"
   }
   passwordsHistory: undefined
-
-  notesInfo: {
-    quickShare?: boolean
-  }
-  notesEdit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-  cardsInfo: {
-    quickShare?: boolean
-  }
-  cardsEdit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-  identitiesInfo: {
-    quickShare?: boolean
-  }
-  identitiesEdit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-  cryptoWalletsInfo: {
-    quickShare?: boolean
-  }
-  cryptoWalletsEdit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-  normalShares: {
-    ciphers?: CipherView[]
-  }
-  quickShares: {
-    cipher: CipherView
-  }
-
-  foldersSelect: {
-    mode: "add" | "move"
-    initialId?: string
-    cipherIds?: string[]
-  }
-  foldersCiphers: {
-    folderId?: string | null
-    collectionId?: string | null
-    organizationId?: string | null
-  }
-  shareFolder: {
-    collectionId: string
-  }
-
-  shareMultiple: undefined
-
-  shares: undefined
-  sharedItems: undefined
-  quickShareItems: undefined
-  quickShareItemsDetail: {
-    send: SendView
-  }
-  shareItems: undefined
-  trash: undefined
 }
 
 export type BrowseStackScreenProps<T extends keyof BrowseRoute> = CompositeScreenProps<
   StackScreenProps<BrowseRoute, T>,
   AuthStackScreenProps<keyof AuthRoute>
+>
+
+export type ShareStackScreenProps<T extends keyof ShareRoute> = CompositeScreenProps<
+  StackScreenProps<ShareRoute, T>,
+  BrowseStackScreenProps<keyof BrowseRoute>
 >
 
 // ---------------------------TOOLS---------------------------

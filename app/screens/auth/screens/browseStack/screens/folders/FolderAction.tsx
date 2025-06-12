@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Platform, View } from "react-native"
-import { AddUserShareFolderModal } from "./folderSharedUsersManagement/ShareUserModal"
+import { AddUserShareFolderModal } from "../shares/screens/folderSharedUsersManagement/ShareUserModal"
 import { useNavigation } from "@react-navigation/native"
 import { ImageIcon, Text } from "app/components/cores"
 import { FolderView } from "core/models/view/folderView"

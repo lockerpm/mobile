@@ -14,7 +14,7 @@ import { CipherView } from "core/models/view"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { Button, Header, Icon, Text, TextInput } from "app/components/cores"
 import { useToast } from "app/services/utils"
-import { SharedUsers } from "app/screens/auth/screens/browseStack/screens/shareCipher/SharedUser"
+import { SharedUsers } from "app/screens/auth/screens/browseStack/screens/shares/screens/shareCipher/SharedUser"
 
 interface Props {
   isOpen?: boolean

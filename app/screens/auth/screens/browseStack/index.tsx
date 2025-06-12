@@ -1,24 +1,15 @@
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 import {
-  SharesScreen,
-  ShareItemsScreen,
-  SharedItemsScreen,
-  QuickShareItemsScreen,
   AuthenticatorEditScreen,
-  NormalSharesScreen,
-  QuickSharesScreen,
-  QuickSharesDetailScreen,
   Password2FASetupScreen,
   PasswordHistoryScreen,
   FolderSelectScreen,
-  FolderCiphersScreen,
-  FolderSharedUsersManagementScreen,
-  ShareMultipleScreen,
   AttachmentScreen,
   CipherDetailScreen,
   CipherEditScreen,
   FolderListScreen,
+  ShareStack,
 } from "./screens"
 import { observer } from "mobx-react-lite"
 import { BrowseRoute } from "app/navigators"
@@ -38,14 +29,8 @@ export const BrowseStack = observer(() => {
       <Stack.Screen name="cipherList" component={CipherListScreen} />
       <Stack.Screen name="cipherEdit" component={CipherEditScreen} />
       <Stack.Screen name="cipherDetail" component={CipherDetailScreen} />
-
       <Stack.Screen name="folderList" component={FolderListScreen} />
-      {/**  ------------------------ OLD ------------------------- */}
-
-      <Stack.Screen name="shares" component={SharesScreen} />
-      <Stack.Screen name="sharedItems" component={SharedItemsScreen} />
-      <Stack.Screen name="shareItems" component={ShareItemsScreen} />
-      <Stack.Screen name="quickShareItems" component={QuickShareItemsScreen} />
+      <Stack.Screen name="shareStack" component={ShareStack} />
 
       {/** TODO */}
       <Stack.Screen
@@ -53,15 +38,6 @@ export const BrowseStack = observer(() => {
         component={AuthenticatorEditScreen}
         initialParams={{ mode: "add" }}
       />
-      <Stack.Screen
-        name="normalShares"
-        component={NormalSharesScreen}
-        initialParams={{ ciphers: [] }}
-      />
-
-      <Stack.Screen name="quickShares" component={QuickSharesScreen} />
-      <Stack.Screen name="quickShareItemsDetail" component={QuickSharesDetailScreen} />
-
       <Stack.Screen name="passwords2faSetup" component={Password2FASetupScreen} />
       <Stack.Screen name="passwordsHistory" component={PasswordHistoryScreen} />
 
@@ -70,9 +46,6 @@ export const BrowseStack = observer(() => {
         component={FolderSelectScreen}
         initialParams={{ mode: "add" }}
       />
-      <Stack.Screen name="foldersCiphers" component={FolderCiphersScreen} />
-      <Stack.Screen name="shareFolder" component={FolderSharedUsersManagementScreen} />
-      <Stack.Screen name="shareMultiple" component={ShareMultipleScreen} />
     </Stack.Navigator>
   )
 })
