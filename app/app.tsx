@@ -35,6 +35,7 @@ import { IS_IOS } from "./config/constants"
 import { AndroidAutofillServiceType } from "./utils/autofillHelper"
 import SplashScreen from "react-native-splash-screen"
 import BootSplash from "react-native-bootsplash"
+import { autofillKeyChain } from "./utils/autofillData"
 
 enableScreens()
 Settings.initializeSDK()
@@ -101,6 +102,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
           // Close all modals before navigate
           EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
           if (navigationRef.current) {
+            autofillKeyChain.resetAll()
             navigationRef.current.dispatch(
               CommonActions.reset({
                 index: 0,

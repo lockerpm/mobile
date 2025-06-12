@@ -1,9 +1,8 @@
 import React from "react"
 import { useStores } from "app/models"
 import { CollectionView } from "core/models/view/collectionView"
-import { ActionSheet } from "../actionsSheet/ActionSheet"
 import { TouchableOpacity, View, Image } from "react-native"
-import { Icon, Text } from "../../cores"
+import { BottomModal, Icon, Text } from "../../cores"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { useHelper } from "app/services/hook"
 import { AccountRole } from "app/static/types"
@@ -35,7 +34,7 @@ export const AddCipherActionModal = (props: Props) => {
   })()
 
   return (
-    <ActionSheet isOpen={isOpen} onClose={onClose}>
+    <BottomModal isOpen={isOpen} onClose={onClose} hideCloseBtn>
       {items.map((item, index) => (
         <TouchableOpacity
           key={index}
@@ -57,7 +56,8 @@ export const AddCipherActionModal = (props: Props) => {
               flexDirection: "row",
               alignItems: "center",
               paddingVertical: 12,
-              paddingHorizontal: 20,
+              borderTopColor: colors.border,
+              borderTopWidth: index > 0 ? 1 : 0,
             }}
           >
             <Image source={item.icon} style={{ height: 40, width: 40 }} resizeMode="contain" />
@@ -65,12 +65,10 @@ export const AddCipherActionModal = (props: Props) => {
           </View>
         </TouchableOpacity>
       ))}
-
       {hasAddCollectionPermission && (
         <View
           style={{
             flexDirection: "row",
-            paddingHorizontal: 16,
             marginVertical: 12,
           }}
         >
@@ -84,6 +82,6 @@ export const AddCipherActionModal = (props: Props) => {
           />
         </View>
       )}
-    </ActionSheet>
+    </BottomModal>
   )
 }

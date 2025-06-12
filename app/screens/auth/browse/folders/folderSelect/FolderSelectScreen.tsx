@@ -109,9 +109,6 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
           )}
         </View>
 
-        {section.isCollection && mode === "move" && (
-          <Icon icon="info" onPress={showNofiAddItemToShareFolder} color={colors.warning} />
-        )}
         {selectedFolder === item.id && (
           <Icon icon="check" size={18} color={colors.primary} style={{ marginLeft: 8 }} />
         )}
@@ -207,11 +204,31 @@ export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = ob
         sections={sections}
         keyExtractor={(item, index) => item.id + index}
         renderItem={renderItem}
-        renderSectionHeader={({ section: { title, data } }) => {
+        renderSectionHeader={({ section: { title, data, isCollection } }) => {
           return (
             data.length > 0 && (
-              <View style={{ backgroundColor: colors.background, marginTop: 16 }}>
-                <Text text={title} style={{ padding: 16, fontWeight: "bold" }} />
+              <View
+                style={{
+                  backgroundColor: colors.background,
+                  marginTop: 16,
+                  padding: 16,
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  text={title}
+                  numberOfLines={1}
+                  style={{
+                    flexGrow: 1,
+                    flexShrink: 1,
+                    fontWeight: "bold",
+                    marginRight: 8,
+                  }}
+                />
+                {isCollection && mode === "move" && (
+                  <Icon icon="info" onPress={showNofiAddItemToShareFolder} color={colors.warning} />
+                )}
               </View>
             )
           )

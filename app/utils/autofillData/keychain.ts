@@ -31,7 +31,15 @@ class KeychainService {
   }
 
   public async resetAll() {
-    await ReactNativeKeychain.resetGenericPassword()
+    ReactNativeKeychain.resetGenericPassword({
+      service: AutofillStorekey.USER_INFO.service,
+    })
+    ReactNativeKeychain.resetGenericPassword({
+      service: AutofillStorekey.PASSWORD.service,
+    })
+    ReactNativeKeychain.resetGenericPassword({
+      service: AutofillStorekey.TEMP_PASSWORD.service,
+    })
   }
 
   // local autofill password creation
@@ -59,9 +67,12 @@ class KeychainService {
   public async resetTempPassword() {
     if (!IS_IOS) return
 
-    await this.saveShared(AutofillStorekey.TEMP_PASSWORD.service, AutofillStorekey.TEMP_PASSWORD.username, "")
+    await this.saveShared(
+      AutofillStorekey.TEMP_PASSWORD.service,
+      AutofillStorekey.TEMP_PASSWORD.username,
+      "",
+    )
   }
-
 
   public async getPasswords(): Promise<IosAutofillPassword | null> {
     if (!IS_IOS) return null

@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
-import { ScrollView, StyleProp, View, ViewStyle } from 'react-native'
-import Dialog from 'react-native-ui-lib/dialog'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { AppEventType, EventBus } from 'app/utils/eventBus'
-import { useTheme } from 'app/services/context'
-import { Text } from '../text/Text'
-import { Icon } from '../icon/Icon'
-import Animated, { useAnimatedStyle, useDerivedValue, withTiming } from 'react-native-reanimated'
-import { useKeyboard } from 'app/services/hook'
+import React, { useEffect } from "react"
+import { ScrollView, StyleProp, View, ViewStyle } from "react-native"
+import Dialog from "react-native-ui-lib/dialog"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+import { useTheme } from "app/services/context"
+import { Text } from "../text/Text"
+import { Icon } from "../icon/Icon"
+import Animated, { useAnimatedStyle, useDerivedValue, withTiming } from "react-native-reanimated"
+import { useKeyboard } from "app/services/hook"
 
 interface BottomModalProps {
   /**
@@ -17,7 +17,7 @@ interface BottomModalProps {
   /**
    * Modal title
    */
-  title: string
+  title?: string
   onClose: () => void
   children?: React.ReactNode
   /**
@@ -31,12 +31,19 @@ interface BottomModalProps {
 /**
  * Show modal view from bottom
  */
-export const BottomModal = ({ style, children, isOpen, onClose, title, hideCloseBtn }: BottomModalProps) => {
+export const BottomModal = ({
+  style,
+  children,
+  isOpen,
+  onClose,
+  title,
+  hideCloseBtn,
+}: BottomModalProps) => {
   const insets = useSafeAreaInsets()
   const { colors } = useTheme()
   const keyboardHeight = useKeyboard()
   const $container: ViewStyle = {
-    justifyContent: 'center',
+    justifyContent: "center",
     backgroundColor: colors.background,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -64,7 +71,7 @@ export const BottomModal = ({ style, children, isOpen, onClose, title, hideClose
 
   return (
     <Dialog
-      supportedOrientations={['portrait', 'landscape']}
+      supportedOrientations={["portrait", "landscape"]}
       containerStyle={[$container, style]}
       bottom
       width="100%"
@@ -73,47 +80,48 @@ export const BottomModal = ({ style, children, isOpen, onClose, title, hideClose
       onDialogDismissed={onClose}
       renderPannableHeader={() => {
         return !hideCloseBtn ? (
-        <View
-          style={{
-            height: 45,
-            paddingHorizontal: 20,
-            paddingTop: 12,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Text
-            preset="bold"
-            text={title}
-            size="large"
-            style={{
-              maxWidth: '90%',
-            }}
-          />
-          <Icon icon="x" onPress={onClose} />
-        </View>
-      ): (
-        <View
-          style={{
-            paddingVertical: 4,
-            justifyContent: "center",
-            alignItems: "center",
-            borderTopLeftRadius: 12,
-            borderTopRightRadius: 12,
-          }}
-        >
           <View
             style={{
-              marginVertical: 5,
-              height: 4,
-              borderRadius: 2,
-              width: 50,
-              backgroundColor: colors.primaryText,
+              height: 45,
+              paddingHorizontal: 20,
+              paddingTop: 12,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
-          />
-        </View>
-      )}}
+          >
+            <Text
+              preset="bold"
+              text={title}
+              size="large"
+              style={{
+                maxWidth: "90%",
+              }}
+            />
+            <Icon icon="x" onPress={onClose} />
+          </View>
+        ) : (
+          <View
+            style={{
+              paddingVertical: 4,
+              justifyContent: "center",
+              alignItems: "center",
+              borderTopLeftRadius: 12,
+              borderTopRightRadius: 12,
+            }}
+          >
+            <View
+              style={{
+                marginVertical: 5,
+                height: 4,
+                borderRadius: 2,
+                width: 50,
+                backgroundColor: colors.primaryText,
+              }}
+            />
+          </View>
+        )
+      }}
     >
       <ScrollView
         contentContainerStyle={{ paddingBottom: insets.bottom + 20, paddingHorizontal: 20 }}
