@@ -1,4 +1,4 @@
-import { useDeleteCipher } from "app/services/hook"
+import { useCipherData, useDeleteCipher } from "app/services/hook"
 import React, { useState } from "react"
 import { Image, StyleSheet } from "react-native"
 import { Text, Button, BottomModalContainer } from "app/components/cores"
@@ -7,12 +7,14 @@ import { useTheme } from "app/services/context"
 interface Props {
   onClose: () => void
   deleteIds: string[]
+  isDeleted: boolean // permanent delete or move to trash
 }
 
 const TRASH = require("assets/images/intro/trash.png")
 
-export const Delete = ({ deleteIds, onClose }: Props) => {
+export const Delete = ({ deleteIds, isDeleted, onClose }: Props) => {
   const { toTrashCiphers } = useDeleteCipher()
+  const { deleteCiphers } = useCipherData()
   const { colors } = useTheme()
 
   // --------------------PARAMS---------------------
@@ -22,16 +24,30 @@ export const Delete = ({ deleteIds, onClose }: Props) => {
 
   const handleDelete = async () => {
     setIsLoading(true)
-    await toTrashCiphers(deleteIds)
+    if (isDeleted) {
+      // permanent delete
+      await deleteCiphers(deleteIds)
+    } else {
+      await toTrashCiphers(deleteIds)
+    }
     setIsLoading(false)
     onClose()
   }
 
   return (
     <BottomModalContainer style={styles.container}>
-      <Text preset="bold" tx="trash.to_trash" style={styles.header} />
+      <Text
+        preset="bold"
+        tx={isDeleted ? "trash.perma_delete" : "trash.to_trash"}
+        style={styles.header}
+      />
       <Image resizeMode="contain" source={TRASH} style={styles.image} />
-      <Text preset="label" size="base" tx={"trash.to_trash_desc"} style={styles.label} />
+      <Text
+        preset="label"
+        size="base"
+        tx={isDeleted ? "trash.perma_delete_desc" : "trash.to_trash_desc"}
+        style={styles.label}
+      />
 
       <Button
         preset="teriatary"
@@ -40,7 +56,7 @@ export const Delete = ({ deleteIds, onClose }: Props) => {
         onPress={handleDelete}
         teriataryBackground={colors.error}
       >
-        <Text preset="bold" tx={"common.delete"} color={colors.white} />
+        <Text preset="bold" tx={isDeleted ? "common.ok" : "common.delete"} color={colors.white} />
       </Button>
     </BottomModalContainer>
   )

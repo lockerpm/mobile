@@ -2,7 +2,6 @@ import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 import {
   SharesScreen,
-  TrashScreen,
   ShareItemsScreen,
   SharedItemsScreen,
   QuickShareItemsScreen,
@@ -34,6 +33,8 @@ export const BrowseStack = observer(() => {
         headerShown: false,
       }}
     >
+      <Stack.Screen name="attachment" component={AttachmentScreen} />
+
       <Stack.Screen name="cipherList" component={CipherListScreen} />
       <Stack.Screen name="cipherEdit" component={CipherEditScreen} />
       <Stack.Screen name="cipherDetail" component={CipherDetailScreen} />
@@ -41,7 +42,6 @@ export const BrowseStack = observer(() => {
       <Stack.Screen name="folderList" component={FolderListScreen} />
       {/**  ------------------------ OLD ------------------------- */}
 
-      <Stack.Screen name="trash" component={TrashScreen} />
       <Stack.Screen name="shares" component={SharesScreen} />
       <Stack.Screen name="sharedItems" component={SharedItemsScreen} />
       <Stack.Screen name="shareItems" component={ShareItemsScreen} />
@@ -73,8 +73,6 @@ export const BrowseStack = observer(() => {
       <Stack.Screen name="foldersCiphers" component={FolderCiphersScreen} />
       <Stack.Screen name="shareFolder" component={FolderSharedUsersManagementScreen} />
       <Stack.Screen name="shareMultiple" component={ShareMultipleScreen} />
-
-      <Stack.Screen name="attachment" component={AttachmentScreen} />
     </Stack.Navigator>
   )
 })

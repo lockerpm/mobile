@@ -4,10 +4,8 @@ import React from "react"
 import { StyleSheet, View } from "react-native"
 
 type Props = {
-  /**
-   * Enable or disable share button
-   */
-  isFreeAccount: boolean
+  // Trash screen header
+  isTrash?: boolean
   /**
    * Show other actions if selected items are more than 0
    */
@@ -29,18 +27,23 @@ type Props = {
    */
   onMoveFolder: () => void
   /**
+   * User press restore icon
+   */
+  onRestore?: () => void
+  /**
    * User press trash icon
    */
   onDelete: () => void
 }
 
 export const CipherListSelectionHeader = ({
-  isFreeAccount,
+  isTrash,
   selectedCipherIds,
   onClose,
   onShare,
   onSelectAll,
   onMoveFolder,
+  onRestore,
   onDelete,
 }: Props) => {
   const { colors } = useTheme()
@@ -66,13 +69,22 @@ export const CipherListSelectionHeader = ({
         <Icon icon="check-bold" onPress={onSelectAll} containerStyle={styles.iconContainer} />
         {selectedCipherIds.length > 0 && (
           <>
-            {!isFreeAccount && (
+            {!isTrash && (
               <Icon icon="share" onPress={onShare} containerStyle={styles.iconContainer} />
             )}
+            {!isTrash && (
+              <Icon
+                icon="folder-simple"
+                onPress={onMoveFolder}
+                containerStyle={styles.iconContainer}
+              />
+            )}
+
             <Icon
-              icon="folder-simple"
-              onPress={onMoveFolder}
+              icon="repeat"
+              onPress={onRestore}
               containerStyle={styles.iconContainer}
+              color={colors.title}
             />
             <Icon
               icon="trash"

@@ -32,7 +32,7 @@ export interface CipherListProps {
   /**
    * Show list delete ciphers
    */
-  deleted?: boolean
+  isdeleted?: boolean
   /**
    * Sort configuration
    */
@@ -79,7 +79,7 @@ export const CipherList = observer(
   ({
     safeBottom,
     ListEmptyComponent,
-    deleted = false,
+    isdeleted = false,
     cipherTypes,
     sort,
     folderId,
@@ -171,7 +171,7 @@ export const CipherList = observer(
       const searchRes = await getCiphersFromCache({
         filters,
         searchText,
-        deleted,
+        deleted: isdeleted,
       })
 
       if (searchRes.length === 0) {

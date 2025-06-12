@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { BackHandler, TouchableOpacity, View, Image } from "react-native"
+import { BackHandler, TouchableOpacity, View, Image, StyleSheet } from "react-native"
 import find from "lodash/find"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
@@ -18,6 +18,9 @@ import { PrivateEmailModal } from "./passwords/privateEmailModal/PrivateEmail"
 import { BrowseStackScreenProps } from "app/navigators"
 import { CipherAppView, CipherEditMode } from "app/static/types"
 import { AndroidAutofillServiceData } from "app/utils/autofillHelper"
+import { CipherOthersInfo, CustomFieldsEdit } from "app/components/newCiphers"
+import { FolderView } from "core/models/view/folderView"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
 type Props = {
   item: CipherAppView
@@ -25,12 +28,12 @@ type Props = {
   navigation: BrowseStackScreenProps<"cipherEdit">["navigation"]
 
   // other common info
-  note: string
-  folderId: string
+  folder?: FolderView
   collection?: CollectionView
-  fields: FieldView[]
   collectionIds: string[]
   organizationId: string
+
+  isOwner: boolean
 
   // autofill android service
   initialUrl?: string
@@ -42,13 +45,12 @@ export const PasswordEdit = observer(
     navigation,
     mode,
     item,
-    initialUrl,
     collection,
-    note,
-    folderId,
+    folder,
     organizationId,
     collectionIds,
-    fields,
+    isOwner,
+    initialUrl,
     androidAutofillSavedData,
   }: Props) => {
     const { colors } = useTheme()
@@ -56,21 +58,12 @@ export const PasswordEdit = observer(
     const { translate } = useAppLocale()
     const { createCipher, updateCipher } = useCipherData()
     const { getPasswordStrength, newCipher, checkPasswordPolicy } = useCipherHelper()
-    const { cipherStore, user, collectionStore, uiStore } = useStores()
+    const { user, collectionStore, uiStore } = useStores()
 
     // ----------------- COMPUTED ------------------
     const selectedCipher: CipherAppView = item
 
     const onSaveFillService = !!androidAutofillSavedData
-    const isOwner = (() => {
-      if (!selectedCipher.organizationId) {
-        return true
-      }
-      const org = cipherStore.myShares.find(
-        (s) => s.organization_id === selectedCipher.organizationId,
-      )
-      return !!org
-    })()
 
     // ----------------- PARAMS ------------------
 
@@ -89,6 +82,10 @@ export const PasswordEdit = observer(
     const [password, setPassword] = useState("")
     const [totp, setTotp] = useState("")
     const [url, setUrl] = useState("")
+
+    // other
+    const [fields, setFields] = useState<FieldView[]>(item.fields)
+    const [note, setNote] = useState("") // custom note for the cipher, not use in CipherType SecureNote
 
     // plan storage limit modal
     const [isOpenModal, setIsOpenModal] = useState(false)
@@ -195,7 +192,7 @@ export const PasswordEdit = observer(
       payload.fields = fields
       payload.name = name
       payload.notes = note
-      payload.folderId = folderId
+      payload.folderId = folder?.id ?? ""
       payload.login = data
       payload.organizationId = organizationId
       const passwordStrength = getPasswordStrength(password).score
@@ -258,7 +255,6 @@ export const PasswordEdit = observer(
     return (
       <Screen
         preset="auto"
-        safeAreaEdges={["bottom"]}
         header={
           <Header
             title={
@@ -281,6 +277,9 @@ export const PasswordEdit = observer(
             }
           />
         }
+        ScrollViewProps={{
+          contentContainerStyle: styles.scrollContainer,
+        }}
       >
         <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
         <PrivateEmailModal
@@ -446,7 +445,25 @@ export const PasswordEdit = observer(
           }}
           confirmText={translate("policy.password_violation_modal.use_anyway")}
         />
+
+        <CustomFieldsEdit fields={fields} setFields={setFields} />
+
+        <CipherOthersInfo
+          isOwner={isOwner}
+          hasNote={true}
+          note={note}
+          onChangeNote={setNote}
+          folder={folder}
+          collection={collection}
+          isDeleted={item.isDeleted}
+        />
       </Screen>
     )
   },
 )
+
+const styles = StyleSheet.create({
+  scrollContainer: {
+    paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom,
+  },
+})

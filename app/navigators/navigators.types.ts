@@ -153,6 +153,11 @@ export type AuthRoute = {
      * it will be item.id
      */
     deleteIds: string[]
+
+    /**
+     * Permanent delete, only use in Trash screen
+     */
+    isDeleted?: boolean
   }
 
   addCipherModal:
@@ -242,6 +247,9 @@ export type BrowseRoute = {
     // Open from collection item in FolderList
     collectionId?: string
     organizationId?: string
+
+    // Deleted cipher (trash screen)
+    isDeleted?: boolean
   }
 
   cipherDetail: {

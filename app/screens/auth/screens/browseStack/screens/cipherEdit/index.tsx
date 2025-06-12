@@ -3,9 +3,8 @@ import { BrowseStackScreenProps } from "app/navigators"
 import { observer } from "mobx-react-lite"
 import React, { FC, useMemo, useState } from "react"
 import { View, ViewStyle } from "react-native"
-import { CipherOthersInfo, CustomFieldsEdit } from "app/components/newCiphers"
 import { useStores } from "app/models"
-import { CardView, FieldView, IdentityView, LoginView, SecureNoteView } from "core/models/view"
+import { CardView, IdentityView, LoginView, SecureNoteView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { CipherAppView } from "app/static/types"
 import { CipherRepromptType } from "core/enums/cipherRepromptType"
@@ -13,6 +12,11 @@ import { PasswordEdit } from "./PasswordEdit"
 import { find } from "lodash"
 import { FolderView } from "core/models/view/folderView"
 import { CollectionView } from "core/models/view/collectionView"
+import { CardEdit } from "./cards/CardEdit"
+import { CryptoWalletEdit } from "./cryptoAsset/CryptoWalletEdit"
+import { IdentityEdit } from "./identities/IdentityEdit"
+import { NoteEdit } from "./NoteEdit"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
 const newCipher = (type: CipherType): CipherAppView => ({
   id: "",
@@ -62,8 +66,6 @@ export const CipherEditScreen: FC<BrowseStackScreenProps<"cipherEdit">> = observ
     const item: CipherAppView = cipher ?? newCipher(cipherType)
 
     // -------------- PARAMS --------------
-    const [note, setNote] = useState("") // custom note for the cipher, not use in CipherType SecureNote
-
     const [folderId, setFolderId] = useState(item.folderId || initFolderId || "")
     const [collectionIds, setCollectionIds] = useState(
       item.collectionIds || initCollectionIds || [],
@@ -71,9 +73,9 @@ export const CipherEditScreen: FC<BrowseStackScreenProps<"cipherEdit">> = observ
     const [organizationId, setOrganizationId] = useState(
       mode === "clone" ? "" : item.organizationId,
     )
-    const [fields, setFields] = useState<FieldView[]>(item.fields)
 
-    // -------------- COMPUTED --------------
+    // -------------------------- COMPUTED --------------------------
+
     const collectionId = collectionIds.length > 0 ? collectionIds[0] : ""
 
     const folder: FolderView | undefined = useMemo(() => {
@@ -101,35 +103,29 @@ export const CipherEditScreen: FC<BrowseStackScreenProps<"cipherEdit">> = observ
     // -------------- METHOD --------------
 
     const otherCommonInfo = {
-      note,
+      item,
+      mode,
+      navigation,
       folderId,
-      fields,
+      folder,
       collectionIds,
       organizationId,
       collection,
+      isOwner,
     }
     return (
       <View style={$container}>
-        <PasswordEdit
-          item={item}
-          mode={mode}
-          navigation={navigation}
-          initialUrl={initialUrl}
-          androidAutofillSavedData={androidAutofillSavedData}
-          {...otherCommonInfo}
-        />
-
-        <CustomFieldsEdit fields={fields} setFields={setFields} />
-
-        <CipherOthersInfo
-          isOwner={isOwner}
-          hasNote={cipherType !== CipherType.SecureNote}
-          note={note}
-          onChangeNote={setNote}
-          folder={folder}
-          collection={collection}
-          isDeleted={item.isDeleted}
-        />
+        {item.type === CipherType.Login && (
+          <PasswordEdit
+            initialUrl={initialUrl}
+            androidAutofillSavedData={androidAutofillSavedData}
+            {...otherCommonInfo}
+          />
+        )}
+        {item.type === CipherType.Card && <CardEdit {...otherCommonInfo} />}
+        {item.type === CipherType.CryptoWallet && <CryptoWalletEdit {...otherCommonInfo} />}
+        {item.type === CipherType.Identity && <IdentityEdit {...otherCommonInfo} />}
+        {item.type === CipherType.SecureNote && <NoteEdit {...otherCommonInfo} />}
       </View>
     )
   },
@@ -137,4 +133,7 @@ export const CipherEditScreen: FC<BrowseStackScreenProps<"cipherEdit">> = observ
 
 const $container: ViewStyle = {
   flex: 1,
+}
+const $content: ViewStyle = {
+  paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom,
 }

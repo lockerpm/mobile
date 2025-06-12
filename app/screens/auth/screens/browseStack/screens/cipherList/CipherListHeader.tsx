@@ -1,7 +1,6 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
 import { Icon, Text } from "app/components/cores"
-import { useStores } from "app/models"
 import Animated, {
   FadeInDown,
   FadeOutDown,
@@ -11,8 +10,13 @@ import Animated, {
 } from "react-native-reanimated"
 import { CipherListSelectionHeader } from "app/components/newCiphers"
 import { TxKeyPath } from "app/i18n"
+import { useCipherData } from "app/services/hook"
 
 interface Props {
+  /**
+   * Trash screen header
+   */
+  isTrash?: boolean
   /**
    * Show Header title
    */
@@ -38,6 +42,7 @@ interface Props {
 
 export const CipherListHeader = (props: Props) => {
   const {
+    isTrash,
     header,
     headerTx,
     goBack,
@@ -52,17 +57,27 @@ export const CipherListHeader = (props: Props) => {
     selectedItems,
     setSelectedItems,
   } = props
-  const { user } = useStores()
-
+  const { restoreCiphers } = useCipherData()
   // ----------------------- PARAMS ------------------------
 
   // ----------------------- COMPUTED ------------------------
-  const isFreeAccount = user.isFreePlan
+
+  const isShowAddFunc = !isTrash
 
   // disable entering animation for first render
   const enabledEnteringAnimation = useSharedValue(false)
 
   // ----------------------- METHODS ------------------------
+
+  const handleRestore = async () => {
+    const res = await restoreCiphers(selectedItems)
+    if (res.kind === "ok") {
+      setIsSelecting(false)
+      setSelectedItems([])
+    }
+  }
+
+  // ----------------------- ANIMATIONS ------------------------
   const FadeInUp = () => {
     "worklet"
     return {
@@ -93,7 +108,9 @@ export const CipherListHeader = (props: Props) => {
               onPress={openSort}
               containerStyle={styles.iconContainer}
             />
-            <Icon icon="plus" onPress={openAdd} containerStyle={styles.iconContainer} />
+            {isShowAddFunc && (
+              <Icon icon="plus" onPress={openAdd} containerStyle={styles.iconContainer} />
+            )}
           </View>
         </Animated.View>
       )}
@@ -105,7 +122,7 @@ export const CipherListHeader = (props: Props) => {
           exiting={FadeOutDown}
         >
           <CipherListSelectionHeader
-            isFreeAccount={isFreeAccount}
+            isTrash={isTrash}
             selectedCipherIds={selectedItems}
             onClose={() => {
               setIsSelecting(false)
@@ -114,6 +131,7 @@ export const CipherListHeader = (props: Props) => {
             onShare={openShare}
             onSelectAll={toggleSelectAll}
             onMoveFolder={openMoveToFolder}
+            onRestore={isTrash ? handleRestore : undefined}
             onDelete={openDelete}
           />
         </Animated.View>

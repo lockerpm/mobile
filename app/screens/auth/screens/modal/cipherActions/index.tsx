@@ -13,7 +13,7 @@ import { LeaveShared } from "./LeaveShared"
 export const CipherActionsModalScreen: FC<AuthStackScreenProps<"cipherActionsModal">> = ({
   navigation,
   route: {
-    params: { mode, item, deleteIds },
+    params: { mode, item, deleteIds, isDeleted = false },
   },
 }) => {
   const [targetModal, setTargetModal] = React.useState(mode)
@@ -28,7 +28,7 @@ export const CipherActionsModalScreen: FC<AuthStackScreenProps<"cipherActionsMod
       )}
 
       {targetModal === CipherActionsModal.DELETE && (
-        <Delete deleteIds={deleteIds} onClose={onClose} />
+        <Delete deleteIds={deleteIds} onClose={onClose} isDeleted={isDeleted} />
       )}
 
       {targetModal === CipherActionsModal.SHARE && !!item && (

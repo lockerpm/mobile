@@ -1,22 +1,23 @@
 import find from "lodash/find"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, Image } from "react-native"
+import { View, Image, StyleSheet } from "react-native"
 import { TextInputMaskOptionProp, TextInputMaskTypeProp } from "react-native-masked-text"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
 import { useStores } from "app/models"
-import { CardView, CipherView } from "core/models/view"
+import { CardView, CipherView, FieldView } from "core/models/view"
 import { CollectionView } from "core/models/view/collectionView"
 import { CipherType } from "core/enums"
 import { Button, Header, Screen, TextInput, Text } from "app/components/cores"
-import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
-import { PlanStorageLimitModal } from "../../planStorageLimitModal"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { BrandSelectItem } from "./BrandSelectItem"
 import { BrowseStackScreenProps } from "app/navigators"
 import { CipherAppView, CipherEditMode } from "app/static/types"
 import { CARD_BRANDS } from "app/static/constants"
+import { FolderView } from "core/models/view/folderView"
+import { CipherOthersInfo, CustomFieldsEdit } from "app/components/newCiphers"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
 type InputItem = {
   label: string
@@ -35,289 +36,262 @@ type InputItem = {
 type Props = {
   item: CipherAppView
   mode: CipherEditMode
-  initCollection?: CollectionView
   navigation: BrowseStackScreenProps<"cipherEdit">["navigation"]
+
+  // other common info
+  folder?: FolderView
+  collection?: CollectionView
+  collectionIds: string[]
+  organizationId: string
+
+  isOwner: boolean
 }
 
-export const CardEdit = observer(({ navigation, mode, item, initCollection }: Props) => {
-  const { colors } = useTheme()
+export const CardEdit = observer(
+  ({
+    navigation,
+    mode,
+    item,
+    collection,
+    folder,
+    organizationId,
+    collectionIds,
+    isOwner,
+  }: Props) => {
+    const { colors } = useTheme()
 
-  const { translate } = useAppLocale()
-  const { shareFolderAddItem } = useFolder()
-  const { createCipher, updateCipher } = useCipherData()
-  const { newCipher } = useCipherHelper()
-  const { cipherStore, collectionStore } = useStores()
+    const { translate } = useAppLocale()
+    const { shareFolderAddItem } = useFolder()
+    const { createCipher, updateCipher } = useCipherData()
+    const { newCipher } = useCipherHelper()
+    const { collectionStore } = useStores()
 
-  const selectedCipher: CipherAppView = item
-  const selectedCollection: CollectionView | undefined = initCollection
+    const selectedCipher: CipherAppView = item
 
-  // Params
-  const isOwner = (() => {
-    if (!selectedCipher.organizationId) {
-      return true
-    }
-    const org = cipherStore.myShares.find(
-      (s) => s.organization_id === selectedCipher.organizationId,
+    // ----------------- PARAMS ------------------
+    const [isLoading, setIsLoading] = useState(false)
+
+    // form
+    const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
+    const [cardName, setCardName] = useState(
+      mode !== "add" ? selectedCipher.card.cardholderName : "",
     )
-    return !!org
-  })()
+    const [brand, setBrand] = useState(mode !== "add" ? selectedCipher.card.brand : "")
+    const [cardNumber, setCardNumber] = useState(mode !== "add" ? selectedCipher.card.number : "")
+    const [expDate, setExpDate] = useState(
+      mode !== "add" ? `${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}` : "",
+    )
+    const [securityCode, setSecurityCode] = useState(mode !== "add" ? selectedCipher.card.code : "")
 
-  const [isLoading, setIsLoading] = useState(false)
+    // other
+    const [fields, setFields] = useState<FieldView[]>(item.fields)
+    const [note, setNote] = useState("") // custom note for the cipher, not use in CipherType SecureNote
 
-  // Forms
+    // ----------------- METHODS ------------------
 
-  const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
-  const [cardName, setCardName] = useState(mode !== "add" ? selectedCipher.card.cardholderName : "")
-  const [brand, setBrand] = useState(mode !== "add" ? selectedCipher.card.brand : "")
-  const [cardNumber, setCardNumber] = useState(mode !== "add" ? selectedCipher.card.number : "")
-  const [expDate, setExpDate] = useState(
-    mode !== "add" ? `${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}` : "",
-  )
-  const [securityCode, setSecurityCode] = useState(mode !== "add" ? selectedCipher.card.code : "")
-  const [note, setNote] = useState(mode !== "add" ? selectedCipher.notes : "")
-  const [folder, setFolder] = useState(mode !== "add" ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(
-    mode === "edit" ? selectedCipher.organizationId : null,
-  )
-  const [collectionIds, setCollectionIds] = useState(
-    mode !== "add" ? selectedCipher.collectionIds : [],
-  )
-  const [collection, setCollection] = useState(
-    mode !== "add" && !!collectionIds ? collectionIds[0] : null,
-  )
-  const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
-  // plan storage limit modal
-  const [isOpenModal, setIsOpenModal] = useState(false)
-  // Watchers
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      if (cipherStore.selectedFolder) {
-        if (cipherStore.selectedFolder === "unassigned") {
-          setFolder(null)
-        } else {
-          if (!selectedCollection) setFolder(cipherStore.selectedFolder)
-        }
-        setCollection(null)
-        setCollectionIds([])
-        setOrganizationId(null)
-        cipherStore.setSelectedFolder(null)
+    const handleSave = async () => {
+      setIsLoading(true)
+      let payload: CipherView
+      if (mode === "add") {
+        payload = newCipher(CipherType.Card)
+      } else {
+        // @ts-ignore
+        payload = { ...selectedCipher }
       }
 
-      if (cipherStore.selectedCollection) {
-        if (!selectedCollection) setCollection(cipherStore.selectedCollection)
-        setFolder(null)
-        cipherStore.setSelectedCollection(null)
+      const data = new CardView()
+      data.cardholderName = cardName
+      data.brand = brand
+      data.number = cardNumber
+      if (expDate) {
+        const splitDate = expDate.split("/")
+        data.expMonth = splitDate[0]
+        data.expYear = splitDate[1]
       }
-    })
+      data.code = securityCode
 
-    return unsubscribe
-  }, [navigation])
+      payload.fields = fields
+      payload.name = name
+      payload.notes = note
+      payload.folderId = folder?.id || ""
+      payload.card = data
+      payload.organizationId = organizationId
 
-  // Methods
-
-  const handleSave = async () => {
-    setIsLoading(true)
-    let payload: CipherView
-    if (mode === "add") {
-      payload = newCipher(CipherType.Card)
-    } else {
-      // @ts-ignore
-      payload = { ...selectedCipher }
-    }
-
-    const data = new CardView()
-    data.cardholderName = cardName
-    data.brand = brand
-    data.number = cardNumber
-    if (expDate) {
-      const splitDate = expDate.split("/")
-      data.expMonth = splitDate[0]
-      data.expYear = splitDate[1]
-    }
-    data.code = securityCode
-
-    payload.fields = fields
-    payload.name = name
-    payload.notes = note
-    payload.folderId = folder
-    payload.card = data
-    payload.organizationId = organizationId
-
-    let res = { kind: "unknown" }
-    if (["add", "clone"].includes(mode)) {
-      res = await createCipher(payload, 0, collectionIds)
-    } else {
-      res = await updateCipher(payload.id, payload, 0, collectionIds)
-    }
-
-    if (res.kind === "ok") {
-      // for shared folder
-      if (isOwner) {
-        if (selectedCollection) {
-          await shareFolderAddItem(selectedCollection, payload)
-        }
-
-        if (collection) {
-          const collectionView = find(collectionStore.collections, (e) => e.id === collection) || {}
-          await shareFolderAddItem(collectionView, payload)
-        }
+      let res = { kind: "unknown" }
+      if (["add", "clone"].includes(mode)) {
+        res = await createCipher(payload, 0, collectionIds)
+      } else {
+        res = await updateCipher(payload.id, payload, 0, collectionIds)
       }
-      setIsLoading(false)
-      navigation.goBack()
-    } else {
-      setIsLoading(false)
 
-      // reach limit plan stogare
-      // @ts-ignore
-      if (res?.data?.code === "5002") {
-        setIsOpenModal(true)
-      }
-    }
-  }
-
-  // Render
-  const cardDetails: InputItem[] = [
-    {
-      label: translate("card.card_name"),
-      value: cardName,
-      setter: setCardName,
-      isRequired: true,
-      placeholder: "...",
-    },
-    {
-      label: translate("card.brand"),
-      value: brand,
-      setter: setBrand,
-      isBrandSelect: true,
-      options: CARD_BRANDS,
-    },
-    {
-      label: translate("card.card_number"),
-      value: cardNumber,
-      setter: setCardNumber,
-      inputType: "numeric",
-      maskType: "credit-card",
-      placeholder: "0000 0000 0000 0000",
-    },
-    {
-      label: translate("card.exp_date"),
-      value: expDate,
-      setter: setExpDate,
-      inputType: "numeric",
-      maskType: "datetime",
-      maskOptions: {
-        format: "MM/YY",
-      },
-      placeholder: "MM/YY",
-    },
-    {
-      label: translate("card.cvv"),
-      value: securityCode,
-      setter: setSecurityCode,
-      maskOptions: {
-        mask: "999",
-      },
-      inputType: "numeric",
-      placeholder: "000",
-      isPassword: true,
-    },
-  ]
-
-  return (
-    <Screen
-      preset="auto"
-      safeAreaEdges={["bottom"]}
-      header={
-        <Header
-          title={
-            mode === "add"
-              ? `${translate("common.add")} ${translate("common.card")}`
-              : translate("common.edit")
+      if (res.kind === "ok") {
+        // for shared folder
+        if (isOwner) {
+          if (collection) {
+            const collectionView =
+              find(collectionStore.collections, (e) => e.id === collection) || {}
+            await shareFolderAddItem(collectionView, payload)
           }
-          leftText={translate("common.cancel")}
-          onLeftPress={() => navigation.goBack()}
-          RightActionComponent={
-            <Button
-              loading={isLoading}
-              preset="teriatary"
-              disabled={isLoading || !name.trim()}
-              text={translate("common.save")}
-              onPress={handleSave}
-            />
-          }
-        />
-      }
-    >
-      <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
+        }
+        setIsLoading(false)
+        navigation.goBack()
+      } else {
+        setIsLoading(false)
 
-      <View style={{ padding: 16, paddingTop: 0 }}>
-        <View style={{ flexDirection: "row" }}>
-          <Image
-            resizeMode="contain"
-            source={BROWSE_ITEMS.card.icon}
-            style={{ height: 50, width: 50, marginRight: 10, marginTop: 25 }}
+        // reach limit plan stogare
+        // @ts-ignore
+        if (res?.data?.code === "5002") {
+          // setIsOpenModal(true)
+        }
+      }
+    }
+
+    // Render
+    const cardDetails: InputItem[] = [
+      {
+        label: translate("card.card_name"),
+        value: cardName,
+        setter: setCardName,
+        isRequired: true,
+        placeholder: "...",
+      },
+      {
+        label: translate("card.brand"),
+        value: brand,
+        setter: setBrand,
+        isBrandSelect: true,
+        options: CARD_BRANDS,
+      },
+      {
+        label: translate("card.card_number"),
+        value: cardNumber,
+        setter: setCardNumber,
+        inputType: "numeric",
+        maskType: "credit-card",
+        placeholder: "0000 0000 0000 0000",
+      },
+      {
+        label: translate("card.exp_date"),
+        value: expDate,
+        setter: setExpDate,
+        inputType: "numeric",
+        maskType: "datetime",
+        maskOptions: {
+          format: "MM/YY",
+        },
+        placeholder: "MM/YY",
+      },
+      {
+        label: translate("card.cvv"),
+        value: securityCode,
+        setter: setSecurityCode,
+        maskOptions: {
+          mask: "999",
+        },
+        inputType: "numeric",
+        placeholder: "000",
+        isPassword: true,
+      },
+    ]
+
+    return (
+      <Screen
+        preset="auto"
+        safeAreaEdges={["bottom"]}
+        header={
+          <Header
+            title={
+              mode === "add"
+                ? `${translate("common.add")} ${translate("common.card")}`
+                : translate("common.edit")
+            }
+            leftText={translate("common.cancel")}
+            onLeftPress={() => navigation.goBack()}
+            RightActionComponent={
+              <Button
+                loading={isLoading}
+                preset="teriatary"
+                disabled={isLoading || !name.trim()}
+                text={translate("common.save")}
+                onPress={handleSave}
+              />
+            }
           />
-          <View style={{ flex: 1 }}>
-            <TextInput
-              animated
-              isRequired
-              label={translate("common.item_name")}
-              value={name}
-              onChangeText={setName}
-            />
-          </View>
-        </View>
-      </View>
-
-      <View style={{ padding: 16, backgroundColor: colors.block }}>
-        <Text preset="label" size="base" text={translate("card.card_details").toUpperCase()} />
-      </View>
-
-      {/* Info */}
-      <View
-        style={{
-          padding: 16,
-          paddingBottom: 32,
+        }
+        ScrollViewProps={{
+          contentContainerStyle: styles.scrollContainer,
         }}
       >
-        {cardDetails.map((item, index) => (
-          <View key={index} style={{ flex: 1, marginTop: index !== 0 ? 20 : 0 }}>
-            {item.isBrandSelect ? (
-              <BrandSelectItem brand={item.value} setBrand={(val) => item.setter(val)} />
-            ) : (
+        <View style={{ padding: 16, paddingTop: 0 }}>
+          <View style={{ flexDirection: "row" }}>
+            <Image
+              resizeMode="contain"
+              source={BROWSE_ITEMS.card.icon}
+              style={{ height: 50, width: 50, marginRight: 10, marginTop: 25 }}
+            />
+            <View style={{ flex: 1 }}>
               <TextInput
-                isRequired={item.isRequired}
-                isPassword={item.isPassword}
-                keyboardType={item.inputType || "default"}
-                maskType={item.maskType}
-                maskOptions={item.maskOptions}
-                label={item.label}
-                value={item.value}
-                onChangeText={(text) => {
-                  item.setter(text)
-                }}
-                placeholder={item.placeholder}
+                animated
+                isRequired
+                label={translate("common.item_name")}
+                value={name}
+                onChangeText={setName}
               />
-            )}
+            </View>
           </View>
-        ))}
-      </View>
+        </View>
 
-      {/* Custom fields */}
-      <CustomFieldsEdit fields={fields} setFields={setFields} />
+        <View style={{ padding: 16, backgroundColor: colors.block }}>
+          <Text preset="label" size="base" text={translate("card.card_details").toUpperCase()} />
+        </View>
 
-      {/* Others */}
-      <CipherOthersInfo
-        isOwner={isOwner}
-        navigation={navigation}
-        hasNote
-        note={note}
-        onChangeNote={setNote}
-        folderId={folder}
-        collectionId={collection}
-        isDeleted={selectedCipher.isDeleted}
-      />
-    </Screen>
-  )
+        {/* Info */}
+        <View
+          style={{
+            padding: 16,
+            paddingBottom: 32,
+          }}
+        >
+          {cardDetails.map((item, index) => (
+            <View key={index} style={{ flex: 1, marginTop: index !== 0 ? 20 : 0 }}>
+              {item.isBrandSelect ? (
+                <BrandSelectItem brand={item.value} setBrand={(val) => item.setter(val)} />
+              ) : (
+                <TextInput
+                  isRequired={item.isRequired}
+                  isPassword={item.isPassword}
+                  keyboardType={item.inputType || "default"}
+                  maskType={item.maskType}
+                  maskOptions={item.maskOptions}
+                  label={item.label}
+                  value={item.value}
+                  onChangeText={(text) => {
+                    item.setter(text)
+                  }}
+                  placeholder={item.placeholder}
+                />
+              )}
+            </View>
+          ))}
+        </View>
+        <CustomFieldsEdit fields={fields} setFields={setFields} />
+
+        <CipherOthersInfo
+          isOwner={isOwner}
+          hasNote={true}
+          note={note}
+          onChangeNote={setNote}
+          folder={folder}
+          collection={collection}
+          isDeleted={item.isDeleted}
+        />
+      </Screen>
+    )
+  },
+)
+
+const styles = StyleSheet.create({
+  scrollContainer: {
+    paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom,
+  },
 })

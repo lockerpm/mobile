@@ -9,6 +9,7 @@ import { CipherActionsModal, CipherAppView } from "app/static/types"
 import { CipherListHeader } from "./CipherListHeader"
 import { CipherListEmpty } from "./CipherListEmpty"
 import { CipherType } from "core/enums"
+import { useStores } from "app/models"
 
 const allTypes = [
   CipherType.Card,
@@ -25,9 +26,10 @@ export const CipherListScreen: FC<BrowseStackScreenProps<"cipherList">> = observ
   ({
     navigation,
     route: {
-      params: { cipherTypes = allTypes, header },
+      params: { cipherTypes = allTypes, header, headerTx, isDeleted = false },
     },
   }) => {
+    const { user } = useStores()
     // -------------- PARAMS ------------------
     const [isSortOpen, setIsSortOpen] = useState(false)
     const [sortConfig, setSortConfig] = useState<SortConfigType>({
@@ -68,15 +70,22 @@ export const CipherListScreen: FC<BrowseStackScreenProps<"cipherList">> = observ
     }, [])
 
     const navigateToShare = useCallback(() => {
+      if (user.isFreePlan) {
+        navigation.navigate("cipherActionsModal", {
+          mode: CipherActionsModal.PREMIUM_ACTION,
+          deleteIds: [],
+        })
+      }
       // navigation.navigate("moveToFolder")
-    }, [])
+    }, [user.isFreePlan])
 
-    const navigateToDelete = useCallback(() => {
+    const openDelete = useCallback(() => {
       navigation.navigate("cipherActionsModal", {
         mode: CipherActionsModal.DELETE,
         deleteIds: selectedCipherIds,
+        isDeleted,
       })
-    }, [selectedCipherIds])
+    }, [selectedCipherIds, isDeleted])
 
     const navigateToCipherActions = useCallback((item: CipherAppView) => {
       const data: CipherAppView = {
@@ -105,13 +114,15 @@ export const CipherListScreen: FC<BrowseStackScreenProps<"cipherList">> = observ
         safeAreaEdges={["top"]}
         header={
           <CipherListHeader
+            isTrash={isDeleted}
             header={header}
+            headerTx={headerTx}
             goBack={navigation.goBack}
             openAdd={navigateToAddCipher}
             openSort={onOpenSortModal}
             openMoveToFolder={navigateToFolder}
             openShare={navigateToShare}
-            openDelete={navigateToDelete}
+            openDelete={openDelete}
             isSelecting={isSelecting}
             setIsSelecting={setIsSelecting}
             selectedItems={selectedCipherIds}
@@ -130,6 +141,7 @@ export const CipherListScreen: FC<BrowseStackScreenProps<"cipherList">> = observ
 
         <CipherList
           safeBottom
+          isdeleted={isDeleted}
           cipherTypes={cipherTypes}
           sort={sortConfig.sort}
           isSelecting={isSelecting}
@@ -139,7 +151,11 @@ export const CipherListScreen: FC<BrowseStackScreenProps<"cipherList">> = observ
           setAllItems={setAllItems}
           openActionsMenu={navigateToCipherActions}
           ListEmptyComponent={
-            <CipherListEmpty cipherTypes={cipherTypes} onAdd={navigateToAddCipher} />
+            <CipherListEmpty
+              isDeleted={isDeleted}
+              cipherTypes={cipherTypes}
+              onAdd={navigateToAddCipher}
+            />
           }
         />
       </Screen>

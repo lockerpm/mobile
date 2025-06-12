@@ -5,7 +5,13 @@ import { AppNotification } from "app/static/types"
 import { useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { useToast } from "app/services/utils"
-import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated"
+import Animated, {
+  FadeInDown,
+  FadeOutDown,
+  FadeOutUp,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
 import { CipherListSelectionHeader } from "app/components/newCiphers"
 
 interface Props {
@@ -42,12 +48,13 @@ export const HomeHeader = (props: Props) => {
   const { user } = useStores()
 
   // ----------------------- PARAMS ------------------------
+  // disable entering animation for first render
+  const enabledEnteringAnimation = useSharedValue(false)
 
   const [notifications, setNotifications] = useState<AppNotification | null>(null)
 
   // ----------------------- COMPUTED ------------------------
   const unreadCount = notifications?.unread_count || 0
-  const isFreeAccount = user.isFreePlan
 
   // ----------------------- METHODS ------------------------
 
@@ -57,6 +64,20 @@ export const HomeHeader = (props: Props) => {
       setNotifications(res.data)
     } else {
       notifyApiError(res)
+    }
+  }
+
+  const FadeInUp = () => {
+    "worklet"
+    return {
+      initialValues: {
+        opacity: enabledEnteringAnimation.value ? 0 : 1,
+        transform: [{ translateY: enabledEnteringAnimation.value ? -30 : 0 }],
+      },
+      animations: {
+        opacity: withTiming(1, { duration: 300 }),
+        transform: [{ translateY: withTiming(0, { duration: 300 }) }],
+      },
     }
   }
 
@@ -70,7 +91,7 @@ export const HomeHeader = (props: Props) => {
   return (
     <View style={styles.headerContainer}>
       {!isSelecting && (
-        <Animated.View entering={FadeInUp} exiting={FadeOutDown} style={styles.container}>
+        <Animated.View entering={FadeInUp} exiting={FadeOutUp} style={styles.container}>
           <Logo preset={isDark ? "horizontal-light" : "horizontal-dark"} style={styles.logo} />
           <View style={styles.rowContainer}>
             {!!notifications && (
@@ -103,18 +124,24 @@ export const HomeHeader = (props: Props) => {
         </Animated.View>
       )}
       {isSelecting && (
-        <CipherListSelectionHeader
-          isFreeAccount={isFreeAccount}
-          selectedCipherIds={selectedItems}
-          onClose={() => {
-            setIsSelecting(false)
-            setSelectedItems([])
-          }}
-          onShare={openShare}
-          onSelectAll={toggleSelectAll}
-          onMoveFolder={openMoveToFolder}
-          onDelete={openDelete}
-        />
+        <Animated.View
+          entering={FadeInDown.withCallback((finished) => {
+            enabledEnteringAnimation.value = finished
+          })}
+          exiting={FadeOutDown}
+        >
+          <CipherListSelectionHeader
+            selectedCipherIds={selectedItems}
+            onClose={() => {
+              setIsSelecting(false)
+              setSelectedItems([])
+            }}
+            onShare={openShare}
+            onSelectAll={toggleSelectAll}
+            onMoveFolder={openMoveToFolder}
+            onDelete={openDelete}
+          />
+        </Animated.View>
       )}
     </View>
   )

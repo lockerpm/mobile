@@ -173,7 +173,11 @@ export const BrowseListScreen: FC<TabsScreenProps<"browseTab">> = observer(({ na
               image: BROWSE_ITEMS.trash,
               onPress: () => {
                 navigation.navigate("browseStack", {
-                  screen: "trash",
+                  screen: "cipherList",
+                  params: {
+                    headerTx: "common.trash",
+                    isDeleted: true,
+                  },
                 })
               },
             }

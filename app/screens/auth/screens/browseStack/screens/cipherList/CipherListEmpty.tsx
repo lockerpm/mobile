@@ -7,12 +7,13 @@ import { TxKeyPath } from "app/i18n"
 interface EmptyCipherListProps {
   onAdd: () => void
   cipherTypes: CipherType[]
+  isDeleted: boolean
 }
 
 type EmptyCipherListType = {
   titleTx: TxKeyPath
   descTx: TxKeyPath
-  buttonTx: TxKeyPath
+  buttonTx?: TxKeyPath
   image: ImageSourcePropType
 }
 
@@ -22,6 +23,7 @@ const CARD_EMPTY = require("assets/images/emptyCipherList/card-empty-img.png")
 const IDENTITIES_EMPTY = require("assets/images/emptyCipherList/identity-empty-img.png")
 const PASSWORD_EMPTY = require("assets/images/emptyCipherList/password-empty-img.png")
 const NOTE_EMPTY = require("assets/images/emptyCipherList/note-empty-img.png")
+const TRASH_EMPTY = require("assets/images/emptyCipherList/trash-empty-img.png")
 
 const emptyTypeContent: Record<number, EmptyCipherListType> = {
   [CipherType.Login]: {
@@ -62,8 +64,19 @@ const emptyAll: EmptyCipherListType = {
   buttonTx: "all_items.empty.btn",
   image: HOME_EMPTY,
 }
+const trashEmpty: EmptyCipherListType = {
+  titleTx: "trash.empty.title",
+  descTx: "trash.empty.desc",
+  image: TRASH_EMPTY,
+}
 
-const parseEmptyCipherContent = (cipherTypes: CipherType[]): EmptyCipherListType => {
+const parseEmptyCipherContent = (
+  cipherTypes: CipherType[],
+  isDeleted: boolean,
+): EmptyCipherListType => {
+  if (isDeleted) {
+    return trashEmpty
+  }
   if (cipherTypes.length > 2) {
     // for all types
     return emptyAll
@@ -78,17 +91,19 @@ const parseEmptyCipherContent = (cipherTypes: CipherType[]): EmptyCipherListType
   return emptyAll
 }
 
-export const CipherListEmpty = React.memo(({ onAdd, cipherTypes }: EmptyCipherListProps) => {
-  const content = parseEmptyCipherContent(cipherTypes)
-  return (
-    <View style={styles.container}>
-      <Image source={content.image} resizeMode="contain" style={styles.image} />
-      <Text preset="bold" size="large" style={styles.title} tx={content.titleTx} />
-      <Text preset="label" tx={content.descTx} size="base" style={styles.label} />
-      <Button tx={content.buttonTx} onPress={onAdd} />
-    </View>
-  )
-})
+export const CipherListEmpty = React.memo(
+  ({ onAdd, cipherTypes, isDeleted }: EmptyCipherListProps) => {
+    const content = parseEmptyCipherContent(cipherTypes, isDeleted)
+    return (
+      <View style={styles.container}>
+        <Image source={content.image} resizeMode="contain" style={styles.image} />
+        <Text preset="bold" size="large" style={styles.title} tx={content.titleTx} />
+        <Text preset="label" tx={content.descTx} size="base" style={styles.label} />
+        {content.buttonTx && <Button tx={content.buttonTx} onPress={onAdd} />}
+      </View>
+    )
+  },
+)
 
 const styles = StyleSheet.create({
   buttonContainer: {
