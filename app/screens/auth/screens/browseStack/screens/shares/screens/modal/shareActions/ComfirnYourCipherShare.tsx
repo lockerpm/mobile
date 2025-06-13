@@ -6,17 +6,16 @@ import { useCipherData } from "app/services/hook"
 import { SharedMemberType } from "app/static/types"
 import React, { useEffect, useState } from "react"
 import { View } from "react-native"
-import { Text, BottomModal, Button } from "app/components/cores"
+import { Text, Button, BottomModalContainer } from "app/components/cores"
 import { useToast } from "app/services/utils"
 
 interface Props {
-  isOpen?: boolean
-  onClose?: () => void
+  onClose: () => void
   member: SharedMemberType
 }
 
-export const ConfirmShareModal = (props: Props) => {
-  const { isOpen, onClose, member } = props
+export const ComfirnYourShare = (props: Props) => {
+  const { onClose, member } = props
   const { cipherStore } = useStores()
   const { colors } = useTheme()
   const { notifyApiError } = useToast()
@@ -62,21 +61,20 @@ export const ConfirmShareModal = (props: Props) => {
 
   // --------------- EFFECT ----------------
   useEffect(() => {
-    if (isOpen) {
-      setFingerprint("")
-      setPublicKey("")
-      loadFingerprint()
-    }
-  }, [isOpen])
+    loadFingerprint()
+  }, [])
 
   // --------------- RENDER ----------------
 
   return (
-    <BottomModal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={translate("shares.confirm_share.verify_fingerprint")}
-    >
+    <BottomModalContainer>
+      <Text
+        text={translate("shares.confirm_share.verify_fingerprint")}
+        style={{
+          marginTop: 20,
+          marginBottom: 20,
+        }}
+      />
       <Text
         text={translate("shares.confirm_share.verification_desc")}
         style={{
@@ -121,6 +119,6 @@ export const ConfirmShareModal = (props: Props) => {
           marginTop: 20,
         }}
       />
-    </BottomModal>
+    </BottomModalContainer>
   )
 }

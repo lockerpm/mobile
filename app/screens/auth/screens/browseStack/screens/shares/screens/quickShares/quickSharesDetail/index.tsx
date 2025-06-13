@@ -6,12 +6,10 @@ import React, { FC } from "react"
 import { TouchableOpacity, View, ViewStyle } from "react-native"
 import { Button, Header, Icon, Screen, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
-import { IS_IOS } from "app/config/constants"
 import { useClipboard } from "app/services/utils"
 import { BrowseStackScreenProps } from "app/navigators"
 import { getCipherDescription } from "app/utils/cipherHelper"
+import { CipherIconImage } from "app/components/newCiphers"
 
 export const QuickSharesDetailScreen: FC<BrowseStackScreenProps<"quickShareItemsDetail">> =
   observer((props) => {
@@ -105,7 +103,7 @@ export const QuickSharesDetailScreen: FC<BrowseStackScreenProps<"quickShareItems
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <CipherIconImage
-              defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
+              cipherType={cipherMapper.type}
               source={cipherMapper.img}
               style={{ height: 40, width: 40, borderRadius: 8 }}
             />

@@ -101,6 +101,11 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
     })
   }, [])
 
+  const clearSelect = useCallback(() => {
+    setIsSelecting(false)
+    setSelectedCipherIds([])
+  }, [])
+
   const onCloseSortModal = useCallback(() => {
     setIsSortOpen(false)
   }, [])
@@ -127,9 +132,8 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
           openShare={navigateToShare}
           openDelete={navigateToDelete}
           isSelecting={isSelecting}
-          setIsSelecting={setIsSelecting}
-          selectedItems={selectedCipherIds}
-          setSelectedItems={setSelectedCipherIds}
+          clearSelect={clearSelect}
+          selectedCount={selectedCipherIds.length}
           toggleSelectAll={toggleSelectAll}
         />
       }

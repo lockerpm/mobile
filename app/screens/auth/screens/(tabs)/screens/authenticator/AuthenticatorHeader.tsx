@@ -6,7 +6,7 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { SearchBar } from "app/components/utils"
 
 import { useCipherData } from "app/services/hook"
-import { ShareModal } from "app/components/ciphers"
+// import { ShareModal } from "app/components/ciphers"
 import { DeleteOtpModal } from "./DeleteOtpModal"
 
 interface Props {
@@ -176,7 +176,7 @@ export const AuthenticatorHeader = (props: Props) => {
         btnText="OK"
       />
 
-      <ShareModal
+      {/* <ShareModal
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
         cipherIds={selectedItems}
@@ -184,7 +184,7 @@ export const AuthenticatorHeader = (props: Props) => {
           setIsSelecting(false)
           setSelectedItems([])
         }}
-      />
+      /> */}
     </View>
   )
 }

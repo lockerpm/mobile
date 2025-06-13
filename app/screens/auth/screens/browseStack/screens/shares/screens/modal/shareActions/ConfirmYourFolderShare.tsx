@@ -7,12 +7,12 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { CollectionView } from "core/models/view/collectionView"
 
 interface Props {
-  isOpen?: boolean
-  onClose?: () => void
+  isOpen: boolean
+  onClose: () => void
   item: CollectionView
 }
 
-export const ConfirmShareFolderModal = (props: Props) => {
+export const ConfirmYourFolderShare = (props: Props) => {
   const { isOpen, onClose, item } = props
   const { cipherStore } = useStores()
   const { colors } = useTheme()

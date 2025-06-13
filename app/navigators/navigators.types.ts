@@ -15,6 +15,7 @@ import {
   OnPremiseIdentifierData,
   OnPremisePreloginData,
   RelayAddress,
+  ShareActionsModal,
   SubdomainData,
   TrustedContact,
   User2FAPasswordConfig,
@@ -222,8 +223,16 @@ export type TabsScreenProps<T extends keyof TabsRoute> = CompositeScreenProps<
 // ---------------------------BROWSE Navigator---------------------------
 
 export type ShareRoute = {
+  shareActionsModal: {
+    mode: ShareActionsModal
+    cipher?: CipherAppView
+    collection?: CollectionView
+  }
   sharesHome: undefined
+  yourShare: undefined
+  sharedWithYou: undefined
 
+  // -- check--
   normalShares: {
     ciphers?: CipherView[]
   }
@@ -234,12 +243,10 @@ export type ShareRoute = {
     collectionId: string
   }
   shareMultiple: undefined
-  sharedItems: undefined
   quickShareItems: undefined
   quickShareItemsDetail: {
     send: SendView
   }
-  shareItems: undefined
 }
 
 export type BrowseRoute = {

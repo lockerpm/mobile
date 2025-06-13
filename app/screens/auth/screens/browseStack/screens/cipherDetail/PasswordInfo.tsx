@@ -93,8 +93,6 @@ export const PasswordInfo = ({ item }: Props) => {
               style={{ marginTop: 12 }}
             />
           )}
-
-          {/* <CipherInfoCommon cipher={item} /> */}
         </>
       )}
 

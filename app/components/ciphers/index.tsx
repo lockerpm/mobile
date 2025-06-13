@@ -12,8 +12,6 @@ export * from "./cipherAction/DeletedAction"
 export * from "./cipherAction/LeaveShareModal"
 export * from "./cipherAction/ShareModal"
 
-export * from "./cipherInfoCommon/CipherInfoCommon"
-
 export * from "./cipherCustomFieldsEdit/TypeSelectModal"
 export * from "./cipherCustomFieldsEdit/CipherCustomFields"
 export * from "./cipherCustomFieldsEdit/fieldEdit"

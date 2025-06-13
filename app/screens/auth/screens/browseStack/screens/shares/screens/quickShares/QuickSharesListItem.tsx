@@ -7,8 +7,8 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { useCipherHelper } from "app/services/hook"
 import { Text } from "app/components/cores"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
+import { CipherIconImage } from "app/components/newCiphers"
 
 type Prop = {
   item: SendView
@@ -45,7 +45,7 @@ export const QuickSharesCipherListItem = memo(
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <CipherIconImage
-            defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
+            cipherType={cipher.type}
             source={cipher.imgLogo}
             style={{
               height: 40,

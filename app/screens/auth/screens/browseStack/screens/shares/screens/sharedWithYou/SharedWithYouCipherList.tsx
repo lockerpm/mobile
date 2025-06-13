@@ -4,13 +4,18 @@ import { View, SectionList } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from "lodash/orderBy"
 
-import { CipherSharedListItem, CipherSharedType } from "./CipherSharedListItem"
-import { CollectionListItem } from "../shareItems/FolderShareListItem"
+// import { CollectionListItem } from "../shareItems/FolderShareListItem"
 import { FolderAction } from "../../../folders/FolderAction"
 import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { CollectionView } from "core/models/view/collectionView"
-import { AccountRole, AccountRoleText, SharingStatus } from "app/static/types"
+import {
+  AccountRole,
+  AccountRoleText,
+  CipherAppView,
+  SharedWithYouType,
+  SharingStatus,
+} from "app/static/types"
 import { Organization } from "core/models/domain/organization"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
@@ -18,41 +23,48 @@ import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { Text } from "app/components/cores"
 import { useAppLocale } from "app/services/context"
 import { useToast } from "app/services/utils"
+import { getTeam } from "app/utils/cipherHelper"
+import { EmptyCipherList } from "app/components/newCiphers"
+import { ShareWithYouItem } from "./ShareWithYouItem"
 
 export interface CipherSharedListProps {
-  emptyContent?: JSX.Element
-  navigation: any
-  searchText?: string
-  onLoadingChange?: (val: boolean) => void
-  sortList?: {
+  /**
+   * Sort configuration
+   */
+  sort?: {
     orderField: string
-    order: string
+    order: "desc" | "asc"
   }
+  /**
+   * Set selecting mode
+   */
   isSelecting: boolean
   setIsSelecting: (val: boolean) => void
-  selectedItems: string[]
-  setSelectedItems: (val: any) => void
-  setAllItems: (val: any) => void
+  selectedIds: string[]
+  setSelectedIds: (val: string[]) => void
+  /**
+   * Store all items IDs for selection all action in header
+   */
+  setAllItems: (val: string[]) => void
+  /**
+   * Open Item actions
+   */
+  openActionsMenu: (item: CipherAppView) => void
 }
 
-/**
- * Describe your component here
- */
-export const CipherSharedList = observer((props: CipherSharedListProps) => {
+const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")
+
+export const SharedWithYouCipherList = observer((props: CipherSharedListProps) => {
   const {
-    emptyContent,
-    navigation,
-    onLoadingChange,
-    searchText,
-    sortList,
+    sort,
     isSelecting,
     setIsSelecting,
-    selectedItems,
-    setSelectedItems,
+    selectedIds,
+    setSelectedIds,
     setAllItems,
+    openActionsMenu,
   } = props
   const { translate } = useAppLocale()
-  const { getTeam } = useHelper()
   const { notifyTx } = useToast()
   const { getCiphersFromCache } = useCipherData()
   const { cipherStore, collectionStore, user } = useStores()
@@ -60,20 +72,15 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
 
   // ------------------------ PARAMS ----------------------------
 
-  const [showCollectionAction, setShowCollectionAction] = useState(false)
-  const [selectedCollection, setSelectedCollection] = useState<CollectionView>(null)
-
-  const [ciphers, setCiphers] = useState<CipherSharedType[]>([])
-  const [showPendingAction, setShowPendingAction] = useState(false)
-
-  const [checkedItem, setCheckedItem] = useState("")
+  const [searchText, setSearchText] = useState<string>("")
+  const [ciphers, setCiphers] = useState<SharedWithYouType[]>([])
 
   // ------------------------ COMPUTED ----------------------------
 
   const organizations = cipherStore.organizations
 
   const pendingCiphers = cipherStore.sharingInvitations.map((i) => {
-    const cipher: CipherSharedType = newCipher(i.cipher_type)
+    const cipher: SharedWithYouType = newCipher(i.cipher_type)
     const cipherInfo = getCipherInfo(cipher)
 
     cipher.isShared = true
@@ -129,7 +136,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
           return false
         }
         const org = _getOrg(c.organizationId)
-        return org && org.type !== 0
+        return (org && org.type !== 0) || false
       },
     ]
 
@@ -154,8 +161,8 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     })
 
     // Sort
-    if (sortList) {
-      const { orderField, order } = sortList
+    if (sort) {
+      const { orderField, order } = sort
       res =
         orderBy(
           res,
@@ -164,29 +171,22 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
         ) || []
     }
 
-    // Delay loading
-    setTimeout(() => {
-      onLoadingChange && onLoadingChange(false)
-    }, 100)
-
-    // Done
-    // @ts-ignore
     setCiphers(res)
     setAllItems(res.map((c) => c.id))
   }
 
   // Handle action menu open
   const openActionMenu = (item: CipherSharedType) => {
-    cipherStore.setSelectedCipher(item)
-    if (item.isShared) {
-      setShowPendingAction(true)
-    }
+    // cipherStore.setSelectedCipher(item)
+    // if (item.isShared) {
+    // setShowPendingAction(true)
+    // }
   }
 
   // Handle open collection menu
   const openCollectionActionMenu = (item: CollectionView) => {
-    setSelectedCollection(item)
-    setShowCollectionAction(true)
+    // setSelectedCollection(item)
+    // setShowCollectionAction(true)
   }
 
   // Toggle item selection
@@ -194,7 +194,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     if (!isSelecting) {
       setIsSelecting(true)
     }
-    let selected = [...selectedItems]
+    let selected = [...selectedIds]
     if (!selected.includes(id)) {
       if (selected.length === MAX_CIPHER_SELECTION) {
         notifyTx("error", "error.cannot_select_more", { count: MAX_CIPHER_SELECTION })
@@ -204,21 +204,20 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     } else {
       selected = selected.filter((i) => i !== id)
     }
-    setSelectedItems(selected)
+    setSelectedIds(selected)
   }
 
   // ------------------------ EFFECTS ----------------------------
 
   useEffect(() => {
     loadData()
-  }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
-
-  useEffect(() => {
-    if (checkedItem) {
-      toggleItemSelection(checkedItem)
-      setCheckedItem(null)
-    }
-  }, [checkedItem, selectedItems])
+  }, [
+    searchText,
+    cipherStore.lastSync,
+    cipherStore.lastCacheUpdate,
+    sort,
+    cipherStore.notSynchedCiphers,
+  ])
 
   const DATA = [
     {
@@ -232,22 +231,22 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   ]
   // ------------------------ RENDER ----------------------------
 
-  return allCiphers.length ? (
+  return (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
 
-      <PendingSharedAction
+      {/* <PendingSharedAction
         isOpen={showPendingAction}
         onClose={() => setShowPendingAction(false)}
         onLoadingChange={onLoadingChange}
-      />
+      /> */}
 
-      <FolderAction
+      {/* <FolderAction
         isOpen={showCollectionAction}
         onClose={() => setShowCollectionAction(false)}
         onLoadingChange={onLoadingChange}
         folder={selectedCollection}
-      />
+      /> */}
 
       <SectionList
         style={{
@@ -258,37 +257,45 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
         renderItem={({ item, index, section }) => (
           <View>
             {section.type === 1 && (
-              <CipherSharedListItem
+              <ShareWithYouItem
                 item={item}
                 isSelecting={isSelecting}
-                toggleItemSelection={setCheckedItem}
+                toggleItemSelection={toggleItemSelection}
                 openActionMenu={openActionMenu}
-                isSelected={selectedItems.includes(item.id)}
-                // @ts-ignore
+                isSelected={selectedIds.includes(item.id)}
                 org={_getOrg(item)}
               />
             )}
-            {section.type === 2 && (
+            {/* {section.type === 2 && (
               <CollectionListItem
                 item={item}
                 openActionMenu={openCollectionActionMenu}
                 navigation={navigation}
               />
-            )}
+            )} */}
           </View>
         )}
-      />
-    </View>
-  ) : emptyContent && !searchText.trim() ? (
-    <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
-  ) : (
-    <View style={{ paddingHorizontal: 20 }}>
-      <Text
-        preset="label"
-        text={translate("error.no_results_found") + ` '${searchText}'`}
-        style={{
-          textAlign: "center",
-        }}
+        ListEmptyComponent={
+          !searchText.trim() ? (
+            <View style={{ paddingHorizontal: 20 }}>
+              <EmptyCipherList
+                image={SHARE_EMPTY}
+                titleTx="shares.empty.title"
+                descTx="shares.empty.desc_shared"
+              />
+            </View>
+          ) : (
+            <View style={{ paddingHorizontal: 20 }}>
+              <Text
+                preset="label"
+                text={translate("error.no_results_found") + ` '${searchText}'`}
+                style={{
+                  textAlign: "center",
+                }}
+              />
+            </View>
+          )
+        }
       />
     </View>
   )

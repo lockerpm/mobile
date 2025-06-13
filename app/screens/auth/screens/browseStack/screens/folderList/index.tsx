@@ -8,8 +8,8 @@ import { FolderView } from "core/models/view/folderView"
 import { CollectionView } from "core/models/view/collectionView"
 import { BrowseStackScreenProps } from "app/navigators"
 import { FolderItem } from "./FolderItem"
-import { CollectionItem } from "./CollectionItem"
 import { SearchBar } from "app/components/utils"
+import { CollectionItem } from "./CollectionItem"
 
 const EMPTY = require("assets/images/emptyCipherList/folder-empty-img.png")
 
@@ -56,6 +56,10 @@ export const FolderListScreen: FC<BrowseStackScreenProps<"folderList">> = observ
     }, [])
 
     const navigateFolderActions = useCallback(() => {
+      // setIsActionOpen(true)
+    }, [])
+
+    const navigateCollectionActions = useCallback(() => {
       // setIsActionOpen(true)
     }, [])
 
@@ -135,7 +139,7 @@ export const FolderListScreen: FC<BrowseStackScreenProps<"folderList">> = observ
                 <CollectionItem
                   item={item}
                   openCollectionCipher={navigateToCollectionCiphers}
-                  openAction={navigateFolderActions}
+                  openAction={navigateCollectionActions}
                 />
               )}
               ItemSeparatorComponent={ItemSperator}

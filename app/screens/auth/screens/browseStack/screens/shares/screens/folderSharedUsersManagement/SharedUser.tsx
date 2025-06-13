@@ -5,7 +5,7 @@ import { CollectionView } from "core/models/view/collectionView"
 import React, { useState } from "react"
 import { View, Image, TouchableOpacity } from "react-native"
 import { Text, Icon } from "app/components/cores"
-import { ActionItem, ActionSheet } from "app/components/ciphers"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
 
 interface Props {
   reload: boolean
@@ -127,7 +127,7 @@ export const SharedUsers = (props: Props) => {
           </View>
         </TouchableOpacity>
 
-        <ActionSheet
+        <NewActionSheet
           isOpen={showSheetModal}
           onClose={() => setShowSheetModal(false)}
           header={
@@ -147,36 +147,36 @@ export const SharedUsers = (props: Props) => {
             </View>
           }
         >
-          <ActionItem
-            containerStyle={{ backgroundColor: !isEditable && colors.block }}
-            action={() => {
+          <NewActionSheetItem
+            // containerStyle={{ backgroundColor: !isEditable && colors.block }}
+            onPress={() => {
               onEditRole("only_fill")
             }}
             icon="eye"
-            disabled={!isEditable}
-            name={translate("shares.share_folder.viewer")}
+            // disabled={!isEditable}
+            tx="shares.share_folder.viewer"
           />
 
-          <ActionItem
-            containerStyle={{ backgroundColor: isEditable && colors.block }}
-            action={() => {
+          <NewActionSheetItem
+            // containerStyle={{ backgroundColor: isEditable && colors.block }}
+            onPress={() => {
               onEditRole("edit")
             }}
             icon="edit"
-            disabled={isEditable}
-            name={translate("shares.share_folder.editor")}
+            // disabled={isEditable}
+            tx="shares.share_folder.editor"
           />
 
-          <ActionItem
-            action={() => {
+          <NewActionSheetItem
+            onPress={() => {
               onRemove(collection, item.id, item.type === "group")
               setShowSheetModal(false)
             }}
             icon="user-minus"
             color={colors.error}
-            name={translate("shares.share_folder.remove")}
+            tx="shares.share_folder.remove"
           />
-        </ActionSheet>
+        </NewActionSheet>
       </View>
       {item?.status === SharingStatus.ACCEPTED && (
         <View

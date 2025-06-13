@@ -4,7 +4,7 @@ import { AccountRoleText, SharedGroupType, SharedMemberType, SharingStatus } fro
 import { useAppLocale, useTheme } from "app/services/context"
 import { Icon, Text } from "app/components/cores"
 import { useCipherData } from "app/services/hook"
-import { ActionSheet } from "app/components/ciphers/actionsSheet/ActionSheet"
+import { NewActionSheet } from "app/components/utils"
 
 interface Props {
   reload: boolean
@@ -117,7 +117,7 @@ export const SharedUsers = (props: Props) => {
         </View>
       </TouchableOpacity>
 
-      <ActionSheet
+      <NewActionSheet
         isOpen={showSheetModal}
         onClose={() => setShowSheetModal(false)}
         header={
@@ -184,7 +184,7 @@ export const SharedUsers = (props: Props) => {
           <Icon icon="user-minus" size={24} color={colors.error} />
           <Text text={translate("common.remove")} style={{ color: colors.error, marginLeft: 12 }} />
         </TouchableOpacity>
-      </ActionSheet>
+      </NewActionSheet>
     </View>
   )
 }

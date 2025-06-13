@@ -1,9 +1,12 @@
 export * from "./home"
-export * from "./shareItems/ShareItemsScreen"
-export * from "./sharedItems/SharedItemsScreen"
-export * from "./shareMultiple/ShareMultipleScreen"
+export * from "./shareCipher/shareMultiple/ShareMultipleScreen"
 export * from "./quickShares/QuickSharesItemsScreen"
 export * from "./quickShares/quickSharesDetail"
 export * from "./folderSharedUsersManagement/FolderSharedUsersManagementScreen"
 export * from "./shareCipher/NormalSharesScreen"
 export * from "./shareCipher/QuickSharesScreen"
+
+// --- news
+
+export * from "./yourShare"
+export * from "./sharedWithYou"

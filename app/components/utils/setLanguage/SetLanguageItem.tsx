@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react"
-import { NewActionSheet, NewActionSheetItem } from "app/components/utils/actionSheet/ActionSheet"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
 import { StyleSheet, TouchableOpacity, View, ViewProps } from "react-native"
 import { Icon, Text } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
@@ -70,7 +70,6 @@ export const SetLanguage = ({ style, ...props }: ViewProps) => {
             onPress={() => {
               handleSetLanguage(item.value)
             }}
-            textStyle={styles.actionsItem}
           />
         ))}
       </NewActionSheet>
@@ -79,10 +78,6 @@ export const SetLanguage = ({ style, ...props }: ViewProps) => {
 }
 
 const styles = StyleSheet.create({
-  actionsItem: {
-    flexGrow: 1,
-    flexShrink: 1,
-  },
   container: {
     borderRadius: 8,
     borderWidth: 1,

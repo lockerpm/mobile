@@ -8,11 +8,12 @@ import {
   QuickShareItemsScreen,
   QuickSharesDetailScreen,
   QuickSharesScreen,
-  SharedItemsScreen,
-  ShareItemsScreen,
+  SharedWithYouScreen,
   ShareMultipleScreen,
   SharesHomeScreen,
+  YourShareScreen,
 } from "./screens"
+import { ShareActionsModalScreen } from "./screens/modal"
 
 const Stack = createStackNavigator<ShareRoute>()
 
@@ -23,10 +24,20 @@ export const ShareStack = observer(() => {
         headerShown: false,
       }}
     >
+      <Stack.Screen
+        name="shareActionsModal"
+        component={ShareActionsModalScreen}
+        options={{
+          presentation: "transparentModal",
+        }}
+      />
       <Stack.Screen name="sharesHome" component={SharesHomeScreen} />
-      <Stack.Screen name="sharedItems" component={SharedItemsScreen} />
-      <Stack.Screen name="shareItems" component={ShareItemsScreen} />
+      <Stack.Screen name="yourShare" component={YourShareScreen} />
+
+      <Stack.Screen name="sharedWithYou" component={SharedWithYouScreen} />
+
       <Stack.Screen name="quickShareItems" component={QuickShareItemsScreen} />
+
       <Stack.Screen
         name="normalShares"
         component={NormalSharesScreen}

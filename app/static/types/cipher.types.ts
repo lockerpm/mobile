@@ -197,9 +197,28 @@ export type CipherAppView = {
   isDeleted: boolean
 }
 
+export type CipherShareType = CipherAppView & {
+  description: string
+  status?: string
+  member?: SharedMemberType
+  group?: SharedGroupType
+}
+
+export type SharedWithYouType = CipherAppView & {
+  isShared?: boolean
+  description?: string
+  notSync?: boolean
+  isAccepted?: boolean
+}
+
 export interface FileData {
   name: string
   uri: string
   type: string
   size: number
+}
+
+export enum ShareActionsModal {
+  DEFAULT = "default",
+  MANAGE_SHARE = "manageShare",
 }

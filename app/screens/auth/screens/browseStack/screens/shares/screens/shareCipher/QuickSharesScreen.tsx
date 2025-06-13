@@ -14,13 +14,11 @@ import { Logger } from "app/utils/utils"
 import { Utils } from "app/services/coreService/utils"
 import { Button, Header, Icon, Screen, Text, Toggle, TextInput } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
-import { ActionSheet } from "app/components/ciphers"
-import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
-import { IS_IOS } from "app/config/constants"
 import { useClipboard, useToast } from "app/services/utils"
 import { BrowseStackScreenProps } from "app/navigators"
 import { getCipherDescription } from "app/utils/cipherHelper"
+import { NewActionSheet } from "app/components/utils"
+import { CipherIconImage } from "app/components/newCiphers"
 
 const { width } = Dimensions.get("screen")
 
@@ -181,15 +179,7 @@ export const QuickSharesScreen: FC<BrowseStackScreenProps<"quickShares">> = obse
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <CipherIconImage
-          defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
-          source={cipher.imgLogo}
-          style={{
-            height: 40,
-            width: 40,
-            borderRadius: 8,
-          }}
-        />
+        <CipherIconImage cipherType={cipher.type} source={cipher.imgLogo} />
 
         <View style={{ flex: 1, marginLeft: 12 }}>
           {/* Name */}
@@ -309,7 +299,7 @@ const QuickShareConfig = ({
   setMaxAccessCount,
   setExpireAfter,
 }: QuickShareConfigProps) => {
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
   const { colors } = useTheme()
   const [openExpireSelect, setOpenExpireSelect] = useState(false)
   const [openAccessSelect, setOpenAccessSelect] = useState(false)
@@ -531,7 +521,7 @@ const QuickShareConfig = ({
         )}
       </View>
 
-      <ActionSheet
+      <NewActionSheet
         isOpen={openExpireSelect}
         onClose={() => setOpenExpireSelect(false)}
         header={
@@ -567,9 +557,9 @@ const QuickShareConfig = ({
             </View>
           </TouchableOpacity>
         ))}
-      </ActionSheet>
+      </NewActionSheet>
 
-      <ActionSheet
+      <NewActionSheet
         isOpen={openAccessSelect}
         onClose={() => setOpenAccessSelect(false)}
         header={
@@ -603,7 +593,7 @@ const QuickShareConfig = ({
             </View>
           </TouchableOpacity>
         ))}
-      </ActionSheet>
+      </NewActionSheet>
     </View>
   )
 }

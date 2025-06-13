@@ -1,9 +1,10 @@
 import * as React from "react"
-import { StyleProp, View, ViewStyle, Image, StyleSheet } from "react-native"
+import { StyleProp, View, ViewStyle, Image, StyleSheet, ImageSourcePropType } from "react-native"
 import { Button, Text } from "../../cores"
 import { TxKeyPath } from "app/i18n"
 
 type EmptyCipherListProps = {
+  image?: ImageSourcePropType
   /**
    * Title text to display in the empty state
    */
@@ -29,6 +30,7 @@ type EmptyCipherListProps = {
 const EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
 
 export const EmptyCipherList = ({
+  image,
   style,
   titleTx,
   descTx,
@@ -37,7 +39,7 @@ export const EmptyCipherList = ({
 }: EmptyCipherListProps) => {
   return (
     <View style={[styles.container, style]}>
-      <Image source={EMPTY_CIPHER} resizeMode="contain" style={styles.image} />
+      <Image source={image || EMPTY_CIPHER} resizeMode="contain" style={styles.image} />
 
       <Text preset="bold" size="large" style={styles.title} text={titleTx} />
 

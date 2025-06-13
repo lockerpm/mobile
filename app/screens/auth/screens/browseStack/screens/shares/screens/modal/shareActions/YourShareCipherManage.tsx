@@ -1,5 +1,5 @@
 import React from "react"
-import { BottomModal, Icon, Text } from "app/components/cores"
+import { BottomModalContainer, Icon, Text } from "app/components/cores"
 import { useStores } from "app/models"
 import { useCipherData } from "app/services/hook"
 import { AccountRoleText, SharedGroupType, SharedMemberType } from "app/static/types"
@@ -9,13 +9,13 @@ import { useAppLocale, useTheme } from "app/services/context"
 
 interface Props {
   isOpen?: boolean
-  onClose?: () => void
+  onClose: () => void
   member: SharedMemberType
   group?: SharedGroupType
 }
 
-export const EditShareModal = (props: Props) => {
-  const { isOpen, onClose, member, group } = props
+export const YourShareCipherManage = (props: Props) => {
+  const { onClose, member, group } = props
   const { translate } = useAppLocale()
   const { cipherStore } = useStores()
   const { editShareCipher } = useCipherData()
@@ -41,7 +41,7 @@ export const EditShareModal = (props: Props) => {
     }
     const res = await editShareCipher(
       selectedCipher.organizationId,
-      member?.id || group?.id,
+      member?.id || group?.id || "",
       role,
       autofillOnly,
       !!group,
@@ -57,7 +57,7 @@ export const EditShareModal = (props: Props) => {
   // --------------- RENDER ----------------
 
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose} title={selectedCipher.name}>
+    <BottomModalContainer>
       <Text
         preset="label"
         size="base"
@@ -125,6 +125,6 @@ export const EditShareModal = (props: Props) => {
         </View>
         {isEditable && <Icon icon="check" color={colors.primary} />}
       </TouchableOpacity>
-    </BottomModal>
+    </BottomModalContainer>
   )
 }

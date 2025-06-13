@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { QuickSharesList } from "./QuickSharesList"
-import { PushNotifier } from "app/utils/pushNotification"
-import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
 import { useStores } from "app/models"
 import { Screen } from "app/components/cores"
 import { useAppLocale } from "app/services/context"
+import { CipherListHeader, SortActionConfigModal, SortConfigType } from "app/components/newCiphers"
 
 const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")
 
@@ -17,40 +16,27 @@ export const QuickShareItemsScreen = observer(() => {
   // --------------------- PARAMS -------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
-  const [sortList, setSortList] = useState({
-    orderField: "revisionDate",
-    order: "desc",
+  const [sortConfig, setSortConfig] = useState<SortConfigType>({
+    sort: {
+      orderField: "revisionDate",
+      order: "desc",
+    },
+    option: "last_updated",
   })
-  const [sortOption, setSortOption] = useState("last_updated")
+
+  const onCloseSortModal = useCallback(() => {
+    setIsSortOpen(false)
+  }, [])
+
+  const onOpenSortModal = useCallback(() => {
+    setIsSortOpen(true)
+  }, [])
 
   // --------------------- COMPUTED -------------------------
 
   const isFreeAccount = user.isFreePlan
 
   // --------------------- EFFECTS -------------------------
-
-  // Clear noti
-  useEffect(() => {
-    PushNotifier.cancelNotification("share_confirm")
-  }, [navigation])
-
-  useEffect(() => {
-    // set Most relevant by defalt when users search
-    if (searchText) {
-      if (searchText.trim().length === 1) {
-        setSortList(null)
-        setSortOption("most_relevant")
-      }
-    } else {
-      setSortList({
-        orderField: "revisionDate",
-        order: "desc",
-      })
-      setSortOption("last_updated")
-    }
-  }, [searchText])
 
   // --------------------- RENDER -------------------------
 
@@ -59,16 +45,11 @@ export const QuickShareItemsScreen = observer(() => {
       safeAreaEdges={["top"]}
       header={
         <CipherListHeader
-          header={translate("quick_shares.share_option.quick.tl")}
-          openSort={() => setIsSortOpen(true)}
-          openAdd={() => {
-            navigation.navigate("mainTab", { screen: "homeTab" })
-          }}
-          onSearch={setSearchText}
-          searchText={searchText}
-          navigation={navigation}
+          headerTx={"quick_shares.share_option.quick.tl"}
+          goBack={navigation.goBack}
+          openSort={onOpenSortModal}
+          selectedCount={0}
           isSelecting={false}
-          setIsLoading={setIsLoading}
         />
       }
       contentContainerStyle={{
@@ -77,12 +58,9 @@ export const QuickShareItemsScreen = observer(() => {
     >
       <SortActionConfigModal
         isOpen={isSortOpen}
-        onClose={() => setIsSortOpen(false)}
-        onSelect={(value: string, obj: { orderField: string; order: string }) => {
-          setSortOption(value)
-          setSortList(obj)
-        }}
-        value={sortOption}
+        onClose={onCloseSortModal}
+        onSelectSortConfig={setSortConfig}
+        option={sortConfig.option}
       />
 
       <QuickSharesList
@@ -90,29 +68,29 @@ export const QuickShareItemsScreen = observer(() => {
         onLoadingChange={setIsLoading}
         searchText={searchText}
         sortList={sortList}
-        emptyContent={
-          isFreeAccount ? (
-            <EmptyCipherList
-              img={SHARE_EMPTY}
-              imgStyle={{ height: 55, width: 55 }}
-              title={translate("shares.empty.title")}
-              desc={translate("error.not_available_for_free")}
-              buttonText={translate("common.upgrade")}
-              addItem={() => {
-                navigation.navigate("payment")
-              }}
-            />
-          ) : (
-            <EmptyCipherList
-              img={SHARE_EMPTY}
-              imgStyle={{ height: 55, width: 55 }}
-              title={translate("shares.empty.title")}
-              desc={translate("shares.empty.desc_share")}
-              buttonText={translate("shares.start_sharing")}
-              addItem={() => navigation.navigate("mainTab", { screen: "homeTab" })}
-            />
-          )
-        }
+        // emptyContent={
+        //   isFreeAccount ? (
+        //     <EmptyCipherList
+        //       img={SHARE_EMPTY}
+        //       imgStyle={{ height: 55, width: 55 }}
+        //       title={translate("shares.empty.title")}
+        //       desc={translate("error.not_available_for_free")}
+        //       buttonText={translate("common.upgrade")}
+        //       addItem={() => {
+        //         navigation.navigate("payment")
+        //       }}
+        //     />
+        //   ) : (
+        //     <EmptyCipherList
+        //       img={SHARE_EMPTY}
+        //       imgStyle={{ height: 55, width: 55 }}
+        //       title={translate("shares.empty.title")}
+        //       desc={translate("shares.empty.desc_share")}
+        //       buttonText={translate("shares.start_sharing")}
+        //       addItem={() => navigation.navigate("mainTab", { screen: "homeTab" })}
+        //     />
+        //   )
+        // }
       />
     </Screen>
   )

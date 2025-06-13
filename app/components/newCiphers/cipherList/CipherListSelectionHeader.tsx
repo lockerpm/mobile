@@ -9,23 +9,23 @@ type Props = {
   /**
    * Show other actions if selected items are more than 0
    */
-  selectedCipherIds: string[]
+  selectedCount: number
   /**
    * User press X icon
    */
-  onClose: () => void
+  onClose?: () => void
   /**
    * User press share icon
    */
-  onShare: () => void
+  onShare?: () => void
   /**
    * User press check icon
    */
-  onSelectAll: () => void
+  onSelectAll?: () => void
   /**
    * User press folder icon
    */
-  onMoveFolder: () => void
+  onMoveFolder?: () => void
   /**
    * User press restore icon
    */
@@ -33,14 +33,14 @@ type Props = {
   /**
    * User press trash icon
    */
-  onDelete: () => void
+  onDelete?: () => void
 }
 
 export const CipherListSelectionHeader = ({
   isTrash,
-  selectedCipherIds,
+  selectedCount,
   onClose,
-  onShare,
+  // onShare,
   onSelectAll,
   onMoveFolder,
   onRestore,
@@ -56,8 +56,8 @@ export const CipherListSelectionHeader = ({
         <Text
           preset="bold"
           text={
-            selectedCipherIds.length
-              ? `${selectedCipherIds.length} ${translate("common.selected")}`
+            selectedCount
+              ? `${selectedCount} ${translate("common.selected")}`
               : translate("common.select")
           }
           style={{
@@ -67,11 +67,11 @@ export const CipherListSelectionHeader = ({
       </View>
       <View style={styles.rowContainer}>
         <Icon icon="check-bold" onPress={onSelectAll} containerStyle={styles.iconContainer} />
-        {selectedCipherIds.length > 0 && (
+        {selectedCount > 0 && (
           <>
-            {!isTrash && (
+            {/* {!isTrash && (
               <Icon icon="share" onPress={onShare} containerStyle={styles.iconContainer} />
-            )}
+            )} */}
             {!isTrash && (
               <Icon
                 icon="folder-simple"
@@ -80,12 +80,14 @@ export const CipherListSelectionHeader = ({
               />
             )}
 
-            <Icon
-              icon="repeat"
-              onPress={onRestore}
-              containerStyle={styles.iconContainer}
-              color={colors.title}
-            />
+            {isTrash && (
+              <Icon
+                icon="repeat"
+                onPress={onRestore}
+                containerStyle={styles.iconContainer}
+                color={colors.title}
+              />
+            )}
             <Icon
               icon="trash"
               color={colors.error}

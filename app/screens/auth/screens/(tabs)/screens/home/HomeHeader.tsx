@@ -24,9 +24,8 @@ interface Props {
   toggleSelectAll: () => void
 
   isSelecting: boolean
-  setIsSelecting: (val: boolean) => void
-  selectedItems: string[]
-  setSelectedItems: (val: any) => void
+  selectedCount: number
+  clearSelect: () => void
 }
 
 export const HomeHeader = (props: Props) => {
@@ -39,9 +38,8 @@ export const HomeHeader = (props: Props) => {
     toggleSelectAll,
     openMoveToFolder,
     isSelecting,
-    setIsSelecting,
-    selectedItems,
-    setSelectedItems,
+    clearSelect,
+    selectedCount,
   } = props
   const { colors, isDark } = useTheme()
   const { notifyApiError } = useToast()
@@ -131,11 +129,8 @@ export const HomeHeader = (props: Props) => {
           exiting={FadeOutDown}
         >
           <CipherListSelectionHeader
-            selectedCipherIds={selectedItems}
-            onClose={() => {
-              setIsSelecting(false)
-              setSelectedItems([])
-            }}
+            selectedCount={selectedCount}
+            onClose={clearSelect}
             onShare={openShare}
             onSelectAll={toggleSelectAll}
             onMoveFolder={openMoveToFolder}

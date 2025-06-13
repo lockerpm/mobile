@@ -4,7 +4,6 @@ import { Icon, Text } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
 import { MAX_MULTIPLE_SHARE_COUNT } from "app/static/constants"
 import { SearchBar } from "app/components/utils"
-import { ShareModal } from "app/components/ciphers"
 
 interface Props {
   openSort: () => void
@@ -137,7 +136,7 @@ export const ShareMultipleHeader = (props: Props) => {
         value={searchText}
       />
 
-      <ShareModal
+      {/* <ShareModal
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
         cipherIds={selectedItems}
@@ -145,7 +144,7 @@ export const ShareMultipleHeader = (props: Props) => {
           setSelectedItems([])
           navigation.goBack()
         }}
-      />
+      /> */}
     </View>
   )
 }

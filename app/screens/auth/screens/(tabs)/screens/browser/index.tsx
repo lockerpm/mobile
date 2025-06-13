@@ -161,7 +161,10 @@ export const BrowseListScreen: FC<TabsScreenProps<"browseTab">> = observer(({ na
               notiCount: shareNotiCount,
               onPress: () => {
                 navigation.navigate("browseStack", {
-                  screen: "shares",
+                  screen: "shareStack",
+                  params: {
+                    screen: "sharesHome",
+                  },
                 })
               },
             }
