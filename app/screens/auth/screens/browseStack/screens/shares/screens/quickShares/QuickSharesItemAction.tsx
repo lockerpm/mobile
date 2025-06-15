@@ -1,4 +1,3 @@
-import { ActionItem, ActionSheet } from "app/components/ciphers"
 import { useStores } from "app/models"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useCipherHelper } from "app/services/hook"
@@ -10,6 +9,7 @@ import { observer } from "mobx-react-lite"
 import { Utils } from "app/services/coreService/utils"
 import { useClipboard, useToast } from "app/services/utils"
 import { CipherIconImage } from "app/components/newCiphers"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
 
 type Props = {
   isOpen: boolean
@@ -60,7 +60,7 @@ export const QuickSharesItemAction = observer((props: Props) => {
   }
 
   return (
-    <ActionSheet
+    <NewActionSheet
       isOpen={isOpen}
       onClose={onClose}
       header={
@@ -83,35 +83,27 @@ export const QuickSharesItemAction = observer((props: Props) => {
         </View>
       }
     >
-      {!isExpired && (
-        <ActionItem
-          name={translate("quick_shares.action.detail")}
+      {!isExpired ? (
+        <NewActionSheetItem
+          tx="quick_shares.action.detail"
           icon="list-bullets"
-          action={() => {
+          onPress={() => {
             onClose()
             navigation.navigate("quickShareItemsDetail", { send: selectedCipher })
           }}
         />
-      )}
+      ) : null}
 
       {!isExpired && (
-        <ActionItem
-          name={translate("quick_shares.action.copy")}
-          icon="link"
-          action={copyShareLink}
-        />
+        <NewActionSheetItem tx="quick_shares.action.copy" icon="link" onPress={copyShareLink} />
       )}
 
-      <ActionItem
-        name={
-          isExpired
-            ? translate("quick_shares.delete_expired")
-            : translate("quick_shares.action.stop")
-        }
+      <NewActionSheetItem
+        tx={isExpired ? "quick_shares.delete_expired" : "quick_shares.action.stop"}
         icon="trash"
         color={colors.error}
-        action={stopQuickShare}
+        onPress={stopQuickShare}
       />
-    </ActionSheet>
+    </NewActionSheet>
   )
 })

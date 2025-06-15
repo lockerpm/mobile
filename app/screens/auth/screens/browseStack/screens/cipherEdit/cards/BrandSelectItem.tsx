@@ -1,7 +1,6 @@
 import React, { useState } from "react"
-import { View, FlatList, TouchableOpacity } from "react-native"
+import { View, FlatList, TouchableOpacity, Modal } from "react-native"
 import { useAppLocale, useTheme } from "app/services/context"
-import Modal from "react-native-modal"
 import { Text, Screen, Header, Icon } from "app/components/cores"
 import { CARD_BRANDS } from "app/static/constants"
 
@@ -51,10 +50,8 @@ export const BrandSelectItem = ({ brand, setBrand }: Props) => {
         </View>
       </TouchableOpacity>
       <Modal
-        animationIn="slideInRight"
-        animationOut="slideOutRight"
-        isVisible={isOpen}
-        onBackdropPress={onClose}
+        visible={isOpen}
+        onDismiss={onClose}
         style={{
           margin: 0,
           justifyContent: "flex-start",

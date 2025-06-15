@@ -4,9 +4,10 @@ import { Text } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { PasswordStrength } from "app/components/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
+
 import { IS_IOS } from "app/config/constants"
 import { getCipherDescription } from "app/utils/cipherHelper"
+import { CipherIconImage } from "app/components/newCiphers"
 
 type Prop = {
   item: any
@@ -30,7 +31,7 @@ export const ListItem = memo(
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <CipherIconImage
-            defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
+            cipherType={item.type}
             source={item.imgLogo}
             style={{
               height: 40,

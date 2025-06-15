@@ -6,16 +6,17 @@ import { useCipherData } from "app/services/hook"
 import { CipherView } from "core/models/view"
 import { useStores } from "app/models"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
-import { ActionItem, ActionSheet } from "app/components/ciphers"
+
 import { useAppLocale, useTheme } from "app/services/context"
 import { DeleteOtpModal } from "./DeleteOtpModal"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { useClipboard } from "app/services/utils"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
 
 type Props = {
   navigation: any
-  isOpen?: boolean
-  onClose?: () => void
+  isOpen: boolean
+  onClose: () => void
   onLoadingChange?: (val: boolean) => void
   cipher: CipherView
 }
@@ -85,7 +86,7 @@ export const AuthenticatorAction = observer((props: Props) => {
         btnText={translate("common.delete")}
       />
 
-      <ActionSheet
+      <NewActionSheet
         isOpen={isOpen}
         onClose={handleActionSheetClose}
         header={
@@ -98,44 +99,35 @@ export const AuthenticatorAction = observer((props: Props) => {
           </View>
         }
       >
-        <ActionItem
-          name={translate("authenticator.copy_code")}
+        <NewActionSheetItem
+          tx="authenticator.copy_code"
           icon="copy"
-          action={() => {
+          onPress={() => {
             copyToClipboard(getTOTP(otp))
             logFirebaseEvent(AnalyticEvents.COPY_OTP, user.email)
             onClose()
           }}
         />
 
-        {__DEV__ && (
-          <ActionItem
-            name={"(DEBUG) Log note"}
-            icon="copy"
-            action={() => {
-              console.log(cipher.notes)
-            }}
-          />
-        )}
-        <ActionItem
-          name={translate("common.edit")}
+        <NewActionSheetItem
+          tx="common.edit"
           icon="edit"
-          action={() => {
+          onPress={() => {
             cipherStore.setSelectedCipher(cipher)
             onClose()
             navigation.navigate("authenticator__edit", { mode: "edit" })
           }}
         />
-        <ActionItem
-          name={translate("common.delete")}
+        <NewActionSheetItem
+          tx="common.delete"
           icon="trash"
           color={colors.error}
-          action={() => {
+          onPress={() => {
             setNextModal("deleteConfirm")
             onClose()
           }}
         />
-      </ActionSheet>
+      </NewActionSheet>
     </View>
   )
 })

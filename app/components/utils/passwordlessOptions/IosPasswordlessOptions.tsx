@@ -1,18 +1,16 @@
 import React from "react"
-import { StyleProp, View, ViewStyle } from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { View } from "react-native"
 import {
   Button,
-  Icon,
   ImageIconTypes,
   ImageIcon,
   Text,
   Logo,
   Toggle,
   PressableScale,
+  BottomModal,
 } from "../../cores"
 import { useAppLocale, useTheme } from "app/services/context"
-import { Dialog } from "react-native-ui-lib"
 
 interface Props {
   /**
@@ -52,44 +50,9 @@ export const IosPasswordlessOptions = ({
 }: Props) => {
   const { colors } = useTheme()
   const { translate } = useAppLocale()
-  const inset = useSafeAreaInsets()
-  const $containerStyle: StyleProp<ViewStyle> = [
-    {
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 10,
-      backgroundColor: colors.block,
-      paddingBottom: inset.bottom + 16,
-    },
-  ]
 
-  const header = () => {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          backgroundColor: colors.block,
-          paddingHorizontal: 16,
-          paddingVertical: 16,
-        }}
-      >
-        <Text preset="bold" text={title} style={{ fontSize: 24, lineHeight: 28 }} />
-        <Icon icon="x" size={24} onPress={onClose} />
-      </View>
-    )
-  }
   return (
-    <Dialog
-      bottom
-      width="100%"
-      visible={isOpen}
-      onDismiss={onClose}
-      containerStyle={$containerStyle}
-      renderPannableHeader={header}
-      supportedOrientations={["portrait", "landscape"]}
-      panDirection={undefined}
-    >
+    <BottomModal isOpen={isOpen} onClose={onClose} hideCloseBtn title={title}>
       <View style={{ paddingHorizontal: 16, backgroundColor: colors.block }}>
         <Logo
           preset="app-logo-secondary"
@@ -127,7 +90,7 @@ export const IosPasswordlessOptions = ({
         }}
         onPress={action}
       />
-    </Dialog>
+    </BottomModal>
   )
 }
 

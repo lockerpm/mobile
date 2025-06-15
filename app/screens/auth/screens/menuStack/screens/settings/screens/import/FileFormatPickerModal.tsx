@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import { View } from "react-native"
-import Modal from "react-native-modal"
+import { View, Modal } from "react-native"
 import { Text, Screen, Header } from "app/components/cores"
 import { SettingsItem } from "app/components/utils"
 import { FormatList } from "./FormatList"
@@ -34,10 +33,8 @@ export const FileFormatPickerModal = ({ format, setFormat, formats }: Props) => 
         RightAccessory={<Text text={formats.find((i) => i.value === format).label} />}
       />
       <Modal
-        animationIn="slideInRight"
-        animationOut="slideOutRight"
-        isVisible={isOpen}
-        onBackdropPress={onClose}
+        visible={isOpen}
+        onDismiss={onClose}
         style={{
           margin: 0,
         }}

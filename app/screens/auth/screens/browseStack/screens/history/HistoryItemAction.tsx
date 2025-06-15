@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { BottomModal, Button, Text, TextInput } from "app/components/cores"
-import { ActionItem } from "app/components/ciphers"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useCipherData, useCipherHelper } from "app/services/hook"
 import { CipherView, LoginView } from "core/models/view"
 import Animated, { FadeIn } from "react-native-reanimated"
 import { useClipboard } from "app/services/utils"
+import { NewActionSheetItem } from "app/components/utils"
 
 interface Props {
   isOpen: boolean
@@ -71,26 +71,21 @@ export const HistoryItemAction = ({
     >
       {!isRestore && (
         <Animated.View>
-          <ActionItem
-            name={translate("password_history.copy")}
+          <NewActionSheetItem
+            bottomBorder
+            tx="password_history.copy"
             icon={"copy"}
-            action={() => {
+            onPress={() => {
               copyToClipboard(selectPassword)
               onClose()
             }}
-            containerStyle={{
-              paddingHorizontal: 0,
-              borderBottomColor: colors.border,
-              borderBottomWidth: 1,
-            }}
           />
-          <ActionItem
-            name={translate("password_history.restore")}
+          <NewActionSheetItem
+            tx="password_history.restore"
             icon={"arrow-clockwise"}
-            action={() => {
+            onPress={() => {
               setIsRestore(true)
             }}
-            containerStyle={{ paddingHorizontal: 0 }}
           />
         </Animated.View>
       )}

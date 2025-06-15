@@ -1,4 +1,3 @@
-import { ActionItem, ActionSheet } from "app/components/ciphers"
 import { useStores } from "app/models"
 import { useCipherData, useCipherHelper } from "app/services/hook"
 import { CipherView } from "core/models/view"
@@ -6,9 +5,11 @@ import React from "react"
 import { View } from "react-native"
 import { Text } from "app/components/cores"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
 import { IS_IOS } from "app/config/constants"
 import { useAppLocale } from "app/services/context"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
+import { CipherIconImage } from "app/components/newCiphers"
+import { CipherType } from "core/enums"
 
 type Props = {
   isOpen: boolean
@@ -59,14 +60,14 @@ export const PendingSharedAction = (props: Props) => {
   return (
     <View>
       {/* Actionsheet */}
-      <ActionSheet
+      <NewActionSheet
         isOpen={isOpen}
         onClose={handleActionSheetClose}
         header={
           <View style={{ width: "100%", paddingHorizontal: 20 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <CipherIconImage
-                defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
+                cipherType={CipherType.Login}
                 source={cipherMapper.img}
                 style={{ height: 40, width: 40, borderRadius: 8 }}
               />
@@ -78,18 +79,10 @@ export const PendingSharedAction = (props: Props) => {
           </View>
         }
       >
-        <ActionItem
-          disabled={uiStore.isOffline}
-          name={translate("common.accept")}
-          action={handleAccept}
-        />
+        <NewActionSheetItem tx="common.accept" onPress={handleAccept} />
 
-        <ActionItem
-          disabled={uiStore.isOffline}
-          name={translate("common.reject")}
-          action={handleReject}
-        />
-      </ActionSheet>
+        <NewActionSheetItem tx="common.reject" onPress={handleReject} />
+      </NewActionSheet>
       {/* Actionsheet end */}
     </View>
   )

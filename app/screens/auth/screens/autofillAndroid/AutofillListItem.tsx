@@ -5,11 +5,9 @@ import { Icon, Text } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { CipherView } from "core/models/view"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
-import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
-import { IS_IOS } from "app/config/constants"
 import { useClipboard } from "app/services/utils"
 import { getCipherDescription } from "app/utils/cipherHelper"
+import { CipherIconImage } from "app/components/newCiphers"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
@@ -52,7 +50,7 @@ export const AutofillListItem = memo(
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <CipherIconImage
-            defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
+            cipherType={item.type}
             resizeMode="contain"
             source={item.imgLogo}
             style={{

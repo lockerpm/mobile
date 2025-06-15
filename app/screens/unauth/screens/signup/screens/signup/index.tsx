@@ -1,8 +1,7 @@
 import React, { useState, useEffect, FC, useCallback } from "react"
 import { BackHandler, Platform, StyleSheet, TouchableOpacity, View } from "react-native"
 import { useAppLocale, useTheme } from "app/services/context"
-import { Checkbox } from "react-native-ui-lib"
-import { Screen, Text, Button, TextInput, Logo } from "app/components/cores"
+import { Screen, Text, Button, TextInput, Logo, Checkbox } from "app/components/cores"
 import { SocialLogin, IosPasswordlessOptions, DividerText, SetLanguage } from "app/components/utils"
 import { Passkey } from "react-native-passkey"
 import { validateEmail } from "app/utils/utils"
@@ -177,22 +176,9 @@ const TermAndConditions = ({
   agreed: boolean
   setAgreed: (val: boolean) => void
 }) => {
-  const { colors } = useTheme()
   return (
     <View style={styles.termContainer}>
-      <Checkbox
-        borderRadius={4}
-        value={agreed}
-        color={colors.primary}
-        onValueChange={setAgreed}
-        style={[
-          styles.checkBox,
-          {
-            borderColor: colors.secondaryText,
-          },
-        ]}
-        size={18}
-      />
+      <Checkbox value={agreed} onValueChange={setAgreed} />
       <TouchableOpacity onPress={() => setAgreed(!agreed)}>
         <Text tx={"new_signup.marketing"} size="base" />
       </TouchableOpacity>
@@ -207,11 +193,6 @@ const styles = StyleSheet.create({
   },
   centerText: {
     textAlign: "center",
-  },
-  checkBox: {
-    borderRadius: 4,
-    marginRight: 8,
-    marginVertical: 7,
   },
   logo: {
     alignSelf: "center",

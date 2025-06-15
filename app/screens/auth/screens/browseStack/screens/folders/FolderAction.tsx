@@ -1,271 +1,265 @@
-import React, { useEffect, useState } from "react"
-import { Platform, View } from "react-native"
-import { AddUserShareFolderModal } from "../shares/screens/folderSharedUsersManagement/ShareUserModal"
-import { useNavigation } from "@react-navigation/native"
-import { ImageIcon, Text } from "app/components/cores"
-import { FolderView } from "core/models/view/folderView"
-import { CollectionView } from "core/models/view/collectionView"
-import { useStores } from "app/models"
-import { useCipherData, useFolder } from "app/services/hook"
-import { AccountRole, AccountRoleText } from "app/static/types"
-import { GeneralApiProblem } from "app/services/api/apiProblem"
-import {
-  ActionItem,
-  ActionSheet,
-  DeleteConfirmModal,
-  LeaveShareModal,
-} from "app/components/ciphers"
-import { useAppLocale, useTheme } from "app/services/context"
-import { ActionPremiumItem } from "app/components/ciphers/actionsSheet/ActionSheetPremiumItem"
-import { useToast } from "app/services/utils"
-import { getTeam } from "app/utils/cipherHelper"
+// import React, { useEffect, useState } from "react"
+// import { Platform, View } from "react-native"
+// import { AddUserShareFolderModal } from "../shares/screens/folderSharedUsersManagement/ShareUserModal"
+// import { useNavigation } from "@react-navigation/native"
+// import { ImageIcon, Text } from "app/components/cores"
+// import { FolderView } from "core/models/view/folderView"
+// import { CollectionView } from "core/models/view/collectionView"
+// import { useStores } from "app/models"
+// import { useCipherData, useFolder } from "app/services/hook"
+// import { AccountRole, AccountRoleText } from "app/static/types"
+// import { GeneralApiProblem } from "app/services/api/apiProblem"
 
-type Props = {
-  isOpen?: boolean
-  onClose?: () => void
-  folder: FolderView | CollectionView
-  onLoadingChange?: (val: boolean) => void
-}
+// import { useAppLocale, useTheme } from "app/services/context"
+// import { useToast } from "app/services/utils"
+// import { getTeam } from "app/utils/cipherHelper"
 
-export const FolderAction = (props: Props) => {
-  const { isOpen, onClose, folder, onLoadingChange } = props
-  if (!folder) return null
-  const navigation = useNavigation() as any
-  const { cipherStore, user, uiStore } = useStores()
-  const { colors } = useTheme()
-  const { translate } = useAppLocale()
-  const { notifyApiError } = useToast()
-  const { deleteCollection, deleteFolder } = useCipherData()
-  const { stopShareFolder } = useFolder()
+// type Props = {
+//   isOpen?: boolean
+//   onClose?: () => void
+//   folder: FolderView | CollectionView
+//   onLoadingChange?: (val: boolean) => void
+// }
 
-  // @ts-ignore
-  const organizationId = folder && folder.organizationId
-  const isCollection = !!organizationId
+// export const FolderAction = (props: Props) => {
+//   const { isOpen, onClose, folder, onLoadingChange } = props
+//   if (!folder) return null
+//   const navigation = useNavigation() as any
+//   const { cipherStore, user, uiStore } = useStores()
+//   const { colors } = useTheme()
+//   const { translate } = useAppLocale()
+//   const { notifyApiError } = useToast()
+//   const { deleteCollection, deleteFolder } = useCipherData()
+//   const { stopShareFolder } = useFolder()
 
-  // Computed
-  const organizations = cipherStore.organizations
-  const teamRole = getTeam(user.teams, organizationId).role
-  const shareRole = getTeam(organizations, organizationId).type
-  const isOwner = shareRole === AccountRole.OWNER
-  const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
-  const editable =
-    !organizationId ||
-    (teamRole && teamRole !== AccountRoleText.MEMBER) ||
-    shareRole === AccountRole.ADMIN ||
-    shareRole === AccountRole.OWNER
+//   // @ts-ignore
+//   const organizationId = folder && folder.organizationId
+//   const isCollection = !!organizationId
 
-  // ---------------- PARAMS -----------------
+//   // Computed
+//   const organizations = cipherStore.organizations
+//   const teamRole = getTeam(user.teams, organizationId).role
+//   const shareRole = getTeam(organizations, organizationId).type
+//   const isOwner = shareRole === AccountRole.OWNER
+//   const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
+//   const editable =
+//     !organizationId ||
+//     (teamRole && teamRole !== AccountRoleText.MEMBER) ||
+//     shareRole === AccountRole.ADMIN ||
+//     shareRole === AccountRole.OWNER
 
-  const [isRenameOpen, setIsRenameOpen] = useState(false)
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [showConfirmLeaveModal, setShowConfirmLeaveModal] = useState(false)
-  const [nextModal, setNextModal] = useState<
-    "rename" | "deleteConfirm" | "share" | "leaveConfirm" | null
-  >(null)
-  const [showShareModal, setShowShareModal] = useState(false)
+//   // ---------------- PARAMS -----------------
 
-  // ---------------- METHODS -----------------
+//   const [isRenameOpen, setIsRenameOpen] = useState(false)
+//   const [showConfirmModal, setShowConfirmModal] = useState(false)
+//   const [showConfirmLeaveModal, setShowConfirmLeaveModal] = useState(false)
+//   const [nextModal, setNextModal] = useState<
+//     "rename" | "deleteConfirm" | "share" | "leaveConfirm" | null
+//   >(null)
+//   const [showShareModal, setShowShareModal] = useState(false)
 
-  const handleDelete = async () => {
-    onLoadingChange && onLoadingChange(true)
-    let res: { kind: string } | GeneralApiProblem
+//   // ---------------- METHODS -----------------
 
-    // @ts-ignore
-    if (!folder.organizationId) {
-      res = await deleteFolder(folder.id)
-    } else {
-      // @ts-ignore
-      res = await deleteCollection(folder)
-    }
+//   const handleDelete = async () => {
+//     onLoadingChange && onLoadingChange(true)
+//     let res: { kind: string } | GeneralApiProblem
 
-    if (res.kind !== "ok") {
-      notifyApiError(res)
-    }
-    onLoadingChange && onLoadingChange(false)
-  }
+//     // @ts-ignore
+//     if (!folder.organizationId) {
+//       res = await deleteFolder(folder.id)
+//     } else {
+//       // @ts-ignore
+//       res = await deleteCollection(folder)
+//     }
 
-  const handleActionSheetClose = () => {
-    onClose()
-    switch (nextModal) {
-      case "rename":
-        setIsRenameOpen(true)
-        break
-      case "deleteConfirm":
-        setShowConfirmModal(true)
-        break
-      case "share":
-        setShowShareModal(true)
-        break
-      case "leaveConfirm":
-        setShowConfirmLeaveModal(true)
-        break
-    }
-    setNextModal(null)
-  }
+//     if (res.kind !== "ok") {
+//       notifyApiError(res)
+//     }
+//     onLoadingChange && onLoadingChange(false)
+//   }
 
-  useEffect(() => {
-    if (Platform.OS === "android" && !isOpen) {
-      switch (nextModal) {
-        case "rename":
-          setIsRenameOpen(true)
-          break
-        case "deleteConfirm":
-          setShowConfirmModal(true)
-          break
-        case "share":
-          setShowShareModal(true)
-          break
-        case "leaveConfirm":
-          setShowConfirmLeaveModal(true)
-          break
-      }
-      setNextModal(null)
-    }
-  }, [isOpen, nextModal])
-  // ---------------- RENDER -----------------
+//   const handleActionSheetClose = () => {
+//     onClose()
+//     switch (nextModal) {
+//       case "rename":
+//         setIsRenameOpen(true)
+//         break
+//       case "deleteConfirm":
+//         setShowConfirmModal(true)
+//         break
+//       case "share":
+//         setShowShareModal(true)
+//         break
+//       case "leaveConfirm":
+//         setShowConfirmLeaveModal(true)
+//         break
+//     }
+//     setNextModal(null)
+//   }
 
-  return (
-    <View>
-      {/* Modals / Actions */}
-      <AddUserShareFolderModal
-        isOpen={showShareModal}
-        onClose={() => {
-          setShowShareModal(false)
-        }}
-        folder={folder}
-      />
+//   useEffect(() => {
+//     if (Platform.OS === "android" && !isOpen) {
+//       switch (nextModal) {
+//         case "rename":
+//           setIsRenameOpen(true)
+//           break
+//         case "deleteConfirm":
+//           setShowConfirmModal(true)
+//           break
+//         case "share":
+//           setShowShareModal(true)
+//           break
+//         case "leaveConfirm":
+//           setShowConfirmLeaveModal(true)
+//           break
+//       }
+//       setNextModal(null)
+//     }
+//   }, [isOpen, nextModal])
+//   // ---------------- RENDER -----------------
 
-      {isShared && (
-        <LeaveShareModal
-          isOpen={showConfirmLeaveModal}
-          onClose={() => setShowConfirmLeaveModal(false)}
-          organizationId={organizationId}
-        />
-      )}
+//   return (
+//     <View>
+//       {/* Modals / Actions */}
+//       <AddUserShareFolderModal
+//         isOpen={showShareModal}
+//         onClose={() => {
+//           setShowShareModal(false)
+//         }}
+//         folder={folder}
+//       />
 
-      <RenameFolderModal
-        isOpen={isRenameOpen}
-        onClose={() => setIsRenameOpen(false)}
-        folder={folder}
-      />
+//       {isShared && (
+//         <LeaveShareModal
+//           isOpen={showConfirmLeaveModal}
+//           onClose={() => setShowConfirmLeaveModal(false)}
+//           organizationId={organizationId}
+//         />
+//       )}
 
-      <DeleteConfirmModal
-        isOpen={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
-        onConfirm={handleDelete}
-        title={translate("folder.delete_modal.title")}
-        desc={translate("folder.delete_modal.desc")}
-        btnText={translate("folder.delete_modal.btn")}
-      />
+//       <RenameFolderModal
+//         isOpen={isRenameOpen}
+//         onClose={() => setIsRenameOpen(false)}
+//         folder={folder}
+//       />
 
-      <ActionSheet
-        isOpen={isOpen}
-        onClose={handleActionSheetClose}
-        header={
-          <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <ImageIcon icon={isCollection ? "folder-share" : "folder"} size={30} />
-              <View
-                style={{
-                  marginLeft: 10,
-                  flex: 1,
-                }}
-              >
-                <Text preset="bold" text={folder?.name} numberOfLines={2} />
-              </View>
-            </View>
-          </View>
-        }
-      >
-        {editable && (
-          <>
-            <ActionItem
-              name={translate("common.rename")}
-              icon="edit"
-              action={() => {
-                setNextModal("rename")
-                onClose()
-              }}
-            />
+//       <DeleteConfirmModal
+//         isOpen={showConfirmModal}
+//         onClose={() => setShowConfirmModal(false)}
+//         onConfirm={handleDelete}
+//         title={translate("folder.delete_modal.title")}
+//         desc={translate("folder.delete_modal.desc")}
+//         btnText={translate("folder.delete_modal.btn")}
+//       />
 
-            {isCollection ? (
-              isOwner && (
-                <ActionItem
-                  name={translate("shares.share_folder.manage_user")}
-                  icon="users-three"
-                  action={() => {
-                    navigation.navigate("shareFolder", { collectionId: folder?.id })
-                    onClose()
-                  }}
-                />
-              )
-            ) : (
-              <ActionPremiumItem
-                name={translate("common.share")}
-                icon="share"
-                action={() => {
-                  if (user.isFreePlan) {
-                    navigation.navigate("payment")
-                    return
-                  }
-                  setNextModal("share")
-                  onClose()
-                }}
-                onClose={onClose}
-              />
-            )}
-            {isOwner && isCollection && (
-              <ActionItem
-                name={translate("shares.stop_sharing")}
-                icon="x-circle"
-                action={() => {
-                  // @ts-ignore
-                  stopShareFolder(folder)
-                  onClose()
-                }}
-              />
-            )}
+//       <ActionSheet
+//         isOpen={isOpen}
+//         onClose={handleActionSheetClose}
+//         header={
+//           <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
+//             <View style={{ flexDirection: "row", alignItems: "center" }}>
+//               <ImageIcon icon={isCollection ? "folder-share" : "folder"} size={30} />
+//               <View
+//                 style={{
+//                   marginLeft: 10,
+//                   flex: 1,
+//                 }}
+//               >
+//                 <Text preset="bold" text={folder?.name} numberOfLines={2} />
+//               </View>
+//             </View>
+//           </View>
+//         }
+//       >
+//         {editable && (
+//           <>
+//             <ActionItem
+//               name={translate("common.rename")}
+//               icon="edit"
+//               action={() => {
+//                 setNextModal("rename")
+//                 onClose()
+//               }}
+//             />
 
-            {isShared && (
-              <ActionItem
-                disabled={uiStore.isOffline}
-                name={translate("shares.leave")}
-                icon="sign-out"
-                color={colors.error}
-                action={() => {
-                  setNextModal("leaveConfirm")
-                  onClose()
-                }}
-              />
-            )}
+//             {isCollection ? (
+//               isOwner && (
+//                 <ActionItem
+//                   name={translate("shares.share_folder.manage_user")}
+//                   icon="users-three"
+//                   action={() => {
+//                     navigation.navigate("shareFolder", { collectionId: folder?.id })
+//                     onClose()
+//                   }}
+//                 />
+//               )
+//             ) : (
+//               <ActionPremiumItem
+//                 name={translate("common.share")}
+//                 icon="share"
+//                 action={() => {
+//                   if (user.isFreePlan) {
+//                     navigation.navigate("payment")
+//                     return
+//                   }
+//                   setNextModal("share")
+//                   onClose()
+//                 }}
+//                 onClose={onClose}
+//               />
+//             )}
+//             {isOwner && isCollection && (
+//               <ActionItem
+//                 name={translate("shares.stop_sharing")}
+//                 icon="x-circle"
+//                 action={() => {
+//                   // @ts-ignore
+//                   stopShareFolder(folder)
+//                   onClose()
+//                 }}
+//               />
+//             )}
 
-            {isOwner && (
-              <ActionItem
-                name={translate("folder.delete_folder")}
-                icon="trash"
-                color={colors.error}
-                action={() => {
-                  setNextModal("deleteConfirm")
-                  onClose()
-                }}
-              />
-            )}
-          </>
-        )}
+//             {isShared && (
+//               <ActionItem
+//                 disabled={uiStore.isOffline}
+//                 name={translate("shares.leave")}
+//                 icon="sign-out"
+//                 color={colors.error}
+//                 action={() => {
+//                   setNextModal("leaveConfirm")
+//                   onClose()
+//                 }}
+//               />
+//             )}
 
-        {!editable && isShared && (
-          <ActionItem
-            disabled={uiStore.isOffline}
-            name={translate("shares.leave")}
-            icon="sign-out"
-            color={colors.error}
-            action={() => {
-              setNextModal("leaveConfirm")
-              onClose()
-            }}
-          />
-        )}
-      </ActionSheet>
-    </View>
-  )
-}
+//             {isOwner && (
+//               <ActionItem
+//                 name={translate("folder.delete_folder")}
+//                 icon="trash"
+//                 color={colors.error}
+//                 action={() => {
+//                   setNextModal("deleteConfirm")
+//                   onClose()
+//                 }}
+//               />
+//             )}
+//           </>
+//         )}
+
+//         {!editable && isShared && (
+//           <ActionItem
+//             disabled={uiStore.isOffline}
+//             name={translate("shares.leave")}
+//             icon="sign-out"
+//             color={colors.error}
+//             action={() => {
+//               setNextModal("leaveConfirm")
+//               onClose()
+//             }}
+//           />
+//         )}
+//       </ActionSheet>
+//     </View>
+//   )
+// }

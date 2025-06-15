@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react"
 import { Text, Icon } from "app/components/cores"
-import { View } from "react-native"
+import { View, Modal } from "react-native"
 import { useAppLocale, useTheme } from "app/services/context"
-import { ActionItem } from "app/components/ciphers"
 import { PrivateEmailList } from "./PrivateEmailList"
-import Modal from "react-native-modal"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useStores } from "app/models"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { useNavigation } from "@react-navigation/native"
 import { GeneralApiProblem } from "app/services/api/apiProblem"
 import { useToast } from "app/services/utils"
+import { NewActionSheetItem } from "app/components/utils"
 
 interface Props {
   isOpen: boolean
@@ -54,11 +53,8 @@ export const PrivateEmailModal = ({ isOpen, onClose, onSelectEmail }: Props) => 
 
   return (
     <Modal
-      avoidKeyboard
-      isVisible={isOpen}
-      animationIn={"slideInUp"}
-      animationOut={"slideOutDown"}
-      onBackdropPress={onClose}
+      visible={isOpen}
+      onDismiss={onClose}
       style={{
         margin: 0,
         paddingTop: insets.top,
@@ -101,16 +97,16 @@ export const PrivateEmailModal = ({ isOpen, onClose, onSelectEmail }: Props) => 
 
         {!isSelectFronExisting && (
           <>
-            <ActionItem
-              name={translate("password.hide_email.generate_new")}
+            <NewActionSheetItem
+              tx="password.hide_email.generate_new"
               icon="zap-fast"
-              action={generateRelayNewAddress}
+              onPress={generateRelayNewAddress}
             />
             <View style={{ height: 1.3, backgroundColor: colors.border }}></View>
-            <ActionItem
-              name={translate("password.hide_email.existing_email")}
+            <NewActionSheetItem
+              tx="password.hide_email.existing_email"
               icon="mail-03"
-              action={() => {
+              onPress={() => {
                 setIsSelectFromExisting(true)
               }}
             />

@@ -7,11 +7,11 @@ import {
   View,
   ViewStyle,
   Image,
+  Modal,
 } from "react-native"
 import { Text, Icon, Screen, Header } from "app/components/cores"
 import { WALLET_APP_LIST } from "app/utils/crypto/applist"
 import { useAppLocale, useTheme } from "app/services/context"
-import Modal from "react-native-modal"
 
 type Props = {
   alias: string
@@ -122,10 +122,8 @@ export const AppSelect = (props: Props) => {
         </View>
       </TouchableOpacity>
       <Modal
-        animationIn="slideInRight"
-        animationOut="slideOutRight"
-        isVisible={isSelect}
-        onBackdropPress={onClose}
+        visible={isSelect}
+        onDismiss={onClose}
         style={{
           margin: 0,
         }}

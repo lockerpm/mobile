@@ -1,16 +1,16 @@
 import React, { useState, useEffect, FC, useRef } from "react"
 import { observer } from "mobx-react-lite"
 import { StyleSheet, View } from "react-native"
-import { Slider, Checkbox } from "react-native-ui-lib"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useCipherHelper } from "app/services/hook"
 import { useCoreService } from "app/services/coreService"
 import { useStores } from "app/models"
-import { Button, Header, Icon, Screen, Text } from "app/components/cores"
+import { Button, Checkbox, Header, Icon, Screen, Text } from "app/components/cores"
 import { PasswordStrength } from "app/components/utils"
 import { ToolsStackScreenProps } from "app/navigators/navigators.types"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { useClipboard } from "app/services/utils"
+import Slider from "@react-native-community/slider"
 
 export const PasswordGeneratorScreen: FC<ToolsStackScreenProps<"passwordGenerator">> = observer(
   ({ navigation }) => {
@@ -159,10 +159,10 @@ export const PasswordGeneratorScreen: FC<ToolsStackScreenProps<"passwordGenerato
             onValueChange={(value) => {
               passwordLength.current = value
             }}
-            onSeekEnd={() => {
-              regenerate()
-              setSliderValue(passwordLength.current)
-            }}
+            // onSeekEnd={() => {
+            //   regenerate()
+            //   setSliderValue(passwordLength.current)
+            // }}
           />
           {/* Password length end */}
 
@@ -172,12 +172,8 @@ export const PasswordGeneratorScreen: FC<ToolsStackScreenProps<"passwordGenerato
                 key={item.label}
                 value={item.key}
                 accessibilityLabel={item.label}
-                color={colors.primary}
                 label={item.label}
                 onValueChange={item.action}
-                style={{
-                  marginVertical: 7,
-                }}
                 labelStyle={{
                   color: colors.title,
                   fontSize: 16,

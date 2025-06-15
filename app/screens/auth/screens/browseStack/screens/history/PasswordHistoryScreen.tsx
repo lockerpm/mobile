@@ -3,7 +3,6 @@ import { Screen, Header, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
-import { CipherIconImage, SortActionConfigModal } from "app/components/ciphers"
 import { IS_IOS } from "app/config/constants"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { useCipherHelper } from "app/services/hook"
@@ -13,6 +12,7 @@ import { PasswordHistoryView } from "core/models/view/passwordHistoryView"
 import { HistoryItemAction } from "./HistoryItemAction"
 import { useAppLocale, useTheme } from "app/services/context"
 import { BrowseStackScreenProps } from "app/navigators"
+import { CipherIconImage } from "app/components/newCiphers"
 
 export const PasswordHistoryScreen: FC<BrowseStackScreenProps<"passwordsHistory">> = observer(
   (props) => {
@@ -21,8 +21,6 @@ export const PasswordHistoryScreen: FC<BrowseStackScreenProps<"passwordsHistory"
     const { colors } = useTheme()
     const { translate } = useAppLocale()
 
-    const [sortOrder, setSortOrder] = useState("last_updated")
-    const [isOpenModalSortStrategy, setOpenModalSortStrategy] = useState(false)
     const [selectHistory, setSelectHistory] = useState<PasswordHistoryView>(null)
 
     const selectedCipher: CipherView = cipherStore.cipherView
@@ -43,34 +41,15 @@ export const PasswordHistoryScreen: FC<BrowseStackScreenProps<"passwordsHistory"
         )
       : selectedCipher.passwordHistory
 
-    const passwordHistories = sortOrder === "last_updated" ? [...data]?.reverse() || [] : data
+    const passwordHistories = data
 
     return (
       <Screen
         preset="auto"
         padding
         safeAreaEdges={["bottom"]}
-        header={
-          <Header
-            leftIcon="arrow-left"
-            onLeftPress={props.navigation.goBack}
-            rightIcon="sliders-horizontal"
-            onRightPress={() => {
-              setOpenModalSortStrategy(true)
-            }}
-          />
-        }
+        header={<Header leftIcon="arrow-left" onLeftPress={props.navigation.goBack} />}
       >
-        <SortActionConfigModal
-          byTimeOnly
-          isOpen={isOpenModalSortStrategy}
-          onClose={() => setOpenModalSortStrategy(false)}
-          onSelect={(value: string) => {
-            setSortOrder(value)
-          }}
-          value={sortOrder}
-        />
-
         <HistoryItemAction
           isOpen={!!selectHistory}
           onClose={() => {
@@ -86,7 +65,7 @@ export const PasswordHistoryScreen: FC<BrowseStackScreenProps<"passwordsHistory"
 
         <CipherIconImage
           resizeMode="contain"
-          defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
+          cipherType={selectedCipher.type}
           source={source}
           style={{ height: 55, width: 55, borderRadius: 8, alignSelf: "center" }}
         />

@@ -7,7 +7,6 @@ import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
 import { Screen } from "app/components/cores"
-import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
 import { observer } from "mobx-react-lite"
 import { GeneratePasswordModal } from "./GeneratePasswordModal"
 import { useAppLocale } from "app/services/context"
@@ -90,26 +89,26 @@ export const AutoFillAndroidScreen: FC<AuthStackScreenProps<"autofillAndroid">> 
     return (
       <Screen
         safeAreaEdges={["bottom", "top"]}
-        header={
-          <CipherListHeader
-            isAutoFill
-            header={translate("common.passwords")}
-            openSort={() => setIsSortOpen(true)}
-            openAdd={() => {
-              // navigation.navigate("passwords__edit", { mode: "add", initialUrl: data.domain })
-            }}
-            onSearch={setSearchText}
-            searchText={searchText}
-            isSelecting={false}
-            setIsLoading={() => ""}
-            setIsOpenGeneratePassword={() => setIsOpenGeneratePassword(true)}
-          />
-        }
+        // header={
+        //   <CipherListHeader
+        //     isAutoFill
+        //     header={translate("common.passwords")}
+        //     openSort={() => setIsSortOpen(true)}
+        //     openAdd={() => {
+        //       // navigation.navigate("passwords__edit", { mode: "add", initialUrl: data.domain })
+        //     }}
+        //     onSearch={setSearchText}
+        //     searchText={searchText}
+        //     isSelecting={false}
+        //     setIsLoading={() => ""}
+        //     setIsOpenGeneratePassword={() => setIsOpenGeneratePassword(true)}
+        //   />
+        // }
         contentContainerStyle={{
           flex: 1,
         }}
       >
-        <SortActionConfigModal
+        {/* <SortActionConfigModal
           isOpen={isSortOpen}
           onClose={() => setIsSortOpen(false)}
           onSelect={(value: string, obj: { orderField: string; order: string }) => {
@@ -117,7 +116,7 @@ export const AutoFillAndroidScreen: FC<AuthStackScreenProps<"autofillAndroid">> 
             setSortList(obj)
           }}
           value={sortOption}
-        />
+        /> */}
 
         <GeneratePasswordModal
           isOpen={isOpenGeneratePassword}
@@ -130,21 +129,21 @@ export const AutoFillAndroidScreen: FC<AuthStackScreenProps<"autofillAndroid">> 
           suggestSearch={suggestSearch}
           setSearchText={setSearchText}
           sortList={sortList}
-          emptyContent={
-            <EmptyCipherList
-              img={EMPTY_CIPHER}
-              imgStyle={{ height: 55, width: 120 }}
-              title={translate("password.empty.title")}
-              desc={translate("password.empty.desc")}
-              buttonText={translate("password.empty.btn")}
-              addItem={() => {
-                // navigation.navigate("passwords__edit", {
-                //   mode: "add",
-                //   initialUrl: data.domain,
-                // })
-              }}
-            />
-          }
+          // emptyContent={
+          //   <EmptyCipherList
+          //     img={EMPTY_CIPHER}
+          //     imgStyle={{ height: 55, width: 120 }}
+          //     title={translate("password.empty.title")}
+          //     desc={translate("password.empty.desc")}
+          //     buttonText={translate("password.empty.btn")}
+          //     addItem={() => {
+          //       navigation.navigate("passwords__edit", {
+          //         mode: "add",
+          //         initialUrl: data.domain,
+          //       })
+          //     }}
+          //   />
+          // }
         />
       </Screen>
     )

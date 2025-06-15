@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react"
 import { View, Image } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { EmergencyAccessStatus, EmergencyAccessType, TrustedContact } from "app/static/types"
-import { useAppLocale, useTheme } from "app/services/context"
+import { useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { Text } from "app/components/cores"
-import { ActionItem, ActionSheet } from "app/components/ciphers"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
 
 interface Props {
   isYourTrusted: boolean
@@ -20,7 +20,6 @@ export const ContactAction = (props: Props) => {
   const { isShow, onClose, trustedContact, setOnAction, isYourTrusted, setShowRequestModal } = props
   const { colors } = useTheme()
   const { user } = useStores()
-  const { translate } = useAppLocale()
   const navigation = useNavigation() as any
 
   const [nextModal, setNextModal] = useState<"rq_modal" | null>(null)
@@ -78,15 +77,15 @@ export const ContactAction = (props: Props) => {
     <>
       {isInintiated && (
         <>
-          <ActionItem
-            name={translate("common.accept")}
-            action={() => {
+          <NewActionSheetItem
+            tx="common.accept"
+            onPress={() => {
               handleYourTrustAction("approve")
             }}
           />
-          <ActionItem
-            name={translate("common.reject")}
-            action={() => {
+          <NewActionSheetItem
+            tx="common.reject"
+            onPress={() => {
               handleYourTrustAction("reject")
             }}
           />
@@ -94,17 +93,17 @@ export const ContactAction = (props: Props) => {
       )}
       {isInvited && (
         <>
-          <ActionItem
-            name={translate("emergency_access.resent")}
-            action={() => {
+          <NewActionSheetItem
+            tx="emergency_access.resent"
+            onPress={() => {
               handleYourTrustAction("reinvite")
             }}
           />
         </>
       )}
-      <ActionItem
-        name={translate("common.remove")}
-        action={() => {
+      <NewActionSheetItem
+        tx="common.remove"
+        onPress={() => {
           handleRemoveAction()
         }}
         color={colors.error}
@@ -116,9 +115,9 @@ export const ContactAction = (props: Props) => {
     <>
       {isApproved && isViewType && (
         <>
-          <ActionItem
-            name={translate("emergency_access.view_vault")}
-            action={() => {
+          <NewActionSheetItem
+            tx="emergency_access.view_vault"
+            onPress={() => {
               onClose()
               navigation.navigate(isViewType ? "viewEA" : "takeoverEA", {
                 trusted: trustedContact,
@@ -129,9 +128,9 @@ export const ContactAction = (props: Props) => {
       )}
       {isApproved && !isViewType && (
         <>
-          <ActionItem
-            name={translate("emergency_access.reset_pw")}
-            action={() => {
+          <NewActionSheetItem
+            tx="emergency_access.reset_pw"
+            onPress={() => {
               onClose()
               navigation.navigate("takeoverEA", {
                 trusted: trustedContact,
@@ -139,9 +138,9 @@ export const ContactAction = (props: Props) => {
               })
             }}
           />
-          <ActionItem
-            name={translate("emergency_access.reset_master_pw")}
-            action={() => {
+          <NewActionSheetItem
+            tx="emergency_access.reset_master_pw"
+            onPress={() => {
               onClose()
               navigation.navigate("takeoverEA", {
                 trusted: trustedContact,
@@ -154,13 +153,9 @@ export const ContactAction = (props: Props) => {
 
       {isConfirm && (
         <>
-          <ActionItem
-            name={
-              isViewType
-                ? translate("emergency_access.rq_view")
-                : translate("emergency_access.rq_takeover")
-            }
-            action={() => {
+          <NewActionSheetItem
+            tx={isViewType ? "emergency_access.rq_view" : "emergency_access.rq_takeover"}
+            onPress={() => {
               setNextModal("rq_modal")
               onClose()
               // handleTrustedYouAction('initiate')
@@ -170,18 +165,18 @@ export const ContactAction = (props: Props) => {
       )}
       {isInvited && (
         <>
-          <ActionItem
-            name={translate("common.accept")}
-            action={() => {
+          <NewActionSheetItem
+            tx="common.accept"
+            onPress={() => {
               handleTrustedYouAction("accept")
             }}
           />
         </>
       )}
 
-      <ActionItem
-        name={translate("common.remove")}
-        action={() => {
+      <NewActionSheetItem
+        tx="common.remove"
+        onPress={() => {
           handleRemoveAction()
         }}
         color={colors.error}
@@ -199,7 +194,7 @@ export const ContactAction = (props: Props) => {
   }, [isShow])
 
   return (
-    <ActionSheet
+    <NewActionSheet
       isOpen={isShow}
       onClose={() => {
         setNextModal(null)
@@ -209,6 +204,6 @@ export const ContactAction = (props: Props) => {
     >
       {isYourTrusted && <YourTrustedAction />}
       {!isYourTrusted && <TrustYouAction />}
-    </ActionSheet>
+    </NewActionSheet>
   )
 }

@@ -1,9 +1,8 @@
 import { useAppLocale, useTheme } from "app/services/context"
 import { CHAIN_LIST } from "app/utils/crypto/chainlist"
 import React, { useState } from "react"
-import { ImageStyle, View, ViewStyle, Image, FlatList } from "react-native"
+import { ImageStyle, View, ViewStyle, Image, FlatList, Modal } from "react-native"
 import { Icon, Text, Screen, Header } from "app/components/cores"
-import Modal from "react-native-modal"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
 type Props = {
@@ -144,10 +143,8 @@ export const ChainSelect = (props: Props) => {
         </View>
       </TouchableOpacity>
       <Modal
-        animationIn="slideInRight"
-        animationOut="slideOutRight"
-        isVisible={isSelect}
-        onBackdropPress={onClose}
+        visible={isSelect}
+        onDismiss={onClose}
         style={{
           margin: 0,
         }}

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { View, ViewStyle, StyleProp } from "react-native"
 import { Text, Button } from "app/components/cores"
 import { useNavigation } from "@react-navigation/native"
-import ProgressBar from "react-native-ui-lib/progressBar"
 import { CipherType } from "core/enums"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useTool } from "app/services/hook"
@@ -71,7 +70,7 @@ const ItemStorage = (props: PlanStorageProps) => {
         )}
       </View>
 
-      {!isUnlimited && (
+      {/* {!isUnlimited && (
         <ProgressBar
           style={{
             height: 6,
@@ -82,7 +81,7 @@ const ItemStorage = (props: PlanStorageProps) => {
           // @ts-ignore
           progress={isUnlimited ? 0 : Math.min((cipherCount / limits) * 100, 100)}
         />
-      )}
+      )} */}
     </View>
   )
 }

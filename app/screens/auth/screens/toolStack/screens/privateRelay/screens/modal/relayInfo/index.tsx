@@ -4,7 +4,6 @@ import { useAppLocale, useTheme } from "app/services/context"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 import { Button, Text } from "app/components/cores"
 import { debounce } from "app/utils/utils"
-import { BlurView } from "@react-native-community/blur"
 import { PrivateRelayScreenProps } from "app/navigators"
 import { TxKeyPath } from "app/i18n"
 
@@ -37,14 +36,6 @@ export const RelayInfoScreen: FC<PrivateRelayScreenProps<"relayInfo">> = ({
 
   return (
     <View style={styles.flex}>
-      <BlurView
-        blurType={"dark"}
-        blurAmount={0}
-        // @ts-ignore
-        blurRadius={10}
-        overlayColor="rgba(0,0,0,0.1)"
-        style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.transparent }]}
-      />
       <View style={styles.container}>
         <View style={[styles.content, { backgroundColor: colors.background }]}>
           {!!title && <Text preset="bold" text={title} style={styles.title} />}

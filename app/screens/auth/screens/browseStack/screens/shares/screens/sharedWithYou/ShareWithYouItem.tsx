@@ -4,8 +4,9 @@ import { Icon, Text, Toggle } from "app/components/cores"
 import { AccountRole, SharedWithYouType } from "app/static/types"
 import { useAppLocale, useTheme } from "app/services/context"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
+
 import { IS_IOS } from "app/config/constants"
+import { CipherIconImage } from "app/components/newCiphers"
 
 type Prop = {
   item: SharedWithYouType
@@ -63,15 +64,7 @@ export const ShareWithYouItem = memo((props: Prop) => {
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <CipherIconImage
-          defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
-          source={item.imgLogo}
-          style={{
-            height: 40,
-            width: 40,
-            borderRadius: 8,
-          }}
-        />
+        <CipherIconImage cipherType={item.type} source={item.imgLogo} />
 
         <View style={{ flex: 1, marginLeft: 12 }}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>

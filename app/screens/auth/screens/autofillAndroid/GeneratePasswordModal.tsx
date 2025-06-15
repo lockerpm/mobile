@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react"
-import { Text, BottomModal, Button, Icon } from "app/components/cores"
+import { Text, BottomModal, Button, Icon, Checkbox } from "app/components/cores"
 import { NativeModules, View, ViewStyle } from "react-native"
 import { useCipherHelper } from "app/services/hook"
 import { useAppLocale, useTheme } from "app/services/context"
 import { PasswordStrength } from "app/components/utils"
-import { Slider, Checkbox } from "react-native-ui-lib"
 import { useCoreService } from "app/services/coreService"
 import { useClipboard } from "app/services/utils"
+import Slider from "@react-native-community/slider"
 
 interface Props {
   isOpen: boolean
@@ -111,10 +111,10 @@ export const GeneratePasswordModal = ({ isOpen, onClose }: Props) => {
           onValueChange={(value) => {
             passwordLength.current = value
           }}
-          onSeekEnd={() => {
-            regenerate()
-            setSliderValue(passwordLength.current)
-          }}
+          // onSeekEnd={() => {
+          //   regenerate()
+          //   setSliderValue(passwordLength.current)
+          // }}
         />
         {/* Password length end */}
 
@@ -124,12 +124,8 @@ export const GeneratePasswordModal = ({ isOpen, onClose }: Props) => {
               key={item.label}
               value={item.key}
               accessibilityLabel={item.label}
-              color={colors.primary}
               label={item.label}
               onValueChange={item.action}
-              style={{
-                marginVertical: 7,
-              }}
               labelStyle={{
                 color: colors.title,
                 fontSize: 16,

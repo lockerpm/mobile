@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react"
+import React from "react"
 import { View, Modal, StyleSheet } from "react-native"
 import { useSafeAreaInsetsStyle } from "app/utils/useSafeAreaInsetsStyle"
 import { Text, PressableScale, ModalBackdrop } from "app/components/cores"
@@ -21,14 +21,14 @@ interface Props {
   /**
    * Children components.
    */
-  children?: ReactElement[] | ReactElement
+  children?: React.ReactNode[] | React.ReactNode
   /**
    * show cancel button.
    */
   isDisableCancelButton?: boolean
 
-  header?: ReactElement
-  footer?: ReactElement
+  header?: React.ReactNode
+  footer?: React.ReactNode
 }
 
 const backdropColor = "rgba(0, 0, 0, 0.5)"

@@ -1,6 +1,5 @@
 import React from "react"
 import { View } from "react-native"
-import { ProgressBar } from "react-native-ui-lib"
 import { Icon, Text } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
 
@@ -41,7 +40,7 @@ export const ImportProgress = (props: ImportProgressProps) => {
           {props.imported}/{props.total}
         </Text>
       </View>
-      <ProgressBar
+      {/* <ProgressBar
         style={{
           borderRadius: 4,
           height: 6,
@@ -49,7 +48,7 @@ export const ImportProgress = (props: ImportProgressProps) => {
         }}
         progressColor={colors.primary}
         progress={(props.imported / props.total) * 100}
-      />
+      /> */}
     </View>
   )
 }

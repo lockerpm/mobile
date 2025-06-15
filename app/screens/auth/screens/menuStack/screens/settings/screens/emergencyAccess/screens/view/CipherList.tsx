@@ -3,7 +3,7 @@ import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
-import { CipherListItem } from "app/components/ciphers"
+import { CipherListItem } from "app/components/newCiphers"
 
 export interface CipherListProps {
   ciphers: any[]

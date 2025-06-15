@@ -7,12 +7,12 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { AccountRoleText } from "app/static/types"
-import { ActionItem, ActionSheet, DeleteConfirmModal } from "app/components/ciphers"
 import { CipherType } from "core/enums"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
-import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
-import { IS_IOS } from "app/config/constants"
 import { useClipboard } from "app/services/utils"
+import { CipherIconImage } from "app/components/newCiphers"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
+import { getTeam } from "app/utils/cipherHelper"
 
 interface Props {
   isOpen: boolean
@@ -33,7 +33,6 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
 
   const { colors } = useTheme()
   const { toTrashCiphers } = useDeleteCipher()
-  const { getTeam } = useHelper()
   const { getWebsiteLogo } = useCipherHelper()
   const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
@@ -61,9 +60,9 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
 
   // Methods
 
-  const handleDelete = async () => {
-    await toTrashCiphers([selectedCipher.id])
-  }
+  // const handleDelete = async () => {
+  //   await toTrashCiphers([selectedCipher.id])
+  // }
 
   const handleActionSheetClose = () => {
     onClose()
@@ -79,24 +78,24 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
 
   return (
     <View>
-      <DeleteConfirmModal
+      {/* <DeleteConfirmModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
         title={translate("trash.to_trash")}
         desc={translate("trash.to_trash_desc")}
         btnText="OK"
-      />
+      /> */}
 
       {/* Actionsheet */}
-      <ActionSheet
+      <NewActionSheet
         isOpen={isOpen}
         onClose={handleActionSheetClose}
         header={
           <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <CipherIconImage
-                defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
+                cipherType={CipherType.Login}
                 source={cipherMapper.img}
                 resizeMode="contain"
                 style={{ height: 40, width: 40, borderRadius: 8 }}
@@ -115,41 +114,41 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
           </View>
         }
       >
-        <ActionItem
-          name={translate("password.copy_username")}
+        <NewActionSheetItem
+          tx="password.copy_username"
           icon="copy"
-          action={() => copyToClipboard(selectedCipher.login.username)}
-          disabled={!selectedCipher.login.username}
+          onPress={() => copyToClipboard(selectedCipher.login.username)}
+          // disabled={!selectedCipher.login.username}
         />
 
-        <ActionItem
-          name={translate("password.copy_password")}
+        <NewActionSheetItem
+          tx="password.copy_password"
           icon="copy"
-          action={() => copyToClipboard(selectedCipher.login.password)}
-          disabled={!selectedCipher.login.password || !selectedCipher.viewPassword}
+          onPress={() => copyToClipboard(selectedCipher.login.password)}
+          // disabled={!selectedCipher.login.password || !selectedCipher.viewPassword}
         />
 
-        <ActionItem
-          disabled={!editable || (uiStore.isOffline && !!selectedCipher.organizationId)}
-          name={translate("common.edit")}
+        <NewActionSheetItem
+          // disabled={!editable || (uiStore.isOffline && !!selectedCipher.organizationId)}
+          tx="common.edit"
           icon="edit"
-          action={() => {
+          onPress={() => {
             onClose()
             // navigation.navigate(`${cipherMapper.path}__edit`, { mode: "edit" })
           }}
         />
 
-        <ActionItem
-          disabled={!editable || (uiStore.isOffline && !!selectedCipher.organizationId)}
-          name={translate("trash.to_trash")}
+        <NewActionSheetItem
+          // disabled={!editable || (uiStore.isOffline && !!selectedCipher.organizationId)}
+          tx="trash.to_trash"
           icon="trash"
           color={colors.error}
-          action={() => {
+          onPress={() => {
             setNextModal("trashConfirm")
             onClose()
           }}
         />
-      </ActionSheet>
+      </NewActionSheet>
     </View>
   )
 })

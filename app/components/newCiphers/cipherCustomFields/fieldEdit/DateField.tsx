@@ -1,7 +1,7 @@
 import React from "react"
 import { View } from "react-native"
 import moment from "moment"
-import { DateTimePicker } from "react-native-ui-lib"
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker"
 import { FieldType } from "core/enums"
 import { useTheme } from "app/services/context"
 import { useStores } from "app/models"
@@ -41,17 +41,17 @@ export const DateField = (props: Props) => {
       }}
     >
       <DateTimePicker
-        value={value ? dateValue : undefined}
-        placeholder={placeholder}
+        value={dateValue}
+        // placeholder={placeholder}
         mode={"date"}
-        dateFormat={dateFormat}
-        enableErrors={false}
-        onChange={(date: Date) => {
+        // dateFormat={dateFormat}
+        // enableErrors={false}
+        onChange={(event: DateTimePickerEvent, date: Date | undefined) => {
           const val = moment(date).format(dateFormat)
           onChange(val)
         }}
-        color={colors.title}
-        placeholderTextColor={colors.secondaryText}
+        // color={colors.title}
+        // placeholderTextColor={colors.secondaryText}
       />
     </View>
   )

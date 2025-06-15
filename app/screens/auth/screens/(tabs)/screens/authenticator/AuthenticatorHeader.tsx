@@ -6,7 +6,6 @@ import { useAppLocale, useTheme } from "app/services/context"
 import { SearchBar } from "app/components/utils"
 
 import { useCipherData } from "app/services/hook"
-// import { ShareModal } from "app/components/ciphers"
 import { DeleteOtpModal } from "./DeleteOtpModal"
 
 interface Props {
@@ -43,7 +42,6 @@ export const AuthenticatorHeader = (props: Props) => {
   // ----------------------- PARAMS ------------------------
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [showShareModal, setShowShareModal] = useState(false)
 
   // ----------------------- COMPUTED ------------------------
 

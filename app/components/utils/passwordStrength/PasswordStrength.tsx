@@ -1,7 +1,6 @@
 import * as React from "react"
 import { Icon, IconTypes, Text } from "../../cores"
 import { StyleProp, ViewStyle, View } from "react-native"
-import ProgressBar from "react-native-ui-lib/progressBar"
 import { useAppLocale, useTheme } from "app/services/context"
 
 export interface PasswordStrengthProps {
@@ -61,7 +60,7 @@ export const PasswordStrength = (props: PasswordStrengthProps) => {
 
   return (
     <View style={[{ width: "100%" }, style]}>
-      {preset === "progress" && (
+      {/* {preset === "progress" && (
         <ProgressBar
           style={{
             height: 8,
@@ -71,7 +70,7 @@ export const PasswordStrength = (props: PasswordStrengthProps) => {
           progressColor={config[value]?.color || colors.block}
           progress={((value + 1) / 5) * 100}
         />
-      )}
+      )} */}
 
       <View
         style={{

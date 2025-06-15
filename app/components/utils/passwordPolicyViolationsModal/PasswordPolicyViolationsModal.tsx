@@ -1,7 +1,7 @@
 import React from "react"
-import { Modal } from "../modal/Modal"
 import { Button, Text } from "../../cores"
 import { useAppLocale } from "app/services/context"
+import { Modal } from "react-native"
 
 interface Props {
   isOpen: boolean
@@ -17,11 +17,14 @@ export const PasswordPolicyViolationsModal = (props: Props) => {
   const { translate } = useAppLocale()
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={translate("policy.password_violation_modal.title")}
-    >
+    <Modal visible={isOpen} onDismiss={onClose}>
+      <Text
+        tx="policy.password_violation_modal.title"
+        style={{
+          marginTop: 20,
+          marginBottom: 10,
+        }}
+      />
       <Text
         text={`${translate("policy.password_violation_modal.desc")} ${teamName}:`}
         style={{

@@ -1,7 +1,6 @@
 import React from "react"
 import { Image, TouchableOpacity, View } from "react-native"
-import { Text, Button } from "app/components/cores"
-import { Modal } from "app/components/utils"
+import { Text, Button, BottomModal } from "app/components/cores"
 import { useAppLocale } from "app/services/context"
 
 type Props = {
@@ -18,7 +17,7 @@ export const ConfirmCreateMPModal = (props: Props) => {
   const { isOpen, onClose, onNext, isCreating } = props
 
   return (
-    <Modal disableHeader isOpen={isOpen} onClose={onClose} ignoreBackgroundPress={true}>
+    <BottomModal hideCloseBtn isOpen={isOpen} onClose={onClose} title={""}>
       <View style={{ alignItems: "center" }}>
         <Text preset="bold" size="xl" text={translate("confirm_create_master_pass.title")} />
         <Image resizeMode="contain" source={WARNING} style={{ width: 120, height: 120 }} />
@@ -43,6 +42,6 @@ export const ConfirmCreateMPModal = (props: Props) => {
           style={{ textAlign: "center" }}
         />
       </TouchableOpacity>
-    </Modal>
+    </BottomModal>
   )
 }

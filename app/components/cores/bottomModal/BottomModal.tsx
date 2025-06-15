@@ -1,6 +1,5 @@
 import React, { useEffect } from "react"
-import { ScrollView, StyleProp, View, ViewStyle } from "react-native"
-import Dialog from "react-native-ui-lib/dialog"
+import { ScrollView, StyleProp, View, ViewStyle, Modal } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { useTheme } from "app/services/context"
@@ -69,66 +68,64 @@ export const BottomModal = ({
     backgroundColor: colors.background,
   }))
 
+  const Header = () => {
+    return !hideCloseBtn ? (
+      <View
+        style={{
+          height: 45,
+          paddingHorizontal: 20,
+          paddingTop: 12,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Text
+          preset="bold"
+          text={title}
+          size="large"
+          style={{
+            maxWidth: "90%",
+          }}
+        />
+        <Icon icon="x" onPress={onClose} />
+      </View>
+    ) : (
+      <View
+        style={{
+          paddingVertical: 4,
+          justifyContent: "center",
+          alignItems: "center",
+          borderTopLeftRadius: 12,
+          borderTopRightRadius: 12,
+        }}
+      >
+        <View
+          style={{
+            marginVertical: 5,
+            height: 4,
+            borderRadius: 2,
+            width: 50,
+            backgroundColor: colors.primaryText,
+          }}
+        />
+      </View>
+    )
+  }
   return (
-    <Dialog
+    <Modal
       supportedOrientations={["portrait", "landscape"]}
-      containerStyle={[$container, style]}
-      bottom
-      width="100%"
-      panDirection={undefined}
+      style={[$container, style]}
       visible={isOpen}
-      onDialogDismissed={onClose}
-      renderPannableHeader={() => {
-        return !hideCloseBtn ? (
-          <View
-            style={{
-              height: 45,
-              paddingHorizontal: 20,
-              paddingTop: 12,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text
-              preset="bold"
-              text={title}
-              size="large"
-              style={{
-                maxWidth: "90%",
-              }}
-            />
-            <Icon icon="x" onPress={onClose} />
-          </View>
-        ) : (
-          <View
-            style={{
-              paddingVertical: 4,
-              justifyContent: "center",
-              alignItems: "center",
-              borderTopLeftRadius: 12,
-              borderTopRightRadius: 12,
-            }}
-          >
-            <View
-              style={{
-                marginVertical: 5,
-                height: 4,
-                borderRadius: 2,
-                width: 50,
-                backgroundColor: colors.primaryText,
-              }}
-            />
-          </View>
-        )
-      }}
+      onDismiss={onClose}
     >
+      <Header />
       <ScrollView
         contentContainerStyle={{ paddingBottom: insets.bottom + 20, paddingHorizontal: 20 }}
       >
         {children}
         <Animated.View style={$AvoidKeyboardStyle} />
       </ScrollView>
-    </Dialog>
+    </Modal>
   )
 }

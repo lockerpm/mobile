@@ -1,13 +1,11 @@
 import React, { FC, useEffect, useRef, useState } from "react"
 import { View, TextInput, KeyboardAvoidingView, StyleSheet } from "react-native"
-import { Text, Button } from "app/components/cores"
+import { Text, Button, BottomModalHeader } from "app/components/cores"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { IS_IOS } from "app/config/constants"
-import { BlurView } from "@react-native-community/blur"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 import { AppEventType, EventBus } from "app/utils/eventBus"
-import { BottomModalHeader } from "app/components/utils"
 import { PrivateRelayScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
 
@@ -49,15 +47,6 @@ export const EditSubdomainScreen: FC<PrivateRelayScreenProps<"editSubdomain">> =
 
   return (
     <KeyboardAvoidingView behavior={IS_IOS ? "padding" : undefined} style={styles.flex}>
-      <BlurView
-        onTouchEnd={navigation.goBack}
-        blurType={"dark"}
-        blurAmount={0}
-        // @ts-ignore
-        blurRadius={10}
-        overlayColor="rgba(0,0,0,0.1)"
-        style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.transparent }]}
-      />
       <View style={[styles.content, { backgroundColor: colors.background }]}>
         <BottomModalHeader
           title={translate("private_relay.manage_subdomain.edit_btn")}

@@ -1,10 +1,10 @@
-import { ActionItem, ActionSheet } from "app/components/ciphers"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
 import { useAppLocale } from "app/services/context"
 import React from "react"
 
 interface Props {
-  isOpen?: boolean
-  onClose?: () => void
+  isOpen: boolean
+  onClose: () => void
   navigation?: any
   allItemsLength?: number
   passwordTotp?: boolean
@@ -14,11 +14,11 @@ interface Props {
 export const AuthenticatorAddAction = (props: Props) => {
   const { translate } = useAppLocale()
   return (
-    <ActionSheet isOpen={props.isOpen} onClose={props.onClose}>
-      <ActionItem
-        name={translate("authenticator.scan_a_qr")}
+    <NewActionSheet isOpen={props.isOpen} onClose={props.onClose}>
+      <NewActionSheetItem
+        tx="authenticator.scan_a_qr"
         icon="qr-code"
-        action={() => {
+        onPress={() => {
           props.onClose && props.onClose()
           props.navigation &&
             props.navigation.navigate("qrScanner", {
@@ -28,10 +28,10 @@ export const AuthenticatorAddAction = (props: Props) => {
             })
         }}
       />
-      <ActionItem
-        name={translate("authenticator.enter_key")}
+      <NewActionSheetItem
+        tx="authenticator.enter_key"
         icon="keyboard"
-        action={() => {
+        onPress={() => {
           props.onClose && props.onClose()
           props.navigation &&
             props.navigation.navigate("authenticator__edit", {
@@ -40,6 +40,6 @@ export const AuthenticatorAddAction = (props: Props) => {
             })
         }}
       />
-    </ActionSheet>
+    </NewActionSheet>
   )
 }

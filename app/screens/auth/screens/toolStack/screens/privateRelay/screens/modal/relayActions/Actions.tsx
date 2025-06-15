@@ -3,12 +3,12 @@ import { View, StyleSheet } from "react-native"
 import { BottomModalContainer, Text } from "app/components/cores"
 import moment from "moment"
 import { RelayAddress } from "app/static/types"
-import { ActionItem } from "app/components/ciphers"
 import { useAppLocale, useTheme } from "app/services/context"
 import { useStores } from "app/models"
 import { debounce } from "app/utils/utils"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { useClipboard, useToast } from "app/services/utils"
+import { NewActionSheetItem } from "app/components/utils"
 
 export enum RelayActionType {
   DEFAULT = "default",
@@ -60,58 +60,58 @@ export const Actions = ({
         </View>
       </View>
 
-      <ActionItem
-        bottomDivider
-        name={translate("private_relay.copy")}
+      <NewActionSheetItem
+        bottomBorder
+        tx="private_relay.copy"
         icon="copy"
-        action={() => {
+        onPress={() => {
           copyToClipboard(item.full_address)
         }}
       />
 
-      <ActionItem
-        bottomDivider
-        name={translate("private_relay.copy")}
+      <NewActionSheetItem
+        bottomBorder
+        tx="private_relay.copy"
         icon="copy"
-        action={() => {
+        onPress={() => {
           copyToClipboard(item.full_address)
         }}
       />
       {isEditable && (
-        <ActionItem
-          bottomDivider
-          name={translate("private_relay.edit")}
+        <NewActionSheetItem
+          bottomBorder
+          tx="private_relay.edit"
           icon="edit"
-          action={() => {
+          onPress={() => {
             setNextAction(RelayActionType.EDIT)
           }}
         />
       )}
       {!freeAccount && (
         <>
-          <ActionItem
-            bottomDivider
-            name={translate("private_relay.statistic")}
+          <NewActionSheetItem
+            bottomBorder
+            tx="private_relay.statistic"
             icon="file-text"
-            action={navigateStatistic}
+            onPress={navigateStatistic}
           />
-          <ActionItem
-            bottomDivider
-            name={translate("private_relay.config")}
+          <NewActionSheetItem
+            bottomBorder
+            tx="private_relay.config"
             icon="gear"
-            action={() => {
+            onPress={() => {
               setNextAction(RelayActionType.CONFIG)
             }}
           />
         </>
       )}
 
-      <ActionItem
-        bottomDivider
-        name={translate("common.delete")}
+      <NewActionSheetItem
+        bottomBorder
+        tx="common.delete"
         icon="trash"
         color={colors.error}
-        action={debounce(handleRemove, 300)}
+        onPress={debounce(handleRemove, 300)}
       />
     </BottomModalContainer>
   )
