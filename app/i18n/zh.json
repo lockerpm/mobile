@@ -318,7 +318,11 @@
       "titel": "編輯別名地址",
       "current": "目前地址",
       "new": "新增地址",
-      "confirm_title": "確認編輯別名"
+      "confirm_title": "確認編輯別名",
+      "error": {
+        "numberCharacters": "地址必須為 6 - 63 個字符",
+        "special": "地址不能包含特殊字元、大寫字母、以連字符開頭或結尾"
+      }
     },
     "error": {
       "taken": "此地址已被使用",

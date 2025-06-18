@@ -131,6 +131,9 @@ const EditView = (item: {
     }
   }, [])
 
+  const validNumberCharacters = addressText.length >= 3 && addressText.length <= 63
+  const validSpecialCharacters = addressText.length > 0 && /^[a-z0-9-]+$/.test(addressText)
+
   return (
     <Animated.View entering={FadeInDown} style={styles.container}>
       <Text
@@ -172,9 +175,22 @@ const EditView = (item: {
         <Text text={item.full_address.replace(item.address, "")} style={styles.domain} />
       </View>
 
+      <View style={styles.note}>
+        <Text
+          tx="private_relay.edit_modal.error.numberCharacters"
+          color={validNumberCharacters ? colors.primary : colors.disable}
+          size="small"
+        />
+        <Text
+          tx="private_relay.edit_modal.error.special"
+          color={validSpecialCharacters ? colors.primary : colors.disable}
+          size="small"
+        />
+      </View>
+
       <Button
         text={translate("common.save")}
-        disabled={!addressText}
+        disabled={!validNumberCharacters || !validSpecialCharacters}
         onPress={() => item.setConfirmNewAddress(addressText)}
         style={{
           marginBottom: IS_IOS ? 0 : 16,
@@ -219,7 +235,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 44,
     justifyContent: "space-between",
-    marginBottom: 24,
     paddingLeft: 12,
     paddingRight: 12,
   },
@@ -230,6 +245,9 @@ const styles = StyleSheet.create({
   label2: {
     marginBottom: 4,
     marginTop: 24,
+  },
+  note: {
+    marginVertical: 16,
   },
   save: {
     marginLeft: 12,

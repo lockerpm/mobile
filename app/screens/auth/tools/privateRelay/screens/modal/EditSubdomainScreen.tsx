@@ -46,6 +46,8 @@ export const EditSubdomainScreen: FC<PrivateRelayScreenProps<"editSubdomain">> =
     }
   }, [])
 
+  const validNumberCharacters = domain.length >= 3 && domain.length <= 63
+
   return (
     <KeyboardAvoidingView behavior={IS_IOS ? "padding" : undefined} style={styles.flex}>
       <BlurView
@@ -93,13 +95,21 @@ export const EditSubdomainScreen: FC<PrivateRelayScreenProps<"editSubdomain">> =
         </View>
 
         <Text
+          tx="private_relay.edit_modal.error.special"
+          color={validNumberCharacters ? colors.primary : colors.disable}
+          size="small"
+          style={styles.mt16}
+        />
+
+        <Text
           preset="label"
           style={styles.mt16}
+          size="base"
           text={translate("private_relay.manage_subdomain.edit_note")}
         />
         <Button
           loading={isLoading}
-          disabled={!domain}
+          disabled={!validNumberCharacters}
           style={styles.mt16}
           text={translate("common.confirm")}
           onPress={handleUpdateSubdomain}

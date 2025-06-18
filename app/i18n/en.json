@@ -318,7 +318,11 @@
       "titel": "Edit Alias Address",
       "current": "Current Address",
       "new": "New Address",
-      "confirm_title": "Confirm Edit Alias"
+      "confirm_title": "Confirm Edit Alias",
+      "error": {
+        "numberCharacters": "The address must be 6 - 63 characters.",
+        "special": "The address can't contain special characters, capitalized, start or end with a hyphen."
+      }
     },
     "error": {
       "taken": "This address is already taken",
