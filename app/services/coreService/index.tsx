@@ -32,8 +32,8 @@ import {
   MobileLogService,
   MobileMessagingService,
 } from "./services"
-import en from "app/i18n/en.json"
-import vi from "app/i18n/vi.json"
+import en from "app/i18n/en"
+import vi from "app/i18n/vi"
 import { AttachmentService } from "./AttachmentsService"
 
 const { createContext, useContext } = React
@@ -175,7 +175,6 @@ const importService = new ImportService(
   i18nService,
   collectionService,
   platformUtilsService,
-  cryptoService,
 )
 const attachmentService = new AttachmentService()
 

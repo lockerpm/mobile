@@ -1,7 +1,6 @@
 import { ApiService } from "../abstractions/api.service"
 import { CipherService } from "../abstractions/cipher.service"
 import { CollectionService } from "../abstractions/collection.service"
-import { CryptoService } from "../abstractions/crypto.service"
 import { FolderService } from "../abstractions/folder.service"
 import { I18nService } from "../abstractions/i18n.service"
 import {
@@ -95,19 +94,21 @@ export class ImportService implements ImportServiceAbstraction {
     { id: "lockercsv", name: "Locker (csv)" },
     { id: "bitwardenjson", name: "Bitwarden (json)" },
     { id: "bitwardencsv", name: "Bitwarden (csv)" },
-    { id: "chromecsv", name: "Chrome (csv)" },
-    { id: "dashlanecsv", name: "Dashlane (csv)" },
-    { id: "firefoxcsv", name: "Firefox (csv)" },
-    { id: "keepass2xml", name: "KeePass 2 (xml)" },
     { id: "lastpasscsv", name: "LastPass (csv)" },
-    { id: "safaricsv", name: "Safari and macOS (csv)" },
+    { id: "chromecsv", name: "Chrome (csv)" },
+    { id: "firefoxcsv", name: "Firefox (csv)" },
+    { id: "safaricsv", name: "Safari (csv)" },
+    { id: "keepass2xml", name: "KeePass 2 (xml)" },
     { id: "1password1pux", name: "1Password (1pux)" },
+    { id: "1password1pif", name: "1Password (1pif)" },
+    { id: "dashlanecsv", name: "Dashlane (csv)" },
+    { id: "dashlanejson", name: "Dashlane (json)" },
   ]
 
   regularImportOptions: ImportOption[] = [
     { id: "keepassxcsv", name: "KeePassX (csv)" },
-    { id: "1passwordwincsv", name: "1Password 6 and 7 Windows (csv)" },
-    { id: "1passwordmaccsv", name: "1Password 6 and 7 Mac (csv)" },
+    { id: "1passwordwincsv", name: "1Password 7 and 8 Windows (csv)" },
+    { id: "1passwordmaccsv", name: "1Password 7 and 8 Mac (csv)" },
     { id: "roboformcsv", name: "RoboForm (csv)" },
     { id: "keepercsv", name: "Keeper (csv)" },
     { id: "enpasscsv", name: "Enpass (csv)" },
@@ -152,12 +153,11 @@ export class ImportService implements ImportServiceAbstraction {
     { id: "encryptrcsv", name: "Encryptr (csv)" },
     { id: "yoticsv", name: "Yoti (csv)" },
     { id: "nordpasscsv", name: "Nordpass (csv)" },
-    { id: "1password1pif", name: "1Password (1pif)" },
-    { id: "dashlanejson", name: "Dashlane (json)" },
     { id: "heylogincsv", name: "HeyLogin (csv)" },
     { id: "protonpasscsv", name: "Proton Pass (csv)" },
   ]
 
+  // eslint-disable-next-line no-useless-constructor
   constructor(
     private cipherService: CipherService,
     private folderService: FolderService,
@@ -165,7 +165,6 @@ export class ImportService implements ImportServiceAbstraction {
     private i18nService: I18nService,
     private collectionService: CollectionService,
     private platformUtilsService: PlatformUtilsService,
-    private cryptoService: CryptoService,
   ) {}
 
   getImportOptions(): ImportOption[] {
@@ -201,11 +200,7 @@ export class ImportService implements ImportServiceAbstraction {
       }
       return null
     } else {
-      if (!Utils.isNullOrWhitespace(importResult.errorMessage)) {
-        return new Error(importResult.errorMessage)
-      } else {
-        return new Error(this.i18nService.t("importFormatError"))
-      }
+      return new Error(this.i18nService.t("importFormatError"))
     }
   }
 
@@ -227,11 +222,11 @@ export class ImportService implements ImportServiceAbstraction {
       case "lockercsv":
         return new LockerCsvImporter()
       case "lockerjson":
-        return new LockerJsonImporter(this.cryptoService, this.i18nService)
+        return new LockerJsonImporter()
       case "bitwardencsv":
         return new BitwardenCsvImporter()
       case "bitwardenjson":
-        return new BitwardenJsonImporter(this.cryptoService, this.i18nService)
+        return new BitwardenJsonImporter()
       case "lastpasscsv":
       case "passboltcsv":
         return new LastPassCsvImporter()
@@ -259,10 +254,10 @@ export class ImportService implements ImportServiceAbstraction {
         return new SaferPassCsvImporter()
       case "meldiumcsv":
         return new MeldiumCsvImporter()
-      case "1password1pux":
-        return new OnePassword1PuxImporter()
       case "1password1pif":
         return new OnePassword1PifImporter()
+      case "1password1pux":
+        return new OnePassword1PuxImporter()
       case "1passwordwincsv":
         return new OnePasswordWinCsvImporter()
       case "1passwordmaccsv":
@@ -339,10 +334,10 @@ export class ImportService implements ImportServiceAbstraction {
         return new YotiCsvImporter()
       case "nordpasscsv":
         return new NordPassCsvImporter()
-      case "safaricsv":
-        return new SafariCsvImporter()
       case "heylogincsv":
         return new HeyLoginCsvImporter()
+      case "safaricsv":
+        return new SafariCsvImporter()
       case "protonpasscsv":
         return new ProtonPassCsvImporter()
       default:

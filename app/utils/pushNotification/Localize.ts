@@ -1,13 +1,15 @@
 import { CipherType } from "core/enums"
-import en from "app/i18n/en.json"
-import vi from "app/i18n/vi.json"
-import zh from "app/i18n/zh.json"
+import en from "app/i18n/en"
+import vi from "app/i18n/vi"
+import zh from "app/i18n/zh"
+import ru from "app/i18n/ru"
+import fr from "app/i18n/fr"
 
 export class Localize {
-  private language: "vi" | "en" | "zh" | "ru"
-  private translations = { en, vi, zh }
+  private language: "vi" | "en" | "zh" | "ru" | "fr"
+  private translations = { en, vi, zh, ru, fr }
 
-  public constructor(language: "vi" | "en" | "zh" | "ru") {
+  public constructor(language: "vi" | "en" | "zh" | "ru" | "fr") {
     this.language = language
   }
 

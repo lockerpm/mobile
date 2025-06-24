@@ -1,0 +1,60 @@
+
+"c.cancel" = "Annuler";
+"c.copied" = "Copié";
+
+// utils
+"utils.touchID" = "Veuillez autoriser avec Touch Id";
+"utils.disableBiometric" = "La biométrie n'est pas disponible";
+"utils.unconfigBiometric" = "Votre appareil n'est pas configuré pour l'authentification biométrique";
+"utils.disableFaceID" = "Face ID n'est pas disponible";
+
+// noti
+"noti.authen" = "Authentification";
+"noti.loginLocker" = "Vous devez vous connecter à Locker avant d'utiliser le service de remplissage automatique";
+
+// CredentialsListScreen
+"list.title" = "Liste de connexion";
+"list.noDataSearch" = "Oups ! Il semble qu'il n'y ait aucune correspondance de données.";
+"list.suggestSearch" = "Vous pouvez rechercher par le(s) texte(s) suivant(s)";
+
+//Lock screen
+"lock.mp" = "Mot de passe principal";
+"lock.title" = "Vérifier le mot de passe principal";
+"lock.btn" = "Ouvrir";
+"lock.faceid" = "Déverrouiller avec Face ID/Touch ID";
+
+
+// totp view
+"totp.desc" = "(L'OTP sera automatiquement copié dans le presse-papiers si vous vous connectez avec cet élément)";
+"totp.update" = "L'OTP sera mis à jour dans ";
+
+// credential
+"item.username" = "Nom d'utilisateur ou e-mail";
+"item.password" = "Mot de passe";
+
+// password generator
+"pw.length"  = "Longueur: ";
+"pw.special" = "Utiliser des symboles (@!$%*)";
+"pw.ambiguous" = "Évitez les caractères ambigus";
+"pw.useBtn" = "Utiliser un mot de passe";
+"pw.generator" = "Générer un mot de passe fort";
+"pw.regenerate" = "Régénérer";
+
+// create password
+"create.title" = "Créer une connexion";
+"create.cancel" = "Annuler";
+"create.save" = "Enregistrer et remplir automatiquement";
+"create.name" = "Nom (*)";
+"create.info" = "Détails de connexion";
+"create.username" = "E-mail ou nom d'utilisateur";
+"create.password" = "Mot de passe";
+"create.web" = "Site web";
+"create.noti" = "Cet élément sera créé et enregistré localement. Il sera synchronisé avec le serveur Locker lorsque vous déverrouillerez l'application Locker.";
+
+//hide email
+"relay.title" = "Masquer votre email";
+"relay.generate_new" = "Générer un nouvel e-mail privé";
+"relay.existing_email" = "Utiliser l'e-mail privé existant";
+"relay.empty" = "Vous n'avez généré aucun e-mail privé";
+"relay.freeLimit" = "Le stockage de votre forfait gratuit est limité";
+"relay.upgrade" = "Vous utilisez l'offre gratuite. Passez à l'offre Premium pour bénéficier de plus d'adresses e-mail privées.";

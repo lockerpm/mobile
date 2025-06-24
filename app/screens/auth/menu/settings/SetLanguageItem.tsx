@@ -17,7 +17,7 @@ export const SetlanguageItem = observer(() => {
   const { translate } = useHelper()
   const [isLanguageSelect, setIsLanguageSelect] = useState(false)
 
-  const options: { label: string; value: "vi" | "en" | "zh" | "ru" }[] = [
+  const options: { label: string; value: "vi" | "en" | "zh" | "ru" | "fr" }[] = [
     {
       label: "Tiếng Việt",
       value: "vi",
@@ -33,6 +33,10 @@ export const SetlanguageItem = observer(() => {
     {
       label: "Русский",
       value: "ru",
+    },
+    {
+      label: "Français",
+      value: "fr",
     },
   ]
 

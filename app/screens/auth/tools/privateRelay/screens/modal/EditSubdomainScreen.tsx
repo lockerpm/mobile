@@ -47,6 +47,7 @@ export const EditSubdomainScreen: FC<PrivateRelayScreenProps<"editSubdomain">> =
   }, [])
 
   const validNumberCharacters = domain.length >= 3 && domain.length <= 63
+  const validSpecialCharacters = domain.length > 0 && /^[a-z0-9-]+$/.test(domain)
 
   return (
     <KeyboardAvoidingView behavior={IS_IOS ? "padding" : undefined} style={styles.flex}>
@@ -94,12 +95,18 @@ export const EditSubdomainScreen: FC<PrivateRelayScreenProps<"editSubdomain">> =
           <Text text={".maily.org"} style={styles.domain} />
         </View>
 
-        <Text
-          tx="private_relay.edit_modal.error.special"
-          color={validNumberCharacters ? colors.primary : colors.disable}
-          size="small"
-          style={styles.mt16}
-        />
+        <View style={styles.note}>
+          <Text
+            tx="private_relay.edit_modal.error.numberCharacters"
+            color={validNumberCharacters ? colors.primary : colors.disable}
+            size="small"
+          />
+          <Text
+            tx="private_relay.edit_modal.error.special"
+            color={validSpecialCharacters ? colors.primary : colors.disable}
+            size="small"
+          />
+        </View>
 
         <Text
           preset="label"
@@ -146,4 +153,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   mt16: { marginTop: 16 },
+  note: {
+    marginVertical: 16,
+  },
 })

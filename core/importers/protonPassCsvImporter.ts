@@ -42,7 +42,9 @@ export class ProtonPassCsvImporter extends BaseImporter implements Importer {
           cipher.login = new LoginView()
 
           cipher.login.password = this.getValueOrDefault(value.password)
-          cipher.login.uris = this.makeUriArray(value.url)
+          if (value.url) {
+            cipher.login.uris = this.makeUriArray(value.url.split(",").map((u) => u.trim()))
+          }
           cipher.login.totp = this.getValueOrDefault(value.totp)
 
           const username = this.getValueOrDefault(value.username)
