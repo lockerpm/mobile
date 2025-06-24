@@ -369,6 +369,7 @@ const en = {
       new: "New subdomain",
       edit_note:
         "*Current sub-domain will be permanently deleted when you change to a new sub-domain. All email aliases created from your current sub-domain will also be then deleted when you perform this action",
+      domain_error: "The address must be 3 - 63 characters.",
     },
     statistic: "Statistics",
     config: "Configuration",

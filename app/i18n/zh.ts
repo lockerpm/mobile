@@ -353,6 +353,7 @@ const zh: Translations = {
       new: "新增子網域",
       edit_note:
         "*當您變更到新的子網域時，目前的子網域將被永久刪除。當您執行此動作時，所有從目前子網域建立的電子郵件別名也將被刪除",
+      domain_error: "地址必須為 3 - 63 個字符",
     },
     statistic: "統計資料",
     config: "組態設定",

@@ -384,6 +384,7 @@ const fr: Translations = {
       new: "Nouveau sous-domaine",
       edit_note:
         "*Le sous-domaine actuel sera définitivement supprimé lorsque vous passerez à un nouveau sous-domaine. Tous les alias d’e-mail créés à partir de votre sous-domaine actuel seront également supprimés lorsque vous effectuez cette action",
+      domain_error: "L'adresse doit comporter entre 3 et 63 caractères.",
     },
     statistic: "Statistiques",
     config: "Configuration",

@@ -116,7 +116,7 @@ export const EditSubdomainScreen: FC<PrivateRelayScreenProps<"editSubdomain">> =
         />
         <Button
           loading={isLoading}
-          disabled={!validNumberCharacters}
+          disabled={!validNumberCharacters || !validSpecialCharacters}
           style={styles.mt16}
           text={translate("common.confirm")}
           onPress={handleUpdateSubdomain}

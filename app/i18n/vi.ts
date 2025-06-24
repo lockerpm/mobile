@@ -368,6 +368,7 @@ const vi: Translations = {
       new: "Tạo mới tên miền phụ",
       edit_note:
         "*Tên miền hiện tại sẽ bị xóa vĩnh viễn khi bạn thay đổi sang một tên miền mới. Tất cả địa chỉ email gắn với tên miền hiện tại sẽ bị xóa khi bạn thực hiện hành động này",
+      domain_error: "Địa chỉ phải có từ 3 - 63 ký tự",
     },
     statistic: "Báo cáo",
     config: "Tuỳ chỉnh",
