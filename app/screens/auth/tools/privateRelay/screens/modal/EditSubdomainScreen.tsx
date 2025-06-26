@@ -97,7 +97,7 @@ export const EditSubdomainScreen: FC<PrivateRelayScreenProps<"editSubdomain">> =
 
         <View style={styles.note}>
           <Text
-            tx="private_relay.edit_modal.error.numberCharacters"
+            tx="private_relay.manage_subdomain.domain_error"
             color={validNumberCharacters ? colors.primary : colors.disable}
             size="small"
           />

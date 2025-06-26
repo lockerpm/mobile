@@ -131,7 +131,7 @@ const EditView = (item: {
     }
   }, [])
 
-  const validNumberCharacters = addressText.length >= 3 && addressText.length <= 63
+  const validNumberCharacters = addressText.length >= 6 && addressText.length <= 63
   const validSpecialCharacters = addressText.length > 0 && /^[a-z0-9-]+$/.test(addressText)
 
   return (
