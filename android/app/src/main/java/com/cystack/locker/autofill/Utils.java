@@ -143,6 +143,8 @@ public class Utils {
     @NonNull
     public static AssistStructure getLatestAssistStructure(@NonNull FillRequest request) {
         List<FillContext> fillContexts = request.getFillContexts();
+        Log.d("getLatestAssistStructure", "" + fillContexts.size());
+
         return fillContexts.get(fillContexts.size() - 1).getStructure();
     }
 

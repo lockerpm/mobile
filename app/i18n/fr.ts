@@ -95,7 +95,7 @@ const fr: Translations = {
     remove: "Supprimer",
     rename: "Renommer",
     restore: "Restaurer",
-    save: "Sauvegarder",
+    save: "Ajouter",
     search: "Rechercher",
     second: "seconde",
     seconds: "secondes",

@@ -49,7 +49,7 @@ public class AutofillDataKeychain {
     public void getAutoFillEntriesForDomain() {
         try {
             String itemString = getAutoFillItems();
-            Log.d(TAG, "getAutoFillEntriesForDomain " + itemString);
+//            Log.d(TAG, "getAutoFillEntriesForDomain " + itemString);
             if (itemString == null) {
                 return;
             }

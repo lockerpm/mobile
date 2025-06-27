@@ -66,6 +66,9 @@ public class Parser {
         boolean isEditText = node.getClassName() != null && (node.getClassName().contains("EditText") || node.getClassName().contains("AutoCompleteTextView"));
         boolean isInputTag = node.getHtmlInfo() != null && node.getHtmlInfo().getTag().equals("input");
 
+
+        Log.d(TAG, node.getClassName());
+
         if (isEditText || isInputTag || haveAutofillHints) {
             fieldParser.addField(new Field(node));
         }

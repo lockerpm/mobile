@@ -25,7 +25,6 @@ export const MenuScreen = observer(() => {
   const isFreeAccount = user.isFreePlan
   const isPremiumAccount = user.isPremiumPlan
 
-  const [showFingerprint, setShowFingerprint] = useState(false)
   const [referLink, setReferLink] = useState<string>(null)
   const [showChatWootWidget, toggleChatWootWidget] = useState(false)
   const [chatwootUser, setChatwoodUser] = useState<ChatWootUser>(null)
@@ -58,14 +57,6 @@ export const MenuScreen = observer(() => {
       getReferralsLink()
     }
   }, [])
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("blur", () => {
-      setShowFingerprint(false)
-    })
-
-    return unsubscribe
-  }, [navigation])
 
   // ------------------COMPUTED------------------------
 
@@ -211,36 +202,6 @@ export const MenuScreen = observer(() => {
                 >
                   <Text text={translate("common.enterprise") + ":"} style={{ marginRight: 8 }} />
                   <Text preset="bold" text={user.enterprise.name} color={colors.primary} />
-                </View>
-              )}
-            </View>
-          }
-        />
-      </MenuItemContainer>
-
-      <MenuItemContainer>
-        <MenuItem
-          icon={"fingerprint"}
-          name={translate("menu.fingerprint")}
-          onPress={() => setShowFingerprint(!showFingerprint)}
-          rightIcon={showFingerprint ? "eye-slash" : "eye"}
-          content={
-            <View style={{ flex: 1 }}>
-              <Text text={translate("menu.fingerprint")} />
-              {showFingerprint && (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                    marginTop: 5,
-                  }}
-                >
-                  {user.fingerprint.split("-").map((e, index) => (
-                    <Text key={index}>
-                      {index !== 0 && <Text color={colors.error} text={"-"} />}
-                      <Text color={colors.error} text={e + "as"} />
-                    </Text>
-                  ))}
                 </View>
               )}
             </View>
