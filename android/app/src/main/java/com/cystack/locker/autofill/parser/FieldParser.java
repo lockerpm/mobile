@@ -72,7 +72,6 @@ public class FieldParser {
         }
     }
     public void parser() {
-        Log.d(TAG, "find fields size: " + fields.size());
         List<Field> unknowType = new ArrayList<>();
         for (Field field: fields){
             // parse by hint
@@ -150,7 +149,6 @@ public class FieldParser {
 
     private boolean parseInputType(Field field) {
         int type = field.inputType;
-        Log.d("type ", String.valueOf(type));
         boolean inputTypePassword = false;
         if ((type & InputType.TYPE_TEXT_VARIATION_PASSWORD) == InputType.TYPE_TEXT_VARIATION_PASSWORD){
             if ((type & InputType.TYPE_TEXT_FLAG_MULTI_LINE) == InputType.TYPE_TEXT_FLAG_MULTI_LINE) {

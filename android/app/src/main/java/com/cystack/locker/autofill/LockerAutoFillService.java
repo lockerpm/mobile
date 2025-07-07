@@ -59,8 +59,6 @@ public class LockerAutoFillService extends AutofillService {
             return;
         }
 
-        Log.d(TAG, "Domain: " + domain);
-        Log.d(TAG, "autofillable fields:" + fields.size());
 
         // Create response...
         FillResponse.Builder response = Utils.BuildFillResponse(fields, request, domain, this);
