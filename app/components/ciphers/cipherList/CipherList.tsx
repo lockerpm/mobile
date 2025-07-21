@@ -1,379 +1,368 @@
 import orderBy from "lodash/orderBy"
-import React, { useState, useEffect, useCallback, useMemo } from "react"
-import { View, FlatList, ActivityIndicator } from "react-native"
+import { useState, useEffect, useCallback, useMemo } from "react"
+import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native"
 import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
-import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useCipherData } from "app/services/hook"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { AccountRole, CipherAppView } from "app/static/types"
 import { CipherType } from "core/enums"
 import { CipherView } from "core/models/view"
-
 import { CipherListItem } from "./CipherListItem"
 import { Text } from "../../cores"
-import { PasswordAction } from "app/screens/auth/browse/passwords/PasswordAction"
-import { CardAction } from "app/screens/auth/browse/cards/CardAction"
-import { IdentityAction } from "app/screens/auth/browse/identities/IdentityAction"
-import { NoteAction } from "app/screens/auth/browse/notes/NoteAction"
-import { CryptoWalletAction } from "app/screens/auth/browse/cryptoAsset/CryptoWalletAction"
-import { DeletedAction } from "../cipherAction/DeletedAction"
 import { observer } from "mobx-react-lite"
+import { useToast } from "app/services/utils"
+import { SearchBar } from "app/components/utils"
+import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { useAppLocale } from "@/i18n"
 
 export interface CipherListProps {
-  navigation: any
-
-  emptyContent?: JSX.Element
-  searchText?: string
-  onLoadingChange?: (val: boolean) => void
-  cipherType?: CipherType | CipherType[]
-  deleted?: boolean
-  sortList?: {
+  /**
+   * add safe padding bottom
+   */
+  safeBottom?: boolean
+  /**
+   * List empty component
+   */
+  ListEmptyComponent?: JSX.Element
+  /**
+   * Cipher type to filter
+   */
+  cipherTypes: CipherType[]
+  /**
+   * Show list delete ciphers
+   */
+  isdeleted?: boolean
+  /**
+   * Sort configuration
+   */
+  sort?: {
     orderField: string
-    order: string
+    order: "desc" | "asc"
   }
+  /**
+   * Folder ID to filter ciphers
+   */
   folderId?: string
+  /**
+   * Collection ID to filter ciphers
+   */
   collectionId?: string
+  /**
+   * Organization ID to filter ciphers
+   */
   organizationId?: string
+  /**
+   * Selecting mode
+   */
   isSelecting: boolean
+  /**
+   * Set selecting mode
+   */
   setIsSelecting: (val: boolean) => void
-  selectedItems: string[]
-  setSelectedItems: (val: any) => void
-  setAllItems: (val: any) => void
+  selectedCiphers: CipherAppView[]
+  setSelectedCiphers: (val: CipherAppView[]) => void
+  /**
+   * Store all items IDs for selection all action in header
+   */
+  setAllItems: (val: CipherAppView[]) => void
+  /**
+   * Open Item actions
+   */
+  openActionsMenu: (item: CipherAppView) => void
 }
 
 /**
  * Describe your component here
  */
-export const CipherList = observer((props: CipherListProps) => {
-  const { cipherStore, user } = useStores()
-
-  const {
-    emptyContent,
-    onLoadingChange,
-    searchText,
-    navigation,
-    deleted = false,
-    sortList,
+export const CipherList = observer(
+  ({
+    safeBottom,
+    ListEmptyComponent,
+    isdeleted = false,
+    cipherTypes,
+    sort,
     folderId,
     collectionId,
     organizationId,
     isSelecting,
     setIsSelecting,
-    selectedItems,
-    setSelectedItems,
+    selectedCiphers,
+    setSelectedCiphers,
     setAllItems,
-  } = props
-  const { colors } = useTheme()
-  const { getTeam, notify, translate } = useHelper()
-  const { getCiphersFromCache } = useCipherData()
-  const { getCipherInfo } = useCipherHelper()
+    openActionsMenu,
+  }: CipherListProps) => {
+    const { cipherStore } = useStores()
+    const {
+      theme: { colors },
+    } = useAppTheme()
+    const { translate } = useAppLocale()
+    const { notifyTx } = useToast()
+    const { getCiphersFromCache } = useCipherData()
 
-  // ------------------------ PARAMS ----------------------------
+    // ------------------------ PARAMS ----------------------------
+    console.log(12)
+    const [searchText, setSearchText] = useState("")
 
-  const [showPasswordAction, setShowPasswordAction] = useState(false)
-  const [showNoteAction, setShowNoteAction] = useState(false)
-  const [showIdentityAction, setShowIdentityAction] = useState(false)
-  const [showCardAction, setShowCardAction] = useState(false)
-  const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
-  const [showDeletedAction, setShowDeletedAction] = useState(false)
+    const [ciphers, setCiphers] = useState<CipherAppView[]>([])
 
-  const [ciphers, setCiphers] = useState<CipherAppView[]>([])
+    const [isLoadingDone, setIsLoadingDone] = useState(false)
 
-  const [checkedItem, setCheckedItem] = useState("")
+    // ------------------------ COMPUTED ----------------------------
+    const data = useMemo(() => {
+      const checkSelectingEditPermission = (c: CipherAppView) => {
+        if (c.type === CipherType.MasterPassword) return false
+        if (!c.organizationId) return true
+        const shareRole = getTeam(cipherStore.organizations, c.organizationId).type
 
-  const [isSearching, setIsSearching] = useState(true)
-
-  const [isLoadingDone, setIsLoadingDone] = useState(false)
-
-  // ------------------------ METHODS ----------------------------
-
-  const isShared = (organizationId: string) => {
-    const share = cipherStore.myShares.find((s) => s.id === organizationId)
-    if (share) {
-      return share.members.length > 0 || share.groups.length > 0
-    }
-    return !!organizationId
-  }
-
-  // Get ciphers list
-  const loadData = async () => {
-    // onLoadingChange && onLoadingChange(true)
-    // Filter
-    const filters = []
-    if (props.cipherType) {
-      if (typeof props.cipherType === "number") {
-        filters.push((c: CipherView) => c.type === props.cipherType)
-      } else {
-        // @ts-ignore
-        filters.push((c: CipherView) => props.cipherType.includes(c.type))
+        const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
+        return !isShared
       }
-    }
-    if (user.hide_master_password) {
-      filters.push((c: CipherView) => c.type !== CipherType.MasterPassword)
-    }
 
-    // Search
-    const searchRes = await getCiphersFromCache({
-      filters,
-      searchText,
-      deleted,
-    })
-
-    if (searchRes.length === 0) {
-      setCiphers([])
-      setAllItems([])
-      setIsLoadingDone(() => true)
-      return
-    }
-
-    // Add image
-    let res: CipherAppView[] = searchRes.map((c: CipherView) => {
-      const cipherInfo = getCipherInfo(c)
-      const data = {
-        ...c,
-        imgLogo: cipherInfo.img,
-        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-          c.id,
-        ),
-        isDeleted: c.isDeleted,
+      if (isSelecting) {
+        return ciphers.filter(checkSelectingEditPermission)
       }
-      return data
-    })
+      return ciphers
+    }, [ciphers, cipherStore.organizations, isSelecting])
 
-    // Filter
-    if (folderId !== undefined) {
-      res = res.filter((i) => i.folderId === folderId)
-    }
+    const masterPassword =
+      data.length === 1 && data[0].type === CipherType.MasterPassword ? data[0] : null
+    const otherData = masterPassword ? [] : data
 
-    // collection
-    if (collectionId !== undefined) {
-      if (collectionId !== null) {
-        res = res.filter((i) => i.collectionIds.includes(collectionId))
+    const lastSync = cipherStore.lastSync
+    const lastCacheUpdate = cipherStore.lastCacheUpdate
+    const notSynchedCiphers = cipherStore.notSynchedCiphers
+
+    // ------------------------ METHODS ----------------------------
+
+    // check if cipher is shared from other user
+    // if true, show shared icon
+    const isShared = (organizationId: string | null) => {
+      if (!organizationId) return false
+      const share = cipherStore.myShares.find((s) => s.id === organizationId)
+      if (share) {
+        return share.members.length > 0 || share.groups.length > 0
       }
+      return !!organizationId
     }
 
-    if (organizationId === undefined && collectionId === undefined && folderId === null) {
-      res = res.filter((i) => !getTeam(user.teams, i.organizationId).name)
-      res = res.filter((i) => !i.collectionIds.length)
-    }
-    if (organizationId !== undefined) {
-      if (organizationId === null) {
-        res = res.filter((i) => !!i.organizationId)
-      } else {
-        res = res.filter((i) => i.organizationId === organizationId)
+    // Check if cipher is not synced or updated
+    const isSync = useCallback(
+      (id: string) => {
+        return [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(id)
+      },
+      [cipherStore.notSynchedCiphers, cipherStore.notUpdatedCiphers]
+    )
+
+    // Get ciphers list
+    const loadData = useCallback(async () => {
+      // filter
+      const filters = [(c: CipherView) => cipherTypes.includes(c.type)]
+
+      // folder
+      if (!!folderId || folderId === null) {
+        if (folderId === null) {
+          // If folderId is null, we want to show ciphers that are not in any folder + collection
+          filters.push((c: CipherView) => !c.collectionIds || c.collectionIds.length === 0)
+        }
+        filters.push((c: CipherView) => c.folderId === folderId)
       }
-    }
 
-    // Sort
-    if (sortList) {
-      const { orderField, order } = sortList
-      res =
-        orderBy(
-          res,
-          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order],
-        ) || []
-    }
+      // collection
+      if (!!collectionId) {
+        filters.push((c: CipherView) => c.collectionIds.includes(collectionId))
+      }
 
-    // Delay loading
-    setTimeout(() => {
-      onLoadingChange && onLoadingChange(false)
-    }, 100)
-    // t.final()
-    // Done
-    setCiphers(res)
-    setAllItems(res.map((c) => c.id))
-    setIsLoadingDone(() => true)
-  }
+      // organization
+      if (!!organizationId) {
+        filters.push((c: CipherView) => c.organizationId === organizationId)
+      }
 
-  // Handle action menu open
-  const openActionMenu = (item: CipherView) => {
-    cipherStore.setSelectedCipher(item)
-    if (deleted) {
-      setShowDeletedAction(true)
-      return
-    }
+      // Search
+      const searchRes = await getCiphersFromCache({
+        filters,
+        searchText,
+        deleted: isdeleted,
+      })
 
-    switch (item.type) {
-      case CipherType.MasterPassword:
-      case CipherType.Login:
-        setShowPasswordAction(true)
-        break
-      case CipherType.Card:
-        setShowCardAction(true)
-        break
-      case CipherType.Identity:
-        setShowIdentityAction(true)
-        break
-      case CipherType.SecureNote:
-        setShowNoteAction(true)
-        break
-      case CipherType.CryptoWallet:
-        setShowCryptoWalletAction(true)
-        break
-      default:
-        break
-    }
-  }
-
-  // Toggle item selection
-  const toggleItemSelection = (id: string) => {
-    if (!isSelecting) {
-      setIsSelecting(true)
-    }
-    let selected = [...selectedItems]
-    if (!selected.includes(id)) {
-      if (selected.length === MAX_CIPHER_SELECTION) {
-        notify("error", translate("error.cannot_select_more", { count: MAX_CIPHER_SELECTION }))
+      if (searchRes.length === 0) {
+        setCiphers([])
+        setAllItems([])
+        setIsLoadingDone(true)
         return
       }
-      selected.push(id)
-    } else {
-      selected = selected.filter((i) => i !== id)
+
+      // Add image
+      let res: CipherAppView[] = searchRes.map((c: CipherView) => {
+        const cipherLogo = getCipherLogo(c)
+        const data = {
+          ...c,
+          imgLogo: cipherLogo,
+          notSync: isSync(c.id),
+          isDeleted: c.isDeleted,
+        }
+        return data
+      })
+
+      // Sort
+      if (sort) {
+        const { orderField, order } = sort
+        res =
+          orderBy(
+            res,
+            [
+              (c: CipherAppView) =>
+                orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate,
+            ],
+            [order]
+          ) || []
+      }
+
+      setCiphers(res)
+      setAllItems(res)
+      setIsLoadingDone(true)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+      cipherTypes,
+      collectionId,
+      folderId,
+      isSync,
+      isdeleted,
+      organizationId,
+      searchText,
+      setAllItems,
+      sort,
+    ])
+
+    // Toggle item selection
+    const toggleItemSelection = (item: CipherAppView) => {
+      if (!isSelecting) {
+        setIsSelecting(true)
+      }
+      let selected = [...selectedCiphers]
+      if (!selected.find((i) => i.id === item.id)) {
+        if (selected.length === MAX_CIPHER_SELECTION) {
+          notifyTx("error", "error:cannot_select_more", { count: MAX_CIPHER_SELECTION })
+          return
+        }
+        selected.push(item)
+      } else {
+        selected = selected.filter((i) => i.id !== item.id)
+      }
+      setSelectedCiphers(selected)
     }
-    setSelectedItems(selected)
-  }
 
-  // ------------------------ EFFECTS ----------------------------
+    // ------------------------ EFFECTS ----------------------------
 
-  const lastSync = cipherStore.lastSync
-  const lastCacheUpdate = cipherStore.lastCacheUpdate
-  const notSynchedCiphers = cipherStore.notSynchedCiphers
-  const hideMP = user.hide_master_password
-  useEffect(() => {
-    if (searchText) setIsSearching(true)
-    if (!searchText && isSearching) {
-      setIsSearching(false)
-    }
+    useEffect(() => {
+      const timeOut = setTimeout(() => {
+        loadData()
+      }, 150)
+      return () => clearTimeout(timeOut)
+    }, [lastSync, lastCacheUpdate, notSynchedCiphers, loadData])
 
-    loadData()
-  }, [searchText, lastSync, lastCacheUpdate, sortList, notSynchedCiphers, hideMP])
+    // ------------------------ RENDER ----------------------------
+    const $listContent = useMemo(
+      () => ({
+        paddingBottom: safeBottom ? StaticSafeAreaInsets.safeAreaInsetsBottom + 12 : 0,
+      }),
+      [safeBottom]
+    )
 
-  useEffect(() => {
-    if (checkedItem) {
-      toggleItemSelection(checkedItem)
-      setCheckedItem(null)
-    }
-  }, [checkedItem, selectedItems])
+    const renderEmptyComponents = useCallback(() => {
+      if (!isLoadingDone) return null
 
-  // ------------------------ RENDER ----------------------------
+      if (ListEmptyComponent && !searchText.trim()) {
+        return ListEmptyComponent
+      }
+      return (
+        <View style={styles.ph16}>
+          {searchText ? (
+            <Text
+              text={translate("error:no_results_found") + ` '${searchText}'`}
+              style={styles.centerText}
+            />
+          ) : (
+            <ActivityIndicator size={30} color={colors.title} />
+          )}
+        </View>
+      )
+    }, [ListEmptyComponent, colors.title, isLoadingDone, searchText, translate])
 
-  const data = useMemo(
-    () =>
-      isSelecting
-        ? ciphers.filter((c) => {
-            if (!c.organizationId) return true
-            const shareRole = getTeam(cipherStore.organizations, c.organizationId).type
+    const itemDivider = useCallback(() => {
+      return <View style={[styles.divider, { backgroundColor: colors.border }]} />
+    }, [colors.border])
 
-            const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
-            return !isShared
-          })
-        : ciphers,
-    [ciphers, cipherStore.organizations, isSelecting],
-  )
-
-  const renderEmptyComponents = useCallback(() => {
-    if (!isLoadingDone) return null
-
-    if (emptyContent && !searchText.trim() && !isSearching) {
-      return <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
-    }
     return (
-      <View style={{ paddingHorizontal: 20 }}>
-        {searchText ? (
-          <Text
-            text={translate("error.no_results_found") + ` '${searchText}'`}
-            style={{
-              textAlign: "center",
-            }}
-          />
-        ) : (
-          <ActivityIndicator size={30} color={colors.title} />
-        )}
+      <View style={styles.flex}>
+        <FlatList
+          removeClippedSubviews
+          maxToRenderPerBatch={15}
+          data={otherData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            return (
+              <CipherListItem
+                item={item}
+                isSelecting={isSelecting}
+                toggleItemSelection={toggleItemSelection}
+                openActionMenu={openActionsMenu}
+                isSelected={selectedCiphers.some((i) => i.id === item.id)}
+                isShared={isShared(item.organizationId)}
+              />
+            )
+          }}
+          ListHeaderComponent={
+            <>
+              <SearchBar
+                containerStyle={styles.searchContainer}
+                onChangeText={setSearchText}
+                value={searchText}
+              />
+              {masterPassword && (
+                <CipherListItem
+                  item={masterPassword}
+                  isSelecting={false}
+                  toggleItemSelection={toggleItemSelection}
+                  openActionMenu={openActionsMenu}
+                  isSelected={false}
+                  isShared={false}
+                />
+              )}
+            </>
+          }
+          contentContainerStyle={$listContent}
+          ItemSeparatorComponent={itemDivider}
+          ListEmptyComponent={renderEmptyComponents}
+          getItemLayout={(data, index) => ({
+            length: 71,
+            offset: 71 * index,
+            index,
+          })}
+        />
       </View>
     )
-  }, [isLoadingDone, searchText, isSearching])
-
-  const renderItem = ({ item }) => {
-    return (
-      <CipherListItem
-        item={item}
-        isSelecting={isSelecting}
-        toggleItemSelection={setCheckedItem}
-        openActionMenu={openActionMenu}
-        isSelected={selectedItems.includes(item.id)}
-        isShared={isShared(item.organizationId)}
-      />
-    )
   }
+)
 
-  const masterPassword =
-    data.length === 1 && data[0].type === CipherType.MasterPassword ? data[0] : null
-  const data1 = masterPassword ? [] : data
-
-  return (
-    <View style={{ flex: 1 }}>
-      <PasswordAction
-        isOpen={showPasswordAction}
-        onClose={() => setShowPasswordAction(false)}
-        navigation={navigation}
-      />
-
-      <CardAction
-        isOpen={showCardAction}
-        onClose={() => setShowCardAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <IdentityAction
-        isOpen={showIdentityAction}
-        onClose={() => setShowIdentityAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <NoteAction
-        isOpen={showNoteAction}
-        onClose={() => setShowNoteAction(false)}
-        navigation={navigation}
-      />
-
-      <CryptoWalletAction
-        isOpen={showCryptoWalletAction}
-        onClose={() => setShowCryptoWalletAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <DeletedAction
-        isOpen={showDeletedAction}
-        onClose={() => setShowDeletedAction(false)}
-        navigation={navigation}
-      />
-
-      {masterPassword && (
-        <CipherListItem
-          item={masterPassword}
-          isSelecting={isSelecting}
-          toggleItemSelection={setCheckedItem}
-          openActionMenu={openActionMenu}
-          isSelected={selectedItems.includes(masterPassword.id)}
-          isShared={isShared(masterPassword.organizationId)}
-        />
-      )}
-      <FlatList
-        data={data1}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-        removeClippedSubviews
-        ListEmptyComponent={renderEmptyComponents}
-        getItemLayout={(data, index) => ({
-          length: 71,
-          offset: 71 * index,
-          index,
-        })}
-      />
-    </View>
-  )
+const styles = StyleSheet.create({
+  centerText: {
+    textAlign: "center",
+  },
+  divider: {
+    height: 1,
+    marginHorizontal: 16,
+  },
+  flex: {
+    flex: 1,
+  },
+  ph16: {
+    paddingHorizontal: 16,
+  },
+  searchContainer: {
+    marginBottom: 2,
+    marginHorizontal: 16,
+    marginTop: 10,
+  },
 })

@@ -1,332 +1,166 @@
-import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
-import { useCipherData, useDeleteCipher, useHelper } from "app/services/hook"
-import React, { useState } from "react"
-import { View, BackHandler } from "react-native"
-import { Text, Icon, TabHeader } from "app/components/cores"
-import { SearchBar } from "app/components/utils"
-import { DeleteConfirmModal } from "app/screens/auth/browse/trash/DeleteConfirmModal"
-import { ShareModal } from "../cipherAction/ShareModal"
-import { IS_IOS } from "app/config/constants"
+import { View, StyleSheet } from "react-native"
+import { PressableIcon, Text } from "app/components/cores"
+import Animated, {
+  FadeInDown,
+  FadeOutDown,
+  FadeOutUp,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
 
-export interface CipherListHeaderProps {
-  openSort?: () => void
-  openAdd?: () => void
-  navigation: any
-  header: string
-  onSearch?: (text: string) => void
-  searchText?: string
-  isSelecting: boolean
-  setIsSelecting?: (val: boolean) => void
-  selectedItems?: string[]
-  setSelectedItems?: (val: any) => void
-  toggleSelectAll?: () => void
-  setIsLoading: (val: boolean) => void
+import { TxKeyPath } from "app/i18n"
+import { CipherListSelectionHeader } from "./CipherListSelectionHeader"
+
+interface Props {
+  isHideAddFunc?: boolean
+  /**
+   * Trash screen header
+   */
   isTrash?: boolean
-  isAuthenticator?: boolean
-  isAutoFill?: boolean
-  isShared?: boolean
-  setIsOpenGeneratePassword?: () => void // for autofill only
+  /**
+   * Show Header title
+   */
+  header?: string
+  headerTx?: TxKeyPath
+
+  /**
+   * Cipher List actions
+   */
+  openSort: () => void
+  goBack: () => void
+
+  openAdd?: () => void
+  openMoveToFolder?: () => void
+  openShare?: () => void
+  openDelete?: () => void
+  toggleSelectAll?: () => void
+  handleRestore?: () => void
+  clearSelect?: () => void
+  selectedCount: number
+  isSelecting: boolean
 }
 
-const EmpFc = () => {
-  //
-}
-
-/**
- * Describe your component here
- */
-export const CipherListHeader = (props: CipherListHeaderProps) => {
+export const CipherListHeader = (props: Props) => {
   const {
+    isHideAddFunc,
+    isTrash,
+    header,
+    headerTx,
+    goBack,
     openAdd,
     openSort,
-    navigation,
-    header,
-    onSearch,
-    searchText,
-    isTrash,
-    isAuthenticator,
-    isAutoFill,
+    openShare,
+    openDelete,
+    toggleSelectAll,
+    openMoveToFolder,
+    selectedCount,
     isSelecting,
-    setIsSelecting = EmpFc,
-    selectedItems = [],
-    setSelectedItems = EmpFc,
-    toggleSelectAll = EmpFc,
-    setIsLoading,
-    setIsOpenGeneratePassword = EmpFc,
-    isShared,
+    clearSelect,
+    handleRestore,
   } = props
-  const { colors } = useTheme()
-  const { translate } = useHelper()
-  const { restoreCiphers, deleteCiphers } = useCipherData()
-  const { user, uiStore } = useStores()
-  const { toTrashCiphers } = useDeleteCipher()
-
   // ----------------------- PARAMS ------------------------
-
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [showShareModal, setShowShareModal] = useState(false)
 
   // ----------------------- COMPUTED ------------------------
 
-  const isFreeAccount = user.isFreePlan
+  // disable entering animation for first render
+  const enabledEnteringAnimation = useSharedValue(false)
+
   // ----------------------- METHODS ------------------------
 
-  const handleDelete = async () => {
-    setIsLoading(true)
-
-    const res = await toTrashCiphers(selectedItems)
-    setIsLoading(false)
-    if (res.kind === "ok") {
-      setIsSelecting(false)
-      setSelectedItems([])
-    }
-  }
-
-  const handleMoveFolder = () => {
-    navigation.navigate("folders__select", {
-      mode: "move",
-      initialId: null,
-      cipherIds: selectedItems,
-    })
-    setIsSelecting(false)
-    setSelectedItems([])
-  }
-
-  const handleRestore = async () => {
-    setIsLoading(true)
-    const res = await restoreCiphers(selectedItems)
-    setIsLoading(false)
-    if (res.kind === "ok") {
-      setIsSelecting(false)
-      setSelectedItems([])
-    }
-  }
-
-  const handlePermaDelete = async () => {
-    setIsLoading(true)
-    const res = await deleteCiphers(selectedItems)
-    setIsLoading(false)
-    if (res.kind === "ok") {
-      setIsSelecting(false)
-      setSelectedItems([])
+  // ----------------------- ANIMATIONS ------------------------
+  const FadeInUp = () => {
+    "worklet"
+    return {
+      initialValues: {
+        opacity: enabledEnteringAnimation.value ? 0 : 1,
+        transform: [{ translateY: enabledEnteringAnimation.value ? -30 : 0 }],
+      },
+      animations: {
+        opacity: withTiming(1, { duration: 300 }),
+        transform: [{ translateY: withTiming(0, { duration: 300 }) }],
+      },
     }
   }
 
   // ----------------------- RENDER ------------------------
 
-  const renderHeaderRight = () => (
-    <View
-      style={{
-        justifyContent: "space-between",
-        flexDirection: "row",
-        alignItems: "center",
-        marginRight: -8,
-      }}
-    >
-      {isAutoFill && !IS_IOS && (
-        <Icon
-          icon="password-fill"
-          size={24}
-          color={colors.primaryText}
-          onPress={setIsOpenGeneratePassword}
-          containerStyle={{ padding: 8 }}
-        />
-      )}
-      {!isAuthenticator && (
-        <Icon
-          icon="sliders-horizontal"
-          size={24}
-          color={colors.primaryText}
-          onPress={openSort}
-          containerStyle={{ padding: 8 }}
-        />
-      )}
-
-      {!!openAdd && (
-        <Icon
-          icon="plus"
-          size={24}
-          color={colors.primaryText}
-          onPress={openAdd}
-          containerStyle={{ padding: 8 }}
-        />
-      )}
-    </View>
-  )
-
-  const renderHeaderSelectRight = () => (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginRight: -8,
-      }}
-    >
-      <Icon
-        icon="check-bold"
-        size={24}
-        color={colors.primaryText}
-        onPress={toggleSelectAll}
-        containerStyle={{ padding: 8 }}
-      />
-
-      {selectedItems.length > 0 && (
-        <>
-          {isTrash || isAuthenticator || isAutoFill ? (
-            <>
-              {isTrash && (
-                <Icon
-                  icon="repeat"
-                  size={24}
-                  onPress={handleRestore}
-                  containerStyle={{ padding: 8 }}
-                />
-              )}
-
-              <Icon
-                icon="trash"
-                size={24}
-                color={colors.error}
-                onPress={() => setShowConfirmModal(true)}
-                containerStyle={{ padding: 8 }}
-              />
-            </>
-          ) : (
-            <>
-              {!uiStore.isOffline && !isShared && !isFreeAccount && (
-                <Icon
-                  icon="share"
-                  size={24}
-                  color={colors.primaryText}
-                  onPress={() => setShowShareModal(true)}
-                  containerStyle={{ padding: 8 }}
-                />
-              )}
-
-              <Icon
-                icon="folder-simple"
-                size={24}
-                color={colors.primaryText}
-                onPress={handleMoveFolder}
-                containerStyle={{ padding: 8 }}
-              />
-
-              <Icon
-                icon="trash"
-                size={24}
-                color={colors.error}
-                onPress={() => setShowConfirmModal(true)}
-                containerStyle={{ padding: 8 }}
-              />
-            </>
-          )}
-        </>
-      )}
-    </View>
-  )
-
-  const renderHeaderSelectLeft = () => (
-    <View style={{ marginLeft: -8, flexDirection: "row", alignItems: "center" }}>
-      <Icon
-        icon="x"
-        size={26}
-        onPress={() => {
-          setIsSelecting(false)
-          setSelectedItems([])
-        }}
-      />
-
-      <Text
-        preset="bold"
-        text={
-          selectedItems.length
-            ? `${selectedItems.length} ${translate("common.selected")}`
-            : translate("common.select")
-        }
-        style={{
-          marginLeft: 5,
-        }}
-      />
-    </View>
-  )
-
-  const renderGoBack = () => {
-    if (isAuthenticator) {
-      return undefined
-    }
-    if (isAutoFill) {
-      return BackHandler.exitApp()
-    }
-    return navigation.goBack()
-  }
-
-  const renderHeaderAuthenticatorLeft = () => <TabHeader title={header} />
-
   return (
-    <View
-      style={{
-        backgroundColor: colors.background,
-      }}
-    >
-      <View
-        style={{
-          height: 56,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingHorizontal: 20,
-        }}
-      >
-        {isSelecting ? (
-          renderHeaderSelectLeft()
-        ) : isAuthenticator ? (
-          renderHeaderAuthenticatorLeft()
-        ) : (
-          <Icon icon="arrow-left" onPress={renderGoBack} />
-        )}
-
-        {isSelecting ? renderHeaderSelectRight() : renderHeaderRight()}
-      </View>
-
-      <View style={{ paddingHorizontal: 20 }}>
-        {!isSelecting && !isAuthenticator && (
-          <Text
-            preset="bold"
-            size="xl"
-            text={header}
-            numberOfLines={2}
-            style={{ marginBottom: 10 }}
+    <View style={styles.headerContainer}>
+      {!isSelecting && (
+        <Animated.View entering={FadeInUp} exiting={FadeOutUp} style={styles.container}>
+          <View style={styles.title}>
+            <PressableIcon icon={"arrow-left"} onPress={goBack} style={styles.mr8} />
+            <Text
+              preset="bold"
+              size="xl"
+              weight="semiBold"
+              numberOfLines={2}
+              ellipsizeMode="tail"
+              text={header}
+              tx={headerTx}
+            />
+          </View>
+          <View style={styles.rowContainer}>
+            <PressableIcon
+              icon="sliders-horizontal"
+              onPress={openSort}
+              containerStyle={styles.iconContainer}
+            />
+            {!isHideAddFunc && (
+              <PressableIcon icon="plus" onPress={openAdd} containerStyle={styles.iconContainer} />
+            )}
+          </View>
+        </Animated.View>
+      )}
+      {isSelecting && (
+        <Animated.View
+          entering={FadeInDown.withCallback((finished) => {
+            enabledEnteringAnimation.value = finished
+          })}
+          exiting={FadeOutDown}
+        >
+          <CipherListSelectionHeader
+            isTrash={isTrash}
+            selectedCount={selectedCount}
+            onClose={clearSelect}
+            onShare={openShare}
+            onSelectAll={toggleSelectAll}
+            onMoveFolder={openMoveToFolder}
+            onRestore={handleRestore}
+            onDelete={openDelete}
           />
-        )}
-
-        <SearchBar value={searchText} onChangeText={onSearch} />
-      </View>
-      <DeleteConfirmModal
-        isOpen={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
-        onConfirm={isTrash || isAuthenticator ? handlePermaDelete : handleDelete}
-        title={
-          isTrash || isAuthenticator ? translate("trash.perma_delete") : translate("trash.to_trash")
-        }
-        desc={
-          isTrash || isAuthenticator
-            ? translate("trash.perma_delete_desc")
-            : translate("trash.to_trash_desc")
-        }
-        btnText="OK"
-      />
-
-      <ShareModal
-        isOpen={showShareModal}
-        onClose={() => setShowShareModal(false)}
-        cipherIds={selectedItems}
-        onSuccess={() => {
-          setIsSelecting(false)
-          setSelectedItems([])
-        }}
-      />
+        </Animated.View>
+      )}
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  headerContainer: {
+    justifyContent: "center",
+    minHeight: 56,
+    paddingHorizontal: 16,
+  },
+  iconContainer: {
+    padding: 8,
+  },
+  mr8: {
+    marginRight: 8,
+  },
+  rowContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  title: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexGrow: 1,
+    flexShrink: 1,
+    marginRight: 32,
+  },
+})

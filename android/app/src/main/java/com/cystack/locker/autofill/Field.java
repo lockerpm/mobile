@@ -4,8 +4,12 @@ import android.app.assist.AssistStructure;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.autofill.AutofillId;
+
 import androidx.annotation.RequiresApi;
+
+import java.util.Arrays;
 
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -43,6 +47,19 @@ public class Field implements Parcelable {
         this.inputType = node.getInputType();
         this.autofillType = node.getAutofillType();
         this.hints = node.getAutofillHints();
+
+        Log.d("New Field", String.format("autofillId: %s, hint: %s, idHint: %s, hints: %s, idEntry: %s, entry: %s, text: %s, inputType: %d, autofillType: %d",
+                this.autofillId.toString(),
+                hint,
+                idHint,
+                Arrays.toString(hints),
+                idEntry,
+                entry,
+                text,
+                inputType,
+                autofillType,
+                node.getIdType()
+        ));
     }
 
     protected Field(Parcel in) {

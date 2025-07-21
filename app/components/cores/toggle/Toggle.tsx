@@ -1,18 +1,28 @@
-import React from 'react'
-import { StyleProp, SwitchProps, View, ViewStyle } from 'react-native'
-import { useTheme } from 'app/services/context'
-import CheckBox from '@react-native-community/checkbox'
-import { Switch, Checkbox } from 'react-native-ui-lib'
+import { ComponentType, FC, useMemo } from "react"
+import {
+  GestureResponderEvent,
+  ImageStyle,
+  StyleProp,
+  SwitchProps,
+  TextInputProps,
+  TextStyle,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  View,
+  ViewProps,
+  ViewStyle,
+} from "react-native"
+import { Text, TextProps } from "../text/Text"
 
-type Variants = 'checkbox' | 'switch' | 'radio'
-
-interface ToggleProps {
+export interface ToggleProps<T> extends Omit<TouchableOpacityProps, "style"> {
   /**
-   * The variant of the toggle.
-   * Options: "checkbox", "switch", "radio"
-   * Default: "checkbox"
+   * A style modifier for different input states.
    */
-  variant?: Variants
+  status?: "disabled"
+  /**
+   * If false, input is not editable. The default value is true.
+   */
+  editable?: TextInputProps["editable"]
   /**
    * The value of the field. If true the component will be turned on.
    */
@@ -20,71 +30,235 @@ interface ToggleProps {
   /**
    * Invoked with the new value when the value changes.
    */
-  onValueChange?: SwitchProps['onValueChange']
+  onValueChange?: SwitchProps["onValueChange"]
   /**
-   * Disable touch
+   * Style overrides for the container
    */
-  disabled?: boolean
-
-  /**
-   * Overide container style
-   */
-
   containerStyle?: StyleProp<ViewStyle>
+  /**
+   * Style overrides for the input wrapper
+   */
+  inputWrapperStyle?: StyleProp<ViewStyle>
+  /**
+   * Optional input wrapper style override.
+   * This gives the inputs their size, shape, "off" background-color, and outer border.
+   */
+  inputOuterStyle?: ViewStyle
+  /**
+   * Optional input style override.
+   * This gives the inputs their inner characteristics and "on" background-color.
+   */
+  inputInnerStyle?: ViewStyle
+  /**
+   * Optional detail style override.
+   * See Checkbox, Radio, and Switch for more details
+   */
+  inputDetailStyle?: ViewStyle
+  /**
+   * The position of the label relative to the action component.
+   * Default: right
+   */
+  labelPosition?: "left" | "right"
+  /**
+   * The label text to display if not using `labelTx`.
+   */
+  label?: TextProps["text"]
+  /**
+   * Label text which is looked up via i18n.
+   */
+  labelTx?: TextProps["tx"]
+  /**
+   * Optional label options to pass to i18n. Useful for interpolation
+   * as well as explicitly setting locale or translation fallbacks.
+   */
+  labelTxOptions?: TextProps["txOptions"]
+  /**
+   * Style overrides for label text.
+   */
+  labelStyle?: StyleProp<TextStyle>
+  /**
+   * Pass any additional props directly to the label Text component.
+   */
+  LabelTextProps?: TextProps
+  /**
+   * The helper text to display if not using `helperTx`.
+   */
+  helper?: TextProps["text"]
+  /**
+   * Helper text which is looked up via i18n.
+   */
+  helperTx?: TextProps["tx"]
+  /**
+   * Optional helper options to pass to i18n. Useful for interpolation
+   * as well as explicitly setting locale or translation fallbacks.
+   */
+  helperTxOptions?: TextProps["txOptions"]
+  /**
+   * Pass any additional props directly to the helper Text component.
+   */
+  HelperTextProps?: TextProps
+  /**
+   * The input control for the type of toggle component
+   */
+  ToggleInput: FC<BaseToggleInputProps<T>>
+}
+
+export interface BaseToggleInputProps<T> {
+  on: boolean
+  status: ToggleProps<T>["status"]
+  disabled: boolean
+  outerStyle: ViewStyle
+  innerStyle: ViewStyle
+  detailStyle: Omit<ViewStyle & ImageStyle, "overflow">
+}
+
+export function Toggle<T>(props: ToggleProps<T>) {
+  const {
+    editable = true,
+    status,
+    value,
+    onPress,
+    onValueChange,
+    labelPosition = "right",
+    helper,
+    helperTx,
+    helperTxOptions,
+    HelperTextProps,
+    containerStyle: $containerStyleOverride,
+    inputWrapperStyle: $inputWrapperStyleOverride,
+    ToggleInput,
+    accessibilityRole,
+    ...WrapperProps
+  } = props
+
+  const disabled = editable === false || status === "disabled" || props.disabled
+
+  const Wrapper = useMemo(
+    () => (disabled ? View : TouchableOpacity) as ComponentType<TouchableOpacityProps | ViewProps>,
+    [disabled]
+  )
+
+  const $containerStyles = [$containerStyleOverride]
+  const $inputWrapperStyles = [$row, $inputWrapper, $inputWrapperStyleOverride]
+  const $helperStyles = [$helper, HelperTextProps?.style]
+
+  /**
+   * @param {GestureResponderEvent} e - The event object.
+   */
+  function handlePress(e: GestureResponderEvent) {
+    if (disabled) return
+    onValueChange?.(!value)
+    onPress?.(e)
+  }
+
+  return (
+    <Wrapper
+      activeOpacity={1}
+      accessibilityRole={accessibilityRole}
+      accessibilityState={{ checked: value, disabled }}
+      {...WrapperProps}
+      style={$containerStyles}
+      onPress={handlePress}
+    >
+      <View style={$inputWrapperStyles}>
+        {labelPosition === "left" && <FieldLabel<T> {...props} labelPosition={labelPosition} />}
+
+        <ToggleInput
+          on={!!value}
+          disabled={!!disabled}
+          status={status}
+          outerStyle={props.inputOuterStyle ?? {}}
+          innerStyle={props.inputInnerStyle ?? {}}
+          detailStyle={props.inputDetailStyle ?? {}}
+        />
+
+        {labelPosition === "right" && <FieldLabel<T> {...props} labelPosition={labelPosition} />}
+      </View>
+
+      {!!(helper || helperTx) && (
+        <Text
+          preset="label"
+          text={helper}
+          tx={helperTx}
+          txOptions={helperTxOptions}
+          {...HelperTextProps}
+          style={$helperStyles}
+        />
+      )}
+    </Wrapper>
+  )
 }
 
 /**
- * Renders a boolean input.
- * This is a controlled component that requires an onValueChange callback that updates the value prop in order for the component to reflect user actions. If the value prop is not updated, the component will continue to render the supplied value prop instead of the expected result of any user actions.
+ * @param {ToggleProps} props - The props for the `FieldLabel` component.
+ * @returns {JSX.Element} The rendered `FieldLabel` component.
  */
-export function Toggle(props: ToggleProps) {
-  const { variant = 'checkbox', disabled, value, containerStyle, onValueChange } = props
-  const { colors } = useTheme()
-  if (variant === 'checkbox') {
-    return (
-      <View style={containerStyle}>
-        <CheckBox
-          tintColors={{ true: colors.secondaryText, false: colors.secondaryText }}
-          onFillColor={colors.primary}
-          tintColor={colors.secondaryText}
-          onTintColor={colors.primary}
-          animationDuration={0.2}
-          onCheckColor={colors.white}
-          style={{ width: 24, height: 24, alignSelf: 'flex-end' }}
-          disabled={disabled}
-          value={value}
-          onValueChange={onValueChange}
-        />
-      </View>
-    )
-  }
+function FieldLabel<T>(props: ToggleProps<T>) {
+  const {
+    label,
+    labelTx,
+    labelTxOptions,
+    LabelTextProps,
+    labelPosition,
+    labelStyle: $labelStyleOverride,
+  } = props
 
-  if (variant === 'switch') {
-    return (
-      <View style={containerStyle}>
-        <Switch
-          disabled={disabled}
-          value={value}
-          onValueChange={onValueChange}
-          onColor={colors.primary}
-          offColor={colors.disable}
-        />
-      </View>
-    )
-  }
-  if (variant === 'radio') {
-    return (
-      <View style={containerStyle}>
-        <Checkbox
-          disabled={disabled}
-          value={value}
-          color={colors.primary}
-          onValueChange={onValueChange}
-          style={{
-            marginLeft: 15,
-          }}
-        />
-      </View>
-    )
-  }
+  if (!label && !labelTx && !LabelTextProps?.children) return null
+
+  const $labelStyle = [
+    $label,
+    labelPosition === "right" && $labelRight,
+    labelPosition === "left" && $labelLeft,
+    $labelStyleOverride,
+    LabelTextProps?.style,
+  ]
+
+  return (
+    <Text
+      preset="label"
+      size="md"
+      text={label}
+      tx={labelTx}
+      txOptions={labelTxOptions}
+      {...LabelTextProps}
+      style={$labelStyle}
+    />
+  )
+}
+
+const $inputWrapper: ViewStyle = {
+  alignItems: "center",
+}
+
+export const $inputOuterBase: ViewStyle = {
+  height: 24,
+  width: 24,
+  borderWidth: 2,
+  alignItems: "center",
+  overflow: "hidden",
+  flexGrow: 0,
+  flexShrink: 0,
+  justifyContent: "space-between",
+  flexDirection: "row",
+}
+
+const $helper: TextStyle = {
+  marginTop: 12,
+}
+
+const $label: TextStyle = {
+  flex: 1,
+}
+
+const $labelRight: TextStyle = {
+  marginStart: 16,
+}
+
+const $labelLeft: TextStyle = {
+  marginEnd: 16,
+}
+
+const $row: ViewStyle = {
+  flexDirection: "row",
+  alignItems: "center",
 }

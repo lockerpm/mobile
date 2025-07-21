@@ -1,17 +1,17 @@
-import { ApiResponse } from 'apisauce'
-import { Logger } from '../../utils/utils'
-import { Api, api } from './api'
-import { GeneralApiProblem, getGeneralApiProblem } from './apiProblem'
-import { AppNotification, BreanchResult, RelayAddress, SubdomainData } from 'app/static/types'
+import { ApiResponse } from "apisauce"
+import { Api, api } from "./api"
+import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
+import { AppNotification, BreanchResult, RelayAddress, SubdomainData } from "app/static/types"
+import { Logger } from "@/utils/logger"
 
 class ToolApi {
   private api: Api = api
 
   async fetchInAppNoti(
     token: string
-  ): Promise<{ kind: 'ok'; data: AppNotification } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok"; data: AppNotification } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `/notifications?scope=pwdmanager`
       )
@@ -22,16 +22,16 @@ class ToolApi {
         if (problem) return problem
       }
 
-      return { kind: 'ok', data: response.data }
+      return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("fetchInAppNoti", e)
+      return { kind: "bad-data" }
     }
   }
 
-  async markReadInappNoti(token: string, id: string): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  async markReadInappNoti(token: string, id: string): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.put(`/notifications/${id}`, {
         read: true,
       })
@@ -42,10 +42,10 @@ class ToolApi {
         if (problem) return problem
       }
 
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("markReadInappNoti", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -55,17 +55,17 @@ class ToolApi {
     email: string
   ): Promise<
     | {
-        kind: 'ok'
+        kind: "ok"
         data: BreanchResult[]
       }
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        '/cystack_platform/pm/tools/breach',
+        "/cystack_platform/pm/tools/breach",
         { email }
       )
       // the typical ways to die when calling an api
@@ -73,10 +73,10 @@ class ToolApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok', data: response.data }
+      return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("checkBreaches", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -87,7 +87,7 @@ class ToolApi {
     page?: number
   ): Promise<
     | {
-        kind: 'ok'
+        kind: "ok"
         data: {
           count: number
           next: string | null
@@ -98,11 +98,11 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        '/cystack_platform/relay/addresses',
+        "/cystack_platform/relay/addresses",
         { page }
       )
       // the typical ways to die when calling an api
@@ -110,32 +110,32 @@ class ToolApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok', data: response.data }
+      return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("fetchRelayListAddresses", e)
+      return { kind: "bad-data" }
     }
   }
 
   async generateRelayNewAddress(
     token: string
-  ): Promise<{ kind: 'ok'; data: RelayAddress } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok"; data: RelayAddress } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        '/cystack_platform/relay/addresses'
+        "/cystack_platform/relay/addresses"
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok', data: response.data }
+      return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("generateRelayNewAddress", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -143,9 +143,9 @@ class ToolApi {
     token: string,
     id: number,
     address: string
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -157,16 +157,16 @@ class ToolApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("updateRelayAddress", e)
+      return { kind: "bad-data" }
     }
   }
 
-  async deleteRelayAddress(token: string, id: number): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  async deleteRelayAddress(token: string, id: number): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(
@@ -177,18 +177,19 @@ class ToolApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      return { kind: 'bad-data' }
+      Logger.error("deleteRelayAddress", e)
+      return { kind: "bad-data" }
     }
   }
 
   async useSubdomain(
     token: string,
     useSubdomain: boolean
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -202,17 +203,18 @@ class ToolApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      return { kind: 'bad-data' }
+      Logger.error("useSubdomain", e)
+      return { kind: "bad-data" }
     }
   }
 
   async fetchUseSubdomain(
     token: string
-  ): Promise<{ kind: 'ok'; data: boolean } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok"; data: boolean } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -223,9 +225,10 @@ class ToolApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok', data: response.data.use_relay_subdomain }
+      return { kind: "ok", data: response.data.use_relay_subdomain }
     } catch (e) {
-      return { kind: 'bad-data' }
+      Logger.error("fetchUseSubdomain", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -235,9 +238,9 @@ class ToolApi {
     address: string,
     enabled: boolean,
     blockSpam: boolean
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -253,9 +256,10 @@ class ToolApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      return { kind: 'bad-data' }
+      Logger.error("configRelayAddress", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -264,13 +268,13 @@ class ToolApi {
     subdomain: string
   ): Promise<
     | {
-        kind: 'ok'
+        kind: "ok"
         data: SubdomainData
       }
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -284,9 +288,10 @@ class ToolApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok', data: response.data }
+      return { kind: "ok", data: response.data }
     } catch (e) {
-      return { kind: 'bad-data' }
+      Logger.error("createSubdomain", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -296,12 +301,12 @@ class ToolApi {
     subdomain: string
   ): Promise<
     | {
-        kind: 'ok'
+        kind: "ok"
       }
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -315,15 +320,16 @@ class ToolApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      return { kind: 'bad-data' }
+      Logger.error("editSubdomain", e)
+      return { kind: "bad-data" }
     }
   }
 
   async fetchSubdomain(token: string): Promise<
     | {
-        kind: 'ok'
+        kind: "ok"
         data: {
           count: number
           next: null
@@ -334,7 +340,7 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -345,9 +351,10 @@ class ToolApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok', data: response.data }
+      return { kind: "ok", data: response.data }
     } catch (e) {
-      return { kind: 'bad-data' }
+      Logger.error("fetchSubdomain", e)
+      return { kind: "bad-data" }
     }
   }
 }

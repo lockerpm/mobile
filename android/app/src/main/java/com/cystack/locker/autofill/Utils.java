@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.app.assist.AssistStructure;
 import android.app.slice.Slice;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.BlendMode;
 import android.graphics.drawable.Icon;
 import android.os.Build;
@@ -14,22 +13,15 @@ import android.service.autofill.Dataset;
 import android.service.autofill.FillContext;
 import android.service.autofill.FillRequest;
 import android.service.autofill.FillResponse;
-import android.service.autofill.SaveInfo;
 import android.service.autofill.InlinePresentation;
+import android.service.autofill.SaveInfo;
 import android.util.Log;
+import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillManager;
 import android.view.autofill.AutofillValue;
-import android.view.autofill.AutofillId;
 import android.view.inputmethod.InlineSuggestionsRequest;
 import android.widget.RemoteViews;
 import android.widget.inline.InlinePresentationSpec;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,13 +29,20 @@ import androidx.annotation.RequiresApi;
 import androidx.autofill.inline.UiVersions;
 import androidx.autofill.inline.v1.InlineSuggestionUi;
 
-import com.tencent.mmkv.MMKV;
 import com.cystack.locker.R;
 import com.cystack.locker.RNAutofillServiceAndroid;
+import com.tencent.mmkv.MMKV;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Utils {
@@ -143,7 +142,6 @@ public class Utils {
     @NonNull
     public static AssistStructure getLatestAssistStructure(@NonNull FillRequest request) {
         List<FillContext> fillContexts = request.getFillContexts();
-
         return fillContexts.get(fillContexts.size() - 1).getStructure();
     }
 
@@ -319,7 +317,7 @@ public class Utils {
             PendingIntent pendingIntent,
             @Nullable String title,
             Context context) {
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             return null;
         }
 

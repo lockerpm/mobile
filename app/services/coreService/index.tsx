@@ -1,4 +1,3 @@
-import React from "react"
 import { NativeModules, Platform } from "react-native"
 import {
   CryptoService,
@@ -32,11 +31,10 @@ import {
   MobileLogService,
   MobileMessagingService,
 } from "./services"
-import en from "app/i18n/en"
-import vi from "app/i18n/vi"
+import en from "@/i18n/en"
+import vi from "@/i18n/vi"
 import { AttachmentService } from "./AttachmentsService"
-
-const { createContext, useContext } = React
+import { createContext, useContext } from "react"
 
 const localesDirectory = "app/i18n"
 const deviceLanguage =
@@ -68,12 +66,12 @@ const cryptoService = new CryptoService(
   secureStorageService,
   cryptoFunctionService,
   platformUtilsService,
-  logService,
+  logService
 )
 const passwordGenerationService = new PasswordGenerationService(
   cryptoService,
   storageService,
-  policyService,
+  policyService
 )
 const apiService = new ApiService(tokenService, platformUtilsService, (_: boolean) => {
   return new Promise((resolve) => {
@@ -91,7 +89,7 @@ const cipherService = new CipherService(
   fileUploadService,
   storageService,
   i18nService,
-  () => searchService,
+  () => searchService
 )
 const searchService = new SearchService(cipherService, logService, i18nService)
 const folderService = new FolderService(
@@ -100,13 +98,13 @@ const folderService = new FolderService(
   apiService,
   storageService,
   i18nService,
-  cipherService,
+  cipherService
 )
 const collectionService = new CollectionService(
   cryptoService,
   userService,
   storageService,
-  i18nService,
+  i18nService
 )
 const vaultTimeoutService = new VaultTimeoutService(
   cipherService,
@@ -124,7 +122,7 @@ const vaultTimeoutService = new VaultTimeoutService(
   },
   () => {
     return Promise.resolve(null)
-  },
+  }
 )
 const authService = new AuthService(
   cryptoService,
@@ -136,7 +134,7 @@ const authService = new AuthService(
   platformUtilsService,
   messagingService,
   vaultTimeoutService,
-  logService,
+  logService
 )
 const sendService = new SendService(
   cryptoService,
@@ -144,7 +142,7 @@ const sendService = new SendService(
   userService,
   storageService,
   i18nService,
-  cryptoFunctionService,
+  cryptoFunctionService
 )
 const syncService = new SyncService(
   userService,
@@ -162,7 +160,7 @@ const syncService = new SyncService(
     return new Promise((resolve) => {
       resolve(null)
     })
-  },
+  }
 )
 const containerService = new ContainerService(cryptoService)
 containerService.attachToGlobal(global)
@@ -175,6 +173,7 @@ const importService = new ImportService(
   i18nService,
   collectionService,
   platformUtilsService,
+  cryptoService
 )
 const attachmentService = new AttachmentService()
 

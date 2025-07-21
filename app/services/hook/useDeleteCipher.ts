@@ -3,9 +3,10 @@ import { useCipherData } from "./useCipherData"
 import { useFolder } from "./useFolder"
 import { useStores } from "app/models"
 import { useCoreService } from "../coreService"
-import { useHelper } from "./useHelper"
-import { Logger } from "app/utils/utils"
 import { useCipherHelper } from "./useCipherHelper"
+import { useToast } from "../utils"
+import { useAppLocale } from "@/i18n"
+import { Logger } from "@/utils/logger"
 
 export const useDeleteCipher = () => {
   const { cipherStore, uiStore } = useStores()
@@ -17,18 +18,20 @@ export const useDeleteCipher = () => {
     minimalReloadCache,
     updateCipher,
   } = useCipherData()
+  const { notify } = useToast()
   const { shareFolderRemoveItem } = useFolder()
-  const { notify, notifyApiError, translate } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
+  const { translate } = useAppLocale()
   const { getPasswordStrength } = useCipherHelper()
 
   const removeItemFromFolder = async (selectedCipher: CipherView) => {
-    selectedCipher.folderId = null
+    selectedCipher.folderId = ""
     const passwordStrength = getPasswordStrength(selectedCipher.login.password).score
     await updateCipher(
       selectedCipher.id,
       selectedCipher,
       passwordStrength,
-      selectedCipher.collectionIds,
+      selectedCipher.collectionIds
     )
   }
 
@@ -58,16 +61,18 @@ export const useDeleteCipher = () => {
           await shareFolderRemoveItem(
             selectedCipher.collectionIds[0],
             selectedCipher.organizationId,
-            selectedCipher,
+            selectedCipher
           )
         } else {
           const share = cipherStore.myShares.find((s) => s.id === selectedCipher.organizationId)
 
-          if (share.members.length > 0) {
-            await stopShareCipher(selectedCipher, share.members[0].id)
-          }
-          if (share.groups.length) {
-            await stopShareCipherForGroup(selectedCipher, share.groups[0].id)
+          if (share) {
+            if (share.members.length > 0) {
+              await stopShareCipher(selectedCipher, share.members[0].id)
+            }
+            if (share.groups.length) {
+              await stopShareCipherForGroup(selectedCipher, share.groups[0].id)
+            }
           }
         }
       }
@@ -79,7 +84,7 @@ export const useDeleteCipher = () => {
         await _offlineToTrashCiphers(ids)
         notify(
           "success",
-          `${translate("success.cipher_trashed")} ${translate("success.will_sync_when_online")}`,
+          `${translate("success:cipher_trashed")} ${translate("success:will_sync_when_online")}`
         )
         return { kind: "ok" }
       }
@@ -88,13 +93,13 @@ export const useDeleteCipher = () => {
       const res = await cipherStore.toTrashCiphers(ids)
       if (res.kind === "ok") {
         await _offlineToTrashCiphers(ids, true)
-        notify("success", translate("success.cipher_trashed"))
+        notifyTx("success", "success:cipher_trashed")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error:something_went_wrong")
       Logger.error("toTrashCiphers: " + e)
       return { kind: "unknown" }
     }

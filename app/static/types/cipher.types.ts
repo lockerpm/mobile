@@ -1,6 +1,6 @@
-import { CipherRequest } from 'core/models/request/cipherRequest'
-import { AccountRoleText, SharingStatus, SharingType } from './enum'
-import { FolderRequest } from 'core/models/request/folderRequest'
+import { CipherRequest } from "core/models/request/cipherRequest"
+import { AccountRoleText, SharingStatus, SharingType } from "./enum"
+import { FolderRequest } from "core/models/request/folderRequest"
 import {
   AttachmentView,
   CardView,
@@ -9,11 +9,30 @@ import {
   IdentityView,
   LoginView,
   SecureNoteView,
-} from 'core/models/view'
-import { ImageSourcePropType } from 'react-native'
-import { CipherType } from 'core/enums'
-import { PasswordHistoryView } from 'core/models/view/passwordHistoryView'
-import { CipherRepromptType } from 'core/enums/cipherRepromptType'
+} from "core/models/view"
+import { ImageSourcePropType } from "react-native"
+import { CipherType } from "core/enums"
+import { PasswordHistoryView } from "core/models/view/passwordHistoryView"
+import { CipherRepromptType } from "core/enums/cipherRepromptType"
+
+export enum CipherActionsModal {
+  DEFAULT = "default",
+  OTP_ACTIONS = "otpActions",
+  SHARE = "share",
+  DELETE = "delete",
+  LEAVE_SHARE = "leaveShare",
+  PREMIUM_ACTION = "premiumAction",
+  PREMIUM_LIMIT = "premiumLimit",
+}
+
+export enum CipherEditHelperModal {
+  PLAN_STORAGE_LIMIT = "planStorageLimit",
+  HIDE_EMAIL = "hideEmail",
+  GENERATE_PASSWORD = "generatePassword",
+  PREMIUM_ACTION = "premiumAction",
+  PASSWORD_OTP = "passwordOtp",
+  MOVE_TO_FOLDER = "moveToFolder",
+}
 
 export type EditShareCipherData = {
   role: AccountRoleText
@@ -159,9 +178,11 @@ export type GetCiphersParams = {
   includeExtensions?: boolean
 }
 
+export type CipherEditMode = "add" | "edit" | "clone"
+
 export type CipherAppView = {
   id: string
-  organizationId: string
+  organizationId: string | null
   folderId: string
   name: string
   notes: string
@@ -179,12 +200,25 @@ export type CipherAppView = {
   fields: FieldView[]
   passwordHistory: PasswordHistoryView[]
   collectionIds: string[]
-  revisionDate: Date
+  revisionDate: Date | null
   deletedDate: Date
   reprompt: CipherRepromptType
   imgLogo: ImageSourcePropType
   notSync: boolean
   isDeleted: boolean
+}
+
+export type CipherShareType = CipherAppView & {
+  description: string
+  status?: string
+  member?: SharedMemberType
+  group?: SharedGroupType
+}
+
+export type SharedWithYouType = CipherAppView & {
+  isShared?: boolean
+  description?: string
+  isAccepted?: boolean
 }
 
 export interface FileData {

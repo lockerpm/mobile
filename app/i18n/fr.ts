@@ -125,6 +125,7 @@ const fr: Translations = {
     value: "Valeur",
     warning: "Attention",
     website: "Site Web",
+    websites: "Sites Web",
     loading: "Déchiffrement des données",
     see_all: "Voir tout",
     collapse: "Replier",
@@ -148,6 +149,7 @@ const fr: Translations = {
     signout: "Se déconnecter",
     signup: "S'inscrire",
     sign_in: "Se connecter",
+    from: "De",
   },
   navigator: {
     is_offline: "Locker est actuellement en mode hors ligne.",
@@ -310,6 +312,8 @@ const fr: Translations = {
       "9000": "Le partage rapide n'est pas valide car l'e-mail ou le code n'est pas valide.",
       "10000": "Le nombre maximum de sauvegardes d'identifiants a été atteint.",
     },
+    email_validate: "L'e-mail n'est pas valide",
+    signup_failed: "Échec de l'inscription ! Veuillez réessayer.",
   },
   success: {
     done: "Terminé",
@@ -678,6 +682,7 @@ const fr: Translations = {
       existing_email: "Utiliser l'e-mail privé existant",
       empty: "Vous n'avez pas généré d'e-mail privé",
     },
+    addWebsite: "Ajouter un site Web",
   },
   shares: {
     shares: "Partages",

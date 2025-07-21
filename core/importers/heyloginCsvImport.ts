@@ -47,7 +47,7 @@ export class HeyLoginCsvImporter extends BaseImporter implements Importer {
       // Basic info
       cipher.name = this.getValueOrDefault(
         value.displayName || this.nameFromUrl(value.url) || value.username || "",
-        "--",
+        "--"
       )
       cipher.notes = this.getValueOrDefault(value.note)
 

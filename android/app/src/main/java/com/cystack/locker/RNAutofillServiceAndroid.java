@@ -5,28 +5,21 @@ import static android.view.autofill.AutofillManager.EXTRA_AUTHENTICATION_RESULT;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Build;
-import android.os.Bundle;
+import android.provider.Settings;
 import android.service.autofill.Dataset;
-import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
-import android.view.autofill.AutofillId;
 
 import androidx.annotation.NonNull;
 
-import com.facebook.react.bridge.NativeModule;
+import com.cystack.locker.autofill.AutofillItem;
+import com.cystack.locker.autofill.Field;
+import com.cystack.locker.autofill.Utils;
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
-
-import com.cystack.locker.R;
-import com.cystack.locker.autofill.AutofillItem;
-import com.cystack.locker.autofill.Utils;
-import com.cystack.locker.autofill.Field;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -79,7 +72,7 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
                 intent.putExtra("username", field.text);
             }
         } 
-        AutofillItem data = new AutofillItem("", username, password, "", domain);
+//        AutofillItem data = new AutofillItem("", username, password, "", domain);
         
         return intent;
     }
@@ -98,9 +91,26 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void isAutofillServiceActived(Callback callBack) {
-        callBack.invoke(Utils.IsLockerAutofillServicesEnabled(getReactApplicationContext()));
+         callBack.invoke(Utils.IsLockerAutofillServicesEnabled(getReactApplicationContext()));
     }
-    
+
+    @ReactMethod
+    public void openAutofillSettings(Promise promise) {
+        try {
+            Context context = getReactApplicationContext();
+            String packageName = context.getPackageName();
+
+            Intent intent = new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE);
+            intent.setData(android.net.Uri.parse("package:" + packageName));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+
+            promise.resolve(true);
+        } catch (Exception e) {
+            promise.reject("AUTOFILL_ERROR", "Failed to open autofill settings: " + e.getMessage());
+        }
+    }
+
     @ReactMethod
     public void removeLastItem() {
         Utils.RemoveCredential(credentialID);

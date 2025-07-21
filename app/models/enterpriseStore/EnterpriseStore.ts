@@ -1,17 +1,17 @@
-import { Instance, SnapshotIn, SnapshotOut, types } from 'mobx-state-tree'
-import { withSetPropAction } from '../helpers/withSetPropAction'
-import { enterpriseApi } from 'app/services/api/enterpriseApi'
-import { folderApi } from 'app/services/api/folderApi'
-import { EditShareCipherData } from 'app/static/types'
+import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
+import { withSetPropAction } from "../helpers/withSetPropAction"
+import { enterpriseApi } from "app/services/api/enterpriseApi"
+import { folderApi } from "app/services/api/folderApi"
+import { EditShareCipherData } from "app/static/types"
 
 /**
  * Model description here for TypeScript hints.
  */
 export const EnterpriseStoreModel = types
-  .model('EnterpriseStore')
+  .model("EnterpriseStore")
   .props({
-    apiToken: types.maybeNull(types.string),
-    isEnterpriseInvitations: false,
+    apiToken: types.string,
+    isEnterpriseInvitations: types.boolean,
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -26,7 +26,7 @@ export const EnterpriseStoreModel = types
   .actions((self) => ({
     clearStore: (dataOnly?: boolean) => {
       if (!dataOnly) {
-        self.apiToken = null
+        self.apiToken = ""
       }
       self.isEnterpriseInvitations = false
     },
@@ -56,7 +56,7 @@ export const EnterpriseStoreModel = types
     },
     invitations: async () => {
       const res = await enterpriseApi.invitations(self.apiToken)
-      if (res.kind === 'ok') {
+      if (res.kind === "ok") {
         if (res.data.length > 0) {
           self.setEnterpriseInvited(res.data.some((e) => e.domain === null))
         }
@@ -64,7 +64,7 @@ export const EnterpriseStoreModel = types
       }
       return []
     },
-    invitationsActions: async (id: string, status: 'confirmed' | 'reject') => {
+    invitationsActions: async (id: string, status: "confirmed" | "reject") => {
       const res = await enterpriseApi.invitationsActions(self.apiToken, id, status)
       return res
     },
@@ -73,4 +73,8 @@ export const EnterpriseStoreModel = types
 export interface EnterpriseStore extends Instance<typeof EnterpriseStoreModel> {}
 export interface EnterpriseStoreSnapshotOut extends SnapshotOut<typeof EnterpriseStoreModel> {}
 export interface EnterpriseStoreSnapshotIn extends SnapshotIn<typeof EnterpriseStoreModel> {}
-export const createEnterpriseStoreDefaultModel = () => types.optional(EnterpriseStoreModel, {})
+export const createEnterpriseStoreDefaultModel = () =>
+  types.optional(EnterpriseStoreModel, {
+    apiToken: "",
+    isEnterpriseInvitations: false,
+  })

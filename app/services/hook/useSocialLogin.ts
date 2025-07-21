@@ -1,15 +1,17 @@
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
-import { GOOGLE_CLIENT_ID } from '../../config/constants'
-import { Logger } from '../../utils/utils'
-import { LoginManager, AccessToken } from 'react-native-fbsdk-next'
-import { appleAuth } from '@invertase/react-native-apple-authentication'
-import { getCookies, logRegisterSuccessEvent } from '../../utils/analytics'
-import { useStores } from 'app/models'
-import { useHelper } from './useHelper'
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin"
+import { LoginManager, AccessToken } from "react-native-fbsdk-next"
+import { appleAuth } from "@invertase/react-native-apple-authentication"
+import { getCookies, logRegisterSuccessEvent } from "../../utils/analytics"
+import { useStores } from "app/models"
+import { useHelper } from "./useHelper"
+import { useToast } from "../utils"
+import Config from "@/config"
+import { Logger } from "@/utils/logger"
 
 export function useSocialLogin() {
   const { user } = useStores()
-  const { notifyApiError, notify, setApiTokens, translate } = useHelper()
+  const { setApiTokens } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
 
   // Google
   const googleLogin = async (payload: {
@@ -19,27 +21,29 @@ export function useSocialLogin() {
     const { setIsLoading, onLoggedIn } = payload
     try {
       GoogleSignin.configure({
-        webClientId: GOOGLE_CLIENT_ID,
+        webClientId: Config.GOOGLE_CLIENT_ID,
       })
       await GoogleSignin.signIn()
       const tokens = await GoogleSignin.getTokens()
       await _handleSocialLogin({
-        provider: 'google',
+        provider: "google",
         token: tokens.accessToken,
         setIsLoading,
         onLoggedIn,
       })
-    } catch (e) {
-      setIsLoading && setIsLoading(false)
-      Logger.debug('googleLogin: ' + e)
+    } catch (e: any) {
+      if (setIsLoading) {
+        setIsLoading(false)
+      }
+      Logger.debug("googleLogin: " + e)
       switch (e.code) {
         case statusCodes.SIGN_IN_CANCELLED:
           break
         case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-          notify('error', translate('error.social_login.google.play_service_not_available'))
+          notifyTx("error", "error:social_login.google.play_service_not_available")
           break
         default:
-          notify('error', translate('error.could_not_complete'))
+          notifyTx("error", "error:could_not_complete")
       }
     }
   }
@@ -53,24 +57,27 @@ export function useSocialLogin() {
     try {
       let res = await AccessToken.getCurrentAccessToken()
       if (!res) {
-        await LoginManager.logInWithPermissions(['email'])
+        await LoginManager.logInWithPermissions(["email"])
         res = await AccessToken.getCurrentAccessToken()
         if (!res) {
-          // notify('error', translate('error.something_went_wrong'))
-          setIsLoading && setIsLoading(false)
+          if (setIsLoading) {
+            setIsLoading(false)
+          }
           return
         }
       }
       await _handleSocialLogin({
-        provider: 'facebook',
+        provider: "facebook",
         token: res.accessToken,
         setIsLoading,
         onLoggedIn,
       })
     } catch (e) {
-      setIsLoading && setIsLoading(false)
-      Logger.debug('facebookLogin: ' + e)
-      notify('error', translate('error.could_not_complete'))
+      if (setIsLoading) {
+        setIsLoading(false)
+      }
+      Logger.debug("facebookLogin: " + e)
+      notifyTx("error", "error:could_not_complete")
     }
   }
 
@@ -82,7 +89,7 @@ export function useSocialLogin() {
   }) => {
     const { setIsLoading, onLoggedIn, code } = payload
     await _handleSocialLogin({
-      provider: 'github',
+      provider: "github",
       code,
       setIsLoading,
       onLoggedIn,
@@ -101,29 +108,31 @@ export function useSocialLogin() {
         requestedScopes: [appleAuth.Scope.EMAIL],
       })
       await _handleSocialLogin({
-        provider: 'apple',
-        token: appleAuthRequestResponse.identityToken,
+        provider: "apple",
+        token: appleAuthRequestResponse.identityToken ?? "",
         setIsLoading,
         onLoggedIn,
       })
-    } catch (e) {
-      setIsLoading && setIsLoading(false)
-      Logger.debug('appleLogin: ' + e)
+    } catch (e: any) {
+      if (setIsLoading) {
+        setIsLoading(false)
+      }
+      Logger.debug("appleLogin: " + e)
       switch (e.code) {
-        case '1001':
+        case "1001":
           break
-        case '1000':
-          notify('error', translate('error.social_login.apple.could_not_complete'))
+        case "1000":
+          notifyTx("error", "error:social_login.apple.could_not_complete")
           break
         default:
-          notify('error', translate('error.could_not_complete'))
+          notifyTx("error", "error:could_not_complete")
       }
     }
   }
 
   // Log out all service
   const logoutAllServices = async () => {
-    await Promise.all([_logoutGoogle(), _logoutFacebook(), _logoutGitHub()])
+    await Promise.all([_logoutGoogle(), _logoutFacebook()])
   }
 
   // ------------------ PRIVATE METHODS ---------------------
@@ -137,17 +146,22 @@ export function useSocialLogin() {
   }) => {
     const { provider, token, code, setIsLoading, onLoggedIn } = payload
 
-    setIsLoading && setIsLoading(true)
+    if (setIsLoading) {
+      setIsLoading(true)
+    }
+
     const loginRes = await user.socialLogin({
       provider,
       access_token: token,
       code,
-      scope: 'pwdmanager',
-      utm_source: await getCookies('utm_source'),
+      scope: "pwdmanager",
+      utm_source: await getCookies("utm_source"),
     })
 
-    setIsLoading && setIsLoading(false)
-    if (loginRes.kind !== 'ok') {
+    if (setIsLoading) {
+      setIsLoading(false)
+    }
+    if (loginRes.kind !== "ok") {
       notifyApiError(loginRes)
       await logoutAllServices()
     } else {
@@ -155,20 +169,18 @@ export function useSocialLogin() {
         logRegisterSuccessEvent()
       }
       const accessToken = loginRes.data.tmp_token || loginRes.data.token
-      setIsLoading && setIsLoading(false)
       const res = await user.getPMToken(accessToken)
 
-      if (res.kind !== 'ok') {
-        if (res.kind === 'bad-data' && res.data.code === '1011') {
-          notify('error', translate('error.social_login.cannot_get_email'))
+      if (res.kind !== "ok") {
+        if (res.kind === "bad-data" && res.data.code === "1011") {
+          notifyTx("error", "error:social_login.cannot_get_email")
         } else {
           notifyApiError(res)
         }
         await logoutAllServices()
       } else {
-        // @ts-ignore
         setApiTokens(res.data?.access_token)
-        onLoggedIn(loginRes.data.is_first, loginRes.data.token)
+        onLoggedIn(loginRes.data.is_first ?? false, loginRes.data.token)
       }
     }
   }
@@ -176,14 +188,14 @@ export function useSocialLogin() {
   const _logoutGoogle = async () => {
     try {
       GoogleSignin.configure({
-        webClientId: GOOGLE_CLIENT_ID,
+        webClientId: Config.GOOGLE_CLIENT_ID,
       })
-      const isSignedIn = await GoogleSignin.isSignedIn()
+      const isSignedIn = GoogleSignin.hasPreviousSignIn()
       if (isSignedIn) {
         await GoogleSignin.signOut()
       }
     } catch (e) {
-      Logger.error('Log out Google: ' + e)
+      Logger.error("Log out Google: " + e)
     }
   }
 
@@ -193,12 +205,8 @@ export function useSocialLogin() {
         LoginManager.logOut()
       }
     } catch (e) {
-      Logger.error('Log out Facebook: ' + e)
+      Logger.error("Log out Facebook: " + e)
     }
-  }
-
-  const _logoutGitHub = async () => {
-    // TODO
   }
 
   return {

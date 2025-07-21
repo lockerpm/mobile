@@ -1,18 +1,21 @@
-// import AsyncStorage from "@react-native-async-storage/async-storage"
-import { MMKV } from 'react-native-mmkv'
+import { MMKV } from "react-native-mmkv"
+export const storage = new MMKV()
 
-const storage = new MMKV()
+export enum AppStorageKey {
+  /**
+   * The key for the last used locale.
+   */
+  LAST_USED_LOCALE = "LAST_USED_LOCALE",
 
-export enum StorageKey {
-  APP_CURRENT_USER = 'app__current_user',
-  PUSH_NOTI_DATA = 'push_noti_data',
-  ANDROID_AUTOFILL_SERVICE_DATA = 'android_autofill_service_data',
-}
+  /**
+   * The key for the last used theme.
+   */
+  LAST_USED_THEME = "LAST_USED_THEME",
 
-export type PushNotiData = {
-  type: string
-  url?: string
-  data?: any
+  /**
+   * The key for the last used theme.
+   */
+  APP_CURRENT_USER_PW_ID = "APP_CURRENT_USER_PW_ID",
 }
 
 /**
@@ -20,10 +23,9 @@ export type PushNotiData = {
  *
  * @param key The key to fetch.
  */
-export async function loadString(key: string): Promise<string | null> {
+export function loadString(key: string): string | null {
   try {
-    // return await AsyncStorage.getItem(key)
-    return Promise.resolve(storage.getString(key))
+    return storage.getString(key) ?? null
   } catch {
     // not sure why this would fail... even reading the RN docs I'm unclear
     return null
@@ -36,10 +38,9 @@ export async function loadString(key: string): Promise<string | null> {
  * @param key The key to fetch.
  * @param value The value to store.
  */
-export async function saveString(key: string, value: string): Promise<boolean> {
+export function saveString(key: string, value: string): boolean {
   try {
-    // await AsyncStorage.setItem(key, value)
-    await Promise.resolve(storage.set(key, value))
+    storage.set(key, value)
     return true
   } catch {
     return false
@@ -51,11 +52,26 @@ export async function saveString(key: string, value: string): Promise<boolean> {
  *
  * @param key The key to fetch.
  */
-export function load(key: string): Promise<any | null> {
-  return new Promise((resolve) => {
-    const res = storage.getString(key)
-    resolve(res ? JSON.parse(res) : null)
-  })
+export function load<T>(key: string): T | null {
+  let almostThere: string | null = null
+  try {
+    almostThere = loadString(key)
+    return JSON.parse(almostThere ?? "") as T
+  } catch {
+    return (almostThere as T) ?? null
+  }
+}
+
+/**
+ * Check if exists
+ */
+export function has(key: string): boolean {
+  try {
+    const val = load(key)
+    return val !== null
+  } catch {
+    return false
+  }
 }
 
 /**
@@ -64,9 +80,9 @@ export function load(key: string): Promise<any | null> {
  * @param key The key to fetch.
  * @param value The value to store.
  */
-export async function save(key: string, value: any): Promise<boolean> {
+export function save(key: string, value: unknown): boolean {
   try {
-    await Promise.resolve(storage.set(key, JSON.stringify(value)))
+    saveString(key, JSON.stringify(value))
     return true
   } catch {
     return false
@@ -78,30 +94,17 @@ export async function save(key: string, value: any): Promise<boolean> {
  *
  * @param key The key to kill.
  */
-export async function remove(key: string): Promise<void> {
+export function remove(key: string): void {
   try {
-    await Promise.resolve(storage.delete(key))
+    storage.delete(key)
   } catch {}
 }
 
 /**
  * Burn it all to the ground.
  */
-export async function clear(): Promise<void> {
+export function clear(): void {
   try {
-    // await AsyncStorage.clear()
-    await Promise.resolve(storage.clearAll())
+    storage.clearAll()
   } catch {}
-}
-
-/**
- * Check if exists
- */
-export async function has(key: string): Promise<boolean> {
-  try {
-    const val = await load(key)
-    return val !== null
-  } catch {
-    return false
-  }
 }

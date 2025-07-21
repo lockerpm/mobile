@@ -1,4 +1,3 @@
-import * as React from "react"
 import { ComponentType } from "react"
 import {
   Image,
@@ -52,6 +51,8 @@ export function Logo(props: LogoProps) {
   } = props
 
   const isPressable = !!WrapperProps.onPress
+
+  // @ts-ignore
   const Wrapper: ComponentType<TouchableOpacityProps> = WrapperProps?.onPress
     ? TouchableOpacity
     : View
@@ -73,10 +74,8 @@ const logoRegistry = {
   "app-logo-secondary": require("assets/images/icons/app-logo-secondary.png"),
   "horizontal-dark": require("assets/images/logo/logo-horizontal-dark.png"),
   "horizontal-light": require("assets/images/logo/logo-horizontal-light.png"),
-
   "vertical-dark": require("assets/images/logo/logo-vertical-dark.png"),
   "vertical-light": require("assets/images/logo/logo-vertical-light.png"),
-
   "locker-premium": require("assets/images/logo/locker-premium.png"),
   "locker-premium-dark": require("assets/images/logo/locker-premium-dark.png"),
 }

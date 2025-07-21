@@ -1,0 +1,43 @@
+import { Platform } from "react-native"
+import Config from "react-native-config"
+
+export default {
+  IS_PROD: Config.IS_PROD === "1",
+
+  BASE_URL: Config.BASE_URL,
+  QUICK_SHARE_BASE_URL: Config.QUICK_SHARE_BASE_URL,
+  GET_LOGO_URL: Config.GET_LOGO_URL,
+  WS_URL: Config.WS_URL,
+
+  // SENTRY LOG
+  DSN_SENTRY: Config.DSN_SENTRY,
+
+  // SERVICES
+  GOOGLE_CLIENT_ID:
+    Platform.OS === "ios" ? Config.GOOGLE_CLIENT_ID_IOS : Config.GOOGLE_CLIENT_ID_ANDROID,
+
+  SHARED_KEYCHAIN_SERVICE: Config.SHARED_KEYCHAIN_SERVICE,
+  SHARED_KEYCHAIN_ACCESS_GROUP: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
+
+  GITHUB_CONFIG: {
+    redirectUrl: Config.GITHUB_CONFIG_REDIRECTURL,
+    clientId: Config.GITHUB_CONFIG_CLIENTID,
+    scopes: ["user:email"],
+    authorizationEndpoint: "https://github.com/login/oauth/authorize",
+  },
+
+  RECAPTCHA_SITE_KEY: Config.RECAPTCHA_SITE_KEY,
+  RECAPTCHA_BASE_URL: Config.RECAPTCHA_BASE_URL,
+
+  // STAGING
+  CF_ACCESS_CLIENT_SECRET: Config.CF_ACCESS_CLIENT_SECRET,
+  CF_ACCESS_CLIENT_ID: Config.CF_ACCESS_CLIENT_ID,
+
+  // APP FLYER
+  APPS_FLYER_DEV_KEY: Config.APPS_FLYER_DEV_KEY,
+  APPS_FLYER_APP_ID: Config.APPS_FLYER_APP_ID,
+
+  // Chat woot
+  CHATWOOT_WEBSITE_TOKEN: Config.CHATWOOT_WEBSITE_TOKEN,
+  CHATWOOT_BASE_URL: Config.CHATWOOT_BASE_URL,
+}

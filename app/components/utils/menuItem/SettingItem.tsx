@@ -1,10 +1,11 @@
-import React from "react"
-import { ActivityIndicator, TouchableOpacity, ViewStyle } from "react-native"
-import { Icon, Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { ActivityIndicator, StyleSheet, ViewStyle } from "react-native"
+import { Icon, PressableScale, Text } from "app/components/cores"
+import { TxKeyPath } from "app/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type SettingsItemProps = {
-  name: string
+  text?: string
+  textTx?: TxKeyPath
   RightAccessory?: JSX.Element
   color?: string
   onPress?: () => void
@@ -17,7 +18,8 @@ type SettingsItemProps = {
 }
 
 export const SettingsItem = ({
-  name,
+  text,
+  textTx,
   RightAccessory,
   color,
   onPress,
@@ -25,37 +27,39 @@ export const SettingsItem = ({
   isLoading,
   containerStyle,
 }: SettingsItemProps) => {
-  const { colors } = useTheme()
+  const {
+    theme: { colors },
+  } = useAppTheme()
 
   const renderRightComponent = () => {
     if (isLoading) return <ActivityIndicator size="small" color={colors.primary} />
     if (RightAccessory) return RightAccessory
 
-    return <Icon icon="caret-right" size={20} color={colors.secondaryText} />
+    return <Icon icon="caret-right" size={20} color={colors.label} />
   }
 
   return (
-    <TouchableOpacity
+    <PressableScale
       disabled={!onPress || disabled}
       onPress={onPress}
-      style={[
-        {
-          justifyContent: "space-between",
-          flexDirection: "row",
-          alignItems: "center",
-          padding: 16,
-        },
-        containerStyle,
-      ]}
+      style={[styles.container, containerStyle]}
     >
-      <Text
-        text={name}
-        color={color}
-        style={{
-          flex: 1,
-        }}
-      />
+      <Text text={text} tx={textTx} color={color} style={styles.text} />
       {renderRightComponent()}
-    </TouchableOpacity>
+    </PressableScale>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16,
+  },
+  text: {
+    flexGrow: 1,
+    flexShrink: 1,
+    marginRight: 8,
+  },
+})

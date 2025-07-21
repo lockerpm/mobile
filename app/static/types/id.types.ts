@@ -1,7 +1,5 @@
-import {
-  PasskeyAuthenticationResult,
-  PasskeyRegistrationResult,
-} from "react-native-passkey/lib/typescript/Passkey"
+import { PasskeyGetResult, PasskeyCreateResult } from "react-native-passkey"
+import { User2FAMethod } from "./user.types"
 
 export type UseLoginMethod = {
   webauthn: boolean
@@ -12,10 +10,7 @@ export type UseLoginMethod = {
 export type LoginResult = {
   token?: string
   is_factor2?: boolean
-  methods?: {
-    type: string
-    data: any
-  }[]
+  methods?: User2FAMethod[]
 }
 
 export type LoginData = {
@@ -51,8 +46,8 @@ export type WebauthCredential = {
 }
 
 export type AccountRecovery = {
-  type: string
-  data: any
+  type: "mail"
+  data: string[]
 }
 
 export type OnPremisePreloginData = {
@@ -68,7 +63,7 @@ export type OnPremisePreloginData = {
 
 export type AuthPasskeyRequest = {
   username: string
-  response: PasskeyAuthenticationResult
+  response: PasskeyGetResult
 }
 
 export type SocialLoginRequest = {
@@ -99,7 +94,7 @@ export type RegisterPasskeyOptionRequest = {
 }
 
 export type RegisterPasskeyRequest = RegisterRequest & {
-  response: PasskeyRegistrationResult & {
+  response: PasskeyCreateResult & {
     authenticatorAttachment: string
   }
 }

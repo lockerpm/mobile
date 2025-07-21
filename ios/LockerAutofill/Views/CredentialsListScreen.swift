@@ -48,10 +48,10 @@ struct CredentialsListScreen: View {
       List {
         if !searchText.isEmpty && searchCredentials.isEmpty {
           Text(i.translate("list.noDataSearch") +  "'\(searchText)'")
-            .foregroundStyle(Color.label)
+            .foregroundStyle(AppColors.label)
           if searchText == initSearch &&  suggestSearchs.count > 1{
             Text(i.translate("list.suggestSearch") )
-              .foregroundStyle(Color.label)
+              .foregroundStyle(AppColors.label)
             ForEach(suggestSearchs[1..<suggestSearchs.count], id: \.self) { searchText in
               Button {
                 self.searchText = searchText
@@ -96,7 +96,7 @@ struct CredentialsListScreen: View {
         }
       }
 
-      .foregroundStyle(Color.title)
+      .foregroundStyle(AppColors.title)
       .autocapitalization(.none)
       .navigationTitle(i.translate("list.title"))
       .toolbar {
@@ -144,7 +144,7 @@ struct CredentialsListScreen: View {
         isShowPasswordGenerator = 2
       })
     }
-    .background(Color.background)
+    .background(AppColors.background)
   }
 }
 

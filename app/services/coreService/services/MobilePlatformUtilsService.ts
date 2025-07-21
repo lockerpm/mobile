@@ -1,27 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { PlatformUtilsService } from 'core/abstractions'
-import { DeviceType } from 'core/enums'
-import { Platform, Linking, Alert } from 'react-native'
-import Clipboard from '@react-native-clipboard/clipboard'
-import ReactNativeBiometrics from 'react-native-biometrics'
-import DeviceInfo from 'react-native-device-info'
-import Toast from 'react-native-toast-message'
-import RNFS from 'react-native-fs'
-import { Logger } from '../../../utils/utils'
+import { PlatformUtilsService } from "core/abstractions"
+import { DeviceType } from "core/enums"
+import { Platform, Linking, Alert } from "react-native"
+import Clipboard from "@react-native-clipboard/clipboard"
+import DeviceInfo from "react-native-device-info"
+import Toast from "react-native-toast-message"
+import RNFS from "react-native-fs"
+import { Logger } from "@/utils/logger"
 
 export class MobilePlatformUtilsService implements PlatformUtilsService {
   identityClientId: string
 
   authenticateBiometric(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      ReactNativeBiometrics.simplePrompt({ promptMessage: 'Authenticate' })
-        .then((resultObject) => {
-          const { success } = resultObject
-          resolve(success)
-        })
-        .catch(() => {
-          resolve(false)
-        })
+      resolve(false)
     })
   }
 
@@ -33,15 +24,15 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
     return Promise.resolve(DeviceInfo.getVersion())
   }
 
-  getDefaultSystemTheme(): Promise<'light' | 'dark'> {
-    return Promise.resolve('light')
+  getDefaultSystemTheme(): Promise<"light" | "dark"> {
+    return Promise.resolve("light")
   }
 
   getDevice(): DeviceType {
     switch (Platform.OS) {
-      case 'ios':
+      case "ios":
         return DeviceType.iOS
-      case 'android':
+      case "android":
         return DeviceType.Android
       default:
         return DeviceType.Android
@@ -110,7 +101,7 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
     return 0
   }
 
-  onDefaultSystemThemeChange(callback: (theme: 'light' | 'dark') => unknown): unknown {
+  onDefaultSystemThemeChange(callback: (theme: "light" | "dark") => unknown): unknown {
     return undefined
   }
 
@@ -122,7 +113,7 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
     try {
       let path: string
 
-      if (Platform.OS === 'android') {
+      if (Platform.OS === "android") {
         path = `${RNFS.ExternalStorageDirectoryPath}/Download/${fileName}`
       } else {
         path = `${RNFS.DocumentDirectoryPath}/${fileName}`
@@ -130,7 +121,7 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
       await RNFS.writeFile(path, blobData, blobOptions)
       return true
     } catch (e) {
-      Logger.error('Save file: ' + e)
+      Logger.error("Save file: " + e)
       return false
     }
   }
@@ -144,14 +135,14 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
     bodyIsHtml: boolean | undefined
   ): Promise<boolean> {
     return new Promise((resolve) => {
-      Alert.alert(title, body, [
+      Alert.alert(title || "", body, [
         {
           text: confirmText,
           onPress: () => resolve(true),
         },
         {
           text: cancelText,
-          style: 'cancel',
+          style: "cancel",
           onPress: () => resolve(false),
         },
       ])
@@ -167,7 +158,7 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
   }
 
   showToast(
-    type: 'error' | 'success' | 'warning' | 'info',
+    type: "error" | "success" | "warning" | "info",
     title: string,
     text: string | string[],
     options: any
@@ -181,9 +172,7 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
 
   supportsBiometric(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      ReactNativeBiometrics.isSensorAvailable().then(({ available }) => {
-        resolve(available)
-      })
+      resolve(false)
     })
   }
 

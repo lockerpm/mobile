@@ -1,20 +1,27 @@
-import { useTheme } from 'app/services/context'
-import React from 'react'
-import { View } from 'react-native'
-import { Text } from '../../cores'
+import { StyleProp, View, ViewStyle } from "react-native"
+import { Text } from "../../cores"
+import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
-export const PremiumTag = () => {
-  const { colors } = useTheme()
+type PremiumTagProps = {
+  style?: StyleProp<ViewStyle>
+}
+
+export const PremiumTag = ({ style }: PremiumTagProps) => {
+  const {
+    themed,
+    theme: { colors },
+  } = useAppTheme()
   return (
-    <View
-      style={{
-        paddingHorizontal: 10,
-        paddingVertical: 2,
-        backgroundColor: colors.primaryText,
-        borderRadius: 3,
-      }}
-    >
-      <Text text="PREMIUM" preset="bold" size="small" color={colors.background} />
+    <View style={themed([$container, style])}>
+      <Text text="PREMIUM" preset="bold" size="xs" color={colors.background} />
     </View>
   )
 }
+
+const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  paddingHorizontal: 10,
+  paddingVertical: 2,
+  backgroundColor: colors.text,
+  borderRadius: 3,
+})

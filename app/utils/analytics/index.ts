@@ -1,20 +1,20 @@
-import { getUrlParameterByName, Logger } from '../utils'
-import CookieManager from '@react-native-cookies/cookies'
-import moment from 'moment'
-import analytics from '@react-native-firebase/analytics'
-import DeviceInfo from 'react-native-device-info'
+import { getUrlParameterByName } from "../utils"
+import CookieManager from "@react-native-cookies/cookies"
+import moment from "moment"
+import analytics from "@react-native-firebase/analytics"
+import DeviceInfo from "react-native-device-info"
+import { Logger } from "../logger"
 
-const WHITELIST_HOSTS = ['https://locker.io', 'https://id.locker.io', 'https://staging.locker.io']
-const COOKIES_URL = 'https://locker.io'
-const TAGS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
-
+const WHITELIST_HOSTS = ["https://locker.io", "https://id.locker.io", "https://staging.locker.io"]
+const COOKIES_URL = "https://locker.io"
+const TAGS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
 
 export enum AnalyticEvents {
   REGISTER_SUCCESS = "register_success",
   CREATE_MASTER_PW = "create_master_pw",
   ENTER_MASTER_PW = "enter_master_pw",
   COPY_OTP = "copy_otp",
-  ADD_OTP = 'add_otp',
+  ADD_OTP = "add_otp",
   CREATE_PRIVATE_EMAIL = "create_private_email",
   BLOCK_PRIVATE_EMAIL = "block_private_email",
   CREATE_ITEMS = "create_items",
@@ -23,7 +23,6 @@ export enum AnalyticEvents {
   PASSWORD_HEALTH = "password_health",
   DATA_BREACH_SCANNER = "data_breach_scanner",
 }
-
 
 export const setCookiesFromUrl = (url: string) => {
   if (!url || !WHITELIST_HOSTS.some((host) => url.startsWith(host))) {
@@ -41,7 +40,7 @@ export const setCookiesFromUrl = (url: string) => {
   if (hasChange) {
     Logger.debug(`Set cookies: ${JSON.stringify(values)}`)
     const now = moment()
-    now.add(30, 'days')
+    now.add(30, "days")
     TAGS.forEach((t, index) => {
       CookieManager.set(COOKIES_URL, {
         name: t,
@@ -52,10 +51,9 @@ export const setCookiesFromUrl = (url: string) => {
   }
 }
 
-
 export const getUtmCookies = async () => {
   const cookies = await CookieManager.get(COOKIES_URL)
-  const res = {}
+  const res: Record<string, any> = {}
   Object.keys(cookies).forEach((k) => {
     if (TAGS.includes(k)) {
       res[k] = cookies[k].value
@@ -69,8 +67,10 @@ export const getCookies = async (name: string) => {
   return cookies[name]
 }
 
-
 export const logRegisterSuccessEvent = async () => {
+  if (__DEV__) {
+    return
+  }
   const cookies = await getUtmCookies()
   const device_identifier = await DeviceInfo.getUniqueId()
   await analytics().logEvent(AnalyticEvents.REGISTER_SUCCESS, {
@@ -81,6 +81,9 @@ export const logRegisterSuccessEvent = async () => {
 
 // Create master pw
 export const logCreateMasterPwEvent = async () => {
+  if (__DEV__) {
+    return
+  }
   const cookies = await getUtmCookies()
   const device_identifier = await DeviceInfo.getUniqueId()
   await analytics().logEvent(AnalyticEvents.CREATE_MASTER_PW, {
@@ -100,10 +103,13 @@ export const trackScreenView = (screenName: string) => {
   })
 }
 
-export const logFirebaseEvent = async (event: AnalyticEvents, email: string) => {
+export const logFirebaseEvent = async (event: AnalyticEvents, email: string | null) => {
+  if (__DEV__) {
+    return
+  }
   const device_identifier = await DeviceInfo.getUniqueId()
   await analytics().logEvent(event, {
     device_identifier,
-    email
+    email,
   })
 }

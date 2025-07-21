@@ -1,7 +1,5 @@
-import { Logo } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import React, { useEffect } from "react"
-import {  ColorValue, View } from "react-native"
+import { useEffect } from "react"
+import { ColorValue, StyleSheet, View } from "react-native"
 import Animated, {
   cancelAnimation,
   interpolate,
@@ -12,9 +10,10 @@ import Animated, {
   withRepeat,
   withTiming,
 } from "react-native-reanimated"
-import { Screen } from "react-native-screens"
+import { Logo } from "app/components/cores"
 import { Circle, Path, Svg } from "react-native-svg"
-import { Text } from '../../cores'
+import { Text } from "../../cores"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 interface CircleProgressProps {
   size: number
@@ -57,7 +56,7 @@ export const CircleProgress = ({
   const progress = useSharedValue(0)
   const back = useSharedValue(false)
   useEffect(() => {
-    progress.value = withRepeat(withTiming(100, {duration: 1000}), -1, true)
+    progress.value = withRepeat(withTiming(100, { duration: 1000 }), -1, true)
     return () => {
       cancelAnimation(progress)
     }
@@ -75,7 +74,7 @@ export const CircleProgress = ({
       back.value = true
       return valueToAngle(99.9, minValue, maxValue)
     }
-    if (progress.value === 0) { 
+    if (progress.value === 0) {
       back.value = false
     }
     return valueToAngle(progress.value, minValue, maxValue)
@@ -98,10 +97,7 @@ export const CircleProgress = ({
   })
   const container = useAnimatedStyle(() => {
     return {
-      transform: [
-        { rotate: "90deg"},
-        { scaleX: back.value ? -1 : 1 }
-      ]
+      transform: [{ rotate: "90deg" }, { scaleX: back.value ? -1 : 1 }],
     }
   }, [])
   return (
@@ -123,43 +119,41 @@ interface MotionLoadingProps {
   message?: string
 }
 
-
-export const MotionLoading = ({message = ""}: MotionLoadingProps) => {
-  const {colors} = useTheme()
+export const MotionLoading = ({ message = "" }: MotionLoadingProps) => {
+  const { theme } = useAppTheme()
   return (
-    <Screen
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <View
-        style={{
-          width: 150,
-          height: 150,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CircleProgress size={150} color={colors.primary}/>
+    <View style={styles.container}>
+      <View style={styles.content}>
+        <CircleProgress size={150} color={theme.colors.primary} />
 
-        <Logo
-          preset={"default"}
-          style={{ height: 80, width: 80, marginBottom: 25, alignSelf: "center"}}
-          containerStyle={{
-            top: 37,
-            position:"absolute" 
-          }}
-        />
-        
+        <Logo preset={"default"} style={styles.logo} containerStyle={styles.logoContainer} />
       </View>
-        <Text
-          text={message}
-          style={{
-            marginTop: 10,
-          }}
-        />
-    </Screen>
+      <Text text={message} />
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
+  },
+  content: {
+    alignItems: "center",
+    height: 150,
+    justifyContent: "center",
+    marginBottom: 10,
+    width: 150,
+  },
+  logo: {
+    alignSelf: "center",
+    height: 80,
+    marginBottom: 25,
+    width: 80,
+  },
+  logoContainer: {
+    position: "absolute",
+    top: 37,
+  },
+})

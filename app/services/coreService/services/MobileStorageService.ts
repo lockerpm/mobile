@@ -1,24 +1,24 @@
-import { StorageService } from 'core/abstractions'
-import { StorageServiceOptions } from 'core/abstractions/storage.service'
-import { load, has, remove, save } from 'app/utils/storage'
+import { StorageService } from "core/abstractions"
+import { StorageServiceOptions } from "core/abstractions/storage.service"
+import { load, has, remove, save } from "app/utils/storage"
 
 export class MobileStorageService implements StorageService {
-  get<T>(key: string, options?: StorageServiceOptions): Promise<T> {
+  get<T>(key: string, options?: StorageServiceOptions): T {
     const targetKey = this.getTargetKey(key, options)
     return load(targetKey)
   }
 
-  has(key: string, options?: StorageServiceOptions): Promise<boolean> {
+  has(key: string, options?: StorageServiceOptions): boolean {
     const targetKey = this.getTargetKey(key, options)
     return has(targetKey)
   }
 
-  remove(key: string, options?: StorageServiceOptions): Promise<any> {
+  remove(key: string, options?: StorageServiceOptions): any {
     const targetKey = this.getTargetKey(key, options)
     return remove(targetKey)
   }
 
-  save(key: string, obj: any, options?: StorageServiceOptions): Promise<any> {
+  save(key: string, obj: any, options?: StorageServiceOptions): any {
     const targetKey = this.getTargetKey(key, options)
     return save(targetKey, obj)
   }

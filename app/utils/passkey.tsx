@@ -1,51 +1,60 @@
 import {
-  PasskeyAuthenticationRequest,
-  PasskeyAuthenticationResult,
-  PasskeyRegistrationRequest,
-  PasskeyRegistrationResult,
-} from "react-native-passkey/lib/typescript/Passkey"
-import { Utils } from "../services/coreService/utils"
+  PasskeyCreateRequest,
+  PasskeyCreateResult,
+  PasskeyGetRequest,
+  PasskeyGetResult,
+} from "react-native-passkey"
+import { Base64 } from "./base64"
+import { Platform } from "react-native"
 
+const IS_IOS = Platform.OS === "ios"
+
+const convertToBase64url = (input: string): string => {
+  if (IS_IOS) {
+    return Base64.base64ToBase64url(input)
+  }
+  return input
+}
 export type Base64urlString = string
 
-export const credentialCreationOptions = (request: PasskeyRegistrationRequest) => {
+export const credentialCreationOptions = (request: PasskeyCreateRequest) => {
   return {
     ...request,
     user: {
       ...request.user,
-      id: Utils.base64UrlToBase64(request.user.id),
+      id: request.user.id,
     },
-    challenge: Utils.base64UrlToBase64(request.challenge),
+    challenge: convertToBase64url(request.challenge),
     authenticatorSelection: {
       ...request.authenticatorSelection,
-      authenticatorAttachment: "cross-platform",
+      authenticatorAttachment: "platform",
       requireResidentKey: true,
       residentKey: "required",
     },
   }
 }
 
-export const publicKeyCredentialWithAttestation = (result: PasskeyRegistrationResult) => {
+export const publicKeyCredentialWithAttestation = (result: PasskeyCreateResult) => {
   return {
     authenticatorAttachment: "platform",
     ...result,
-    rawId: Utils.base64ToBase64url(result.rawId),
-    id: Utils.base64ToBase64url(result.id),
+    rawId: convertToBase64url(result.rawId),
+    id: convertToBase64url(result.id),
   }
 }
 
-export const credentialAuthOptions = (request: PasskeyAuthenticationRequest) => {
+export const credentialAuthOptions = (request: PasskeyGetRequest) => {
   return {
     ...request,
     allowCredentials: [],
-    challenge: Utils.base64UrlToBase64(request.challenge),
+    challenge: convertToBase64url(request.challenge),
   }
 }
 
-export const publicKeyCredentialWithAssertion = (result: PasskeyAuthenticationResult) => {
+export const publicKeyCredentialWithAssertion = (result: PasskeyGetResult) => {
   return {
     ...result,
-    rawId: Utils.base64ToBase64url(result.rawId),
-    id: Utils.base64ToBase64url(result.id),
+    rawId: convertToBase64url(result.rawId),
+    id: convertToBase64url(result.id),
   }
 }

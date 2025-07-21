@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
-    android:background="@android:color/background_dark"
+    android:background="@android:color/white"
     >
     <ImageView
         android:layout_width="wrap_content"
@@ -12,5 +12,5 @@
         android:scaleType="centerCrop"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/bootsplash_logo" />
+        android:src="@drawable/splashscreen_logo" />
 </RelativeLayout>

@@ -1,11 +1,9 @@
-import React, { useEffect } from "react"
-import { Modal, View } from "react-native"
+import { Modal, View, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { WebView } from "react-native-webview"
-import { AppEventType, EventBus } from "app/utils/eventBus"
-import { useTheme } from "app/services/context"
-import { Icon } from "../cores"
-import { OverlayLoading } from "../utils/loading/Loading"
+import { PressableIcon } from "../cores"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { OverlayLoading } from "../utils"
 
 type Props = {
   url: string
@@ -16,20 +14,15 @@ type Props = {
 
 export const WebViewModal = (props: Props) => {
   const { url, isOpen, onClose, onURLChange } = props
-  const { colors } = useTheme()
-
+  const { theme } = useAppTheme()
   const insets = useSafeAreaInsets()
 
-  // Close on signal
-  useEffect(() => {
-    const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
-      onClose()
-    })
-    return () => {
-      EventBus.removeListener(listener)
-    }
-  }, [])
-
+  const $container: ViewStyle = {
+    marginTop: insets.top,
+    paddingBottom: insets.bottom,
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  }
   return (
     <Modal
       visible={isOpen}
@@ -37,34 +30,20 @@ export const WebViewModal = (props: Props) => {
       onRequestClose={onClose}
       supportedOrientations={["portrait", "landscape"]}
     >
-      <View
-        style={{
-          marginTop: insets.top,
-          paddingBottom: insets.bottom,
-          flex: 1,
-          backgroundColor: colors.background,
-        }}
-      >
-        <View
-          style={{
-            position: "absolute",
-            top: 8,
-            left: 20,
-            zIndex: 2,
-          }}
-        >
-          <Icon icon="caret-left" onPress={onClose} />
+      <View style={$container}>
+        <View style={$header}>
+          <PressableIcon icon="caret-left" onPress={onClose} />
         </View>
 
-        {/* <Header leftIcon="caret-left" onLeftPress={onClose} /> */}
         <WebView
           incognito
           startInLoadingState
           renderLoading={() => <OverlayLoading />}
           source={{ uri: url }}
           onShouldStartLoadWithRequest={(request) => {
-            onURLChange && onURLChange(request.url)
-
+            if (onURLChange) {
+              onURLChange(request.url)
+            }
             // Prevent self deep linking
             if (request.url?.startsWith("com.cystack.locker")) {
               return false
@@ -77,4 +56,11 @@ export const WebViewModal = (props: Props) => {
       </View>
     </Modal>
   )
+}
+
+const $header: ViewStyle = {
+  position: "absolute",
+  top: 8,
+  left: 20,
+  zIndex: 2,
 }

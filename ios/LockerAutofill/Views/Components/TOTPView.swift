@@ -38,29 +38,29 @@ struct TOTPView: View {
           VStack(alignment: .leading){
             Text((otp))
             Text(i.translate("totp.update") + "\(updateIn)")
-              .foregroundStyle(Color.label)
+              .foregroundStyle(AppColors.label)
               .font(.system(size: 14))
           }
           Spacer()
           if copied {
             Text(i.translate("c.copied"))
-              .foregroundStyle(Color.label)
+              .foregroundStyle(AppColors.label)
               .transition(.opacity)
               .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 0))
           } else {
             Image(systemName: "doc.on.doc.fill")
-              .foregroundStyle(Color.label)
+              .foregroundStyle(AppColors.label)
               .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 0))
             
           }
         }
-        .foregroundColor(Color.title)
+        .foregroundColor(AppColors.title)
         .padding(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
         .background(RoundedRectangle(cornerRadius: 8).stroke(Color("border"), lineWidth: 1))
       }
       
       Text(i.translate("totp.desc"))
-        .foregroundStyle(Color.label)
+        .foregroundStyle(AppColors.label)
         .font(.system(size: 14))
     }
     .onAppear {

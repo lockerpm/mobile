@@ -1,19 +1,22 @@
 import * as ReactNativeKeychain from "react-native-keychain"
-import { IS_IOS, SHARED_KEYCHAIN_ACCESS_GROUP } from "../../config/constants"
-import { Logger } from "../utils"
 import {
   IosAutofillPassword,
   IosAutofillTemporaryPassword,
   AutofillUserInfo,
   AutofillStorekey,
 } from "./autofillType"
+import { Platform } from "react-native"
+import Config from "@/config"
+import { Logger } from "../logger"
+
+const IS_IOS = Platform.OS === "ios"
 
 class KeychainService {
   public async saveUserInfo(data: AutofillUserInfo) {
     await this.saveShared(
       AutofillStorekey.USER_INFO.service,
       AutofillStorekey.USER_INFO.username,
-      JSON.stringify(data),
+      JSON.stringify(data)
     )
   }
 
@@ -26,7 +29,7 @@ class KeychainService {
     await this.saveShared(
       AutofillStorekey.PASSWORD.service,
       AutofillStorekey.PASSWORD.username,
-      JSON.stringify(data),
+      JSON.stringify(data)
     )
   }
 
@@ -49,7 +52,7 @@ class KeychainService {
     await this.saveShared(
       AutofillStorekey.TEMP_PASSWORD.service,
       AutofillStorekey.TEMP_PASSWORD.username,
-      JSON.stringify(data),
+      JSON.stringify(data)
     )
   }
 
@@ -70,7 +73,7 @@ class KeychainService {
     await this.saveShared(
       AutofillStorekey.TEMP_PASSWORD.service,
       AutofillStorekey.TEMP_PASSWORD.username,
-      "",
+      ""
     )
   }
 
@@ -96,7 +99,7 @@ class KeychainService {
     try {
       await ReactNativeKeychain.setGenericPassword(username, password, {
         service,
-        accessGroup: SHARED_KEYCHAIN_ACCESS_GROUP,
+        accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
       })
     } catch (e) {
       Logger.error(`saveShared  ${username}: ` + e)
@@ -107,7 +110,7 @@ class KeychainService {
     try {
       const credentials = await ReactNativeKeychain.getGenericPassword({
         service,
-        accessGroup: SHARED_KEYCHAIN_ACCESS_GROUP,
+        accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
       })
       return credentials
     } catch (e) {

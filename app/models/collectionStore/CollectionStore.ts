@@ -1,22 +1,21 @@
-import { Instance, SnapshotIn, SnapshotOut, cast, types } from 'mobx-state-tree'
-import { withSetPropAction } from '../helpers/withSetPropAction'
-import { CollectionView } from 'core/models/view/collectionView'
-import { CollectionRequest } from 'core/models/request/collectionRequest'
-import { folderApi } from 'app/services/api/folderApi'
-import { CollectionActionData } from 'app/static/types'
-import { AccountRoleText } from 'app/static/types/enum'
-import { CipherRequest } from 'core/models/request/cipherRequest'
-import { omit } from 'ramda'
+import { Instance, SnapshotIn, SnapshotOut, cast, types } from "mobx-state-tree"
+import { withSetPropAction } from "../helpers/withSetPropAction"
+import { CollectionView } from "core/models/view/collectionView"
+import { CollectionRequest } from "core/models/request/collectionRequest"
+import { folderApi } from "app/services/api/folderApi"
+import { CollectionActionData } from "app/static/types"
+import { AccountRoleText } from "app/static/types/enum"
+import { CipherRequest } from "core/models/request/cipherRequest"
 
 /**
  * Model description here for TypeScript hints.
  */
 export const CollectionStoreModel = types
-  .model('CollectionStore')
+  .model("CollectionStore")
   .props({
-    apiToken: types.maybeNull(types.string),
+    apiToken: types.string,
     collections: types.array(types.frozen()),
-    lastUpdate: types.maybeNull(types.number),
+    lastUpdate: types.number,
     notSynchedCollections: types.array(types.string), // Offline
     notUpdatedCollections: types.array(types.string), // Online but somehow not update
   })
@@ -37,7 +36,7 @@ export const CollectionStoreModel = types
 
     clearStore: (dataOnly?: boolean) => {
       if (!dataOnly) {
-        self.apiToken = null
+        self.apiToken = ""
       }
       self.lastUpdate = Date.now()
       self.collections = cast([])
@@ -148,10 +147,22 @@ export const CollectionStoreModel = types
       const res = await folderApi.removeShareItem(self.apiToken, id, teamId, payload)
       return res
     },
-  })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .postProcessSnapshot(omit(['collections']))
+  }))
+  .postProcessSnapshot((snapShot) => {
+    return {
+      ...snapShot,
+      collections: [],
+    }
+  })
 
 export interface CollectionStore extends Instance<typeof CollectionStoreModel> {}
 export interface CollectionStoreSnapshotOut extends SnapshotOut<typeof CollectionStoreModel> {}
 export interface CollectionStoreSnapshotIn extends SnapshotIn<typeof CollectionStoreModel> {}
-export const createCollectionStoreDefaultModel = () => types.optional(CollectionStoreModel, {})
+export const createCollectionStoreDefaultModel = () =>
+  types.optional(CollectionStoreModel, {
+    apiToken: "",
+    collections: [],
+    lastUpdate: 0,
+    notSynchedCollections: [], // Offline
+    notUpdatedCollections: [], // Online but somehow not update
+  })

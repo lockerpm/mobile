@@ -130,6 +130,7 @@ const zh: Translations = {
     value: "值",
     warning: "警告",
     website: "網站",
+    websites: "網站",
     loading: "解密資料",
     see_all: "檢視全部",
     collapse: "收合",
@@ -148,6 +149,7 @@ const zh: Translations = {
     invalid_date: "失效日期",
     required_text: "此為必填欄位",
     social_login: "或使用以下方式登入",
+    from: "來自",
   },
   navigator: {
     is_offline: "Locker 目前在離線模式。",
@@ -166,6 +168,7 @@ const zh: Translations = {
     logout: "登出自 ",
   },
   error: {
+    email_validate: "無效信箱",
     incorrect_pw: "主密碼不正確",
     master_password: "無法自動建立主密碼",
     not_supported: "未支援",
@@ -176,6 +179,7 @@ const zh: Translations = {
     required_data: "此為必填資料",
     session_login_failed: "登入失敗！請再試一次",
     login_failed: "登入失敗！請再試一次",
+    signup_failed: "註冊失敗！請再試一次",
     wrong_username_or_password: "無效密碼",
     account_not_activated:
       "此帳戶尚未啟動！請檢查您的電子郵件並按照說明進行操作（我們將在 1 天後重新發送）。",
@@ -670,6 +674,7 @@ const zh: Translations = {
       existing_email: "使用現有的私人電子郵件",
       empty: "您還沒有產生任何私人電子郵件",
     },
+    addWebsite: "新增網站",
   },
   shares: {
     shares: "分享",
@@ -864,7 +869,6 @@ const zh: Translations = {
       "請點下方以刪除您保險庫中的所有項目和資料夾。屬於您和其他公司/群組分享之組織的項目並不會被刪除。",
     delete_all_items_success: "您的保險庫已被清除！",
     on_app_close: "應用程式關閉時",
-    hide_mp: "從庫存中隱藏主密碼",
     on_screen_off: "螢幕關閉時",
     timeout: "逾時",
     timeout_action: "逾時動作",
@@ -876,6 +880,7 @@ const zh: Translations = {
     dark_theme: "深色",
     light_theme: "明亮",
     defaultTab: "起始畫面",
+    hide_mp: "從庫存中隱藏主密碼",
   },
   autofill_service: {
     deleted: "密碼已刪除。",
@@ -1332,7 +1337,7 @@ const zh: Translations = {
     max_size: "文件最大大小为50MB",
     upload_success: "文件上传成功",
     download_success: "文件下载成功！在您的文件应用中查看。",
-    download_media_success: "文件下載成功！",
+    download_media_success: "文件下载成功！",
     delete_success: "文件删除成功",
     delete_confirm: "您确定要删除此文件吗？",
     delete_btn: "删除附件",

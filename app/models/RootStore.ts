@@ -1,23 +1,23 @@
-import { Instance, SnapshotOut, types } from 'mobx-state-tree'
-import { CipherStoreModel } from './cipherStore/CipherStore'
-import { CollectionStoreModel } from './collectionStore/CollectionStore'
-import { EnterpriseStoreModel } from './enterpriseStore/EnterpriseStore'
-import { FolderStoreModel } from './folderStore/FolderStore'
-import { ToolStoreModel } from './toolStore/ToolStore'
-import { UiStoreModel } from './uiStore/UiStore'
-import { UserModel } from './user/User'
+import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { createCipherStoreDefaultModel } from "./cipherStore/CipherStore"
+import { createCollectionStoreDefaultModel } from "./collectionStore/CollectionStore"
+import { createEnterpriseStoreDefaultModel } from "./enterpriseStore/EnterpriseStore"
+import { createFolderStoreDefaultModel } from "./folderStore/FolderStore"
+import { createToolStoreDefaultModel } from "./toolStore/ToolStore"
+import { createUiStoreDefaultModel } from "./uiStore/UiStore"
+import { createUserStoreDefaultModel } from "./user/User"
 
 /**
  * A RootStore model.
  */
-export const RootStoreModel = types.model('RootStore').props({
-  cipherStore: types.optional(CipherStoreModel, {} as any),
-  collectionStore: types.optional(CollectionStoreModel, {} as any),
-  enterpriseStore: types.optional(EnterpriseStoreModel, {} as any),
-  folderStore: types.optional(FolderStoreModel, {} as any),
-  toolStore: types.optional(ToolStoreModel, {} as any),
-  uiStore: types.optional(UiStoreModel, {} as any),
-  user: types.optional(UserModel, {} as any),
+export const RootStoreModel = types.model("RootStore").props({
+  cipherStore: createCipherStoreDefaultModel(),
+  collectionStore: createCollectionStoreDefaultModel(),
+  enterpriseStore: createEnterpriseStoreDefaultModel(),
+  folderStore: createFolderStoreDefaultModel(),
+  toolStore: createToolStoreDefaultModel(),
+  uiStore: createUiStoreDefaultModel(),
+  user: createUserStoreDefaultModel(),
 })
 
 /**

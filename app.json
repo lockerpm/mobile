@@ -1,4 +1,52 @@
 {
   "name": "Locker",
-  "displayName": "Locker"
+  "displayName": "Locker",
+  "expo": {
+    "name": "Locker",
+    "slug": "Locker",
+    "scheme": "locker",
+    "version": "2.0.1",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "icon": "./assets/images/appIcons/app-icon-all.png",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "newArchEnabled": false,
+    "jsEngine": "hermes",
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "icon": "./assets/images/appIcons/app-icon-android-legacy.png",
+      "package": "com.cystack.locker",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/appIcons/app-icon-android-adaptive-foreground.png",
+        "backgroundImage": "./assets/images/appIcons/app-icon-android-adaptive-background.png"
+      },
+      "allowBackup": false
+    },
+    "ios": {
+      "icon": "./assets/images/appIcons/app-icon-ios.png",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cystack.lockerapp"
+    },
+    "plugins": [
+      "expo-localization",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/appIcons/app-icon-android-adaptive-foreground.png",
+          "imageWidth": 250,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
+    ],
+    "experiments": {
+      "tsconfigPaths": true
+    }
+  },
+  "ignite": {
+    "version": "10.5.3"
+  }
 }

@@ -1,55 +1,50 @@
-#import <Firebase.h>
 #import "AppDelegate.h"
-#import "RNCConfig.h"
 
-#import "RNBootSplash.h"
-
+#import <Firebase.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
 
+// ssl PINNING
+#import "RNCConfig.h"
 #import <TrustKit/TrustKit.h>
-
 // react-native-fbsdk-next
 #import <AuthenticationServices/AuthenticationServices.h>
 #import <SafariServices/SafariServices.h>
 #import <FBSDKCoreKit/FBSDKCoreKit-swift.h>
 
-
 @implementation AppDelegate
 
-  
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
+  self.moduleName = @"main";
   
-  self.moduleName = @"Locker";
+  [FIRApp configure];
 
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
-  [FIRApp configure];
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
+  return [self bundleURL];
+}
+
+- (NSURL *)bundleURL
+{
 #if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
+  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@".expo/.virtual-metro-entry"];
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
 
-/// This method controls whether the `concurrentRoot`feature of React18 is turned on or off.
-///
-/// @see: https://reactjs.org/blog/2022/03/29/react-v18.html
-/// @note: This requires to be rendering on Fabric (i.e. on the New Architecture).
-/// @return: `true` if the `concurrentRoot` feature is enabled. Otherwise, it returns `false`.
-- (BOOL)concurrentRootEnabled
-{
-  return true;
-}
+//// Linking API
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+//  return [super application:application openURL:url options:options] || [RCTLinkingManager application:application openURL:url options:options];
+//}
 
 // Linking API
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
@@ -65,37 +60,81 @@
   return [super application:application openURL:url options:options] || [RCTLinkingManager application:application openURL:url options:options];
 }
 
-
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken  { [FIRMessaging messaging].APNSToken = deviceToken; //add this line
+// Universal Links
+- (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
+  BOOL result = [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+  return [super application:application continueUserActivity:userActivity restorationHandler:restorationHandler] || result;
 }
+
+// Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+  [FIRMessaging messaging].APNSToken = deviceToken;
+  return [super application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+}
+
+// Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+  return [super application:application didFailToRegisterForRemoteNotificationsWithError:error];
+}
+
+// Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+  return [super application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+}
+
 
 // ------------ Prevent preview background
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.window.bounds];
-    imageView.tag = 1234;
-    imageView.backgroundColor = [UIColor blackColor];
-    imageView.contentMode = UIViewContentModeScaleAspectFill;
-    [imageView setImage:[UIImage imageNamed:@"LaunchScreen.png"]];
-    [self.window addSubview:imageView];
-    [self.window bringSubviewToFront:imageView];
-    // fade in the view
-    [UIImageView animateWithDuration:0.5 animations:^{
-      imageView.alpha = 1;
+    // Load image
+    UIImage *logoImage = [UIImage imageNamed:@"SplashScreenLogo.png"];
+    if (!logoImage) {
+        NSLog(@"[DEBUG] Image not found!");
+        return;
+    }
+
+    // Create image view with 250x250 and center it
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    imageView.tag = 5678;
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageView.image = logoImage;
+    imageView.alpha = 1.0;
+
+    // Center it in the window
+    imageView.center = CGPointMake(CGRectGetMidX(self.window.bounds), CGRectGetMidY(self.window.bounds));
+
+    // Optional: white background overlay
+    UIView *overlay = [[UIView alloc] initWithFrame:self.window.bounds];
+    if (@available(iOS 13.0, *)) {
+        UIUserInterfaceStyle style = self.window.traitCollection.userInterfaceStyle;
+        if (style == UIUserInterfaceStyleDark) {
+            overlay.backgroundColor = [UIColor blackColor];
+        } else {
+            overlay.backgroundColor = [UIColor whiteColor];
+        }
+      }
+    overlay.alpha = 0;
+    overlay.tag = 1234;
+    [overlay addSubview:imageView];
+
+    [self.window addSubview:overlay];
+    [self.window bringSubviewToFront:overlay];
+
+    // Animate fade in
+    [UIView animateWithDuration:0.5 animations:^{
+        overlay.alpha = 1.0;
     }];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // grab a reference to our coloured view
-    UIView *colourView = [self.window viewWithTag:1234];
-    // fade away colour view from main view
-    [UIView animateWithDuration:0.5 animations:^{
-        colourView.alpha = 0;
-    } completion:^(BOOL finished) {
-        // remove when finished fading
-        [colourView removeFromSuperview];
-    }];
+    UIView *overlay = [self.window viewWithTag:1234];
+    if (overlay) {
+        [overlay removeFromSuperview];
+    }
 }
 
 - (void)initTrustKit {
@@ -114,15 +153,6 @@
        }
      };
     [TrustKit initSharedInstanceWithConfiguration:trustKitConfig];
-}
-
-// ⬇️ Add this before file @end (for react-native < 0.74)
-- (UIView *)createRootViewWithBridge:(RCTBridge *)bridge
-                          moduleName:(NSString *)moduleName
-                           initProps:(NSDictionary *)initProps {
-  UIView *rootView = [super createRootViewWithBridge:bridge moduleName:moduleName initProps:initProps];
-  [RNBootSplash initWithStoryboard:@"LaunchScreen" rootView:rootView]; // ⬅️ initialize the splash screen
-  return rootView;
 }
 
 @end

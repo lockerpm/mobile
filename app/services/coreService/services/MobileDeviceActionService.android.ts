@@ -1,8 +1,8 @@
-import { DeviceActionService as DeviceActionServiceAbstraction } from 'core/abstractions'
-import { DeviceType } from 'core/enums'
-import { CipherView } from 'core/models/view'
+import { DeviceActionService as DeviceActionServiceAbstraction } from "core/abstractions"
+import { DeviceType } from "core/enums"
+import { CipherView } from "core/models/view"
 
-import { Platform } from 'react-native'
+import { Platform } from "react-native"
 
 export class DeviceActionService implements DeviceActionServiceAbstraction {
   // --------- Requirements for autofill -------------
@@ -24,7 +24,7 @@ export class DeviceActionService implements DeviceActionServiceAbstraction {
 
   // --------- Others-------------
 
-  deviceUserAgent = 'mobile'
+  deviceUserAgent = "mobile"
   deviceType: DeviceType = DeviceType.Android
 
   toast: (text: string, longDuration?: boolean) => void

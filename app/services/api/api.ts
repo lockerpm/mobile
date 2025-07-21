@@ -1,6 +1,6 @@
-import { ApisauceInstance, create } from 'apisauce'
-import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_PROD } from '../../config/constants'
-import { ApiConfig, DEFAULT_API_CONFIG } from './apiConfig'
+import { ApisauceInstance, create } from "apisauce"
+import { ApiConfig, DEFAULT_API_CONFIG } from "./apiConfig"
+import Config from "@/config"
 /**
  * Manages all requests to the API.
  */
@@ -22,14 +22,14 @@ export class Api {
    *
    * Be as quick as possible in here.
    */
-  private _headers = IS_PROD
+  private _headers = Config.IS_PROD
     ? {
-        Accept: 'application/json',
+        Accept: "application/json",
       }
     : {
-        Accept: 'application/json',
-        'CF-Access-Client-Id': CF_ACCESS_CLIENT_ID,
-        'CF-Access-Client-Secret': CF_ACCESS_CLIENT_SECRET,
+        Accept: "application/json",
+        "CF-Access-Client-Id": Config.CF_ACCESS_CLIENT_ID,
+        "CF-Access-Client-Secret": Config.CF_ACCESS_CLIENT_SECRET,
       }
 
   /**

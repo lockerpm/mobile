@@ -1,49 +1,42 @@
 /* eslint-disable import/first */
+/**
+ * Welcome to the main entry point of the app. In this file, we'll
+ * be kicking off our app.
+ *
+ * Most of this file is boilerplate and you shouldn't need to modify
+ * it very often. But take some time to look through and understand
+ * what is going on here.
+ *
+ * The app navigation resides in ./app/navigators, so head over there
+ * if you're interested in adding screens and navigators.
+ */
 if (__DEV__) {
-  // Load Reactotron configuration in development. We don't want to
-  // include this in our production bundle, so we are using `if (__DEV__)`
-  // to only execute this in development.
+  // Load Reactotron in development only.
+  // Note that you must be using metro's `inlineRequires` for this to work.
+  // If you turn it off in metro.config.js, you'll have to manually import it.
   require("./devtools/ReactotronConfig.ts")
 }
-import "./i18n"
-import "./utils/ignoreWarnings"
-import React, { ComponentType, useRef } from "react"
-import { CommonActions, NavigationContainerRef } from "@react-navigation/native"
+import "./utils/gestureHandler"
+import { initI18n, LanguageSupportType, LocaleContextProvider } from "./i18n"
+import { useFonts } from "expo-font"
+import { FC, useEffect, useState } from "react"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
-import { useInitialRootStore } from "./models"
-import {
-  useBackButtonHandler,
-  RootNavigator,
-  canExit,
-  setRootNavigation,
-  useNavigationPersistence,
-} from "./navigators"
-import * as storage from "./utils/storage"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
-import * as Tracking from "./utils/tracking"
+import * as SplashScreen from "expo-splash-screen"
 import * as Sentry from "@sentry/react-native"
-import { enableScreens } from "react-native-screens"
-import { ApiResponse } from "apisauce"
-import { getGeneralApiProblem } from "./services/api/apiProblem"
+import * as storage from "./utils/storage"
+import { useInitialRootStore } from "./models"
+import { AppNavigator, useNavigationPersistence } from "./navigators"
+import { customFontsToLoad } from "./theme"
+import { KeyboardProvider } from "react-native-keyboard-controller"
+import { loadDateFnsLocale } from "./utils/formatDate"
+import { initCrashReporting } from "./utils/crashReporting"
+import { Platform, StatusBar } from "react-native"
 import { Settings } from "react-native-fbsdk-next"
-import { Logger } from "app/utils/utils"
-import { AppEventType, EventBus } from "./utils/eventBus"
-import { api } from "./services/api"
-import { ThemeContextProvider } from "./services/context/useTheme"
-import CombineContext from "./services/context/useCombineContext"
-import { IS_IOS } from "./config/constants"
-import { AndroidAutofillServiceType } from "./utils/autofillHelper"
-import SplashScreen from "react-native-splash-screen"
-import BootSplash from "react-native-bootsplash"
-import { autofillKeyChain } from "./utils/autofillData"
-
-enableScreens()
-Settings.initializeSDK()
-Tracking.initSentry()
+import { setAndroidAutofillServiceData } from "./utils/autofillHelper"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
-export interface RootProp extends JSX.IntrinsicAttributes {
+export interface AppProps {
   lastFill?: number
   autofill?: number
   savePassword?: number
@@ -53,124 +46,69 @@ export interface RootProp extends JSX.IntrinsicAttributes {
   password?: string
 }
 
-const App: ComponentType<RootProp> = (props: RootProp) => {
-  const navigationRef = useRef<NavigationContainerRef<any>>(null)
-  setRootNavigation(navigationRef)
-  useBackButtonHandler(navigationRef, canExit)
-  const { initialNavigationState, onNavigationStateChange } = useNavigationPersistence(
-    storage,
-    NAVIGATION_PERSISTENCE_KEY,
-  )
+initCrashReporting()
+Settings.initializeSDK()
 
-  const { rehydrated, rootStore } = useInitialRootStore(() => {
-    const hideSplash = IS_IOS ? BootSplash.hide : SplashScreen.hide
-    setTimeout(hideSplash, 400)
+/**
+ * This is the root component of our app.
+ * @param {AppProps} props - The props for the `App` component.
+ * @returns {JSX.Element} The rendered `App` component.
+ */
+const App: FC<AppProps> = (props) => {
+  setAndroidAutofillServiceData(props)
+  const { onNavigationStateChange, isRestored: isNavigationStateRestored } =
+    useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
+
+  const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
+  const [isI18nInitialized, setIsI18nInitialized] = useState<null | string>(null)
+
+  useEffect(() => {
+    initI18n()
+      .then((i18n) => {
+        setIsI18nInitialized(i18n.language)
+      })
+      .then(() => loadDateFnsLocale())
+  }, [])
+
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      StatusBar.setTranslucent(true)
+      StatusBar.setBackgroundColor("transparent")
+    }
+  }, [])
+
+  const { rehydrated } = useInitialRootStore(() => {
+    // This runs after the root store has been initialized and rehydrated.
+
+    // If your initialization scripts run very fast, it's good to show the splash screen for just a bit longer to prevent flicker.
+    // Slightly delaying splash screen hiding for better UX; can be customized or removed as needed,
+    setTimeout(SplashScreen.hideAsync, 500)
   })
 
-  if (!rehydrated) return null
-
-  // Set up API listener
-  const monitorApiResponse = (response: ApiResponse<any>) => {
-    const problem = getGeneralApiProblem(response)
-
-    if (problem) {
-      Logger.debug(
-        `URL:${response.config?.baseURL}${response.config?.url} - Status: ${
-          response.status
-        } - Message: ${JSON.stringify(response.data)}`,
-      )
-    }
-
-    if (problem) {
-      if (problem.kind === "unauthorized") {
-        const ignoredUrls = ["/users/logout", "/sso/auth"]
-        const ignoredRoute = ["init", "intro", "onBoarding", "login", "forgotPassword", "signup"]
-        const currentRoute = navigationRef.current?.getCurrentRoute()
-
-        if (
-          !ignoredUrls.includes(response.config?.url || "") &&
-          !ignoredRoute.includes(currentRoute?.name || "")
-        ) {
-          rootStore.user.setApiToken("")
-          rootStore.user.setLoggedIn(false)
-          rootStore.user.setLoggedInPw(false)
-          rootStore.cipherStore.lock()
-          rootStore.collectionStore.lock()
-          rootStore.folderStore.lock()
-          rootStore.toolStore.lock()
-
-          // Close all modals before navigate
-          EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
-          if (navigationRef.current) {
-            autofillKeyChain.resetAll()
-            navigationRef.current.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: "init" }],
-              }),
-            )
-          }
-        }
-      }
-    }
-  }
-  // const monitorApiRequest = (request: any) => async () => {
-  //   Logger.debug(
-  //     `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
-  //       request.params ? JSON.stringify(request.params) : ""
-  //     }`,
-  //   )
-  // }
-
-  api.apisauce.addMonitor(monitorApiResponse)
-  // api.apisauce.addAsyncRequestTransform(monitorApiRequest)
-
-  // if app start from android autofill service. navigate to autofill screen
-  if (!IS_IOS) {
-    const {
-      lastFill = 0,
-      autofill = 0,
-      savePassword = 0,
-      domain = "",
-      lastUserPasswordID = "",
-      username = "",
-      password = "",
-    } = props
-
-    if (autofill || lastFill || savePassword) {
-      let type = AndroidAutofillServiceType.AUTOFILL
-      if (lastFill) type = AndroidAutofillServiceType.AUTOFILL_ITEM
-      if (savePassword) type = AndroidAutofillServiceType.SAVE_REQUEST
-      rootStore.uiStore.setAndroidAutofillServiceData(true, {
-        type,
-        lastUserPasswordID,
-        domain,
-        username,
-        password,
-      })
-    } else {
-      rootStore.uiStore.setAndroidAutofillServiceData(false, null)
-    }
+  // Before we show the app, we have to wait for our state to be ready.
+  // In the meantime, don't render anything. This will be the background
+  // color set in native by rootView's background color.
+  // In iOS: application:didFinishLaunchingWithOptions:
+  // In Android: https://stackoverflow.com/a/45838109/204044
+  // You can replace with your own loading component if you wish.
+  if (
+    !rehydrated ||
+    !isNavigationStateRestored ||
+    !isI18nInitialized ||
+    (!areFontsLoaded && !fontLoadError)
+  ) {
+    return null
   }
 
   // otherwise, we're ready to render the app
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-        <CombineContext
-          childProps={{
-            navigationRef,
-          }}
-          components={[ThemeContextProvider]}
-        >
-          <RootNavigator
-            ref={navigationRef}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-          />
-        </CombineContext>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <KeyboardProvider>
+        <LocaleContextProvider initLanguage={isI18nInitialized as LanguageSupportType}>
+          <AppNavigator onStateChange={onNavigationStateChange} />
+        </LocaleContextProvider>
+      </KeyboardProvider>
+    </SafeAreaProvider>
   )
 }
 

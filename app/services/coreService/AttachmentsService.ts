@@ -1,12 +1,13 @@
 import Upload, { UploadOptions } from "react-native-background-upload"
 import RNFS from "react-native-fs"
-import { Logger } from "app/utils/utils"
-import crypto from "react-native-crypto"
+import crypto from "react-native-quick-crypto"
 import { Buffer } from "buffer"
 import { GetUploadFormResult } from "app/static/types"
-import { IS_IOS } from "app/config/constants"
-import { NativeModules } from "react-native"
+import { NativeModules, Platform } from "react-native"
+import { Logger } from "@/utils/logger"
 const { FileEncryptor } = NativeModules
+
+const IS_IOS = Platform.OS === "ios"
 
 export class AttachmentService {
   private static readonly PROGRESS_INTERVAL = 1500 // ms
@@ -34,6 +35,7 @@ export class AttachmentService {
       await RNFS.writeFile(outputPath, finalData, "base64")
       return true
     } catch (error) {
+      Logger.error("Encryption error:", error)
       return false
     }
   }
@@ -41,7 +43,7 @@ export class AttachmentService {
   encryptFileByChunk = async (
     inputPath: string,
     outputPath: string,
-    key: Buffer,
+    key: Buffer
   ): Promise<boolean> => {
     try {
       const iv = crypto.randomBytes(12) // 12-byte IV for AES-GCM
@@ -51,8 +53,6 @@ export class AttachmentService {
       let offset = 0
       const fileStat = await RNFS.stat(inputPath)
       const fileSize = Number(fileStat.size)
-
-      console.log(`Encrypting file: ${inputPath} (${fileSize} bytes) in chunks...`)
 
       while (offset < fileSize) {
         const chunkBase64 = await RNFS.read(inputPath, this.CHUNK_SIZE, offset, "base64")
@@ -71,14 +71,12 @@ export class AttachmentService {
         // Write encrypted chunk
         await RNFS.appendFile(outputPath, encryptedChunk.toString("base64") + "\n", "base64")
 
-        console.log(`Encrypted chunk at offset: ${offset}`)
         offset += this.CHUNK_SIZE
       }
 
-      console.log(`Encryption completed: ${outputPath}`)
       return true
     } catch (error) {
-      console.error("Encryption error:", error)
+      Logger.error("Encryption error:", error)
       return false
     }
   }
@@ -92,19 +90,18 @@ export class AttachmentService {
   nativeEncryptFileByChunk = async (
     inputPath: string,
     outputPath: string,
-    key: string,
+    key: string
   ): Promise<boolean> => {
     try {
       const result = await FileEncryptor.encryptFileByChunk(
         inputPath.replace("file://", ""),
         outputPath.replace("file://", ""),
         key,
-        this.CHUNK_SIZE,
+        this.CHUNK_SIZE
       )
-      console.log("nativeEncryptFileByChunk success:", result)
       return result
     } catch (err) {
-      console.error("nativeEncryptFileByChunk failed", err)
+      Logger.error("nativeEncryptFileByChunk failed", err)
       return false
     }
   }
@@ -132,6 +129,7 @@ export class AttachmentService {
       await RNFS.writeFile(outputPath, decryptedData.toString("base64"), "base64")
       return true
     } catch (error) {
+      Logger.error("Decryption error:", error)
       return false
     }
   }
@@ -139,7 +137,7 @@ export class AttachmentService {
   decryptFileByChunk = async (
     inputPath: string,
     outputPath: string,
-    key: Buffer,
+    key: Buffer
   ): Promise<boolean> => {
     try {
       const fileStat = await RNFS.stat(inputPath)
@@ -156,7 +154,6 @@ export class AttachmentService {
       await RNFS.writeFile(outputPath, "", "base64") // Clear output file
 
       let offset = 28 // Start after IV + AuthTag
-      console.log(`Decrypting file: ${inputPath} (${fileSize} bytes) in chunks...`)
 
       while (offset < fileSize) {
         const chunkBase64 = await RNFS.read(inputPath, this.CHUNK_SIZE, offset, "base64")
@@ -168,7 +165,6 @@ export class AttachmentService {
         // Write decrypted chunk immediately
         await RNFS.appendFile(outputPath, decryptedChunk, "base64")
 
-        console.log(`Decrypted chunk at offset: ${offset}`)
         offset += this.CHUNK_SIZE
       }
 
@@ -178,10 +174,9 @@ export class AttachmentService {
         await RNFS.appendFile(outputPath, finalData, "base64")
       }
 
-      console.log(`Decryption completed: ${outputPath}`)
       return true
     } catch (error) {
-      console.error("Decryption error:", error)
+      Logger.error("Decryption error:", error)
       return false
     }
   }
@@ -189,20 +184,18 @@ export class AttachmentService {
   nativeDecryptFileByChunk = async (
     inputPath: string,
     outputPath: string,
-    key: string,
+    key: string
   ): Promise<boolean> => {
-    console.log("nativeEncryptFileByChunk", inputPath, outputPath, key)
     try {
       const result = await FileEncryptor.decryptFileByChunk(
         inputPath.replace("file://", ""),
         outputPath.replace("file://", ""),
         key,
-        this.CHUNK_SIZE,
+        this.CHUNK_SIZE
       )
-      console.log("nativeEncryptFileByChunk success:", result)
       return result
     } catch (err) {
-      console.error("nativeEncryptFileByChunk failed", err)
+      Logger.error("nativeEncryptFileByChunk failed", err)
       return false
     }
   }
@@ -239,7 +232,9 @@ export class AttachmentService {
         Upload.startUpload(uploadOptions)
           .then((uploadId) => {
             Upload.addListener("progress", uploadId, (data) => {
-              onProgress && onProgress(data.progress / 100)
+              if (onProgress) {
+                onProgress(data.progress / 100)
+              }
             })
 
             Upload.addListener("completed", uploadId, (data) => {

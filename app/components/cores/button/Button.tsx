@@ -1,285 +1,234 @@
-import { observer } from "mobx-react-lite"
-import React, { ComponentType } from "react"
 import {
   Pressable,
   PressableProps,
   PressableStateCallbackType,
   StyleProp,
   TextStyle,
-  StyleSheet,
-  View,
   ViewStyle,
+  View,
   ActivityIndicator,
-  ColorValue,
 } from "react-native"
-import { spacing } from "../../../theme"
+import { type ThemedStyle, type ThemedStyleArray } from "@/theme"
 import { Text, TextProps } from "../text/Text"
-import { useTheme } from "app/services/context"
-import { Icon, IconProps, IconTypes } from "../icon/Icon"
+import { useAppTheme } from "@/utils/useAppTheme"
 
-type Presets = "primary" | "secondary" | "teriatary"
-type Sizes = keyof typeof $sizeStyles
+type Presets = "primary" | "secondary" | "teriatary" | "delete"
 
 export interface ButtonAccessoryProps {
   style: StyleProp<any>
   pressableState: PressableStateCallbackType
+  disabled?: boolean
 }
 
 export interface ButtonProps extends PressableProps {
   /**
-   * Button is disabled
+   * Text which is looked up via i18n.
+   */
+  tx?: TextProps["tx"]
+  /**
+   * The text to display if not using `tx` or nested components.
+   */
+  text?: TextProps["text"]
+  /**
+   * Optional options to pass to i18n. Useful for interpolation
+   * as well as explicitly setting locale or translation fallbacks.
+   */
+  txOptions?: TextProps["txOptions"]
+  /**
+   * An optional style override useful for padding & margin.
+   */
+  style?: StyleProp<ViewStyle>
+  /**
+   * An optional style override for the button text.
+   */
+  textStyle?: StyleProp<TextStyle>
+  /**
+   * One of the different types of button presets.
+   */
+  preset?: Presets
+  /**
+   * Children components.
+   */
+  children?: React.ReactNode
+  /**
+   * disabled prop, accessed directly for declarative styling reasons.
    */
   disabled?: boolean
   /**
    * The Button is performing a long action
    */
   loading?: boolean
-  /**
-   * Buttom size modifier.
-   */
-  size?: Sizes
-
-  /**
-   * The text to display if not using `tx` or nested components.
-   */
-  text?: TextProps["text"]
-  /**
-   * An optional style override useful for padding & margin.
-   */
-  style?: StyleProp<ViewStyle>
-  /**
-   * An optional style override for the "pressed" state.
-   */
-  pressedStyle?: StyleProp<ViewStyle>
-  /**
-   * An optional style override for the button text.
-   */
-  textStyle?: StyleProp<TextStyle>
-  /**
-   * An optional style override for the button text when in the "pressed" state.
-   */
-  pressedTextStyle?: StyleProp<TextStyle>
-  /**
-   * One of the different types of button presets.
-   */
-  preset?: Presets
-  /**
-   * An optional Icon component to render on the right side of the text.
-   */
-  leftIcon?: IconTypes
-  leftIconProps?: IconProps
-  /**
-   * An optional Icon component to render on the left side of the text.
-   */
-  rightIcon?: IconTypes
-  rightIconProps?: IconProps
-  /**
-   * An optional component to render on the right side of the text.
-   * Example: `RightAccessory={(props) => <View {...props} />}`
-   */
-  RightAccessory?: ComponentType<ButtonAccessoryProps>
-  /**
-   * An optional component to render on the left side of the text.
-   * Example: `LeftAccessory={(props) => <View {...props} />}`
-   */
-  LeftAccessory?: ComponentType<ButtonAccessoryProps>
-  /**
-   * Text which is looked up via i18n.
-   */
-  teriataryBackground?: ColorValue
-  /**
-   * Children components.
-   */
-  children?: React.ReactNode
 }
 
 /**
  * A component that allows users to take actions and make choices.
  * Wraps the Text component with a Pressable component.
+ * @see [Documentation and Examples]{@link https://docs.infinite.red/ignite-cli/boilerplate/app/components/Button/}
+ * @param {ButtonProps} props - The props for the `Button` component.
+ * @returns {JSX.Element} The rendered `Button` component.
+ * @example
+ * <Button
+ *   tx="common:ok"
+ *   style={styles.button}
+ *   textStyle={styles.buttonText}
+ *   onPress={handleButtonPress}
+ * />
  */
-export const Button = observer((props: ButtonProps) => {
-  const { colors } = useTheme()
-
+export function Button(props: ButtonProps) {
   const {
+    tx,
     text,
+    txOptions,
+    style: $viewStyleOverride,
+    textStyle: $textStyleOverride,
+    children,
     disabled,
     loading,
-    size = "medium",
-    style: $viewStyleOverride,
-    pressedStyle: $pressedViewStyleOverride,
-    textStyle: $textStyleOverride,
-    pressedTextStyle: $pressedTextStyleOverride,
-    children,
-    leftIcon,
-    leftIconProps,
-    rightIcon,
-    rightIconProps,
-    RightAccessory,
-    LeftAccessory,
-    teriataryBackground = colors.background,
     ...rest
   } = props
 
-  const $viewPresets = {
-    primary: [
-      $baseViewStyle,
-      $sizeStyles.medium,
-      {
-        backgroundColor: colors.primary,
-      },
-    ] as StyleProp<ViewStyle>,
+  const {
+    themed,
+    theme: { colors },
+  } = useAppTheme()
 
-    secondary: [
-      $baseViewStyle,
-      $sizeStyles.medium,
-      {
-        borderWidth: 1,
-        borderColor: colors.primary,
-        backgroundColor: colors.background,
-      },
-    ] as StyleProp<ViewStyle>,
-
-    teriatary: [
-      $baseViewStyle,
-      $sizeStyles.medium,
-      { backgroundColor: teriataryBackground, paddingHorizontal: 0 },
-    ] as StyleProp<ViewStyle>,
-  }
-
-  const $textPresets: Record<Presets, StyleProp<TextStyle>> = {
-    primary: [$baseTextStyle, { color: colors.white }],
-    secondary: [$baseTextStyle, { color: colors.primary }],
-    teriatary: [$baseTextStyle, { color: colors.primary }],
-  }
-
-  // Button Pressed
-  const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
-    primary: { backgroundColor: colors.primaryClick },
-    secondary: { backgroundColor: colors.palette.neutral2, borderColor: colors.primaryClick },
-    teriatary: { backgroundColor: teriataryBackground },
-  }
-
-  const $pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
-    primary: { opacity: 0.9 },
-    secondary: { opacity: 0.9, color: colors.primaryClick },
-    teriatary: { opacity: 0.9, color: colors.primaryClick },
-  }
-
-  // Button Disable
-  const $disabledViewStyle: Record<Presets, StyleProp<ViewStyle>> = {
-    primary: { backgroundColor: colors.primary, opacity: 0.5 },
-    secondary: { opacity: 0.7, borderColor: colors.palette.neutral5 },
-    teriatary: { backgroundColor: teriataryBackground },
-  }
-
-  const $disabledTextStyle: StyleProp<TextStyle> = {
-    color: colors.disable,
-  }
-
-  // Button Loading
-  const $loadingStyle: Record<Presets, StyleProp<ViewStyle>> = {
-    primary: { backgroundColor: colors.primary },
-    secondary: { backgroundColor: colors.background },
-    teriatary: { backgroundColor: teriataryBackground },
-  }
-
-  const $activityColor: Record<Presets, ColorValue> = {
-    primary: colors.white,
-    secondary: colors.primary,
-    teriatary: colors.primary,
-  }
-
-  const preset: Presets = $viewPresets[props.preset] ? props.preset : "primary"
-
-  function $viewStyle({ pressed }) {
+  const preset: Presets = props.preset ?? "primary"
+  /**
+   * @param {PressableStateCallbackType} root0 - The root object containing the pressed state.
+   * @param {boolean} root0.pressed - The pressed state.
+   * @returns {StyleProp<ViewStyle>} The view style based on the pressed state.
+   */
+  function $viewStyle({ pressed }: PressableStateCallbackType): StyleProp<ViewStyle> {
     return [
-      $viewPresets[preset],
-      $sizeStyles[size],
-      !!disabled && $disabledViewStyle[preset],
-      !!pressed && [$pressedViewPresets[preset], $pressedViewStyleOverride],
-      // $viewStyleOverride,
+      themed($viewPresets[preset]),
+      !!pressed && themed([$pressedViewPresets[preset]]),
+      !!disabled && themed([$disabledViewStyle[preset]]),
     ]
   }
-  function $textStyle({ pressed }) {
+  /**
+   * @param {PressableStateCallbackType} root0 - The root object containing the pressed state.
+   * @param {boolean} root0.pressed - The pressed state.
+   * @returns {StyleProp<TextStyle>} The text style based on the pressed state.
+   */
+  function $textStyle({ pressed }: PressableStateCallbackType): StyleProp<TextStyle> {
     return [
-      $textPresets[preset],
-      $sizeStyles[size],
-      !!disabled && $disabledTextStyle,
-      !!pressed && [$pressedTextPresets[preset], $pressedTextStyleOverride],
+      themed($textPresets[preset]),
       $textStyleOverride,
+      !!pressed && themed([$pressedTextPresets[preset]]),
+      !!disabled && themed([$disabledTextStyle]),
     ]
-  }
-
-  const LeftIcon = (state) => {
-    if (leftIcon)
-      return <Icon containerStyle={$leftAccessoryStyle} {...leftIconProps} icon={leftIcon} />
-    if (LeftAccessory) return <LeftAccessory style={$leftAccessoryStyle} pressableState={state} />
-    return null
-  }
-
-  const RightIcon = (state) => {
-    if (rightIcon)
-      return <Icon containerStyle={$rightAccessoryStyle} {...rightIconProps} icon={rightIcon} />
-    if (RightAccessory)
-      return <RightAccessory style={$rightAccessoryStyle} pressableState={state} />
-    return null
   }
 
   return (
     <View style={$viewStyleOverride}>
-      <Pressable disabled={disabled} style={$viewStyle} accessibilityRole="button" {...rest}>
+      <Pressable
+        style={$viewStyle}
+        accessibilityRole="button"
+        accessibilityState={{ disabled: !!disabled }}
+        {...rest}
+        disabled={disabled || loading}
+      >
         {(state) => (
           <>
-            <LeftIcon state={state} />
-
-            <Text preset="bold" text={text} style={$textStyle(state)} />
-
-            {children}
-
-            <RightIcon state={state} />
+            <Text
+              tx={!loading ? tx : undefined}
+              text={!loading ? text : undefined}
+              txOptions={txOptions}
+              style={$textStyle(state)}
+            >
+              {children}
+            </Text>
           </>
         )}
       </Pressable>
       {loading && (
-        <View style={[$baseLoadingStyle, $loadingStyle[preset], $sizeStyles[size]]}>
-          <ActivityIndicator size={17} color={$activityColor[preset]} />
+        <View style={themed([$baseViewStyle, $baseLoadingStyle])}>
+          <ActivityIndicator
+            size={17}
+            color={preset === "primary" || preset === "delete" ? colors.white : colors.primary}
+          />
         </View>
       )}
     </View>
   )
-})
+}
 
-const $baseViewStyle: ViewStyle = {
-  paddingHorizontal: 12,
-  minHeight: 28,
+const $baseViewStyle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  height: 44,
   borderRadius: 8,
   justifyContent: "center",
   alignItems: "center",
-  flexDirection: "row",
+  paddingVertical: spacing.sm,
+  paddingHorizontal: spacing.sm,
   overflow: "hidden",
-  paddingVertical: 12,
-}
+})
 
-const $baseTextStyle: TextStyle = {
+const $baseTextStyle: ThemedStyle<TextStyle> = ({ colors, typography }) => ({
   fontSize: 16,
   lineHeight: 20,
+  fontFamily: typography.primary.medium,
+  color: colors.primary,
   textAlign: "center",
   flexShrink: 1,
   flexGrow: 0,
   zIndex: 2,
+})
+
+const $viewPresets: Record<Presets, ThemedStyleArray<ViewStyle>> = {
+  primary: [
+    $baseViewStyle,
+    ({ colors }) => ({
+      backgroundColor: colors.primary,
+    }),
+  ],
+  secondary: [
+    $baseViewStyle,
+    ({ colors }) => ({
+      borderWidth: 1,
+      borderColor: colors.primary,
+      backgroundColor: colors.background,
+    }),
+  ],
+  teriatary: [$baseViewStyle, ({ colors }) => ({ backgroundColor: colors.transparent })],
+  delete: [$baseViewStyle, ({ colors }) => ({ backgroundColor: colors.error })],
 }
+
+const $textPresets: Record<Presets, ThemedStyleArray<TextStyle>> = {
+  primary: [$baseTextStyle, ({ colors }) => ({ color: colors.white })],
+  secondary: [$baseTextStyle],
+  teriatary: [$baseTextStyle],
+  delete: [$baseTextStyle, ({ colors }) => ({ color: colors.white })],
+}
+
+const $pressedViewPresets: Record<Presets, ThemedStyle<ViewStyle>> = {
+  primary: ({ colors }) => ({ backgroundColor: colors.primaryClick }),
+  secondary: ({ colors }) => ({
+    backgroundColor: colors.palette.neutral2,
+    borderColor: colors.primaryClick,
+  }),
+  teriatary: ({ colors }) => ({ backgroundColor: colors.transparent }),
+  delete: () => ({ opacity: 0.8 }),
+}
+
+const $pressedTextPresets: Record<Presets, ThemedStyle<TextStyle>> = {
+  primary: () => ({ opacity: 0.9 }),
+  secondary: () => ({ opacity: 0.9 }),
+  teriatary: () => ({ opacity: 0.7 }),
+  delete: () => ({ opacity: 0.7 }),
+}
+
+// Button Disable
+const $disabledViewStyle: Record<Presets, ThemedStyle<ViewStyle>> = {
+  primary: ({ colors }) => ({ backgroundColor: colors.primary, opacity: 0.5 }),
+  secondary: ({ colors }) => ({ opacity: 0.7, borderColor: colors.palette.neutral5 }),
+  teriatary: ({ colors }) => ({ backgroundColor: colors.transparent }),
+  delete: ({ colors }) => ({ backgroundColor: colors.error, opacity: 0.5 }),
+}
+
+const $disabledTextStyle: ThemedStyle<TextStyle> = ({ colors }) => ({
+  color: colors.disable,
+})
 
 const $baseLoadingStyle: StyleProp<ViewStyle> = [
-  StyleSheet.absoluteFill,
-  $baseViewStyle,
-  { zIndex: 3 },
+  { zIndex: 3, position: "absolute", top: 0, left: 0, bottom: 0, right: 0 },
 ]
-
-const $sizeStyles = {
-  large: { paddingVertical: 10 } as ViewStyle,
-  medium: { paddingVertical: 6 } as ViewStyle,
-  small: { paddingVertical: 4 } as ViewStyle,
-}
-
-const $rightAccessoryStyle: ViewStyle = { marginLeft: spacing.smaller }
-const $leftAccessoryStyle: ViewStyle = { marginRight: spacing.smaller }

@@ -1,32 +1,34 @@
 import { useStores } from "app/models"
 import { useCoreService } from "../coreService"
 import { useCipherData } from "./useCipherData"
-import { useHelper } from "./useHelper"
-import { Utils } from "../coreService/utils"
 import { EncString, SymmetricCryptoKey } from "core/models/domain"
 import { FolderView } from "core/models/view/folderView"
 import { CipherView } from "core/models/view"
 import { Alert } from "react-native"
 import { CipherRequest } from "core/models/request"
-import { Logger } from "app/utils/utils"
 import { CollectionView } from "core/models/view/collectionView"
 import { AccountRoleText } from "app/static/types"
+import { useToast } from "../utils"
+import { useAppLocale } from "@/i18n"
+import { Base64 } from "@/utils/base64"
+import { Logger } from "@/utils/logger"
 
 export function useFolder() {
   const { cipherStore, folderStore, collectionStore, enterpriseStore, user } = useStores()
   const { cipherService, cryptoService } = useCoreService()
   const { getCiphers, reloadCache } = useCipherData()
-  const { notify, notifyApiError, translate } = useHelper()
+  const { notifyTx, notifyApiError } = useToast()
+  const { translate } = useAppLocale()
 
   const _generateMemberKey = async (publicKey: string, orgKey: SymmetricCryptoKey) => {
-    const pk = Utils.fromB64ToArray(publicKey)
+    const pk = Base64.fromB64ToArray(publicKey)
     const key = await cryptoService.rsaEncrypt(orgKey.key, pk.buffer)
     return key.encryptedString
   }
 
   const _shareFolderToGroups = async (
     orgKey: SymmetricCryptoKey,
-    groups: { id: string; name: string }[],
+    groups: { id: string; name: string }[]
   ) => {
     return await Promise.all(
       groups.map(async (group) => {
@@ -42,14 +44,14 @@ export function useFolder() {
                 username: member.email,
                 key: member.public_key ? await _generateMemberKey(member.public_key, orgKey) : null,
               }
-            }),
+            })
         )
         return {
           id: group.id,
           role: "member",
           members,
         }
-      }),
+      })
     )
   }
 
@@ -59,9 +61,9 @@ export function useFolder() {
     emails: string[],
     role: AccountRoleText,
     autofillOnly: boolean,
-    groups?: { id: string; name: string }[],
+    groups?: { id: string; name: string }[]
   ) => {
-    if (!folder || (!emails.length && !groups.length)) {
+    if (!folder || (!emails.length && !groups?.length)) {
       return { kind: "ok" }
     }
 
@@ -75,13 +77,13 @@ export function useFolder() {
     try {
       if (ciphers.some((c) => c.organizationId)) {
         Alert.alert(
-          translate("error.share_folder"),
-          translate("shares.share_folder.error_share_item"),
+          translate("error:share_folder"),
+          translate("shares:share_folder.error_share_item"),
           [
             {
               text: "OK",
             },
-          ],
+          ]
         )
         return { kind: "ok" }
       }
@@ -103,7 +105,7 @@ export function useFolder() {
             hide_passwords: autofillOnly,
             key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
           }
-        }),
+        })
       )
 
       // Prepare cipher..  CipherRequest & { id: string }
@@ -141,14 +143,14 @@ export function useFolder() {
       })
 
       if (res.kind === "ok") {
-        notify("success", translate("shares.share_folder.success.shared"))
+        notifyTx("success", "shares:share_folder.success.shared")
         await reloadCache()
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error:something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -159,7 +161,7 @@ export function useFolder() {
     emails: string[],
     role: AccountRoleText,
     autofillOnly: boolean,
-    _groups?: { id: string; name: string }[],
+    _groups?: { id: string; name: string }[]
   ) => {
     if (!collection || !emails.length) {
       return { kind: "ok" }
@@ -182,20 +184,20 @@ export function useFolder() {
             hide_passwords: autofillOnly,
             key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
           }
-        }),
+        })
       )
 
       // Prepare folder name
       const res = await collectionStore.addShareMember(collection.organizationId, members)
 
       if (res.kind === "ok") {
-        notify("success", translate("shares.share_folder.success.add_member"))
+        notifyTx("success", "shares:share_folder.success.add_member")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error:something_went_wrong")
       Logger.error("shareFolder " + e)
       return { kind: "unknown" }
     }
@@ -203,7 +205,7 @@ export function useFolder() {
   const shareFolderRemoveMember = async (
     collection: CollectionView,
     memberID: string,
-    isGroup?: boolean,
+    isGroup?: boolean
   ) => {
     try {
       const personalKey = await cryptoService.getEncKey()
@@ -228,17 +230,17 @@ export function useFolder() {
             ciphers: data,
           },
         },
-        isGroup,
+        isGroup
       )
 
       if (res.kind === "ok") {
-        notify("success", translate("shares.share_folder.success.remove_member"))
+        notifyTx("success", "shares:share_folder.success.remove_member")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error:something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -260,18 +262,18 @@ export function useFolder() {
       const res = await collectionStore.updateShareItem(
         collection.id,
         collection.organizationId,
-        payload,
+        payload
       )
 
       if (res.kind === "ok") {
         await reloadCache()
-        notify("success", translate("shares.share_folder.success.add_items"))
+        notifyTx("success", "shares:share_folder.success.add_items")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error:something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -289,19 +291,19 @@ export function useFolder() {
         })) || []
 
       if (ciphers.some((c) => c.organizationId)) {
-        notify("error", translate("error.share_folder_move_item"))
+        notifyTx("error", "error:share_folder_move_item")
         return { kind: "unknown" }
       }
 
       await Promise.all(
         ciphers.map(async (cipher) => {
           await shareFolderAddItem(collection, cipher)
-        }),
+        })
       )
-
+      notifyTx("success", "folder:item_moved")
       return { kind: "ok" }
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error:something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -324,13 +326,12 @@ export function useFolder() {
 
       if (res.kind === "ok") {
         await reloadCache()
-        // notify('success', 'Remove shared item  success')
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error:something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }
@@ -360,13 +361,13 @@ export function useFolder() {
 
       if (res.kind === "ok") {
         await reloadCache()
-        notify("success", translate("shares.share_folder.success.stop"))
+        notifyTx("success", "shares:share_folder.success.stop")
       } else {
         notifyApiError(res)
       }
       return res
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error:something_went_wrong")
       Logger.error("shareCipher: " + e)
       return { kind: "unknown" }
     }

@@ -31,7 +31,7 @@ struct PasswordImage: View {
         case .empty:
           RoundedRectangle(cornerRadius: 12)
             .frame(width: 40, height: 40)
-            .background(Color.block)
+            .background(AppColors.block)
         case .success(let image):
           image
             .resizable()

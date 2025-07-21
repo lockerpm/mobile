@@ -1,4 +1,4 @@
-import { SHARED_KEYCHAIN_SERVICE } from "app/config/constants"
+import Config from "@/config"
 
 export type AutofillUserInfo = {
   email: string
@@ -42,16 +42,15 @@ export const AutofillStorekey: Record<
   }
 > = {
   USER_INFO: {
-    service: SHARED_KEYCHAIN_SERVICE + ".info",
+    service: Config.SHARED_KEYCHAIN_SERVICE + ".info",
     username: "locker_info",
   },
   TEMP_PASSWORD: {
-    service: SHARED_KEYCHAIN_SERVICE + ".temp_password",
+    service: Config.SHARED_KEYCHAIN_SERVICE + ".temp_password",
     username: "locker_temp_password",
   },
   PASSWORD: {
-    service: SHARED_KEYCHAIN_SERVICE + ".password",
+    service: Config.SHARED_KEYCHAIN_SERVICE + ".password",
     username: "locker_password",
   },
 }
-// SHARED_KEYCHAIN_SERVICE = 'W7S57TNBH5.com.cystack.lockerapp'

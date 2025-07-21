@@ -1,28 +1,22 @@
-import * as React from "react"
-import { StyleProp, TextInput, TextInputProps, View, ViewStyle } from "react-native"
-import { SharedValue } from "react-native-reanimated"
-import { Text, Icon } from "../../cores"
-import { useTheme } from "app/services/context"
-import { IS_IOS } from "app/config/constants"
+/* eslint-disable no-restricted-imports */
+import { Platform, StyleProp, TextInput, TextInputProps, View, ViewStyle } from "react-native"
+import { Icon, PressableIcon } from "../../cores"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { ThemedStyle } from "@/theme"
 
 export interface SearchBarProps extends TextInputProps {
-  /**
-   * Handle scroll to hide search bar
-   */
-  scrollY?: SharedValue<number>
   /**
    * override default style
    */
   containerStyle?: StyleProp<ViewStyle>
-  /**
-   * search title
-   */
-  label?: string
 }
 
 export const SearchBar = (props: SearchBarProps) => {
-  const { containerStyle, label, value, onChangeText, ...textInputProps } = props
-  const { colors } = useTheme()
+  const { containerStyle, value, onChangeText, ...textInputProps } = props
+  const {
+    themed,
+    theme: { colors },
+  } = useAppTheme()
 
   const CONTAINER: StyleProp<ViewStyle> = [
     {
@@ -38,42 +32,37 @@ export const SearchBar = (props: SearchBarProps) => {
 
   return (
     <View style={CONTAINER}>
-      {!label && (
-        <Icon
-          testID="searchBar.icon"
-          icon="magnifying-glass"
-          size={20}
-          color={colors.secondaryText}
-        />
-      )}
-      <Text text={label} color={colors.primaryText} />
+      <Icon testID="searchBar.icon" icon="magnifying-glass" size={20} color={colors.label} />
       <TextInput
         testID="searchBar.textInput"
         selectionColor={colors.primary}
-        placeholderTextColor={colors.primaryText}
+        placeholderTextColor={colors.text}
         clearButtonMode="while-editing"
-        style={{
-          flex: 1,
-          paddingVertical: 10,
-          paddingHorizontal: 8,
-          fontSize: 16,
-          color: colors.primaryText,
-        }}
+        style={themed($input)}
         value={value}
         onChangeText={onChangeText}
         {...textInputProps}
       />
-      {!!value && !IS_IOS && (
-        <Icon
-          filled
-          icon="x-circle"
+      {!!value && Platform.OS !== "ios" && (
+        <PressableIcon
+          icon="x-circle-fill"
           size={20}
-          color={colors.secondaryText}
+          color={colors.label}
           onPress={() => {
-            onChangeText && onChangeText("")
+            if (onChangeText) {
+              onChangeText("")
+            }
           }}
         />
       )}
     </View>
   )
 }
+
+const $input: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  flex: 1,
+  paddingVertical: 10,
+  paddingHorizontal: 8,
+  fontSize: 16,
+  color: colors.text,
+})

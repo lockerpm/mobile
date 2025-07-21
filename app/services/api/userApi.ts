@@ -1,8 +1,6 @@
 import { ApiResponse } from "apisauce"
 import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
-import { Logger } from "../../utils/utils"
-import { IS_IOS } from "../../config/constants"
 import {
   Billing,
   BlockFailedLoginPolicy,
@@ -27,10 +25,16 @@ import {
   NotificationSettingData,
   MarketingContent,
   ChatWootUser,
+  User2FAMethod,
+  UserIDType,
+  UserLockerType,
 } from "app/static/types"
 import { CipherResponse } from "core/models/response/cipherResponse"
 import { PolicyType } from "app/static/types/enum"
-import { UserSnapshotIn as UserSnapshot } from "app/models"
+import { Platform } from "react-native"
+import { Logger } from "@/utils/logger"
+
+const IS_IOS = Platform.OS === "ios"
 
 class UserApi {
   private api: Api = api
@@ -38,7 +42,7 @@ class UserApi {
   // --------------------- ID -----------------------------
 
   // Get me
-  async getUser(token: string): Promise<{ kind: "ok"; user: UserSnapshot } | GeneralApiProblem> {
+  async getUser(token: string): Promise<{ kind: "ok"; user: UserIDType } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -52,7 +56,7 @@ class UserApi {
       const user = response.data
       return { kind: "ok", user }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getUser", e)
       return { kind: "bad-data" }
     }
   }
@@ -63,7 +67,7 @@ class UserApi {
   async getPMToken(
     token: string,
     payload: GetPMTokenData,
-    deviceId: string,
+    deviceId: string
   ): Promise<
     | {
         kind: "ok"
@@ -74,10 +78,7 @@ class UserApi {
           // Clone data here to hide error
           // These data actually not exists
           is_factor2?: boolean
-          methods?: {
-            type: string
-            data: any
-          }[]
+          methods?: User2FAMethod[]
         }
       }
     | GeneralApiProblem
@@ -97,7 +98,7 @@ class UserApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getPMToken", e)
       return { kind: "bad-data" }
     }
   }
@@ -105,7 +106,7 @@ class UserApi {
   // Get master password hint
   async sendMasterPasswordHint(
     token: string,
-    payload: { email: string },
+    payload: { email: string }
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -113,7 +114,7 @@ class UserApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/cystack_platform/pm/users/password_hint",
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -122,19 +123,21 @@ class UserApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("sendMasterPasswordHint", e)
       return { kind: "bad-data" }
     }
   }
 
   // Get user info from PM
-  async getUserPw(token: string): Promise<{ kind: "ok"; user: UserSnapshot } | GeneralApiProblem> {
+  async getUserPw(
+    token: string
+  ): Promise<{ kind: "ok"; user: UserLockerType } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/users/me",
+        "/cystack_platform/pm/users/me"
       )
 
       // the typical ways to die when calling an api
@@ -146,14 +149,14 @@ class UserApi {
 
       return { kind: "ok", user }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getUserPw", e)
       return { kind: "bad-data" }
     }
   }
 
   async hideUserMassterPassword(
     token: string,
-    hide: boolean,
+    hide: boolean
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -163,7 +166,7 @@ class UserApi {
         "/cystack_platform/pm/users/me",
         {
           hide_master_password: hide,
-        },
+        }
       )
 
       // the typical ways to die when calling an api
@@ -174,20 +177,20 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("hideUserMassterPassword", e)
       return { kind: "bad-data" }
     }
   }
 
   async getEnterprise(
-    token: string,
+    token: string
   ): Promise<{ kind: "ok"; data: Enterprise[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/enterprises",
+        "/cystack_platform/pm/enterprises"
       )
 
       // the typical ways to die when calling an api
@@ -198,14 +201,14 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getEnterprise", e)
       return { kind: "bad-data" }
     }
   }
 
   async setUserLanguage(
     token: string,
-    language: string,
+    language: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -221,7 +224,7 @@ class UserApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("setUserLanguage", e)
       return { kind: "bad-data" }
     }
   }
@@ -229,7 +232,7 @@ class UserApi {
   // Session login
   async sessionLogin(
     token: string,
-    payload: SessionLoginRequest,
+    payload: SessionLoginRequest
   ): Promise<{ kind: "ok"; data: SessionSnapshot } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -237,7 +240,7 @@ class UserApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/cystack_platform/pm/users/session",
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -247,7 +250,7 @@ class UserApi {
       const data = response.data
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("sessionLogin", e)
       return { kind: "bad-data" }
     }
   }
@@ -255,7 +258,7 @@ class UserApi {
   // Session login
   async sessionOtpLogin(
     token: string,
-    payload: SessionOtpLoginRequest,
+    payload: SessionOtpLoginRequest
   ): Promise<{ kind: "ok"; data: SessionSnapshot } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -263,7 +266,7 @@ class UserApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/cystack_platform/pm/users/session/otp",
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -273,7 +276,7 @@ class UserApi {
       const data = response.data
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("sessionOtpLogin", e)
       return { kind: "bad-data" }
     }
   }
@@ -281,7 +284,7 @@ class UserApi {
   // Create new master password
   async registerLocker(
     token: string,
-    payload: RegisterLockerRequest,
+    payload: RegisterLockerRequest
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -289,7 +292,7 @@ class UserApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/cystack_platform/pm/users/register",
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -299,7 +302,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("registerLocker", e)
       return { kind: "bad-data" }
     }
   }
@@ -307,7 +310,7 @@ class UserApi {
   // Change master password
   async changeMasterPassword(
     token: string,
-    payload: ChangePasswordRequest,
+    payload: ChangePasswordRequest
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -315,7 +318,7 @@ class UserApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/cystack_platform/pm/users/me/password",
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -325,7 +328,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("changeMasterPassword", e)
       return { kind: "bad-data" }
     }
   }
@@ -346,7 +349,7 @@ class UserApi {
 
       return { kind: "ok", teams }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getTeams", e)
       return { kind: "bad-data" }
     }
   }
@@ -363,7 +366,7 @@ class UserApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/payments/plan",
+        "/cystack_platform/pm/payments/plan"
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -374,7 +377,7 @@ class UserApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getPlan", e)
       return { kind: "bad-data" }
     }
   }
@@ -392,7 +395,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/users/invitations",
+        "/cystack_platform/pm/users/invitations"
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -403,7 +406,7 @@ class UserApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getInvitations", e)
       return { kind: "bad-data" }
     }
   }
@@ -412,7 +415,7 @@ class UserApi {
   async invitationRespond(
     token: string,
     id: string,
-    status: string,
+    status: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -422,7 +425,7 @@ class UserApi {
         `/cystack_platform/pm/users/invitations/${id}`,
         {
           status,
-        },
+        }
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -432,7 +435,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("invitationRespond", e)
       return { kind: "bad-data" }
     }
   }
@@ -440,7 +443,7 @@ class UserApi {
   // Deauthorize all sessions
   async deauthorizeSessions(
     token: string,
-    hashedPassword: string,
+    hashedPassword: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -450,7 +453,7 @@ class UserApi {
         "/cystack_platform/pm/users/session/revoke_all",
         {
           master_password_hash: hashedPassword,
-        },
+        }
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -460,7 +463,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("deauthorizeSessions", e)
       return { kind: "bad-data" }
     }
   }
@@ -468,7 +471,7 @@ class UserApi {
   // Purge account
   async purgeAccount(
     token: string,
-    hashedPassword: string,
+    hashedPassword: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -478,7 +481,7 @@ class UserApi {
         "/cystack_platform/pm/users/me/purge",
         {
           master_password_hash: hashedPassword,
-        },
+        }
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -488,18 +491,18 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("purgeAccount", e)
       return { kind: "bad-data" }
     }
   }
 
   async getReferLink(
-    token: string,
+    token: string
   ): Promise<{ kind: "ok"; data: { referral_link: string } } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/referrals",
+        "/cystack_platform/pm/referrals"
       )
 
       // the typical ways to die when calling an api
@@ -510,19 +513,19 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getReferLink", e)
       return { kind: "bad-data" }
     }
   }
 
   async getNotificationSettings(
-    token: string,
+    token: string
   ): Promise<{ kind: "ok"; data: NotificationSettingData[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
         "/cystack_platform/pm/notification/settings",
-        { type: "notification" },
+        { type: "notification" }
       )
 
       // the typical ways to die when calling an api
@@ -533,7 +536,7 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getNotificationSettings", e)
       return { kind: "bad-data" }
     }
   }
@@ -542,13 +545,13 @@ class UserApi {
     token: string,
     categoryId: string,
     mail: boolean,
-    notification: boolean,
+    notification: boolean
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.put(
         `/cystack_platform/pm/notification/settings/${categoryId}`,
-        { mail, notification },
+        { mail, notification }
       )
 
       // the typical ways to die when calling an api
@@ -559,7 +562,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("updateNotiSettings", e)
       return { kind: "bad-data" }
     }
   }
@@ -567,7 +570,7 @@ class UserApi {
   // Delete account
   async deleteAccount(
     token: string,
-    hashedPassword: string,
+    hashedPassword: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -577,7 +580,7 @@ class UserApi {
         "/cystack_platform/pm/users/me/delete",
         {
           master_password_hash: hashedPassword,
-        },
+        }
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -587,7 +590,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("deleteAccount", e)
       return { kind: "bad-data" }
     }
   }
@@ -595,14 +598,14 @@ class UserApi {
   // Get all policies
   async getTeamPolicies(
     token: string,
-    organizationId: string,
+    organizationId: string
   ): Promise<{ kind: "ok"; data: TeamPolicies } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/enterprises/${organizationId}/policy`,
+        `/cystack_platform/pm/enterprises/${organizationId}/policy`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -613,7 +616,7 @@ class UserApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getTeamPolicies", e)
       return { kind: "bad-data" }
     }
   }
@@ -622,7 +625,7 @@ class UserApi {
   async getTeamPolicy(
     token: string,
     organizationId: string,
-    policyType: PolicyType,
+    policyType: PolicyType
   ): Promise<
     | {
         kind: "ok"
@@ -635,7 +638,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/enterprises/${organizationId}/policy/${policyType}`,
+        `/cystack_platform/pm/enterprises/${organizationId}/policy/${policyType}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -646,7 +649,7 @@ class UserApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getTeamPolicy", e)
       return { kind: "bad-data" }
     }
   }
@@ -654,7 +657,7 @@ class UserApi {
   // Send feedback
   async sendFeedback(
     token: string,
-    payload: FeedbackRequest,
+    payload: FeedbackRequest
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -662,7 +665,7 @@ class UserApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/cystack_platform/pm/feedback",
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -672,7 +675,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("sendFeedback", e)
       return { kind: "bad-data" }
     }
   }
@@ -680,14 +683,14 @@ class UserApi {
   // Update FCM
   async updateFCM(
     token: string,
-    payload: UpdateFCMRequest,
+    payload: UpdateFCMRequest
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/cystack_platform/pm/users/me/fcm_id",
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -697,7 +700,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("updateFCM", e)
       return { kind: "bad-data" }
     }
   }
@@ -705,7 +708,7 @@ class UserApi {
   // Get Billing Documents
   async getBillingDocuments(
     token: string,
-    page: number,
+    page: number
   ): Promise<
     | {
         kind: "ok"
@@ -719,7 +722,7 @@ class UserApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
         "/cystack_platform/pm/payments/invoices",
-        { page },
+        { page }
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -729,7 +732,7 @@ class UserApi {
 
       return { kind: "ok", data: response.data.results }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getBillingDocuments", e)
       return { kind: "bad-data" }
     }
   }
@@ -739,7 +742,7 @@ class UserApi {
     token: string,
     receipt?: string,
     subscriptionId?: string,
-    originalTransactionIdentifierIOS?: string,
+    originalTransactionIdentifierIOS?: string
   ): Promise<
     | {
         kind: "ok"
@@ -775,7 +778,7 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("purchaseValidation", e)
       return { kind: "bad-data" }
     }
   }
@@ -790,7 +793,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/family/members",
+        "/cystack_platform/pm/family/members"
       )
 
       // the typical ways to die when calling an api
@@ -800,20 +803,20 @@ class UserApi {
       }
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getFamilyMember", e)
       return { kind: "bad-data" }
     }
   }
 
   async addFamilyMember(
     token: string,
-    emailMembers: string[],
+    emailMembers: string[]
   ): Promise<{ kind: "ok"; data: any } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/cystack_platform/pm/family/members",
-        { family_members: emailMembers },
+        { family_members: emailMembers }
       )
 
       // the typical ways to die when calling an api
@@ -823,20 +826,20 @@ class UserApi {
       }
 
       return { kind: "ok", data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
+    } catch (e: any) {
+      Logger.error("addFamilyMember", e)
       return { kind: "bad-data", data: e.message.code }
     }
   }
 
   async removeFamilyMember(
     token: string,
-    memberId: string,
+    memberId: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.delete(
-        "/cystack_platform/pm/family/members/" + memberId,
+        "/cystack_platform/pm/family/members/" + memberId
       )
 
       // the typical ways to die when calling an api
@@ -847,7 +850,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("removeFamilyMember", e)
       return { kind: "bad-data" }
     }
   }
@@ -875,7 +878,7 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getTrialEligible", e)
       return { kind: "bad-data" }
     }
   }
@@ -887,13 +890,13 @@ class UserApi {
     email: string,
     key: string,
     type: string,
-    wait_time_days: number,
+    wait_time_days: number
   ): Promise<{ kind: "ok"; data: { is: string } } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/emergency_access/invite`,
-        { email, key, type, wait_time_days },
+        { email, key, type, wait_time_days }
       )
 
       // the typical ways to die when calling an api
@@ -904,18 +907,18 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("EAInvite", e)
       return { kind: "bad-data" }
     }
   }
 
   async EATrusted(
-    token: string,
+    token: string
   ): Promise<{ kind: "ok"; data: TrustedContact[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/emergency_access/trusted`,
+        `/cystack_platform/pm/emergency_access/trusted`
       )
 
       // the typical ways to die when calling an api
@@ -926,18 +929,18 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("EATrusted", e)
       return { kind: "bad-data" }
     }
   }
 
   async EAGranted(
-    token: string,
+    token: string
   ): Promise<{ kind: "ok"; data: TrustedContact[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/emergency_access/granted`,
+        `/cystack_platform/pm/emergency_access/granted`
       )
 
       // the typical ways to die when calling an api
@@ -948,7 +951,7 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("EAGranted", e)
       return { kind: "bad-data" }
     }
   }
@@ -956,12 +959,12 @@ class UserApi {
   async EATrustedYouAction(
     token: string,
     id: string,
-    action: "accept" | "initiate",
+    action: "accept" | "initiate"
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/emergency_access/${id}/${action}`,
+        `/cystack_platform/pm/emergency_access/${id}/${action}`
       )
 
       // the typical ways to die when calling an api
@@ -972,14 +975,14 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("EATrustedYouAction", e)
       return { kind: "bad-data" }
     }
   }
 
   async EATakeover(
     token: string,
-    id: string,
+    id: string
   ): Promise<
     | {
         kind: "ok"
@@ -994,7 +997,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/emergency_access/${id}/takeover`,
+        `/cystack_platform/pm/emergency_access/${id}/takeover`
       )
 
       // the typical ways to die when calling an api
@@ -1005,14 +1008,14 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("EATakeover", e)
       return { kind: "bad-data" }
     }
   }
 
   async EAView(
     token: string,
-    id: string,
+    id: string
   ): Promise<
     | {
         kind: "ok"
@@ -1026,7 +1029,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/emergency_access/${id}/view`,
+        `/cystack_platform/pm/emergency_access/${id}/view`
       )
 
       // the typical ways to die when calling an api
@@ -1037,7 +1040,7 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("EAView", e)
       return { kind: "bad-data" }
     }
   }
@@ -1045,12 +1048,12 @@ class UserApi {
   async EAyourTrustedAction(
     token: string,
     id: string,
-    action: "reject" | "approve" | "reinvite",
+    action: "reject" | "approve" | "reinvite"
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/emergency_access/${id}/${action}`,
+        `/cystack_platform/pm/emergency_access/${id}/${action}`
       )
 
       // the typical ways to die when calling an api
@@ -1061,7 +1064,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("EAyourTrustedAction", e)
       return { kind: "bad-data" }
     }
   }
@@ -1069,13 +1072,13 @@ class UserApi {
   async EAPassword(
     token: string,
     id: string,
-    payload: any,
+    payload: any
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/emergency_access/${id}/password`,
-        payload,
+        payload
       )
 
       // the typical ways to die when calling an api
@@ -1086,7 +1089,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("EAPassword", e)
       return { kind: "bad-data" }
     }
   }
@@ -1094,7 +1097,7 @@ class UserApi {
   async EALockerPassword(
     token: string,
     id: string,
-    newPass: string,
+    newPass: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -1102,7 +1105,7 @@ class UserApi {
         `/cystack_platform/pm/emergency_access/${id}/id_password`,
         {
           new_password: newPass,
-        },
+        }
       )
 
       // the typical ways to die when calling an api
@@ -1113,7 +1116,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("EALockerPassword", e)
       return { kind: "bad-data" }
     }
   }
@@ -1122,7 +1125,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.delete(
-        `/cystack_platform/pm/emergency_access/${id}`,
+        `/cystack_platform/pm/emergency_access/${id}`
       )
 
       // the typical ways to die when calling an api
@@ -1133,7 +1136,7 @@ class UserApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("EARemove", e)
       return { kind: "bad-data" }
     }
   }
@@ -1141,12 +1144,12 @@ class UserApi {
   // marketing
   async fetchMarketingContent(
     token: string,
-    language: string,
+    language: string
   ): Promise<{ kind: "ok"; data: MarketingContent } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/marketing/banner?language=${language}`,
+        `/cystack_platform/pm/marketing/banner?language=${language}`
       )
 
       // the typical ways to die when calling an api
@@ -1157,18 +1160,18 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("fetchMarketingContent", e)
       return { kind: "bad-data" }
     }
   }
 
   async getChatWootIdHash(
-    token: string,
+    token: string
   ): Promise<{ kind: "ok"; data: ChatWootUser } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/users/me/chatwoot`,
+        `/cystack_platform/pm/users/me/chatwoot`
       )
 
       // the typical ways to die when calling an api
@@ -1179,7 +1182,7 @@ class UserApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error("getChatWootIdHash", e)
       return { kind: "bad-data" }
     }
   }

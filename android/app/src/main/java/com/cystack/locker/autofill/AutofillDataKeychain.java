@@ -1,23 +1,23 @@
 package com.cystack.locker.autofill;
 
+import android.content.Context;
 import android.util.Log;
+
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.oblador.keychain.PrefsStorage;
+import com.oblador.keychain.SecurityLevel;
+import com.oblador.keychain.cipherStorage.CipherStorage;
+import com.oblador.keychain.cipherStorage.CipherStorageKeystoreAesCbc;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import com.oblador.keychain.PrefsStorage;
-import com.oblador.keychain.SecurityLevel;
-import com.oblador.keychain.cipherStorage.CipherStorage;
-import com.oblador.keychain.cipherStorage.CipherStorageKeystoreAesCbc;
-
-import com.facebook.react.bridge.ReactApplicationContext;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class AutofillDataKeychain {
     private static final String TAG = "AutofillDataKeychain";
@@ -49,7 +49,6 @@ public class AutofillDataKeychain {
     public void getAutoFillEntriesForDomain() {
         try {
             String itemString = getAutoFillItems();
-//            Log.d(TAG, "getAutoFillEntriesForDomain " + itemString);
             if (itemString == null) {
                 return;
             }

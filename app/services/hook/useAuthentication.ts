@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { useStores } from "app/models"
 import { useHelper } from "./useHelper"
 import { useSocialLogin } from "./useSocialLogin"
@@ -7,15 +6,19 @@ import { SymmetricCryptoKey } from "core/models/domain"
 import moment from "moment"
 import DeviceInfo from "react-native-device-info"
 import { KdfType } from "core/enums/kdfType"
-import { Utils } from "../coreService/utils"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { CipherRequest } from "core/models/request"
 import { CipherType } from "core/enums"
 import { CipherView, LoginUriView, LoginView } from "core/models/view"
-import { Logger, delay, getUrlParameterByName } from "app/utils/utils"
-import { StorageKey, remove, removeSecure } from "app/utils/storage"
-import { setCookiesFromUrl } from "app/utils/analytics"
+import { removeSecure } from "app/utils/storage"
 import { autofillKeyChain } from "app/utils/autofillData"
+import { useToast } from "../utils"
+import { useAppLocale } from "@/i18n"
+import { delay } from "@/utils/delay"
+import { Logger } from "@/utils/logger"
+import { Base64 } from "@/utils/base64"
+
+const rnBiometrics = new ReactNativeBiometrics()
 
 export function useAuthentication() {
   const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore, enterpriseStore } =
@@ -31,7 +34,9 @@ export function useAuthentication() {
     messagingService,
     tokenService,
   } = useCoreService()
-  const { notify, notifyApiError, setApiTokens, translate } = useHelper()
+  const { translate } = useAppLocale()
+  const { setApiTokens } = useHelper()
+  const { notify, notifyTx, notifyApiError } = useToast()
   const { logoutAllServices } = useSocialLogin()
 
   // -------------------- AUTHENTICATION --------------------
@@ -44,7 +49,7 @@ export function useAuthentication() {
     kdfIterations: number,
     masterPassword?: string,
     createMasterPasswordItem?: () => Promise<void>,
-    onPremiseData?: boolean,
+    onPremiseData?: boolean
   ) => {
     // Session login API
     const res = await user.sessionLogin({
@@ -57,7 +62,7 @@ export function useAuthentication() {
       email: user.email,
     })
     if (res.kind === "unauthorized") {
-      notify("error", translate("error.token_expired"))
+      notifyTx("error", "error:token_expired")
       return { kind: "unauthorized" }
     }
 
@@ -66,9 +71,9 @@ export function useAuthentication() {
         if (res.data.code === "1008") {
           notify(
             "error",
-            `${translate("error.login_locked")} ${moment
+            `${translate("error:login_locked")} ${moment
               .duration(res.data.wait, "seconds")
-              .humanize()}`,
+              .humanize()}`
           )
         } else if (res.data.code === "1009") {
           return { kind: "enterprise-lock" }
@@ -77,13 +82,13 @@ export function useAuthentication() {
         } else if (res.data.code === "1011") {
           return { kind: "enterprise-belongs" }
         } else if (res.data.code === "0004") {
-          notify("error", translate("error.incorrect_pw"))
+          notifyTx("error", "error:incorrect_pw")
         } else {
           notifyApiError(res)
         }
         return res
       }
-      notify("error", translate("error.session_login_failed"))
+      notifyTx("error", "error:session_login_failed")
       return res
     }
 
@@ -105,7 +110,7 @@ export function useAuthentication() {
     if (masterPassword) {
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(
         masterPassword,
-        key.keyB64,
+        key.keyB64
       )
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
       // await syncAutofillData();
@@ -127,7 +132,7 @@ export function useAuthentication() {
     masterPassword: string,
     method: string,
     otp: string,
-    save_device: boolean,
+    save_device: boolean
   ) => {
     // Session login API
     const res = await user.sessionOtpLogin({
@@ -143,11 +148,11 @@ export function useAuthentication() {
       save_device,
     })
     if (res.kind === "unauthorized") {
-      notify("error", translate("error.token_expired"))
+      notifyTx("error", "error:token_expired")
       return { kind: "unauthorized" }
     }
     if (res.kind !== "ok") {
-      notify("error", translate("error.session_login_failed"))
+      notifyTx("error", "error:session_login_failed")
       return res
     }
 
@@ -167,7 +172,7 @@ export function useAuthentication() {
     if (masterPassword) {
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(
         masterPassword,
-        key.keyB64,
+        key.keyB64
       )
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
       // await syncAutofillData();
@@ -180,7 +185,7 @@ export function useAuthentication() {
   const sessionLogin = async (
     masterPassword: string,
     createMasterPasswordItem?: () => Promise<void>,
-    onPremiseData?: boolean,
+    onPremiseData?: boolean
   ): Promise<{ kind: string }> => {
     try {
       await delay(200)
@@ -214,10 +219,11 @@ export function useAuthentication() {
         kdfIterations,
         masterPassword,
         createMasterPasswordItem,
-        onPremiseData,
+        onPremiseData
       )
     } catch (e) {
-      notify("error", translate("error.session_login_failed"))
+      Logger.error("sessionLogin: " + e)
+      notifyTx("error", "error:session_login_failed")
       return { kind: "bad-data" }
     }
   }
@@ -225,28 +231,28 @@ export function useAuthentication() {
   const sessionQrLogin = async (
     qr: string,
     qrOtp: string,
-    onPremise?: boolean,
+    onPremise?: boolean
   ): Promise<{ kind: string }> => {
     try {
       await delay(100)
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const keyStr = (qrOtp + qrOtp + qrOtp).slice(0, 16)
-      const keyBuff = Utils.fromUtf8ToArray(keyStr).buffer
+      const keyBuff = Base64.fromUtf8ToArray(keyStr).buffer
 
       // parse qr
-      const iv = Utils.fromB64ToArray(qr.split(".")[0]).buffer
-      const encryptB64 = Utils.fromB64ToArray(qr.split(".")[1]).buffer
+      const iv = Base64.fromB64ToArray(qr.split(".")[0]).buffer
+      const encryptB64 = Base64.fromB64ToArray(qr.split(".")[1]).buffer
 
       const dataBuffer = await cryptoFunctionService.aesDecrypt(encryptB64, iv, keyBuff)
-      const data = Utils.fromBufferToUtf8(dataBuffer)
+      const data = Base64.fromBufferToUtf8(dataBuffer)
       const [keyHash, keyB64, encType] = data.split(".")
 
-      const key = new SymmetricCryptoKey(Utils.fromB64ToArray(keyB64).buffer, parseInt(encType))
+      const key = new SymmetricCryptoKey(Base64.fromB64ToArray(keyB64).buffer, parseInt(encType))
       // Online session login
       return _loginUsingApi(key, keyHash, kdf, kdfIterations, "", () => null, onPremise)
     } catch (e) {
-      notify("error", translate("error.session_login_failed"))
+      notifyTx("error", "error:session_login_failed")
       return { kind: "bad-data" }
     }
   }
@@ -258,21 +264,22 @@ export function useAuthentication() {
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const keyStr = (qrOtp + qrOtp + qrOtp).slice(0, 16)
-      const keyBuff = Utils.fromUtf8ToArray(keyStr).buffer
+      const keyBuff = Base64.fromUtf8ToArray(keyStr).buffer
 
       // parse qr
-      const iv = Utils.fromB64ToArray(qr.split(".")[0]).buffer
-      const encryptB64 = Utils.fromB64ToArray(qr.split(".")[1]).buffer
+      const iv = Base64.fromB64ToArray(qr.split(".")[0]).buffer
+      const encryptB64 = Base64.fromB64ToArray(qr.split(".")[1]).buffer
 
       const dataBuffer = await cryptoFunctionService.aesDecrypt(encryptB64, iv, keyBuff)
-      const data = Utils.fromBufferToUtf8(dataBuffer)
+      const data = Base64.fromBufferToUtf8(dataBuffer)
       const [keyHash, keyB64, encType] = data.split(".")
 
-      const key = new SymmetricCryptoKey(Utils.fromB64ToArray(keyB64).buffer, parseInt(encType))
+      const key = new SymmetricCryptoKey(Base64.fromB64ToArray(keyB64).buffer, parseInt(encType))
       // Online session login
       return _loginUsingApi(key, keyHash, kdf, kdfIterations)
     } catch (e) {
-      notify("error", translate("error.session_login_failed"))
+      Logger.error("sessionBusinessQrLogin: ", e)
+      notifyTx("error", "error:session_login_failed")
       return { kind: "bad-data" }
     }
   }
@@ -283,7 +290,7 @@ export function useAuthentication() {
     key: SymmetricCryptoKey,
     method: string,
     otp: string,
-    save_device: boolean,
+    save_device: boolean
   ): Promise<{ kind: string }> => {
     try {
       await delay(200)
@@ -299,10 +306,11 @@ export function useAuthentication() {
         "",
         method,
         otp,
-        save_device,
+        save_device
       )
     } catch (e) {
-      notify("error", translate("error.session_login_failed"))
+      Logger.error("sessionOtpLoginWithHashPassword: ", e)
+      notifyTx("error", "error:session_login_failed")
       return { kind: "bad-data" }
     }
   }
@@ -312,7 +320,7 @@ export function useAuthentication() {
     masterPassword: string,
     method: string,
     otp: string,
-    save_device: boolean,
+    save_device: boolean
   ): Promise<{ kind: string }> => {
     try {
       await delay(200)
@@ -347,10 +355,11 @@ export function useAuthentication() {
         masterPassword,
         method,
         otp,
-        save_device,
+        save_device
       )
     } catch (e) {
-      notify("error", translate("error.session_login_failed"))
+      Logger.error("sessionOtpLogin: ", e)
+      notifyTx("error", "error:session_login_failed")
       return { kind: "bad-data" }
     }
   }
@@ -359,25 +368,25 @@ export function useAuthentication() {
   const biometricLogin = async (): Promise<{ kind: string }> => {
     try {
       await delay(200)
-      const { available } = await ReactNativeBiometrics.isSensorAvailable()
+      const { available } = await rnBiometrics.isSensorAvailable()
       if (!available) {
-        notify("error", translate("error.biometric_not_support"))
+        notifyTx("error", "error:biometric_not_support")
         return { kind: "bad-data" }
       }
 
       // Validate biometric
-      const { success } = await ReactNativeBiometrics.simplePrompt({
+      const { success } = await rnBiometrics.simplePrompt({
         promptMessage: "Unlock Locker",
       })
       if (!success) {
-        notify("error", translate("error.biometric_unlock_failed"))
+        notifyTx("error", "error:biometric_unlock_failed")
         return { kind: "bad-data" }
       }
       // Offline login
       if (uiStore.isOffline) {
         const hasKey = await cryptoService.hasKey()
         if (!hasKey) {
-          notify("error", translate("error.session_login_failed"))
+          notifyTx("error", "error:session_login_failed")
           return { kind: "bad-data" }
         }
         // Fake set key
@@ -394,6 +403,7 @@ export function useAuthentication() {
       const kdfIterations = 100000
       return _loginUsingApi(key, keyHash, kdf, kdfIterations)
     } catch (e) {
+      Logger.error("biometricLogin: ", e)
       return { kind: "bad-data" }
     }
   }
@@ -439,18 +449,19 @@ export function useAuthentication() {
 
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(
         masterPassword,
-        key.keyB64,
+        key.keyB64
       )
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
 
       // Success
-      notify("success", translate("success.master_password_updated"))
+      notifyTx("success", "success:master_password_updated")
 
       await delay(500)
 
       return { kind: "ok" }
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      Logger.error("registerLocker: " + e)
+      notifyTx("error", "error:something_went_wrong")
       return { kind: "bad-data" }
     }
   }
@@ -460,7 +471,7 @@ export function useAuthentication() {
     newPassword: string,
     email: string,
     eaID: string,
-    lockerPassword?: boolean,
+    lockerPassword?: boolean
   ): Promise<{ kind: string }> => {
     try {
       if (lockerPassword) {
@@ -470,7 +481,7 @@ export function useAuthentication() {
           return { kind: "bad-data" }
         }
         // Setup service
-        notify("success", translate("success.locker_password_updated"))
+        notifyTx("success", "success:locker_password_updated")
       } else {
         const fetchKeyRes = await user.takeoverEA(eaID)
         if (fetchKeyRes.kind !== "ok") return { kind: "bad-data" }
@@ -500,12 +511,13 @@ export function useAuthentication() {
           return { kind: "bad-data" }
         }
         // Setup service
-        notify("success", translate("success.master_password_updated"))
+        notifyTx("success", "success:master_password_updated")
       }
 
       return { kind: "ok" }
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      Logger.error("updateNewMasterPasswordEA: " + e)
+      notifyTx("error", "error:something_went_wrong")
       return { kind: "bad-data" }
     }
   }
@@ -532,6 +544,7 @@ export function useAuthentication() {
       data.type = CipherType.MasterPassword
       return data
     } catch (e) {
+      Logger.error("_createMasterPwItemRequest: ", e)
       return null
     }
   }
@@ -540,7 +553,7 @@ export function useAuthentication() {
   const changeMasterPassword = async (
     oldPassword: string,
     newPassword: string,
-    hint: string,
+    hint: string
   ): Promise<{ kind: string }> => {
     try {
       // createMasterPwItem
@@ -574,12 +587,13 @@ export function useAuthentication() {
       }
 
       // Setup service
-      notify("success", translate("success.master_password_updated"))
+      notifyTx("success", "success:master_password_updated")
       await cryptoService.clearKeys()
       await logout()
       return { kind: "ok" }
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      Logger.error("changeMasterPassword: " + e)
+      notifyTx("error", "error:something_went_wrong")
       return { kind: "bad-data" }
     }
   }
@@ -587,12 +601,12 @@ export function useAuthentication() {
   // Logout
   const logout = async () => {
     try {
-      await user.updateFCM(null)
+      await user.updateFCM("")
       await user.logout()
       await clearAllData()
       await logoutAllServices()
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error:something_went_wrong")
       Logger.error("logout: " + e)
     }
   }
@@ -622,9 +636,6 @@ export function useAuthentication() {
     // Reset shared data
     await autofillKeyChain.resetAll()
 
-    // Reset push noti data
-    await remove(StorageKey.PUSH_NOTI_DATA)
-
     // TODO: remove this when RSA problem is fixed
     await removeSecure("decOrgKeys")
 
@@ -646,74 +657,6 @@ export function useAuthentication() {
     ])
   }
 
-  // Handle dynamic link
-  const handleDynamicLink = async (url: string, navigation?: any) => {
-    // Set UTM
-    setCookiesFromUrl(url)
-
-    // Redirect
-    const WHITELIST_HOSTS = [
-      "https://locker.io",
-      "https://id.locker.io",
-      "https://staging.locker.io",
-    ]
-    const host = WHITELIST_HOSTS.find((h) => url.startsWith(h))
-    if (host) {
-      const path = url.split(host)[1]
-
-      // Register
-      if (path.startsWith("/register")) {
-        navigation?.navigate("signup")
-        return !!navigation
-      }
-
-      // Authenticate
-      if (path.startsWith("/authenticate")) {
-        const token = getUrlParameterByName("token", url)
-        if (token) {
-          const tempUserRes = await user.getUser({
-            customToken: token,
-            dontSetData: true,
-          })
-
-          // Ignore if token is not valid or current user is correct
-          if (tempUserRes.kind !== "ok" || tempUserRes.user.email === user.email) {
-            return false
-          }
-
-          // Logout if current user is not correct
-          if (user.isLoggedIn) {
-            await logout()
-          }
-          navigation?.navigate("init")
-          setApiTokens(token)
-          const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-          if (userRes.kind === "ok" && userPwRes.kind === "ok") {
-            if (user.is_pwd_manager) {
-              navigation?.navigate("lock")
-            } else {
-              navigation?.navigate("createMasterPassword")
-            }
-            return !!navigation
-          }
-        }
-      }
-
-      // emergencyAccess
-      if (path.startsWith("/settings/security")) {
-        uiStore.setIsDeeplinkEmergencyAccess(true)
-        return false
-      }
-
-      // emergencyAccess
-      if (path.startsWith("/shares")) {
-        uiStore.setIsDeeplinkShares(true)
-        return false
-      }
-    }
-    return false
-  }
-
   return {
     sessionLogin,
     sessionOtpLogin,
@@ -724,7 +667,6 @@ export function useAuthentication() {
     changeMasterPassword,
     updateNewMasterPasswordEA,
     clearAllData,
-    handleDynamicLink,
     sessionQrLogin,
     sessionOtpLoginWithHashPassword,
     sessionBusinessQrLogin,

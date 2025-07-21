@@ -132,7 +132,7 @@ export enum LoginMethod {
 }
 
 // use only on Login screen
-export enum LOGIN_METHOD {
+export enum LoginOptions {
   PASSKEY = 0,
   PASSWORD = 1,
   NONE = 2,
@@ -145,4 +145,25 @@ export enum AppTimeoutType {
 export enum TimeoutActionType {
   LOCK = "lock",
   LOGOUT = "logout",
+}
+
+export const enum BiometricsType {
+  TouchID = "touchID",
+  /**
+   * Enum for face id sensor type
+   */
+  FaceID = "faceID",
+  /**
+   * Enum for generic biometrics (this is the only value available on android)
+   */
+  Biometrics = "biometric",
+  /**
+   * Biometrics not available
+   */
+  None = "none",
+}
+
+export const enum LockType {
+  Individual = "individual",
+  OnPremise = "onPremise",
 }

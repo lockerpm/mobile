@@ -20,6 +20,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+ios/.xcode.env.local
 
 # Android/IntelliJ
 #
@@ -28,6 +29,8 @@ build/
 .gradle
 local.properties
 *.iml
+*.hprof
+.cxx/
 
 # node.js
 #
@@ -39,7 +42,6 @@ yarn-error.log
 buck-out/
 \.buckd/
 *.keystore
-!my-upload-key.keystore
 !debug.keystore
 
 # fastlane
@@ -49,16 +51,13 @@ buck-out/
 # For more information about the recommended setup visit:
 # https://docs.fastlane.tools/best-practices/source-control/
 
-*/fastlane/report.xml
-*/fastlane/Preview.html
-*/fastlane/screenshots
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
 
 # Bundle artifact
 *.jsbundle
-
-# CocoaPods
-/ios/Pods/
-ios/Podfile.lock
 
 # Ignite-specific items below
 # You can safely replace everything above this comment with whatever is
@@ -69,8 +68,12 @@ ios/Podfile.lock
 
 # Expo
 .expo/*
-bin/Exponent.appw
+bin/Exponent.app
 
+
+expo-env.d.ts
+
+## Secrets
 npm-debug.*
 *.jks
 *.p8
@@ -81,21 +84,20 @@ npm-debug.*
 web-build/
 
 # Configurations
-app/config/env.*.js
 !env.js
-yarn.lock
-
-# Env
 .env
-app/config/.env.production
-app/config/.env.staging
-app/config/.env.*
-
-android/gradle.properties
-android/app/my-upload-key.keystore
+**/.env.*
 android/app/google-services.json
+android/gradle.properties
+ios/GoogleService-Info.plist
 
-ios/**/**.xcconfig
 
-/ios/Firebase/
-/vendor
+/coverage
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

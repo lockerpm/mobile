@@ -113,7 +113,7 @@ struct CreateCipherScreen: View {
           self.webUrl = initWebsite
         }
         .padding()
-        .background(Color.background)
+        .background(AppColors.background)
         .cornerRadius(15)
         .padding()
       }
@@ -168,7 +168,7 @@ struct CreateCipherScreen: View {
     }, onDismiss: {
       isShowEmailList = 0
     })
-    .background(Color.block)
+    .background(AppColors.block)
   }
   
   func onSaveButtonPress() {

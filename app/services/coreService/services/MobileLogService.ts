@@ -1,5 +1,5 @@
-import { LogService as LogServiceAbstraction } from 'core/abstractions'
-import { LogLevelType } from 'core/enums'
+import { LogService as LogServiceAbstraction } from "core/abstractions"
+import { LogLevelType } from "core/enums"
 
 export class MobileLogService implements LogServiceAbstraction {
   protected timersMap: Map<string, [number, number]> = new Map()
@@ -23,7 +23,7 @@ export class MobileLogService implements LogServiceAbstraction {
     this.write(LogLevelType.Error, message)
   }
 
-  time(label = 'default') {
+  time(label = "default") {
     if (!this.timersMap.has(label)) {
       this.timersMap.set(label, global.nativePerformanceNow())
     }

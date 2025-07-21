@@ -1,5 +1,5 @@
-import React, { ReactElement } from "react"
 import {
+  ActivityIndicator,
   StyleProp,
   TextStyle,
   TouchableOpacity,
@@ -7,12 +7,14 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { spacing } from "../../../theme"
-import { Icon, IconTypes } from "../icon/Icon"
+import { isRTL } from "@/i18n"
+import { $styles } from "@/theme"
+import { ExtendedEdge, useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
+import { IconTypes, PressableIcon } from "../icon/Icon"
 import { Text, TextProps } from "../text/Text"
-import { ExtendedEdge, useSafeAreaInsetsStyle } from "app/utils/useSafeAreaInsetsStyle"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { useAppTheme } from "@/utils/useAppTheme"
+import type { ThemedStyle } from "@/theme"
+import { ReactElement } from "react"
 
 export interface HeaderProps {
   /**
@@ -69,14 +71,15 @@ export interface HeaderProps {
    */
   leftText?: TextProps["text"]
   /**
-   * Left action text color
+   * Left action text text which is looked up via i18n.
+   * Can be used with `onLeftPress`. Overrides `leftIcon`.
    */
-  leftTextColor?: string
+  leftTx?: TextProps["tx"]
   /**
-   * Left action custom ReactElement if the built in action props don't suffice.
-   * Overrides `leftIcon`, `leftTx` and `leftText`.
+   * Optional options to pass to i18n. Useful for interpolation
+   * as well as explicitly setting locale or translation fallbacks.
    */
-  LeftActionComponent?: ReactElement
+  leftTxOptions?: TextProps["txOptions"]
   /**
    * What happens when you press the left icon or text action.
    */
@@ -96,9 +99,17 @@ export interface HeaderProps {
    */
   rightText?: TextProps["text"]
   /**
-   * Right action text color
+   * Right action text text which is looked up via i18n.
+   * Can be used with `onRightPress`. Overrides `rightIcon`.
    */
-  rightTextColor?: string
+  rightTx?: TextProps["tx"]
+  rightLoading?: boolean
+  rightDisabled?: boolean
+  /**
+   * Optional options to pass to i18n. Useful for interpolation
+   * as well as explicitly setting locale or translation fallbacks.
+   */
+  rightTxOptions?: TextProps["txOptions"]
   /**
    * Right action custom ReactElement if the built in action props don't suffice.
    * Overrides `rightIcon`, `rightTx` and `rightText`.
@@ -119,33 +130,37 @@ interface HeaderActionProps {
   icon?: IconTypes
   iconColor?: string
   text?: TextProps["text"]
-  textColor?: string
+  tx?: TextProps["tx"]
+  txOptions?: TextProps["txOptions"]
   onPress?: TouchableOpacityProps["onPress"]
+  loading?: boolean
+  disabled?: boolean
   ActionComponent?: ReactElement
 }
 
-/**
- * Header that appears on many screens. Will hold navigation buttons and screen title.
- * The Header is meant to be used with the `screenOptions.header` option on navigators, routes, or screen components via `navigation.setOptions({ header })`.
- *
- * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Header.md)
- */
 export function Header(props: HeaderProps) {
-  const { colors } = useTheme()
+  const {
+    theme: { colors },
+    themed,
+  } = useAppTheme()
   const {
     backgroundColor = colors.background,
-    LeftActionComponent,
+
     leftIcon,
     leftIconColor,
     leftText,
-    leftTextColor,
+    leftTx,
+    leftTxOptions,
     onLeftPress,
     onRightPress,
-    RightActionComponent,
+    rightLoading,
+    rightDisabled,
     rightIcon,
     rightIconColor,
     rightText,
-    rightTextColor,
+    rightTx,
+    rightTxOptions,
+    RightActionComponent,
     safeAreaEdges = ["top"],
     title,
     titleMode = "center",
@@ -156,44 +171,52 @@ export function Header(props: HeaderProps) {
     titleStyle: $titleStyleOverride,
     containerStyle: $containerStyleOverride,
   } = props
-  const { translate } = useHelper()
-  const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
 
-  const titleContent = titleTx ? translate(titleTx, titleTxOptions) : title
+  const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
 
   return (
     <View style={[$container, $containerInsets, { backgroundColor }, $containerStyleOverride]}>
-      <View style={[$wrapper, $styleOverride]}>
+      <View style={[$styles.row, $wrapper, $styleOverride]}>
         <HeaderAction
+          tx={leftTx}
           text={leftText}
-          textColor={leftTextColor}
           icon={leftIcon}
           iconColor={leftIconColor}
           onPress={onLeftPress}
+          txOptions={leftTxOptions}
           backgroundColor={backgroundColor}
-          ActionComponent={LeftActionComponent}
         />
 
-        {!!titleContent && (
+        {!!(title || titleTx) && (
           <View
             style={[
-              titleMode === "center" && $titleWrapperCenter,
+              $titleWrapperPointerEvents,
+              titleMode === "center" && themed($titleWrapperCenter),
               titleMode === "flex" && $titleWrapperFlex,
               $titleContainerStyleOverride,
             ]}
-            pointerEvents="none"
           >
-            <Text weight="medium" text={titleContent} style={[$title, $titleStyleOverride]} />
+            <Text
+              weight="medium"
+              size="md"
+              text={title}
+              tx={titleTx}
+              txOptions={titleTxOptions}
+              style={[$title, $titleStyleOverride]}
+            />
           </View>
         )}
 
         <HeaderAction
+          tx={rightTx}
           text={rightText}
-          textColor={rightTextColor}
           icon={rightIcon}
           iconColor={rightIconColor}
           onPress={onRightPress}
+          txOptions={rightTxOptions}
           backgroundColor={backgroundColor}
+          loading={rightLoading}
+          disabled={rightDisabled}
           ActionComponent={RightActionComponent}
         />
       </View>
@@ -201,38 +224,68 @@ export function Header(props: HeaderProps) {
   )
 }
 
+/**
+ * @param {HeaderActionProps} props - The props for the `HeaderAction` component.
+ * @returns {JSX.Element} The rendered `HeaderAction` component.
+ */
 function HeaderAction(props: HeaderActionProps) {
-  const { backgroundColor, icon, text, onPress, ActionComponent, iconColor, textColor } = props
-  const { colors } = useTheme()
-  const content = text
+  const {
+    backgroundColor,
+    icon,
+    text,
+    tx,
+    txOptions,
+    onPress,
+    loading,
+    iconColor,
+    disabled,
+    ActionComponent,
+  } = props
+  const {
+    themed,
+    theme: { colors },
+  } = useAppTheme()
 
-  if (ActionComponent) return <View style={{ paddingHorizontal: 20 }}>{ActionComponent}</View>
+  if (ActionComponent) return <View style={$actionContainer}>{ActionComponent}</View>
 
-  const $actionText: TextStyle = {
-    color: textColor || colors.primaryText,
+  if (loading) {
+    return (
+      <View style={themed([$actionTextContainer, { backgroundColor }])}>
+        <ActivityIndicator size={20} color={colors.primary} />
+      </View>
+    )
   }
 
-  if (content) {
+  if (tx || text) {
     return (
       <TouchableOpacity
-        style={[$actionTextContainer, { backgroundColor }]}
+        style={themed([$actionTextContainer, { backgroundColor }])}
         onPress={onPress}
-        disabled={!onPress}
+        disabled={!onPress || disabled}
         activeOpacity={0.8}
       >
-        <Text preset="bold" text={content} style={$actionText} />
+        <Text
+          weight="medium"
+          size="md"
+          text={text}
+          tx={tx}
+          color={disabled ? colors.disable : iconColor || undefined}
+          txOptions={txOptions}
+        />
       </TouchableOpacity>
     )
   }
 
   if (icon) {
     return (
-      <Icon
+      <PressableIcon
         size={24}
         icon={icon}
-        color={iconColor}
+        disabled={disabled}
+        color={disabled ? colors.disable : iconColor}
         onPress={onPress}
-        containerStyle={[$actionIconContainer, { backgroundColor }]}
+        containerStyle={themed([$actionIconContainer, { backgroundColor }])}
+        style={isRTL ? { transform: [{ rotate: "180deg" }] } : {}}
       />
     )
   }
@@ -242,7 +295,6 @@ function HeaderAction(props: HeaderActionProps) {
 
 const $wrapper: ViewStyle = {
   height: 56,
-  flexDirection: "row",
   alignItems: "center",
   justifyContent: "space-between",
 }
@@ -255,39 +307,47 @@ const $title: TextStyle = {
   textAlign: "center",
 }
 
-const $actionTextContainer: ViewStyle = {
+const $actionTextContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   flexGrow: 0,
   alignItems: "center",
   justifyContent: "center",
   height: "100%",
-  paddingHorizontal: spacing.medium,
+  paddingHorizontal: spacing.md,
   zIndex: 2,
-}
+})
 
-const $actionIconContainer: ViewStyle = {
+const $actionIconContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   flexGrow: 0,
   alignItems: "center",
   justifyContent: "center",
   height: "100%",
-  paddingHorizontal: spacing.medium,
+  paddingHorizontal: spacing.md,
   zIndex: 2,
-}
+})
 
 const $actionFillerContainer: ViewStyle = {
   width: 16,
 }
 
-const $titleWrapperCenter: ViewStyle = {
+const $titleWrapperPointerEvents: ViewStyle = {
+  pointerEvents: "none",
+}
+
+const $titleWrapperCenter: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   alignItems: "center",
   justifyContent: "center",
   height: "100%",
   width: "100%",
   position: "absolute",
-  paddingHorizontal: spacing.large,
+  paddingHorizontal: spacing.xxl,
   zIndex: 1,
-}
+})
 
 const $titleWrapperFlex: ViewStyle = {
   justifyContent: "center",
   flexGrow: 1,
+}
+
+const $actionContainer: ViewStyle = {
+  paddingHorizontal: 20,
 }

@@ -1,4 +1,3 @@
-/* eslint-disable n/no-callback-literal */
 import { NativeModules, Platform } from "react-native"
 const { RNAutofillServiceIos, RNAutofillServiceAndroid } = NativeModules
 
@@ -59,4 +58,44 @@ export const parseSearchText: (bundle: string) => string[] = (bundle) => {
   })
 
   return results
+}
+
+export let isAndroidAutofillService = false
+export let androidAutofillServiceData: AndroidAutofillServiceData | null = null
+
+// if app start from android autofill service. navigate to autofill screen
+export const setAndroidAutofillServiceData = (props: {
+  lastFill?: number
+  autofill?: number
+  savePassword?: number
+  domain?: string
+  lastUserPasswordID?: string
+  username?: string
+  password?: string
+}) => {
+  if (Platform.OS === "android") {
+    const {
+      lastFill = 0,
+      autofill = 0,
+      savePassword = 0,
+      domain = "",
+      lastUserPasswordID = "",
+      username = "",
+      password = "",
+    } = props
+
+    if (autofill || lastFill || savePassword) {
+      let type = AndroidAutofillServiceType.AUTOFILL
+      if (lastFill) type = AndroidAutofillServiceType.AUTOFILL_ITEM
+      if (savePassword) type = AndroidAutofillServiceType.SAVE_REQUEST
+      isAndroidAutofillService = true
+      androidAutofillServiceData = {
+        type,
+        lastUserPasswordID,
+        domain,
+        username,
+        password,
+      }
+    }
+  }
 }

@@ -1,6 +1,5 @@
 package com.cystack.locker.autofill;
 
-import android.app.PendingIntent;
 import android.app.assist.AssistStructure;
 import android.os.Build;
 import android.os.CancellationSignal;
@@ -16,13 +15,16 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.cystack.locker.autofill.parser.Parser;
 import com.cystack.locker.RNAutofillServiceAndroid;
+import com.cystack.locker.autofill.parser.Parser;
+import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactInstanceManager;
+import com.facebook.react.ReactNativeHost;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.facebook.react.bridge.ReactApplicationContext;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService {
@@ -32,12 +34,18 @@ public class LockerAutoFillService extends AutofillService {
     public void onConnected() {
         Log.d(TAG, "onConnected()");
         super.onConnected();
+        ReactNativeHost host = ((ReactApplication) this.getApplicationContext()).getReactNativeHost();
+        ReactInstanceManager manager = host.getReactInstanceManager();
 
-        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
-        AutofillDataKeychain keyStore = new AutofillDataKeychain(reactContext);
-        if (keyStore.isLoggedInPw) {
-            Utils.InitCredentialsStore(getBaseContext(), keyStore.email, keyStore.hashPass);
-        } else {
+        ReactContext reactContext = manager.getCurrentReactContext();
+        if (reactContext instanceof ReactApplicationContext) {
+            AutofillDataKeychain keyStore = new AutofillDataKeychain((ReactApplicationContext) reactContext);
+            if (keyStore.isLoggedInPw) {
+                Utils.InitCredentialsStore(getBaseContext(), keyStore.email, keyStore.hashPass);
+            }  else {
+                Utils.RemoveAllCredential();
+            }
+        }  else {
             Utils.RemoveAllCredential();
         }
     }
@@ -46,9 +54,8 @@ public class LockerAutoFillService extends AutofillService {
     public void onFillRequest(@NonNull FillRequest request, @NonNull CancellationSignal cancellationSignal,
             @NonNull FillCallback callback) {
         Log.d(TAG, "onFillRequest()");
-        // Find fillable fields
-        AssistStructure structure = Utils.getLatestAssistStructure(request);
-        Parser.Result parseResult = new Parser(structure).Parse();
+
+        Parser.Result parseResult = new Parser(request).Parse();
 
         ArrayList<Field> fields = (ArrayList<Field>) parseResult.getFillable();
         String domain = parseResult.getDomain();
@@ -58,7 +65,6 @@ public class LockerAutoFillService extends AutofillService {
             callback.onSuccess(null);
             return;
         }
-
 
         // Create response...
         FillResponse.Builder response = Utils.BuildFillResponse(fields, request, domain, this);
@@ -73,9 +79,7 @@ public class LockerAutoFillService extends AutofillService {
     public void onSaveRequest(@NonNull SaveRequest request, @NonNull SaveCallback callback) {
         Log.d(TAG, "onSaveRequest()");
 
-        List<FillContext> context = request.getFillContexts();
-        AssistStructure structure = context.get(context.size() - 1).getStructure();
-        Parser.Result parseResult = new Parser(structure).Parse();
+        Parser.Result parseResult = new Parser(request).Parse();
         ArrayList<Field> fields = (ArrayList<Field>) parseResult.getFillable();
         String domain = parseResult.getDomain();
 

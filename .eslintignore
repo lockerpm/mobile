@@ -1,3 +1,8 @@
-react-native.config.js
-babel.config.js
-metro.config.js
+node_modules
+ios
+android
+.expo
+.vscode
+ignite/ignite.json
+package.json
+.eslintignore

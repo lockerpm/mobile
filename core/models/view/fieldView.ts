@@ -1,25 +1,25 @@
-import { FieldType } from '../../enums/fieldType';
+import { FieldType } from "../../enums/fieldType"
 
-import { View } from './view';
+import { View } from "./view"
 
-import { Field } from '../domain/field';
+import { Field } from "../domain/field"
 
 export class FieldView implements View {
-    name: string = null;
-    value: string = null;
-    type: FieldType = null;
-    newField = false; // Marks if the field is new and hasn't been saved
-    showValue = false;
+  name: string = null
+  value: string = null
+  type: FieldType = null
+  newField = false // Marks if the field is new and hasn't been saved
+  showValue = false
 
-    constructor(f?: Field) {
-        if (!f) {
-            return;
-        }
-
-        this.type = f.type;
+  constructor(f?: Field) {
+    if (!f) {
+      return
     }
 
-    get maskedValue(): string {
-        return this.value != null ? '••••••••' : null;
-    }
+    this.type = f.type
+  }
+
+  get maskedValue(): string {
+    return this.value != null ? "••••••••" : null
+  }
 }

@@ -1,11 +1,12 @@
-import React, { useCallback, useState } from "react"
-import { Dimensions, Platform, StyleProp, View, ViewStyle } from "react-native"
+import { useCallback, useState } from "react"
+import { Dimensions, ImageStyle, Platform, StyleProp, View, ViewStyle } from "react-native"
 import { ImageIcon } from "../../cores"
 import { useHelper, useSocialLogin } from "app/services/hook"
-import { GITHUB_CONFIG } from "app/config/constants"
 import { getUrlParameterByName } from "app/utils/utils"
 import { WebViewModal } from "../../webviewModal/WebviewModal"
 import { useNavigation } from "@react-navigation/native"
+import { UnAuthScreenProps } from "app/navigators"
+import Config from "@/config"
 
 const IS_IOS = Platform.OS === "ios"
 const SCREEN_WIDTH = Dimensions.get("screen").width
@@ -17,13 +18,13 @@ interface Props {
   /**
    * Callback when social authen success
    */
-  onLoggedIn: (_newUser: boolean, _token: string) => Promise<void>
+  onLoggedIn: () => Promise<void>
 
   style?: StyleProp<ViewStyle>
 }
 
 export const SocialLogin = ({ onLoggedIn, setIsLoading, style, isSingIn }: Props) => {
-  const navigation = useNavigation() as any
+  const navigation = useNavigation<UnAuthScreenProps<"loginStack">["navigation"]>()
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLogin()
 
@@ -75,7 +76,12 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading, style, isSingIn }: Props
       hide: !isSingIn,
       icon: "sso",
       handler: () => {
-        navigation.navigate("ssoIdentifier")
+        navigation.navigate("unAuthStack", {
+          screen: "ssoStack",
+          params: {
+            screen: "ssoIdentifier",
+          },
+        })
       },
     },
   }
@@ -88,7 +94,7 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading, style, isSingIn }: Props
             .filter((item) => !item.hide)
             .map((item, index) => (
               <ImageIcon
-                style={{ marginHorizontal: 16 }}
+                style={$mh16 as ImageStyle}
                 key={index}
                 icon={item.icon}
                 size={32}
@@ -105,7 +111,7 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading, style, isSingIn }: Props
             .slice(0, 3)
             .map((item, index) => (
               <ImageIcon
-                style={{ marginHorizontal: 20 }}
+                style={$mh16 as ImageStyle}
                 key={index}
                 icon={item.icon}
                 size={40}
@@ -113,12 +119,12 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading, style, isSingIn }: Props
               />
             ))}
         </View>
-        <View style={[$centerRowSpaceBtw, { marginVertical: 20 }]}>
+        <View style={[$centerRowSpaceBtw, $mh16]}>
           {Object.values(SOCIAL_LOGIN)
             .slice(3)
             .map((item, index) => (
               <ImageIcon
-                style={{ marginHorizontal: 20 }}
+                style={$mh16 as ImageStyle}
                 key={index}
                 icon={item.icon}
                 size={40}
@@ -129,6 +135,7 @@ export const SocialLogin = ({ onLoggedIn, setIsLoading, style, isSingIn }: Props
       </View>
     )
   }, [])
+
   return (
     <View style={style}>
       <GitHubLoginModal
@@ -159,14 +166,14 @@ export const GitHubLoginModal = (props: GitHubLoginModalProps) => {
   const { isOpen, onClose, onDone } = props
   const { randomString } = useHelper()
 
-  const url = `${GITHUB_CONFIG.authorizationEndpoint}?client_id=${
-    GITHUB_CONFIG.clientId
-  }&redirect_uri=${encodeURIComponent(GITHUB_CONFIG.redirectUrl)}&scope=${encodeURIComponent(
-    GITHUB_CONFIG.scopes.join(" "),
+  const url = `${Config.GITHUB_CONFIG.authorizationEndpoint}?client_id=${
+    Config.GITHUB_CONFIG.clientId
+  }&redirect_uri=${encodeURIComponent(Config.GITHUB_CONFIG.redirectUrl)}&scope=${encodeURIComponent(
+    Config.GITHUB_CONFIG.scopes.join(" ")
   )}&state=${randomString()}`
 
   const onURLChange = (url: string) => {
-    if (url.startsWith(GITHUB_CONFIG.redirectUrl)) {
+    if (url.startsWith(Config.GITHUB_CONFIG.redirectUrl)) {
       const code = getUrlParameterByName("code", url)
       onClose()
       onDone(code)
@@ -180,4 +187,8 @@ const $centerRowSpaceBtw: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "center",
+}
+
+const $mh16: ViewStyle | ImageStyle = {
+  marginHorizontal: 16,
 }

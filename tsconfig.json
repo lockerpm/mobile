@@ -6,17 +6,29 @@
     "jsx": "react-native",
     "module": "es2015",
     "moduleResolution": "node",
-    "noImplicitAny": false,
+    "strict": true,
+    "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUnusedLocals": false,
     "sourceMap": true,
     "target": "esnext",
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "baseUrl": "./"
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./app/*"],
+      "assets/*": ["./assets/*"],
+      "core/*": ["./core/*"]
+    },
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "exclude": ["node_modules"],
-  "include": ["index.js", "App.js", "app", "core", "test", "*.js"]
+  "extends": "expo/tsconfig.base",
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "test/**/*"]
 }

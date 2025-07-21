@@ -1,8 +1,10 @@
+import { Logger } from "../logger"
+
 export type CryptoWalletData = {
   walletApp: {
     name: string
     alias: string
-  },
+  }
   username: string
   password: string
   pin: string
@@ -20,7 +22,7 @@ export const toCryptoWalletData = (str: string) => {
   let res: CryptoWalletData = {
     walletApp: {
       name: "",
-      alias: ""
+      alias: "",
     },
     username: "",
     password: "",
@@ -29,15 +31,19 @@ export const toCryptoWalletData = (str: string) => {
     privateKey: "",
     seed: "",
     networks: [],
-    notes: ""
+    notes: "",
+  }
+  if (str === "") {
+    return res
   }
   try {
     const parsed: CryptoWalletData = JSON.parse(str)
     res = {
       ...res,
-      ...parsed
+      ...parsed,
     }
   } catch (e) {
+    Logger.error("toCryptoWalletData: Error parsing crypto wallet data", e)
   }
   return res
 }

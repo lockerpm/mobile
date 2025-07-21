@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import { useRef } from "react"
 import { Pressable, Animated, PressableProps, StyleProp, ViewStyle } from "react-native"
 
 interface Props extends PressableProps {
@@ -12,7 +12,7 @@ interface Props extends PressableProps {
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
-export const PressableScale = ({ children, onPress, style }: Props) => {
+export const PressableScale = ({ children, onPress, style, ...other }: Props) => {
   const scale = useRef(new Animated.Value(1)).current
 
   const handlePressIn = () => {
@@ -41,6 +41,7 @@ export const PressableScale = ({ children, onPress, style }: Props) => {
       onPressOut={handlePressOut}
       onPress={onPress}
       style={[style, { transform: [{ scale }] }]}
+      {...other}
     >
       {children}
     </AnimatedPressable>

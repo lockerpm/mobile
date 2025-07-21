@@ -1,5 +1,14 @@
 import { AccountRoleText } from "./enum"
 
+export enum FolderActionsModal {
+  DEFAULT = "default",
+  RENAME = "rename",
+  DELETE = "delete",
+  LEAVE_SHARE = "leaveShare",
+  PREMIUM_ACTION = "premiumAction",
+  CREATE = "create",
+}
+
 export type ShareFolderData = {
   sharing_key: string
   members: {

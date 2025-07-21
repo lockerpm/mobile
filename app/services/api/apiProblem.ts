@@ -47,7 +47,7 @@ export type GeneralApiProblem =
  *
  * @param response The api response.
  */
-export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProblem | void {
+export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProblem | null {
   switch (response.problem) {
     case "CONNECTION_ERROR":
       return { kind: "cannot-connect", temporary: true }
@@ -62,7 +62,7 @@ export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProb
     case "CLIENT_ERROR":
       switch (response.status) {
         case 400:
-          return { kind: 'bad-data', data: response.data }
+          return { kind: "bad-data", data: response.data }
         case 401:
           return { kind: "unauthorized", data: response.data }
         case 403:

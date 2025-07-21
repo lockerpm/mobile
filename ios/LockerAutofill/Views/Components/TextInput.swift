@@ -28,7 +28,7 @@ struct TextInput: View {
       .focused($focusedField, equals: textField)
       .textInputAutocapitalization(.never)
       .disableAutocorrection(true)
-      .foregroundColor(Color.title)
+      .foregroundColor(AppColors.title)
       
       if isPassword {
         Button(action: {
@@ -36,7 +36,7 @@ struct TextInput: View {
         }, label: {
           Image(systemName: !isSecure ? "eye.slash" : "eye" )
             .resizable()
-            .foregroundStyle(Color.label)
+            .foregroundStyle(AppColors.label)
             .scaledToFit()
             .frame(width: 24, height: 20)
         })

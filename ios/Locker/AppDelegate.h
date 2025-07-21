@@ -1,12 +1,7 @@
 #import <RCTAppDelegate.h>
 #import <UIKit/UIKit.h>
-#import "RNAppAuthAuthorizationFlowManager.h"
+#import <Expo/Expo.h>
 
-@interface AppDelegate : RCTAppDelegate<RNAppAuthAuthorizationFlowManager>
-@property(nonatomic, weak)id<RNAppAuthAuthorizationFlowManagerDelegate>authorizationFlowManagerDelegate;
-
-@property (nonatomic, strong) UIWindow *window;
-
-
+@interface AppDelegate : EXAppDelegateWrapper
 
 @end

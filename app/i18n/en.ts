@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 const en = {
   common: {
     accept: "Accept",
@@ -128,6 +129,7 @@ const en = {
     value: "Value",
     warning: "Warning",
     website: "Website",
+    websites: "Websites",
     loading: "Decrypting data",
     see_all: "See all",
     collapse: "Collapse",
@@ -146,6 +148,7 @@ const en = {
     invalid_date: "Invalid date",
     required_text: "This field is required",
     social_login: "Or login with",
+    from: "From",
   },
   navigator: {
     is_offline: "Locker is currently in offline mode.",
@@ -165,6 +168,7 @@ const en = {
     logout: "Log out from ",
   },
   error: {
+    email_validate: "Email is not valid",
     incorrect_pw: "Incorrect Master Password",
     master_password: "Cannot auto create Master Password item",
     not_supported: "Not supported",
@@ -175,6 +179,7 @@ const en = {
     required_data: "This data is mandatory",
     session_login_failed: "Session login failed! Please try again",
     login_failed: "Login failed! Please try again",
+    signup_failed: "Sign up failed! Please try again",
     wrong_username_or_password: "The password is not valid",
     account_not_activated:
       "This account is not activated yet! Please check your email and follow the instructions (we will resend after 1 day).",
@@ -692,6 +697,7 @@ const en = {
       existing_email: "Use existing private email",
       empty: "You haven't generated any private email",
     },
+    addWebsite: "Add Website",
   },
   shares: {
     shares: "Shares",
@@ -892,7 +898,6 @@ const en = {
       "Proceed below to delete all items and folders in your vault. Items belonging to an organization that you share with will not be deleted.",
     delete_all_items_success: "Your vault has been purged!",
     on_app_close: "On app close",
-    hide_mp: "Hide the Master Password item",
     on_screen_off: "On screen off",
     timeout: "Timeout",
     timeout_action: "Timeout Action",
@@ -904,6 +909,7 @@ const en = {
     dark_theme: "Dark",
     light_theme: "Light",
     defaultTab: "Start Screen",
+    hide_mp: "Hide the Master Password item",
   },
   autofill_service: {
     deleted: "This password has been deleted.",

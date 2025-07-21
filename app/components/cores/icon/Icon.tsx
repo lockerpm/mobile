@@ -1,6 +1,3 @@
-import { useTheme } from "app/services/context"
-import * as React from "react"
-import { ComponentType } from "react"
 import {
   ColorValue,
   Image,
@@ -9,22 +6,16 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
   View,
+  ViewProps,
   ViewStyle,
 } from "react-native"
+import { useAppTheme } from "@/utils/useAppTheme"
 
-type RegularIconTypes = keyof typeof iconRegularRegistry
-type CommonIconTypes = keyof typeof iconRegistry
-export type IconTypes = RegularIconTypes | CommonIconTypes | null
+export type IconTypes = keyof typeof iconRegistry
 
-export interface IconProps extends TouchableOpacityProps {
-  /**
-   * Filled style icon
-   */
-  filled?: boolean
-
+type BaseIconProps = {
   /**
    * The name of the icon
-   * if null is given, the component will renders the view for placeholder
    */
   icon: IconTypes
 
@@ -47,90 +38,94 @@ export interface IconProps extends TouchableOpacityProps {
    * Style overrides for the icon container
    */
   containerStyle?: StyleProp<ViewStyle>
+}
 
-  /**
-   * An optional function to be called when the icon is pressed
-   */
-  onPress?: TouchableOpacityProps["onPress"]
+type PressableIconProps = Omit<TouchableOpacityProps, "style"> & BaseIconProps
+type IconProps = Omit<ViewProps, "style"> & BaseIconProps
+
+/**
+ * A component to render a registered icon.
+ * It is wrapped in a <TouchableOpacity />
+ * @see [Documentation and Examples]{@link https://docs.infinite.red/ignite-cli/boilerplate/app/components/Icon/}
+ * @param {PressableIconProps} props - The props for the `PressableIcon` component.
+ * @returns {JSX.Element} The rendered `PressableIcon` component.
+ */
+export function PressableIcon(props: PressableIconProps) {
+  const {
+    icon,
+    color,
+    size = 24, // Default size if not provided
+    style: $imageStyleOverride,
+    containerStyle: $containerStyleOverride,
+    ...pressableProps
+  } = props
+
+  const { theme } = useAppTheme()
+
+  const $imageStyle: StyleProp<ImageStyle> = [
+    $imageStyleBase,
+    { tintColor: color ?? theme.colors.text, width: size, height: size },
+    $imageStyleOverride,
+  ]
+
+  return (
+    <TouchableOpacity {...pressableProps} style={$containerStyleOverride}>
+      <Image style={$imageStyle} source={iconRegistry[icon]} />
+    </TouchableOpacity>
+  )
 }
 
 /**
  * A component to render a registered icon.
- * It is wrapped in a <TouchableOpacity /> if `onPress` is provided, otherwise a <View />.
- *
- * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Icon.md)
+ * It is wrapped in a <View />, use `PressableIcon` if you want to react to input
+ * @see [Documentation and Examples]{@link https://docs.infinite.red/ignite-cli/boilerplate/app/components/Icon/}
+ * @param {IconProps} props - The props for the `Icon` component.
+ * @returns {JSX.Element} The rendered `Icon` component.
  */
 export function Icon(props: IconProps) {
-  const { colors } = useTheme()
   const {
     icon,
-    color = colors.primaryText,
-    filled,
-    size = 24,
+    color,
+    size = 24, // Default size if not provided
     style: $imageStyleOverride,
     containerStyle: $containerStyleOverride,
-    ...WrapperProps
+    ...viewProps
   } = props
 
-  const isPressable = !!WrapperProps.onPress
-  const Wrapper: ComponentType<TouchableOpacityProps> = WrapperProps?.onPress
-    ? TouchableOpacity
-    : View
+  const { theme } = useAppTheme()
+
+  const $imageStyle: StyleProp<ImageStyle> = [
+    $imageStyleBase,
+    { tintColor: color ?? theme.colors.text, width: size, height: size },
+    $imageStyleOverride,
+  ]
 
   return (
-    <Wrapper
-      accessibilityRole={isPressable ? "imagebutton" : undefined}
-      {...WrapperProps}
-      style={$containerStyleOverride}
-    >
-      {icon ? (
-        <Image
-          style={[
-            $imageStyle,
-            { tintColor: color },
-            size && { width: size, height: size },
-            $imageStyleOverride,
-          ]}
-          source={
-            iconRegistry[icon]
-              ? iconRegistry[icon]
-              : !filled
-              ? iconRegularRegistry[icon]
-              : iconFillRegistry[icon]
-          }
-        />
-      ) : (
-        <View style={size && { width: size, height: size }} />
-      )}
-    </Wrapper>
+    <View {...viewProps} style={$containerStyleOverride}>
+      <Image style={$imageStyle} source={iconRegistry[icon]} />
+    </View>
   )
 }
 
-export const iconRegularRegistry = {
-  "arrow-left": require("assets/icons/regular/arrow-left.png"),
-  "arrow-right": require("assets/icons/regular/arrow-right.png"),
-  "caret-left": require("assets/icons/regular/caret-left.png"),
-  "caret-right": require("assets/icons/regular/caret-right.png"),
-  check: require("assets/icons/regular/check.png"),
-  "x-circle": require("assets/icons/regular/x-circle.png"),
-  bug: require("assets/icons/regular/bug.png"),
-  shield: require("assets/icons/regular/shield.png"),
-  "shield-check": require("assets/icons/regular/shield-check.png"),
-}
-
-export const iconFillRegistry = {
-  "arrow-left": require("assets/icons/fill/arrow-left-fill.png"),
-  "arrow-right": require("assets/icons/fill/arrow-right-fill.png"),
-  "caret-left": require("assets/icons/fill/caret-left-fill.png"),
-  "caret-right": require("assets/icons/fill/caret-right-fill.png"),
-  check: require("assets/icons/fill/check-fill.png"),
-  "x-circle": require("assets/icons/fill/x-circle-fill.png"),
-  bug: require("assets/icons/fill/bug-fill.png"),
-  shield: require("assets/icons/fill/shield-fill.png"),
-  "shield-check": require("assets/icons/fill/shield-check-fill.png"),
-}
-
 export const iconRegistry = {
+  "arrow-left": require("assets/icons/arrow-left.png"),
+  "arrow-right": require("assets/icons/arrow-right.png"),
+  "caret-left": require("assets/icons/caret-left.png"),
+  "caret-right": require("assets/icons/caret-right.png"),
+  check: require("assets/icons/check.png"),
+  "x-circle": require("assets/icons/x-circle.png"),
+  bug: require("assets/icons/bug.png"),
+  shield: require("assets/icons/shield.png"),
+  "shield-check": require("assets/icons/shield-check.png"),
+  "arrow-left-fill": require("assets/icons/arrow-left-fill.png"),
+  "arrow-right-fill": require("assets/icons/arrow-right-fill.png"),
+  "caret-left-fill": require("assets/icons/caret-left-fill.png"),
+  "caret-right-fill": require("assets/icons/caret-right-fill.png"),
+  "check-fill": require("assets/icons/check-fill.png"),
+  "x-circle-fill": require("assets/icons/x-circle-fill.png"),
+  "bug-fill": require("assets/icons/bug-fill.png"),
+  "shield-fill": require("assets/icons/shield-fill.png"),
+  "shield-check-fill": require("assets/icons/shield-check-fill.png"),
   "info-fill": require("assets/icons/info-fill.png"),
   "at-fill": require("assets/icons/at-fill.png"),
   "mailbox-fill": require("assets/icons/mailbox-fill.png"),
@@ -173,13 +168,11 @@ export const iconRegistry = {
   keyboard: require("assets/icons/keyboard.png"),
   "user-plus": require("assets/icons/user-plus.png"),
   "user-minus": require("assets/icons/user-minus.png"),
-
   star: require("assets/icons/star.png"),
   question: require("assets/icons/question.png"),
   "lock-key": require("assets/icons/lock-key.png"),
   "sign-out": require("assets/icons/sign-out.png"),
   invite: require("assets/icons/invite.png"),
-
   headset: require("assets/icons/headset.png"),
   user: require("assets/icons/user.png"),
   link: require("assets/icons/link.png"),
@@ -201,6 +194,6 @@ export const iconRegistry = {
   "download-simple": require("assets/icons/download-simple.png"),
 }
 
-const $imageStyle: ImageStyle = {
+const $imageStyleBase: ImageStyle = {
   resizeMode: "contain",
 }

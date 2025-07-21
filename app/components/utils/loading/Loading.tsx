@@ -1,80 +1,65 @@
-import * as React from 'react'
-import { StyleProp, View, ViewStyle, ActivityIndicator } from 'react-native'
-import { flatten } from 'ramda'
-import { Text } from '../../cores'
-import { useTheme } from 'app/services/context'
-
-const CONTAINER: ViewStyle = {
-  justifyContent: 'center',
-  alignItems: 'center',
-  flex: 1,
-}
-
-const OVERLAY_CONTAINER: ViewStyle = {
-  flex: 1,
-  position: 'absolute',
-  height: '100%',
-  width: '100%',
-  top: 0,
-  left: 0,
-  zIndex: 1000,
-  opacity: 0.8,
-  justifyContent: 'center',
-  alignItems: 'center',
-}
+import { StyleProp, View, ViewStyle, ActivityIndicator } from "react-native"
+import { Text, TextProps } from "../../cores"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { ThemedStyle } from "@/theme"
 
 export interface LoadingProps {
+  /**
+   * Custom container style
+   */
   style?: StyleProp<ViewStyle>
-  message?: string
+
+  /**
+   * Message to display below the loading indicator
+   */
+  tx?: TextProps["tx"]
 }
 
 /**
  * Describe your component here
  */
-export const Loading = function Loading(props: LoadingProps) {
-  const { style, message } = props
-  const { colors } = useTheme()
-
-  const styles = flatten([CONTAINER, style])
-
+export const Loading = function Loading({ style, tx }: LoadingProps) {
+  const { theme, themed } = useAppTheme()
   return (
-    <View
-      style={[
-        styles,
-        {
-          backgroundColor: colors.background,
-        },
-      ]}
-    >
-      <ActivityIndicator size="large" color={colors.primary} />
-      {!!message && (
-        <Text
-          text={message}
-          style={{
-            marginTop: 10,
-          }}
-        />
-      )}
+    <View style={themed([$container, style])}>
+      <ActivityIndicator size="large" color={theme.colors.primary} />
+      {!!tx && <Text tx={tx} style={themed($text)} />}
     </View>
   )
 }
 
-export const OverlayLoading = function OverlayLoading(props: LoadingProps) {
+export const OverlayLoading = (props: LoadingProps) => {
   const { style } = props
-  const { colors } = useTheme()
-  const styles = flatten([OVERLAY_CONTAINER, style])
+  const { themed, theme } = useAppTheme()
 
   return (
-    <View
-      style={[
-        styles,
-        {
-          backgroundColor: colors.background,
-        },
-      ]}
-    >
-      <ActivityIndicator size="large" color={colors.primary} />
+    <View style={themed([$overlayContainer, style])}>
+      <ActivityIndicator size="large" color={theme.colors.primary} />
     </View>
   )
 }
 
+const $overlayContainer: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  alignItems: "center",
+  flex: 1,
+  height: "100%",
+  justifyContent: "center",
+  left: 0,
+  opacity: 0.8,
+  position: "absolute",
+  top: 0,
+  width: "100%",
+  zIndex: 1000,
+  backgroundColor: colors.background,
+})
+
+const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  alignItems: "center",
+  flex: 1,
+  justifyContent: "center",
+  backgroundColor: colors.background,
+})
+
+const $text: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  marginTop: spacing.sm,
+})

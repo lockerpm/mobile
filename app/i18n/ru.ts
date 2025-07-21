@@ -1,4 +1,5 @@
 import { Translations } from "./en"
+
 const ru: Translations = {
   common: {
     accept: "Принять",
@@ -129,6 +130,7 @@ const ru: Translations = {
     value: "Данные",
     warning: "Предупреждение",
     website: "Веб-сайт",
+    websites: "Веб-сайты",
     loading: "Расшифровка данных",
     see_all: "Видеть всё",
     collapse: "Сброс",
@@ -147,6 +149,7 @@ const ru: Translations = {
     invalid_date: "Неверная дата",
     required_text: "Это поле обязательно к заполнению",
     social_login: "Или войти с",
+    from: "От",
   },
   navigator: {
     is_offline: "В настоящее время Locker находится в офлайн режиме.",
@@ -166,6 +169,7 @@ const ru: Translations = {
     logout: "Выйти с ",
   },
   error: {
+    email_validate: "Email недействителен",
     incorrect_pw: "Неверный мастер-пароль",
     master_password: "Невозможно автоматически создать мастер-пароль",
     not_supported: "Не поддерживается",
@@ -177,6 +181,7 @@ const ru: Translations = {
     required_data: "Эти данные являются обязательными",
     session_login_failed: "Сессия входа не удалась! Попробуйте еще раз",
     login_failed: "Не удалось войти! Попробуйте еще раз",
+    signup_failed: "Не удалось зарегистрироваться! Попробуйте еще раз",
     wrong_username_or_password: "Пароль недействителен",
     account_not_activated:
       "Эта учетная запись еще не активирована! Проверьте свою электронную почту и следуйте инструкциям (мы отправим повторно через 1 день).",
@@ -701,6 +706,7 @@ const ru: Translations = {
       existing_email: "Использовать существующую приватную почту",
       empty: "Вы не создали ни одного приватного адреса электронной почты",
     },
+    addWebsite: "Добавить веб-сайт",
   },
   shares: {
     shares: "Общий доступ",
@@ -903,7 +909,6 @@ const ru: Translations = {
       "Чтобы удалить все элементы и папки в вашем хранилище, выполните следующие действия. Элементы, принадлежащие организации, с которой вы делитесь, не будут удалены.",
     delete_all_items_success: "Ваше хранилище было очищено!",
     on_app_close: "При закрытии приложения",
-    hide_mp: "Скрыть Мастер-пароля",
     on_screen_off: "При выключенном экране",
     timeout: "Тайм-аут",
     timeout_action: "Действие по тайм-ауту",
@@ -915,6 +920,7 @@ const ru: Translations = {
     dark_theme: "Тёмная",
     light_theme: "Светлая",
     defaultTab: "Начальный экран",
+    hide_mp: "Скрыть Мастер-пароля",
   },
   autofill_service: {
     deleted: "Этот пароль был удалён.",

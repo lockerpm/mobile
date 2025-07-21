@@ -52,12 +52,12 @@ struct StrongPasswordGenerator: View {
                     UIPasteboard.general.string = password
                 } label: {
                     Image(systemName: "doc.on.doc")
-                     .foregroundColor(Color.label)
+                     .foregroundColor(AppColors.label)
                 }
               
             }
             .padding()
-            .background(Color.block)
+            .background(AppColors.block)
             .cornerRadius(15)
             
             
@@ -97,7 +97,7 @@ struct StrongPasswordGenerator: View {
                 }
             }
             .padding()
-            .background(Color.block)
+            .background(AppColors.block)
             .cornerRadius(15)
             
             Spacer()
@@ -129,8 +129,8 @@ struct StrongPasswordGenerator: View {
         .onAppear {
             generatePassword()
         }
-        .foregroundColor(Color.title)
-        .background(Color.background)
+        .foregroundColor(AppColors.title)
+        .background(AppColors.background)
     }
     
     func generatePassword() {

@@ -46,14 +46,16 @@ export const useStores = () => useContext(RootStoreContext)
  * Used only in the app.tsx file, this hook sets up the RootStore
  * and then rehydrates it. It connects everything with Reactotron
  * and then lets the app know that everything is ready to go.
+ * @param {() => void | Promise<void>} callback - an optional callback that's invoked once the store is ready
+ * @returns {object} - the RootStore and rehydrated state
  */
-export const useInitialRootStore = (callback: () => void | Promise<void>) => {
+export const useInitialRootStore = (callback?: () => void | Promise<void>) => {
   const rootStore = useStores()
   const [rehydrated, setRehydrated] = useState(false)
 
   // Kick off initial async loading actions, like loading fonts and rehydrating RootStore
   useEffect(() => {
-    let _unsubscribe
+    let _unsubscribe: () => void | undefined
     ;(async () => {
       // set up the RootStore (returns the state restored from AsyncStorage)
       const { unsubscribe } = await setupRootStore(rootStore)
@@ -61,6 +63,7 @@ export const useInitialRootStore = (callback: () => void | Promise<void>) => {
 
       // reactotron integration with the MST root store (DEV only)
       if (__DEV__) {
+        // @ts-ignore
         console.tron.trackMstNode(rootStore)
       }
 
@@ -73,8 +76,10 @@ export const useInitialRootStore = (callback: () => void | Promise<void>) => {
 
     return () => {
       // cleanup
-      if (_unsubscribe) _unsubscribe()
+      if (_unsubscribe !== undefined) _unsubscribe()
     }
+    // only runs on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return { rootStore, rehydrated }

@@ -1,17 +1,17 @@
-import { ApiResponse } from 'apisauce'
-import { Logger } from '../../utils/utils'
-import { Api, api } from './api'
-import { GeneralApiProblem, getGeneralApiProblem } from './apiProblem'
-import { EnterpriseInvitation, GroupData, GroupMemberData } from 'app/static/types'
+import { ApiResponse } from "apisauce"
+import { Api, api } from "./api"
+import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
+import { EnterpriseInvitation, GroupData, GroupMemberData } from "app/static/types"
+import { Logger } from "@/utils/logger"
 
 class EnterpriseApi {
   private api: Api = api
 
   async getListUserGroups(
     token: string
-  ): Promise<{ kind: 'ok'; data: GroupData[] } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok"; data: GroupData[] } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -22,19 +22,19 @@ class EnterpriseApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok', data: response.data }
+      return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("getListUserGroups ", e)
+      return { kind: "bad-data" }
     }
   }
 
   async getListGroupMembers(
     token: string,
     groupId: string
-  ): Promise<{ kind: 'ok'; data: GroupData & { members: GroupMemberData[] } } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok"; data: GroupData & { members: GroupMemberData[] } } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -45,10 +45,10 @@ class EnterpriseApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok', data: response.data }
+      return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("getListGroupMembers ", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -58,7 +58,7 @@ class EnterpriseApi {
     query: string
   ): Promise<
     | {
-        kind: 'ok'
+        kind: "ok"
         data: {
           groups: GroupData[]
           members: GroupMemberData[]
@@ -67,7 +67,7 @@ class EnterpriseApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -80,26 +80,24 @@ class EnterpriseApi {
         if (problem) return problem
       }
 
-      return { kind: 'ok', data: response.data }
+      return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("searchGroupOrMember ", e)
+      return { kind: "bad-data" }
     }
   }
 
   // Join enterprise invitations
   // Get list invitations
-  async invitations(
-    token: string
-  ): Promise<
+  async invitations(token: string): Promise<
     | {
-        kind: 'ok'
+        kind: "ok"
         data: EnterpriseInvitation[]
       }
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -110,20 +108,20 @@ class EnterpriseApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok', data: response.data }
+      return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("invitations", e)
+      return { kind: "bad-data" }
     }
   }
 
   async invitationsActions(
     token: string,
     id: string,
-    status: 'confirmed' | 'reject'
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+    status: "confirmed" | "reject"
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -135,10 +133,10 @@ class EnterpriseApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("invitationsActions", e)
+      return { kind: "bad-data" }
     }
   }
 }

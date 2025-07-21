@@ -1,111 +1,106 @@
-import find from 'lodash/find'
-import React from 'react'
-import { TouchableOpacity, View } from 'react-native'
-import { Textarea } from '../../utils'
-import { Text, Icon } from '../../cores'
-
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import { useHelper } from 'app/services/hook'
+import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
+import { DividerText, Textarea } from "../../utils"
+import { Text, Icon } from "../../cores"
+import { FolderView } from "core/models/view/folderView"
+import { CollectionView } from "core/models/view/collectionView"
+import { useAppLocale } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { ThemedStyle } from "@/theme"
+import { useNavigation } from "@react-navigation/native"
+import { BrowseScreenProps } from "@/navigators"
 
 export interface CipherOthersInfoProps {
-  navigation: any
-  hasNote?: boolean
+  isOwner: boolean
+  isDeleted: boolean
+  folder?: FolderView
+  collection?: CollectionView
+  hasNote: boolean
   note?: string
   onChangeNote?: (val: string) => void
-  folderId?: string
-  collectionId?: string
-  isDeleted?: boolean
-  isOwner: boolean
 }
 
 /**
  * Describe your component here
  */
 export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
+  const navigation = useNavigation<BrowseScreenProps<"cipherEdit">["navigation"]>()
+  const { hasNote, note, onChangeNote, folder, isDeleted, collection, isOwner } = props
+  const { translate } = useAppLocale()
   const {
-    navigation,
-    hasNote,
-    note,
-    onChangeNote,
-    folderId = null,
-    isDeleted,
-    collectionId,
-    isOwner,
-  } = props
-  const { translate } = useHelper()
-  const { folderStore, collectionStore } = useStores()
-  const { colors } = useTheme()
-
-  const folder = (() => {
-    return folderId ? find(folderStore.folders, (e) => e.id === folderId) || {} : {}
-  })()
-
-  const collection = (() => {
-    return collectionId ? find(collectionStore.collections, (e) => e.id === collectionId) || {} : {}
-  })()
+    themed,
+    theme: { colors },
+  } = useAppTheme()
 
   return (
     <View>
-      <View style={{ padding: 16, backgroundColor: colors.block }}>
-        <Text
-          preset="label"
-          text={translate('common.others').toUpperCase()}
-          style={{ fontSize: 14 }}
-        />
+      <View style={themed($other)}>
+        <Text preset="label" tx="common:others" size="sm" />
       </View>
 
-      {/* Others */}
-      <View
-        style={{
-          backgroundColor: colors.background,
-          padding: 16,
-          paddingBottom: 32,
-        }}
-      >
+      <View style={themed($container)}>
         {/* Folder */}
         {isOwner && (
           <TouchableOpacity
             disabled={isDeleted}
             onPress={() => {
-              navigation.navigate('folders__select', {
-                mode: 'add',
-                initialId: folderId || collectionId,
+              navigation.navigate("folderSelect", {
+                mode: "add",
+                initialId: folder?.id || collection?.id,
               })
             }}
           >
-            <View
-              style={{
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-                alignItems: 'center',
-                width: '100%',
-              }}
-            >
+            <View style={styles.folderContainer}>
               <View>
+                <Text preset="label" tx={"common:folders"} size="sm" style={styles.mb5} />
                 <Text
-                  preset="label"
-                  text={translate('common.folders')}
-                  style={{ fontSize: 14, marginBottom: 5 }}
-                />
-                <Text
-                  text={folder?.name || collection?.name || translate('common.none')}
+                  text={folder?.name || collection?.name || translate("common:none")}
                   numberOfLines={2}
                 />
               </View>
-              <Icon icon="caret-right" size={20} color={colors.title} />
+              <Icon icon="caret-right" size={20} color={colors.label} />
             </View>
           </TouchableOpacity>
         )}
 
+        <DividerText style={styles.mv8} />
+
         {/* Note */}
         {hasNote && (
-          <View style={{ flex: 1, marginTop: 20 }}>
-            <Textarea label={translate('common.notes')} value={note} onChangeText={onChangeNote} />
+          <View style={styles.note}>
+            <Textarea labelTx={"common:notes"} value={note || ""} onChangeText={onChangeNote} />
           </View>
         )}
       </View>
-
     </View>
   )
 }
+
+const $other: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  padding: 16,
+  paddingVertical: 8,
+  backgroundColor: colors.block,
+})
+
+const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  backgroundColor: colors.background,
+  padding: 16,
+  paddingBottom: 32,
+})
+
+const styles = StyleSheet.create({
+  folderContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  mb5: {
+    marginBottom: 5,
+  },
+  mv8: {
+    marginTop: 8,
+  },
+  note: {
+    flex: 1,
+  },
+})

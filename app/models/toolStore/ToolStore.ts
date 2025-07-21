@@ -1,35 +1,25 @@
-import { Instance, SnapshotIn, SnapshotOut, cast, types } from 'mobx-state-tree'
-import { withSetPropAction } from '../helpers/withSetPropAction'
-import { omit } from 'ramda'
-import { toolApi } from 'app/services/api/toolApi'
-import { BreanchResult } from 'app/static/types'
-import { CipherView } from 'core/models/view'
+import { Instance, SnapshotIn, SnapshotOut, cast, types } from "mobx-state-tree"
+import { withSetPropAction } from "../helpers/withSetPropAction"
+import { toolApi } from "app/services/api/toolApi"
+import { CipherView } from "core/models/view"
 /**
  * Model description here for TypeScript hints.
  */
 export const ToolStoreModel = types
-  .model('ToolStore')
+  .model("ToolStore")
   .props({
-    apiToken: types.maybeNull(types.string),
-
-    // Data breach scanner
-    breachedEmail: types.maybeNull(types.string),
-    breaches: types.array(types.frozen()),
-    selectedBreach: types.maybeNull(types.frozen()),
+    apiToken: types.string,
 
     // Password health
-    isDataLoading: types.maybeNull(types.boolean), // is data synchronizing or decrypting
-    isLoadingHealth: types.maybeNull(types.boolean),
-    lastHealthCheck: types.maybeNull(types.number),
+    isDataLoading: types.boolean, // is data synchronizing or decrypting
+    isLoadingHealth: types.boolean,
+    lastHealthCheck: types.number,
     weakPasswords: types.array(types.frozen()),
     reusedPasswords: types.array(types.frozen()),
     exposedPasswords: types.array(types.frozen()),
     passwordStrengthMap: types.maybeNull(types.frozen()),
     passwordUseMap: types.maybeNull(types.frozen()),
     exposedPasswordMap: types.maybeNull(types.frozen()),
-
-    // Authenticator
-    authenticatorOrder: types.optional(types.array(types.string), []),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -39,21 +29,6 @@ export const ToolStoreModel = types
     },
 
     // ----------------- DATA -------------------
-
-    // BREACH
-
-    setBreachedEmail: (email: string) => {
-      self.breachedEmail = email
-    },
-
-    setBreaches: (breaches: BreanchResult[]) => {
-      self.breaches = cast(breaches)
-    },
-
-    setSelectedBreach: (data: BreanchResult) => {
-      self.selectedBreach = cast(data)
-    },
-
     // HEALTH
 
     setLoadingHealth: (val: boolean) => {
@@ -92,42 +67,25 @@ export const ToolStoreModel = types
       self.exposedPasswordMap = cast(data)
     },
 
-    // AUTHENTICATOR
-
-    setAuthenticatorOrder: (ids: string[]) => {
-      self.authenticatorOrder = cast(ids)
-    },
-
     // OTHER
 
     clearStore: (dataOnly?: boolean) => {
       if (!dataOnly) {
-        self.apiToken = null
+        self.apiToken = ""
       }
-
-      self.breachedEmail = null
-      self.breaches = cast([])
-      self.selectedBreach = null
-
       self.isLoadingHealth = false
-      self.lastHealthCheck = null
+      self.lastHealthCheck = 0
       self.weakPasswords = cast([])
       self.reusedPasswords = cast([])
       self.exposedPasswords = cast([])
       self.passwordStrengthMap = null
       self.passwordUseMap = null
       self.exposedPasswordMap = null
-
-      self.authenticatorOrder = cast([])
     },
 
     lock: () => {
-      self.breachedEmail = null
-      self.breaches = cast([])
-      self.selectedBreach = null
-
       self.isLoadingHealth = false
-      self.lastHealthCheck = null
+      self.lastHealthCheck = 0
       self.weakPasswords = cast([])
       self.reusedPasswords = cast([])
       self.exposedPasswords = cast([])
@@ -199,19 +157,34 @@ export const ToolStoreModel = types
       const res = await toolApi.checkBreaches(self.apiToken, email)
       return res
     },
-  })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .postProcessSnapshot(
-    omit([
-      'isLoadingHealth',
-      'lastHealthCheck',
-      'weakPasswords',
-      'reusedPasswords',
-      'passwordUseMap',
-      'exposedPasswordMap',
-    ])
-  )
+  }))
+  .postProcessSnapshot((snapShot) => {
+    return {
+      ...snapShot,
+      isLoadingHealth: false,
+      lastHealthCheck: 0,
+      weakPasswords: [],
+      reusedPasswords: [],
+      passwordUseMap: null,
+      exposedPasswordMap: null,
+    }
+  })
 
 export interface ToolStore extends Instance<typeof ToolStoreModel> {}
 export interface ToolStoreSnapshotOut extends SnapshotOut<typeof ToolStoreModel> {}
 export interface ToolStoreSnapshotIn extends SnapshotIn<typeof ToolStoreModel> {}
-export const createToolStoreDefaultModel = () => types.optional(ToolStoreModel, {})
+export const createToolStoreDefaultModel = () =>
+  types.optional(ToolStoreModel, {
+    apiToken: "",
+
+    // Password health
+    isDataLoading: false, // is data synchronizing or decrypting
+    isLoadingHealth: false,
+    lastHealthCheck: 0,
+    weakPasswords: [],
+    reusedPasswords: [],
+    exposedPasswords: [],
+    passwordStrengthMap: null,
+    passwordUseMap: null,
+    exposedPasswordMap: null,
+  })

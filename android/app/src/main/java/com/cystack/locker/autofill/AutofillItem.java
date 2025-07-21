@@ -3,8 +3,6 @@ package com.cystack.locker.autofill;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
 public class AutofillItem implements Parcelable {
     private String userName;
     private String password;

@@ -1,20 +1,73 @@
-import { DeviceType } from 'core/enums'
+import { DeviceType } from "core/enums"
 import {
   AccountRoleText,
   EmergencyAccessStatus,
   EmergencyAccessType,
   InvitationStatus,
+  LoginMethod,
   NotificationCategory,
   PlanType,
   PlanTypeDuration,
   PolicyType,
-} from './enum'
-import { CipherRequest } from 'core/models/request/cipherRequest'
+} from "./enum"
+import { CipherRequest } from "core/models/request/cipherRequest"
+import { LanguageSupportType } from "@/i18n"
+
+export type UserIDType = {
+  full_name: string
+  organization: any
+  country: string
+  language: LanguageSupportType
+  customer_language: LanguageSupportType
+  phone: string
+  avatar: string
+  email: string
+  username: string
+}
+
+export type UserLockerType = {
+  timeout: number
+  timeout_action: string
+  sync_all_platforms: boolean
+  block_by_source: boolean
+  is_pwd_manager: boolean
+  pwd_user_id: string
+  login_method: LoginMethod
+  hide_master_password: boolean
+  pwd_user_type: string
+  pwd_plan: PlanType
+  is_require_passwordless: boolean
+  is_require_2fa: boolean
+  name: string
+  email: string
+}
 
 export type GetPMTokenData = {
-  SERVICE_URL: '/'
-  SERVICE_SCOPE: 'pwdmanager'
-  CLIENT: 'mobile'
+  SERVICE_URL: "/"
+  SERVICE_SCOPE: "pwdmanager"
+  CLIENT: "mobile"
+}
+
+export type User2FAMethod =
+  | {
+      type: "mail"
+      data: string
+    }
+  | {
+      type: "smart_otp"
+      data: any
+    }
+
+export type User2FAPasswordConfig = {
+  username: string
+  password: string
+  methods: User2FAMethod[]
+}
+
+export type User2FAPincodeConfig = {
+  nonce: string
+  code: string
+  methods: User2FAMethod[]
 }
 
 export type Enterprise = {
@@ -50,7 +103,6 @@ export type UserTeam = {
   locker: boolean
   organization_id: string
 }
-
 
 export type UserInvitations = {
   access_time: number
@@ -111,13 +163,13 @@ export type TeamPolicies = [
   PasswordPolicy,
   MasterPasswordPolicy,
   BlockFailedLoginPolicy,
-  PasswordlessPolicy
+  PasswordlessPolicy,
 ]
 
 export type Billing = {
   id: number
   created_time: number
-  currency: 'VNP' | 'USD'
+  currency: "VNP" | "USD"
   description: string
   discount: number
   duration: PlanTypeDuration
@@ -151,76 +203,76 @@ export type NotificationSettingData = {
 }
 
 export type AppNotificationCodeWithMetadata = {
-  100002:{
+  100002: {
     recipient_name: string
   }
   100001: {
     recipient_name: string
   }
   100003: {
-    owner_name: string,
-    cipher_type: string,
+    owner_name: string
+    cipher_type: string
   }
   100004: null
   100005: {
-    member_joined_text_vi: string,
-    member_joined_text_en: string,
-    member_joined_text: string,
-    sharing_id: string,
-    emails: string,
-    group_id: string,
-    group_name: string,
-  },
+    member_joined_text_vi: string
+    member_joined_text_en: string
+    member_joined_text: string
+    sharing_id: string
+    emails: string
+    group_id: string
+    group_name: string
+  }
   100006: {
-    owner_name: string,
-    owner_email: string,
-    cipher_type: string,
+    owner_name: string
+    owner_email: string
+    cipher_type: string
   }
   100007: {
-    team_id: string,
+    team_id: string
     payment_id: string
   }
   100008: {
-    team_id: string,
+    team_id: string
     payment_id: string
-  },
+  }
   100009: {
-    grantee_name: string,
+    grantee_name: string
     grantee_email: string
     request: string
   }
   100010: {
-    grantee_name: string,
+    grantee_name: string
     grantee_email: string
     request: string
-  },
+  }
   100011: {
-    grantee_name: string,
+    grantee_name: string
     grantee_email: string
     request: string
   }
   100012: {
-    grantee_name: string,
+    grantee_name: string
     grantee_email: string
     request: string
   }
   100013: {
-    grantee_name: string,
+    grantee_name: string
     grantee_email: string
     request: string
   }
   100014: {
-    grantee_name: string,
+    grantee_name: string
     grantee_email: string
     request: string
   }
   100015: {
-    grantee_name: string,
+    grantee_name: string
     grantee_email: string
     request: string
   }
   100016: {
-    grantee_name: string,
+    grantee_name: string
     grantee_email: string
     request: string
   }
@@ -228,55 +280,60 @@ export type AppNotificationCodeWithMetadata = {
     link: {
       vi: string
       en: string
-    },
+    }
     title: string
   }
 }
 
+export type AppNotificationMetadata = {
+  is_grantee?: boolean
+  is_grantor?: boolean
+
+  // v2
+  grantee_name?: string
+  grantee_email?: string
+  link?: {
+    vi: string
+    en: string
+  }
+  title?: string
+  team_id?: string
+  payment_id?: string
+  owner_name?: string
+  owner_email?: string
+  cipher_type?: string
+  member_joined_text_vi?: string
+  member_joined_text_en?: string
+  member_joined_text?: string
+  sharing_id?: string
+  emails?: string
+  group_id?: string
+  group_name?: string
+  recipient_name?: string
+}
+
+export type AppNotificationType = {
+  id: string
+  type: NotificationCategory
+  notification_code: keyof AppNotificationCodeWithMetadata
+  publish_time: number
+  title: {
+    en: string
+    vi: string
+  }
+  description: {
+    en: string
+    vi: string
+  }
+  metadata: AppNotificationMetadata
+  read: boolean
+}
 
 export type AppNotification = {
   count: number
   unread_count: number
-  results: {
-    description: any
-    id: string
-    notification_code: keyof AppNotificationCodeWithMetadata
-    metadata: {
-      is_grantee?: boolean
-      is_grantor?: boolean
-      
-      // v2
-      grantee_name?: string,
-      grantee_email?: string
-      link?: {
-        vi: string
-        en: string
-      },
-      title?: string
-      team_id?: string,
-      payment_id?: string
-      owner_name?: string,
-      owner_email?: string,
-      cipher_type?: string,
-      member_joined_text_vi?: string,
-      member_joined_text_en?: string,
-      member_joined_text?: string,
-      sharing_id?: string,
-      emails?: string,
-      group_id?: string,
-      group_name?: string,
-      recipient_name?: string
-    }
-    publish_time: number
-    read: boolean
-    title: {
-      en: string
-      vi: string
-    }
-    type: NotificationCategory
-  }[]
+  results: AppNotificationType[]
 }
-
 
 export type TrustedContact = {
   avatar: string
@@ -297,7 +354,7 @@ export type TrustedContact = {
 }
 
 export type SessionLoginRequest = {
-  client_id: 'mobile'
+  client_id: "mobile"
   password: string
   device_name: string
   device_type: DeviceType
@@ -336,7 +393,7 @@ export type ChangePasswordRequest = {
 }
 
 export type FeedbackRequest = {
-  type: 'feedback' | 'support'
+  type: "feedback" | "support"
   description: string
 }
 
@@ -344,7 +401,6 @@ export type UpdateFCMRequest = {
   fcm_id: string
   device_identifier: string
 }
-
 
 export type UserPlan = {
   name: string
@@ -356,7 +412,6 @@ export type UserPlan = {
   payment_method: string
   max_number: number
 }
-
 
 export type OnPremiseIdentifierData = {
   host: string
@@ -380,13 +435,13 @@ export type MarketingContent = {
 }
 
 export type ChatWootUser = {
-  country_code: string,
-  email: string, 
-  is_locker: boolean, 
-  language_override: string, 
-  name: string, 
-  phone: string, 
-  signed_up_at: number, 
-  type: string, 
+  country_code: string
+  email: string
+  is_locker: boolean
+  language_override: string
+  name: string
+  phone: string
+  signed_up_at: number
+  type: string
   user_hash: string
 }

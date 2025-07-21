@@ -8,7 +8,10 @@ import * as ReactNativeKeychain from "react-native-keychain"
 export async function loadSecure(key: string): Promise<any | null> {
   try {
     const almostThere = await load(key)
-    return JSON.parse(almostThere.password)
+    if (almostThere.password) {
+      return JSON.parse(almostThere.password)
+    }
+    return null
   } catch {
     return null
   }

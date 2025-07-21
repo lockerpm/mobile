@@ -1,15 +1,13 @@
-import React, { useEffect } from "react"
-import { ScrollView, StyleProp, View, ViewStyle } from "react-native"
-import Dialog from "react-native-ui-lib/dialog"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { AppEventType, EventBus } from "app/utils/eventBus"
-import { useTheme } from "app/services/context"
-import { Text } from "../text/Text"
-import { Icon } from "../icon/Icon"
-import Animated, { useAnimatedStyle, useDerivedValue, withTiming } from "react-native-reanimated"
-import { useKeyboard } from "app/services/hook"
+import { StyleProp, ViewStyle, Modal, View, StyleSheet, Platform } from "react-native"
+import { TextProps } from "../text/Text"
+import { BottomModalHeader } from "./BottomModalHeader"
+import { useAppTheme } from "@/utils/useAppTheme"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+import { ThemedStyle } from "@/theme"
+import { debounce } from "@/utils/utils"
+import Animated, { FadeInDown } from "react-native-reanimated"
 
-interface BottomModalProps {
+interface Props {
   /**
    * Show modal
    */
@@ -17,118 +15,81 @@ interface BottomModalProps {
   /**
    * Modal title
    */
-  title?: string
+  tx?: TextProps["tx"]
+
   onClose: () => void
   children?: React.ReactNode
   /**
    * Style for the outer content container useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
-
-  hideCloseBtn?: boolean
+  /**
+   * Style for the outer content container useful for padding & margin.
+   */
+  contentContainer?: StyleProp<ViewStyle>
+  onDismiss?: () => void
 }
 
 /**
  * Show modal view from bottom
+ * This modal is used to show content from bottom of the screen
+ * Dont use this modal for showing forms or inputs
  */
 export const BottomModal = ({
   style,
   children,
   isOpen,
   onClose,
-  title,
-  hideCloseBtn,
-}: BottomModalProps) => {
-  const insets = useSafeAreaInsets()
-  const { colors } = useTheme()
-  const keyboardHeight = useKeyboard()
-  const $container: ViewStyle = {
-    justifyContent: "center",
-    backgroundColor: colors.background,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    marginTop: insets.top + 16,
-  }
-
-  // Close on signal
-  useEffect(() => {
-    const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
-      onClose()
-    })
-    return () => {
-      EventBus.removeListener(listener)
-    }
-  }, [])
-
-  const keyboardAvoidingViewHeight = useDerivedValue(() => {
-    return withTiming(keyboardHeight)
-  }, [keyboardHeight])
-
-  const $AvoidKeyboardStyle = useAnimatedStyle(() => ({
-    height: 12 + keyboardAvoidingViewHeight.value,
-    backgroundColor: colors.background,
-  }))
+  tx,
+  contentContainer,
+  onDismiss,
+}: Props) => {
+  const { themed } = useAppTheme()
 
   return (
-    <Dialog
+    <Modal
+      transparent
+      animationType="fade"
       supportedOrientations={["portrait", "landscape"]}
-      containerStyle={[$container, style]}
-      bottom
-      width="100%"
-      panDirection={null}
+      style={[styles.container, style]}
       visible={isOpen}
-      onDialogDismissed={onClose}
-      renderPannableHeader={() => {
-        return !hideCloseBtn ? (
-          <View
-            style={{
-              height: 45,
-              paddingHorizontal: 20,
-              paddingTop: 12,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text
-              preset="bold"
-              text={title}
-              size="large"
-              style={{
-                maxWidth: "90%",
-              }}
-            />
-            <Icon icon="x" onPress={onClose} />
-          </View>
-        ) : (
-          <View
-            style={{
-              paddingVertical: 4,
-              justifyContent: "center",
-              alignItems: "center",
-              borderTopLeftRadius: 12,
-              borderTopRightRadius: 12,
-            }}
-          >
-            <View
-              style={{
-                marginVertical: 5,
-                height: 4,
-                borderRadius: 2,
-                width: 50,
-                backgroundColor: colors.primaryText,
-              }}
-            />
-          </View>
-        )
-      }}
+      onDismiss={onDismiss}
     >
-      <ScrollView
-        contentContainerStyle={{ paddingBottom: insets.bottom + 20, paddingHorizontal: 20 }}
+      <View style={themed($backdrop)} onTouchStart={debounce(onClose, 250)} />
+      <Animated.View
+        entering={Platform.OS === "ios" ? FadeInDown : undefined}
+        style={themed($contentBackground)}
       >
-        {children}
-        <Animated.View style={$AvoidKeyboardStyle} />
-      </ScrollView>
-    </Dialog>
+        <BottomModalHeader tx={tx} onClose={onClose} />
+        <View style={[$contentContainer, contentContainer]}>{children}</View>
+      </Animated.View>
+    </Modal>
   )
 }
+
+const $contentBackground: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  backgroundColor: colors.background,
+  borderRadius: 12,
+  marginTop: -12,
+  // borderTopRightRadius: 12,
+  overflow: "hidden",
+})
+
+const $backdrop: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  flex: 1,
+  backgroundColor: colors.transparentModal,
+})
+
+const $contentContainer: StyleProp<ViewStyle> = {
+  paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom + (Platform.OS === "ios" ? 0 : 24),
+  paddingHorizontal: 16,
+  maxHeight: "80%",
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    margin: 0,
+    padding: 0,
+  },
+})

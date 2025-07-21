@@ -1,34 +1,32 @@
-const { getDefaultConfig } = require('metro-config')
+/* eslint-env node */
+// Learn more https://docs.expo.io/guides/customizing-metro
+const { getDefaultConfig } = require("expo/metro-config")
 
-let metroConfig
+/** @type {import('expo/metro-config').MetroConfig} */
+const config = getDefaultConfig(__dirname)
 
-/**
- * Vanilla metro config - we're using a custom metro config because we want to support symlinks
- * out of the box. This allows you to use pnpm and/or play better in a monorepo.
- *
- * You can safely delete this file and remove @rnx-kit/metro-* if you're not
- * using PNPM or monorepo or symlinks at all.
- *
- * However, it doesn't hurt to have it either.
- */
-const { makeMetroConfig } = require('@rnx-kit/metro-config')
-const MetroSymlinksResolver = require('@rnx-kit/metro-resolver-symlinks')
+config.transformer.getTransformOptions = async () => ({
+  transform: {
+    // Inline requires are very useful for deferring loading of large dependencies/components.
+    // For example, we use it in app.tsx to conditionally load Reactotron.
+    // However, this comes with some gotchas.
+    // Read more here: https://reactnative.dev/docs/optimizing-javascript-loading
+    // And here: https://github.com/expo/expo/issues/27279#issuecomment-1971610698
+    inlineRequires: true,
+  },
+})
 
-metroConfig = (async () => {
-  const defaultConfig = await getDefaultConfig()
-  return makeMetroConfig({
-    projectRoot: __dirname,
-    // watchFolders: [`${__dirname}/../..`], // for monorepos
-    resolver: {
-      /**
-       * This custom resolver is for if you're using symlinks.
-       *
-       * You can disable it if you're not using pnpm or a monorepo or symlinks.
-       */
-      resolveRequest: MetroSymlinksResolver(),
-      assetExts: [...defaultConfig.resolver.assetExts, 'bin'],
-    },
-  })
-})()
+// This helps support certain popular third-party libraries
+// such as Firebase that use the extension cjs.
+config.resolver.sourceExts.push("cjs")
 
-module.exports = metroConfig
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (moduleName === "crypto") {
+    // when importing crypto, resolve to react-native-quick-crypto
+    return context.resolveRequest(context, "react-native-quick-crypto", platform)
+  }
+  // otherwise chain to the standard Metro resolver.
+  return context.resolveRequest(context, moduleName, platform)
+}
+
+module.exports = config

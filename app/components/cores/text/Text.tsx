@@ -1,20 +1,21 @@
-import i18n from "i18n-js"
-import React from "react"
+import { TOptions } from "i18next"
 import {
   StyleProp,
+  // eslint-disable-next-line no-restricted-imports
   Text as RNText,
   TextProps as RNTextProps,
   TextStyle,
   ColorValue,
 } from "react-native"
-import { TxKeyPath } from "../../../i18n"
-import { typography } from "../../../theme"
-import { useTheme } from "app/services/context"
-import { useHelper } from "app/services/hook"
+import { isRTL, TxKeyPath, useAppLocale } from "@/i18n"
+import type { ThemedStyle, ThemedStyleArray } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { typography } from "@/theme/typography"
+import { ReactNode, forwardRef, ForwardedRef } from "react"
 
 type Sizes = keyof typeof $sizeStyles
 type Weights = keyof typeof typography.primary
-type Presets = keyof typeof $presets
+type Presets = "default" | "bold" | "heading" | "label"
 
 export interface TextProps extends RNTextProps {
   /**
@@ -29,11 +30,7 @@ export interface TextProps extends RNTextProps {
    * Optional options to pass to i18n. Useful for interpolation
    * as well as explicitly setting locale or translation fallbacks.
    */
-  txOptions?: i18n.TranslateOptions
-  /**
-   * An optional color.
-   */
-  color?: ColorValue
+  txOptions?: TOptions
   /**
    * An optional style override useful for padding & margin.
    */
@@ -51,18 +48,25 @@ export interface TextProps extends RNTextProps {
    */
   size?: Sizes
   /**
+   * Text colors
+   */
+  color?: ColorValue
+  /**
    * Children components.
    */
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 /**
  * For your text displaying needs.
  * This component is a HOC over the built-in React Native one.
- *
- * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Text.md)
+ * @see [Documentation and Examples]{@link https://docs.infinite.red/ignite-cli/boilerplate/app/components/Text/}
+ * @param {TextProps} props - The props for the `Text` component.
+ * @returns {JSX.Element} The rendered `Text` component.
  */
-export function Text(props: TextProps) {
+export const Text = forwardRef(function Text(props: TextProps, ref: ForwardedRef<RNText>) {
+  const { themed } = useAppTheme()
+
   const {
     weight,
     size,
@@ -70,66 +74,62 @@ export function Text(props: TextProps) {
     txOptions,
     text,
     children,
-    style: $styleOverride,
     color,
+    style: $styleOverride,
     ...rest
   } = props
-
-  const { colors } = useTheme()
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
 
-  const preset: Presets = $presets[props.preset] ? props.preset : "default"
-
-  const $colorPreset = {
-    default: { color: colors.primaryText },
-    bold: { color: colors.primaryText },
-    heading: { color: colors.primaryText },
-    label: { color: colors.secondaryText },
-    helper: { color: colors.secondaryText },
-  }
+  const preset: Presets = props.preset ?? "default"
   const $styles: StyleProp<TextStyle> = [
-    $presets[preset],
-    $fontWeightStyles[weight],
-    $sizeStyles[size],
-    color ? { color } : $colorPreset[preset],
+    $rtlStyle,
+    themed($presets[preset]),
+    weight && $fontWeightStyles[weight],
+    size && $sizeStyles[size],
+    color && { color },
     $styleOverride,
   ]
 
   return (
-    <RNText {...rest} style={$styles}>
+    <RNText {...rest} style={$styles} ref={ref}>
       {content}
     </RNText>
   )
-}
+})
 
-export const $sizeStyles = {
-  xxxl: { fontSize: 32, lineHeight: 46 },
-  xxl: { fontSize: 28, lineHeight: 38 },
-  xl: { fontSize: 24, lineHeight: 32 },
-  large: { fontSize: 20, lineHeight: 28 },
-  medium: { fontSize: 16, lineHeight: 24 },
-  base: { fontSize: 14, lineHeight: 22 },
-  small: { fontSize: 12, lineHeight: 20 },
-  sx: { fontSize: 10, lineHeight: 18 },
+const $sizeStyles = {
+  xxl: { fontSize: 30, lineHeight: 42 } satisfies TextStyle,
+  xl: { fontSize: 24, lineHeight: 34 } satisfies TextStyle,
+  lg: { fontSize: 20, lineHeight: 32 } satisfies TextStyle,
+  md: { fontSize: 18, lineHeight: 26 } satisfies TextStyle,
+  sm: { fontSize: 16, lineHeight: 24 } satisfies TextStyle,
+  xs: { fontSize: 14, lineHeight: 21 } satisfies TextStyle,
+  xxs: { fontSize: 12, lineHeight: 18 } satisfies TextStyle,
 }
 
 const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {
   return { ...acc, [weight]: { fontFamily } }
 }, {}) as Record<Weights, TextStyle>
 
-const $baseStyle: StyleProp<TextStyle> = [$sizeStyles.medium, $fontWeightStyles.regular]
+const $baseStyle: ThemedStyle<TextStyle> = (theme) => ({
+  ...$sizeStyles.sm,
+  ...$fontWeightStyles.normal,
+  color: theme.colors.text,
+})
 
-const $presets = {
-  default: $baseStyle,
-
-  bold: [$baseStyle, $fontWeightStyles.medium] as StyleProp<TextStyle>,
-
-  heading: [$baseStyle, $sizeStyles.xl, $fontWeightStyles.medium] as StyleProp<TextStyle>,
-
-  label: [$baseStyle] as StyleProp<TextStyle>,
-
-  helper: [$baseStyle, $sizeStyles.small] as StyleProp<TextStyle>,
+const $presets: Record<Presets, ThemedStyleArray<TextStyle>> = {
+  default: [$baseStyle],
+  bold: [$baseStyle, { ...$fontWeightStyles.bold }],
+  heading: [
+    $baseStyle,
+    {
+      ...$sizeStyles.xxl,
+      ...$fontWeightStyles.bold,
+    },
+  ],
+  label: [$baseStyle, (theme) => ({ color: theme.colors.label })],
 }
+const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}

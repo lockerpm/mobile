@@ -1,7 +1,6 @@
-import React from 'react'
-import { Modal } from '../modal/Modal'
-import { Button, Text } from '../../cores'
-import { useHelper } from 'app/services/hook'
+import { useAppLocale } from "@/i18n"
+import { BottomModal, Button, Text } from "../../cores"
+import { StyleSheet } from "react-native"
 
 interface Props {
   isOpen: boolean
@@ -14,42 +13,34 @@ interface Props {
 
 export const PasswordPolicyViolationsModal = (props: Props) => {
   const { isOpen, onClose, onConfirm, violations, teamName, confirmText } = props
-  const { translate } = useHelper()
+  const { translate } = useAppLocale()
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={translate('policy.password_violation_modal.title')}
-    >
+    <BottomModal isOpen={isOpen} onClose={onClose} tx="policy:password_violation_modal.title">
       <Text
-        text={`${translate('policy.password_violation_modal.desc')} ${teamName}:`}
-        style={{
-          marginTop: 20,
-          marginBottom: 10,
-        }}
+        text={`${translate("policy:password_violation_modal.desc")} ${teamName}:`}
+        style={styles.label}
       />
 
       {violations.map((v, index) => (
-        <Text
-          preset="bold"
-          key={index}
-          text={`- ${v}`}
-          style={{
-            marginBottom: 3,
-          }}
-        />
+        <Text preset="bold" key={index} text={`- ${v}`} style={styles.violation} />
       ))}
 
-      <Button
-        preset="secondary"
-        text={confirmText}
-        onPress={onConfirm}
-        style={{
-          width: '100%',
-          marginTop: 30,
-        }}
-      />
-    </Modal>
+      <Button preset="secondary" text={confirmText} onPress={onConfirm} style={styles.button} />
+    </BottomModal>
   )
 }
+
+const styles = StyleSheet.create({
+  button: {
+    marginTop: 30,
+    width: "100%",
+  },
+  label: {
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  violation: {
+    marginBottom: 3,
+  },
+})

@@ -1,16 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-async-promise-executor */
-import * as crypto from "crypto"
+import crypto from "react-native-quick-crypto"
 import * as forge from "node-forge"
 import { CryptoFunctionService } from "core/abstractions/cryptoFunction.service"
 import { SymmetricCryptoKey } from "core/models/domain"
 import { DecryptParameters } from "core/models/domain/decryptParameters"
 import { Utils } from "core/misc/utils"
 import RNSimpleCrypto from "react-native-simple-crypto"
-import { NativeModules } from "react-native"
-import { IS_IOS } from "../../../config/constants"
+import { NativeModules, Platform } from "react-native"
 
 const { RNCryptoServiceIos, RNCryptoServiceAndroid } = NativeModules
+
+const IS_IOS = Platform.OS === "ios"
 
 export class MobileCryptoFunctionService implements CryptoFunctionService {
   // DONE
@@ -18,25 +17,18 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     password: string | ArrayBuffer,
     salt: string | ArrayBuffer,
     algorithm: "sha256" | "sha512",
-    iterations: number,
+    iterations: number
   ): Promise<ArrayBuffer> {
     const len = algorithm === "sha256" ? 32 : 64
     const nodePassword = this.toNodeValue(password)
     const nodeSalt = this.toNodeValue(salt)
     return new Promise<ArrayBuffer>(async (resolve, reject) => {
-      // crypto.pbkdf2(nodePassword, nodeSalt, iterations, len, algorithm, (error, key) => {
-      //   if (error != null) {
-      //     reject(error);
-      //   } else {
-      //     resolve(this.toArrayBuffer(key));
-      //   }
-      // });
       const key = await RNSimpleCrypto.PBKDF2.hash(
         nodePassword,
         nodeSalt,
         iterations,
         len,
-        algorithm === "sha256" ? "SHA256" : "SHA512",
+        algorithm === "sha256" ? "SHA256" : "SHA512"
       )
       resolve(this.toArrayBuffer(key))
     })
@@ -49,7 +41,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     salt: string | ArrayBuffer,
     info: string | ArrayBuffer,
     outputByteSize: number,
-    algorithm: "sha256" | "sha512",
+    algorithm: "sha256" | "sha512"
   ): Promise<ArrayBuffer> {
     const saltBuf = this.toArrayBuffer(salt)
     const prk = await this.hmac(ikm, saltBuf, algorithm)
@@ -62,7 +54,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     prk: ArrayBuffer,
     info: string | ArrayBuffer,
     outputByteSize: number,
-    algorithm: "sha256" | "sha512",
+    algorithm: "sha256" | "sha512"
   ): Promise<ArrayBuffer> {
     const hashLen = algorithm === "sha256" ? 32 : 64
     if (outputByteSize > 255 * hashLen) {
@@ -96,7 +88,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   // DONE (can ignore md5)
   hash(
     value: string | ArrayBuffer,
-    algorithm: "sha1" | "sha256" | "sha512" | "md5",
+    algorithm: "sha1" | "sha256" | "sha512" | "md5"
   ): Promise<ArrayBuffer> {
     const nodeValue = this.toNodeValue(value)
 
@@ -123,7 +115,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   hmac(
     value: ArrayBuffer,
     key: ArrayBuffer,
-    algorithm: "sha1" | "sha256" | "sha512",
+    algorithm: "sha1" | "sha256" | "sha512"
   ): Promise<ArrayBuffer> {
     const nodeValue = this.toNodeBuffer(value)
     const nodeKey = this.toNodeBuffer(key)
@@ -160,7 +152,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   hmacFast(
     value: ArrayBuffer,
     key: ArrayBuffer,
-    algorithm: "sha1" | "sha256" | "sha512",
+    algorithm: "sha1" | "sha256" | "sha512"
   ): Promise<ArrayBuffer> {
     return this.hmac(value, key, algorithm)
   }
@@ -174,9 +166,6 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     const nodeData = this.toNodeBuffer(data)
     const nodeIv = this.toNodeBuffer(iv)
     const nodeKey = this.toNodeBuffer(key)
-    // const cipher = crypto.createCipheriv('aes-256-cbc', nodeKey, nodeIv);
-    // const encBuf = Buffer.concat([cipher.update(nodeData), cipher.final()]);
-    // return Promise.resolve(this.toArrayBuffer(encBuf));
 
     return RNSimpleCrypto.AES.encrypt(nodeData, nodeKey, nodeIv)
   }
@@ -185,7 +174,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     data: string,
     iv: string,
     mac: string,
-    key: SymmetricCryptoKey,
+    key: SymmetricCryptoKey
   ): DecryptParameters<ArrayBuffer> {
     const p = new DecryptParameters<ArrayBuffer>()
     p.encKey = key.encKey
@@ -217,9 +206,6 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     const nodeData = this.toNodeBuffer(data)
     const nodeIv = this.toNodeBuffer(iv)
     const nodeKey = this.toNodeBuffer(key)
-    // const decipher = crypto.createDecipheriv('aes-256-cbc', nodeKey, nodeIv);
-    // const decBuf = Buffer.concat([decipher.update(nodeData), decipher.final()]);
-    // return Promise.resolve(this.toArrayBuffer(decBuf));
 
     return RNSimpleCrypto.AES.decrypt(nodeData, nodeKey, nodeIv)
   }
@@ -228,7 +214,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   rsaEncrypt(
     data: ArrayBuffer,
     publicKey: ArrayBuffer,
-    algorithm: "sha1" | "sha256",
+    algorithm: "sha1" | "sha256"
   ): Promise<ArrayBuffer> {
     if (algorithm === "sha256") {
       throw new Error("Node crypto does not support RSA-OAEP SHA-256")
@@ -243,7 +229,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   async rsaDecrypt(
     data: ArrayBuffer,
     privateKey: ArrayBuffer,
-    algorithm: "sha1" | "sha256",
+    algorithm: "sha1" | "sha256"
   ): Promise<ArrayBuffer> {
     if (algorithm === "sha256") {
       throw new Error("Node crypto does not support RSA-OAEP SHA-256")
@@ -252,7 +238,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     const CryptoServiceModule = IS_IOS ? RNCryptoServiceIos : RNCryptoServiceAndroid
     const decipher = await CryptoServiceModule.decryptOAEPSHA1(
       Utils.fromBufferToB64(data),
-      Utils.fromBufferToB64(privateKey),
+      Utils.fromBufferToB64(privateKey)
     )
     return Utils.fromB64ToArray(decipher).buffer
   }
@@ -360,7 +346,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   private toPemPublicKey(key: ArrayBuffer): string {
     const byteString = Utils.fromBufferToByteString(key)
     const asn1 = forge.asn1.fromDer(byteString)
-    const publicKey = (forge as any).pki.publicKeyFromAsn1(asn1)
-    return (forge.pki as any).publicKeyToPem(publicKey)
+    const publicKey = forge.pki.publicKeyFromAsn1(asn1)
+    return forge.pki.publicKeyToPem(publicKey)
   }
 }

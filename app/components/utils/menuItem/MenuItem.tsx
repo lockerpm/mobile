@@ -1,12 +1,21 @@
-import React from "react"
-import { TouchableOpacity, View, ViewProps, Image } from "react-native"
-import { Icon, IconTypes, Text } from "app/components/cores"
-import { useTheme } from "app/services/context"
+import { View, ViewProps, Image, StyleSheet, ViewStyle } from "react-native"
+import { Icon, IconTypes, PressableScale, Text } from "app/components/cores"
+import { TxKeyPath, useAppLocale } from "app/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { ThemedStyle } from "@/theme"
+import { Children } from "react"
 
 export type MenuItemProps = {
+  /**
+   * Icon name
+   */
   icon: IconTypes
+  /**
+   * Custom image instead of icon
+   */
   imageSource?: string
   name: string
+
   onPress?: () => void
   disabled?: boolean
   hide?: boolean
@@ -26,81 +35,73 @@ export const MenuItem = ({
   content,
   rightIcon,
 }: MenuItemProps) => {
-  const { colors } = useTheme()
+  const {
+    theme: { colors },
+  } = useAppTheme()
 
   if (hide) return null
 
   return (
-    <TouchableOpacity
-      disabled={disabled}
-      onPress={onPress}
-      style={{
-        padding: 16,
-        flexDirection: "row",
-        alignItems: "center",
-      }}
-    >
+    <PressableScale disabled={disabled} onPress={onPress} style={styles.itemContainer}>
       {!imageSource ? (
-        <Icon icon={icon} containerStyle={{ marginRight: 10 }} />
+        <Icon icon={icon} />
       ) : (
-        <Image
-          resizeMode="contain"
-          source={{ uri: imageSource }}
-          style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10 }}
-        />
+        <Image resizeMode="contain" source={{ uri: imageSource }} style={styles.itemImage} />
       )}
 
-      <View style={{ flex: 1, flexDirection: "row" }}>
+      <View style={styles.row}>
         {!content ? (
           <>
             <Text text={name} />
-            {family && <Text text={"FAMILY"} color={colors.primary} style={{ marginLeft: 12 }} />}
+            {family && <Text text={"FAMILY"} color={colors.primary} style={styles.ml12} />}
           </>
         ) : (
           content
         )}
       </View>
 
-      <Icon icon={rightIcon || "caret-right"} size={20} color={colors.secondaryText} />
-    </TouchableOpacity>
+      <Icon icon={rightIcon || "caret-right"} size={20} color={colors.label} />
+    </PressableScale>
   )
 }
 
 interface ContainerProps extends ViewProps {
   title?: string
+  titleTx?: TxKeyPath
   children?: React.ReactNode | React.ReactNode[]
 }
 
-export const MenuItemContainer = ({ title, children, style, ...viewProps }: ContainerProps) => {
-  const { colors } = useTheme()
+export const MenuItemContainer = ({
+  title,
+  titleTx,
+  children,
+  style,
+  ...viewProps
+}: ContainerProps) => {
+  const {
+    themed,
+    theme: { colors },
+  } = useAppTheme()
+  const { translate } = useAppLocale()
+  const titleText = title || (titleTx && translate(titleTx))
   const arrayLength = Array.isArray(children) ? children.length : 1
+
   return (
-    <View style={{ marginTop: 16 }}>
-      {!!title && (
+    <View style={styles.mt16}>
+      {!!titleText && (
         <Text
           preset="bold"
-          color={colors.secondaryText}
-          text={title.toUpperCase()}
-          style={{ marginVertical: 2 }}
+          color={colors.label}
+          text={titleText.toUpperCase()}
+          style={styles.mv2}
         />
       )}
-      <View
-        style={[
-          { borderRadius: 12, overflow: "hidden", backgroundColor: colors.background },
-          style,
-        ]}
-        {...viewProps}
-      >
-        {React.Children.map(children, (child, index) => {
+      <View style={themed([$menuContainer, style])} {...viewProps}>
+        {Children.map(children, (child, index) => {
           return (
-            <View
-              key={index}
-              style={{
-                borderBottomColor: colors.border,
-                borderBottomWidth: index !== arrayLength - 1 ? 1 : 0,
-              }}
-            >
+            <View key={index}>
               {child}
+              {index !== arrayLength - 1 && <View style={themed($divider)} />}
             </View>
           )
         })}
@@ -108,3 +109,42 @@ export const MenuItemContainer = ({ title, children, style, ...viewProps }: Cont
     </View>
   )
 }
+
+const $divider: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  height: 1,
+  backgroundColor: colors.border,
+  marginHorizontal: 16,
+})
+
+const $menuContainer: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  borderRadius: 12,
+  overflow: "hidden",
+  backgroundColor: colors.background,
+})
+
+const styles = StyleSheet.create({
+  itemContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    padding: 16,
+  },
+  itemImage: {
+    borderRadius: 20,
+    height: 40,
+    width: 40,
+  },
+  ml12: {
+    marginLeft: 12,
+  },
+  mt16: {
+    marginTop: 16,
+  },
+  mv2: {
+    marginVertical: 2,
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row",
+    marginHorizontal: 12,
+  },
+})

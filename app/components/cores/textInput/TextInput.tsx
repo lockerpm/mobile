@@ -1,4 +1,5 @@
-import React, {
+/* eslint-disable no-restricted-imports */
+import {
   ComponentType,
   forwardRef,
   Ref,
@@ -26,21 +27,21 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import { bin } from "react-native-redash"
-import { Icon } from "../icon/Icon"
+import { PressableIcon } from "../icon/Icon"
 import { Text, TextProps } from "../text/Text"
 import { typography } from "app/theme"
-import { useHelper } from "app/services/hook"
 import {
   MaskService,
   TextInputMaskTypeProp,
   TextInputMaskOptionProp,
 } from "react-native-masked-text"
-import { useTheme } from "app/services/context/useTheme"
+import { useAppLocale } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { useClipboard } from "@/services/utils"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
   status: TextFieldProps["status"]
-  multiline: boolean
   editable: boolean
 }
 
@@ -79,6 +80,14 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
    */
   label?: TextProps["text"]
   /**
+   * Title tx
+   */
+  labelTx?: TextProps["tx"]
+  /**
+   * Title txoptions
+   */
+  labelTxOption?: TextProps["txOptions"]
+  /**
    * Pass any additional props directly to the label Text component.
    */
   LabelTextProps?: TextProps
@@ -86,6 +95,7 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
    * The helper text to display if not using .
    */
   helper?: TextProps["text"]
+  helperTx?: TextProps["tx"]
   /**
    * Pass any additional props directly to the helper Text component.
    */
@@ -94,6 +104,10 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
    * The placeholder text to display if not using .
    */
   placeholder?: TextProps["text"]
+  /**
+   * The placeholder tx to display if not using .
+   */
+  placeholderTx?: TextProps["tx"]
   /**
    * Optional input style override.
    */
@@ -132,7 +146,7 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
  */
 export const TextInput = forwardRef(function TextField(
   props: TextFieldProps,
-  ref: Ref<RNTextInput>,
+  ref: Ref<RNTextInput | null>
 ) {
   const {
     isRequired: isRequiredProps,
@@ -142,11 +156,14 @@ export const TextInput = forwardRef(function TextField(
     isCopyable,
     animated,
     placeholder,
+    placeholderTx,
     helper: helperProps,
     status: statusProps,
     maskType,
     maskOptions,
     label,
+    labelTx,
+    labelTxOption,
     RightAccessory,
     LeftAccessory,
     HelperTextProps,
@@ -159,16 +176,21 @@ export const TextInput = forwardRef(function TextField(
     value = "",
     ...TextInputProps
   } = props
-  const { translate, copyToClipboard } = useHelper()
-  const { colors } = useTheme()
+  const { translate } = useAppLocale()
+  const { copyToClipboard } = useClipboard()
+  const {
+    theme: { colors },
+  } = useAppTheme()
+
+  // -------------------- PARAMS --------------------
   const [isFocus, setIsFocus] = useState(false)
   const [isRequired, setIsRequired] = useState(false)
   const [isShowText, setIsShowText] = useState(false)
-  const input = useRef<RNTextInput>()
+  const input = useRef<RNTextInput>(null)
+
+  // -------------------- COMPUTED --------------------
   const status = (() => {
-    if (
-      (isRequired || isError) 
-    ) {
+    if (isRequired || isError) {
       return "error"
     }
     if (isDisabled) {
@@ -178,8 +200,11 @@ export const TextInput = forwardRef(function TextField(
   })()
   const disabled = TextInputProps.editable === false || status === "disabled"
 
-  const helper = value ? helperProps : isRequired && translate("common.required_text")
-  const placeholderContent = placeholder && placeholder + (isRequiredProps ? " (*)" : "")
+  const helper = value ? helperProps : isRequired && translate("common:required_text")
+  const placeholderText = placeholder || (placeholderTx && translate(placeholderTx))
+  const placeholderContent = placeholderText && placeholderText + (isRequiredProps ? " (*)" : "")
+
+  const labelProps = label || (labelTx && translate(labelTx, labelTxOption))
 
   const $containerStyles: StyleProp<ViewStyle> = [
     { width: "100%", alignItems: "flex-start", marginVertical: 2 },
@@ -197,7 +222,7 @@ export const TextInput = forwardRef(function TextField(
   const $inputWrapperStyles = [
     $inputWrapperStyle,
     {
-      borderColor: isFocus && !disabled ? colors.primary : colors.disable,
+      borderColor: isFocus && !disabled ? colors.primary : colors.border,
     },
     status === "error" && { borderColor: colors.error },
     TextInputProps.multiline && { minHeight: 112 },
@@ -206,9 +231,9 @@ export const TextInput = forwardRef(function TextField(
     $inputWrapperStyleOverride,
   ]
 
-  const $inputStyles = [
+  const $inputStyles: StyleProp<TextStyle> = [
     $inputStyle,
-    { color: disabled ? colors.disable : colors.primaryText },
+    { color: disabled ? colors.disable : colors.text },
     TextInputProps.multiline && { height: "auto" },
     $inputStyleOverride,
   ]
@@ -237,7 +262,9 @@ export const TextInput = forwardRef(function TextField(
 
   const onFucus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setIsFocus(true)
-    propsFocus && propsFocus(e)
+    if (propsFocus) {
+      propsFocus(e)
+    }
   }
 
   const onBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -245,7 +272,9 @@ export const TextInput = forwardRef(function TextField(
     if (isRequiredProps && !value) {
       setIsRequired(true)
     }
-    propsBlur && propsBlur(e)
+    if (propsBlur) {
+      propsBlur(e)
+    }
   }
 
   const toggleStyle = useDerivedValue(() => {
@@ -277,8 +306,8 @@ export const TextInput = forwardRef(function TextField(
           ]
         : [],
       color: animated
-        ? interpolateColor(toggleStyle.value, [0, 1], [colors.disable, colors.primaryText])
-        : colors.primaryText,
+        ? interpolateColor(toggleStyle.value, [0, 1], [colors.disable, colors.text])
+        : colors.text,
     }
   })
 
@@ -289,20 +318,15 @@ export const TextInput = forwardRef(function TextField(
       onPress={focusInput}
       accessibilityState={{ disabled }}
     >
-      {!!label && (
+      {!!labelProps && (
         <Animated.Text style={[$labelStyles, $titleAnim]} {...LabelTextProps}>
-          {label + (isRequiredProps ? " (*)" : "")}
+          {labelProps + (isRequiredProps ? " (*)" : "")}
         </Animated.Text>
       )}
 
       <View style={$inputWrapperStyles}>
         {!!LeftAccessory && (
-          <LeftAccessory
-            style={$leftAccessoryStyle}
-            status={status}
-            editable={!disabled}
-            multiline={TextInputProps.multiline}
-          />
+          <LeftAccessory style={$leftAccessoryStyle} status={status} editable={!disabled} />
         )}
 
         <RNTextInput
@@ -310,7 +334,7 @@ export const TextInput = forwardRef(function TextField(
           autoCapitalize="none"
           underlineColorAndroid={colors.transparent}
           textAlignVertical="top"
-          placeholder={placeholderContent}
+          placeholder={isFocus ? placeholderContent : ""}
           placeholderTextColor={colors.disable}
           value={validateMask(value)}
           secureTextEntry={!isShowText && isPassword}
@@ -322,40 +346,41 @@ export const TextInput = forwardRef(function TextField(
           style={$inputStyles}
         />
 
-        {isPassword && (
-          <Icon
+        {isPassword && !!value && (
+          <PressableIcon
             onPress={() => {
               setIsShowText(!isShowText)
             }}
             containerStyle={$rightAccessoryStyle}
             icon={!isShowText ? "eye" : "eye-slash"}
-            color={colors.primaryText}
             size={20}
           />
         )}
 
-        {isCopyable && (
-          <Icon
-            onPress={() => copyToClipboard(value)}
+        {isCopyable && !!value && (
+          <PressableIcon
+            onPress={() => {
+              copyToClipboard(value)
+            }}
             containerStyle={$rightAccessoryStyle}
             icon={"copy"}
-            color={colors.primaryText}
             size={20}
           />
         )}
 
-        {!!RightAccessory && !isPassword && !isCopyable && (
-          <RightAccessory
-            style={$rightAccessoryStyle}
-            status={status}
-            editable={!disabled}
-            multiline={TextInputProps.multiline}
-          />
+        {!!RightAccessory && !isCopyable && (
+          <RightAccessory style={$rightAccessoryStyle} status={status} editable={!disabled} />
         )}
       </View>
 
-      {!!helper && status === "error" && (
-        <Text preset="label" text={helper} {...HelperTextProps} style={$helperStyles} />
+      {(helper || props.helperTx) && status === "error" && (
+        <Text
+          preset="label"
+          tx={props.helperTx}
+          text={helper || undefined}
+          {...HelperTextProps}
+          style={$helperStyles}
+        />
       )}
     </TouchableOpacity>
   )

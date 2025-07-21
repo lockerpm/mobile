@@ -1,7 +1,5 @@
 import { Instance, SnapshotIn, SnapshotOut, cast, types } from "mobx-state-tree"
 import { withSetPropAction } from "../helpers/withSetPropAction"
-import { QUICK_SHARE_BASE_URL } from "app/config/constants"
-import { omit } from "ramda"
 import {
   ConfirmShareCipherData,
   EditShareCipherData,
@@ -21,6 +19,7 @@ import { Organization } from "core/models/domain/organization"
 import { cipherApi } from "app/services/api/cipherApi"
 import { CipherRequest } from "core/models/request/cipherRequest"
 import { SendRequest } from "core/models/request/sendRequest"
+import Config from "@/config"
 
 /**
  * Model description here for TypeScript hints.
@@ -28,31 +27,30 @@ import { SendRequest } from "core/models/request/sendRequest"
 export const CipherStoreModel = types
   .model("CipherStore")
   .props({
-    apiToken: types.maybeNull(types.string),
+    apiToken: types.string,
 
     // Status
-    isSynching: types.maybeNull(types.boolean),
-    isSynchingOffline: types.maybeNull(types.boolean),
-    isSynchingAutofill: types.maybeNull(types.boolean),
-    isBatchDecrypting: types.maybeNull(types.boolean),
+    isSynching: types.boolean,
+    isSynchingOffline: types.boolean,
+    isSynchingAutofill: types.boolean,
+    isBatchDecrypting: types.boolean,
 
     // Data
     notSynchedCiphers: types.array(types.string), // Create in offline mode
     notUpdatedCiphers: types.array(types.string), // Create in online mode but somehow not update yet
-    lastSync: types.maybeNull(types.number),
-    lastSyncQuickShare: types.maybeNull(types.number),
-    lastCacheUpdate: types.maybeNull(types.number),
+    lastSync: types.number,
+    lastSyncQuickShare: types.number,
+    lastCacheUpdate: types.number,
     sharingInvitations: types.array(types.frozen<SharingInvitationType>()),
     myShares: types.array(types.frozen<MyShareType>()),
     organizations: types.array(types.frozen<Organization>()),
 
     // Selector
-
-    generatedPassword: types.maybeNull(types.string),
-    selectedTotp: types.maybeNull(types.string),
+    generatedPassword: types.string,
+    selectedTotp: types.string,
     selectedCipher: types.maybeNull(types.frozen()),
-    selectedFolder: types.maybeNull(types.string),
-    selectedCollection: types.maybeNull(types.string),
+    selectedFolder: types.string,
+    selectedCollection: types.string,
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -152,29 +150,29 @@ export const CipherStoreModel = types
 
     clearStore: (dataOnly?: boolean) => {
       if (!dataOnly) {
-        self.apiToken = null
+        self.apiToken = ""
       }
-      self.generatedPassword = null
+      self.generatedPassword = ""
       self.selectedCipher = null
-      self.selectedFolder = null
-      self.selectedCollection = null
+      self.selectedFolder = ""
+      self.selectedCollection = ""
       self.notSynchedCiphers = cast([])
       self.notUpdatedCiphers = cast([])
       self.isSynching = false
       self.isSynchingOffline = false
       self.isSynchingAutofill = false
-      self.lastSync = null
-      self.lastCacheUpdate = null
+      self.lastSync = 0
+      self.lastCacheUpdate = 0
       self.sharingInvitations = cast([])
       self.myShares = cast([])
       self.organizations = cast([])
     },
 
     lock: () => {
-      self.generatedPassword = null
+      self.generatedPassword = ""
       self.selectedCipher = null
-      self.selectedFolder = null
-      self.selectedCollection = null
+      self.selectedFolder = ""
+      self.selectedCollection = ""
     },
 
     setSharingInvitations: (data: SharingInvitationType[]) => {
@@ -229,7 +227,7 @@ export const CipherStoreModel = types
       id: string,
       data: CipherRequest,
       score: number,
-      collectionIds: string[],
+      collectionIds: string[]
     ) => {
       const res = await cipherApi.putCipher(self.apiToken, id, data, score, collectionIds)
       return res
@@ -239,7 +237,7 @@ export const CipherStoreModel = types
       id: string,
       data: CipherRequest,
       score: number,
-      collectionIds: string[],
+      collectionIds: string[]
     ) => {
       const res = await cipherApi.shareCipherToTeam(self.apiToken, id, data, score, collectionIds)
       return res
@@ -288,7 +286,7 @@ export const CipherStoreModel = types
     stopShareCipher: async (
       organizationId: string,
       memberId: string,
-      payload: StopShareCipherData,
+      payload: StopShareCipherData
     ) => {
       const res = await cipherApi.stopShareCipher(self.apiToken, organizationId, memberId, payload)
       return res
@@ -302,7 +300,7 @@ export const CipherStoreModel = types
     editShareCipher: async (
       organizationId: string,
       memberId: string,
-      payload: EditShareCipherData,
+      payload: EditShareCipherData
     ) => {
       const res = await cipherApi.editShareCipher(self.apiToken, organizationId, memberId, payload)
       return res
@@ -311,13 +309,13 @@ export const CipherStoreModel = types
     confirmShareCipher: async (
       organizationId: string,
       memberId: string,
-      payload: ConfirmShareCipherData,
+      payload: ConfirmShareCipherData
     ) => {
       const res = await cipherApi.confirmShareCipher(
         self.apiToken,
         organizationId,
         memberId,
-        payload,
+        payload
       )
       return res
     },
@@ -374,31 +372,58 @@ export const CipherStoreModel = types
       return []
     },
 
-    getPublicShareUrl: (accessId, key) => {
-      return `${QUICK_SHARE_BASE_URL}/quick-shares/${accessId}#${encodeURIComponent(key)}`
+    getPublicShareUrl: (accessId: string, key: any) => {
+      return `${Config.QUICK_SHARE_BASE_URL}/quick-shares/${accessId}#${encodeURIComponent(key)}`
     },
 
-    stopQuickSharing: async (send) => {
+    stopQuickSharing: async (send: any) => {
       const res = await cipherApi.stopQuickSharing(self.apiToken, send.id)
       return res
     },
     // ---------------------QUICK SHARE----------------------------
   }))
-  .postProcessSnapshot(
-    omit([
-      "generatedPassword",
-      "selectedCipher",
-      "selectedFolder",
-      "selectedCollection",
-      "isSynching",
-      "isSynchingOffline",
-      "isSynchingAutofill",
-      "isBatchDecrypting",
-      "organizations",
-    ]),
-  )
+  .postProcessSnapshot((snapShot) => {
+    return {
+      ...snapShot,
+      generatedPassword: "",
+      selectedCipher: null,
+      selectedFolder: "",
+      selectedCollection: "",
+      isSynching: false,
+      isSynchingOffline: false,
+      isSynchingAutofill: false,
+      isBatchDecrypting: false,
+      organizations: [],
+    }
+  })
 
 export interface CipherStore extends Instance<typeof CipherStoreModel> {}
 export interface CipherStoreSnapshotOut extends SnapshotOut<typeof CipherStoreModel> {}
 export interface CipherStoreSnapshotIn extends SnapshotIn<typeof CipherStoreModel> {}
-export const createCipherStoreDefaultModel = () => types.optional(CipherStoreModel, {})
+export const createCipherStoreDefaultModel = () =>
+  types.optional(CipherStoreModel, {
+    apiToken: "",
+
+    // Status
+    isSynching: false,
+    isSynchingOffline: false,
+    isSynchingAutofill: false,
+    isBatchDecrypting: false,
+
+    // Data
+    notSynchedCiphers: [], // Create in offline mode
+    notUpdatedCiphers: [], // Create in online mode but somehow not update yet
+    lastSync: 0,
+    lastSyncQuickShare: 0,
+    lastCacheUpdate: 0,
+    sharingInvitations: [],
+    myShares: [],
+    organizations: [],
+
+    // Selector
+    generatedPassword: "",
+    selectedTotp: "",
+    selectedCipher: null,
+    selectedFolder: "",
+    selectedCollection: "",
+  })

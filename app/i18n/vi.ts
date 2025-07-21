@@ -130,6 +130,7 @@ const vi: Translations = {
     value: "Giá trị",
     warning: "Cảnh báo",
     website: "Website",
+    websites: "Websites",
     loading: "Đang giải mã dữ liệu",
     see_all: "Xem tất cả",
     collapse: "Thu gọn",
@@ -148,6 +149,7 @@ const vi: Translations = {
     invalid_date: "Ngày không hợp lệ",
     required_text: "Không được để trống",
     social_login: "Hoặc đăng nhập với",
+    from: "Từ",
   },
   navigator: {
     is_offline: "Locker hiện đang ở chế độ ngoại tuyến.",
@@ -167,6 +169,7 @@ const vi: Translations = {
     logout: "Đăng xuất khỏi ",
   },
   error: {
+    email_validate: "Email không hợp lệ",
     incorrect_pw: "Master Password không chính xác",
     master_password: "Không thể tự động tạo Siêu Mật Khẩu tự động",
     not_supported: "Không hỗ trợ",
@@ -177,6 +180,7 @@ const vi: Translations = {
     required_data: "Không được để trống thông tin này",
     session_login_failed: "Đăng nhập phiên không thành công! Vui lòng thử lại",
     login_failed: "Đăng nhập không thành công! Vui lòng thử lại",
+    signup_failed: "Đăng ký không thành công! Vui lòng thử lại",
     wrong_username_or_password: "Mật khẩu không chính xác",
     account_not_activated:
       "Tài khoản này chưa được kích hoạt. Vui lòng kiểm tra email và làm theo hướng dẫn (chúng tôi sẽ gửi lại sau 1 ngày).",
@@ -679,7 +683,6 @@ const vi: Translations = {
     no_otp: "Không dùng OTP",
     existing_otp: "Chọn các OTP có sẵn",
     "2fa_setup": "Cài đặt 2FA",
-
     empty: {
       title: "Khỏi lo quên mật khẩu",
       desc: "Thêm mật khẩu của bạn và truy cập chúng trên mọi thiết bị, bất kỳ lúc nào",
@@ -691,6 +694,7 @@ const vi: Translations = {
       existing_email: "Sử dụng email ẩn danh có sẵn",
       empty: "Bạn chưa taọ bất kì email ẩn danh nào",
     },
+    addWebsite: "Thêm Website",
   },
   shares: {
     shares: "Chia sẻ",
@@ -890,7 +894,6 @@ const vi: Translations = {
       "Mục này để xóa tất cả dữ liệu trong không gian Locker của bạn. Dữ liệu tổ chức, nếu có, sẽ không được xóa.",
     delete_all_items_success: "Xoá dữ liệu thành công!",
     on_app_close: "Khi tắt ứng dụng",
-    hide_mp: "Không hiện mục Mật khẩu chính",
     on_screen_off: "Khi tắt màn hình",
     timeout: "Tự động khoá",
     timeout_action: "Tự động khoá",
@@ -902,6 +905,7 @@ const vi: Translations = {
     dark_theme: "Tối",
     light_theme: "Sáng",
     defaultTab: "Màn hình mặc định",
+    hide_mp: "Không hiện mục Mật khẩu chính",
   },
   autofill_service: {
     deleted: "Mật khẩu này đã bị xóa.",
@@ -1369,8 +1373,8 @@ const vi: Translations = {
     upload_file: "Tải lên tệp",
     max_size: "Kích thước tệp tối đa là 50MB",
     upload_success: "Tệp đã được tải lên thành công",
+    download_media_success: "Tệp đã được tải xuống thành công",
     download_success: "Tệp đã được tải xuống thành công! Xem trong ứng dụng Tệp của bạn.",
-    download_media_success: "Tệp đã được tải xuống thành công!",
     delete_success: "Tệp đã được xóa thành công",
     delete_confirm: "Bạn có chắc chắn muốn xóa tệp này không?",
     delete_btn: "Xóa tệp đính kèm",

@@ -28,7 +28,7 @@ struct UserAvatar: View {
         Text(email).foregroundStyle(Color("title")).padding(.trailing, 10)
       }
       .padding(2)
-      .background(RoundedRectangle(cornerRadius: 16).fill(Color.block))
+      .background(RoundedRectangle(cornerRadius: 16).fill(AppColors.block))
       Spacer()
     }
   }

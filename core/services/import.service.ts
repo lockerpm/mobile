@@ -164,7 +164,7 @@ export class ImportService implements ImportServiceAbstraction {
     private apiService: ApiService,
     private i18nService: I18nService,
     private collectionService: CollectionService,
-    private platformUtilsService: PlatformUtilsService,
+    private platformUtilsService: PlatformUtilsService
   ) {}
 
   getImportOptions(): ImportOption[] {
@@ -174,7 +174,7 @@ export class ImportService implements ImportServiceAbstraction {
   async import(
     importer: Importer,
     fileContents: string,
-    organizationId: string = null,
+    organizationId: string = null
   ): Promise<Error> {
     const importResult = await importer.parse(fileContents)
     if (importResult.success) {
@@ -360,7 +360,7 @@ export class ImportService implements ImportServiceAbstraction {
       }
       if (importResult.folderRelationships != null) {
         importResult.folderRelationships.forEach((r) =>
-          request.folderRelationships.push(new KvpRequest(r[0], r[1])),
+          request.folderRelationships.push(new KvpRequest(r[0], r[1]))
         )
       }
       return await this.apiService.postImportCiphers(request)
@@ -380,7 +380,7 @@ export class ImportService implements ImportServiceAbstraction {
       }
       if (importResult.collectionRelationships != null) {
         importResult.collectionRelationships.forEach((r) =>
-          request.collectionRelationships.push(new KvpRequest(r[0], r[1])),
+          request.collectionRelationships.push(new KvpRequest(r[0], r[1]))
         )
       }
       return await this.apiService.postImportOrganizationCiphers(organizationId, request)

@@ -11,11 +11,11 @@ import { ShareFolderData } from "app/static/types"
 export const FolderStoreModel = types
   .model("FolderStore")
   .props({
-    apiToken: types.maybeNull(types.string),
+    apiToken: types.string,
     folders: types.array(types.frozen()),
-    lastUpdate: types.maybeNull(types.number),
-    notSynchedFolders: types.array(types.string),   // Create in offline mode
-    notUpdatedFolders: types.array(types.string),   // Create in online mode but somehow not update yet
+    lastUpdate: types.number,
+    notSynchedFolders: types.array(types.string), // Create in offline mode
+    notUpdatedFolders: types.array(types.string), // Create in online mode but somehow not update yet
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -36,10 +36,10 @@ export const FolderStoreModel = types
 
     clearStore: (dataOnly?: boolean) => {
       if (!dataOnly) {
-        self.apiToken = null
+        self.apiToken = ""
       }
       self.folders = cast([])
-      self.lastUpdate = null
+      self.lastUpdate = 0
       self.notSynchedFolders = cast([])
       self.notUpdatedFolders = cast([])
     },
@@ -56,7 +56,7 @@ export const FolderStoreModel = types
 
     removeNotSync: (id: string) => {
       if (!self.notSynchedFolders.includes(id)) {
-        self.notSynchedFolders = cast(self.notSynchedFolders.filter(i => i !== id))
+        self.notSynchedFolders = cast(self.notSynchedFolders.filter((i) => i !== id))
       }
     },
 
@@ -72,7 +72,7 @@ export const FolderStoreModel = types
 
     removeNotUpdate: (id: string) => {
       if (self.notUpdatedFolders.includes(id)) {
-        self.notUpdatedFolders = cast(self.notUpdatedFolders.filter(i => i !== id))
+        self.notUpdatedFolders = cast(self.notUpdatedFolders.filter((i) => i !== id))
       }
     },
 
@@ -106,7 +106,14 @@ export const FolderStoreModel = types
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
-export interface FolderStore extends Instance<typeof FolderStoreModel> { }
-export interface FolderStoreSnapshotOut extends SnapshotOut<typeof FolderStoreModel> { }
-export interface FolderStoreSnapshotIn extends SnapshotIn<typeof FolderStoreModel> { }
-export const createFolderStoreDefaultModel = () => types.optional(FolderStoreModel, {})
+export interface FolderStore extends Instance<typeof FolderStoreModel> {}
+export interface FolderStoreSnapshotOut extends SnapshotOut<typeof FolderStoreModel> {}
+export interface FolderStoreSnapshotIn extends SnapshotIn<typeof FolderStoreModel> {}
+export const createFolderStoreDefaultModel = () =>
+  types.optional(FolderStoreModel, {
+    apiToken: "",
+    folders: [],
+    lastUpdate: 0,
+    notSynchedFolders: [], // Create in offline mode
+    notUpdatedFolders: [], // Create in online mode but somehow not update yet
+  })

@@ -1,248 +1,539 @@
-import { NavigatorScreenParams } from "@react-navigation/native"
-import { StackScreenProps } from "@react-navigation/stack"
-import { LockType } from "app/screens/unauth/lock/lock.types"
+import { AndroidAutofillServiceData } from "@/utils/autofillHelper"
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
+import { CompositeScreenProps, NavigatorScreenParams } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { TxKeyPath } from "app/i18n"
 import {
   AppNotification,
-  LOGIN_METHOD,
+  BreanchResult,
+  CipherActionsModal,
+  CipherAppView,
+  CipherEditHelperModal,
+  CipherEditMode,
+  FamilyMember,
+  FolderActionsModal,
+  LockType,
+  LoginOptions,
   MarketingContent,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
+  RelayAddress,
+  SharedGroupType,
+  SharedMemberType,
+  SharedWithYouType,
+  SubdomainData,
   TrustedContact,
+  User2FAPasswordConfig,
+  User2FAPincodeConfig,
 } from "app/static/types"
-import { AndroidAutofillServiceData } from "app/utils/autofillHelper"
-import { CipherView } from "core/models/view/cipherView"
+import { CipherType } from "core/enums"
 import { CollectionView } from "core/models/view/collectionView"
+import { FolderView } from "core/models/view/folderView"
 import { SendView } from "core/models/view/sendView"
 
 // ---------------------------ROOT Navigator---------------------------
-export type RootParamList = {
+export type AppRoute = {
   init: undefined
-  intro: {
-    preview?: boolean
-  }
-  onBoarding: undefined
-  lock: {
-    temporaryLock?: boolean
-    type?: LockType
-    // onpremise data
-    data?: OnPremisePreloginData
-    email?: string
-  }
-  login: {
-    initMethod?: LOGIN_METHOD
-    email?: string
-  }
-  login_by_pincode: {
+  lock:
+    | {
+        temporaryLock?: boolean
+        type: LockType.Individual
+      }
+    | {
+        temporaryLock?: boolean
+        type: LockType.OnPremise
+        data: OnPremisePreloginData
+        email: string
+      }
+  unAuthStack: NavigatorScreenParams<UnAuthRoute>
+  authStack: NavigatorScreenParams<AuthRoute>
+}
+
+export type AppScreenProps<T extends keyof AppRoute> = NativeStackScreenProps<AppRoute, T>
+
+// ---------------------------Login---------------------------
+
+export type LoginRoute = {
+  login:
+    | {
+        initMethod?: LoginOptions
+        email?: string
+      }
+    | undefined
+  loginByPincode: {
     email: string
     // user register by password of not
     havePassword: boolean
   }
-  forgotPassword: {
-    email?: string
-  }
+  twoFA:
+    | {
+        type: "password"
+        credential: User2FAPasswordConfig
+      }
+    | {
+        type: "pincode"
+        credential: User2FAPincodeConfig
+      }
+}
+
+export type LoginScreenProps<T extends keyof LoginRoute> = CompositeScreenProps<
+  NativeStackScreenProps<LoginRoute, T>,
+  UnAuthScreenProps<keyof UnAuthRoute>
+>
+// --------------------------Signup--------------------------
+
+export type SignupRoute = {
   signup: undefined
-  signup_pin_code: {
+  signupPinCode: {
     email: string
     getNews: boolean
   }
-  signup_password: {
+  signupPassword: {
     email: string
   }
-  createMasterPassword: undefined
-  mainStack: NavigatorScreenParams<PrimaryParamList>
+}
 
-  // vinsso
+export type SignUpScreenProps<T extends keyof SignupRoute> = CompositeScreenProps<
+  NativeStackScreenProps<SignupRoute, T>,
+  UnAuthScreenProps<keyof UnAuthRoute>
+>
+// --------------------------SSO--------------------------
+
+export type SSORoute = {
   ssoIdentifier: undefined
   ssoLogin: OnPremiseIdentifierData
 }
 
-export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
+export type SSOScreenProps<T extends keyof SSORoute> = CompositeScreenProps<
+  NativeStackScreenProps<SSORoute, T>,
+  UnAuthScreenProps<keyof UnAuthRoute>
+>
 
-// ---------------------------TABS Navigator---------------------------
-
-export type TabsParamList = {
-  homeTab: undefined
-  browseTab: NavigatorScreenParams<BrowseParamList>
-  authenticatorTab: undefined
-  toolsTab: undefined
-  menuTab: NavigatorScreenParams<MenuParamList>
-}
-
-// ---------------------------BROWSE Navigator---------------------------
-
-export type BrowseParamList = {
-  browseList: undefined
-  folders: undefined
-  cards: undefined
-  passwords: undefined
-  notes: undefined
-  identities: undefined
-  shares: undefined
-  sharedItems: undefined
-  quickShareItems: undefined
-  quickShareItemsDetail: {
-    send: SendView
+// --------------------------Forgot password--------------------------
+export type ForgotPasswordRoute = {
+  methodSelect: undefined
+  otp: {
+    email: string // for get OTP
+    username: string
   }
-  shareItems: undefined
-  trash: undefined
-  cryptoWallets: undefined
+  changePassword: {
+    username: string
+    token: string
+  }
 }
 
-export type BrowseStackScreenProps<T extends keyof BrowseParamList> = StackScreenProps<
-  BrowseParamList,
-  T
+export type ForgotPasswordScreenProps<T extends keyof ForgotPasswordRoute> = CompositeScreenProps<
+  NativeStackScreenProps<ForgotPasswordRoute, T>,
+  UnAuthScreenProps<keyof UnAuthRoute>
 >
-// ---------------------------MENU Navigator---------------------------
 
-export type MenuParamList = {
-  menu: undefined
+// --------------------------Unauth--------------------------
+
+export type UnAuthRoute = {
+  intro: undefined
+  onBoarding: undefined
+  createMasterPassword: undefined
+  forgotPasswordStack: NavigatorScreenParams<ForgotPasswordRoute>
+  loginStack: NavigatorScreenParams<LoginRoute>
+  signupStack: NavigatorScreenParams<SignupRoute>
+  ssoStack: NavigatorScreenParams<SSORoute>
 }
 
-// ---------------------------TOOLS Navigator---------------------------
-
-export type ToolsParamList = {
-  passwordHealth: undefined
-  weakPasswordList: undefined
-  reusePasswordList: undefined
-  exposedPasswordList: undefined
-  privateRelay: undefined
-}
-
-export type ToolsStackScreenProps<T extends keyof ToolsParamList> = StackScreenProps<
-  ToolsParamList,
-  T
+export type UnAuthScreenProps<T extends keyof UnAuthRoute> = CompositeScreenProps<
+  NativeStackScreenProps<UnAuthRoute, T>,
+  AppScreenProps<keyof AppRoute>
 >
+
 // ---------------------------MAIN Navigator---------------------------
 
-export type PrimaryParamList = {
-  marketing: {
+export type AndroidAutofillRoute = {
+  passwordList: {
+    data: AndroidAutofillServiceData
+  }
+  passwordActionsModal: {
+    item: CipherAppView
+  }
+  passwordGenModal: undefined
+}
+
+export type AuthRoute = {
+  cipherActionsModal: {
+    mode: CipherActionsModal
+    item?: CipherAppView
+
+    /**
+     * Delete ids for multiple ciphers, if start with CipherActionsModal.DEFAULT
+     * it will be item.id
+     */
+    deleteIds: string[]
+
+    /**
+     * Permanent delete, only use in Trash screen
+     */
+    isDeleted?: boolean
+  }
+
+  addCipherModal:
+    | {
+        folderId?: string
+        collectionId?: string
+      }
+    | undefined
+
+  marketingModal: {
     data: MarketingContent
   }
 
-  mainTab: {
-    screen?: string
-  }
-  toolsStack: NavigatorScreenParams<ToolsParamList>
-  // start: undefined
+  qrScannerModal: undefined
 
+  androidAutofillStack: NavigatorScreenParams<AndroidAutofillRoute>
+  mainTab: NavigatorScreenParams<TabsRoute>
+  toolsStack: NavigatorScreenParams<ToolsRoute>
+  menuStack: NavigatorScreenParams<MenuRoute>
+  browseStack: NavigatorScreenParams<BrowseRoute>
+  homeStack: NavigatorScreenParams<HomeRoute>
+}
+
+export type AuthScreenProps<T extends keyof AuthRoute> = CompositeScreenProps<
+  NativeStackScreenProps<AuthRoute, T>,
+  AppScreenProps<keyof AppRoute>
+>
+
+export type AndroidAutofillScreenProps<T extends keyof AndroidAutofillRoute> = CompositeScreenProps<
+  NativeStackScreenProps<AndroidAutofillRoute, T>,
+  AuthScreenProps<keyof AuthRoute>
+>
+
+// ---------------------------Home Navigator---------------------------
+
+export type HomeRoute = {
   enterpriseInvited: undefined
   biometricUnlockIntro: undefined
+  appListNoti: {
+    notifications: AppNotification
+  }
+}
 
-  passwordGenerator: {
-    fromTools?: boolean
-  }
-  authenticator__edit: {
-    mode: "add" | "edit"
-    passwordTotp?: boolean
-    passwordMode?: "add" | "edit" | "clone"
-  }
-  qrScanner: {
-    totpCount?: number
-    passwordTotp?: boolean
-    passwordMode?: "add" | "edit" | "clone"
-  }
-  dataBreachScanner: undefined
-  dataBreachList: undefined
-  dataBreachDetail: undefined
-  countrySelector: undefined
+export type HomeScreenProps<T extends keyof HomeRoute> = CompositeScreenProps<
+  NativeStackScreenProps<HomeRoute, T>,
+  AuthScreenProps<keyof AuthRoute>
+>
 
-  normal_shares: {
-    ciphers?: CipherView[]
+// ---------------------------TABS Navigator---------------------------
+
+export type TabsRoute = {
+  homeTab: undefined
+  browseTab: undefined
+  authenticatorTab: undefined
+  toolsTab: undefined
+  menuTab: undefined
+}
+export type TabsScreenProps<T extends keyof TabsRoute> = CompositeScreenProps<
+  BottomTabScreenProps<TabsRoute, T>,
+  AuthScreenProps<keyof AuthRoute>
+>
+
+// ---------------------------BROWSE Navigator---------------------------
+
+export type ShareRoute = {
+  confirmYourShareModal: {
+    organizationId: string
+    member: SharedMemberType
   }
-  quick_shares: {
-    cipher: CipherView
+  pendingSharedCipherModal: {
+    cipher: SharedWithYouType
   }
-  quickShareItemsDetail: {
+  quickSharesActionsModal: {
+    cipher: SendView
+  }
+  sharesHome: undefined
+  yourShareCipherList: undefined
+  sharedWithYouCipherList: undefined
+  quickShareCipherList: undefined
+  quickShareCipherDetail: {
     send: SendView
   }
+  quickShares: {
+    cipher: CipherAppView
+  }
+  quickSharesSelectCipher: undefined
 
-  passwords__info: {
+  normalShare: {
+    ciphers: CipherAppView[]
+  }
+  manageSharedMember: {
+    cipher: CipherAppView
+    isFromShare?: boolean
+  }
+  manageSharedMemberModal: {
+    member?: SharedMemberType
+    group?: SharedGroupType
+    cipher: CipherAppView
+  }
+
+  folderShare: {
+    folder: FolderView | CollectionView
+  }
+  manageFolderSharedMember: {
+    collection: CollectionView
+    isFromShare?: boolean
+  }
+  manageFolderSharedMemberModal: {
+    member?: SharedMemberType
+    group?: SharedGroupType
+    collection: CollectionView
+  }
+}
+
+export type BrowseRoute = {
+  folderActionModal: {
+    mode: FolderActionsModal
+
+    folder?: FolderView
+    collection?: CollectionView
+  }
+
+  cipherEditHelperModal: {
+    mode: CipherEditHelperModal
+  }
+
+  attachment: {
+    cipher: CipherAppView
+    // open attachmet screen from shared cipher or not
+    isShared?: boolean
+  }
+
+  cipherList: {
+    cipherTypes?: CipherType[]
+
+    // cipherList header
+    header?: string
+    headerTx?: TxKeyPath
+
+    // Open from folder item in FolderList
+    folderId?: string
+
+    // Open from collection item in FolderList
+    collectionId?: string
+    organizationId?: string
+
+    // Deleted cipher (trash screen)
+    isDeleted?: boolean
+  }
+
+  cipherDetail: {
+    cipher: CipherAppView
+
+    // If cipher is from quick share
     quickShare?: boolean
   }
-  passwords__edit: {
-    mode: "add" | "edit" | "clone"
-    initialUrl?: string
-    collection?: CollectionView
+
+  cipherEdit: {
+    // mode: "add" | "edit" | "clone"
+    mode: CipherEditMode
+
+    // cipher type to add or edit
+    cipherType: CipherType
+
+    // cipher to edit, if mode is "edit" or "clone"
+    cipher?: CipherAppView
+
+    // add cipher from Collection Ciphers view
+    initCollectionIds?: string[]
+
+    // add cipher from Folder Ciphers view
+    initFolderId?: string
+
+    // add password from android Autofill Service
+    initialUrl?: string // app domain
     androidAutofillSavedData?: AndroidAutofillServiceData
   }
-  passwords_2fa_setup: {
-    mode: "add" | "edit" | "clone"
-  }
-  passwords_history: undefined
 
-  notes__info: {
-    quickShare?: boolean
-  }
-  notes__edit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-  cards__info: {
-    quickShare?: boolean
-  }
-  cards__edit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-  identities__info: {
-    quickShare?: boolean
-  }
-  identities__edit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-  cryptoWallets__info: {
-    quickShare?: boolean
-  }
-  cryptoWallets__edit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
-
-  folders__select: {
+  folderList: undefined
+  folderSelect: {
+    // mode === "add": navigate from cipher edit screen
+    // mode === "move": navigate from cipher list when user want  move ciphers to folder
     mode: "add" | "move"
     initialId?: string
     cipherIds?: string[]
   }
-  folders__ciphers: {
-    folderId?: string | null
-    collectionId?: string | null
-    organizationId?: string | null
+  otpSelect: {
+    selectedOtp: string
   }
-  shareFolder: {
-    collectionId: string
+  shareStack: NavigatorScreenParams<ShareRoute>
+  passwordsHistory: {
+    cipher: CipherAppView
   }
-  manage_plan: undefined
-  payment: {
-    benefitTab?: 0 | 1 | 2 | 3
-    family?: boolean
-    premium?: boolean
+}
+
+export type BrowseScreenProps<T extends keyof BrowseRoute> = CompositeScreenProps<
+  NativeStackScreenProps<BrowseRoute, T>,
+  AuthScreenProps<keyof AuthRoute>
+>
+
+export type ShareScreenProps<T extends keyof ShareRoute> = CompositeScreenProps<
+  NativeStackScreenProps<ShareRoute, T>,
+  BrowseScreenProps<keyof BrowseRoute>
+>
+
+// ---------------------------TOOLS---------------------------
+
+export type PasswordHealthRoute = {
+  passwordHealth: undefined
+  weakPasswordList: undefined
+  reusePasswordList: undefined
+  exposedPasswordList: undefined
+}
+
+export type DataBreachScannerRoute = {
+  emailInput: undefined
+  dataBreachList: {
+    email: string
+    data: BreanchResult[]
   }
-  refer_friend: {
-    referLink: string | null
+  dataBreachDetail: {
+    data: BreanchResult
   }
-  invite_member: undefined
+}
+
+export type ToolsRoute = {
+  passwordGenerator: undefined
+  passwordHealthStack: NavigatorScreenParams<PasswordHealthRoute> | undefined
+  privateRelayStack: NavigatorScreenParams<PrivateRelayRoute> | undefined
+  dataBreachScannerStack: NavigatorScreenParams<DataBreachScannerRoute> | undefined
+}
+
+export type ToolsScreenProps<T extends keyof ToolsRoute> = CompositeScreenProps<
+  NativeStackScreenProps<ToolsRoute, T>,
+  AuthScreenProps<keyof AuthRoute>
+>
+
+export type PasswordHealthScreenProps<T extends keyof PasswordHealthRoute> = CompositeScreenProps<
+  NativeStackScreenProps<PasswordHealthRoute, T>,
+  ToolsScreenProps<keyof ToolsRoute>
+>
+
+export type DataBreachScannerScreenProps<T extends keyof DataBreachScannerRoute> =
+  CompositeScreenProps<
+    NativeStackScreenProps<DataBreachScannerRoute, T>,
+    ToolsScreenProps<keyof ToolsRoute>
+  >
+
+// ---------------------Private Relay------------------------
+
+export type PrivateRelayRoute = {
+  relay: undefined
+  manageSubdomain: {
+    subdomain: SubdomainData
+  }
+  aliasStatistic: {
+    alias: RelayAddress
+  }
+  relayInfo: {
+    freeAccount: boolean
+    data:
+      | {
+          kind: "email"
+          email: string
+        }
+      | {
+          kind: "subdomain"
+          subdomain: string
+        }
+  }
+  relayAction: {
+    freeAccount: boolean
+    item: RelayAddress
+    isEditable: boolean
+    isEdit: boolean
+  }
+  editSubdomain: {
+    subdomain: SubdomainData
+  }
+  createSubdomain: undefined
+}
+
+export type PrivateRelayScreenProps<T extends keyof PrivateRelayRoute> = NativeStackScreenProps<
+  PrivateRelayRoute,
+  T
+>
+
+// ---------------------------Settings---------------------------
+
+export type MenuRoute = {
+  help: undefined
+  inviteToFamilyStack: NavigatorScreenParams<InviteToFamilyRoute>
+  settingsStack: NavigatorScreenParams<SettingsRoute>
+  payment:
+    | {
+        benefitTab?: 0 | 1 | 2 | 3
+        family?: boolean
+        premium?: boolean
+      }
+    | undefined
+  welcomePremium: undefined
+  referFriend: undefined
+}
+
+export type MenuScreenProps<T extends keyof MenuRoute> = CompositeScreenProps<
+  NativeStackScreenProps<MenuRoute, T>,
+  AuthScreenProps<keyof AuthRoute>
+>
+
+// ---------------------------Invite to family---------------------------
+
+export type InviteToFamilyRoute = {
+  manageMember: undefined
+  inviteMember: {
+    limit: number
+    familyMembers: FamilyMember[]
+  }
+  deleteMember: {
+    id: number
+    email: string
+    avatar?: string
+  }
+}
+
+export type InviteToFamilyScreenProps<T extends keyof InviteToFamilyRoute> = CompositeScreenProps<
+  NativeStackScreenProps<InviteToFamilyRoute, T>,
+  MenuScreenProps<keyof MenuRoute>
+>
+
+// ---------------------------Settings---------------------------
+
+export type SettingsRoute = {
   settings: undefined
   changeMasterPassword: undefined
-  help: undefined
   autofillService: undefined
   import: undefined
   export: undefined
-  autofill: {
-    data: AndroidAutofillServiceData
-  }
-  notificationSettings: undefined
-  emailNotiSettings: undefined
-  deviceNotiSettings: undefined
-  shareMultiple: undefined
+  emergencyStack: NavigatorScreenParams<EmergencyAccessRoute>
+  notiConfigStack: NavigatorScreenParams<NotificationSettingsRoute>
+}
 
-  welcome_premium: undefined
+export type SettingsScreenProps<T extends keyof SettingsRoute> = CompositeScreenProps<
+  NativeStackScreenProps<SettingsRoute, T>,
+  MenuScreenProps<keyof MenuRoute>
+>
 
-  app_list_noti: {
-    notifications: AppNotification
-  }
+// ------------------------Notification config-----------------------
 
-  emergencyAccess: undefined
+export type NotificationSettingsRoute = {
+  notiOptions: undefined
+  deviceNoti: undefined
+  emailNoti: undefined
+}
+
+export type NotificationSettingsScreenProps<T extends keyof NotificationSettingsRoute> =
+  CompositeScreenProps<
+    NativeStackScreenProps<NotificationSettingsRoute, T>,
+    SettingsScreenProps<keyof SettingsRoute>
+  >
+// -------------------------Emergency access-------------------------
+
+export type EmergencyAccessRoute = {
+  emergencyOptions: undefined
   yourTrustedContact: undefined
   contactsTrustedYou: undefined
   viewEA: {
@@ -252,12 +543,9 @@ export type PrimaryParamList = {
     trusted: TrustedContact
     reset_pw: boolean
   }
-  attachment: {
-    isShared?: boolean
-  }
 }
 
-export type AppStackScreenProps<T extends keyof PrimaryParamList> = StackScreenProps<
-  PrimaryParamList,
-  T
+export type EmergencyAccessScreenProps<T extends keyof EmergencyAccessRoute> = CompositeScreenProps<
+  NativeStackScreenProps<EmergencyAccessRoute, T>,
+  SettingsScreenProps<keyof SettingsRoute>
 >

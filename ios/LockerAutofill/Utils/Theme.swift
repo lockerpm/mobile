@@ -8,24 +8,12 @@
 import Foundation
 import SwiftUI
 
-extension Color {
-  public static var primary: Color {
-    return Color("primary")
-  }
-  public static var title: Color {
-    return Color("title")
-  }
-  public static var label: Color {
-    return Color("label")
-  }
-  public static var border: Color {
-    return Color("border")
-  }
-  public static var block: Color {
-    return Color("block")
-  }
-  public static var background: Color {
-    return Color("background")
-  }
-}
 
+struct AppColors {
+  static let primary = Color("primary")
+  static let title = Color("title")
+  static let label = Color("label")
+  static let border = Color("border")
+  static let block = Color("block")
+  static let background = Color("background")
+}

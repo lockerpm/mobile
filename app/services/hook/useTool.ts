@@ -1,19 +1,19 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useStores } from "app/models"
 import { useCoreService } from "../coreService"
-import { useHelper } from "./useHelper"
 import { useCipherData } from "./useCipherData"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
-import { Logger } from "app/utils/utils"
 import { AccountRole } from "app/static/types"
+import { useToast } from "../utils"
+import { getTeam } from "@/utils/cipherHelper"
+import { Logger } from "@/utils/logger"
 
 export function useTool() {
   const { user, toolStore, cipherStore } = useStores()
   const { passwordGenerationService, auditService, searchService } = useCoreService()
 
   const { getCiphers, getEncryptedCiphers, getCiphersFromCache } = useCipherData()
-  const { notify, translate, getTeam } = useHelper()
+  const { notifyTx, notify } = useToast()
 
   // ----------------------------- METHODS ---------------------------
 
@@ -138,7 +138,7 @@ export function useTool() {
                     .substr(0, atPosition)
                     .trim()
                     .toLowerCase()
-                    .split(/[^A-Za-z0-9]/),
+                    .split(/[^A-Za-z0-9]/)
                 )
                 .filter((i) => i.length >= 3)
             } else {
@@ -150,7 +150,7 @@ export function useTool() {
             }
           }
           const result = passwordGenerationService.passwordStrength(
-            c.login.password,
+            c.login.password
             // TODO: disable for now
             // userInput.length > 0 ? userInput : null
           )
@@ -180,7 +180,7 @@ export function useTool() {
       })
       const reusedPasswordCiphers = allCiphers.filter(
         (c: CipherView) =>
-          passwordUseMap.has(c.login.password) && passwordUseMap.get(c.login.password) > 1,
+          passwordUseMap.has(c.login.password) && passwordUseMap.get(c.login.password) > 1
       )
       toolStore.setLoadingHealth(false)
       toolStore.setWeakPasswords(weakPasswordCiphers)
@@ -190,10 +190,10 @@ export function useTool() {
       toolStore.setExposedPasswords(exposedPasswordCiphers)
       toolStore.setExposedPasswordMap(exposedPasswordMap)
     } catch (e) {
-      notify("error", translate("error.something_went_wrong"))
+      notifyTx("error", "error:something_went_wrong")
       Logger.error("loadPasswordsHealth: " + e)
-      toolStore.setLoadingHealth(false)
     }
+    toolStore.setLoadingHealth(false)
   }
 
   return {

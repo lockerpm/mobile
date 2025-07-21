@@ -1,14 +1,14 @@
-import { ApiResponse } from 'apisauce'
-import { detectTempId } from '../../utils/eventBus'
-import { Logger } from '../../utils/utils'
-import { Api, api } from './api'
-import { GeneralApiProblem, getGeneralApiProblem } from './apiProblem'
-import { FolderRequest } from 'core/models/request/folderRequest'
-import { CollectionActionData, EditShareCipherData, ShareFolderData } from 'app/static/types'
-import { CollectionRequest } from 'core/models/request/collectionRequest'
-import { CollectionResponse } from 'core/models/response/collectionResponse'
-import { CipherRequest } from 'core/models/request/cipherRequest'
-import { FolderResponse } from 'core/models/response/folderResponse'
+import { ApiResponse } from "apisauce"
+import { detectTempId } from "../../utils/eventBus"
+import { Api, api } from "./api"
+import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
+import { FolderRequest } from "core/models/request/folderRequest"
+import { CollectionActionData, EditShareCipherData, ShareFolderData } from "app/static/types"
+import { CollectionRequest } from "core/models/request/collectionRequest"
+import { CollectionResponse } from "core/models/response/collectionResponse"
+import { CipherRequest } from "core/models/request/cipherRequest"
+import { FolderResponse } from "core/models/response/folderResponse"
+import { Logger } from "@/utils/logger"
 
 class FolderApi {
   private api: Api = api
@@ -19,9 +19,9 @@ class FolderApi {
     organizationId: string,
     groupID: string,
     payload: EditShareCipherData
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -33,10 +33,10 @@ class FolderApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      Logger.error('Edit share cipher: ' + e.message)
-      return { kind: 'bad-data' }
+      Logger.error("Edit share cipher: ", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -44,10 +44,10 @@ class FolderApi {
   async getFolder(
     token: string,
     id: string
-  ): Promise<{ kind: 'ok'; data: FolderResponse } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok"; data: FolderResponse } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -60,10 +60,10 @@ class FolderApi {
       }
       const res = new FolderResponse(response.data)
 
-      return { kind: 'ok', data: res }
+      return { kind: "ok", data: res }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("getFolder", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -71,13 +71,13 @@ class FolderApi {
   async postFolder(
     token: string,
     data: FolderRequest
-  ): Promise<{ kind: 'ok'; data: FolderResponse } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok"; data: FolderResponse } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        '/cystack_platform/pm/folders',
+        "/cystack_platform/pm/folders",
         data
       )
       // the typical ways to die when calling an api
@@ -86,10 +86,10 @@ class FolderApi {
         if (problem) return problem
       }
       const res = new FolderResponse(response.data)
-      return { kind: 'ok', data: res }
+      return { kind: "ok", data: res }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("postFolder", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -98,10 +98,10 @@ class FolderApi {
     token: string,
     id: string,
     data: FolderRequest
-  ): Promise<{ kind: 'ok'; data: FolderResponse } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok"; data: FolderResponse } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -114,18 +114,18 @@ class FolderApi {
         if (problem) return problem
       }
       const res = new FolderResponse(response.data)
-      return { kind: 'ok', data: res }
+      return { kind: "ok", data: res }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("putFolder", e)
+      return { kind: "bad-data" }
     }
   }
 
   // Delete folder
-  async deleteFolder(token: string, id: string): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  async deleteFolder(token: string, id: string): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(
@@ -136,10 +136,10 @@ class FolderApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("deleteFolder", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -147,9 +147,9 @@ class FolderApi {
   async shareFolder(
     token: string,
     payload: ShareFolderData
-  ): Promise<{ kind: 'ok'; data: { id: string } } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok"; data: { id: string } } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -163,10 +163,10 @@ class FolderApi {
       }
       const data = response.data
 
-      return { kind: 'ok', data }
+      return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("shareFolder", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -177,10 +177,10 @@ class FolderApi {
     token: string,
     teamId: string,
     data: CollectionRequest
-  ): Promise<{ kind: 'ok'; data: CollectionResponse } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok"; data: CollectionResponse } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -193,10 +193,10 @@ class FolderApi {
         if (problem) return problem
       }
       const res = new CollectionResponse(response.data)
-      return { kind: 'ok', data: res }
+      return { kind: "ok", data: res }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("postCollection", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -206,10 +206,10 @@ class FolderApi {
     id: string,
     teamId: string,
     data: CollectionRequest
-  ): Promise<{ kind: 'ok'; data: CollectionResponse } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok"; data: CollectionResponse } | GeneralApiProblem> {
     try {
       detectTempId([id, teamId])
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -222,10 +222,10 @@ class FolderApi {
         if (problem) return problem
       }
       const res = new CollectionResponse(response.data)
-      return { kind: 'ok', data: res }
+      return { kind: "ok", data: res }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("putCollection", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -235,10 +235,10 @@ class FolderApi {
     id: string,
     teamId: string,
     payload: CollectionActionData
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id, teamId])
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -250,10 +250,10 @@ class FolderApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("deleteCollection", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -263,10 +263,10 @@ class FolderApi {
     id: string,
     teamId: string,
     payload: CollectionActionData
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id, teamId])
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -278,10 +278,10 @@ class FolderApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("stopShare", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -292,10 +292,10 @@ class FolderApi {
     teamId: string,
     payload: CollectionActionData,
     isGroup?: boolean
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       let response: ApiResponse<any>
@@ -317,10 +317,10 @@ class FolderApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("removeShareMember", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -328,10 +328,10 @@ class FolderApi {
     token: string,
     teamId: string,
     members: any[]
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -343,10 +343,10 @@ class FolderApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("addShareMember", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -355,10 +355,10 @@ class FolderApi {
     id: string,
     teamId: string,
     payload: { cipher: CipherRequest & { id: string } }
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -370,10 +370,10 @@ class FolderApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("updateShareItem", e)
+      return { kind: "bad-data" }
     }
   }
 
@@ -383,10 +383,10 @@ class FolderApi {
     id: string,
     teamId: string,
     payload: { cipher: CipherRequest & { id: string } }
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -398,10 +398,10 @@ class FolderApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
+      Logger.error("removeShareItem", e)
+      return { kind: "bad-data" }
     }
   }
 }
