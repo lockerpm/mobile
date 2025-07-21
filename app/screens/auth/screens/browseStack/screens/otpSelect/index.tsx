@@ -1,14 +1,14 @@
 import { BrowseScreenProps } from "@/navigators"
 import { FC, useCallback, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Screen, Header, Text } from "app/components/cores"
+import { Screen, Header, Text, PressableScale } from "app/components/cores"
 import { useStores } from "app/models"
 import { FREE_PLAN_LIMIT } from "app/static/constants"
 import { CipherActionsModal, CipherAppView } from "@/static/types"
 import { CipherType } from "core/enums"
 import { delay } from "@/utils/delay"
 import { OTPAddAction, OtpList } from "@/components/ciphers"
-import { View, ViewStyle } from "react-native"
+import { ViewStyle } from "react-native"
 import { AppEventType, EventBus } from "@/utils/eventBus"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
@@ -34,9 +34,9 @@ export const OtpSelectScreen: FC<BrowseScreenProps<"otpSelect">> = observer(
     const disableAddmore = user.isFreePlan && otpCount === FREE_PLAN_LIMIT.OTP
     // -------------------- METHODS ----------------------
 
-    const navigateToCipherActions = useCallback(
-      (item: CipherAppView) => {
-        EventBus.emit(AppEventType.CIPHER_EDIT_OTP_SELECT, item.notes)
+    const selectOtp = useCallback(
+      (item?: CipherAppView) => {
+        EventBus.emit(AppEventType.CIPHER_EDIT_OTP_SELECT, item?.notes || "")
         navigation.goBack()
       },
       [navigation]
@@ -101,17 +101,18 @@ export const OtpSelectScreen: FC<BrowseScreenProps<"otpSelect">> = observer(
           isPasswordEdit
           selectedOtp={selectedOtp}
           setOtpCount={setOtpCount}
-          openActionMenu={navigateToCipherActions}
+          openActionMenu={selectOtp}
           openAddMenu={openAddOtpMenu}
           ListHeaderComponent={
-            <View
+            <PressableScale
               style={[
                 themed($item),
                 { borderColor: !selectedOtp ? colors.primary : colors.border },
               ]}
+              onPress={() => selectOtp()}
             >
               <Text tx="password:no_otp" />
-            </View>
+            </PressableScale>
           }
         />
       </Screen>

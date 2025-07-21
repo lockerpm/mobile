@@ -8,6 +8,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { ThemedStyle } from "@/theme"
 import { useNavigation } from "@react-navigation/native"
 import { BrowseScreenProps } from "@/navigators"
+import { CipherEditActionField } from "../cipherEdit/CipherEditActionField"
 
 export interface CipherOthersInfoProps {
   isOwner: boolean
@@ -38,6 +39,27 @@ export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
       </View>
 
       <View style={themed($container)}>
+        <CipherEditActionField
+          haveValue={!!folder || !!collection}
+          editable={!isDeleted}
+          onPress={() => {
+            navigation.navigate("folderSelect", {
+              mode: "add",
+              initialId: folder?.id || collection?.id,
+            })
+          }}
+        >
+          <View style={styles.folderContainer}>
+            <View>
+              <Text preset="label" tx={"common:folders"} size="sm" style={styles.mb5} />
+              <Text
+                text={folder?.name || collection?.name || translate("common:none")}
+                numberOfLines={2}
+              />
+            </View>
+            <Icon icon="caret-right" size={20} color={colors.label} />
+          </View>
+        </CipherEditActionField>
         {/* Folder */}
         {isOwner && (
           <TouchableOpacity
