@@ -110,6 +110,10 @@ export const imageRegistry = {
   folder: require("assets/images/icons/folder/folder.png"),
   "folder-add": require("assets/images/icons/folder/folder-add.png"),
   "folder-share": require("assets/images/icons/folder/folder-share.png"),
+  lookup: require("assets/images/icons/tools/lookup.png"),
+  myReport: require("assets/images/icons/tools/myReport.png"),
+  report: require("assets/images/icons/tools/report.png"),
+  scam: require("assets/images/icons/tools/scam.png"),
 }
 
 const $imageStyle: ImageStyle = {

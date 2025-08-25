@@ -2,8 +2,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
 import {
   SharedWithYouScreen,
-  // FolderSharedUsersManagementScreen,
-  // ShareMultipleScreen,
   SharesHomeScreen,
   YourShareScreen,
   QuickShareScreen,
@@ -19,6 +17,7 @@ import {
   FolderSharesScreen,
   ManageFolderSharedMemberScreen,
   ManageFolderShareMemberModalScreen,
+  EditShareMemberPermissionModalScreen,
 } from "./screens"
 import { modalScreenOptions, ShareRoute } from "@/navigators"
 
@@ -40,6 +39,10 @@ export const ShareStack = observer(() => {
           name="manageFolderSharedMemberModal"
           component={ManageFolderShareMemberModalScreen}
         />
+        <Stack.Screen
+          name="editShareMemberPermissionModal"
+          component={EditShareMemberPermissionModalScreen}
+        />
       </Stack.Group>
       <Stack.Screen name="sharesHome" component={SharesHomeScreen} />
       <Stack.Screen name="sharedWithYouCipherList" component={SharedWithYouScreen} />
@@ -52,8 +55,6 @@ export const ShareStack = observer(() => {
       <Stack.Screen name="manageSharedMember" component={ManageSharedMemberScreen} />
       <Stack.Screen name="folderShare" component={FolderSharesScreen} />
       <Stack.Screen name="manageFolderSharedMember" component={ManageFolderSharedMemberScreen} />
-      {/* <Stack.Screen name="shareFolder" component={FolderSharedUsersManagementScreen} /> */}
-      {/* <Stack.Screen name="shareMultiple" component={ShareMultipleScreen} /> */}
     </Stack.Navigator>
   )
 })

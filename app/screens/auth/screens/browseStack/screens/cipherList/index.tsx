@@ -43,19 +43,21 @@ export const CipherListScreen: FC<BrowseScreenProps<"cipherList">> = observer(
       },
     },
   }) => {
-    const { user, cipherStore } = useStores()
+    const { user, cipherStore, uiStore } = useStores()
     const { restoreCiphers } = useCipherData()
 
     const organizations = cipherStore.organizations
     // -------------- PARAMS ------------------
     const [isSortOpen, setIsSortOpen] = useState(false)
-    const [sortConfig, setSortConfig] = useState<SortConfigType>({
-      sort: {
-        orderField: "revisionDate",
-        order: "desc",
-      },
-      option: "last_updated",
-    })
+    const [sortConfig, setSortConfig] = useState<SortConfigType>(
+      uiStore.sortConfig || {
+        sort: {
+          orderField: "revisionDate",
+          order: "desc",
+        },
+        option: "last_updated",
+      }
+    )
 
     const allCipher = useRef<CipherAppView[]>([])
     const [isSelecting, setIsSelecting] = useState(false)

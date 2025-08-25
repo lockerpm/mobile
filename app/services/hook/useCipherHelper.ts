@@ -52,7 +52,7 @@ export function useCipherHelper() {
   }
 
   // Password strength
-  const getPasswordStrength = (password: string) => {
+  const getPasswordStrength = (password: string): { score: number } => {
     return passwordGenerationService.passwordStrength(password, ["cystack"]) || { score: 0 }
   }
 

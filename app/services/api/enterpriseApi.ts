@@ -15,7 +15,7 @@ class EnterpriseApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/enterprises/user_groups`
+        `/v3/cystack_platform/pm/enterprises/user_groups`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -38,7 +38,7 @@ class EnterpriseApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/enterprises/user_groups/${groupId}/members`
+        `/v3/cystack_platform/pm/enterprises/user_groups/${groupId}/members`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -71,7 +71,7 @@ class EnterpriseApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/enterprises/${enterpriseId}/members_groups/search`,
+        `/v3/cystack_platform/pm/enterprises/${enterpriseId}/members_groups/search`,
         { query }
       )
       // the typical ways to die when calling an api
@@ -101,7 +101,7 @@ class EnterpriseApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/enterprises/members/invitations`
+        `/v3/cystack_platform/pm/enterprises/members/invitations`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -125,7 +125,7 @@ class EnterpriseApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/enterprises/members/invitations/${id}`,
+        `/v3/cystack_platform/pm/enterprises/members/invitations/${id}`,
         { status }
       )
       // the typical ways to die when calling an api

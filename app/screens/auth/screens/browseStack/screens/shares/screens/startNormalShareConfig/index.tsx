@@ -1,14 +1,16 @@
-import { FC, useCallback, useState } from "react"
-import { View, StyleSheet, ViewStyle, ScrollView } from "react-native"
-import { Header, PressableIcon, PressableText, Screen, Text } from "app/components/cores"
+import { FC, useCallback, useEffect, useState } from "react"
+import { View, StyleSheet, ScrollView } from "react-native"
+import { Header, PressableText, Screen, Text } from "app/components/cores"
 import { AccountRoleText, CipherAppView } from "app/static/types"
-import { useCipherData } from "app/services/hook"
 import { observer } from "mobx-react-lite"
 import { ShareScreenProps } from "@/navigators"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { ThemedStyle } from "@/theme"
 import { EmailInput } from "./EmailInput"
 import { ShareCipherList } from "./ShareCipherList"
+import { AppEventType, EventBus } from "@/utils/eventBus"
+import { useShareMultipleCiphers } from "./useShareMultipleCiphers"
+import { Member } from "./Member"
+import { Group } from "./Group"
 
 export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
   ({
@@ -18,16 +20,15 @@ export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
     },
   }) => {
     const {
-      themed,
       theme: { colors },
     } = useAppTheme()
-    const { shareMultipleCiphers } = useCipherData()
+    const { shareMultipleCiphers } = useShareMultipleCiphers()
 
     // --------------- PARAMS ----------------
     const [isSharing, setIsSharing] = useState(false)
     const [shareCiphers, setShareCiphers] = useState<CipherAppView[]>(ciphers)
-    const [emails, setEmails] = useState<string[]>([])
-    const [groups, setGroups] = useState<{ name: string; id: string }[]>([])
+    const [emails, setEmails] = useState<{ email: string; role: AccountRoleText }[]>([])
+    const [groups, setGroups] = useState<{ name: string; id: string; role: AccountRoleText }[]>([])
     // --------------- COMPUTED ----------------
 
     const cipherIds = shareCiphers.map((c) => c.id)
@@ -47,25 +48,57 @@ export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
     }
 
     const removeEmail = (val: string) => {
-      setEmails(emails.filter((e) => e !== val))
+      setEmails(emails.filter((e) => e.email !== val))
+    }
+
+    const removeGroup = (id: string) => {
+      setGroups(groups.filter((group) => group.id !== id))
     }
 
     // Share single/multiple
     const handleShare = async () => {
       setIsSharing(true)
 
-      const res = await shareMultipleCiphers(
-        cipherIds,
-        emails,
-        AccountRoleText.MEMBER,
-        false,
-        groups
-      )
+      const res = await shareMultipleCiphers(cipherIds, emails, groups, false)
       if (res.kind === "ok" || res.kind === "unauthorized") {
+        EventBus.emit(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, null)
         navigation.goBack()
       }
       setIsSharing(false)
     }
+
+    const changeEmailRole = useCallback(
+      (email: string, role: AccountRoleText) => {
+        if (!email) {
+          return
+        }
+        const temp = [...emails]
+        const index = temp.findIndex((e) => e.email === email)
+
+        if (index === -1 || temp[index].role === role) {
+          return
+        }
+        temp[index].role = role
+        setEmails(temp)
+      },
+      [emails]
+    )
+
+    const changeGroupRole = useCallback(
+      (id: string, role: AccountRoleText) => {
+        if (!id) {
+          return
+        }
+        const temp = [...groups]
+        const index = temp.findIndex((e) => e.id === id)
+        if (index === -1 || temp[index].role === role) {
+          return
+        }
+        temp[index].role = role
+        setGroups(temp)
+      },
+      [groups]
+    )
 
     const navigateToManageMember = useCallback(() => {
       if (!!selectedCipher && !!selectedCipher.organizationId) {
@@ -75,6 +108,33 @@ export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
         })
       }
     }, [navigation, selectedCipher])
+
+    const navigateToEditMember = useCallback(
+      (id: string, val: string, role: AccountRoleText) => {
+        navigation.navigate("editShareMemberPermissionModal", {
+          id,
+          value: val,
+          role,
+        })
+      },
+      [navigation]
+    )
+
+    // --------------------------EFFECT----------------------------
+
+    useEffect(() => {
+      const listener1 = EventBus.createListener(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, (data) => {
+        console.log(data)
+        if (data) {
+          changeEmailRole(data?.id, data?.role)
+          changeGroupRole(data?.id, data?.role)
+        }
+      })
+
+      return () => {
+        EventBus.removeListener(listener1)
+      }
+    }, [changeEmailRole, changeGroupRole])
 
     // --------------- RENDER ----------------
 
@@ -101,7 +161,7 @@ export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
       >
         <View style={styles.header}>
           <Text
-            tx={"shares:share_x_items"}
+            tx={shareCiphers.length > 1 ? "shares:share_x_items" : "shares:share_x_item"}
             txOptions={{ count: shareCiphers.length }}
             style={styles.email}
           />
@@ -117,26 +177,26 @@ export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
 
         <ShareCipherList ciphers={shareCiphers} removeShareCipher={removeShareCipher} />
 
-        <Text text="Share with:" style={styles.mv12} />
+        <Text tx="common:shareWith" style={styles.mv12} />
         <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
           {emails.map((e, index) => {
             return (
-              <View key={index} style={themed($shareMember)}>
-                <Text text={e} style={styles.email} />
-                <PressableIcon icon="trash" size={20} onPress={() => removeEmail(e)} />
-              </View>
+              <Member
+                member={e}
+                key={index}
+                removeEmail={removeEmail}
+                navigateToEditMember={navigateToEditMember}
+              />
             )
           })}
           {groups.map((e, index) => {
             return (
-              <View key={index} style={themed($shareMember)}>
-                <Text text={e.name} style={styles.email} />
-                <PressableIcon
-                  icon="trash"
-                  size={20}
-                  onPress={() => setGroups(groups.filter((group) => group.id !== e.id))}
-                />
-              </View>
+              <Group
+                group={e}
+                key={index}
+                removeGroup={removeGroup}
+                navigateToEditGroup={navigateToEditMember}
+              />
             )
           })}
         </ScrollView>
@@ -144,19 +204,6 @@ export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
     )
   }
 )
-
-const $shareMember: ThemedStyle<ViewStyle> = ({ colors }) => ({
-  borderRadius: 8,
-  borderWidth: 0.5,
-  borderColor: colors.border,
-  backgroundColor: colors.block,
-  paddingHorizontal: 16,
-  marginBottom: 16,
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-  paddingVertical: 6,
-})
 
 const styles = StyleSheet.create({
   cipherContent: {
@@ -194,11 +241,18 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 12,
   },
+  mh4: {
+    marginHorizontal: 4,
+  },
   mt20: {
     marginTop: 20,
   },
   mv12: {
     marginVertical: 12,
+  },
+  row: {
+    alignItems: "center",
+    flexDirection: "row",
   },
   screenContent: {
     flex: 1,

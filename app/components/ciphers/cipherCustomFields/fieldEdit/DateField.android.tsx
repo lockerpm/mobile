@@ -1,14 +1,14 @@
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { Keyboard, StyleSheet, TouchableOpacity } from "react-native"
 import moment from "moment"
 import { DateTimePickerAndroid, DateTimePickerEvent } from "@react-native-community/datetimepicker"
 import { FieldType } from "core/enums"
 import { useAppLocale } from "@/i18n"
 import { Text } from "app/components/cores"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type Props = {
   type: FieldType
   value: string
-  placeholder: string
   onChange: (val: string) => void
 }
 
@@ -23,6 +23,9 @@ function getDateFormat(locale: string) {
 }
 
 export const DateField = (props: Props) => {
+  const {
+    theme: { colors },
+  } = useAppTheme()
   const { value, onChange, type } = props
   const { lang } = useAppLocale()
 
@@ -40,6 +43,7 @@ export const DateField = (props: Props) => {
   }
 
   const showDatepicker = () => {
+    Keyboard.dismiss()
     DateTimePickerAndroid.open({
       value: dateValue,
       onChange: onChangeDate,
@@ -49,7 +53,7 @@ export const DateField = (props: Props) => {
 
   return (
     <TouchableOpacity onPress={showDatepicker} style={styles.pt10}>
-      <Text text={value || "---"}></Text>
+      <Text color={value ? colors.text : colors.label} text={value || dateFormat}></Text>
     </TouchableOpacity>
   )
 }

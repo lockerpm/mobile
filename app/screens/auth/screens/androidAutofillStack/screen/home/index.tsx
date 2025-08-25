@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import { BackHandler, NativeModules, ViewStyle } from "react-native"
 import { AutoFillList } from "./AutofillList"
 import { AndroidAutofillServiceType } from "app/utils/autofillHelper"
@@ -12,6 +12,7 @@ import { AndroidAutofillScreenProps } from "@/navigators"
 import { useClipboard, useToast } from "@/services/utils"
 import { ListHeader } from "./ListHeader"
 import { CipherAppView } from "@/static/types"
+import { MotionLoading } from "@/components/utils"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
@@ -25,6 +26,10 @@ export const AndroidAutofillScreen: FC<AndroidAutofillScreenProps<"passwordList"
     const { getCiphersFromCache } = useCipherData()
     const { copyToClipboard } = useClipboard()
     const { notifyTx } = useToast()
+
+    const isLastFillItem =
+      data.type === AndroidAutofillServiceType.AUTOFILL_ITEM && data.lastUserPasswordID
+    const [showListPassword, setShowListPassword] = useState(!isLastFillItem)
 
     // -------------------- Methods ----------------------------
     const navigateToAddCipher = useCallback(() => {
@@ -52,12 +57,11 @@ export const AndroidAutofillScreen: FC<AndroidAutofillScreenProps<"passwordList"
     }, [navigation])
 
     const handleAutofillLastItem = useCallback(async () => {
-      if (data.type === AndroidAutofillServiceType.AUTOFILL_ITEM && data.lastUserPasswordID) {
-        const id = data.lastUserPasswordID
+      if (isLastFillItem) {
         const allLogins = await getCiphersFromCache({
           deleted: false,
           searchText: "",
-          filters: [(c: CipherView) => c.type === CipherType.Login && c.id === id],
+          filters: [(c: CipherView) => c.id === data.lastUserPasswordID],
         })
 
         if (allLogins.length > 0) {
@@ -67,6 +71,7 @@ export const AndroidAutofillScreen: FC<AndroidAutofillScreenProps<"passwordList"
             copyToClipboard(otp)
           }
         } else {
+          setShowListPassword(true)
           RNAutofillServiceAndroid.removeLastItem()
           notifyTx("info", "autofill_service:deleted")
         }
@@ -94,11 +99,14 @@ export const AndroidAutofillScreen: FC<AndroidAutofillScreenProps<"passwordList"
         }
         contentContainerStyle={$container}
       >
-        <AutoFillList
-          domain={data.domain}
-          openActionMenu={navigateToCipherActions}
-          navigateToAddCipher={navigateToAddCipher}
-        />
+        {showListPassword && (
+          <AutoFillList
+            domain={data.domain}
+            openActionMenu={navigateToCipherActions}
+            navigateToAddCipher={navigateToAddCipher}
+          />
+        )}
+        {!showListPassword && <MotionLoading disableProgress />}
       </Screen>
     )
   }

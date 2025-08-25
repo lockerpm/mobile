@@ -25,7 +25,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/sharing/${organizationId}/groups/${groupID}`,
+        `/v3/cystack_platform/pm/sharing/${organizationId}/groups/${groupID}`,
         payload
       )
       // the typical ways to die when calling an api
@@ -51,7 +51,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/sync/folders/${id}`
+        `/v3/cystack_platform/pm/sync/folders/${id}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -77,7 +77,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/folders",
+        "/v3/cystack_platform/pm/folders",
         data
       )
       // the typical ways to die when calling an api
@@ -105,7 +105,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/folders/${id}`,
+        `/v3/cystack_platform/pm/folders/${id}`,
         data
       )
       // the typical ways to die when calling an api
@@ -129,7 +129,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(
-        `/cystack_platform/pm/folders/${id}`
+        `/v3/cystack_platform/pm/folders/${id}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -153,7 +153,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/sharing`,
+        `/v3/cystack_platform/pm/sharing`,
         payload
       )
       // the typical ways to die when calling an api
@@ -184,7 +184,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/sharing/${teamId}/folders`,
+        `/v3/cystack_platform/pm/sharing/${teamId}/folders`,
         data
       )
       // the typical ways to die when calling an api
@@ -213,7 +213,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/sharing/${teamId}/folders/${id}`,
+        `/v3/cystack_platform/pm/sharing/${teamId}/folders/${id}`,
         data
       )
       // the typical ways to die when calling an api
@@ -242,7 +242,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/sharing/${teamId}/folders/${id}/delete`,
+        `/v3/cystack_platform/pm/sharing/${teamId}/folders/${id}/delete`,
         payload
       )
       // the typical ways to die when calling an api
@@ -270,7 +270,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/sharing/${teamId}/folders/${id}/stop`,
+        `/v3/cystack_platform/pm/sharing/${teamId}/folders/${id}/stop`,
         payload
       )
       // the typical ways to die when calling an api
@@ -302,12 +302,12 @@ class FolderApi {
 
       if (!isGroup) {
         response = await this.api.apisauce.post(
-          `/cystack_platform/pm/sharing/${teamId}/members/${memberId}/stop`,
+          `/v3/cystack_platform/pm/sharing/${teamId}/members/${memberId}/stop`,
           payload
         )
       } else {
         response = await this.api.apisauce.post(
-          `/cystack_platform/pm/sharing/${teamId}/groups/${memberId}/stop`,
+          `/v3/cystack_platform/pm/sharing/${teamId}/groups/${memberId}/stop`,
           payload
         )
       }
@@ -335,7 +335,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/sharing/${teamId}/members`,
+        `/v3/cystack_platform/pm/sharing/${teamId}/members`,
         { members }
       )
       // the typical ways to die when calling an api
@@ -362,7 +362,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/sharing/${teamId}/folders/${id}/items`,
+        `/v3/cystack_platform/pm/sharing/${teamId}/folders/${id}/items`,
         payload
       )
       // the typical ways to die when calling an api
@@ -390,7 +390,7 @@ class FolderApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/sharing/${teamId}/folders/${id}/items`,
+        `/v3/cystack_platform/pm/sharing/${teamId}/folders/${id}/items`,
         payload
       )
       // the typical ways to die when calling an api

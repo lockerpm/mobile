@@ -4,6 +4,7 @@ import { CompositeScreenProps, NavigatorScreenParams } from "@react-navigation/n
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { TxKeyPath } from "app/i18n"
 import {
+  AccountRoleText,
   AppNotification,
   BreanchResult,
   CipherActionsModal,
@@ -18,6 +19,7 @@ import {
   OnPremiseIdentifierData,
   OnPremisePreloginData,
   RelayAddress,
+  ScamLookupResult,
   SharedGroupType,
   SharedMemberType,
   SharedWithYouType,
@@ -63,7 +65,14 @@ export type LoginRoute = {
   loginByPincode: {
     email: string
     // user register by password of not
-    havePassword: boolean
+    havePassword?: boolean
+
+    // deeplink
+    code_otp?: string
+    nonce?: string
+
+    // Sign up
+    fromSignup?: boolean
   }
   twoFA:
     | {
@@ -131,6 +140,9 @@ export type ForgotPasswordScreenProps<T extends keyof ForgotPasswordRoute> = Com
 
 export type UnAuthRoute = {
   intro: undefined
+  activateAccount: {
+    token: string
+  }
   onBoarding: undefined
   createMasterPassword: undefined
   forgotPasswordStack: NavigatorScreenParams<ForgotPasswordRoute>
@@ -270,6 +282,11 @@ export type ShareRoute = {
     group?: SharedGroupType
     cipher: CipherAppView
   }
+  editShareMemberPermissionModal: {
+    id: string
+    value: string
+    role: AccountRoleText
+  }
 
   folderShare: {
     folder: FolderView | CollectionView
@@ -347,6 +364,9 @@ export type BrowseRoute = {
     // add password from android Autofill Service
     initialUrl?: string // app domain
     androidAutofillSavedData?: AndroidAutofillServiceData
+
+    // otp qrscan uri
+    otpUri?: string
   }
 
   folderList: undefined
@@ -378,6 +398,18 @@ export type ShareScreenProps<T extends keyof ShareRoute> = CompositeScreenProps<
 
 // ---------------------------TOOLS---------------------------
 
+export type ScamRoute = {
+  scamList: undefined
+  lookup: undefined
+  lookupResult: {
+    data: ScamLookupResult
+  }
+  myReportList: undefined
+  report: {
+    phoneNumber?: string
+  }
+}
+
 export type PasswordHealthRoute = {
   passwordHealth: undefined
   weakPasswordList: undefined
@@ -401,6 +433,7 @@ export type ToolsRoute = {
   passwordHealthStack: NavigatorScreenParams<PasswordHealthRoute> | undefined
   privateRelayStack: NavigatorScreenParams<PrivateRelayRoute> | undefined
   dataBreachScannerStack: NavigatorScreenParams<DataBreachScannerRoute> | undefined
+  scamStack: NavigatorScreenParams<ScamRoute> | undefined
 }
 
 export type ToolsScreenProps<T extends keyof ToolsRoute> = CompositeScreenProps<
@@ -418,6 +451,11 @@ export type DataBreachScannerScreenProps<T extends keyof DataBreachScannerRoute>
     NativeStackScreenProps<DataBreachScannerRoute, T>,
     ToolsScreenProps<keyof ToolsRoute>
   >
+
+export type ScamScreenProps<T extends keyof ScamRoute> = CompositeScreenProps<
+  NativeStackScreenProps<ScamRoute, T>,
+  ToolsScreenProps<keyof ToolsRoute>
+>
 
 // ---------------------Private Relay------------------------
 

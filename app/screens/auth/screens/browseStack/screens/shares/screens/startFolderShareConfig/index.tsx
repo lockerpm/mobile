@@ -1,6 +1,6 @@
-import { FC, useCallback, useState } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import { View, StyleSheet, ViewStyle, ScrollView } from "react-native"
-import { Header, ImageIcon, PressableIcon, PressableText, Screen, Text } from "app/components/cores"
+import { Header, ImageIcon, PressableText, Screen, Text } from "app/components/cores"
 import { AccountRoleText } from "app/static/types"
 import { useFolder } from "app/services/hook"
 import { observer } from "mobx-react-lite"
@@ -9,6 +9,9 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { ThemedStyle } from "@/theme"
 import { CollectionView } from "core/models/view/collectionView"
 import { EmailInput } from "../startNormalShareConfig/EmailInput"
+import { AppEventType, EventBus } from "@/utils/eventBus"
+import { Member } from "../startNormalShareConfig/Member"
+import { Group } from "../startNormalShareConfig/Group"
 
 export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
   ({
@@ -25,8 +28,19 @@ export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
 
     // --------------- PARAMS ----------------
     const [isSharing, setIsSharing] = useState(false)
-    const [emails, setEmails] = useState<string[]>([])
-    const [groups, setGroups] = useState<{ name: string; id: string }[]>([])
+    const [emails, setEmails] = useState<
+      {
+        email: string
+        role: AccountRoleText
+      }[]
+    >([])
+    const [groups, setGroups] = useState<
+      {
+        name: string
+        id: string
+        role: AccountRoleText
+      }[]
+    >([])
     // --------------- COMPUTED ----------------
 
     const showManageShare = "organizationId" in folder && !!folder.organizationId
@@ -34,24 +48,62 @@ export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
     // --------------- METHODS ----------------
 
     const removeEmail = (val: string) => {
-      setEmails(emails.filter((e) => e !== val))
+      setEmails(emails.filter((e) => e.email !== val))
+    }
+
+    const removeGroup = (id: string) => {
+      setGroups(groups.filter((group) => group.id !== id))
     }
 
     // Share single/multiple
     const handleShare = async () => {
       setIsSharing(true)
       let res
-      if (folder instanceof CollectionView) {
-        res = await shareFolderAddMember(folder, emails, AccountRoleText.MEMBER, true, groups)
+      if (showManageShare || folder instanceof CollectionView) {
+        res = await shareFolderAddMember(folder, emails, groups, true)
       } else {
-        res = await shareFolder(folder, emails, AccountRoleText.MEMBER, true, groups)
+        res = await shareFolder(folder, emails, groups, true)
       }
 
       if (res.kind === "ok" || res.kind === "unauthorized") {
+        EventBus.emit(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, null)
         navigation.goBack()
       }
       setIsSharing(false)
     }
+
+    const changeEmailRole = useCallback(
+      (email: string, role: AccountRoleText) => {
+        if (!email) {
+          return
+        }
+        const temp = [...emails]
+        const index = temp.findIndex((e) => e.email === email)
+
+        if (index === -1 || temp[index].role === role) {
+          return
+        }
+        temp[index].role = role
+        setEmails(temp)
+      },
+      [emails]
+    )
+
+    const changeGroupRole = useCallback(
+      (id: string, role: AccountRoleText) => {
+        if (!id) {
+          return
+        }
+        const temp = [...groups]
+        const index = temp.findIndex((e) => e.id === id)
+        if (index === -1 || temp[index].role === role) {
+          return
+        }
+        temp[index].role = role
+        setGroups(temp)
+      },
+      [groups]
+    )
 
     const navigateToManageMember = useCallback(() => {
       if (showManageShare) {
@@ -62,6 +114,32 @@ export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
       }
     }, [navigation, folder, showManageShare])
 
+    const navigateToEditMember = useCallback(
+      (id: string, val: string, role: AccountRoleText) => {
+        navigation.navigate("editShareMemberPermissionModal", {
+          id,
+          value: val,
+          role,
+        })
+      },
+      [navigation]
+    )
+
+    // --------------------------EFFECT----------------------------
+
+    useEffect(() => {
+      const listener1 = EventBus.createListener(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, (data) => {
+        console.log(data)
+        if (data) {
+          changeEmailRole(data?.id, data?.role)
+          changeGroupRole(data?.id, data?.role)
+        }
+      })
+
+      return () => {
+        EventBus.removeListener(listener1)
+      }
+    }, [changeEmailRole, changeGroupRole])
     // --------------- RENDER ----------------
 
     const disabled = (emails?.length < 1 && groups.length < 1) || isSharing
@@ -91,6 +169,10 @@ export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
             <ImageIcon icon={"folder"} size={24} />
             <Text preset="bold" text={folder.name} numberOfLines={2} style={styles.ml12} />
           </View>
+        </View>
+
+        <View style={styles.shareWidth}>
+          <Text tx="common:shareWith" />
           {showManageShare && (
             <PressableText
               preset="bold"
@@ -100,27 +182,25 @@ export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
             />
           )}
         </View>
-
-        <Text text="Share with:" style={styles.mv12} />
         <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
           {emails.map((e, index) => {
             return (
-              <View key={index} style={themed($shareMember)}>
-                <Text text={e} style={styles.email} />
-                <PressableIcon icon="trash" size={20} onPress={() => removeEmail(e)} />
-              </View>
+              <Member
+                member={e}
+                key={index}
+                removeEmail={removeEmail}
+                navigateToEditMember={navigateToEditMember}
+              />
             )
           })}
           {groups.map((e, index) => {
             return (
-              <View key={index} style={themed($shareMember)}>
-                <Text text={e.name} style={styles.email} />
-                <PressableIcon
-                  icon="trash"
-                  size={20}
-                  onPress={() => setGroups(groups.filter((group) => group.id !== e.id))}
-                />
-              </View>
+              <Group
+                group={e}
+                key={index}
+                removeGroup={removeGroup}
+                navigateToEditGroup={navigateToEditMember}
+              />
             )
           })}
         </ScrollView>
@@ -128,19 +208,6 @@ export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
     )
   }
 )
-
-const $shareMember: ThemedStyle<ViewStyle> = ({ colors }) => ({
-  borderRadius: 8,
-  borderWidth: 0.5,
-  borderColor: colors.border,
-  backgroundColor: colors.block,
-  paddingHorizontal: 16,
-  marginBottom: 16,
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-  paddingVertical: 6,
-})
 
 const $folder: ThemedStyle<ViewStyle> = ({ colors }) => ({
   alignItems: "center",
@@ -202,6 +269,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
   },
-
   shareAvatar: { borderRadius: 20, height: 40, marginRight: 12, width: 40 },
+
+  shareWidth: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginVertical: 12,
+  },
 })

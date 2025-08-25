@@ -47,7 +47,7 @@ class UserApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get("/me")
+      const response: ApiResponse<any> = await this.api.apisauce.get("/v3/me")
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -88,7 +88,10 @@ class UserApi {
       this.api.apisauce.setHeader("device-id", deviceId)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/access_token", payload)
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        "/v3/sso/access_token",
+        payload
+      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -113,7 +116,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/users/password_hint",
+        "/v3/cystack_platform/pm/users/password_hint",
         payload
       )
       // the typical ways to die when calling an api
@@ -137,7 +140,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/users/me"
+        "/v3/cystack_platform/pm/users/me"
       )
 
       // the typical ways to die when calling an api
@@ -163,7 +166,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        "/cystack_platform/pm/users/me",
+        "/v3/cystack_platform/pm/users/me",
         {
           hide_master_password: hide,
         }
@@ -190,7 +193,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/enterprises"
+        "/v3/cystack_platform/pm/enterprises"
       )
 
       // the typical ways to die when calling an api
@@ -214,7 +217,7 @@ class UserApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.put("/me", {
+      const response: ApiResponse<any> = await this.api.apisauce.put("/v3/me", {
         customer_language: language,
       })
       // the typical ways to die when calling an api
@@ -239,7 +242,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/users/session",
+        "/v3/cystack_platform/pm/users/session",
         payload
       )
       // the typical ways to die when calling an api
@@ -265,7 +268,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/users/session/otp",
+        "/v3/cystack_platform/pm/users/session/otp",
         payload
       )
       // the typical ways to die when calling an api
@@ -291,7 +294,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/users/register",
+        "/v3/cystack_platform/pm/users/register",
         payload
       )
       // the typical ways to die when calling an api
@@ -317,7 +320,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/users/me/password",
+        "/v3/cystack_platform/pm/users/me/password",
         payload
       )
       // the typical ways to die when calling an api
@@ -339,7 +342,9 @@ class UserApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get("/cystack_platform/pm/teams")
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        "/v3/cystack_platform/pm/teams"
+      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -366,7 +371,7 @@ class UserApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/payments/plan"
+        "/v3/cystack_platform/pm/payments/plan"
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -395,7 +400,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/users/invitations"
+        "/v3/cystack_platform/pm/users/invitations"
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -422,7 +427,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/users/invitations/${id}`,
+        `/v3/cystack_platform/pm/users/invitations/${id}`,
         {
           status,
         }
@@ -450,7 +455,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/users/session/revoke_all",
+        "/v3/cystack_platform/pm/users/session/revoke_all",
         {
           master_password_hash: hashedPassword,
         }
@@ -478,7 +483,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/users/me/purge",
+        "/v3/cystack_platform/pm/users/me/purge",
         {
           master_password_hash: hashedPassword,
         }
@@ -502,7 +507,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/referrals"
+        "/v3/cystack_platform/pm/referrals"
       )
 
       // the typical ways to die when calling an api
@@ -524,7 +529,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/notification/settings",
+        "/v3/cystack_platform/pm/notification/settings",
         { type: "notification" }
       )
 
@@ -550,7 +555,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/notification/settings/${categoryId}`,
+        `/v3/cystack_platform/pm/notification/settings/${categoryId}`,
         { mail, notification }
       )
 
@@ -577,7 +582,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/users/me/delete",
+        "/v3/cystack_platform/pm/users/me/delete",
         {
           master_password_hash: hashedPassword,
         }
@@ -605,7 +610,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/enterprises/${organizationId}/policy`
+        `/v3/cystack_platform/pm/enterprises/${organizationId}/policy`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -638,7 +643,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/enterprises/${organizationId}/policy/${policyType}`
+        `/v3/cystack_platform/pm/enterprises/${organizationId}/policy/${policyType}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -664,7 +669,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/feedback",
+        "/v3/cystack_platform/pm/feedback",
         payload
       )
       // the typical ways to die when calling an api
@@ -689,7 +694,7 @@ class UserApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/users/me/fcm_id",
+        "/v3/cystack_platform/pm/users/me/fcm_id",
         payload
       )
       // the typical ways to die when calling an api
@@ -721,7 +726,7 @@ class UserApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/payments/invoices",
+        "/v3/cystack_platform/pm/payments/invoices",
         { page }
       )
       // the typical ways to die when calling an api
@@ -759,13 +764,13 @@ class UserApi {
       // make the api call
       if (IS_IOS) {
         // if (originalTransactionIdentifierIOS) {
-        response = await this.api.apisauce.post("/payments/webhook/ios/validate", {
+        response = await this.api.apisauce.post("/v3/payments/webhook/ios/validate", {
           scope: "pwdmanager",
           receipt_data: receipt,
           original_transaction_id: originalTransactionIdentifierIOS,
         })
       } else {
-        response = await this.api.apisauce.post("/payments/webhook/android/validate", {
+        response = await this.api.apisauce.post("/v3/payments/webhook/android/validate", {
           scope: "pwdmanager",
           receipt_data: { token: receipt, plan_id: subscriptionId },
         })
@@ -793,7 +798,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/family/members"
+        "/v3/cystack_platform/pm/family/members"
       )
 
       // the typical ways to die when calling an api
@@ -815,7 +820,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/family/members",
+        "/v3/cystack_platform/pm/family/members",
         { family_members: emailMembers }
       )
 
@@ -839,7 +844,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.delete(
-        "/cystack_platform/pm/family/members/" + memberId
+        "/v3/cystack_platform/pm/family/members/" + memberId
       )
 
       // the typical ways to die when calling an api
@@ -866,9 +871,12 @@ class UserApi {
   > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.post("/payments/webhook/trial", {
-        scope: "pwdmanager",
-      })
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        "/v3/payments/webhook/trial",
+        {
+          scope: "pwdmanager",
+        }
+      )
 
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -895,7 +903,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/emergency_access/invite`,
+        `/v3/cystack_platform/pm/emergency_access/invite`,
         { email, key, type, wait_time_days }
       )
 
@@ -918,7 +926,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/emergency_access/trusted`
+        `/v3/cystack_platform/pm/emergency_access/trusted`
       )
 
       // the typical ways to die when calling an api
@@ -940,7 +948,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/emergency_access/granted`
+        `/v3/cystack_platform/pm/emergency_access/granted`
       )
 
       // the typical ways to die when calling an api
@@ -964,7 +972,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/emergency_access/${id}/${action}`
+        `/v3/cystack_platform/pm/emergency_access/${id}/${action}`
       )
 
       // the typical ways to die when calling an api
@@ -997,7 +1005,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/emergency_access/${id}/takeover`
+        `/v3/cystack_platform/pm/emergency_access/${id}/takeover`
       )
 
       // the typical ways to die when calling an api
@@ -1029,7 +1037,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/emergency_access/${id}/view`
+        `/v3/cystack_platform/pm/emergency_access/${id}/view`
       )
 
       // the typical ways to die when calling an api
@@ -1053,7 +1061,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/emergency_access/${id}/${action}`
+        `/v3/cystack_platform/pm/emergency_access/${id}/${action}`
       )
 
       // the typical ways to die when calling an api
@@ -1077,7 +1085,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/emergency_access/${id}/password`,
+        `/v3/cystack_platform/pm/emergency_access/${id}/password`,
         payload
       )
 
@@ -1102,7 +1110,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/emergency_access/${id}/id_password`,
+        `/v3/cystack_platform/pm/emergency_access/${id}/id_password`,
         {
           new_password: newPass,
         }
@@ -1125,7 +1133,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.delete(
-        `/cystack_platform/pm/emergency_access/${id}`
+        `/v3/cystack_platform/pm/emergency_access/${id}`
       )
 
       // the typical ways to die when calling an api
@@ -1149,7 +1157,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/marketing/banner?language=${language}`
+        `/v3/cystack_platform/pm/marketing/banner?language=${language}`
       )
 
       // the typical ways to die when calling an api
@@ -1171,7 +1179,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/users/me/chatwoot`
+        `/v3/cystack_platform/pm/users/me/chatwoot`
       )
 
       // the typical ways to die when calling an api

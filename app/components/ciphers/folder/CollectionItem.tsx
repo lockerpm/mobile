@@ -4,16 +4,26 @@ import { CollectionView } from "core/models/view/collectionView"
 import { useAppLocale } from "@/i18n"
 
 type Props = {
+  isYourSharedScreen?: boolean
   item: CollectionView
   openCollectionCipher: (collectionId: string, orgId: string, name: string) => void
   openAction: (item: CollectionView) => void
 }
 
-export const CollectionItem = ({ item, openCollectionCipher, openAction }: Props) => {
+export const CollectionItem = ({
+  item,
+  openCollectionCipher,
+  openAction,
+  isYourSharedScreen,
+}: Props) => {
   const { translate } = useAppLocale()
   return (
     <PressableScale
       onPress={() => {
+        if (!!item.id && isYourSharedScreen) {
+          openAction(item)
+          return
+        }
         openCollectionCipher(item.id, item.organizationId, item.name)
       }}
       style={styles.pv12}
@@ -32,7 +42,7 @@ export const CollectionItem = ({ item, openCollectionCipher, openAction }: Props
           />
         </View>
 
-        {!!item.id && (
+        {!!item.id && !isYourSharedScreen && (
           <PressableIcon
             icon="dots-three"
             size={24}

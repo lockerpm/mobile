@@ -8,6 +8,34 @@ import { VAULT_LOGO } from "app/static/vault"
 import find from "lodash/find"
 import { toCryptoWalletData } from "../crypto"
 import Config from "@/config"
+import { CARD_BRANDS } from "@/static/constants"
+
+// Card detection logic
+export const detectCardBrand = (cardNumber: string) => {
+  if (!cardNumber) {
+    return undefined
+  }
+  const number = cardNumber.replace(/\D/g, "")
+
+  const cardPatterns = [
+    { value: "Visa", regex: /^4\d{0,15}$/ },
+    { value: "Mastercard", regex: /^(5[1-5]|2[2-7])\d{0,14}$/ },
+    { value: "Amex", regex: /^3[47]\d{0,13}$/ },
+    { value: "Discover", regex: /^6(?:011|5\d{2}|4[4-9])\d{0,12}$/ },
+    { value: "Diners Club", regex: /^3(?:0[0-5]|[68])\d{0,11}$/ },
+    { value: "JCB", regex: /^(?:2131|1800|35\d{0,3})\d{0,11}$/ },
+    { value: "Maestro", regex: /^(?:5[06789]|6\d)\d{0,17}$/ },
+    { value: "UnionPay", regex: /^62\d{0,17}$/ },
+  ]
+
+  for (const { value, regex } of cardPatterns) {
+    if (regex.test(number)) {
+      return CARD_BRANDS.find((b) => b.value === value)
+    }
+  }
+
+  return undefined
+}
 
 // Get cipher description
 export const getCipherDescription = (item: CipherView | CipherAppView) => {
@@ -55,7 +83,8 @@ export const getCipherLogo: (item: CipherView | CipherAppView) => ImageSourcePro
       return uri ? { uri } : VAULT_LOGO.passwords
     }
     case CipherType.Card:
-      return VAULT_LOGO.cards
+      const cardBrand = detectCardBrand(item.card.number)
+      return cardBrand?.logo || VAULT_LOGO.cards
 
     case CipherType.Identity:
       return VAULT_LOGO.identities

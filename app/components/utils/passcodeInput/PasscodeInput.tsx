@@ -7,6 +7,7 @@ import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 interface PasscodeInputProps {
+  iniCode?: string
   onCodeFilled?: (code: string) => void
   style?: StyleProp<ViewStyle>
   /**
@@ -26,6 +27,7 @@ interface PasscodeInputProps {
 const pinCount = 6
 
 export const PasscodeInput: React.FC<PasscodeInputProps> = ({
+  iniCode,
   isError,
   onCodeFilled,
   style,
@@ -130,6 +132,12 @@ export const PasscodeInput: React.FC<PasscodeInputProps> = ({
     })
     return unsubscribe
   }, [navigation])
+
+  useEffect(() => {
+    if (!!iniCode) {
+      setPasscode(iniCode.split(""))
+    }
+  }, [iniCode])
 
   return (
     <View>

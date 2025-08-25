@@ -193,7 +193,7 @@ export const PasswordGeneratorScreen: FC<ToolsScreenProps<"passwordGenerator">> 
                   value={item.key}
                   accessibilityLabel={item.label}
                   labelTx={item.label}
-                  onValueChange={item.action}
+                  onPress={() => item.action(!item.key)}
                   LabelTextProps={{
                     color: colors.title,
                     size: "md",

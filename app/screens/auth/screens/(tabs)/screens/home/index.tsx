@@ -25,7 +25,7 @@ const allCipherType = [
 ]
 
 export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation }) => {
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
 
   const cipherTypes = user.hide_master_password
     ? allCipherType.filter((type) => type !== CipherType.MasterPassword)
@@ -33,13 +33,15 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
 
   // -------------- PARAMS ------------------
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [sortConfig, setSortConfig] = useState<SortConfigType>({
-    sort: {
-      orderField: "revisionDate",
-      order: "desc",
-    },
-    option: "last_updated",
-  })
+  const [sortConfig, setSortConfig] = useState<SortConfigType>(
+    uiStore.sortConfig || {
+      sort: {
+        orderField: "revisionDate",
+        order: "desc",
+      },
+      option: "last_updated",
+    }
+  )
 
   const allCipher = useRef<CipherAppView[]>([])
   const [isSelecting, setIsSelecting] = useState(false)

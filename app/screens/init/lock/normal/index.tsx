@@ -1,10 +1,28 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { Alert, BackHandler, View, Image, StyleSheet, Dimensions, ViewStyle } from "react-native"
+import {
+  Alert,
+  BackHandler,
+  View,
+  Image,
+  StyleSheet,
+  Dimensions,
+  ViewStyle,
+  TouchableOpacity,
+} from "react-native"
 import { useAuthentication, useCipherData, useCipherHelper } from "app/services/hook"
 import { useStores } from "app/models"
-import { EnterpriseInvitation } from "app/static/types"
+import { BiometricsType, EnterpriseInvitation } from "app/static/types"
 import { useNavigation } from "@react-navigation/native"
-import { Logo, Button, Screen, Text, TextInput, Header, PressableText } from "app/components/cores"
+import {
+  Logo,
+  Button,
+  Screen,
+  Text,
+  TextInput,
+  Header,
+  PressableText,
+  Icon,
+} from "app/components/cores"
 import { EnterpriseInvitationModal } from "./EnterpriseInvitationModal"
 import { AppScreenProps } from "app/navigators/navigators.types"
 import { useToast } from "app/services/utils"
@@ -12,29 +30,35 @@ import { useAppLocale } from "@/i18n"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { ThemedStyle } from "@/theme"
 import { isAndroidAutofillService } from "@/utils/autofillHelper"
+import { useCoreService } from "@/services/coreService"
+import Config from "@/config"
 
 interface Props {
   handleLogout: () => void
   handleUnlock: () => Promise<void>
   isUnlocking: boolean
   setIsUnlocking: (val: boolean) => void
+  biometryType: BiometricsType
 }
 
 const SCREEN_HEIGHT = Dimensions.get("window").height
 const hideLogo = SCREEN_HEIGHT < 700
 export const LockByMasterPassword = ({
   isUnlocking,
+  biometryType,
   setIsUnlocking,
   handleLogout,
   handleUnlock,
 }: Props) => {
   const navigation = useNavigation<AppScreenProps<"lock">["navigation"]>()
   const { user, enterpriseStore } = useStores()
+  const { cryptoService } = useCoreService()
   const { notifyTx, notifyApiError } = useToast()
   const { translate } = useAppLocale()
-  const { sessionLogin } = useAuthentication()
+  const { sessionLogin, biometricLogin } = useAuthentication()
   const { createMasterPasswordItem } = useCipherData()
   const { getPasswordStrength } = useCipherHelper()
+
   const {
     themed,
     theme: { colors },
@@ -53,12 +77,14 @@ export const LockByMasterPassword = ({
 
   // ---------------------- METHODS -------------------------
 
+  const showInvitation = enterpeiseInvitations.length > 0
+
   // ---------------------- METHODS -------------------------
 
   const unlock = async () => {
     setIsUnlocking(true)
     const res = await sessionLogin(masterPassword, async () => {
-      await createMasterPasswordItem(masterPassword, getPasswordStrength(masterPassword))
+      await createMasterPasswordItem(masterPassword, getPasswordStrength(masterPassword).score)
     })
     if (res.kind === "ok") {
       await handleUnlock()
@@ -119,9 +145,35 @@ export const LockByMasterPassword = ({
     }
   }, [])
 
+  const handleUnlockBiometric = async () => {
+    if (!user.isBiometricUnlock) {
+      notifyTx("error", "error:biometric_not_enable")
+      return
+    }
+    const key = await cryptoService.getKey()
+    if (!key) {
+      notifyTx("info", "error:not_valid_for_biometric")
+      return
+    }
+
+    if (showInvitation) {
+      setIsShowInvitation(true)
+      return
+    }
+    setIsUnlocking(true)
+
+    const res = await biometricLogin()
+    if (res.kind === "ok") {
+      await handleUnlock()
+    }
+    setIsUnlocking(false)
+  }
+
   // -------------- EFFECT ------------------
   useEffect(() => {
-    fetchEnterpriseInvitation()
+    if (!isAndroidAutofillService) {
+      fetchEnterpriseInvitation()
+    }
   }, [])
 
   // ---------------------- RENDER -------------------------
@@ -174,6 +226,9 @@ export const LockByMasterPassword = ({
 
       {!(isFocused && hideLogo) && <Logo preset={"cystack-logo"} style={styles.logo} />}
       <Text preset="bold" size="xl" style={styles.title} tx={"lock:title"} />
+      {!Config.IS_PROD && (
+        <Text preset="bold" size="xl" style={styles.title} text={"------ Staging ------"} />
+      )}
       <Text style={styles.textCenter} tx={"lock:desc"} />
       <View style={styles.center}>
         <View style={themed($email)}>
@@ -210,6 +265,22 @@ export const LockByMasterPassword = ({
         style={styles.mgTop20}
         preset="primary"
       />
+      {biometryType !== BiometricsType.None && (
+        <TouchableOpacity
+          disabled={isUnlocking}
+          onPress={handleUnlockBiometric}
+          style={styles.faceIdContainer}
+        >
+          <View style={styles.faceId}>
+            <Icon icon={biometryType === BiometricsType.FaceID ? "face-id" : "fingerprint"} />
+
+            <Text
+              // @ts-ignore
+              text={"  " + translate(`common:${biometryType}_unlocking`)}
+            />
+          </View>
+        </TouchableOpacity>
+      )}
     </Screen>
   )
 }
@@ -236,8 +307,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
   },
+
   email: {
     marginHorizontal: 10,
+  },
+  faceId: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  faceIdContainer: {
+    alignItems: "center",
+    marginVertical: 25,
+    width: "100%",
   },
   logo: { alignSelf: "center", height: 70, marginBottom: 10, width: 70 },
   mgTop20: {

@@ -1,5 +1,5 @@
 import { NewActionSheet } from "@/components/utils"
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
+import { Dimensions, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import { Icon, Text, TextInput } from "@/components/cores"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { TxKeyPath } from "@/i18n"
@@ -23,6 +23,8 @@ const AccessCountOptions = [
     value: true,
   },
 ]
+
+const width = Dimensions.get("window").width
 
 export const AccessSelect = ({
   setCountAccess,
@@ -51,30 +53,36 @@ export const AccessSelect = ({
         </TouchableOpacity>
 
         {countAccess && (
-          <View
-            style={styles.countAccess}
-            onTouchStart={() => {
-              // @ts-ignore
-              inputRef?.current?.focus()
-            }}
-          >
-            <TextInput
-              ref={inputRef}
-              keyboardType="number-pad"
-              value={maxAccessCount.toString()}
-              onChangeText={(value) => {
-                if (value === "") {
-                  setMaxAccessCount("1")
-                } else {
+          <>
+            <View style={styles.w12} />
+            <View
+              style={styles.countAccess}
+              onTouchStart={() => {
+                // @ts-ignore
+                inputRef?.current?.focus()
+              }}
+            >
+              <TextInput
+                ref={inputRef}
+                keyboardType="number-pad"
+                value={maxAccessCount.toString()}
+                onChangeText={(value) => {
                   setMaxAccessCount(value.replace(/[^0-9]/g, ""))
-                }
-              }}
-              onBlur={() => {
-                if (!maxAccessCount || maxAccessCount === "0") setMaxAccessCount("1")
-              }}
-              maxLength={8}
-            />
-          </View>
+                }}
+                onBlur={() => {
+                  if (!maxAccessCount || maxAccessCount === "0" || !maxAccessCount) {
+                    setMaxAccessCount("1")
+                    return
+                  }
+                  if (maxAccessCount.length > 0 && maxAccessCount[0] === "0") {
+                    // Remove leading zeros
+                    setMaxAccessCount(maxAccessCount.replace(/^0+/, ""))
+                  }
+                }}
+                maxLength={8}
+              />
+            </View>
+          </>
         )}
       </View>
       <NewActionSheet
@@ -109,22 +117,16 @@ export const AccessSelect = ({
 }
 
 const $accessCount: ThemedStyle<ViewStyle> = ({ colors }) => ({
-  flexDirection: "row",
-  alignItems: "center",
+  width: width / 2 - 22,
   borderWidth: 1,
   borderRadius: 8,
   borderColor: colors.border,
   padding: 12,
-  marginBottom: 12,
-  marginRight: 16,
 })
 
 const styles = StyleSheet.create({
   countAccess: {
-    alignItems: "center",
-    flexDirection: "row",
-    marginBottom: 12,
-    width: 100,
+    width: width / 2 - 22,
   },
   label: {
     flexGrow: 1,
@@ -143,5 +145,8 @@ const styles = StyleSheet.create({
   row2: {
     alignItems: "center",
     flexDirection: "row",
+  },
+  w12: {
+    width: 12,
   },
 })

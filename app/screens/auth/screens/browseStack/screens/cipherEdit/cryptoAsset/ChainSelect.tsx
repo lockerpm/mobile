@@ -1,9 +1,11 @@
 import { CHAIN_LIST } from "app/utils/crypto/chainlist"
-import { useState } from "react"
-import { View, StyleSheet, TouchableOpacity, Image } from "react-native"
-import { Icon, Text } from "app/components/cores"
+import { useCallback, useState } from "react"
+import { View, StyleSheet, Image, ViewStyle } from "react-native"
+import { Icon, PressableIcon, PressableScale, Text } from "app/components/cores"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { WalletChainsModal } from "./WalletChainsModal"
+import { CipherEditActionField } from "@/components/ciphers"
+import { ThemedStyle } from "@/theme"
 
 type Props = {
   selected: {
@@ -14,10 +16,14 @@ type Props = {
 }
 
 const chainOther = require("assets/images/icons/crypto/other.png")
+const findChain = (al: string) => {
+  return CHAIN_LIST.find((c) => c.alias === al)
+}
 
 export const ChainSelect = (props: Props) => {
   const { onChange, selected } = props
   const {
+    themed,
     theme: { colors },
   } = useAppTheme()
 
@@ -28,77 +34,141 @@ export const ChainSelect = (props: Props) => {
   const onClose = () => setIsSelect(false)
 
   const setChain = (value: { alias: string; name: string }) => {
-    onChange([value])
+    onChange([...selected, value])
     setIsSelect(false)
   }
 
-  const findChain = (al: string) => {
-    return CHAIN_LIST.find((c) => c.alias === al)
+  const removeChain = (value: { alias: string; name: string }) => {
+    onChange(selected.filter((c) => c.alias !== value.alias))
   }
 
   // ------------------ COMPUTED ------------------
 
+  const showModal = useCallback(() => {
+    setIsSelect(true)
+  }, [])
   // ------------------ RENDER ------------------
 
   return (
     <View>
-      <TouchableOpacity onPress={() => setIsSelect(true)}>
-        <View style={styles.flex}>
-          <View style={styles.content}>
-            <Text preset="label" size="sm" tx={"crypto_asset:network"} style={styles.mb5} />
-            <View style={styles.row}>
-              {selected.length ? (
-                selected.map((item) => {
-                  const selectedChain = findChain(item.alias)
-                  return (
-                    <View key={item.alias} style={styles.row}>
-                      <Image
-                        resizeMode="contain"
-                        source={selectedChain?.logo || chainOther}
-                        style={styles.image}
-                      />
+      {(!selected || selected.length === 0) && (
+        <CipherEditActionField labelTx="crypto_asset:network" onPress={showModal} />
+      )}
 
-                      <Text preset="bold" text={item.name} />
-                    </View>
-                  )
-                })
-              ) : (
-                <Text tx={"common:none"} />
-              )}
-            </View>
+      {selected.length > 0 && (
+        <>
+          <Text
+            weight="medium"
+            color={colors.text}
+            tx={"crypto_asset:network"}
+            style={[styles.label, { backgroundColor: colors.background }]}
+          />
+          <View style={themed($container)}>
+            {selected.map((item, index) => (
+              <View key={index}>
+                {index !== 0 && <View style={themed($divider)} />}
+                <ChainItem
+                  item={item}
+                  onRemove={() => {
+                    removeChain(item)
+                  }}
+                />
+              </View>
+            ))}
           </View>
-          <Icon icon="caret-right" size={20} color={colors.title} />
-        </View>
-      </TouchableOpacity>
+          <PressableScale style={styles.add} onPress={showModal}>
+            <Text
+              preset="bold"
+              tx="password:addWebsite"
+              color={colors.primary}
+              style={styles.mr8}
+            />
+            <Icon icon="plus-circle" size={18} color={colors.primary} />
+          </PressableScale>
+        </>
+      )}
+
       <WalletChainsModal isOpen={isSelect} onClose={onClose} chain={selected} setChain={setChain} />
     </View>
   )
 }
 
+const ChainItem = ({
+  item,
+  onRemove,
+}: {
+  item: { alias: string; name: string }
+  onRemove: () => void
+}) => {
+  const {
+    theme: { colors },
+  } = useAppTheme()
+  const selectedChain = findChain(item.alias)
+
+  return (
+    <View style={styles.chainItem}>
+      <View style={styles.row}>
+        <Image
+          resizeMode="contain"
+          source={selectedChain?.logo || chainOther}
+          style={styles.image}
+        />
+        <Text text={item.name} />
+      </View>
+      <PressableIcon icon="trash" size={18} color={colors.error} onPress={onRemove} />
+    </View>
+  )
+}
+
+const $divider: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  height: 1,
+  width: "100%",
+  backgroundColor: colors.border,
+})
+
+const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  width: "100%",
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: colors.border,
+})
+
 const styles = StyleSheet.create({
-  content: {
-    flexGrow: 1,
-    flexShrink: 1,
-    marginRight: 12,
-  },
-  flex: {
+  add: {
     alignItems: "center",
-    flex: 1,
+    alignSelf: "flex-end",
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
+    marginBottom: -12,
+    paddingVertical: 12,
+  },
+  chainItem: {
+    alignItems: "center",
+    flexDirection: "row",
+    height: 48,
+    justifyContent: "flex-start",
+    paddingHorizontal: 12,
   },
   image: {
     borderRadius: 20,
-    height: 32,
-    marginRight: 8,
-    width: 32,
+    height: 24,
+    marginRight: 12,
+    width: 24,
   },
-  mb5: {
-    marginBottom: 5,
+  label: {
+    left: 0,
+    paddingHorizontal: 4,
+    position: "absolute",
+    top: -14,
+    transform: [{ scale: 0.9 }],
+    zIndex: 5,
+  },
+  mr8: {
+    marginRight: 8,
   },
   row: {
     alignItems: "center",
     flexDirection: "row",
+    flexGrow: 1,
+    flexShrink: 1,
   },
 })

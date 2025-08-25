@@ -51,9 +51,6 @@ export const DynamicUris = ({
 
   const haveAnyUri = fields.length > 0
   const isFocused = isFocuseds.some((focused) => focused)
-  const $addBorder: ViewStyle = {
-    alignSelf: haveAnyUri ? "flex-end" : "flex-start",
-  }
 
   const $titleAnim: TextStyle = {
     fontSize: 16,
@@ -109,7 +106,7 @@ export const DynamicUris = ({
         )}
       </View>
       {editable && (
-        <PressableScale style={[$add, $addBorder]} onPress={handleAddField}>
+        <PressableScale style={$add} onPress={handleAddField}>
           <Text preset="bold" tx="password:addWebsite" style={styles.add} color={colors.primary} />
           <Icon icon="plus-circle" size={18} color={colors.primary} />
         </PressableScale>

@@ -85,7 +85,7 @@ export const UriItem = forwardRef(function TextField(
 
   const $inputStyles: StyleProp<TextStyle> = [
     $inputStyle,
-    { color: disabled ? colors.disable : colors.text },
+    { color: colors.text },
     TextInputProps.multiline && { height: "auto" },
     $inputStyleOverride,
   ]

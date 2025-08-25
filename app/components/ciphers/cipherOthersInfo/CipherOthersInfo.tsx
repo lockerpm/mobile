@@ -1,14 +1,13 @@
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
-import { DividerText, Textarea } from "../../utils"
-import { Text, Icon } from "../../cores"
+import { StyleSheet, View, ViewStyle } from "react-native"
+import { Textarea } from "../../utils"
+import { Text, ImageIcon } from "../../cores"
 import { FolderView } from "core/models/view/folderView"
 import { CollectionView } from "core/models/view/collectionView"
-import { useAppLocale } from "@/i18n"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { ThemedStyle } from "@/theme"
 import { useNavigation } from "@react-navigation/native"
 import { BrowseScreenProps } from "@/navigators"
-import { CipherEditActionField } from "../cipherEdit/CipherEditActionField"
+import { CipherEditActionField } from "../cipherEditActionField"
 
 export interface CipherOthersInfoProps {
   isOwner: boolean
@@ -26,11 +25,7 @@ export interface CipherOthersInfoProps {
 export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
   const navigation = useNavigation<BrowseScreenProps<"cipherEdit">["navigation"]>()
   const { hasNote, note, onChangeNote, folder, isDeleted, collection, isOwner } = props
-  const { translate } = useAppLocale()
-  const {
-    themed,
-    theme: { colors },
-  } = useAppTheme()
+  const { themed } = useAppTheme()
 
   return (
     <View>
@@ -39,30 +34,9 @@ export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
       </View>
 
       <View style={themed($container)}>
-        <CipherEditActionField
-          haveValue={!!folder || !!collection}
-          editable={!isDeleted}
-          onPress={() => {
-            navigation.navigate("folderSelect", {
-              mode: "add",
-              initialId: folder?.id || collection?.id,
-            })
-          }}
-        >
-          <View style={styles.folderContainer}>
-            <View>
-              <Text preset="label" tx={"common:folders"} size="sm" style={styles.mb5} />
-              <Text
-                text={folder?.name || collection?.name || translate("common:none")}
-                numberOfLines={2}
-              />
-            </View>
-            <Icon icon="caret-right" size={20} color={colors.label} />
-          </View>
-        </CipherEditActionField>
         {/* Folder */}
         {isOwner && (
-          <TouchableOpacity
+          <CipherEditActionField
             disabled={isDeleted}
             onPress={() => {
               navigation.navigate("folderSelect", {
@@ -70,21 +44,20 @@ export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
                 initialId: folder?.id || collection?.id,
               })
             }}
+            labelTx="common:folders"
           >
-            <View style={styles.folderContainer}>
-              <View>
-                <Text preset="label" tx={"common:folders"} size="sm" style={styles.mb5} />
-                <Text
-                  text={folder?.name || collection?.name || translate("common:none")}
-                  numberOfLines={2}
+            {(folder || collection) && (
+              <View style={styles.folderContainer}>
+                <ImageIcon
+                  icon={folder ? "folder" : "folder-share"}
+                  size={20}
+                  containerStyle={styles.mr12}
                 />
+                <Text text={folder?.name || collection?.name} numberOfLines={1} />
               </View>
-              <Icon icon="caret-right" size={20} color={colors.label} />
-            </View>
-          </TouchableOpacity>
+            )}
+          </CipherEditActionField>
         )}
-
-        <DividerText style={styles.mv8} />
 
         {/* Note */}
         {hasNote && (
@@ -106,21 +79,18 @@ const $other: ThemedStyle<ViewStyle> = ({ colors }) => ({
 const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
   backgroundColor: colors.background,
   padding: 16,
-  paddingBottom: 32,
+  paddingTop: 24,
 })
 
 const styles = StyleSheet.create({
   folderContainer: {
     alignItems: "center",
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
+    flexGrow: 1,
+    marginRight: 36,
   },
-  mb5: {
-    marginBottom: 5,
-  },
-  mv8: {
-    marginTop: 8,
+  mr12: {
+    marginRight: 12,
   },
   note: {
     flex: 1,

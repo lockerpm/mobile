@@ -1,9 +1,10 @@
 import { useState } from "react"
 import { NewActionSheet } from "app/components/utils/actionSheet/ActionSheet"
-import { StyleSheet, TouchableOpacity, View } from "react-native"
-import { Icon, Text } from "app/components/cores"
+import { View } from "react-native"
+import { Text } from "app/components/cores"
 import { NewActionSheetItem } from "app/components/utils"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { CipherEditActionField } from "@/components/ciphers"
 
 interface Props {
   title: string
@@ -38,15 +39,9 @@ export const SetIDTitle = ({ title, setTitle }: Props) => {
 
   return (
     <View>
-      <TouchableOpacity onPress={() => setIsSelect(true)}>
-        <View style={styles.container}>
-          <View style={styles.row}>
-            <Text preset="bold" text={"Title: "} />
-            {!!title && <Text preset="bold" text={title} />}
-          </View>
-          <Icon icon="caret-right" size={20} color={colors.label} />
-        </View>
-      </TouchableOpacity>
+      <CipherEditActionField label="Title" onPress={() => setIsSelect(true)}>
+        {!!title && <Text preset="bold" text={title} />}
+      </CipherEditActionField>
 
       <NewActionSheet
         isOpen={isSelect}
@@ -69,15 +64,3 @@ export const SetIDTitle = ({ title, setTitle }: Props) => {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  row: {
-    alignItems: "center",
-    flexDirection: "row",
-  },
-})

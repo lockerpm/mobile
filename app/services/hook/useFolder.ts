@@ -7,7 +7,7 @@ import { CipherView } from "core/models/view"
 import { Alert } from "react-native"
 import { CipherRequest } from "core/models/request"
 import { CollectionView } from "core/models/view/collectionView"
-import { AccountRoleText } from "app/static/types"
+import { AccountRoleText, CipherRequestWithId, ShareMultipleCiphersGroups } from "app/static/types"
 import { useToast } from "../utils"
 import { useAppLocale } from "@/i18n"
 import { Base64 } from "@/utils/base64"
@@ -22,18 +22,24 @@ export function useFolder() {
 
   const _generateMemberKey = async (publicKey: string, orgKey: SymmetricCryptoKey) => {
     const pk = Base64.fromB64ToArray(publicKey)
-    const key = await cryptoService.rsaEncrypt(orgKey.key, pk.buffer)
+    const key = await cryptoService.rsaEncrypt(orgKey.key, pk.buffer as ArrayBuffer)
     return key.encryptedString
   }
 
   const _shareFolderToGroups = async (
     orgKey: SymmetricCryptoKey,
-    groups: { id: string; name: string }[]
-  ) => {
-    return await Promise.all(
+    groups: { id: string; name: string; role: AccountRoleText }[]
+  ): Promise<ShareMultipleCiphersGroups> => {
+    if (!groups.length) {
+      return []
+    }
+    const res = await Promise.all(
       groups.map(async (group) => {
         const groupMemberRes = await enterpriseStore.getListGroupMembers(group.id)
         if (groupMemberRes.kind !== "ok") {
+          return null
+        }
+        if (!groupMemberRes.data.members || !groupMemberRes.data.members.length) {
           return null
         }
         const members = await Promise.all(
@@ -42,26 +48,35 @@ export function useFolder() {
             ?.map(async (member) => {
               return {
                 username: member.email,
-                key: member.public_key ? await _generateMemberKey(member.public_key, orgKey) : null,
+                key: member.public_key
+                  ? (await _generateMemberKey(member.public_key, orgKey)) || ""
+                  : "",
               }
             })
         )
         return {
           id: group.id,
-          role: "member",
+          role: group.role,
           members,
         }
       })
     )
+    return res.filter((g) => g !== null)
   }
 
   // Share Folder
   const shareFolder = async (
     folder: FolderView,
-    emails: string[],
-    role: AccountRoleText,
-    autofillOnly: boolean,
-    groups?: { id: string; name: string }[]
+    emails: {
+      email: string
+      role: AccountRoleText
+    }[],
+    groups: {
+      id: string
+      name: string
+      role: AccountRoleText
+    }[],
+    autofillOnly: boolean
   ) => {
     if (!folder || (!emails.length && !groups?.length)) {
       return { kind: "ok" }
@@ -93,17 +108,17 @@ export function useFolder() {
 
       // Get public keys
       const members = await Promise.all(
-        emails.map(async (email) => {
-          const publicKeyRes = await cipherStore.getSharingPublicKey(email)
+        emails.map(async (item) => {
+          const publicKeyRes = await cipherStore.getSharingPublicKey(item.email)
           let publicKey = ""
           if (publicKeyRes.kind === "ok") {
             publicKey = publicKeyRes.data.public_key
           }
           return {
-            username: email,
-            role,
+            username: item.email,
+            role: item.role,
             hide_passwords: autofillOnly,
-            key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
+            key: publicKey ? (await _generateMemberKey(publicKey, orgKey)) || "" : "",
           }
         })
       )
@@ -126,17 +141,14 @@ export function useFolder() {
       const folderNameEnc = await cryptoService.encrypt(folder.name, orgKey)
 
       // prepare for share to groups
-      let groupsPayload = []
-      if (groups) {
-        groupsPayload = await _shareFolderToGroups(orgKey, groups)
-      }
+      const groupsPayload: ShareMultipleCiphersGroups = await _shareFolderToGroups(orgKey, groups)
 
       const res = await folderStore.shareFolder({
-        sharing_key: shareKey ? shareKey[0].encryptedString : null,
+        sharing_key: shareKey ? shareKey[0].encryptedString || "" : "",
         members,
         folder: {
           id: folder.id,
-          name: folderNameEnc.encryptedString,
+          name: folderNameEnc.encryptedString || "",
           ciphers: sharedCiphers,
         },
         groups: groupsPayload,
@@ -158,10 +170,16 @@ export function useFolder() {
 
   const shareFolderAddMember = async (
     collection: CollectionView,
-    emails: string[],
-    role: AccountRoleText,
-    autofillOnly: boolean,
-    _groups?: { id: string; name: string }[]
+    emails: {
+      email: string
+      role: AccountRoleText
+    }[],
+    _groups: {
+      id: string
+      name: string
+      role: AccountRoleText
+    }[],
+    autofillOnly: boolean
   ) => {
     if (!collection || !emails.length) {
       return { kind: "ok" }
@@ -172,17 +190,17 @@ export function useFolder() {
 
       // Get public keys
       const members = await Promise.all(
-        emails.map(async (email) => {
-          const publicKeyRes = await cipherStore.getSharingPublicKey(email)
+        emails.map(async (item) => {
+          const publicKeyRes = await cipherStore.getSharingPublicKey(item.email)
           let publicKey = ""
           if (publicKeyRes.kind === "ok") {
             publicKey = publicKeyRes.data.public_key
           }
           return {
-            username: email,
-            role,
+            username: item.email,
+            role: item.role,
             hide_passwords: autofillOnly,
-            key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
+            key: publicKey ? (await _generateMemberKey(publicKey, orgKey)) || "" : "",
           }
         })
       )
@@ -226,7 +244,7 @@ export function useFolder() {
         {
           folder: {
             id: collection.id,
-            name: folderNameEnc.encryptedString,
+            name: folderNameEnc.encryptedString || "",
             ciphers: data,
           },
         },
@@ -354,7 +372,7 @@ export function useFolder() {
       const res = await collectionStore.stopShare(collection.id, collection.organizationId, {
         folder: {
           id: collection.id,
-          name: folderNameEnc.encryptedString,
+          name: folderNameEnc.encryptedString || "",
           ciphers: data,
         },
       })
@@ -374,7 +392,7 @@ export function useFolder() {
   }
 
   const _prepareCipher = async (ciphers: CipherView[], key: SymmetricCryptoKey) => {
-    const data = []
+    const data: CipherRequestWithId[] = []
 
     const prepareCipher = async (c: CipherView) => {
       const cipherEnc = await cipherService.encrypt(c, key)

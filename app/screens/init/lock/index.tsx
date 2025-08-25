@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react"
 import { Alert, BackHandler, Platform } from "react-native"
 import { useStores } from "app/models"
 import { api } from "app/services/api"
-import { useAuthentication, useCipherData } from "app/services/hook"
+import { useAuthentication } from "app/services/hook"
 import { BiometricsType, LockType, LoginMethod } from "app/static/types/enum"
 import NetInfo from "@react-native-community/netinfo"
 import { LockByMasterPassword } from "./normal"
@@ -29,7 +29,6 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(({ navigation, ro
   const { user, uiStore, enterpriseStore } = useStores()
   const { cryptoService } = useCoreService()
   const { logout, biometricLogin } = useAuthentication()
-  const { loadFolders, loadCollections, loadOrganizations } = useCipherData()
 
   // ---------------------- PARAMS -------------------------
 
@@ -103,7 +102,6 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(({ navigation, ro
         // Sync teams and plan
         if (!isAndroidAutofillService) {
           await Promise.all([user.loadTeams(), user.loadPlan()])
-          Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
         }
       }
 
@@ -187,7 +185,9 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(({ navigation, ro
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-    fetchLockType()
+    if (!isAndroidAutofillService) {
+      fetchLockType()
+    }
   }, [])
 
   // // Handle back press
@@ -211,6 +211,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(({ navigation, ro
     handleUnlock,
     isUnlocking,
     setIsUnlocking,
+    biometryType,
   }
 
   if (route.params.type === LockType.OnPremise) {

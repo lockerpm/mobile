@@ -6,6 +6,7 @@ import {
   PasswordGeneratorScreen,
   PasswordHealthStack,
   PrivateRelayStack,
+  ScamStack,
 } from "./screens"
 
 const Stack = createNativeStackNavigator<ToolsRoute>()
@@ -21,6 +22,7 @@ export const ToolStack = observer(() => {
       <Stack.Screen name="passwordHealthStack" component={PasswordHealthStack} />
       <Stack.Screen name="privateRelayStack" component={PrivateRelayStack} />
       <Stack.Screen name="dataBreachScannerStack" component={DataBreachScannerStack} />
+      <Stack.Screen name="scamStack" component={ScamStack} />
     </Stack.Navigator>
   )
 })

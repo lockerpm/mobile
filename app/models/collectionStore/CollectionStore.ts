@@ -38,6 +38,7 @@ export const CollectionStoreModel = types
       if (!dataOnly) {
         self.apiToken = ""
       }
+
       self.lastUpdate = Date.now()
       self.collections = cast([])
       self.notSynchedCollections = cast([])
@@ -148,12 +149,6 @@ export const CollectionStoreModel = types
       return res
     },
   }))
-  .postProcessSnapshot((snapShot) => {
-    return {
-      ...snapShot,
-      collections: [],
-    }
-  })
 
 export interface CollectionStore extends Instance<typeof CollectionStoreModel> {}
 export interface CollectionStoreSnapshotOut extends SnapshotOut<typeof CollectionStoreModel> {}

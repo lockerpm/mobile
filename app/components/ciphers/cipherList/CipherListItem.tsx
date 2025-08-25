@@ -69,7 +69,9 @@ export const CipherListItem = memo(
           {/* Not sync icon */}
           {item.notSync && <Icon icon="wifi-slash" size={22} containerStyle={styles.ml12} />}
 
-          {isSelecting && <Checkbox value={isSelected} containerStyle={styles.ml12} />}
+          {isSelecting && (
+            <Checkbox value={isSelected} containerStyle={styles.ml12} onPress={onPress} />
+          )}
         </View>
       </TouchableOpacity>
     )

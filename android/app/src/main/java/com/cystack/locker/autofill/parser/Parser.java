@@ -8,7 +8,7 @@ import android.service.autofill.SaveRequest;
 import android.text.InputType;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
@@ -26,6 +26,7 @@ public class Parser {
     private static final String TAG = "Parser";
 
     private final List<AssistStructure> structures;
+    private final AssistStructure structure;
     private Result result;
     private String packageName;
     private String domain;
@@ -33,37 +34,46 @@ public class Parser {
 
     public FieldParser fieldParser = new FieldParser();
 
-    public Parser(@NonNull FillRequest request )
+    public Parser(FillRequest request )
     {
         List<FillContext> fillContexts = request.getFillContexts();
         Log.d(TAG, "getLatestAssistStructure: " + fillContexts.size());
         this.structures = fillContexts.stream()
                 .map(FillContext::getStructure)
                 .collect(Collectors.toList());
+        this.structure = fillContexts.get(fillContexts.size() - 1).getStructure();
     }
 
-    public Parser(@NonNull SaveRequest request )
+    public Parser(SaveRequest request )
     {
         List<FillContext> fillContexts = request.getFillContexts();
         Log.d(TAG, "getLatestAssistStructure: " + fillContexts.size());
         this.structures = fillContexts.stream()
                 .map(FillContext::getStructure)
                 .collect(Collectors.toList());
+        this.structure = fillContexts.get(fillContexts.size() - 1).getStructure();
     }
 
 
     public Result Parse() {
         result = new Result();
-        for (AssistStructure structure : structures) {
-//            dumpStructure(structure);
-            for(int i = 0 ; i < structure.getWindowNodeCount() ; i++) {
-                AssistStructure.WindowNode node = structure.getWindowNodeAt(i);
-                if (i == 0)
-                {
-                    this.packageName = getTitlePackage(node);
-                }
-                ParseNode(node.getRootViewNode());
+//        for (AssistStructure structure : structures) {
+//            for(int i = 0 ; i < structure.getWindowNodeCount() ; i++) {
+//                AssistStructure.WindowNode node = structure.getWindowNodeAt(i);
+//                if (i == 0)
+//                {
+//                    this.packageName = getTitlePackage(node);
+//                }
+//                ParseNode(node.getRootViewNode());
+//            }
+//        }
+        for(int i = 0 ; i < structure.getWindowNodeCount() ; i++) {
+            AssistStructure.WindowNode node = structure.getWindowNodeAt(i);
+            if (i == 0)
+            {
+                this.packageName = getTitlePackage(node);
             }
+            ParseNode(node.getRootViewNode());
         }
 
 
@@ -99,10 +109,6 @@ public class Parser {
         boolean isEditText = node.getClassName() != null && (node.getClassName().contains("EditText") || node.getClassName().contains("AutoCompleteTextView"));
         boolean isInputTag = node.getHtmlInfo() != null &&
                 "input".equalsIgnoreCase(node.getHtmlInfo().getTag());
-
-//        boolean isInputType = (inputType & InputType.TYPE_MASK_CLASS) == InputType.TYPE_CLASS_TEXT
-//                || (inputType & InputType.TYPE_MASK_CLASS) == InputType.TYPE_CLASS_NUMBER
-//                || (inputType & InputType.TYPE_MASK_CLASS) == InputType.TYPE_CLASS_PHONE;
 
         boolean isInputType = false;
         int inputType = node.getInputType();

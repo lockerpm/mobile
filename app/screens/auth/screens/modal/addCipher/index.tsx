@@ -2,19 +2,41 @@ import { FC, useCallback } from "react"
 import { StyleSheet, View, Image, ViewStyle } from "react-native"
 import { debounce } from "app/utils/utils"
 import { AuthScreenProps } from "app/navigators"
-import { ModalBackdrop, Text, BottomModalContainer, PressableScale } from "app/components/cores"
+import {
+  ModalBackdrop,
+  Text,
+  BottomModalContainer,
+  PressableScale,
+  Icon,
+} from "app/components/cores"
 import { VAULT_ITEMS } from "app/static/vault"
 import { CipherType } from "core/enums"
 import { delay } from "@/utils/delay"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { useStores } from "@/models"
+import { getTeam } from "@/utils/cipherHelper"
+import { AccountRole } from "@/static/types"
 
 export const AddCipherModalScreen: FC<AuthScreenProps<"addCipherModal">> = ({
   navigation,
   route,
 }) => {
-  const { themed } = useAppTheme()
+  const { cipherStore } = useStores()
+  const {
+    themed,
+    theme: { colors },
+  } = useAppTheme()
   const onClose = debounce(navigation.goBack, 400)
+
+  const hasAddCollectionPermission = (() => {
+    if (route.params?.collectionId) {
+      const organizations = cipherStore.organizations
+      const organizationRole = getTeam(organizations, route.params.collectionId).type
+      return organizationRole === AccountRole.OWNER || organizationRole === AccountRole.ADMIN
+    }
+    return false
+  })()
 
   const navigateToCreateCipher = useCallback((cipherTypes: CipherType[]) => {
     const initCollectionIds = route.params?.collectionId ? [route.params?.collectionId] : undefined
@@ -46,6 +68,12 @@ export const AddCipherModalScreen: FC<AuthScreenProps<"addCipherModal">> = ({
             <View style={themed($border)} />
           </PressableScale>
         ))}
+        {hasAddCollectionPermission && (
+          <View style={styles.shareFolderWarningContainer}>
+            <Icon icon="info" color={colors.warning} style={styles.mr8} />
+            <Text tx="folder:move_to_collection_warning" style={styles.warningText} />
+          </View>
+        )}
       </BottomModalContainer>
     </View>
   )
@@ -74,5 +102,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 20,
     paddingVertical: 12,
+  },
+  mr8: {
+    marginRight: 8,
+  },
+  shareFolderWarningContainer: {
+    flexDirection: "row",
+    marginVertical: 12,
+    paddingHorizontal: 16,
+  },
+  warningText: {
+    flexGrow: 1,
+    flexShrink: 1,
   },
 })

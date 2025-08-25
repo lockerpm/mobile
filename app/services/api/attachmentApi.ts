@@ -15,7 +15,7 @@ class AttachmentApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/attachments/url`,
+        `/v3/cystack_platform/pm/attachments/url`,
         {
           path,
         }
@@ -40,7 +40,7 @@ class AttachmentApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/attachments",
+        "/v3/cystack_platform/pm/attachments",
         payload
       )
       if (!response.ok) {
@@ -63,7 +63,7 @@ class AttachmentApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/attachments/multiple_delete",
+        "/v3/cystack_platform/pm/attachments/multiple_delete",
         {
           paths,
         }

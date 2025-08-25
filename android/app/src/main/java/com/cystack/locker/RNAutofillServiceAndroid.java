@@ -130,17 +130,21 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
 
     private void buildResponse(AutofillItem data) {
         RemoteViews presentation = new RemoteViews(getReactApplicationContext().getPackageName(), R.layout.remote_locker_app); // crash ?
-        Dataset response = Utils.BuildUnlockDataset(sfields, data, presentation);
 
-        if (!data.getId().isEmpty()) {
-            Utils.SetCredential(credentialID, data);
+        if (sfields != null ) {
+            Dataset response = Utils.BuildUnlockDataset(sfields, data, presentation);
+
+            if (!data.getId().isEmpty()) {
+                Utils.SetCredential(credentialID, data);
+            }
+
+            Intent replyIntent = new Intent();
+            replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, response);
+
+            Objects.requireNonNull(getCurrentActivity()).setResult(-1, replyIntent); //RESULT_OK
+            Objects.requireNonNull(getCurrentActivity()).finish();
         }
 
-        Intent replyIntent = new Intent();
-        replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, response);
-
-        Objects.requireNonNull(getCurrentActivity()).setResult(-1, replyIntent); //RESULT_OK
-        Objects.requireNonNull(getCurrentActivity()).finish();
     }
 }
 

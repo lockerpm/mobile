@@ -4,6 +4,7 @@ import { Text } from "app/components/cores"
 import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { useAppLocale } from "@/i18n"
+import { useStores } from "@/models"
 
 export type SortConfigType = {
   sort:
@@ -40,6 +41,7 @@ export const SortActionConfigModal = (props: Props) => {
     theme: { colors },
   } = useAppTheme()
   const { translate } = useAppLocale()
+  const { uiStore } = useStores()
 
   // --------------------COMPUTED---------------------
   const options: SortConfigModalType[] = useMemo(
@@ -103,6 +105,10 @@ export const SortActionConfigModal = (props: Props) => {
           iconColor={colors.primary}
           onPress={() => {
             onSelectSortConfig({
+              sort: item.sort,
+              option: item.option,
+            })
+            uiStore.setSortConfig({
               sort: item.sort,
               option: item.option,
             })

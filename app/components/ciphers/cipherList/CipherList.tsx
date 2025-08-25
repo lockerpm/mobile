@@ -237,6 +237,9 @@ export const CipherList = observer(
 
     // Toggle item selection
     const toggleItemSelection = (item: CipherAppView) => {
+      if (collectionId) {
+        return
+      }
       if (!isSelecting) {
         setIsSelecting(true)
       }

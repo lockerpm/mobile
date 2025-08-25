@@ -7,11 +7,12 @@ import { useAppLocale } from "@/i18n"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 interface Props {
+  haveCode?: boolean
   email: string
   language: string
   nonce: string
 }
-export const ResendOtp = ({ email, language, nonce }: Props) => {
+export const ResendOtp = ({ email, language, nonce, haveCode }: Props) => {
   const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
   const {
@@ -30,7 +31,7 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
       setEnableResendBtn(false)
       lastSend.current = Date.now()
       setTimer(60)
-      const res = await idApi.resendPinCode(email, language, nonce)
+      const res = await idApi.resendPinCode(email, language === "vi" ? "vi" : "en", nonce)
       if (res.kind !== "ok") {
         notifyApiError(res)
       }
@@ -82,8 +83,10 @@ export const ResendOtp = ({ email, language, nonce }: Props) => {
   }, [])
 
   useEffect(() => {
-    sendPinCode()
-  }, [])
+    if (!haveCode) {
+      sendPinCode()
+    }
+  }, [haveCode])
 
   return (
     <View>

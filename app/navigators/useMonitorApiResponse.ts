@@ -23,7 +23,18 @@ export const useMonitorApiResponse = (rootStore: RootStore) => {
     if (problem) {
       if (problem.kind === "unauthorized") {
         const ignoredUrls = ["/users/logout", "/sso/auth"]
-        const ignoredRoute = ["init", "intro", "onBoarding", "login", "forgotPassword", "signup"]
+        const ignoredRoute = [
+          "init",
+          "intro",
+          "onBoarding",
+          "login",
+          "loginByPincode",
+          "twoFA",
+          "forgotPassword",
+          "signup",
+          "signupPinCode",
+          "signupPassword",
+        ]
         const currentRoute = navigationRef.current?.getCurrentRoute()
 
         if (

@@ -1,12 +1,10 @@
 import { useCallback, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, Image, StyleSheet, ViewStyle } from "react-native"
-import { TextInputMaskOptionProp, TextInputMaskTypeProp } from "react-native-masked-text"
 import { useCipherData, useFolder } from "app/services/hook"
 import { CardView, CipherView, FieldView } from "core/models/view"
 import { CollectionView } from "core/models/view/collectionView"
 import { Header, Screen, TextInput, Text } from "app/components/cores"
-import { BrandSelectItem } from "./BrandSelectItem"
 import { BrowseScreenProps } from "app/navigators"
 import { CipherAppView, CipherEditHelperModal, CipherEditMode } from "app/static/types"
 import { CARD_BRANDS } from "app/static/constants"
@@ -15,45 +13,7 @@ import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { ThemedStyle } from "@/theme"
-import { TxKeyPath } from "@/i18n"
-
-// Card detection logic
-const detectCardBrand = (cardNumber: string) => {
-  const number = cardNumber.replace(/\D/g, "")
-
-  const cardPatterns = [
-    { value: "Visa", regex: /^4\d{0,15}$/ },
-    { value: "Mastercard", regex: /^(5[1-5]|2[2-7])\d{0,14}$/ },
-    { value: "Amex", regex: /^3[47]\d{0,13}$/ },
-    { value: "Discover", regex: /^6(?:011|5\d{2}|4[4-9])\d{0,12}$/ },
-    { value: "Diners Club", regex: /^3(?:0[0-5]|[68])\d{0,11}$/ },
-    { value: "JCB", regex: /^(?:2131|1800|35\d{0,3})\d{0,11}$/ },
-    { value: "Maestro", regex: /^(?:5[06789]|6\d)\d{0,17}$/ },
-    { value: "UnionPay", regex: /^62\d{0,17}$/ },
-  ]
-
-  for (const { value, regex } of cardPatterns) {
-    if (regex.test(number)) {
-      return CARD_BRANDS.find((b) => b.value === value)
-    }
-  }
-
-  return CARD_BRANDS.find((b) => b.value === "Other")
-}
-
-type InputItem = {
-  label: TxKeyPath
-  value: string
-  setter: (val: any) => void
-  isRequired?: boolean
-  inputType?: "default" | "email-address" | "numeric" | "phone-pad" | "number-pad" | "decimal-pad"
-  placeholder?: string
-  isPassword?: boolean
-  maskType?: TextInputMaskTypeProp
-  maskOptions?: TextInputMaskOptionProp
-  isBrandSelect?: boolean
-  options?: { label: string; value: string | number | null }[]
-}
+import { detectCardBrand } from "@/utils/cipherHelper"
 
 type Props = {
   item: CipherAppView
@@ -103,6 +63,8 @@ export const CardEdit = observer(
     // other
     const [fields, setFields] = useState<FieldView[]>(item.fields ?? [])
     const [note, setNote] = useState(item.notes)
+
+    const brandItem = CARD_BRANDS.find((b) => b.value === brand)
 
     // ----------------- METHODS ------------------
 
@@ -160,57 +122,6 @@ export const CardEdit = observer(
       }
     }
 
-    // Render
-    const cardDetails: InputItem[] = [
-      {
-        label: "card:card_name",
-        value: cardName,
-        setter: setCardName,
-        isRequired: true,
-        placeholder: "...",
-      },
-      {
-        label: "card:brand",
-        value: brand,
-        setter: setBrand,
-        isBrandSelect: true,
-        options: CARD_BRANDS,
-      },
-      {
-        label: "card:card_number",
-        value: cardNumber,
-        setter: (text) => {
-          setCardNumber(text)
-          setBrand(detectCardBrand(text)?.value || "")
-        },
-        inputType: "numeric",
-        maskType: "credit-card",
-        placeholder: "0000 0000 0000 0000",
-      },
-      {
-        label: "card:exp_date",
-        value: expDate,
-        setter: setExpDate,
-        inputType: "numeric",
-        maskType: "datetime",
-        maskOptions: {
-          format: "MM/YY",
-        },
-        placeholder: "MM/YY",
-      },
-      {
-        label: "card:cvv",
-        value: securityCode,
-        setter: setSecurityCode,
-        maskOptions: {
-          mask: brand === "Amex" ? "9999" : "999",
-        },
-        inputType: "numeric",
-        placeholder: brand === "Amex" ? "0000" : "000",
-        isPassword: true,
-      },
-    ]
-
     return (
       <Screen
         preset="auto"
@@ -232,7 +143,11 @@ export const CardEdit = observer(
         }}
       >
         <View style={styles.header}>
-          <Image resizeMode="contain" source={item.imgLogo} style={styles.logo} />
+          <Image
+            resizeMode="contain"
+            source={brandItem?.logo || item.imgLogo}
+            style={styles.logo}
+          />
           <View style={styles.flex}>
             <TextInput
               animated
@@ -249,28 +164,61 @@ export const CardEdit = observer(
         </View>
 
         <View style={styles.infoContainer}>
-          {cardDetails.map((item, index) => (
-            <View key={index}>
-              {item.isBrandSelect ? (
-                <BrandSelectItem brand={item.value} setBrand={(val) => item.setter(val)} />
-              ) : (
-                <TextInput
-                  animated
-                  isRequired={item.isRequired}
-                  isPassword={item.isPassword}
-                  keyboardType={item.inputType || "default"}
-                  maskType={item.maskType}
-                  maskOptions={item.maskOptions}
-                  labelTx={item.label}
-                  value={item.value}
-                  onChangeText={(text) => {
-                    item.setter(text)
-                  }}
-                  placeholder={item.placeholder}
-                />
+          <TextInput
+            animated
+            isRequired
+            labelTx={"card:card_name"}
+            value={cardName}
+            onChangeText={setCardName}
+            placeholder={"..."}
+          />
+          <View style={styles.row2}>
+            <TextInput
+              animated
+              keyboardType={"numeric"}
+              maskType={"credit-card"}
+              labelTx={"card:card_number"}
+              value={cardNumber}
+              onChangeText={(text) => {
+                setCardNumber(text)
+                setBrand(detectCardBrand(text)?.value || "")
+              }}
+              placeholder={"0000 0000 0000 0000"}
+            />
+
+            <View style={styles.brandContainer}>
+              {!!brand && (
+                <View style={themed($brand)}>
+                  <Image source={brandItem?.logo || item.imgLogo} style={styles.logoBrand} />
+                </View>
               )}
             </View>
-          ))}
+          </View>
+
+          <TextInput
+            animated
+            keyboardType={"numeric"}
+            maskType={"datetime"}
+            maskOptions={{
+              format: "MM/YY",
+            }}
+            labelTx={"card:exp_date"}
+            value={expDate}
+            onChangeText={setExpDate}
+            placeholder={"MM/YY"}
+          />
+          <TextInput
+            animated
+            isPassword
+            keyboardType={"numeric"}
+            maskOptions={{
+              mask: brand === "Amex" ? "9999" : "999",
+            }}
+            labelTx={"card:cvv"}
+            value={securityCode}
+            onChangeText={setSecurityCode}
+            placeholder={brand === "Amex" ? "0000" : "000"}
+          />
         </View>
 
         <CustomFieldsEdit fields={fields} setFields={setFields} />
@@ -294,7 +242,22 @@ const $block: ThemedStyle<ViewStyle> = ({ colors }) => ({
   paddingVertical: 8,
   backgroundColor: colors.block,
 })
+
+const $brand: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  borderRadius: 4,
+  borderColor: colors.border,
+  borderWidth: 1,
+  overflow: "hidden",
+})
+
 const styles = StyleSheet.create({
+  brandContainer: {
+    bottom: 2,
+    height: 50,
+    justifyContent: "center",
+    position: "absolute",
+    right: 16,
+  },
   flex: {
     flex: 1,
   },
@@ -309,6 +272,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 26,
     width: 50,
+  },
+  logoBrand: {
+    height: 32,
+    width: 42,
+  },
+  row2: {
+    alignItems: "center",
+    flexDirection: "row",
   },
   scrollContainer: {
     paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom,

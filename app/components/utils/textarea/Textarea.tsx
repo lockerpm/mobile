@@ -27,13 +27,14 @@ import { bin } from "react-native-redash"
 interface Props extends TextInputProps {
   style?: StyleProp<ViewStyle>
   inputStyle?: StyleProp<ViewStyle>
+  disableCopy?: boolean
   label?: string
   labelTx?: TxKeyPath
   value: string
 }
 
 export const Textarea = (props: Props) => {
-  const { style, inputStyle, editable = true, label, labelTx, value, ...rest } = props
+  const { style, inputStyle, editable = true, label, labelTx, disableCopy, value, ...rest } = props
   const {
     themed,
     theme: { colors },
@@ -48,7 +49,7 @@ export const Textarea = (props: Props) => {
   const input = useRef<TextInput>(null)
 
   const toggleStyle = useDerivedValue(() => {
-    return withTiming(bin(isFocus || !!value))
+    return withTiming(bin(isFocus || !!value || !editable))
   }, [isFocus, value])
 
   // ----------------- RENDER -----------------
@@ -93,14 +94,16 @@ export const Textarea = (props: Props) => {
       {!editable && (
         <ScrollView bounces={false} style={[$containerStyle, $view]}>
           <Text text={value} />
-          <PressableIcon
-            icon="copy"
-            size={18}
-            onPress={() => {
-              copyToClipboard(value)
-            }}
-            containerStyle={$icon}
-          />
+          {!!value && !disableCopy && (
+            <PressableIcon
+              icon="copy"
+              size={18}
+              onPress={() => {
+                copyToClipboard(value)
+              }}
+              containerStyle={$icon}
+            />
+          )}
         </ScrollView>
       )}
       {editable && (

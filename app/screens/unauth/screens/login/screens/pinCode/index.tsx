@@ -8,18 +8,13 @@ import { StyleSheet } from "react-native"
 import { LoginOptions, User2FAPincodeConfig } from "app/static/types"
 import { LoginScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
-import { ResendOtp } from "../../../signup/screens"
 import { useLoggedIn } from "../../../hook/useLoggedIn"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { useAppLocale } from "@/i18n"
+import { ResendOtp } from "./ResendOtp"
 
 export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observer(
-  ({
-    navigation,
-    route: {
-      params: { email },
-    },
-  }) => {
+  ({ navigation, route: { params } }) => {
     const {
       theme: { colors },
     } = useAppTheme()
@@ -28,14 +23,14 @@ export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observ
     const { user } = useStores()
     const { translate, lang } = useAppLocale()
 
+    const { email, code_otp, nonce: dlNonce, fromSignup } = params
     // ----------------------PARAMS--------------------
+    const nonce = useRef(randomString(32))
     const [code, setCode] = useState("")
     const [isLoadding, setIsLoading] = useState(false)
     const [errorText, setErrorText] = useState("")
 
     // ----------------------COMPUTED--------------------
-    const nonce = useRef(randomString(32))
-
     const isEnable = code.length === 6
 
     // ----------------------METHOD--------------------
@@ -55,6 +50,17 @@ export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observ
       })
     }, [email])
 
+    const onGoBack = useCallback(() => {
+      if (fromSignup) {
+        navigation.goBack()
+      } else {
+        navigation.navigate("login", {
+          initMethod: LoginOptions.PASSWORD,
+          email,
+        })
+      }
+    }, [fromSignup, navigation, email])
+
     const submitOTP = async () => {
       setIsLoading(true)
       const res = await user.registerByPinCode(code, nonce.current)
@@ -69,8 +75,8 @@ export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observ
           if ("access_token" in res.data) {
             setApiTokens(res.data.access_token)
           }
-          onLoggedIn()
-          setCode("")
+          onLoggedIn(fromSignup)
+          // setCode("")
         }
       } else {
         setErrorText(notifyApiError(res, true))
@@ -84,10 +90,16 @@ export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observ
       }
     }, [isEnable])
 
+    useEffect(() => {
+      if (!!code_otp) {
+        setCode(code_otp)
+      }
+    }, [dlNonce, code_otp])
+
     return (
       <Screen
         preset="scroll"
-        header={<Header leftIcon="arrow-left" onLeftPress={navigateToLoginWithPassword} />}
+        header={<Header leftIcon="arrow-left" onLeftPress={onGoBack} />}
         contentContainerStyle={styles.ph16}
       >
         <Logo preset={"cystack-logo"} style={styles.logo} />
@@ -99,6 +111,7 @@ export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observ
         </Text>
 
         <PasscodeInput
+          iniCode={code_otp}
           isError={!!errorText}
           isLoading={isLoadding}
           onCodeFilled={setCode}
@@ -109,20 +122,24 @@ export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observ
         />
         <Text text={errorText} color={colors.error} style={styles.error} />
 
-        <ResendOtp email={email} language={lang} nonce={nonce.current} />
+        <ResendOtp haveCode={!!code_otp} email={email} language={lang} nonce={nonce.current} />
 
-        <DividerText
-          tx="login_email_code:or"
-          color={colors.label}
-          size="sm"
-          containerStyle={styles.divider}
-        />
+        {!fromSignup && (
+          <>
+            <DividerText
+              tx="login_email_code:or"
+              color={colors.label}
+              size="sm"
+              containerStyle={styles.divider}
+            />
 
-        <Button
-          disabled={isLoadding}
-          onPress={navigateToLoginWithPassword}
-          tx="login_email_code:sign_in"
-        />
+            <Button
+              disabled={isLoadding}
+              onPress={navigateToLoginWithPassword}
+              tx="login_email_code:sign_in"
+            />
+          </>
+        )}
       </Screen>
     )
   }

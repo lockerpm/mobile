@@ -34,7 +34,7 @@ export const OtpSelectScreen: FC<BrowseScreenProps<"otpSelect">> = observer(
     const disableAddmore = user.isFreePlan && otpCount === FREE_PLAN_LIMIT.OTP
     // -------------------- METHODS ----------------------
 
-    const selectOtp = useCallback(
+    const onSelectPasswordOtp = useCallback(
       (item?: CipherAppView) => {
         EventBus.emit(AppEventType.CIPHER_EDIT_OTP_SELECT, item?.notes || "")
         navigation.goBack()
@@ -101,7 +101,7 @@ export const OtpSelectScreen: FC<BrowseScreenProps<"otpSelect">> = observer(
           isPasswordEdit
           selectedOtp={selectedOtp}
           setOtpCount={setOtpCount}
-          openActionMenu={selectOtp}
+          openActionMenu={onSelectPasswordOtp}
           openAddMenu={openAddOtpMenu}
           ListHeaderComponent={
             <PressableScale
@@ -109,7 +109,7 @@ export const OtpSelectScreen: FC<BrowseScreenProps<"otpSelect">> = observer(
                 themed($item),
                 { borderColor: !selectedOtp ? colors.primary : colors.border },
               ]}
-              onPress={() => selectOtp()}
+              onPress={() => onSelectPasswordOtp()}
             >
               <Text tx="password:no_otp" />
             </PressableScale>

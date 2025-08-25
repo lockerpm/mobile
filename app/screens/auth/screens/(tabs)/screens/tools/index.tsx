@@ -1,13 +1,22 @@
 import { FC, useCallback } from "react"
-import { View, TouchableOpacity, StyleSheet, ViewStyle } from "react-native"
+import { View, StyleSheet, ViewStyle } from "react-native"
 import { useStores } from "app/models"
-import { Text, Screen, Icon, ImageIcon, ImageIconTypes } from "app/components/cores"
+import { Text, Screen, Icon, ImageIcon, ImageIconTypes, PressableScale } from "app/components/cores"
 import { TabHeader } from "app/components/cores/header/TabHeader"
 import { PremiumTag } from "app/components/utils"
-
 import { TabsScreenProps, ToolsRoute } from "app/navigators"
 import { TxKeyPath } from "app/i18n"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { getLocales } from "expo-localization"
+
+const isVietnam = () => {
+  const locales = getLocales()
+  if (locales.length > 0) {
+    const countryCode = locales[0].regionCode // e.g. "VN"
+    return countryCode === "VN"
+  }
+  return false
+}
 
 type ToolsItem = {
   label: TxKeyPath
@@ -15,6 +24,7 @@ type ToolsItem = {
   icon: ImageIconTypes
   routeName: keyof ToolsRoute
   premium?: boolean
+  hide?: boolean
 }
 
 const TOOLS_ITEMS: ToolsItem[] = [
@@ -44,6 +54,13 @@ const TOOLS_ITEMS: ToolsItem[] = [
     routeName: "dataBreachScannerStack",
     premium: true,
   },
+  // {
+  //   label: "scam:tool.title",
+  //   desc: "scam:tool.label",
+  //   icon: "lookup",
+  //   routeName: "scamStack",
+  //   hide: !isVietnam(), // Hide if not in Vietnam
+  // },
 ]
 
 export const ToolsListScreen: FC<TabsScreenProps<"toolsTab">> = ({ navigation }) => {
@@ -88,37 +105,36 @@ export const ToolsListScreen: FC<TabsScreenProps<"toolsTab">> = ({ navigation })
           },
         ]}
       >
-        {Object.values(TOOLS_ITEMS).map((item, index) => {
-          if (user.onPremiseUser && item.routeName === "privateRelayStack") {
-            return null
-          }
+        {Object.values(TOOLS_ITEMS)
+          .filter((item) => !item.hide)
+          .map((item, index) => {
+            if (user.onPremiseUser && item.routeName === "privateRelayStack") {
+              return null
+            }
 
-          return (
-            <TouchableOpacity
-              key={index}
-              onPress={() => {
-                handleNavigate(item)
-              }}
-              style={[
-                styles.itemContainer,
-                index !== Object.keys(TOOLS_ITEMS).length - 1 && $border,
-              ]}
-            >
-              <ImageIcon icon={item.icon} size={40} containerStyle={styles.image} />
+            return (
+              <PressableScale
+                key={index}
+                onPress={() => {
+                  handleNavigate(item)
+                }}
+                style={[styles.itemContainer, index !== TOOLS_ITEMS.length - 1 && $border]}
+              >
+                <ImageIcon icon={item.icon} size={40} containerStyle={styles.image} />
 
-              <View style={styles.itemContent}>
-                <View style={styles.itemText}>
-                  <Text tx={item.label} />
-                  {item.premium && isFreeAccount && <PremiumTag style={styles.ml8} />}
+                <View style={styles.itemContent}>
+                  <View style={styles.itemText}>
+                    <Text tx={item.label} />
+                    {item.premium && isFreeAccount && <PremiumTag style={styles.ml8} />}
+                  </View>
+
+                  <Text preset="label" tx={item.desc} size="sm" />
                 </View>
 
-                <Text preset="label" tx={item.desc} size="sm" />
-              </View>
-
-              <Icon icon="caret-right" size={20} color={colors.label} style={styles.image} />
-            </TouchableOpacity>
-          )
-        })}
+                <Icon icon="caret-right" size={20} color={colors.label} style={styles.image} />
+              </PressableScale>
+            )
+          })}
       </View>
     </Screen>
   )

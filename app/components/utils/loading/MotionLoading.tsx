@@ -117,14 +117,15 @@ export const CircleProgress = ({
 
 interface MotionLoadingProps {
   message?: string
+  disableProgress?: boolean
 }
 
-export const MotionLoading = ({ message = "" }: MotionLoadingProps) => {
+export const MotionLoading = ({ message = "", disableProgress }: MotionLoadingProps) => {
   const { theme } = useAppTheme()
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <CircleProgress size={150} color={theme.colors.primary} />
+        {!disableProgress && <CircleProgress size={150} color={theme.colors.primary} />}
 
         <Logo preset={"default"} style={styles.logo} containerStyle={styles.logoContainer} />
       </View>

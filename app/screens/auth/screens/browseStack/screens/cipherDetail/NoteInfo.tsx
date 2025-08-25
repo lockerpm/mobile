@@ -9,7 +9,7 @@ type Props = {
 export const NoteInfo = ({ item }: Props) => {
   return (
     <View>
-      <Textarea labelTx="common:notes" value={item.notes} editable={false} />
+      {item.notes && <Textarea labelTx="common:notes" value={item.notes} editable={false} />}
     </View>
   )
 }

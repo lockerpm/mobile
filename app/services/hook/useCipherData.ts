@@ -189,6 +189,7 @@ export function useCipherData() {
         // Load folders
         loadFolders()
         loadCollections()
+        loadOrganizations()
 
         // Clear not updated list
         cipherStore.clearNotUpdate()
@@ -1294,6 +1295,7 @@ export function useCipherData() {
   }
 
   // -------------------------------------------------------
+
   // Share multiple ciphers
   const shareMultipleCiphers = async (
     ids: string[],

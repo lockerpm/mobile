@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react"
 import { useStores } from "app/models"
 import { useCipherData, useCipherHelper } from "app/services/hook"
-import { beautifyName, decodeGoogleAuthenticatorImport, getTOTP, parseOTPUri } from "app/utils/totp"
+import { beautifyName, decodeGoogleAuthenticatorImport } from "app/utils/totp"
 import { CipherType } from "core/enums"
 import { Header, Screen } from "app/components/cores"
 import { observer } from "mobx-react-lite"
@@ -18,6 +18,7 @@ import {
 } from "react-native-vision-camera"
 import { ActivityIndicator, Dimensions, StyleSheet, View, ViewStyle } from "react-native"
 import { ThemedStyle } from "@/theme"
+import { delay } from "@/utils/delay"
 
 const { width, height } = Dimensions.get("screen")
 
@@ -29,7 +30,7 @@ export const QRScannerScreen: FC<AuthScreenProps<"qrScannerModal">> = observer((
   } = useAppTheme()
   const { notifyTx } = useToast()
   const { newCipher } = useCipherHelper()
-  const { createCipher, importCiphers } = useCipherData()
+  const { importCiphers } = useCipherData()
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -50,23 +51,35 @@ export const QRScannerScreen: FC<AuthScreenProps<"qrScannerModal">> = observer((
   }
 
   const handleSaveQr = async (uri: string) => {
-    const payload = parseOTPUri(uri)
-    try {
-      const otp = getTOTP(payload)
-      if (otp) {
-        const cipher = newCipher(CipherType.TOTP)
-        cipher.name = beautifyName(payload.account || "")
-        cipher.notes = uri
-        await createCipher(cipher, 0, [])
-      } else {
-        notifyTx("error", "authenticator:invalid_qr")
-      }
-    } catch (e) {
-      Logger.error("Save QR: " + e)
-      notifyTx("error", "authenticator:invalid_qr")
-    }
-    setIsLoading(false)
     navigation.goBack()
+    delay(20).then(() => {
+      navigation.navigate("browseStack", {
+        screen: "cipherEdit",
+        params: {
+          mode: "add",
+          cipherType: CipherType.TOTP,
+          otpUri: uri,
+        },
+      })
+    })
+
+    // const payload = parseOTPUri(uri)
+    // try {
+    //   const otp = getTOTP(payload)
+    //   if (otp) {
+    //     const cipher = newCipher(CipherType.TOTP)
+    //     cipher.name = beautifyName(payload.account || "")
+    //     cipher.notes = uri
+    //     await createCipher(cipher, 0, [])
+    //   } else {
+    //     notifyTx("error", "authenticator:invalid_qr")
+    //   }
+    // } catch (e) {
+    //   Logger.error("Save QR: " + e)
+    //   notifyTx("error", "authenticator:invalid_qr")
+    // }
+    // setIsLoading(false)
+    // navigation.goBack()
   }
 
   const handleGoogleAuthenticatorImport = async (uri: string) => {

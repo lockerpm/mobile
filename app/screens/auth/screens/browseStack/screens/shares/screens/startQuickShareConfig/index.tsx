@@ -65,7 +65,7 @@ export const QuickSharesScreen: FC<ShareScreenProps<"quickShares">> = observer(
     const addEmail = () => {
       const e = email.trim().toLowerCase()
       const isValidate = validateEmail(e)
-      if (isValidate) {
+      if (!isValidate) {
         notifyTx("error", "error:email_validate")
         return
       }
@@ -151,6 +151,7 @@ export const QuickSharesScreen: FC<ShareScreenProps<"quickShares">> = observer(
 
     return (
       <Screen
+        disableAvoidkeyboard
         preset="scroll"
         safeAreaEdges={["bottom"]}
         header={

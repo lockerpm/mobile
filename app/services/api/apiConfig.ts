@@ -21,6 +21,6 @@ export interface ApiConfig {
  * The default configuration for the app.
  */
 export const DEFAULT_API_CONFIG: ApiConfig = {
-  url: Config.BASE_URL || "https://jsonplaceholder.typicode.com",
+  url: Config.BASE_URL,
   timeout: 15000,
 }

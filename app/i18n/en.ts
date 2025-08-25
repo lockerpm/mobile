@@ -149,6 +149,7 @@ const en = {
     required_text: "This field is required",
     social_login: "Or login with",
     from: "From",
+    shareWith: "Share with:",
   },
   navigator: {
     is_offline: "Locker is currently in offline mode.",
@@ -463,7 +464,7 @@ const en = {
     confirm_master_pass: "Confirm Master Password",
     hint: "Hint (optional)",
     hint_error: "The Hint cannot be the same as the Master Password",
-    btn: "Create Password",
+    btn: "Create Master Password",
     note: "Note: Locker cannot view, store, or re-issue Master Password in case you forget or lose it.",
   },
   confirm_create_master_pass: {
@@ -561,6 +562,11 @@ const en = {
     sign_up_with: "Or Sign Up With",
     marketing: "I want to stay updated on news, events and offers",
     error_pin: "Code is invalid. Please retry!",
+    activated: "Your account has been activated successfully.",
+    useLocker: "You can use Locker now!",
+    activatedError: "This activation link is expired or have already been used.",
+    try_again: "Please try again with another activation link.",
+    backHome: "Back to home",
   },
   login_email_code: {
     title: "Check your email for verification code",
@@ -706,6 +712,7 @@ const en = {
     shared_folder: "Shared folder",
     encrypted_content: "Encrypted Content",
     share_folder: {
+      detail: "View items",
       error_share_item:
         "Folders with shared items can’t be shared. Remove or stop sharing the items and try again",
       manage_user: "Manage Share",
@@ -746,10 +753,15 @@ const en = {
     leave: "Leave",
     leave_desc: "Are you sure you want to leave this share group?",
     shared_with: "Shared with",
+    users: "users",
+    groups: "groups",
+    user: "user",
+    group: "group",
     no_members: "No member",
     start_sharing: "Start Sharing",
     stop_sharing: "Stop Sharing",
     share_x_items: "Share {{count}} items",
+    share_x_item: "Share {{count}} item",
     confirm_share: {
       verify_fingerprint: "Verify fingerprint phrase",
       verification_desc:
@@ -1404,6 +1416,123 @@ const en = {
     encrypting: "Encrypting file...",
     uploading: "Uploading file...",
     upgrade: "Upgrade account to Premium to download your file attachments.",
+  },
+  scam: {
+    tool: {
+      title: "Anti-Scam",
+      label: "Look up suspicious phone numbers and warn the community about scams",
+    },
+    home: {
+      lookup: {
+        title: "Phone Lookup",
+        label: "Check suspicious phone numbers",
+      },
+      report: {
+        title: "Report Phone",
+        label: "Send warnings about scam phone numbers to protect the community",
+      },
+      myReportList: {
+        title: "My Report List",
+        label: "List of phone numbers I've reported",
+      },
+      getWarning: "Get Warnings",
+      getWarningDesc: "Receive warnings when suspicious phone numbers call",
+      otherScam: "Check other scam types",
+      otherScamDesc: "Suspect a website URL or Facebook profile is a scam?",
+      checkNow: "Check Now",
+    },
+    lookup: {
+      title: "Phone Lookup",
+      label:
+        "Check if a phone number has been reported by Locker users or users from other communities.",
+      btn: "Check",
+      placeholder: "Enter Vietnam phone number",
+      safe: "No risks detected",
+    },
+    lookupResult: {
+      maybe: {
+        title: "May not be safe",
+        label: "Scam type: ",
+      },
+      detail: {
+        network: "Network: ",
+        name: "Name: ",
+      },
+      source: "Report from data source: ",
+      community: "Community reports: {{count}} report(s)",
+      yourPhone: "Is this your phone number?",
+      contact: "Contact ",
+      support: " for help with removing the report.",
+      btn: "Report scam phone number",
+      user: {
+        title: "A user",
+        label: " warned",
+      },
+    },
+    report: {
+      title: "Report Phone",
+      label: "Notice something suspicious? Share your experience with the community.",
+      btn: "Submit Report",
+      enterPhone: "Enter phone number (*)",
+      enterPhonePlaceholder: "Enter phone number to report",
+      typeTitle: "Scam Type (*)",
+      type: {
+        fake_finance_banking: "Fake bank/business",
+        fake_ecommerce: "Fake e-commerce/shopping/ticket booking site",
+        fake_government: "Fake government/legal entity",
+        fake_public_service: "Fake public service/utility",
+        fake_login_page: "Fake login page",
+        malicious: "Page containing malware/viruses",
+        fake_giveaway: "Fake prize/lottery page",
+        scam_online_store: "Fraudulent online store",
+        investment_scam: "Investment/cryptocurrency scam page",
+        fake_me: "Impersonating me, my friends, or family",
+        fake_organization: "Impersonating organization/public service",
+        fake_brand: "Brand impersonation",
+        fake_celebrity: "Celebrity impersonation",
+        fake_promotion: "Fake sales/promotions",
+        fake_job: "Fake job offers",
+        spam_link: "Spam malicious links (via comments or messages)",
+        gambling: "Investment or gambling solicitation",
+        fake_police: "Police/public service impersonation",
+        fake_electricity_company: "Electricity/Water bill scam",
+        fake_bank_credit_securities: "Bank / Credit / Securities scam or impersonation",
+        phone_spam: "Spam calls / Missed call spam",
+        online_delivery: "Online delivery",
+        fake_ads_prize: "Fake ads / Prize scams",
+        customer_service: "Customer service / Support center / Hotline",
+        real_estate: "Real estate",
+        insurance: "Insurance",
+        scam: "Scam",
+        other: "Other",
+      },
+      anonymos: "Post anonymously",
+      desc: "Description",
+      descPlaceholder: "Your experience with this phone number",
+      success: {
+        title: "Report Successful",
+        label: "Thank you for helping protect the community!",
+      },
+      error: {
+        title: "Error",
+        label: "An error occurred while sending the report. Please try again later.",
+      },
+      enableScam: {
+        ios: {
+          title: "Enable Scam Phone Reporting",
+          desc: "To enable scam phone blocking feature, you need to grant permissions to the app following these instructions",
+        },
+      },
+    },
+    myReportList: {
+      empty: {
+        title: "No reports yet",
+        desc: "You haven't reported any phone numbers yet. Start reporting to help the community.",
+      },
+      deleteConfirm: "Are you sure you want to delete this report?",
+      deleteSuccess: "Report deleted successfully",
+      scanType: "Scam Type: ",
+    },
   },
 }
 

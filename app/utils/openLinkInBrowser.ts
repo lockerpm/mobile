@@ -12,6 +12,7 @@ const DELETE_ACCOUNT_URL = "https://locker.io/settings/account"
 const LANGUAGE_SUPPORT_URL =
   "https://cystack.notion.site/Locker-Translation-Guide-bb4e4fc4c23d4bbc994375035b124829"
 
+const SCAM_URL = "https://locker.io/vi/cong-cu-nhan-biet-lua-dao"
 /**
  * Helper for opening a give URL in an external browser.
  */
@@ -29,3 +30,5 @@ export const openRegisterBusiness = () => openLinkInBrowser(REGISTER_BUSINESS_UR
 export const openDeleteAccount = () => openLinkInBrowser(DELETE_ACCOUNT_URL)
 
 export const openLanguageSupport = () => openLinkInBrowser(LANGUAGE_SUPPORT_URL)
+
+export const openScamUrl = () => openLinkInBrowser(SCAM_URL)

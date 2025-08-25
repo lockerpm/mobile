@@ -28,7 +28,7 @@ export const AnimatedTabIndicator = ({ val, animIndex }: ContentProps) => {
     }
   }, [colors, val])
 
-  return <Animated.View style={[$contentStyle, themed([$container])]} />
+  return <Animated.View style={[themed([$container]), $contentStyle]} />
 }
 
 const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({

@@ -29,7 +29,7 @@ export const FolderSelectScreen: FC<BrowseScreenProps<"folderSelect">> = observe
   ({
     navigation,
     route: {
-      params: { mode, initialId = "unassigned", cipherIds = [] },
+      params: { mode, initialId = null, cipherIds = [] },
     },
   }) => {
     const { folderStore, cipherStore, collectionStore } = useStores()
@@ -63,7 +63,7 @@ export const FolderSelectScreen: FC<BrowseScreenProps<"folderSelect">> = observe
       })
     }, [navigation])
 
-    const onSelectItem = useCallback((id: string, isCollection: boolean) => {
+    const onSelectItem = useCallback((id: string | null, isCollection: boolean) => {
       isSelectedCollection.current = isCollection
       setSelectedFolderId(id)
     }, [])
@@ -172,13 +172,13 @@ export const FolderSelectScreen: FC<BrowseScreenProps<"folderSelect">> = observe
               </PressableScale>
 
               <PressableScale
-                onPress={() => setSelectedFolderId("unassigned")}
+                onPress={() => onSelectItem(null, false)}
                 style={themed($itemContainer)}
               >
                 <View style={styles.row}>
                   <Text tx={"folder:no_folder"} style={styles.noFolder} />
 
-                  {selectedFolderId === "unassigned" && (
+                  {selectedFolderId === null && (
                     <Icon icon="check" size={18} color={colors.primary} />
                   )}
                 </View>
@@ -211,7 +211,7 @@ export const FolderSelectScreen: FC<BrowseScreenProps<"folderSelect">> = observe
 )
 
 type ItemProps = {
-  selectedId: string
+  selectedId: string | null
   item: FolderView | CollectionView
   isCollection: boolean
   setSelectedFolderId: (id: string, isCollection: boolean) => void

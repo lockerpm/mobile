@@ -1,6 +1,5 @@
-import { View, StyleSheet, Dimensions } from "react-native"
+import { View, StyleSheet, Dimensions, ViewStyle } from "react-native"
 import {
-  Button,
   Checkbox,
   Icon,
   PressableIcon,
@@ -12,6 +11,7 @@ import { TxKeyPath } from "@/i18n"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { ExpireSelect } from "./ExpireSelect"
 import { AccessSelect } from "./AccessSelect"
+import { ThemedStyle } from "@/theme"
 
 const width = Dimensions.get("window").width
 
@@ -26,7 +26,7 @@ interface QuickShareOptionProps {
 const QuickShareOption = ({ isAnyone, isSelect, action, tx, iconColor }: QuickShareOptionProps) => {
   return (
     <PressableScale style={styles.optionContainer} onPress={action}>
-      <Checkbox value={isSelect} />
+      <Checkbox value={isSelect} onPress={action} />
       <Icon
         icon={isAnyone ? "users-three" : "user"}
         size={24}
@@ -70,6 +70,7 @@ export const QuickShareConfig = ({
   setExpireAfter,
 }: QuickShareConfigProps) => {
   const {
+    themed,
     theme: { colors },
   } = useAppTheme()
 
@@ -106,17 +107,25 @@ export const QuickShareConfig = ({
           <View style={styles.row}>
             <View style={styles.width80}>
               <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+                returnKeyType="done"
                 placeholderTx="shares:share_folder.add_email"
                 selectionColor={colors.primary}
                 onChangeText={setEmail}
                 value={email}
                 clearButtonMode="unless-editing"
-                clearTextOnFocus={true}
                 onSubmitEditing={addEmail}
               />
             </View>
-
-            <Button disabled={!email} tx="common:add" onPress={addEmail} />
+            <PressableIcon
+              icon="user-plus"
+              size={24}
+              color={colors.white}
+              onPress={addEmail}
+              containerStyle={[themed($inputAdd), !email && styles.disableAdd]}
+            />
           </View>
           <Text tx="quick_shares:config.verify" style={styles.verify} />
         </View>
@@ -147,10 +156,22 @@ export const QuickShareConfig = ({
     </View>
   )
 }
+const $inputAdd: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  backgroundColor: colors.primary,
+  borderRadius: 12,
+  padding: 12,
+  marginLeft: 12,
+  height: 50,
+  justifyContent: "center",
+  alignItems: "center",
+})
 
 const styles = StyleSheet.create({
   checkbox: {
     marginHorizontal: 12,
+  },
+  disableAdd: {
+    opacity: 0.5,
   },
   mb12: {
     marginBottom: 12,
@@ -186,6 +207,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   width80: {
-    width: "80%",
+    flexGrow: 1,
+    flexShrink: 1,
   },
 })

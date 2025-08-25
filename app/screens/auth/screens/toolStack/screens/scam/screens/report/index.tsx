@@ -1,0 +1,147 @@
+import { Button, Checkbox, Header, Screen, Text, TextInput } from "@/components/cores"
+import { ScamScreenProps } from "@/navigators"
+import { FC, useCallback, useState } from "react"
+import { Keyboard, StyleSheet, TouchableOpacity } from "react-native"
+import { ScamTypeInput } from "./ScamTypeInput"
+import { ScamPhoneType, ScamType } from "@/static/types"
+import { toolApi } from "@/services/api"
+import { observer } from "mobx-react-lite"
+import { useStores } from "@/models"
+import { useAppLocale } from "@/i18n"
+import { validateVietnamesePhoneNumber } from "@/utils/utils"
+import { useToast } from "@/services/utils"
+import { CommonActions } from "@react-navigation/native"
+
+export const ScamReportScreen: FC<ScamScreenProps<"report">> = observer(
+  ({ navigation, route: { params } }) => {
+    const { user } = useStores()
+    const { translate } = useAppLocale()
+    const { notifyTx, notifyApiError } = useToast()
+
+    // -----------------------PARAMS----------------------------
+    const [phoneNumber, setPhoneNumber] = useState(params?.phoneNumber || "")
+    const [scamType, setScamType] = useState<ScamPhoneType>(ScamPhoneType.PhoneSpam)
+    const [description, setDescription] = useState("")
+    const [anonymos, setAnonymos] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const toggleAnonymos = useCallback(() => {
+      Keyboard.dismiss()
+      setAnonymos((prev) => !prev)
+    }, [])
+
+    const isValidPhoneNumber = validateVietnamesePhoneNumber(phoneNumber)
+    const canSubmit = phoneNumber.trim() !== "" && isValidPhoneNumber && !isLoading
+
+    const sendReport = async () => {
+      if (!canSubmit) return
+
+      setIsLoading(true)
+      const res = await toolApi.scamReport(user.apiToken, {
+        type: ScamType.Phone,
+        value: phoneNumber,
+        description: description || translate(`scam:report.type.${scamType}`),
+        phishing_type: scamType,
+        target_entity: "",
+        is_anonymous: anonymos,
+      })
+
+      if (res.kind === "ok") {
+        notifyTx("success", "scam:report.success.title")
+        navigation.goBack()
+      } else {
+        notifyApiError(res)
+      }
+    }
+
+    const navigateBack = useCallback(() => {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0, // Index of the active route in new state
+          routes: [{ name: "scamList" }],
+        })
+      )
+    }, [navigation])
+
+    return (
+      <Screen
+        disableAvoidkeyboard
+        preset="auto"
+        safeAreaEdges={["bottom"]}
+        header={
+          <Header leftIcon="arrow-left" onLeftPress={navigateBack} titleTx="scam:report.title" />
+        }
+        footer={
+          <Button
+            tx="scam:report.btn"
+            onPress={sendReport}
+            style={styles.m16}
+            disabled={!canSubmit}
+            loading={isLoading}
+          />
+        }
+        contentContainerStyle={styles.ph16}
+      >
+        <Text tx="scam:report.label" />
+        <Text
+          size="sm"
+          weight="semiBold"
+          tx="scam:report.enterPhone"
+          style={styles.textInputTitle}
+        />
+        <TextInput
+          placeholderTx="scam:report.enterPhonePlaceholder"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+          keyboardType="phone-pad"
+        />
+
+        <Text
+          size="sm"
+          weight="semiBold"
+          tx="scam:report.typeTitle"
+          style={styles.textInputTitle}
+        />
+        <ScamTypeInput scamType={scamType} setScamType={setScamType} />
+
+        <Text size="sm" weight="semiBold" tx="scam:report.desc" style={styles.textInputTitle} />
+        <TextInput
+          placeholderTx="scam:report.descPlaceholder"
+          value={description}
+          onChangeText={setDescription}
+          autoCorrect={false}
+        />
+
+        <TouchableOpacity style={styles.anonymos} onPress={toggleAnonymos}>
+          <Checkbox value={anonymos} onPress={toggleAnonymos} />
+          <Text tx="scam:report.anonymos" style={styles.ml8} />
+        </TouchableOpacity>
+      </Screen>
+    )
+  }
+)
+
+const styles = StyleSheet.create({
+  anonymos: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 16,
+  },
+  m16: {
+    marginHorizontal: 16,
+  },
+  ml8: {
+    marginLeft: 8,
+  },
+  mt32: {
+    marginTop: 32,
+  },
+  ph16: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  textInputTitle: {
+    marginBottom: 4,
+    marginTop: 16,
+  },
+})

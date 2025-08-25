@@ -41,3 +41,52 @@ export type SubdomainData = {
   num_spam: number
   num_forwarded: number
 }
+
+export enum ScamPhoneType {
+  FakePolice = "fake_police",
+  FakeElectricityCompany = "fake_electricity_company",
+  FakeBanking = "fake_bank_credit_securities",
+  PhoneSpam = "phone_spam",
+  OnlineDelivery = "online_delivery",
+  FakePrize = "fake_ads_prize",
+  Other = "other",
+}
+
+export type ScamLookupResult = {
+  result: {
+    data_sources: any[]
+    id: string
+    phishing_type: ScamPhoneType
+    reports: number
+    status: string
+    target_entity: null
+    type: ScamType
+    value: string
+    value_information: any
+  }
+}
+
+export enum ScamType {
+  Phone = "phone",
+  Url = "url",
+}
+
+export type ScamMyReportParams = {
+  type: ScamType
+  value: string
+  description: string
+  phishing_type: string
+  target_entity: string
+  is_anonymous: boolean
+}
+
+export type ScamMyReportData = {
+  created_time: number
+  description: string
+  id: string
+  is_anonymous: boolean
+  phishing_type: string
+  type: ScamType
+  user: any
+  value: string
+}

@@ -17,7 +17,7 @@ export const useLoggedIn = () => {
   const { notifyTx } = useToast()
 
   const onLoggedIn = useCallback(
-    async (fromSignin?: boolean) => {
+    async (fromSignup?: boolean) => {
       try {
         const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
         if (userRes.kind === "ok" && userPwRes.kind === "ok") {
@@ -43,7 +43,7 @@ export const useLoggedIn = () => {
             )
           }
         } else {
-          notifyTx("error", fromSignin ? "error:signup_failed" : "error:login_failed")
+          notifyTx("error", fromSignup ? "error:signup_failed" : "error:login_failed")
         }
       } catch (error) {
         Logger.error("onLoggedIn", error)

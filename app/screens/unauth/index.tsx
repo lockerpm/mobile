@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite"
 import {
+  ActivateAccountScreen,
   CreateMasterPasswordScreen,
   ForgotPasswordStack,
   IntroScreen,
@@ -24,8 +25,8 @@ export const UnAuthStack = observer(() => {
     >
       <Stack.Screen name="intro" component={IntroScreen} />
       <Stack.Screen name="onBoarding" component={OnboardingScreen} />
+      <Stack.Screen name="activateAccount" component={ActivateAccountScreen} />
       <Stack.Screen name="ssoStack" component={SSOStack} />
-
       <Stack.Screen name="loginStack" component={LoginStack} />
       <Stack.Screen name="signupStack" component={SignupStack} />
       <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />

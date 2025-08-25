@@ -73,13 +73,13 @@ export const AuthStack: FC<AppScreenProps<"authStack">> = observer(({ navigation
       return
     }
     if (lastUpdateRes.kind === "ok") {
-      bumpTimestamp =
-        (lastUpdateRes.data.revision_date - new Date().getTimezoneOffset() * 60) * 1000
+      bumpTimestamp = lastUpdateRes.data.revision_date * 1000
+
+      console.log("BUMP TIMESTAMP: ", bumpTimestamp, cipherStore.lastSync)
       if (bumpTimestamp <= (cipherStore.lastSync ?? 0)) {
         return
       }
     }
-
     // Send request
     const syncRes = await startSyncProcess(bumpTimestamp)
     if (!syncRes || syncRes.kind !== "ok") {
@@ -244,7 +244,6 @@ export const AuthStack: FC<AppScreenProps<"authStack">> = observer(({ navigation
 
   useInAppReview()
 
-  // Web socket connection
   useEffect(() => {
     if (!uiStore.isOffline && !socket && user.isLoggedInPw && !isAndroidAutofillService) {
       setSocket(generateSocket())

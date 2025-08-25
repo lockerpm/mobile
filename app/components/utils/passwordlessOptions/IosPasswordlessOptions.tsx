@@ -94,7 +94,7 @@ const Options = ({ titleTx, labelTx, icon, isSelect, action }: OptionsProps) => 
           </View>
         </View>
 
-        <Checkbox value={isSelect} />
+        <Checkbox value={isSelect} onPress={action} />
       </View>
     </PressableScale>
   )

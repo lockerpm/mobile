@@ -42,6 +42,9 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fb1260309664112849</string>
+				<string>locker</string>
+				<string>com.cystack.lockerapp</string>
+				<string>exp+locker</string>
 			</array>
 		</dict>
 		<dict>
@@ -52,19 +55,6 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>tagmanager.c.com.cystack.lockerapp</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>locker</string>
-				<string>com.cystack.lockerapp</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>exp+locker</string>
 			</array>
 		</dict>
 	</array>

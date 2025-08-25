@@ -178,7 +178,8 @@ const styles = StyleSheet.create({
   },
   notes: {
     padding: 16,
-    paddingBottom: 32,
+    paddingBottom: 20,
+    paddingTop: 0,
   },
   scrollContainer: {
     paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom,

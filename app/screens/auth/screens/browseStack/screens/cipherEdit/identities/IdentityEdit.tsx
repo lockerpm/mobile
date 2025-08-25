@@ -347,7 +347,8 @@ const styles = StyleSheet.create({
   },
   info: {
     padding: 16,
-    paddingBottom: 32,
+    paddingBottom: 20,
+    paddingTop: 24,
   },
   scrollContainer: {
     paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom,

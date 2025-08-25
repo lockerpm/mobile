@@ -128,6 +128,7 @@ export const ManageFolderSharedMemberScreen: FC<ShareScreenProps<"manageFolderSh
       return (
         <Screen
           safeAreaEdges={["bottom"]}
+          disableAvoidkeyboard
           header={
             <Header
               titleTx="shares:share_folder.manage_user"

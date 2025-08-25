@@ -150,6 +150,7 @@ const fr: Translations = {
     signup: "S'inscrire",
     sign_in: "Se connecter",
     from: "De",
+    shareWith: "Partager avec :",
   },
   navigator: {
     is_offline: "Locker est actuellement en mode hors ligne.",
@@ -479,7 +480,7 @@ const fr: Translations = {
     desc: "Le mot de passe maître est votre mot de passe de déverrouillage Locker. C’est le seul mot de passe dont vous avez besoin pour accéder à tous les autres mots de passe stockés dans Locker. Veuillez ne pas partager ce mot de passe avec quiconque.",
     confirm_master_pass: "Confirmer le mot de passe maître",
     hint: "Indice (facultatif)",
-    btn: "Créer un mot de passe",
+    btn: "Créer le mot de passe maître",
     note: "Remarque : Locker ne peut pas afficher, stocker ou réémettre le mot de passe maître en cas d'oubli ou de perte.",
     hint_error: "L'indice ne peut pas être identique au mot de passe maître",
   },
@@ -691,6 +692,7 @@ const fr: Translations = {
     shared_folder: "Dossier partagé",
     encrypted_content: "Contenu chiffré",
     share_folder: {
+      detail: "Voir les éléments",
       error_share_item:
         "Les dossiers avec des éléments partagés ne peuvent pas être partagés. Supprimez ou arrêtez de partager les éléments et réessayez",
       manage_user: "Gérer le partage",
@@ -726,10 +728,15 @@ const fr: Translations = {
     leave: "Quitter",
     leave_desc: "Êtes-vous sûr de vouloir quitter ce groupe de partage ?",
     shared_with: "Partagé avec",
+    users: "utilisateurs",
+    groups: "groupes",
+    user: "utilisateur",
+    group: "groupe",
     no_members: "Aucun membre",
     start_sharing: "Commencer le partage",
     stop_sharing: "Arrêter le partage",
     share_x_items: "Partager les {{count}} éléments",
+    share_x_item: "Partager {{count}} élément",
     confirm_share: {
       verify_fingerprint: "Vérifier la phrase d’empreinte digitale",
       verification_desc:
@@ -1312,6 +1319,11 @@ const fr: Translations = {
     sign_up_with: "Ou inscrivez-vous avec",
     marketing: "Je souhaite rester informé des actualités, événements et offres",
     error_pin: "Le code est invalide. Veuillez réessayer !",
+    activated: "Votre compte a été activé avec succès.",
+    useLocker: "Vous pouvez maintenant utiliser Locker !",
+    activatedError: "Ce lien d'activation a expiré ou a déjà été utilisé.",
+    try_again: "Veuillez réessayer avec un autre lien d'activation.",
+    backHome: "Retour à l'accueil",
   },
   login_email_code: {
     title: "Vérifiez votre e-mail pour le code de vérification",
@@ -1436,6 +1448,127 @@ const fr: Translations = {
     encrypting: "Chiffrement du fichier...",
     uploading: "Téléchargement du fichier...",
     upgrade: "Mettre à niveau le compte vers Premium pour télécharger vos pièces jointes.",
+  },
+  scam: {
+    tool: {
+      title: "Anti-Arnaque",
+      label:
+        "Recherchez des numéros de téléphone suspects et avertissez la communauté des arnaques",
+    },
+    home: {
+      lookup: {
+        title: "Recherche de Numéro",
+        label: "Vérifiez les numéros de téléphone suspects",
+      },
+      report: {
+        title: "Signaler un Numéro",
+        label: "Envoyez des avertissements sur les numéros d'arnaque pour protéger la communauté",
+      },
+      myReportList: {
+        title: "Ma Liste de Signalements",
+        label: "Liste des numéros de téléphone que j'ai signalés",
+      },
+      getWarning: "Recevoir des Avertissements",
+      getWarningDesc: "Recevez des avertissements lorsque des numéros suspects appellent",
+      otherScam: "Vérifier d'autres types d'arnaques",
+      otherScamDesc:
+        "Vous soupçonnez qu'une URL de site web ou un profil Facebook est une arnaque ?",
+      checkNow: "Vérifier Maintenant",
+    },
+    lookup: {
+      title: "Recherche de Numéro",
+      label:
+        "Vérifiez si un numéro de téléphone a été signalé par des utilisateurs Locker ou d'autres communautés.",
+      btn: "Vérifier",
+      placeholder: "Entrez un numéro de téléphone vietnamien",
+      safe: "Aucun risque détecté",
+    },
+    lookupResult: {
+      maybe: {
+        title: "Peut ne pas être sûr",
+        label: "Type d'arnaque : ",
+      },
+      detail: {
+        network: "Réseau : ",
+        name: "Nom : ",
+      },
+      source: "Signalement de source de données : ",
+      community: "Signalements de la communauté : {{count}} signalement(s)",
+      yourPhone: "Est-ce votre numéro de téléphone ?",
+      contact: "Contactez ",
+      support: " pour obtenir de l'aide pour supprimer le signalement.",
+      btn: "Signaler un numéro d'arnaque",
+      user: {
+        title: "Un utilisateur",
+        label: " a averti",
+      },
+    },
+    report: {
+      title: "Signaler un Numéro",
+      label:
+        "Vous remarquez quelque chose de suspect ? Partagez votre expérience avec la communauté.",
+      btn: "Envoyer le Signalement",
+      enterPhone: "Entrez le numéro de téléphone (*)",
+      enterPhonePlaceholder: "Entrez le numéro de téléphone à signaler",
+      typeTitle: "Type d'Arnaque (*)",
+      type: {
+        fake_finance_banking: "Fausse banque/entreprise",
+        fake_ecommerce: "Faux site e-commerce/shopping/réservation de billets",
+        fake_government: "Fausse entité gouvernementale/légale",
+        fake_public_service: "Faux service public/utilitaire",
+        fake_login_page: "Fausse page de connexion",
+        malicious: "Page contenant des malwares/virus",
+        fake_giveaway: "Fausse page de prix/loterie",
+        scam_online_store: "Boutique en ligne frauduleuse",
+        investment_scam: "Page d'arnaque d'investissement/crypto-monnaie",
+        fake_me: "Usurpation d'identité de moi, mes amis ou ma famille",
+        fake_organization: "Usurpation d'organisation/service public",
+        fake_brand: "Usurpation de marque",
+        fake_celebrity: "Usurpation de célébrité",
+        fake_promotion: "Fausses ventes/promotions",
+        fake_job: "Fausses offres d'emploi",
+        spam_link: "Liens malveillants de spam (via commentaires ou messages)",
+        gambling: "Sollicitation d'investissement ou de jeu",
+        fake_police: "Usurpation de police/service public",
+        fake_electricity_company: "Arnaque facture électricité/eau",
+        fake_bank_credit_securities: "Arnaque ou usurpation banque/crédit/titres",
+        phone_spam: "Appels de spam/spam d'appels manqués",
+        online_delivery: "Livraison en ligne",
+        fake_ads_prize: "Fausses publicités/arnaques aux prix",
+        customer_service: "Service client/centre de support/hotline",
+        real_estate: "Immobilier",
+        insurance: "Assurance",
+        scam: "Arnaque",
+        other: "Autre",
+      },
+      anonymos: "Publier anonymement",
+      desc: "Description",
+      descPlaceholder: "Votre expérience avec ce numéro de téléphone",
+      success: {
+        title: "Signalement Réussi",
+        label: "Merci d'aider à protéger la communauté !",
+      },
+      error: {
+        title: "Erreur",
+        label:
+          "Une erreur s'est produite lors de l'envoi du signalement. Veuillez réessayer plus tard.",
+      },
+      enableScam: {
+        ios: {
+          title: "Activer le Signalement d'Arnaques Téléphoniques",
+          desc: "Pour activer la fonction de blocage d'arnaques téléphoniques, vous devez accorder des permissions à l'application en suivant ces instructions",
+        },
+      },
+    },
+    myReportList: {
+      empty: {
+        title: "Aucun signalement pour l'instant",
+        desc: "Vous n'avez encore signalé aucun numéro de téléphone. Commencez à signaler pour aider la communauté.",
+      },
+      deleteConfirm: "Êtes-vous sûr de vouloir supprimer ce signalement ?",
+      deleteSuccess: "Signalement supprimé avec succès",
+      scanType: "Type d'Arnaque : ",
+    },
   },
 }
 

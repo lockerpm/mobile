@@ -10,6 +10,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { useNavigation } from "@react-navigation/native"
 import { BrowseScreenProps } from "@/navigators"
 import { delay } from "@/utils/delay"
+import { useCallback } from "react"
 
 type Props = {
   collection: CollectionView
@@ -44,7 +45,7 @@ export const CollectionActions = ({ collection, setNextModal, onClose }: Props) 
 
   // ---------------- METHODS -----------------
 
-  const navigateToManageShareMember = () => {
+  const navigateToManageShareMember = useCallback(() => {
     navigation.goBack()
     delay(30).then(() => {
       navigation.navigate("shareStack", {
@@ -54,7 +55,18 @@ export const CollectionActions = ({ collection, setNextModal, onClose }: Props) 
         },
       })
     })
-  }
+  }, [navigation, collection])
+
+  const navigateToCollectionCiphers = useCallback(() => {
+    navigation.goBack()
+    delay(30).then(() => {
+      navigation.navigate("cipherList", {
+        header: collection.name,
+        collectionId: collection.id,
+        organizationId: collection.organizationId,
+      })
+    })
+  }, [navigation, collection])
 
   // ---------------- RENDER -----------------
 
@@ -70,6 +82,14 @@ export const CollectionActions = ({ collection, setNextModal, onClose }: Props) 
           style={styles.name}
         />
       </View>
+
+      <NewActionSheetItem
+        bottomBorder
+        tx="shares:share_folder.detail"
+        icon="list-bullets"
+        onPress={navigateToCollectionCiphers}
+      />
+
       <NewActionSheetItem
         bottomBorder
         hide={!editable}

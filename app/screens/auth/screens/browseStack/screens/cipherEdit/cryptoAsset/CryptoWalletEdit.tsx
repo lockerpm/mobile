@@ -155,7 +155,7 @@ export const CryptoWalletEdit = observer(
     // -------------------------- RENDER ------------------------------
 
     const PasswordAccessory = useCallback(
-      ({ style }: { style: ViewStyle }) => (
+      ({ style }: { style?: ViewStyle }) => (
         <TouchableOpacity onPress={navigateGeneratePassword} style={[style, styles.accessory]}>
           <Text preset="bold" color={colors.primary} tx={"common:generate"} />
           <Icon icon="arrow-clockwise" size={18} color={colors.primary} style={styles.mt2} />
@@ -223,11 +223,21 @@ export const CryptoWalletEdit = observer(
             labelTx={"common:password"}
             value={password}
             onChangeText={setPassword}
-            RightAccessory={!password ? PasswordAccessory : undefined}
           />
-          {!!password && (
-            <PasswordStrength value={getPasswordStrength(password).score} style={styles.mt8} />
-          )}
+
+          <View style={styles.passwordActions}>
+            <View style={styles.passwordStrength}>
+              {!!password && (
+                <PasswordStrength
+                  preset="text"
+                  value={getPasswordStrength(password).score}
+                  width={150}
+                />
+              )}
+            </View>
+
+            <PasswordAccessory />
+          </View>
 
           <TextInput animated isPassword label={"PIN"} value={pin} onChangeText={setPin} />
 
@@ -295,13 +305,15 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     padding: 16,
-    paddingBottom: 32,
+    paddingBottom: 20,
+    paddingTop: 24,
   },
   item: {
     flex: 1,
     marginTop: 16,
   },
   logo: {
+    borderRadius: 8,
     height: 50,
     marginRight: 10,
     marginTop: 26,
@@ -315,6 +327,22 @@ const styles = StyleSheet.create({
   },
   mt8: {
     marginTop: 8,
+  },
+  passwordActions: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginBottom: -16,
+    padding: 12,
+    paddingRight: 0,
+    zIndex: 2,
+  },
+  passwordStrength: {
+    alignItems: "flex-start",
+    flexGrow: 1,
+    flexShrink: 1,
+    marginLeft: -5,
+    marginTop: -5,
   },
   scrollContainer: {
     paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom,

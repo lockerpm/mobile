@@ -1,7 +1,7 @@
 import { PressableIcon, TextInput, Text } from "@/components/cores"
 import { useStores } from "@/models"
 import { useToast } from "@/services/utils"
-import { GroupData, GroupMemberData } from "@/static/types"
+import { AccountRoleText, GroupData, GroupMemberData } from "@/static/types"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { validateEmail } from "@/utils/utils"
@@ -10,10 +10,10 @@ import { useEffect, useState } from "react"
 import { StyleSheet, TouchableOpacity, View, ViewStyle, Image } from "react-native"
 
 interface Props {
-  emails: string[]
-  setEmails: (emails: string[]) => void
-  groups: { name: string; id: string }[]
-  setGroups: (groups: { name: string; id: string }[]) => void
+  emails: { email: string; role: AccountRoleText }[]
+  setEmails: (emails: { email: string; role: AccountRoleText }[]) => void
+  groups: { name: string; id: string; role: AccountRoleText }[]
+  setGroups: (groups: { name: string; id: string; role: AccountRoleText }[]) => void
 }
 
 const SHARE_GROUP = require("assets/images/icons/group.png")
@@ -40,8 +40,8 @@ export const EmailInput = observer(({ setEmails, emails, setGroups, groups }: Pr
       notifyTx("error", "error:email_validate")
       return
     }
-    if (!!e && !emails.includes(e)) {
-      setEmails([...emails, e])
+    if (!!e && !emails.map((e) => e.email).includes(e)) {
+      setEmails([...emails, { email: e, role: AccountRoleText.MEMBER }])
     }
     setEmail("")
     setSuggestions(null)
@@ -55,6 +55,7 @@ export const EmailInput = observer(({ setEmails, emails, setGroups, groups }: Pr
       {
         name: e.name,
         id: e.id,
+        role: AccountRoleText.MEMBER, // Default role for group members
       },
     ])
     setEmail("")
@@ -122,6 +123,7 @@ export const EmailInput = observer(({ setEmails, emails, setGroups, groups }: Pr
       <View style={styles.inpuContainer}>
         <View style={styles.input}>
           <TextInput
+            autoFocus
             onChangeText={setEmail}
             value={email}
             autoCapitalize="none"

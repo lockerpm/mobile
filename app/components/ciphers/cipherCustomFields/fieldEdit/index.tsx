@@ -11,6 +11,7 @@ import { useAppLocale } from "@/i18n"
 import { DateField } from "./DateField"
 import { OTPField } from "./OTPField"
 import { ThemedStyle } from "@/theme"
+import { MonthYearField } from "./MonthYearField"
 type Props = {
   type: FieldType
   name: string
@@ -56,13 +57,20 @@ export const FieldEdit = memo(
             />
           )
         case FieldType.Date:
-        case FieldType.MonthYear:
           return (
             <DateField
               type={type}
               value={value}
               onChange={(val: string) => onChange({ type, name, value: val })}
-              placeholder={translate("common:value")}
+            />
+          )
+        case FieldType.MonthYear:
+          return (
+            <MonthYearField
+              value={value}
+              onChange={(val: string) => onChange({ type, name, value: val })}
+              onBlur={onBlur}
+              onFocus={onFocus}
             />
           )
         case FieldType.TOTP:

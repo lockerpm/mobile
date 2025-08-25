@@ -19,15 +19,13 @@ class RNAutofillServiceIos: NSObject {
   @objc func isAutofillServiceActived(
     _ callback: @escaping RCTResponseSenderBlock
   ) {
-    if #available(iOS 12.0, *) {
-      let store = ASCredentialIdentityStore.shared
-      store.getState { state in
-          if state.isEnabled {
-            callback([true])
-          } else {
-            callback([false])
-          }
-      }
+    let store = ASCredentialIdentityStore.shared
+    store.getState { state in
+        if state.isEnabled {
+          callback([true])
+        } else {
+          callback([false])
+        }
     }
   }
 }

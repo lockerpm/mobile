@@ -15,6 +15,5 @@ export const MoveItemToSharedFolderWarningModal = ({ isOpen, onClose }: Props) =
 }
 
 const $text: TextStyle = {
-  marginTop: 16,
-  fontSize: 18,
+  marginBottom: 12,
 }

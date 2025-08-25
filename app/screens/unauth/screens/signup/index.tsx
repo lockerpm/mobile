@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite"
-import { SignupScreen, SignUpWithPassword, SignUpWithPinCode } from "./screens"
+import { SignupScreen, SignUpWithPassword } from "./screens"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { SignupRoute } from "app/navigators"
 
@@ -16,7 +16,7 @@ export const SignupStack = observer(() => {
       }}
     >
       <Stack.Screen name="signup" component={SignupScreen} />
-      <Stack.Screen name="signupPinCode" component={SignUpWithPinCode} />
+      {/* <Stack.Screen name="signupPinCode" component={SignUpWithPinCode} /> */}
       <Stack.Screen name="signupPassword" component={SignUpWithPassword} />
     </Stack.Navigator>
   )

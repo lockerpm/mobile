@@ -122,7 +122,7 @@ export const OtpAuthen = ({ params, goBack, method }: Props) => {
       />
 
       <TouchableOpacity style={styles.saveDevice} onPress={() => setSaveDevice(!saveDevice)}>
-        <Checkbox value={saveDevice} onValueChange={setSaveDevice} />
+        <Checkbox value={saveDevice} onPress={() => setSaveDevice(!saveDevice)} />
         <Text tx="login:save_device" style={styles.saveDeviceText} />
       </TouchableOpacity>
 

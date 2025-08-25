@@ -128,6 +128,7 @@ export function useNavigationPersistence(storage: Storage, persistenceKey: strin
   const onNavigationStateChange = (state: NavigationState | undefined) => {
     const previousRouteName = routeNameRef.current
     if (state !== undefined) {
+      // console.log("onNavigationStateChange", state)
       const currentRouteName = getActiveRouteName(state)
 
       if (previousRouteName !== currentRouteName) {

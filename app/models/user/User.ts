@@ -224,6 +224,8 @@ export const UserModel = types
       self.fingerprint = ""
       self.onPremiseUser = false
       self.onPremiseLastBaseUrl = ""
+      self.isPasswordlessLogin = false
+      self.biometricIntroShown = null
     },
     clearSettings: () => {
       self.appTimeout = AppTimeoutType.APP_CLOSE
@@ -336,6 +338,23 @@ export const UserModel = types
         }
       }
       return res
+    },
+
+    activate: async (token: string) => {
+      const pmRes = await userApi.getPMToken(
+        token,
+        {
+          SERVICE_URL: "/",
+          SERVICE_SCOPE: "pwdmanager",
+          CLIENT: "mobile",
+        },
+        self.deviceId
+      )
+      if (pmRes.kind === "ok") {
+        self.setApiToken(pmRes.data.access_token)
+        self.setLoggedIn(true)
+      }
+      return pmRes
     },
 
     authPasskey: async (payload: AuthPasskeyRequest) => {

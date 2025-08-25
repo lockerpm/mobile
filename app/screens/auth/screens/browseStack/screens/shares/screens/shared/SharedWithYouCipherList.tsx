@@ -160,6 +160,7 @@ export const SharedWithYouCipherList = observer(
               )}
               {section.type === 2 && (
                 <CollectionItem
+                  isYourSharedScreen
                   item={item}
                   openCollectionCipher={openCollectionCiphers}
                   openAction={openFolderActions}

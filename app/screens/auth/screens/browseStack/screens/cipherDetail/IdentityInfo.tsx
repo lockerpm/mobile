@@ -74,19 +74,24 @@ export const IdentityInfo = ({ item }: Props) => {
 
   return (
     <View>
-      {textFields.map((item, index) => (
-        <TextInput
-          animated
-          key={index}
-          isCopyable={!!item.value}
-          labelTx={item.label}
-          value={item.value}
-          editable={false}
-          style={styles.mb10}
-        />
-      ))}
+      {textFields.map(
+        (item, index) =>
+          item.value && (
+            <TextInput
+              animated
+              key={index}
+              isCopyable={!!item.value}
+              labelTx={item.label}
+              value={item.value}
+              editable={false}
+              style={styles.mb10}
+            />
+          )
+      )}
 
-      <Textarea labelTx="common:notes" value={item.notes} editable={false} style={styles.mt16} />
+      {item.notes && (
+        <Textarea labelTx="common:notes" value={item.notes} editable={false} style={styles.mt16} />
+      )}
     </View>
   )
 }

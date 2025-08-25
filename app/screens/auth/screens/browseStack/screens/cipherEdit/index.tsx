@@ -77,6 +77,7 @@ export const CipherEditScreen: FC<BrowseScreenProps<"cipherEdit">> = observer(
         initFolderId,
         initialUrl,
         androidAutofillSavedData,
+        otpUri,
       },
     },
   }) => {
@@ -167,7 +168,7 @@ export const CipherEditScreen: FC<BrowseScreenProps<"cipherEdit">> = observer(
         {item.type === CipherType.SecureNote && <NoteEdit {...otherCommonInfo} />}
 
         {item.type === CipherType.TOTP && (
-          <AuthenticatorEdit item={item} mode={mode} navigation={navigation} />
+          <AuthenticatorEdit initOtpUri={otpUri} item={item} mode={mode} navigation={navigation} />
         )}
       </View>
     )

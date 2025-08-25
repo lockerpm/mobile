@@ -33,6 +33,30 @@ import { Logger } from "@/utils/logger"
 class IdApi {
   private api: Api = api
 
+  async activateEmail(
+    token: string
+  ): Promise<{ kind: "ok"; data: { token: string } } | GeneralApiProblem> {
+    try {
+      this.api.apisauce.deleteHeader("Authorization")
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/v3/sso/users/activate_account/${token}?is_login=1&scope=pwdmanager`
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      const data = response.data
+
+      return { kind: "ok", data }
+    } catch (e) {
+      Logger.error("loginMethod", e)
+      return { kind: "bad-data" }
+    }
+  }
+
   // ID login
   async loginMethod(
     username: string
@@ -41,7 +65,7 @@ class IdApi {
       this.api.apisauce.deleteHeader("Authorization")
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(`/sso/auth/method`, {
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/v3/sso/auth/method`, {
         username,
       })
       // the typical ways to die when calling an api
@@ -70,7 +94,7 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/sso/auth${isOtp ? "/otp" : ""}`,
+        `/v3/sso/auth${isOtp ? "/otp" : ""}`,
         payload
       )
       // the typical ways to die when calling an api
@@ -97,7 +121,10 @@ class IdApi {
       this.api.apisauce.setHeader("device-id", deviceId)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/social", payload)
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        "/v3/sso/auth/social",
+        payload
+      )
 
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -126,7 +153,7 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/webauthn/auth/options",
+        "/v3/sso/users/webauthn/auth/options",
         { username }
       )
       // the typical ways to die when calling an api
@@ -158,7 +185,7 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/webauthn/auth",
+        "/v3/sso/users/webauthn/auth",
         payload
       )
       // the typical ways to die when calling an api
@@ -181,7 +208,7 @@ class IdApi {
       this.api.apisauce.deleteHeader("Authorization")
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/users", payload)
+      const response: ApiResponse<any> = await this.api.apisauce.post("/v3/sso/users", payload)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -208,7 +235,7 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/webauthn/register/options",
+        "/v3/sso/users/webauthn/register/options",
         payload
       )
       // the typical ways to die when calling an api
@@ -235,7 +262,7 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/webauthn/register",
+        "/v3/sso/users/webauthn/register",
         payload
       )
       // the typical ways to die when calling an api
@@ -260,7 +287,7 @@ class IdApi {
     try {
       this.api.apisauce.deleteHeader("Authorization")
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/code/send", {
+      const response: ApiResponse<any> = await this.api.apisauce.post("/v3/sso/auth/code/send", {
         username: email,
         lang,
         scope: "pwdmanager",
@@ -291,7 +318,7 @@ class IdApi {
   > {
     try {
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/code", {
+      const response: ApiResponse<any> = await this.api.apisauce.post("/v3/sso/auth/code", {
         code: otp,
         nonce,
       })
@@ -313,7 +340,10 @@ class IdApi {
   ): Promise<{ kind: "ok"; data: LoginResult } | GeneralApiProblem> {
     try {
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/code/otp", params)
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        "/v3/sso/auth/code/otp",
+        params
+      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -334,7 +364,10 @@ class IdApi {
       this.api.apisauce.deleteHeader("Authorization")
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/otp/mail", payload)
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        "/v3/sso/auth/otp/mail",
+        payload
+      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -360,7 +393,7 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/account_recovery",
+        "/v3/sso/users/account_recovery",
         payload
       )
       // the typical ways to die when calling an api
@@ -384,7 +417,7 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/reset_password",
+        "/v3/sso/users/reset_password",
         payload
       )
       // the typical ways to die when calling an api
@@ -414,7 +447,7 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/reset_password/token",
+        "/v3/sso/users/reset_password/token",
         payload
       )
       // the typical ways to die when calling an api
@@ -439,7 +472,7 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/new_password",
+        "/v3/sso/users/new_password",
         payload
       )
       // the typical ways to die when calling an api
@@ -465,7 +498,10 @@ class IdApi {
       this.api.apisauce.deleteHeader("Authorization")
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/new_password", payload)
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        "/v3/sso/new_password",
+        payload
+      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -493,7 +529,7 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/sso/users/me/webauthn/list?paging=${paging}`
+        `/v3/sso/users/me/webauthn/list?paging=${paging}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -520,7 +556,7 @@ class IdApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/users/logout")
+      const response: ApiResponse<any> = await this.api.apisauce.post("/v3/users/logout")
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -544,7 +580,7 @@ class IdApi {
   > {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/users/me/login_method`
+        `/v3/cystack_platform/pm/users/me/login_method`
       )
 
       // the typical ways to die when calling an api
@@ -568,7 +604,7 @@ class IdApi {
   > {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/users/onpremise/prelogin`,
+        `/v3/cystack_platform/pm/users/onpremise/prelogin`,
         preLoginPayload
       )
 
@@ -593,7 +629,7 @@ class IdApi {
   > {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/users/onpremise/identifier`,
+        `/v3/cystack_platform/pm/users/onpremise/identifier`,
         { identifier }
       )
 

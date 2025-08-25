@@ -40,11 +40,14 @@ class CipherApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get("/cystack_platform/pm/sync", {
-        paging: page ? 1 : 0,
-        page,
-        size,
-      })
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        "/v3/cystack_platform/pm/sync",
+        {
+          paging: page ? 1 : 0,
+          page,
+          size,
+        }
+      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -69,7 +72,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/sync/ciphers/${id}`
+        `/v3/cystack_platform/pm/sync/ciphers/${id}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -96,7 +99,7 @@ class CipherApi {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/ciphers/vaults",
+        "/v3/cystack_platform/pm/ciphers/vaults",
         {
           ...data,
           score,
@@ -125,7 +128,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/ciphers/import",
+        "/v3/cystack_platform/pm/ciphers/import",
         data
       )
       // the typical ways to die when calling an api
@@ -150,7 +153,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/import/folders",
+        "/v3/cystack_platform/pm/import/folders",
         data
       )
       // the typical ways to die when calling an api
@@ -175,7 +178,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/import/ciphers",
+        "/v3/cystack_platform/pm/import/ciphers",
         data
       )
       // the typical ways to die when calling an api
@@ -200,7 +203,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/ciphers/sync/offline",
+        "/v3/cystack_platform/pm/ciphers/sync/offline",
         data
       )
       // the typical ways to die when calling an api
@@ -229,7 +232,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/ciphers/${id}`,
+        `/v3/cystack_platform/pm/ciphers/${id}`,
         {
           ...data,
           score,
@@ -262,7 +265,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/ciphers/${id}/share`,
+        `/v3/cystack_platform/pm/ciphers/${id}/share`,
         {
           ...data,
           score,
@@ -289,7 +292,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/ciphers/permanent_delete`,
+        `/v3/cystack_platform/pm/ciphers/permanent_delete`,
         { ids }
       )
       // the typical ways to die when calling an api
@@ -312,7 +315,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/ciphers/delete`,
+        `/v3/cystack_platform/pm/ciphers/delete`,
         { ids }
       )
       // the typical ways to die when calling an api
@@ -335,7 +338,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/ciphers/restore`,
+        `/v3/cystack_platform/pm/ciphers/restore`,
         { ids }
       )
       // the typical ways to die when calling an api
@@ -356,12 +359,12 @@ class CipherApi {
     data: MoveFolderData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      detectTempId([data.folderId, ...data.ids])
+      detectTempId([data.folderId || "", ...data.ids])
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        "/cystack_platform/pm/ciphers/move",
+        "/v3/cystack_platform/pm/ciphers/move",
         data
       )
       // the typical ways to die when calling an api
@@ -385,7 +388,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/users/me/revision_date`
+        `/v3/cystack_platform/pm/users/me/revision_date`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -412,7 +415,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/sharing/public_key`,
+        `/v3/cystack_platform/pm/sharing/public_key`,
         payload
       )
       // the typical ways to die when calling an api
@@ -449,7 +452,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/quick_shares`,
+        `/v3/cystack_platform/pm/quick_shares`,
         payload
       )
       // the typical ways to die when calling an api
@@ -484,7 +487,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/sharing`,
+        `/v3/cystack_platform/pm/sharing`,
         payload
       )
       // the typical ways to die when calling an api
@@ -511,7 +514,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/sharing/multiple`,
+        `/v3/cystack_platform/pm/sharing/multiple`,
         payload
       )
       // the typical ways to die when calling an api
@@ -540,7 +543,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/sharing/${organizationId}/members/${memberId}/stop`,
+        `/v3/cystack_platform/pm/sharing/${organizationId}/members/${memberId}/stop`,
         payload
       )
       // the typical ways to die when calling an api
@@ -567,7 +570,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/sharing/${organizationId}/stop`,
+        `/v3/cystack_platform/pm/sharing/${organizationId}/stop`,
         payload
       )
       // the typical ways to die when calling an api
@@ -596,7 +599,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/sharing/${organizationId}/members/${memberId}`,
+        `/v3/cystack_platform/pm/sharing/${organizationId}/members/${memberId}`,
         payload
       )
       // the typical ways to die when calling an api
@@ -625,7 +628,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/sharing/${organizationId}/members/${memberId}`,
+        `/v3/cystack_platform/pm/sharing/${organizationId}/members/${memberId}`,
         payload
       )
       // the typical ways to die when calling an api
@@ -650,7 +653,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/sharing/invitations`
+        `/v3/cystack_platform/pm/sharing/invitations`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -675,7 +678,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/sharing/my_share`
+        `/v3/cystack_platform/pm/sharing/my_share`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -701,7 +704,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/sharing/${organizationId}/leave`,
+        `/v3/cystack_platform/pm/sharing/${organizationId}/leave`,
         {}
       )
       // the typical ways to die when calling an api
@@ -731,7 +734,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/sharing/invitations/${id}`,
+        `/v3/cystack_platform/pm/sharing/invitations/${id}`,
         payload
       )
       // the typical ways to die when calling an api
@@ -756,7 +759,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/sync/profile"
+        "/v3/cystack_platform/pm/sync/profile"
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -783,7 +786,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/sync/organizations/${id}`
+        `/v3/cystack_platform/pm/sync/organizations/${id}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -819,7 +822,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `cystack_platform/pm/quick_shares`,
+        `/v3/cystack_platform/pm/quick_shares`,
         sendRequest
       )
       // the typical ways to die when calling an api
@@ -842,7 +845,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(
-        `cystack_platform/pm/quick_shares/${id}`
+        `/v3/cystack_platform/pm/quick_shares/${id}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -867,7 +870,7 @@ class CipherApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `cystack_platform/pm/quick_shares?paging=${page}`
+        `/v3/cystack_platform/pm/quick_shares?paging=${page}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {

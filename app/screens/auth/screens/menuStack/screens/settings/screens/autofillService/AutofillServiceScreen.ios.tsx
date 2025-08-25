@@ -54,9 +54,9 @@ export const AutofillServiceScreen: FC<SettingsScreenProps<"autofillService">> =
             if (enabled) {
               navigation.navigate("mainTab", { screen: "homeTab" })
             } else {
-              Linking.canOpenURL("app-settings:").then((supported) => {
+              Linking.canOpenURL("App-prefs:root=General").then((supported) => {
                 if (supported) {
-                  Linking.openURL("App-prefs:root=General&path=Passwords")
+                  Linking.openURL("App-prefs:root=General")
                 }
               })
             }

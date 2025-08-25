@@ -1,7 +1,15 @@
 import { ApiResponse } from "apisauce"
 import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
-import { AppNotification, BreanchResult, RelayAddress, SubdomainData } from "app/static/types"
+import {
+  AppNotification,
+  BreanchResult,
+  RelayAddress,
+  ScamLookupResult,
+  ScamMyReportData,
+  ScamMyReportParams,
+  SubdomainData,
+} from "app/static/types"
 import { Logger } from "@/utils/logger"
 
 class ToolApi {
@@ -13,7 +21,7 @@ class ToolApi {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/notifications?scope=pwdmanager`
+        `/v3/notifications?scope=pwdmanager`
       )
 
       // the typical ways to die when calling an api
@@ -32,7 +40,7 @@ class ToolApi {
   async markReadInappNoti(token: string, id: string): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.put(`/notifications/${id}`, {
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/v3/notifications/${id}`, {
         read: true,
       })
 
@@ -65,7 +73,7 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/tools/breach",
+        "/v3/cystack_platform/pm/tools/breach",
         { email }
       )
       // the typical ways to die when calling an api
@@ -102,7 +110,7 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/relay/addresses",
+        "/v3/cystack_platform/relay/addresses",
         { page }
       )
       // the typical ways to die when calling an api
@@ -125,7 +133,7 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/relay/addresses"
+        "/v3/cystack_platform/relay/addresses"
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -149,7 +157,7 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/relay/addresses/${id}`,
+        `/v3/cystack_platform/relay/addresses/${id}`,
         { address }
       )
       // the typical ways to die when calling an api
@@ -170,7 +178,7 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(
-        `/cystack_platform/relay/addresses/${id}`
+        `/v3/cystack_platform/relay/addresses/${id}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -193,7 +201,7 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/relay/subdomains/use_subdomain`,
+        `/v3/cystack_platform/relay/subdomains/use_subdomain`,
         {
           use_relay_subdomain: useSubdomain,
         }
@@ -218,7 +226,7 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/relay/subdomains/use_subdomain`
+        `/v3/cystack_platform/relay/subdomains/use_subdomain`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -244,7 +252,7 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/relay/addresses/${id}`,
+        `/v3/cystack_platform/relay/addresses/${id}`,
         {
           address,
           enabled,
@@ -278,7 +286,7 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/relay/subdomains`,
+        `/v3/cystack_platform/relay/subdomains`,
         {
           subdomain,
         }
@@ -310,7 +318,7 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/relay/subdomains/${id}`,
+        `/v3/cystack_platform/relay/subdomains/${id}`,
         {
           subdomain,
         }
@@ -344,7 +352,7 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/relay/subdomains`
+        `/v3/cystack_platform/relay/subdomains`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -354,6 +362,176 @@ class ToolApi {
       return { kind: "ok", data: response.data }
     } catch (e) {
       Logger.error("fetchSubdomain", e)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // ---------------------- SCAM LOOKUP ----------------------
+  async scamLookup(value: string): Promise<
+    | {
+        kind: "ok"
+        data: ScamLookupResult
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        `/locker_scam_detector/v1/public/detector/checking`,
+        {
+          value,
+        }
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error("editSubdomain", e)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async scamListUsersReport(id: string): Promise<
+    | {
+        kind: "ok"
+        data: {
+          count: number
+          next: null
+          previous: null
+          results: ScamMyReportData[]
+        }
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/locker_scam_detector/v1/public/detector/${id}/reports`
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error("editSubdomain", e)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async scamReport(
+    token: string,
+    data: ScamMyReportParams
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          id: string
+        }
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        `/locker_scam_detector/v1/reports`,
+        data
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error("editSubdomain", e)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async scamMyListReport(token: string): Promise<
+    | {
+        kind: "ok"
+        data: {
+          count: number
+          next: null
+          previous: null
+          results: ScamMyReportData[]
+        }
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/locker_scam_detector/v1/reports`
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error("editSubdomain", e)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async scamDeleteMyReport(
+    token: string,
+    id: string
+  ): Promise<
+    | {
+        kind: "ok"
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.delete(
+        `/locker_scam_detector/v1/reports/${id}`
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error("editSubdomain", e)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async scamSyncPhones(token: string): Promise<
+    | {
+        kind: "ok"
+        data: any
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/locker_scam_detector/v1/detector/sync/phones`
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error("editSubdomain", e)
       return { kind: "bad-data" }
     }
   }

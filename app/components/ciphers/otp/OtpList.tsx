@@ -11,6 +11,7 @@ import { useAppLocale } from "@/i18n"
 import { EmptyCipherList } from "@/components/ciphers"
 import { SearchBar } from "@/components/utils"
 import { CipherAppView } from "@/static/types"
+import { orderBy } from "lodash"
 
 const EMPTY = require("assets/images/emptyCipherList/password-empty-img.png")
 
@@ -59,8 +60,10 @@ export const OtpList = observer(
         includeExtensions: true,
       })
 
+      const res = orderBy(searchRes, [(c: CipherView) => c.revisionDate], ["desc"]) || []
+
       setCiphers(
-        searchRes.map((e) => ({
+        res.map((e) => ({
           ...e,
           imgLogo: { uri: "" },
           notSync: false,
@@ -131,6 +134,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   content: {
+    paddingBottom: 16,
     paddingHorizontal: 16,
   },
   divider: {

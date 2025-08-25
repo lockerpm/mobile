@@ -58,7 +58,7 @@ export type ImportCipherData = {
 
 export type MoveFolderData = {
   ids: string[]
-  folderId: string
+  folderId: string | null
 }
 
 export type QuickShareCipherData = {
@@ -91,23 +91,27 @@ export type ShareCipherData = {
   }[]
 }
 
+export type ShareMultipleCiphersMembers = {
+  username: string
+  role: AccountRoleText
+  key: string
+  hide_passwords: boolean
+}[]
+
+export type ShareMultipleCiphersGroups = {
+  id: string
+  role: string
+  members: {
+    username: string
+    key: string
+  }[]
+}[]
+
 export type ShareMultipleCiphersData = {
   ciphers: {
     cipher: CipherRequest & { id: string }
-    members: {
-      username: string
-      role: AccountRoleText
-      key: string
-      hide_passwords: boolean
-    }[]
-    groups?: {
-      id: string
-      role: string
-      members: {
-        username: string
-        key: string
-      }[]
-    }[]
+    members: ShareMultipleCiphersMembers
+    groups: ShareMultipleCiphersGroups
   }[]
   sharing_key: string
 }
@@ -226,4 +230,8 @@ export interface FileData {
   uri: string
   type: string
   size: number
+}
+
+export type CipherRequestWithId = CipherRequest & {
+  id: string
 }

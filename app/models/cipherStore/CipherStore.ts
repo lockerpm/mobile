@@ -152,20 +152,27 @@ export const CipherStoreModel = types
       if (!dataOnly) {
         self.apiToken = ""
       }
-      self.generatedPassword = ""
-      self.selectedCipher = null
-      self.selectedFolder = ""
-      self.selectedCollection = ""
-      self.notSynchedCiphers = cast([])
-      self.notUpdatedCiphers = cast([])
+
+      // Status
       self.isSynching = false
       self.isSynchingOffline = false
       self.isSynchingAutofill = false
+      self.isBatchDecrypting = false
+
+      // Data
+      self.notUpdatedCiphers = cast([])
       self.lastSync = 0
+      self.lastSyncQuickShare = 0
       self.lastCacheUpdate = 0
       self.sharingInvitations = cast([])
       self.myShares = cast([])
       self.organizations = cast([])
+      // Selector
+      self.generatedPassword = ""
+      self.selectedTotp = ""
+      self.selectedCipher = null
+      self.selectedFolder = ""
+      self.selectedCollection = ""
     },
 
     lock: () => {
@@ -393,7 +400,6 @@ export const CipherStoreModel = types
       isSynchingOffline: false,
       isSynchingAutofill: false,
       isBatchDecrypting: false,
-      organizations: [],
     }
   })
 

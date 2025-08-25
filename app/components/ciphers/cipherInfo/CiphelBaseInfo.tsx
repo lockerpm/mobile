@@ -9,8 +9,10 @@ import { CollectionView } from "core/models/view/collectionView"
 import filter from "lodash/filter"
 import find from "lodash/find"
 import { useState } from "react"
-import { StyleProp, View, ViewStyle, Image, TouchableOpacity, StyleSheet } from "react-native"
+import { StyleProp, View, ViewStyle, Image, StyleSheet } from "react-native"
 import { PasswordOtp } from "../passwordOtp/PasswordOtp"
+import { CipherEditActionField } from "../cipherEditActionField"
+import { ThemedStyle } from "@/theme"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
@@ -76,9 +78,11 @@ export const CiphelBaseInfo = (props: CipherInfoCommonProps) => {
       ))}
 
       {/* Owned by */}
-      <Text preset="label" size="sm" tx={"common:owned_by"} style={styles.showdBy} />
-      <Text
-        text={
+      <TextInput
+        animated
+        editable={false}
+        labelTx={"common:owned_by"}
+        value={
           getTeam(user.teams, cipher.organizationId).name ||
           getTeam(cipherStore.organizations, cipher.organizationId).name ||
           translate("common:me")
@@ -92,27 +96,27 @@ export const CiphelBaseInfo = (props: CipherInfoCommonProps) => {
       />
 
       {/* Folder */}
-      <Text preset="label" size="sm" tx={"common:folders"} style={styles.folder} />
-
-      {collections.length > 0
-        ? collections.map((c: CollectionView) => (
-            <View key={c.id} style={styles.collection}>
-              <ImageIcon icon="folder-share" size={30} />
-              <Text text={c.name || translate("folder:unassigned")} style={styles.text} />
-            </View>
-          ))
-        : (!cipher.organizationId ||
-            !!folder.name ||
-            getTeam(user.teams, cipher.organizationId)) && (
-            <View style={styles.collection}>
-              <ImageIcon icon="folder" size={30} />
-              <Text
-                text={folder.name || translate("folder:unassigned")}
-                numberOfLines={2}
-                style={styles.text}
-              />
-            </View>
-          )}
+      <CipherEditActionField disabled labelTx="common:folders" style={styles.mt20}>
+        {collections.length > 0
+          ? collections.map((c: CollectionView) => (
+              <View key={c.id} style={styles.collection}>
+                <ImageIcon icon="folder-share" size={30} />
+                <Text text={c.name || translate("folder:unassigned")} style={styles.text} />
+              </View>
+            ))
+          : (!cipher.organizationId ||
+              !!folder.name ||
+              getTeam(user.teams, cipher.organizationId)) && (
+              <View style={styles.collection}>
+                <ImageIcon icon="folder" size={30} />
+                <Text
+                  text={folder.name || translate("folder:unassigned")}
+                  numberOfLines={2}
+                  style={styles.text}
+                />
+              </View>
+            )}
+      </CipherEditActionField>
     </View>
   )
 }
@@ -123,81 +127,88 @@ type SharedWithProps = {
   setShow: (show: boolean) => void
 }
 
-const SharedWith = ({ shareMember, show, setShow }: SharedWithProps) => {
+const SharedWith = ({ shareMember }: SharedWithProps) => {
   const {
+    themed,
     theme: { colors },
   } = useAppTheme()
 
-  const container: ViewStyle = {
-    flexDirection: show ? "column" : "row",
-    alignItems: !show ? "center" : "flex-start",
-  }
   return (
     shareMember.isShared && (
-      <View>
-        <Text preset="label" tx={"common:share_with"} size="sm" style={styles.label} />
+      <View style={styles.mt20}>
+        <Text
+          weight="medium"
+          color={colors.text}
+          tx={"common:share_with"}
+          style={[styles.label, { backgroundColor: colors.background }]}
+        />
 
-        <View style={container}>
+        <View style={themed($container)}>
           {shareMember.member.map((element, index) => {
-            if (index > 4 && !show) {
-              return null
-            } else {
-              return (
-                <View key={index} style={styles.memeber}>
+            return (
+              <View key={index}>
+                {index !== 0 && <View style={themed($divider)} />}
+                <View style={styles.memeber}>
                   <Image
                     resizeMode="contain"
                     source={{ uri: element.avatar }}
                     style={styles.avatar}
                   />
-                  {show && <Text text={element.email} />}
+                  <Text text={element.email} />
                 </View>
-              )
-            }
+              </View>
+            )
           })}
-
-          <TouchableOpacity style={styles.show} onPress={() => setShow(!show)}>
-            <Text tx={!show ? "common:see_all" : "common:collapse"} color={colors.primary} />
-          </TouchableOpacity>
         </View>
       </View>
     )
   )
 }
 
+const $divider: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  height: 1,
+  width: "100%",
+  backgroundColor: colors.border,
+})
+
+const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  width: "100%",
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: colors.border,
+})
+
 const styles = StyleSheet.create({
   avatar: {
     borderRadius: 20,
-    height: 30,
+    height: 28,
     marginRight: 10,
-    width: 30,
+    width: 28,
   },
   collection: {
     alignItems: "center",
     flexDirection: "row",
-    marginBottom: 10,
-  },
-  folder: {
-    marginBottom: 10,
-    marginTop: 20,
   },
   label: {
-    marginBottom: 5,
-    marginTop: 20,
+    left: 0,
+    paddingHorizontal: 4,
+    position: "absolute",
+    top: -14,
+    transform: [{ scale: 0.9 }],
+    zIndex: 5,
   },
   memeber: {
     alignItems: "center",
     flexDirection: "row",
-    marginVertical: 5,
+    minHeight: 48,
+    padding: 12,
+    paddingHorizontal: 12,
   },
   mt10: {
     marginTop: 10,
   },
-  show: {
-    marginTop: 10,
-  },
-  showdBy: {
-    marginBottom: 5,
-    marginTop: 20,
+  mt20: {
+    marginTop: 24,
   },
   text: {
     flexGrow: 1,

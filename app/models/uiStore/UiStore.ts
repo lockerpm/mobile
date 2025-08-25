@@ -1,5 +1,6 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../helpers/withSetPropAction"
+import { SortConfigType } from "@/components/ciphers"
 /**
  * Model description here for TypeScript hints.
  */
@@ -16,10 +17,14 @@ export const UiStoreModel = types
     hasNoMasterPwItem: types.boolean,
     isShowedPopupMarketing: types.boolean,
     isStartFromPasswordLess: types.boolean,
+    sortConfig: types.maybeNull(types.frozen<SortConfigType>()),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setSortConfig: (sortConfig: SortConfigType) => {
+      self.sortConfig = sortConfig
+    },
     setStartFromPasswordLess: (val: boolean) => {
       self.isStartFromPasswordLess = val
     },

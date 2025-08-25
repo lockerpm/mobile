@@ -233,7 +233,7 @@ export const TextInput = forwardRef(function TextField(
 
   const $inputStyles: StyleProp<TextStyle> = [
     $inputStyle,
-    { color: disabled ? colors.disable : colors.text },
+    { color: colors.text },
     TextInputProps.multiline && { height: "auto" },
     $inputStyleOverride,
   ]
@@ -334,7 +334,7 @@ export const TextInput = forwardRef(function TextField(
           autoCapitalize="none"
           underlineColorAndroid={colors.transparent}
           textAlignVertical="top"
-          placeholder={isFocus ? placeholderContent : ""}
+          placeholder={animated && !isFocus ? "" : placeholderContent}
           placeholderTextColor={colors.disable}
           value={validateMask(value)}
           secureTextEntry={!isShowText && isPassword}

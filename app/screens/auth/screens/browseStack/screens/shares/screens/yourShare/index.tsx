@@ -26,7 +26,9 @@ export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = obse
           deleteIds: [],
         })
       }
-      // navigation.navigate("moveToFolder")
+      navigation.navigate("mainTab", {
+        screen: "homeTab",
+      })
     }, [navigation, user.isFreePlan])
 
     const navigateToCipherActions = useCallback((item: CipherAppView) => {

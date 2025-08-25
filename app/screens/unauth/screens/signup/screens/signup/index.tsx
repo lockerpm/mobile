@@ -59,10 +59,17 @@ export const SignupScreen: FC<SignUpScreenProps<"signup">> = ({ navigation }) =>
   }, [navigation])
 
   const onRegisterWithPinCode = useCallback(() => {
-    navigation.navigate("signupPinCode", {
-      email: emailRef.current,
-      getNews: getNewsRef.current,
+    navigation.navigate("loginStack", {
+      screen: "loginByPincode",
+      params: {
+        email: emailRef.current,
+        fromSignup: true,
+      },
     })
+    // navigation.navigate("signupPinCode", {
+    //   email: emailRef.current,
+    //   getNews: getNewsRef.current,
+    // })
   }, [navigation])
 
   const { handleRegisterWebauth } = useSignupWebauth({
@@ -221,7 +228,7 @@ const TermAndConditions = ({
   return (
     <TouchableOpacity onPress={() => setAgreed(!agreed)}>
       <View style={styles.termContainer}>
-        <Checkbox value={agreed} />
+        <Checkbox value={agreed} onPress={() => setAgreed(!agreed)} />
         <Text tx={"new_signup:marketing"} size="sm" style={styles.ml12} />
       </View>
     </TouchableOpacity>
@@ -230,7 +237,6 @@ const TermAndConditions = ({
 
 const styles = StyleSheet.create({
   centerSignupBussinessText: {
-    marginVertical: 12,
     textAlign: "center",
   },
   centerText: {
@@ -256,6 +262,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
+    marginVertical: 12,
   },
   setLanguage: {
     alignItems: "flex-end",

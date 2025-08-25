@@ -76,6 +76,7 @@ export const LoginScreen: FC<LoginScreenProps<"login">> = observer(
     const getLoginMethod = async () => {
       setIsLoading(true)
       const res = await user.loginMethod(username)
+
       if (res.kind === "ok") {
         if (res.data.webauthn && Passkey.isSupported()) {
           setLoginMethod(LoginOptions.PASSKEY)

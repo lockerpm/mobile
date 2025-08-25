@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native"
+import { View } from "react-native"
 import { TextInput } from "app/components/cores"
 import { Textarea } from "app/components/utils"
 import { CipherAppView } from "app/static/types"
@@ -9,69 +9,53 @@ type Props = {
 }
 
 export const CardInfo = ({ item }: Props) => {
+  const brand = (CARD_BRANDS.find((i) => i.value === item.card.brand) || { label: "" }).label
   return (
     <View>
-      <TextInput
-        animated
-        isCopyable
-        labelTx="card:card_name"
-        value={item.card.cardholderName}
-        editable={false}
-        containerStyle={styles.mb16}
-      />
+      {item.card.cardholderName && (
+        <TextInput
+          animated
+          isCopyable
+          labelTx="card:card_name"
+          value={item.card.cardholderName}
+          editable={false}
+        />
+      )}
+      {brand && (
+        <TextInput animated isCopyable labelTx="card:brand" value={brand} editable={false} />
+      )}
 
-      <TextInput
-        animated
-        isCopyable
-        labelTx="card:brand"
-        value={(CARD_BRANDS.find((i) => i.value === item.card.brand) || { label: "" }).label}
-        editable={false}
-        containerStyle={styles.mb16}
-      />
+      {item.card.number && (
+        <TextInput
+          animated
+          isCopyable
+          labelTx="card:card_number"
+          value={item.card.number}
+          editable={false}
+        />
+      )}
 
-      <TextInput
-        animated
-        isCopyable
-        labelTx="card:card_number"
-        value={item.card.number}
-        editable={false}
-        containerStyle={styles.mb16}
-      />
+      {item.card.expMonth && item.card.expYear && (
+        <TextInput
+          animated
+          isCopyable
+          labelTx="card:exp_date"
+          value={`${item.card.expMonth}/${item.card.expYear}`}
+          editable={false}
+        />
+      )}
 
-      <TextInput
-        animated
-        isCopyable
-        labelTx="card:exp_date"
-        value={`${item.card.expMonth}/${item.card.expYear}`}
-        editable={false}
-        containerStyle={styles.mb16}
-      />
-
-      <TextInput
-        animated
-        isCopyable
-        isPassword
-        labelTx="card:cvv"
-        value={item.card.code}
-        editable={false}
-        containerStyle={styles.mb16}
-      />
-
-      <Textarea
-        labelTx="common:notes"
-        value={item.notes || "123"}
-        editable={false}
-        style={styles.mt10}
-      />
+      {item.card.code && (
+        <TextInput
+          animated
+          isCopyable
+          isPassword
+          labelTx="card:cvv"
+          value={item.card.code}
+          editable={false}
+        />
+      )}
+      {item.notes && <Textarea labelTx="common:notes" value={item.notes} editable={false} />}
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  mb16: {
-    marginBottom: 16,
-  },
-  mt10: {
-    marginTop: 10,
-  },
-})

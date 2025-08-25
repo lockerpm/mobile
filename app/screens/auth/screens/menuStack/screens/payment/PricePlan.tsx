@@ -42,7 +42,7 @@ const PricePlanItem = (prop: PricePlanItemProps) => {
           styles.planItem,
         ]}
       >
-        <Checkbox value={prop.isEnable} onValueChange={prop.onPress} />
+        <Checkbox value={prop.isEnable} onPress={prop.onPress} />
         <View style={styles.planItemContent}>
           <View style={styles.row}>
             <Text

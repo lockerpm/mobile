@@ -5,6 +5,7 @@ import { CipherType } from "core/enums"
 import { PasswordStrength, Textarea } from "app/components/utils"
 import { CipherAppView } from "app/static/types"
 import { DynamicUris, PasswordOtp } from "@/components/ciphers"
+import { useAppLocale } from "@/i18n"
 
 type Props = {
   item: CipherAppView
@@ -12,6 +13,7 @@ type Props = {
 
 export const PasswordInfo = ({ item }: Props) => {
   const { getPasswordStrength } = useCipherHelper()
+  const { translate } = useAppLocale()
 
   // ------------------ COMPUTED --------------------
   const lockerMasterPassword = item.type === CipherType.MasterPassword
@@ -21,7 +23,7 @@ export const PasswordInfo = ({ item }: Props) => {
 
   return (
     <View>
-      {!lockerMasterPassword && (
+      {!lockerMasterPassword && !!item.login.username && (
         <TextInput
           animated
           isCopyable
@@ -31,14 +33,16 @@ export const PasswordInfo = ({ item }: Props) => {
         />
       )}
 
-      <TextInput
-        animated
-        isPassword
-        isCopyable={item.viewPassword}
-        labelTx="common:password"
-        value={item.login.password}
-        editable={false}
-      />
+      {!!item.login.password && (
+        <TextInput
+          animated
+          isPassword
+          isCopyable={item.viewPassword}
+          labelTx="common:password"
+          value={item.login.password}
+          editable={false}
+        />
+      )}
 
       {item.login.hasTotp && (
         <>
@@ -52,7 +56,9 @@ export const PasswordInfo = ({ item }: Props) => {
 
       {!!item.login.password && <PasswordStrength preset="text" value={passwordStrength.score} />}
 
-      <DynamicUris editable={false} fields={item.login.uris.map((e) => e.uri)} />
+      {item.login.uris && (
+        <DynamicUris editable={false} fields={item.login.uris?.map((e) => e.uri)} />
+      )}
 
       {!lockerMasterPassword && (
         <>
@@ -69,8 +75,13 @@ export const PasswordInfo = ({ item }: Props) => {
 
       {lockerMasterPassword && (
         <>
-          <Text preset="label" size="sm" tx="common:notes" style={styles.masterPwNote} />
-          <Text tx="password:master_password_note" />
+          <Textarea
+            disableCopy
+            labelTx="common:notes"
+            value={translate("password:master_password_note")}
+            editable={false}
+            style={styles.mt12}
+          />
         </>
       )}
     </View>
@@ -78,9 +89,6 @@ export const PasswordInfo = ({ item }: Props) => {
 }
 
 const styles = StyleSheet.create({
-  masterPwNote: {
-    marginVertical: 12,
-  },
   mb20: {
     marginBottom: 20,
   },

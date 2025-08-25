@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { useCipherData } from "app/services/hook"
 import { useStores } from "app/models"
 import { CollectionView } from "core/models/view/collectionView"
-import { AccountRole, AccountRoleText, CipherAppView, CipherShareType } from "app/static/types"
+import { AccountRole, CipherAppView, CipherShareType } from "app/static/types"
 import { Organization } from "core/models/domain/organization"
 import { CipherView } from "core/models/view"
 import { CollectionItem, EmptyCipherList } from "app/components/ciphers"
@@ -105,47 +105,33 @@ export const YourShareCipherList = observer(
           ),
           isDeleted: c.isDeleted,
           description: "",
-          status: "",
         }
-
         // Display for each sharing member
         const share = _getShare(c.organizationId)
+
         if (share) {
-          share.members.forEach((m) => {
-            let shareType = ""
-            switch (m.role) {
-              case AccountRoleText.MEMBER:
-                shareType = translate("shares:share_type.view")
-                break
-              case AccountRoleText.ADMIN:
-                shareType = translate("shares:share_type.edit")
-                break
-            }
-
-            data.description = `${translate("shares:shared_with")} ${m.full_name || m.email} - ${shareType}`
-            data.status = m.status
-            data.member = m
-
-            res.push(data)
-          })
-          share.groups.forEach((group) => {
-            let shareType = ""
-            switch (group.role) {
-              case AccountRoleText.MEMBER:
-                shareType = translate("shares:share_type.view")
-                break
-              case AccountRoleText.ADMIN:
-                shareType = translate("shares:share_type.edit")
-                break
-            }
-
-            data.description = `${translate("shares:shared_with")} ${group.name} - ${shareType}`
-            // data.status = m.status
-            data.group = group
-
-            res.push(data)
-          })
+          const ml = share.members.length
+          const gl = share.groups.length
+          if (ml > 0 && gl > 0) {
+            data.description =
+              translate("shares:shared_with") +
+              ` ${ml} ` +
+              translate(ml > 1 ? "shares:users" : "shares:user") +
+              ` - ${gl} ` +
+              translate(gl > 1 ? "shares:groups" : "shares:group")
+          } else if (ml > 0) {
+            data.description =
+              translate("shares:shared_with") +
+              ` ${ml} ` +
+              translate(ml > 1 ? "shares:users" : "shares:user")
+          } else if (gl > 0) {
+            data.description =
+              translate("shares:shared_with") +
+              ` ${gl} ` +
+              translate(gl > 1 ? "shares:groups" : "shares:group")
+          }
         }
+        res.push(data)
       })
       // Done
       setCiphers(res)
@@ -186,6 +172,7 @@ export const YourShareCipherList = observer(
               )}
               {section.type === 2 && (
                 <CollectionItem
+                  isYourSharedScreen
                   item={item}
                   openAction={openCollectionAction}
                   openCollectionCipher={openCollectionCiphers}

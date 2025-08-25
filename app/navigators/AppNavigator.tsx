@@ -19,11 +19,33 @@ import { ErrorToast, InfoToast, SuccessToast } from "app/components/cores"
 import { useStores } from "@/models"
 import { Logger } from "@/utils/logger"
 import { useMonitorApiResponse } from "./useMonitorApiResponse"
+import { isAndroidAutofillService } from "@/utils/autofillHelper"
 
 const exitRoutes = Config.exitRoutes
 
 const linking = {
-  prefixes: ["https://lockerio.page.link"],
+  prefixes: ["https://id.locker.io", "locker://"],
+  config: {
+    screens: {
+      unAuthStack: {
+        screens: {
+          loginStack: {
+            screens: {
+              loginByPincode: {
+                path: "login/quick",
+              },
+            },
+          },
+          activateAccount: {
+            path: "confirmation/:token",
+            parse: {
+              token: (token: string) => decodeURIComponent(token),
+            },
+          },
+        },
+      },
+    },
+  },
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -87,9 +109,16 @@ export const AppNavigator = observer(function AppNavigator(props: NavigationProp
     []
   )
 
+  const enableDeeplink = !isAndroidAutofillService
+
   return (
     <ThemeProvider value={{ themeScheme, setThemeContextOverride }}>
-      <NavigationContainer ref={navigationRef} theme={navigationTheme} linking={linking} {...props}>
+      <NavigationContainer
+        ref={navigationRef}
+        theme={navigationTheme}
+        linking={enableDeeplink ? linking : undefined}
+        {...props}
+      >
         <AppStack />
         <Toast position="top" config={toastConfig} />
       </NavigationContainer>

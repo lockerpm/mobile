@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native"
 import { BottomModalContainer, Text } from "app/components/cores"
-import { AccountRole, CipherActionsModal, CipherAppView } from "app/static/types"
+import { AccountRole, CipherActionsModal, CipherAppView, MyShareType } from "app/static/types"
 import { useStores } from "app/models"
 import { CipherType } from "core/enums"
 import { getCipherDescription, getTeam } from "app/utils/cipherHelper"
@@ -9,6 +9,7 @@ import { NewActionSheetItem } from "app/components/utils"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { useActionsNavigate } from "./useActionsNavigate"
 import { useCipherData } from "@/services/hook"
+import { useState } from "react"
 
 interface Props {
   isDeleted: boolean
@@ -163,9 +164,23 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose }: Props) => {
           setNextModal(CipherActionsModal.LEAVE_SHARE)
         }}
       />
+      <StopShareSheetItem
+        hide={
+          isDeleted ||
+          lockerMasterPassword ||
+          isInFolderShare ||
+          isShared ||
+          !editable ||
+          !item?.organizationId
+        }
+        color={colors.error}
+        myShares={cipherStore.myShares}
+        item={item}
+        onClose={onClose}
+      />
       <NewActionSheetItem
         bottomBorder
-        hide={isDeleted || lockerMasterPassword || !editable}
+        hide={isDeleted || lockerMasterPassword || !editable || isShared}
         tx="trash:to_trash"
         icon="trash"
         color={colors.error}
@@ -197,6 +212,55 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose }: Props) => {
         }}
       />
     </BottomModalContainer>
+  )
+}
+
+interface StopShareSheetItemProps {
+  item: CipherAppView
+  hide: boolean
+  color: string
+  myShares: MyShareType[]
+  onClose: () => void
+}
+
+const StopShareSheetItem = ({ hide, color, myShares, item, onClose }: StopShareSheetItemProps) => {
+  const { stopShareCipher, stopShareCipherForGroup } = useCipherData()
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  const storeShare = async () => {
+    setIsLoading(true)
+    const share = myShares.find((s) => s.id === item.organizationId)
+
+    if (share) {
+      if (share.members.length > 0) {
+        for (const user of share.members) {
+          // @ts-ignore
+          await stopShareCipher(item, user.id)
+        }
+      }
+      if (share.groups.length > 0) {
+        for (const group of share.groups) {
+          // @ts-ignore
+          await stopShareCipherForGroup(item, group.id)
+        }
+      }
+    }
+    onClose()
+    setIsLoading(false)
+  }
+
+  return (
+    <NewActionSheetItem
+      isLoading={isLoading}
+      bottomBorder
+      hide={hide}
+      tx="shares:stop_sharing"
+      icon="x-circle"
+      color={color}
+      iconColor={color}
+      onPress={storeShare}
+    />
   )
 }
 
