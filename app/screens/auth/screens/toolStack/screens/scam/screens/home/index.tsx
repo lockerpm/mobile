@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-native/no-unused-styles */
 import {
   Header,
   Icon,
@@ -7,18 +5,19 @@ import {
   ImageIconTypes,
   PressableScale,
   Screen,
-  Switch,
   Text,
 } from "@/components/cores"
 import { MenuItemContainer } from "@/components/utils"
 import { TxKeyPath } from "@/i18n"
-import { useStores } from "@/models"
 import { ScamRoute, ScamScreenProps } from "@/navigators"
-import { toolApi } from "@/services/api"
 import { openScamUrl } from "@/utils/openLinkInBrowser"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { FC } from "react"
 import { StyleSheet, View } from "react-native"
+
+// @ts-ignore
+import { CallerContent } from "./CallerContent"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
 type ToolsItem = {
   label: TxKeyPath
@@ -49,7 +48,6 @@ const SCAM_ITEMS: ToolsItem[] = [
 ]
 
 export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) => {
-  const { user } = useStores()
   const {
     theme: { colors },
   } = useAppTheme()
@@ -57,13 +55,6 @@ export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) 
   const handleNavigate = (item: ToolsItem) => {
     // @ts-ignore
     navigation.navigate("scamStack", { screen: item.routeName })
-  }
-
-  const handleSyncScamList = async () => {
-    const res = await toolApi.scamSyncPhones(user.apiToken)
-    if (res.kind === "ok") {
-      console.log("Scam list synced successfully", res.data)
-    }
   }
 
   return (
@@ -99,21 +90,8 @@ export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) 
         })}
       </MenuItemContainer>
 
+      <CallerContent />
       <MenuItemContainer>
-        <PressableScale style={styles.itemContainer2} onPress={handleSyncScamList}>
-          <View style={styles.itemContent2}>
-            <Text tx={"scam:home.getWarning"} style={styles.itemText} />
-            <Text
-              preset="label"
-              tx={"scam:home.getWarningDesc"}
-              size="xs"
-              style={styles.itemLabel}
-            />
-          </View>
-
-          <Switch value={true} />
-        </PressableScale>
-
         <PressableScale style={styles.itemContainer2} onPress={openScamUrl}>
           <View style={styles.itemContent2}>
             <Text tx={"scam:home.otherScam"} style={styles.itemText} />
@@ -137,7 +115,7 @@ export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom + 16,
     paddingHorizontal: 16,
   },
   image: {

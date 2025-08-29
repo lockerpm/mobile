@@ -4,7 +4,7 @@ import { toolApi } from "@/services/api"
 import { useToast } from "@/services/utils"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { validateVietnamesePhoneNumber } from "@/utils/utils"
+import { formatVietnamesePhoneNumber, validateVietnamesePhoneNumber } from "@/utils/utils"
 import { FC, useCallback, useState } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
 import Animated, { FadeInUp } from "react-native-reanimated"
@@ -23,7 +23,8 @@ export const ScamLookupScreen: FC<ScamScreenProps<"lookup">> = ({ navigation }) 
 
   const lookupPhoneNumber = async () => {
     setIsLoading(true)
-    const res = await toolApi.scamLookup(phoneNumber)
+    const formatPhone = formatVietnamesePhoneNumber(phoneNumber)
+    const res = await toolApi.scamLookup(formatPhone)
     if (res.kind === "ok") {
       if (res.data.result.status === "safe") {
         setShowSafe(true)

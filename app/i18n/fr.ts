@@ -1474,6 +1474,29 @@ const fr: Translations = {
       otherScamDesc:
         "Vous soupçonnez qu'une URL de site web ou un profil Facebook est une arnaque ?",
       checkNow: "Vérifier Maintenant",
+      android: {
+        title: "Avertissement d'appel",
+        desc: "Recevez un avertissement lorsqu'un numéro de téléphone suspect vous appelle",
+        disable: {
+          title: "Désactiver l'avertissement d'appel",
+          label:
+            "Dans les paramètres, désactivez l'option d'affichage de Locker sur d'autres applications",
+          btn: "Ouvrir les paramètres",
+        },
+        enable: {
+          title: "Activer l'avertissement d'appel en autorisant les autorisations :",
+          first: "1. Autoriser Locker à accéder à l'état du téléphone",
+          second: "2. Autoriser Locker à accéder aux journaux d'appels",
+          third: "3. Autoriser Locker à s'afficher sur d'autres applications",
+          btn: "Activer les autorisations",
+        },
+        update: "Mettre à jour les données sur les numéros de téléphone suspects",
+      },
+      ios: {
+        title: "Mise à jour requise",
+        label:
+          "La fonctionnalité Live Caller ID Lookup est disponible uniquement sur iOS 18.2 ou une version ultérieure. Veuillez mettre à jour votre iPhone dans Réglages > Général > Mise à jour logicielle.",
+      },
     },
     lookup: {
       title: "Recherche de Numéro",

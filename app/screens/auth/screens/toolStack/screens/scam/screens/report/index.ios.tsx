@@ -7,15 +7,13 @@ import { ScamPhoneType, ScamType } from "@/static/types"
 import { toolApi } from "@/services/api"
 import { observer } from "mobx-react-lite"
 import { useStores } from "@/models"
-import { useAppLocale } from "@/i18n"
-import { validateVietnamesePhoneNumber } from "@/utils/utils"
+import { formatVietnamesePhoneNumber, validateVietnamesePhoneNumber } from "@/utils/utils"
 import { useToast } from "@/services/utils"
 import { CommonActions } from "@react-navigation/native"
 
 export const ScamReportScreen: FC<ScamScreenProps<"report">> = observer(
   ({ navigation, route: { params } }) => {
     const { user } = useStores()
-    const { translate } = useAppLocale()
     const { notifyTx, notifyApiError } = useToast()
 
     // -----------------------PARAMS----------------------------
@@ -36,11 +34,13 @@ export const ScamReportScreen: FC<ScamScreenProps<"report">> = observer(
     const sendReport = async () => {
       if (!canSubmit) return
 
+      const formatPhone = formatVietnamesePhoneNumber(phoneNumber)
+
       setIsLoading(true)
       const res = await toolApi.scamReport(user.apiToken, {
         type: ScamType.Phone,
-        value: phoneNumber,
-        description: description || translate(`scam:report.type.${scamType}`),
+        value: formatPhone,
+        description: description || "",
         phishing_type: scamType,
         target_entity: "",
         is_anonymous: anonymos,

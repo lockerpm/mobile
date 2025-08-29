@@ -1,10 +1,11 @@
 import { ScamMyReportData } from "@/static/types"
-import { ActivityIndicator, StyleSheet, View } from "react-native"
+import { ActivityIndicator, StyleSheet, View, ViewStyle } from "react-native"
 import { PressableIcon, Text } from "@/components/cores"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { formatDate } from "@/utils/formatDate"
 import { useAppLocale } from "@/i18n"
 import { useState } from "react"
+import { ThemedStyle } from "@/theme"
 
 interface Props {
   item: ScamMyReportData
@@ -13,6 +14,7 @@ interface Props {
 
 export const ListItem = ({ item, onDelete }: Props) => {
   const {
+    themed,
     theme: { colors },
   } = useAppTheme()
   const { translate } = useAppLocale()
@@ -42,10 +44,34 @@ export const ListItem = ({ item, onDelete }: Props) => {
       </View>
 
       <Text size="sm" weight="semiBold" tx="scam:myReportList.scanType" />
-      <Text size="sm">{item.description}</Text>
+      <Text
+        size="sm"
+        // @ts-ignore
+        tx={"scam:report.type." + item.phishing_type}
+      />
+      {!!item.description && (
+        <View>
+          <View style={themed($description)}>
+            <Text size="xs">{item.description}</Text>
+          </View>
+        </View>
+      )}
     </View>
   )
 }
+
+const $description: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  borderRadius: 16,
+  borderWidth: 1,
+  padding: 4,
+  paddingHorizontal: 8,
+  borderColor: colors.border,
+  backgroundColor: colors.block,
+  marginRight: 12,
+  flexShrink: 1,
+  flexGrow: 1,
+  marginTop: 12,
+})
 
 const styles = StyleSheet.create({
   container: {

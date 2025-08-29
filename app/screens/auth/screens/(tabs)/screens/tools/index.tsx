@@ -11,11 +11,15 @@ import { getLocales } from "expo-localization"
 
 const isVietnam = () => {
   const locales = getLocales()
+  let isVietnam = false
   if (locales.length > 0) {
-    const countryCode = locales[0].regionCode // e.g. "VN"
-    return countryCode === "VN"
+    locales.forEach((locale) => {
+      if (locale.regionCode === "VN") {
+        isVietnam = true
+      }
+    })
   }
-  return false
+  return isVietnam
 }
 
 type ToolsItem = {
@@ -54,13 +58,13 @@ const TOOLS_ITEMS: ToolsItem[] = [
     routeName: "dataBreachScannerStack",
     premium: true,
   },
-  // {
-  //   label: "scam:tool.title",
-  //   desc: "scam:tool.label",
-  //   icon: "lookup",
-  //   routeName: "scamStack",
-  //   hide: !isVietnam(), // Hide if not in Vietnam
-  // },
+  {
+    label: "scam:tool.title",
+    desc: "scam:tool.label",
+    icon: "lookup",
+    routeName: "scamStack",
+    hide: !isVietnam(), // Hide if not in Vietnam
+  },
 ]
 
 export const ToolsListScreen: FC<TabsScreenProps<"toolsTab">> = ({ navigation }) => {

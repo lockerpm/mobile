@@ -66,7 +66,7 @@ export const LockByMasterPassword = ({
 
   // ---------------------- PARAMS -------------------------
 
-  const [masterPassword, setMasterPassword] = useState("")
+  const [masterPassword, setMasterPassword] = useState("demo@123")
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const [isError, setIsError] = useState(false)
@@ -243,6 +243,10 @@ export const LockByMasterPassword = ({
       <TextInput
         isPassword
         animated
+        autoFocus
+        autoCapitalize="none"
+        autoComplete="password"
+        autoCorrect={false}
         isError={isError}
         labelTx={"common:master_pass"}
         onChangeText={(val) => {

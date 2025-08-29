@@ -30,11 +30,20 @@ export const ListItem = ({ item }: Props) => {
       )}
       <View style={styles.row2}>
         <View style={themed($report)}>
-          <Text size="xs" color={"#B54708"}>
-            {item.description}
-          </Text>
+          <Text
+            size="xs"
+            color={"#B54708"}
+            // @ts-ignore
+            tx={"scam:report.type." + item.phishing_type}
+          />
         </View>
         <Text size="xs" preset="label" text={formatDate(item.created_time * 1000, "dd/MM/yyyy")} />
+      </View>
+
+      <View>
+        <View style={themed($description)}>
+          <Text size="xs">{item.description}</Text>
+        </View>
       </View>
     </View>
   )
@@ -50,6 +59,19 @@ const $report: ThemedStyle<ViewStyle> = () => ({
   marginRight: 12,
   flexShrink: 1,
   flexGrow: 1,
+})
+
+const $description: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  borderRadius: 16,
+  borderWidth: 1,
+  padding: 4,
+  paddingHorizontal: 8,
+  borderColor: colors.border,
+  backgroundColor: colors.background,
+  marginRight: 12,
+  flexShrink: 1,
+  flexGrow: 1,
+  marginTop: 12,
 })
 
 const $userReport: ThemedStyle<ViewStyle> = ({ colors }) => ({
@@ -74,6 +96,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexGrow: 1,
     flexShrink: 1,
+    flexWrap: "wrap",
   },
   row2: {
     alignItems: "center",

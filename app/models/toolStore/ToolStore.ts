@@ -20,6 +20,9 @@ export const ToolStoreModel = types
     passwordStrengthMap: types.maybeNull(types.frozen()),
     passwordUseMap: types.maybeNull(types.frozen()),
     exposedPasswordMap: types.maybeNull(types.frozen()),
+
+    // scam
+    lastSyncCursor: types.maybeNull(types.string), // last sync cursor for scam phone numbers
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -156,6 +159,10 @@ export const ToolStoreModel = types
     checkBreaches: async (email: string) => {
       const res = await toolApi.checkBreaches(self.apiToken, email)
       return res
+    },
+
+    updateSyncScamPhones: async (cursor: string) => {
+      self.lastSyncCursor = cursor
     },
   }))
   .postProcessSnapshot((snapShot) => {

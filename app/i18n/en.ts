@@ -1419,7 +1419,7 @@ const en = {
   },
   scam: {
     tool: {
-      title: "Anti-Scam",
+      title: "Scam checker",
       label: "Look up suspicious phone numbers and warn the community about scams",
     },
     home: {
@@ -1428,7 +1428,7 @@ const en = {
         label: "Check suspicious phone numbers",
       },
       report: {
-        title: "Report Phone",
+        title: "Report Phone Number",
         label: "Send warnings about scam phone numbers to protect the community",
       },
       myReportList: {
@@ -1440,6 +1440,28 @@ const en = {
       otherScam: "Check other scam types",
       otherScamDesc: "Suspect a website URL or Facebook profile is a scam?",
       checkNow: "Check Now",
+      android: {
+        title: "Call warning",
+        desc: "Receive a warning when a scam phone number calls you",
+        disable: {
+          title: "Disable call warning",
+          label: "In Settings, toggle off the option to display Locker over other apps",
+          btn: "Open Settings",
+        },
+        enable: {
+          title: "Enable call warning by allowing the permissions:",
+          first: "1. Allow Locker to access Phone State",
+          second: "2. Allow Locker to access Call Logs",
+          third: "3. Allow Locker to display over other apps",
+          btn: "Enable Permission",
+        },
+        update: "Update data on suspicious phone numbers",
+      },
+      ios: {
+        title: "Update Required",
+        label:
+          "Live Caller ID Lookup works only on iOS 18.2 or later. Update your iPhone in Settings > General > Software Update",
+      },
     },
     lookup: {
       title: "Phone Lookup",

@@ -162,7 +162,7 @@ const vi: Translations = {
       "Tài khoản đã bị khóa bởi gói doanh nghiệp đã hết hạn. Vui lòng liên hệ quản trị viên của bạn để mở khóa tài khoản",
     update: {
       title: "Cập nhật ứng dụng?",
-      content: "Locker {{version}} đã có mặt tại của hàng CH play. Cập nhật ngay!",
+      content: "Locker {{version}} đã có mặt tại của hàng. Cập nhật ngay!",
       later: "Sau",
       now: "Cập nhật",
     },
@@ -1439,6 +1439,28 @@ const vi: Translations = {
       otherScam: "Tra cứu hình thức lừa đảo khác",
       otherScamDesc: "Nghi ngờ một URL trang web hoặc Hồ sơ Facebook là lừa đảo?",
       checkNow: "Kiểm tra ngay",
+      android: {
+        title: "Cảnh báo cuộc gọi đến",
+        desc: "Nhận cảnh báo khi có số điện thoại khả nghi gọi đến",
+        disable: {
+          title: "Tắt cảnh báo cuộc gọi",
+          label: "Tại Cài đặt, tắt nút cho phép hiển thị Locker trong các ứng dụng khác",
+          btn: "Mở Cài đặt",
+        },
+        enable: {
+          title: "Bật nhận cảnh báo bằng cách cấp quyền cho Locker:",
+          first: "1. Truy cập Phone State",
+          second: "2. Truy cập Nhật ký cuộc gọi",
+          third: "3. Hiển thị Locker trong các ứng dụng khác",
+          btn: "Cấp quyền",
+        },
+        update: "Cập nhật dữ liệu SDT khả nghi mới nhất",
+      },
+      ios: {
+        title: "Cần cập nhật",
+        label:
+          "Tính năng Live Caller ID Lookup chỉ hoạt động trên iOS 18.2 hoặc phiên bản mới hơn. Vui lòng cập nhật iPhone của bạn trong Cài đặt > Chung > Cập nhật phần mềm",
+      },
     },
     lookup: {
       title: "Tra cứu SĐT",

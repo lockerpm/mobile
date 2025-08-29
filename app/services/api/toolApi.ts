@@ -8,9 +8,14 @@ import {
   ScamLookupResult,
   ScamMyReportData,
   ScamMyReportParams,
+  ScamSyncPhonesParams,
+  ScamSyncPhonesResponse,
   SubdomainData,
 } from "app/static/types"
 import { Logger } from "@/utils/logger"
+import { gunzipSync } from "fflate"
+import { decode } from "@msgpack/msgpack"
+import Config from "@/config"
 
 class ToolApi {
   private api: Api = api
@@ -511,27 +516,51 @@ class ToolApi {
     }
   }
 
-  async scamSyncPhones(token: string): Promise<
+  async scamSyncPhones(
+    token: string,
+    param: ScamSyncPhonesParams
+  ): Promise<
     | {
         kind: "ok"
-        data: any
+        data: ScamSyncPhonesResponse
       }
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/locker_scam_detector/v1/detector/sync/phones`
-      )
-      // the typical ways to die when calling an api
+      const url = `${Config.BASE_URL}/locker_scam_detector/v1/detector/sync/phones?cursor=${param.cursor || "abc_0"}`
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Accept-Encoding": "gzip", // Yêu cầu gzip nếu có
+        },
+      })
+
       if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
+        return { kind: "bad-data" }
       }
-      return { kind: "ok", data: response.data }
+
+      // Lấy dữ liệu dạng ArrayBuffer
+      const arrayBuffer = await response.arrayBuffer()
+      const compressed = new Uint8Array(arrayBuffer)
+
+      // Kiểm tra magic number của gzip (0x1f, 0x8b)
+      const isGzip = compressed[0] === 0x1f && compressed[1] === 0x8b
+
+      let rawData: Uint8Array
+      if (isGzip) {
+        rawData = gunzipSync(compressed) // Giải nén
+      } else {
+        rawData = compressed // Không gzip
+      }
+
+      // Decode msgpack
+      const decoded = decode(rawData.buffer) as ScamSyncPhonesResponse
+
+      return { kind: "ok", data: decoded }
     } catch (e) {
-      Logger.error("editSubdomain", e)
+      Logger.error("scamSyncPhones", e)
       return { kind: "bad-data" }
     }
   }

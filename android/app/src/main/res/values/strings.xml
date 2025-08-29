@@ -6,6 +6,7 @@
 
   <!-- Locker config -->
   <string name="service_name">Locker</string>
+  <string name="locker">Locker</string>
   <string name="facebook_app_id">1260309664112849</string>
   <string name="facebook_client_token">082ae6329b491d0314aa527e2f83179e</string>
   <string name="mp_title">Locker Password Manager</string>
@@ -22,4 +23,11 @@
         \"include\": \"https://locker.io/.well-known/assetlinks.json\"
     }]
     </string>
+  <string name="fake_police">Giả mạo công an / dịch vụ công</string>
+  <string name="fake_electricity_company">Lừa đảo đóng tiền điện nước</string>
+  <string name="fake_bank_credit_securities">Giả mạo, lừa đảo ngân hàng / tín dụng / chứng khoán</string>
+  <string name="phone_spam">Nháy máy spam</string>
+  <string name="online_delivery">Giao hàng trực tuyến</string>
+  <string name="fake_ads_prize">Quảng cáo / trúng thưởng</string>
+  <string name="other">Khác</string>
 </resources>

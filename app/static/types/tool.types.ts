@@ -90,3 +90,19 @@ export type ScamMyReportData = {
   user: any
   value: string
 }
+
+export type ScamPhonesData = {
+  value: string
+  type: string
+}
+
+export type ScamSyncPhonesResponse = {
+  cursor: string
+  data: ScamPhonesData[]
+  count: number
+}
+
+export type ScamSyncPhonesParams = {
+  cursor?: string
+  size?: number
+}

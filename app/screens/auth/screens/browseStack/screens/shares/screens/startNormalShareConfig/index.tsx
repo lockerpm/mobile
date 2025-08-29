@@ -124,7 +124,6 @@ export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
 
     useEffect(() => {
       const listener1 = EventBus.createListener(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, (data) => {
-        console.log(data)
         if (data) {
           changeEmailRole(data?.id, data?.role)
           changeGroupRole(data?.id, data?.role)

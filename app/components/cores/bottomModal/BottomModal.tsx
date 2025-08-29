@@ -69,9 +69,9 @@ export const BottomModal = ({
 
 const $contentBackground: ThemedStyle<ViewStyle> = ({ colors }) => ({
   backgroundColor: colors.background,
-  borderRadius: 12,
+  borderTopLeftRadius: 12,
+  borderTopRightRadius: 12,
   marginTop: -12,
-  // borderTopRightRadius: 12,
   overflow: "hidden",
 })
 

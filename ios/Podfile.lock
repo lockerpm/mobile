@@ -1931,6 +1931,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-sqlite-storage (6.0.1):
+    - React-Core
   - react-native-version-check (3.5.0):
     - React-Core
   - react-native-webview (13.15.0):
@@ -2554,6 +2556,7 @@ DEPENDENCIES:
   - react-native-simple-crypto (from `../node_modules/react-native-simple-crypto`)
   - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
+  - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-version-check (from `../node_modules/react-native-version-check`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -2805,6 +2808,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@shopify/react-native-skia"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
+  react-native-sqlite-storage:
+    :path: "../node_modules/react-native-sqlite-storage"
   react-native-version-check:
     :path: "../node_modules/react-native-version-check"
   react-native-webview:
@@ -3016,6 +3021,7 @@ SPEC CHECKSUMS:
   react-native-simple-crypto: 499ddd9f317932677e50393e58e7a72bca2a86e1
   react-native-skia: c99e19b063d75bbd9977ff4ad807806b31930672
   react-native-slider: 6189d127d7532409045b320af353e11ae423d6c9
+  react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-check: 54a471d70dadf0f72fc142e70f16e4bf473a91a5
   react-native-webview: 6fb36c7f29fbe2c65eb9cc7636c22452eb13765c
   React-nativeconfig: 415626a63057638759bcc75e0a96e2e07771a479

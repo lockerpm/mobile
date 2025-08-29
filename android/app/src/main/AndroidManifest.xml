@@ -1,26 +1,28 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="MissingLeanbackLauncher">
 
-  <uses-feature
-    android:name="android.hardware.camera"
-    android:required="false" />
-
-  <!-- Exclude Android TV by stating you don't support LEANBACK -->
-  <uses-feature android:name="android.software.leanback" android:required="false" />
-
-  <!-- Exclude Android Auto by stating you don't support AUTOMOTIVE -->
-  <uses-feature android:name="android.hardware.type.automotive" android:required="false" />
+  <uses-feature android:name="android.hardware.camera" android:required="false" />
+  <uses-feature android:name="android.software.leanback" android:required="false" />   <!-- Exclude Android TV by stating you don't support LEANBACK -->
+  <uses-feature android:name="android.hardware.type.automotive" android:required="false" />   <!-- Exclude Android Auto by stating you don't support AUTOMOTIVE -->
+  <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
   <uses-permission android:name="android.permission.INTERNET"/>
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
   <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
   <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
   <uses-permission android:name="com.android.vending.BILLING" />
   <uses-permission android:name="android.permission.CAMERA" />
 
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.READ_CALL_LOG" />
+  <uses-permission android:name="android.permission.READ_CONTACTS"/>
+
+  
   <queries>
     <intent>
       <action android:name="android.intent.action.VIEW"/>
@@ -83,6 +85,15 @@
               android:pathPrefix="/confirmation" />
       </intent-filter>
     </activity>
+
+    <receiver
+        android:name=".scam.ScamReceiver"
+        android:enabled="true"
+        android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.PHONE_STATE" />
+      </intent-filter>
+    </receiver>
 
     <service
         android:exported="false"
