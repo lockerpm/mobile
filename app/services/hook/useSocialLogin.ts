@@ -1,5 +1,5 @@
 import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin"
-import { LoginManager, AccessToken } from "react-native-fbsdk-next"
+import { LoginManager, AccessToken, AuthenticationToken } from "react-native-fbsdk-next"
 import { appleAuth } from "@invertase/react-native-apple-authentication"
 import { getCookies, logRegisterSuccessEvent } from "../../utils/analytics"
 import { useStores } from "app/models"
@@ -7,6 +7,7 @@ import { useHelper } from "./useHelper"
 import { useToast } from "../utils"
 import Config from "@/config"
 import { Logger } from "@/utils/logger"
+import { Platform } from "react-native"
 
 export function useSocialLogin() {
   const { user } = useStores()
@@ -48,6 +49,19 @@ export function useSocialLogin() {
     }
   }
 
+  const getFacebookToken = async () => {
+    if (Platform.OS === "ios") {
+      const res = await AuthenticationToken.getAuthenticationTokenIOS()
+      return res?.authenticationToken || null
+    }
+    if (Platform.OS === "android") {
+      const res = await AccessToken.getCurrentAccessToken()
+      return res?.accessToken || null
+    }
+
+    return null
+  }
+
   // Facebook
   const facebookLogin = async (payload: {
     setIsLoading?: (val: boolean) => void
@@ -55,20 +69,17 @@ export function useSocialLogin() {
   }) => {
     const { setIsLoading, onLoggedIn } = payload
     try {
-      let res = await AccessToken.getCurrentAccessToken()
-      if (!res) {
-        await LoginManager.logInWithPermissions(["email"])
-        res = await AccessToken.getCurrentAccessToken()
-        if (!res) {
-          if (setIsLoading) {
-            setIsLoading(false)
-          }
-          return
+      await LoginManager.logInWithPermissions(["email"])
+      const token = await getFacebookToken()
+      if (!token) {
+        if (setIsLoading) {
+          setIsLoading(false)
         }
+        return
       }
       await _handleSocialLogin({
         provider: "facebook",
-        token: res.accessToken,
+        token: token,
         setIsLoading,
         onLoggedIn,
       })

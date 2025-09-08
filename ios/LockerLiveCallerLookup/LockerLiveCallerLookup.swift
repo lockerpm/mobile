@@ -11,8 +11,8 @@ import IdentityLookup
 struct LockerLiveCallerLookup: LiveCallerIDLookupProtocol {
     var context: LiveCallerIDLookupExtensionContext {
         LiveCallerIDLookupExtensionContext(
-            serviceURL: URL(string: "http://Nguyens-Mac-mini-3.local:9000")!,
-            tokenIssuerURL: URL(string: "http://Nguyens-Mac-mini-3.local:9000")!,
+            serviceURL: URL(string: "https://api.cystack.org/locker_scam_detector/v1/pir_service")!,
+            tokenIssuerURL: URL(string: "https://api.cystack.org/locker_scam_detector/v1/pir_service")!,
             userTierToken: Data(base64Encoded: "BBBB")!
         )
     }
