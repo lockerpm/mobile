@@ -74,6 +74,31 @@ class CallerID {
       console.error("❌ Reload Error:", err)
     }
   }
+
+  public async iosResetExtension() {
+    if (Platform.OS !== "ios") {
+      console.warn("iosResetExtension is iOS-only.")
+      return
+    }
+    try {
+      await CallerIDManager.reset()
+    } catch (err) {
+      console.error("❌ iosResetExtension Error:", err)
+    }
+  }
+
+  public async iosRefreshPIRParameters() {
+    if (Platform.OS !== "ios") {
+      console.warn("iosRefreshPIRParameters is iOS-only.")
+      return
+    }
+    try {
+      await CallerIDManager.refreshPIRParameters()
+      console.log("✅ iosRefreshPIRParameters Success")
+    } catch (err) {
+      console.error("❌ iosRefreshPIRParameters Error:", err)
+    }
+  }
 }
 
 export const callerID = new CallerID()

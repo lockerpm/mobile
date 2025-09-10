@@ -92,20 +92,26 @@ export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) 
 
       <CallerContent />
       <MenuItemContainer>
-        <PressableScale style={styles.itemContainer2} onPress={openScamUrl}>
-          <View style={styles.itemContent2}>
-            <Text tx={"scam:home.otherScam"} style={styles.itemText} />
-            <Text
-              preset="label"
-              tx={"scam:home.otherScamDesc"}
-              size="xs"
-              style={styles.itemLabel}
-            />
-          </View>
-
-          <View style={styles.row}>
-            <Text weight="semiBold" size="sm" tx={"scam:home.checkNow"} color={colors.primary} />
-            <Icon size={18} icon="arrow-right" color={colors.primary} />
+        <PressableScale onPress={openScamUrl}>
+          <View style={styles.itemContainer2}>
+            <View style={styles.itemContent2}>
+              <Text tx={"scam:home.otherScam"} style={styles.itemText} />
+              <Text
+                preset="label"
+                tx={"scam:home.otherScamDesc"}
+                size="xs"
+                style={styles.itemLabel}
+              />
+              <View style={[styles.row, styles.mt12]}>
+                <Text
+                  weight="semiBold"
+                  size="sm"
+                  tx={"scam:home.checkNow"}
+                  color={colors.primary}
+                />
+                <Icon size={18} icon="arrow-right" color={colors.primary} />
+              </View>
+            </View>
           </View>
         </PressableScale>
       </MenuItemContainer>
@@ -146,6 +152,9 @@ const styles = StyleSheet.create({
   itemText: {
     flexGrow: 1,
     flexShrink: 1,
+  },
+  mt12: {
+    marginTop: 16,
   },
   row: {
     alignItems: "center",

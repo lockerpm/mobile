@@ -13,7 +13,7 @@ struct LockerLiveCallerLookup: LiveCallerIDLookupProtocol {
         LiveCallerIDLookupExtensionContext(
             serviceURL: URL(string: "https://api.cystack.org/locker_scam_detector/v1/pir_service")!,
             tokenIssuerURL: URL(string: "https://api.cystack.org/locker_scam_detector/v1/pir_service")!,
-            userTierToken: Data(base64Encoded: "BBBB")!
+            userTierToken: Data(base64Encoded: "AAAA")!
         )
     }
 }

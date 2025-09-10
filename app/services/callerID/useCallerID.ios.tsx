@@ -34,5 +34,7 @@ export const useCallerID = () => {
   return {
     isExtensionEnabled,
     openSettings,
+    refreshService: callerID.iosRefreshPIRParameters,
+    resetService: callerID.iosResetExtension,
   }
 }
