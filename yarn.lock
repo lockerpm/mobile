@@ -11109,6 +11109,18 @@ tldjs@^2.3.1:
   dependencies:
     punycode "^1.4.1"
 
+tldts-core@^7.0.13:
+  version "7.0.13"
+  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-7.0.13.tgz#01e30579c88f299485cebcada440a7a2d51c96f1"
+  integrity sha512-Td0LeWLgXJGsikI4mO82fRexgPCEyTcwWiXJERF/GBHX3Dm+HQq/wx4HnYowCbiwQ8d+ENLZc+ktbZw8H+0oEA==
+
+tldts@^7.0.13:
+  version "7.0.13"
+  resolved "https://registry.yarnpkg.com/tldts/-/tldts-7.0.13.tgz#3f7151b0266fd613930b4dbecd28f95616267fb3"
+  integrity sha512-z/SgnxiICGb7Gli0z7ci9BZdjy1tQORUbdmzEUA7NbIJKWhdONn78Ji8gV0PAGfHPyEd+I+W2rMzhLjWkv2Olg==
+  dependencies:
+    tldts-core "^7.0.13"
+
 tmpl@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.5.tgz#8683e0b902bb9c20c4f726e3c0b69f36518c07cc"

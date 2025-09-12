@@ -1,57 +1,61 @@
-import { LoginUriView } from './loginUriView';
-import { View } from './view';
+import { LoginUriView } from "./loginUriView"
+import { Fido2CredentialView } from "./fido2CredentialView"
+import { View } from "./view"
 
-import { Utils } from '../../misc/utils';
-import { Login } from '../domain/login';
+import { Utils } from "../../misc/utils"
+import { Login } from "../domain/login"
 
 export class LoginView implements View {
-    username: string = null;
-    password: string = null;
-    passwordRevisionDate?: Date = null;
-    totp: string = null;
-    uris: LoginUriView[] = null;
-    autofillOnPageLoad: boolean = null;
+  username: string = null
+  password: string = null
+  passwordRevisionDate?: Date = null
+  totp: string = null
+  uris: LoginUriView[] = null
+  fido2Credentials: Fido2CredentialView[] = null
 
-    constructor(l?: Login) {
-        if (!l) {
-            return;
-        }
-
-        this.passwordRevisionDate = l.passwordRevisionDate;
-        this.autofillOnPageLoad = l.autofillOnPageLoad;
+  constructor(l?: Login) {
+    if (!l) {
+      return
     }
 
-    get uri(): string {
-        return this.hasUris ? this.uris[0].uri : null;
-    }
+    this.passwordRevisionDate = l.passwordRevisionDate
+  }
 
-    get maskedPassword(): string {
-        return this.password != null ? '••••••••' : null;
-    }
+  get uri(): string {
+    return this.hasUris ? this.uris[0].uri : null
+  }
 
-    get subTitle(): string {
-        return this.username;
-    }
+  get maskedPassword(): string {
+    return this.password != null ? "••••••••" : null
+  }
 
-    get canLaunch(): boolean {
-        return this.hasUris && this.uris.some(u => u.canLaunch);
-    }
+  get subTitle(): string {
+    return this.username
+  }
 
-    get hasTotp(): boolean {
-        return !Utils.isNullOrWhitespace(this.totp);
-    }
+  get canLaunch(): boolean {
+    return this.hasUris && this.uris.some((u) => u.canLaunch)
+  }
 
-    get launchUri(): string {
-        if (this.hasUris) {
-            const uri = this.uris.find(u => u.canLaunch);
-            if (uri != null) {
-                return uri.launchUri;
-            }
-        }
-        return null;
-    }
+  get hasTotp(): boolean {
+    return !Utils.isNullOrWhitespace(this.totp)
+  }
 
-    get hasUris(): boolean {
-        return this.uris != null && this.uris.length > 0;
+  get launchUri(): string {
+    if (this.hasUris) {
+      const uri = this.uris.find((u) => u.canLaunch)
+      if (uri != null) {
+        return uri.launchUri
+      }
     }
+    return null
+  }
+
+  get hasUris(): boolean {
+    return this.uris != null && this.uris.length > 0
+  }
+
+  get hasFido2Credentials(): boolean {
+    return this.fido2Credentials != null && this.fido2Credentials.length > 0
+  }
 }

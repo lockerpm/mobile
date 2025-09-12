@@ -15,6 +15,7 @@ import { Field } from "../models/domain/field"
 import { Identity } from "../models/domain/identity"
 import { Login } from "../models/domain/login"
 import { LoginUri } from "../models/domain/loginUri"
+import { Fido2Credential } from "../models/domain/fido2Credential"
 import { Password } from "../models/domain/password"
 import { SecureNote } from "../models/domain/secureNote"
 import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey"
@@ -1320,6 +1321,34 @@ export class CipherService implements CipherServiceAbstraction {
             cipher.login.uris.push(loginUri)
           }
         }
+        if (model.login.fido2Credentials != null) {
+          cipher.login.fido2Credentials = []
+          for (let i = 0; i < model.login.fido2Credentials.length; i++) {
+            const cred = new Fido2Credential()
+            cred.creationDate = model.login.fido2Credentials[i].creationDate
+            await this.encryptObjProperty(
+              model.login.fido2Credentials[i],
+              cred,
+              {
+                credentialId: null,
+                keyType: null,
+                keyAlgorithm: null,
+                keyCurve: null,
+                keyValue: null,
+                rpId: null,
+                userHandle: null,
+                userName: null,
+                counter: null,
+                rpName: null,
+                userDisplayName: null,
+                discoverable: null,
+              },
+              key
+            )
+            cipher.login.fido2Credentials.push(cred)
+          }
+        }
+
         return
       case CipherType.SecureNote:
       case CipherType.TOTP:

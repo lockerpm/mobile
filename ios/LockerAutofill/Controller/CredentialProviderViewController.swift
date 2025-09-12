@@ -38,37 +38,37 @@ class CredentialProviderController: ASCredentialProviderViewController {
       options.attachStacktrace = true
       options.sendDefaultPii = true  // Capture user details if necessary
     }
-  
+    
     self.dataModel.getUserInfo()
     i.locale = user.language
   }
-
+  
   override func viewDidAppear(_ animated: Bool) {
-      self.view.backgroundColor = UIColor(named: "background")
-      self.dataModel.getPasswords()
+    self.view.backgroundColor = UIColor(named: "background")
+    self.dataModel.getPasswords()
     
-      if (self.loginLocker()) {
-        if (user.faceIdEnabled){
-          authenService.biometricAuthentication(
-            view: self,
-            onSuccess: {
-              if (self.quickBarCredential == nil) {
-                self.navigateCredentialsList()
-              } else {
-                self.loginSelected(data: self.quickBarCredential)
-              }
-            },
-            onFailed: self.navigateLockScreen,
-            notSupported: {
-//              self.user.faceIdEnabled = false
-              self.navigateLockScreen()
+    if (self.loginLocker()) {
+      if (user.faceIdEnabled){
+        authenService.biometricAuthentication(
+          view: self,
+          onSuccess: {
+            if (self.quickBarCredential == nil) {
+              self.navigateCredentialsList()
+            } else {
+              self.loginSelected(data: self.quickBarCredential)
             }
-          )
-        }
-        else {
-          self.navigateLockScreen()
-        }
+          },
+          onFailed: self.navigateLockScreen,
+          notSupported: {
+            //              self.user.faceIdEnabled = false
+            self.navigateLockScreen()
+          }
+        )
       }
+      else {
+        self.navigateLockScreen()
+      }
+    }
   }
   
   /*
@@ -92,12 +92,43 @@ class CredentialProviderController: ASCredentialProviderViewController {
     }
   }
   
-  /**
-   Implement this method if provideCredentialWithoutUserInteraction(for:) can fail with
-   ASExtensionError.userInteractionRequired. In this case, the system may present your extension's
-   UI and call this method. Show appropriate UI for authenticating the user then provide the password
-   by completing the extension request with the associated ASPasswordCredential.
-   */
+  @available(iOS 17.0, *)
+  override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier], requestParameters: ASPasskeyCredentialRequestParameters){
+    // test
+    print("prepareCredentialList", serviceIdentifiers, requestParameters)
+  }
+  
+  @available(iOS 18.0, *)
+  override func prepareOneTimeCodeCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+    // test
+    print("prepareCredentialList", serviceIdentifiers)
+  }
+  
+  @available(iOS 18.0, *)
+  override func prepareInterfaceForUserChoosingTextToInsert() {
+    // test
+    print("prepareInterfaceForUserChoosingTextToInsert")
+  }
+  
+  @available(iOS 17.0, *)
+  override func prepareInterfaceToProvideCredential(for credentialRequest: any ASCredentialRequest) {
+    // test
+    print("prepareInterfaceToProvideCredential", credentialRequest)
+  }
+  
+  @available(iOS 17.0, *)
+  override func prepareInterface(forPasskeyRegistration registrationRequest: any ASCredentialRequest) {
+    // test
+    print("prepareInterface", registrationRequest)
+  }
+  
+  @available(iOS 18.0, *)
+  override func performWithoutUserInteractionIfPossible(passkeyRegistration registrationRequest: ASPasskeyCredentialRequest) {
+    // test
+    print("prepareInterface", registrationRequest)
+  }
+  
+  
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
     if (self.loginLocker()) {
       self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
@@ -113,14 +144,12 @@ class CredentialProviderController: ASCredentialProviderViewController {
     }
   }
   
-  /**
-   Implement this method if your extension supports showing credentials in the QuickType bar.
-   When the user selects a credential from your app, this method will be called with the
-   ASPasswordCredentialIdentity your app has previously saved to the ASCredentialIdentityStore.
-   Provide the password by completing the extension request with the associated ASPasswordCredential.
-   If using the credential would require showing custom UI for authenticating the user, cancel
-   the request with error code ASExtensionError.userInteractionRequired.
-   */
+  @available(iOS 17.0, *)
+  override func provideCredentialWithoutUserInteraction(for credentialRequest: any ASCredentialRequest) {
+    // test
+    print("provideCredentialWithoutUserInteraction", credentialRequest)
+  }
+  
   override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
   }

@@ -142,6 +142,7 @@
     "react-native-webview": "^13.15.0",
     "string_decoder": "~0.10.25",
     "tldjs": "^2.3.1",
+    "tldts": "^7.0.13",
     "totp-generator": "^0.0.14",
     "url": "~0.10.1",
     "util": "~0.10.3",

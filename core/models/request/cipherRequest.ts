@@ -8,6 +8,7 @@ import { FieldApi } from "../api/fieldApi"
 import { IdentityApi } from "../api/identityApi"
 import { LoginApi } from "../api/loginApi"
 import { LoginUriApi } from "../api/loginUriApi"
+import { Fido2CredentialApi } from "../api/fido2CredentialApi"
 import { SecureNoteApi } from "../api/secureNoteApi"
 
 import { AttachmentRequest } from "./attachmentRequest"
@@ -60,6 +61,27 @@ export class CipherRequest {
             uri.uri = u.uri != null ? u.uri.encryptedString : null
             uri.match = u.match != null ? u.match : null
             return uri
+          })
+        }
+
+        if (cipher.login.fido2Credentials != null) {
+          this.login.fido2Credentials = cipher.login.fido2Credentials.map((c) => {
+            const cred = new Fido2CredentialApi()
+            cred.credentialId = c.credentialId != null ? c.credentialId.encryptedString : null
+            cred.keyType = c.keyType != null ? c.keyType.encryptedString : null
+            cred.keyAlgorithm = c.keyAlgorithm != null ? c.keyAlgorithm.encryptedString : null
+            cred.keyCurve = c.keyCurve != null ? c.keyCurve.encryptedString : null
+            cred.keyValue = c.keyValue != null ? c.keyValue.encryptedString : null
+            cred.rpId = c.rpId != null ? c.rpId.encryptedString : null
+            cred.userHandle = c.userHandle != null ? c.userHandle.encryptedString : null
+            cred.userName = c.userName != null ? c.userName.encryptedString : null
+            cred.counter = c.counter != null ? c.counter.encryptedString : null
+            cred.rpName = c.rpName != null ? c.rpName.encryptedString : null
+            cred.userDisplayName =
+              c.userDisplayName != null ? c.userDisplayName.encryptedString : null
+            cred.discoverable = c.discoverable != null ? c.discoverable.encryptedString : null
+            cred.creationDate = c.creationDate != null ? c.creationDate.toISOString() : null
+            return cred
           })
         }
         break
