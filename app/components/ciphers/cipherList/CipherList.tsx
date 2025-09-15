@@ -276,7 +276,7 @@ export const CipherList = observer(
     const renderEmptyComponents = useCallback(() => {
       if (!isLoadingDone) return null
 
-      if (ListEmptyComponent && !searchText.trim()) {
+      if (ListEmptyComponent && !searchText?.trim()) {
         return ListEmptyComponent
       }
       return (

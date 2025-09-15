@@ -104,7 +104,7 @@ export const OtpList = observer(
         }
         ItemSeparatorComponent={() => <View style={styles.divider} />}
         ListEmptyComponent={
-          !searchText.trim() ? (
+          !searchText?.trim() ? (
             <View>
               <EmptyCipherList
                 image={EMPTY}

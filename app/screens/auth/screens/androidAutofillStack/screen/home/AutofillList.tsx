@@ -80,7 +80,7 @@ export const AutoFillList = observer(
     const renderEmptyComponents = useCallback(() => {
       if (isLoadingDone) return null
 
-      if (!searchText.trim()) {
+      if (!searchText?.trim()) {
         return (
           <View style={styles.emptyContainer}>
             <EmptyCipherList
