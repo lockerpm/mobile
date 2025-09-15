@@ -35,7 +35,7 @@ export const CardInfo = ({ item }: Props) => {
         />
       )}
 
-      {item.card.expMonth && item.card.expYear && (
+      {item.card.expMonth != null && item.card.expYear != null && (
         <TextInput
           animated
           isCopyable

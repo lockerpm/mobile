@@ -19,7 +19,7 @@ export const CardActions = ({ item, onClose }: Props) => {
         icon="copy"
         onPress={() => {
           onClose()
-          copyToClipboard(item.card.maskedNumber)
+          copyToClipboard(item.card.number)
         }}
       />
     </View>

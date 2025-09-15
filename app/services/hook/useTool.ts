@@ -128,7 +128,7 @@ export function useTool() {
         // Check password strength
         if (!passwordStrengthCache.has(cacheKey)) {
           // Compare password with username as well
-          let userInput = []
+          let userInput: string[] = []
           if (hasUserName) {
             const atPosition = c.login.username.indexOf("@")
             if (atPosition > -1) {

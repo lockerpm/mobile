@@ -85,8 +85,10 @@ export const CardEdit = observer(
       data.number = cardNumber
       if (expDate) {
         const splitDate = expDate.split("/")
-        data.expMonth = splitDate[0]
-        data.expYear = splitDate[1]
+        if (splitDate.length === 2) {
+          data.expMonth = splitDate[0]
+          data.expYear = splitDate[1]
+        }
       }
       data.code = securityCode
 

@@ -221,7 +221,6 @@ export const IdentityEdit = observer(
         label: "identity:zip",
         value: zip,
         setter: setZip,
-        type: "numeric",
       },
       {
         label: "identity:country",
