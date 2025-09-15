@@ -72,9 +72,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   /*
-   Prepare your UI to list available credentials for the user to choose from. The items in
-   'serviceIdentifiers' describe the service the user is logging in to, so your extension can
-   prioritize the most relevant credentials in the list.
+    Mở List Passwords
    */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     if (self.loginLocker()) {
@@ -92,43 +90,44 @@ class CredentialProviderController: ASCredentialProviderViewController {
     }
   }
   
+  /**
+    Mở List Passwords + Passkeys, Khi chọn Passkeys thì dùng requestParameters
+   */
   @available(iOS 17.0, *)
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier], requestParameters: ASPasskeyCredentialRequestParameters){
     // test
     print("prepareCredentialList", serviceIdentifiers, requestParameters)
   }
   
+  /**
+   Mở List OTP
+   */
   @available(iOS 18.0, *)
   override func prepareOneTimeCodeCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     // test
     print("prepareCredentialList", serviceIdentifiers)
   }
   
+  /**
+   Mở List để chọn Các Text để fill
+   */
   @available(iOS 18.0, *)
   override func prepareInterfaceForUserChoosingTextToInsert() {
     // test
     print("prepareInterfaceForUserChoosingTextToInsert")
   }
   
+  /**
+   * Người dùng chọn Passkey từ QuickTypeBar -> mở unlock screen để xác thực
+   */
   @available(iOS 17.0, *)
   override func prepareInterfaceToProvideCredential(for credentialRequest: any ASCredentialRequest) {
     // test
     print("prepareInterfaceToProvideCredential", credentialRequest)
   }
-  
-  @available(iOS 17.0, *)
-  override func prepareInterface(forPasskeyRegistration registrationRequest: any ASCredentialRequest) {
-    // test
-    print("prepareInterface", registrationRequest)
-  }
-  
-  @available(iOS 18.0, *)
-  override func performWithoutUserInteractionIfPossible(passkeyRegistration registrationRequest: ASPasskeyCredentialRequest) {
-    // test
-    print("prepareInterface", registrationRequest)
-  }
-  
-  
+  /**
+   * Người dùng chọn Password từ QuickTypeBar -> mở unlock screen để xác thực
+   */
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
     if (self.loginLocker()) {
       self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
@@ -144,12 +143,33 @@ class CredentialProviderController: ASCredentialProviderViewController {
     }
   }
   
+  
+  /**
+   Hiện thị giao diện cho việc tạo Passkey
+   */
   @available(iOS 17.0, *)
-  override func provideCredentialWithoutUserInteraction(for credentialRequest: any ASCredentialRequest) {
+  override func prepareInterface(forPasskeyRegistration registrationRequest: any ASCredentialRequest) {
     // test
-    print("provideCredentialWithoutUserInteraction", credentialRequest)
+    print("prepareInterface", registrationRequest)
   }
   
+  /**
+   Tạo passkey mà ko hiện gì
+   TODO: chấm hỏi, test sau)
+   */
+  @available(iOS 18.0, *)
+  override func performWithoutUserInteractionIfPossible(passkeyRegistration registrationRequest: ASPasskeyCredentialRequest) {
+    // test
+    print("prepareInterface", registrationRequest)
+  }
+  
+  // Unsupported
+  @available(iOS 17.0, *)
+  override func provideCredentialWithoutUserInteraction(for credentialRequest: any ASCredentialRequest) {
+    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
+  }
+  
+  // Unsupported
   override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
   }
