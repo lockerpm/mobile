@@ -40,6 +40,12 @@ export const ScamLookupScreen: FC<ScamScreenProps<"lookup">> = ({ navigation }) 
     setIsLoading(false)
   }
 
+  const navigateToReport = () => {
+    navigation.navigate("report", {
+      phoneNumber: phoneNumber,
+    })
+  }
+
   const onChangeText = useCallback((text: string) => {
     setPhoneNumber(text)
     setShowSafe(false)
@@ -53,13 +59,21 @@ export const ScamLookupScreen: FC<ScamScreenProps<"lookup">> = ({ navigation }) 
         <Header leftIcon="arrow-left" onLeftPress={navigation.goBack} titleTx="scam:lookup.title" />
       }
       footer={
-        <Button
-          disabled={!canSubmit}
-          loading={isLoading}
-          tx="scam:lookup.btn"
-          onPress={lookupPhoneNumber}
-          style={styles.m16}
-        />
+        <>
+          <Button
+            preset="delete"
+            tx="scam:home.report.title"
+            style={styles.m16}
+            onPress={navigateToReport}
+          />
+          <Button
+            disabled={!canSubmit}
+            loading={isLoading}
+            tx="scam:lookup.btn"
+            onPress={lookupPhoneNumber}
+            style={styles.m16}
+          />
+        </>
       }
       contentContainerStyle={styles.ph16}
       keyboardOffset={16}
@@ -89,6 +103,7 @@ export const ScamLookupScreen: FC<ScamScreenProps<"lookup">> = ({ navigation }) 
 const styles = StyleSheet.create({
   m16: {
     marginHorizontal: 16,
+    marginTop: 12,
   },
   mb16: {
     marginBottom: 16,

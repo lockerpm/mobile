@@ -1451,7 +1451,8 @@ const vi: Translations = {
           title: "Bật nhận cảnh báo bằng cách cấp quyền cho Locker:",
           first: "1. Truy cập Phone State",
           second: "2. Truy cập Nhật ký cuộc gọi",
-          third: "3. Hiển thị Locker trong các ứng dụng khác",
+          third:
+            "3. Hiển thị trên các ứng dụng khác (trong Cài đặt, bấm vào Locker > bật nút Cho phép)",
           btn: "Cấp quyền",
         },
         update: "Cập nhật dữ liệu SDT khả nghi mới nhất",
@@ -1525,7 +1526,7 @@ const vi: Translations = {
         real_estate: "Bất động sản",
         insurance: "Bảo hiểm",
         scam: "Lừa đảo",
-        other: "Khác",
+        other: "Phân loại khác",
       },
       anonymos: "Đăng ẩn danh",
       desc: "Mô tả",

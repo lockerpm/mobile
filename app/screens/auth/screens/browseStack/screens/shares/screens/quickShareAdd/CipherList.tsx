@@ -146,7 +146,7 @@ export const CipherList = observer(({ openActionsMenu, openAdd }: CipherListProp
   const renderEmptyComponents = useCallback(() => {
     if (!isLoadingDone) return null
 
-    if (!searchText.trim()) {
+    if (!searchText?.trim()) {
       return <CipherListEmpty onAdd={openAdd} cipherTypes={allTypes} isDeleted={false} />
     }
     return (

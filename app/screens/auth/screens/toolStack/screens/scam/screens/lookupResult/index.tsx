@@ -140,10 +140,10 @@ const styles = StyleSheet.create({
     height: 12,
   },
   mv12: {
-    marginTop: 24,
     marginVertical: 12,
   },
   ph16: {
+    marginTop: 12,
     paddingHorizontal: 16,
   },
   support: {

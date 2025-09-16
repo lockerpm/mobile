@@ -40,11 +40,13 @@ export const ListItem = ({ item }: Props) => {
         <Text size="xs" preset="label" text={formatDate(item.created_time * 1000, "dd/MM/yyyy")} />
       </View>
 
-      <View>
-        <View style={themed($description)}>
-          <Text size="xs">{item.description}</Text>
+      {!!item.description && (
+        <View>
+          <View style={themed($description)}>
+            <Text size="xs">{item.description}</Text>
+          </View>
         </View>
-      </View>
+      )}
     </View>
   )
 }
