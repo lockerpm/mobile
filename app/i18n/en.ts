@@ -1526,7 +1526,7 @@ const en = {
         real_estate: "Real estate",
         insurance: "Insurance",
         scam: "Scam",
-        other: "Other",
+        other: "Other scam types",
       },
       anonymos: "Post anonymously",
       desc: "Description",
