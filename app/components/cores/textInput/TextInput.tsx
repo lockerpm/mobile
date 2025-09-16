@@ -174,6 +174,7 @@ export const TextInput = forwardRef(function TextField(
     onFocus: propsFocus,
     onBlur: propsBlur,
     value = "",
+    onChangeText: propsOnChangeText,
     ...TextInputProps
   } = props
   const { translate } = useAppLocale()
@@ -256,6 +257,13 @@ export const TextInput = forwardRef(function TextField(
       return masked
     }
     return text
+  }
+
+  const onChangeText = (text: string) => {
+    const masked = validateMask(text)
+    if (propsOnChangeText) {
+      propsOnChangeText(masked)
+    }
   }
 
   useImperativeHandle(ref, () => input.current)
@@ -342,6 +350,7 @@ export const TextInput = forwardRef(function TextField(
           onFocus={onFucus}
           onBlur={onBlur}
           editable={!disabled}
+          onChangeText={onChangeText}
           {...TextInputProps}
           style={$inputStyles}
         />

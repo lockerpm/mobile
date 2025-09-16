@@ -49,7 +49,7 @@ export const CryptoWalletActions = ({ item, onClose }: Props) => {
 
       <NewActionSheetItem
         bottomBorder
-        hide={!data.privateKey.trim()}
+        hide={!data.privateKey?.trim()}
         tx="crypto_asset:copy_private_key"
         icon="copy"
         onPress={() => {
@@ -60,7 +60,7 @@ export const CryptoWalletActions = ({ item, onClose }: Props) => {
 
       <NewActionSheetItem
         bottomBorder
-        hide={!data.seed.trim()}
+        hide={!data.seed?.trim()}
         tx="crypto_asset:copy_seed"
         icon="copy"
         onPress={() => {
