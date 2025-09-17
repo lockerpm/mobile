@@ -24,12 +24,14 @@ class CredentialProviderController: ASCredentialProviderViewController {
   
   required init?(coder: NSCoder) {
     super.init(coder: coder)
+    print("init ------")
     self.user = User()
     self.dataModel = AutofillDataModel(self.user)
     
   }
   override func viewDidLoad() {
     super.viewDidLoad()
+    print("viewDidLoad ------")
     
     SentrySDK.start { options in
       options.dsn = getStringInfo(key: "DSN_SENTRY")
@@ -44,7 +46,8 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   override func viewDidAppear(_ animated: Bool) {
-    self.view.backgroundColor = UIColor(named: "background")
+    print("viewDidAppear -----")
+//    self.view.backgroundColor = UIColor(named: "background")
     self.dataModel.getPasswords()
     
     if (self.loginLocker()) {
@@ -75,6 +78,8 @@ class CredentialProviderController: ASCredentialProviderViewController {
     Mở List Passwords
    */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+    // test
+    print("prepareCredentialList", "-------")
     if (self.loginLocker()) {
       if serviceIdentifiers.count > 0 {
         self.serviceIdentifier = serviceIdentifiers[0].identifier
