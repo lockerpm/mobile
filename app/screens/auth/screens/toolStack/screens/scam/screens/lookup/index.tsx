@@ -6,11 +6,14 @@ import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { formatVietnamesePhoneNumber, validateVietnamesePhoneNumber } from "@/utils/utils"
 import { FC, useCallback, useState } from "react"
-import { StyleSheet, View, ViewStyle } from "react-native"
+import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import Animated, { FadeInUp } from "react-native-reanimated"
 
 export const ScamLookupScreen: FC<ScamScreenProps<"lookup">> = ({ navigation }) => {
-  const { themed } = useAppTheme()
+  const {
+    themed,
+    theme: { colors },
+  } = useAppTheme()
   const { notifyApiError } = useToast()
 
   //.-----------------------PARAMS----------------------------
@@ -59,21 +62,13 @@ export const ScamLookupScreen: FC<ScamScreenProps<"lookup">> = ({ navigation }) 
         <Header leftIcon="arrow-left" onLeftPress={navigation.goBack} titleTx="scam:lookup.title" />
       }
       footer={
-        <>
-          <Button
-            preset="delete"
-            tx="scam:home.report.title"
-            style={styles.m16}
-            onPress={navigateToReport}
-          />
-          <Button
-            disabled={!canSubmit}
-            loading={isLoading}
-            tx="scam:lookup.btn"
-            onPress={lookupPhoneNumber}
-            style={styles.m16}
-          />
-        </>
+        <Button
+          disabled={!canSubmit}
+          loading={isLoading}
+          tx="scam:lookup.btn"
+          onPress={lookupPhoneNumber}
+          style={styles.m16}
+        />
       }
       contentContainerStyle={styles.ph16}
       keyboardOffset={16}
@@ -94,6 +89,13 @@ export const ScamLookupScreen: FC<ScamScreenProps<"lookup">> = ({ navigation }) 
             <Icon icon="info" size={12} containerStyle={themed($warningIcon)} color={"#067647"} />
             <Text weight="semiBold" tx="scam:lookup.safe" color={"#067647"} />
           </View>
+
+          <TouchableOpacity onPress={navigateToReport}>
+            <View style={styles.report}>
+              <Text size="sm" tx="scam:home.report.title" color={colors.primary} />
+              <Icon size={18} icon="arrow-right" color={colors.primary} style={styles.ml8} />
+            </View>
+          </TouchableOpacity>
         </Animated.View>
       )}
     </Screen>
@@ -108,8 +110,16 @@ const styles = StyleSheet.create({
   mb16: {
     marginBottom: 16,
   },
+  ml8: {
+    marginLeft: 8,
+  },
   ph16: {
     paddingHorizontal: 16,
+  },
+  report: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 8,
   },
 })
 

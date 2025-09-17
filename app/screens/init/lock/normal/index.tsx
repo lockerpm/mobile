@@ -243,7 +243,7 @@ export const LockByMasterPassword = ({
       <TextInput
         isPassword
         animated
-        autoFocus
+        autoFocus={!user.isBiometricUnlock}
         autoCapitalize="none"
         autoComplete="password"
         autoCorrect={false}
