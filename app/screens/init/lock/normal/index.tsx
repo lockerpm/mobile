@@ -66,7 +66,7 @@ export const LockByMasterPassword = ({
 
   // ---------------------- PARAMS -------------------------
 
-  const [masterPassword, setMasterPassword] = useState("demo@123")
+  const [masterPassword, setMasterPassword] = useState("")
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const [isError, setIsError] = useState(false)

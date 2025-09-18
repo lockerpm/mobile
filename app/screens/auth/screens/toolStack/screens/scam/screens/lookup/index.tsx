@@ -92,7 +92,7 @@ export const ScamLookupScreen: FC<ScamScreenProps<"lookup">> = ({ navigation }) 
 
           <TouchableOpacity onPress={navigateToReport}>
             <View style={styles.report}>
-              <Text size="sm" tx="scam:home.report.title" color={colors.primary} />
+              <Text weight="bold" size="sm" tx="scam:home.report.title" color={colors.primary} />
               <Icon size={18} icon="arrow-right" color={colors.primary} style={styles.ml8} />
             </View>
           </TouchableOpacity>

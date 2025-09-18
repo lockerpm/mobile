@@ -1,15 +1,12 @@
-import { PressableScale, Text, Switch, Button } from "@/components/cores"
+import { PressableScale, Text, Switch } from "@/components/cores"
 import { MenuItemContainer } from "@/components/utils"
-import Config from "@/config"
 import { useAppLocale } from "@/i18n"
 import { useCallerID } from "@/services/callerID/useCallerID.ios"
-import { useState } from "react"
 import { Alert, Platform, StyleSheet, View } from "react-native"
 
 export const CallerContent = () => {
-  const { isExtensionEnabled, openSettings, refreshService, resetService } = useCallerID()
+  const { isExtensionEnabled, openSettings } = useCallerID()
   const { translate } = useAppLocale()
-  const [isTestRefreshing, setIsTestRefreshing] = useState(false)
 
   const enableCallerIdLookup = () => {
     if (typeof Platform.Version === "string" && Platform.Version < "18.2") {
@@ -24,12 +21,6 @@ export const CallerContent = () => {
     openSettings()
   }
 
-  const testRefreshService = async () => {
-    setIsTestRefreshing(true)
-    await refreshService()
-    setIsTestRefreshing(false)
-  }
-
   return (
     <MenuItemContainer>
       <PressableScale style={styles.itemContainer2} onPress={enableCallerIdLookup}>
@@ -40,22 +31,6 @@ export const CallerContent = () => {
 
         <Switch value={isExtensionEnabled} onPress={enableCallerIdLookup} />
       </PressableScale>
-      {__DEV__ && !Config.IS_PROD && (
-        <Button
-          loading={isTestRefreshing}
-          text={"Refresh Ios Extension"}
-          onPress={testRefreshService}
-          style={styles.testRefreshButton}
-        />
-      )}
-      {__DEV__ && !Config.IS_PROD && (
-        <Button
-          loading={isTestRefreshing}
-          text={"Reset"}
-          onPress={resetService}
-          style={styles.testRefreshButton}
-        />
-      )}
     </MenuItemContainer>
   )
 }
@@ -77,9 +52,5 @@ const styles = StyleSheet.create({
   itemText: {
     flexGrow: 1,
     flexShrink: 1,
-  },
-  testRefreshButton: {
-    marginHorizontal: 16,
-    marginTop: 12,
   },
 })

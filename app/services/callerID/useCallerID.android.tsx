@@ -6,6 +6,7 @@ import { useStores } from "@/models"
 import { toolApi } from "../api"
 import { useToast } from "../utils"
 import { ScamPhonesData } from "@/static/types"
+import { AnalyticEvents, logFirebaseEvent } from "@/utils/analytics"
 
 const BATCH_SIZE = 1000
 const SYNC_PAGE_SIZE = 30000
@@ -192,6 +193,7 @@ export const useCallerIDData = () => {
 }
 
 export const useCallerID = () => {
+  const { user } = useStores()
   const [isEnabledOverlayPermission, setEnabledOverlayPermission] = useState(false)
 
   // ---------------------------METHOD-----------------------
@@ -206,6 +208,7 @@ export const useCallerID = () => {
       const isEnabled = await callerID.androidRequestOverlayPermission()
       setEnabledOverlayPermission(isEnabled)
     }
+    logFirebaseEvent(AnalyticEvents.SCAM_ENABLE_CALLERID, user.email)
   }, [])
 
   const checkEnabledOverlayPermission = useCallback(async () => {
