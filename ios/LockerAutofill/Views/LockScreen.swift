@@ -1,16 +1,8 @@
-//
-//  LockScreen.swift
-//  LockerAutofill
-//
-//  Created by Nguyen Thinh on 22/02/2024.
-//
-
 import SwiftUI
 
 struct LockScreen: View {
   var afd: AutofillScreenDelegate // autofill delegate
-  var quickBar: Bool
-  var quickBarCredential: AutofillData!
+  var userInfo: UserInfo
   
   @State private var masterPassword: String = ""
   @State private var isShowCredentialsList = false
@@ -30,11 +22,11 @@ struct LockScreen: View {
           .padding(.bottom, 4)
           .foregroundColor(AppColors.title)
         
-        UserAvatar(imageUri: afd.user.avatar , email: afd.user.email)
+        UserAvatar(imageUri: self.userInfo.avatar , email: self.userInfo.email)
         
         MasterPasswordInput(masterPassword: $masterPassword)
         
-        NavigationLink(destination:  CredentialsListScreen(afd: self.afd), isActive: $isShowCredentialsList) {
+        NavigationLink(destination:  PasswordsListScreen(afd: self.afd, userInfo: self.userInfo), isActive: $isShowCredentialsList) {
           Button {
             passwordAuthen()
           } label: {
@@ -48,7 +40,7 @@ struct LockScreen: View {
         }
         .disabled(masterPassword.isEmpty)
         
-        if afd.user.faceIdEnabled{
+        if self.userInfo.faceIdEnabled{
           Button {
             biometricAuthen()
           } label: {
@@ -73,8 +65,8 @@ struct LockScreen: View {
   }
   
   private func passwordAuthen() {
-    let hash = authenService.makeKeyHash(masterPassword: masterPassword, email: afd.user.email)
-    if hash == afd.user.hashMassterPass {
+    let hash = authenService.makeKeyHash(masterPassword: masterPassword, email: self.userInfo.email)
+    if hash == self.userInfo.hashPass {
       authenSuccess()
     } else {
       afd.cancel()
@@ -88,10 +80,10 @@ struct LockScreen: View {
   }
   
   private func authenSuccess() {
-    if (self.quickBarCredential == nil) {
+    if (afd.quickBarCredential == nil) {
       self.isShowCredentialsList = true
     } else {
-      afd.loginSelected(data: self.quickBarCredential)
+      afd.loginSelected(data: afd.quickBarCredential)
     }
     
   }

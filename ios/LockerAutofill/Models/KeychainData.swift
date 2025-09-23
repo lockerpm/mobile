@@ -6,8 +6,22 @@
 
 import Foundation
 
-struct AutofillData {
+struct AFPasswordItem {
   var fillID: Int
+  var login: PasswordItem
+  
+  init(fillID: Int, login: PasswordItem) {
+    self.fillID = fillID
+    self.login = login
+  }
+  
+  init(fillID: Int, id: Int, tmp: TempPasswordItem) {
+    self.fillID = fillID
+    self.login = PasswordItem(id: "tempPassword" + String(id), name: tmp.name, uri: tmp.uri, username: tmp.username, password: tmp.password)
+  }
+}
+
+struct PasswordItem: Hashable, Codable {
   var id: String
   var name: String
   var uri: String
@@ -17,17 +31,7 @@ struct AutofillData {
   var otp: String = ""
 }
 
-struct LoginItem: Hashable, Codable {
-  var id: String
-  var name: String
-  var uri: String
-  var username: String
-  var password: String
-  var isOwner: Bool = true
-  var otp: String = ""
-}
-
-struct TempLoginItem: Hashable, Codable {
+struct TempPasswordItem: Hashable, Codable {
   var username: String
   var password: String
   var name: String

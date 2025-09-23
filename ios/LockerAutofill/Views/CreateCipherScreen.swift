@@ -12,7 +12,7 @@ struct CreateCipherScreen: View {
   var isFree: Bool
   var initWebsite: String
   var goBack: () -> Void
-  var saveAndFill: (_ item: TempLoginItem) -> Void
+  var saveAndFill: (_ item: TempPasswordItem) -> Void
   
   @FocusState var focusedField: FocusedField?
   @State private var isShowPasswordGenerator = 0
@@ -172,7 +172,7 @@ struct CreateCipherScreen: View {
   }
   
   func onSaveButtonPress() {
-    let tempItem = TempLoginItem(username: userName, password: passowrd, name: itemName, uri: webUrl)
+    let tempItem = TempPasswordItem(username: userName, password: passowrd, name: itemName, uri: webUrl)
     saveAndFill(tempItem)
   }
 }

@@ -1,71 +1,65 @@
-//
-//  AutofillDataKeychain.swift
-//  LockerAutofill
-//
-//  Created by Nguyen Thinh on 20/01/2022.
-//
-
 import Foundation
 import KeychainAccess
 import StoreKit
 import Sentry
 
 class AutofillDataModel {
-  private var keychainData: String!
-  private var user: User
-  private var tempPasswords: [TempLoginItem] = []
+  private var tempPasswords: [TempPasswordItem] = []
   
-  init(_ user: User){
-    self.user = user
-  }
-  
-  func getUserInfo() {
+  func getUserInfo() -> UserInfo! {
     do {
       let keychain = Keychain(service: infoKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
-      keychainData = try! keychain.get(infoKey.username)
-      if (keychainData != nil && !keychainData.isEmpty) {
-        self.user.loginedLocker = true;
+      var keychainData = try! keychain.get(infoKey.username) ?? ""
+      if (!keychainData.isEmpty) {
         let jsonData = Data(keychainData.utf8)
         let decoder = JSONDecoder()
         let decodeData = try decoder.decode(UserInfo.self, from: jsonData)
-        user.setInfo(decodeData)
+        return decodeData
       }
+      return nil
     } catch {
       SentrySDK.capture(message: "Couldn't decode jsonData when getUserInfo: \(error)")
     }
+    return nil
   }
   
-  func getPasswords() {
+  func getPasswords() -> [PasswordItem] {
     do {
       let keychain = Keychain(service: passwordKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
-      keychainData = try! keychain.get(passwordKey.username)
-      if (keychainData != nil && !keychainData.isEmpty) {
+      var keychainData = try! keychain.get(passwordKey.username) ?? ""
+      if (!keychainData.isEmpty) {
         let jsonData = Data(keychainData.utf8)
         let decoder = JSONDecoder()
-        let decodeData = try decoder.decode([LoginItem].self, from: jsonData)
-        user.setPasswords(decodeData)
+        let decodeData = try decoder.decode([PasswordItem].self, from: jsonData)
+        return decodeData
       }
-      try getTempPasswords()
+      return []
     } catch {
       SentrySDK.capture(message: "Couldn't decode jsonData when getPasswords: \(error)")
     }
+    return []
   }
   
-  func getTempPasswords() throws {
-    let keychain = Keychain(service: tempPasswordKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
-    keychainData = try! keychain.get(tempPasswordKey.username)
-    if (keychainData != nil && !keychainData.isEmpty) {
-      let jsonData = Data(keychainData.utf8)
-      let decoder = JSONDecoder()
-      let decodeData = try decoder.decode([TempLoginItem].self, from: jsonData)
-      user.addTempPassword(decodeData)
-      self.tempPasswords.append(contentsOf: decodeData)
-    }
-  }
-  
-  func saveAutofillData(tempItem: TempLoginItem) {
+  func getTempPasswords() -> [TempPasswordItem] {
     do {
-      user.addTempPassword([tempItem])
+      let keychain = Keychain(service: tempPasswordKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
+      var keychainData = try! keychain.get(tempPasswordKey.username) ?? ""
+      if (!keychainData.isEmpty) {
+        let jsonData = Data(keychainData.utf8)
+        let decoder = JSONDecoder()
+        let decodeData = try decoder.decode([TempPasswordItem].self, from: jsonData)
+        self.tempPasswords.append(contentsOf: decodeData)
+        return decodeData
+      }
+      return []
+    } catch {
+      SentrySDK.capture(message: "Couldn't decode jsonData when getTempPasswords: \(error)")
+    }
+    return []
+  }
+  
+  func saveTempPassword(_ tempItem: TempPasswordItem) {
+    do {
       self.tempPasswords.append(tempItem)
       
       let jsonEncoder = JSONEncoder()

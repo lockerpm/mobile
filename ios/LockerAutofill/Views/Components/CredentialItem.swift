@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CredentialItem: View {
-  var item: AutofillData
+  var item: AFPasswordItem
   @Binding var isShowDetailId: Int
   
   var isShowDetail: Bool {
@@ -18,11 +18,11 @@ struct CredentialItem: View {
   var body: some View {
     VStack(alignment: .leading){
       HStack {
-         PasswordImage(itemUri: item.uri)
+        PasswordImage(itemUri: item.login.uri)
 
          VStack(alignment: .leading){
-           Text(item.name)
-           Text(item.username)
+           Text(item.login.name)
+           Text(item.login.username)
              .font(.subheadline)
              .foregroundStyle(AppColors.label)
          }

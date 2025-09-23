@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -115,14 +115,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7C0752E32E56F9B600D28650 /* Exceptions for "LockerLiveCallerLookup" folder in "LockerLiveCallerLookup" target */ = {
+		7C0752E32E56F9B600D28650 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = 7C0752D72E56F9B600D28650 /* LockerLiveCallerLookup */;
 		};
-		7C9128032E0150D1009D80A5 /* Exceptions for "LockerAutofill" folder in "LockerAutofill" target */ = {
+		7C9128032E0150D1009D80A5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -132,30 +132,8 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		7C0752D92E56F9B600D28650 /* LockerLiveCallerLookup */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				7C0752E32E56F9B600D28650 /* Exceptions for "LockerLiveCallerLookup" folder in "LockerLiveCallerLookup" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = LockerLiveCallerLookup;
-			sourceTree = "<group>";
-		};
-		7C9127F82E0150D1009D80A5 /* LockerAutofill */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				7C9128032E0150D1009D80A5 /* Exceptions for "LockerAutofill" folder in "LockerAutofill" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = LockerAutofill;
-			sourceTree = "<group>";
-		};
+		7C0752D92E56F9B600D28650 /* LockerLiveCallerLookup */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7C0752E32E56F9B600D28650 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LockerLiveCallerLookup; sourceTree = "<group>"; };
+		7C9127F82E0150D1009D80A5 /* LockerAutofill */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7C9128032E0150D1009D80A5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LockerAutofill; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1029,10 +1007,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -1098,10 +1073,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

@@ -14,20 +14,18 @@ import Sentry
 
 
 class CredentialProviderController: ASCredentialProviderViewController {
-  internal var user: User!
-  private var dataModel: AutofillDataModel!
   private var serviceIdentifier: String = ""
-  private var quickBar: Bool = false
-  private var quickBarCredential: AutofillData!
+  internal var user: User
+  internal var quickBar: Bool = false
+  internal var quickBarCredential: AFPasswordItem!
   
   @IBOutlet weak var logo: UIImageView!
   
   required init?(coder: NSCoder) {
+    self.user = User()
     super.init(coder: coder)
     print("init ------")
-    self.user = User()
-    self.dataModel = AutofillDataModel(self.user)
-    
+
   }
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -41,15 +39,15 @@ class CredentialProviderController: ASCredentialProviderViewController {
       options.sendDefaultPii = true  // Capture user details if necessary
     }
     
-    self.dataModel.getUserInfo()
-    i.locale = user.language
+    i.locale = user.info?.language ?? "en"
   }
+  
+  
   
   override func viewDidAppear(_ animated: Bool) {
     print("viewDidAppear -----")
-//    self.view.backgroundColor = UIColor(named: "background")
-    self.dataModel.getPasswords()
-    
+    self.view.backgroundColor = UIColor(named: "background")
+   
     if (self.loginLocker()) {
       if (user.faceIdEnabled){
         authenService.biometricAuthentication(
@@ -139,7 +137,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
       self.quickBar = true
       user.URI = URL(string: serviceIdentifier)?.host ?? serviceIdentifier
       
-      if let credential = user.getAutofillDataById(id: credentialIdentity.recordIdentifier!)  {
+      if let credential = user.getPasswordItemById(id: credentialIdentity.recordIdentifier!)  {
         self.quickBarCredential = credential
       } else {
         quickTypeBar.removeCredentialIdentities(credentialIdentity)
@@ -187,6 +185,30 @@ class CredentialProviderController: ASCredentialProviderViewController {
     }
     return true
   }
+  
+  private func startExtension() {
+    if (self.loginLocker()) {
+      if (user.faceIdEnabled){
+        authenService.biometricAuthentication(
+          view: self,
+          onSuccess: {
+            if (self.quickBarCredential == nil) {
+              self.navigateCredentialsList()
+            } else {
+              self.loginSelected(data: self.quickBarCredential)
+            }
+          },
+          onFailed: self.navigateLockScreen,
+          notSupported: {
+            self.navigateLockScreen()
+          }
+        )
+      }
+      else {
+        self.navigateLockScreen()
+      }
+    }
+  }
 }
 
 /**
@@ -194,13 +216,12 @@ class CredentialProviderController: ASCredentialProviderViewController {
  */
 extension CredentialProviderController {
   private func navigateCredentialsList() {
-    let credentialsListView = CredentialsListScreen(afd: self)
+    let credentialsListView = PasswordsListScreen(afd: self, userInfo: user.info)
     self.navigateView(view: credentialsListView)
   }
   
   private func navigateLockScreen() {
-    let lockView = LockScreen(afd: self, quickBar: self.quickBar, quickBarCredential: self.quickBarCredential)
-    
+    let lockView = LockScreen(afd: self, userInfo: user.info)
     self.navigateView(view: lockView)
   }
   
@@ -220,8 +241,8 @@ extension CredentialProviderController: AutofillScreenDelegate {
     completeRequest(user: "", password: password, otp: "")
   }
   
-  func createLoginItem(item: TempLoginItem) {
-    dataModel.saveAutofillData(tempItem: item)
+  func createLoginItem(item: TempPasswordItem) {
+    user.saveTempPassword(item)
     completeRequest(user: item.username, password: item.password, otp: "")
   }
   
@@ -229,9 +250,9 @@ extension CredentialProviderController: AutofillScreenDelegate {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
   }
   
-  func loginSelected(data: AutofillData) {
-    quickTypeBar.replaceCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, username: data.username, userID: data.id)
-    completeRequest(user: data.username, password: data.password, otp: data.otp)
+  func loginSelected(data: AFPasswordItem) {
+    quickTypeBar.replaceCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, username: data.login.username, userID: data.login.id)
+    completeRequest(user: data.login.username, password: data.login.password, otp: data.login.otp)
   }
   
   private func completeRequest(user: String, password: String, otp: String){

@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-struct CredentialsListScreen: View {
+struct PasswordsListScreen: View {
   var afd: AutofillScreenDelegate // autofill delegate
+  var userInfo: UserInfo
+
   
   @State private var searchText = ""
   @State private var isShowItemDetailId = -1
@@ -30,15 +32,15 @@ struct CredentialsListScreen: View {
     }
   }
   
-  var searchCredentials: [AutofillData] {
+  var passwords: [AFPasswordItem] {
     if searchText.isEmpty {
-      return afd.user.credentials
+      return afd.user.afPasswords
     } else {
       let search = searchText.lowercased()
-      return afd.user.credentials.filter {
-        $0.name.lowercased().contains(search)
-        || $0.uri.lowercased().contains(search)
-        || $0.username.lowercased().contains(search)
+      return afd.user.afPasswords.filter {
+        $0.login.name.lowercased().contains(search)
+        || $0.login.uri.lowercased().contains(search)
+        || $0.login.username.lowercased().contains(search)
       }
     }
   }
@@ -46,7 +48,7 @@ struct CredentialsListScreen: View {
   var body: some View {
     NavigationView{
       List {
-        if !searchText.isEmpty && searchCredentials.isEmpty {
+        if !searchText.isEmpty && passwords.isEmpty {
           Text(i.translate("list.noDataSearch") +  "'\(searchText)'")
             .foregroundStyle(AppColors.label)
           if searchText == initSearch &&  suggestSearchs.count > 1{
@@ -61,28 +63,28 @@ struct CredentialsListScreen: View {
             }
           }
         } else {
-          ForEach(searchCredentials, id: \.id) { credential in
+          ForEach(passwords, id: \.login.id) { pw in
             Button {
-              afd.loginSelected(data: credential)
+              afd.loginSelected(data: pw)
             } label: {
-              CredentialItem(item: credential, isShowDetailId: $isShowItemDetailId)
+              CredentialItem(item: pw, isShowDetailId: $isShowItemDetailId)
             }
             
-            if isShowItemDetailId ==  credential.fillID {
-              if !credential.username.isEmpty {
-                CredentialInfo(label: i.translate("item.username"), text: credential.username, isCopydable: true)
+            if isShowItemDetailId ==  pw.fillID {
+              if !pw.login.username.isEmpty {
+                CredentialInfo(label: i.translate("item.username"), text: pw.login.username, isCopydable: true)
               }
               
-              if !credential.password.isEmpty {
-                CredentialInfo(label: i.translate("item.password"), text: credential.password, isCopydable: true)
+              if !pw.login.password.isEmpty {
+                CredentialInfo(label: i.translate("item.password"), text: pw.login.password, isCopydable: true)
               }
               
-              if !credential.uri.isEmpty {
-                CredentialInfo(label: "URL", text: credential.uri, isCopydable: false)
+              if !pw.login.uri.isEmpty {
+                CredentialInfo(label: "URL", text: pw.login.uri, isCopydable: false)
               }
 
-              if !credential.otp.isEmpty {
-                TOTPView(url: credential.otp)
+              if !pw.login.otp.isEmpty {
+                TOTPView(url: pw.login.otp)
               }
             }
           }
@@ -115,8 +117,8 @@ struct CredentialsListScreen: View {
         ToolbarItem(placement: .navigationBarTrailing) {
           NavigationLink(
             destination:  CreateCipherScreen(
-              token: afd.user.token,
-              isFree: afd.user.isFree,
+              token: userInfo.token,
+              isFree: userInfo.isFree,
               initWebsite: initSearch,
               goBack: {
                 isShowCreatePassword = false
