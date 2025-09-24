@@ -1441,21 +1441,11 @@ const vi: Translations = {
       checkNow: "Kiểm tra ngay",
       android: {
         title: "Cảnh báo cuộc gọi đến",
-        desc: "Nhận cảnh báo khi có số điện thoại khả nghi gọi đến",
-        disable: {
-          title: "Tắt cảnh báo cuộc gọi",
-          label: "Tại Cài đặt, tắt nút cho phép hiển thị Locker trong các ứng dụng khác",
-          btn: "Mở Cài đặt",
-        },
-        enable: {
-          title: "Bật nhận cảnh báo bằng cách cấp quyền cho Locker:",
-          first: "1. Truy cập Phone State",
-          second: "2. Truy cập Nhật ký cuộc gọi",
-          third:
-            "3. Hiển thị trên các ứng dụng khác (trong Cài đặt, bấm vào Locker > bật nút Cho phép)",
-          btn: "Cấp quyền",
-        },
+        desc: "Nhận cảnh báo khi có số điện thoại lừa đảo gọi đến. Bạn cần đặt Locker làm ứng dụng điện thoại mặc định.",
         update: "Cập nhật dữ liệu SDT khả nghi mới nhất",
+        alertTitle: "Cần cập nhật",
+        alertLabel:
+          "Tính năng chỉ hoạt động trên Android 10.0 hoặc phiên bản mới hơn. Vui lòng cập nhật điện thoại của bạn trong Cài đặt > Hệ thống > Cập nhật hệ thống",
       },
       ios: {
         title: "Cần cập nhật",

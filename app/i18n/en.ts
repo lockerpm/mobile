@@ -1442,20 +1442,11 @@ const en = {
       checkNow: "Check Now",
       android: {
         title: "Call warning",
-        desc: "Receive a warning when a scam phone number calls you",
-        disable: {
-          title: "Disable call warning",
-          label: "In Settings, toggle off the option to display Locker over other apps",
-          btn: "Open Settings",
-        },
-        enable: {
-          title: "Enable call warning by allowing the permissions:",
-          first: "1. Allow Locker to access Phone State",
-          second: "2. Allow Locker to access Call Logs",
-          third: "3. Allow Locker to display over other apps",
-          btn: "Enable Permission",
-        },
+        desc: "Receive a warning when a scam phone number calls you. You need to set Locker as your default phone app.",
         update: "Update data on suspicious phone numbers",
+        alertTitle: "Update Required",
+        alertLabel:
+          "Live Caller ID Lookup works only on Android 10.0 or later. Update your phone in Settings > System > System update",
       },
       ios: {
         title: "Update Required",

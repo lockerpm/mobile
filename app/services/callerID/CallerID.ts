@@ -3,51 +3,32 @@ import { NativeModules, Platform } from "react-native"
 const { CallerIDManager } = NativeModules
 
 class CallerID {
-  public PAGE_SIZE = 30
-  public async getAndroidCallLogsHistory(page: number) {
+  // Android 10+ request Call Screening Service
+  public async androidRequestCallScreeningService() {
     if (Platform.OS !== "android") {
-      console.warn("getAndroidCallLogsHistory is android-only.")
-      return false
-    }
-    return await CallerIDManager.getCallLogs(page, this.PAGE_SIZE)
-  }
-
-  public async isOverlayPermissionEnabled() {
-    if (Platform.OS !== "android") {
-      console.warn("isOverlayPermissionEnabled is android-only.")
+      console.warn("CallScreeningService is android-only.")
       return false
     }
     try {
-      return await CallerIDManager.isOverlayPermissionEnabled()
+      return await CallerIDManager.requestScreeningRole()
     } catch (err) {
       console.error("❌ Reload Error:", err)
     }
     return false
   }
 
-  public async androidRequestOverlayPermission() {
+  // Android 10+ check Call Screening Service
+  public async androidCheckCallScreeningPermission() {
     if (Platform.OS !== "android") {
-      console.warn("androidRequestOverlayPermission is android-only.")
+      console.warn("androidCheckCallScreeningPermission is android-only.")
       return false
     }
     try {
-      return await CallerIDManager.requestOverlayPermission()
+      return await CallerIDManager.isEnabledScreeningRole()
     } catch (err) {
       console.error("❌ Reload Error:", err)
     }
     return false
-  }
-
-  public async androidOpenOverlayPermissionSettings() {
-    if (Platform.OS !== "android") {
-      console.warn("androidOpenOverlayPermissionSettings is android-only.")
-      return
-    }
-    try {
-      await CallerIDManager.openOverlayPermissionSettings()
-    } catch (err) {
-      console.error("❌ Reload Error:", err)
-    }
   }
 
   public async iosCheckExtensionIsEnabled() {

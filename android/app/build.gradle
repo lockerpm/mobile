@@ -95,7 +95,7 @@ android {
         applicationId 'com.cystack.locker'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 42030
+        versionCode 42031
         versionName "2.6"
 
         missingDimensionStrategy "store", "play"

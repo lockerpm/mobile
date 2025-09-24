@@ -1402,20 +1402,11 @@ const zh: Translations = {
       checkNow: "立即检查",
       android: {
         title: "来电警告",
-        desc: "当可疑电话号码来电时接收警告",
-        disable: {
-          title: "禁用来电警告",
-          label: "在设置中，关闭在其他应用上方显示Locker的选项",
-          btn: "打开设置",
-        },
-        enable: {
-          title: "通过允许权限来启用来电警告:",
-          first: "1. 允许Locker访问电话状态",
-          second: "2. 允许Locker访问通话记录",
-          third: "3. 允许Locker在其他应用上方显示",
-          btn: "启用权限",
-        },
+        desc: "当可疑电话号码来电时接收警告。您需要将Locker设置为默认电话应用。",
         update: "更新可疑电话号码的数据",
+        alertTitle: "更新要求",
+        alertLabel:
+          "实时来电识别仅适用于 Android 10.0 或更高版本。请在设置 > 系统 > 系统更新中更新您的手机。",
       },
       ios: {
         title: "更新要求",
