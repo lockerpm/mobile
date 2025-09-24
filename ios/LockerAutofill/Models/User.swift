@@ -1,9 +1,16 @@
 import Foundation
 
+enum AutofillMode {
+    case password
+    case passwordVsPasskey
+    case otp
+    case text
+}
 
 class User {
   var URI: String = ""
   var info: UserInfo!
+  var filleMode: AutofillMode = .password
   var afPasswords: [AFPasswordItem] = []
   
   private var model = AutofillDataModel()
@@ -29,27 +36,6 @@ class User {
     self.URI = uri
   }
   
-  func getLogins() {
-    var passwords: [PasswordItem] = model.getPasswords()
-    if !passwords.isEmpty {
-      for (index, item) in passwords.enumerated() {
-        let credential = AFPasswordItem(fillID: index,
-                                        login: item )
-        self.afPasswords.append(credential)
-      }
-    }
-    
-    var tempPasswords: [TempPasswordItem] = model.getTempPasswords()
-    let currentPwLength = self.afPasswords.count
-    for (index, item) in tempPasswords.enumerated() {
-      let credential = AFPasswordItem(fillID: currentPwLength + index,
-                                      id: currentPwLength + index,
-                                      tmp: item)
-      self.afPasswords.append(credential)
-    }
-  }
-  
-  
   func saveTempPassword(_ tempItem: TempPasswordItem) {
     let currentPwLength = self.afPasswords.count
     let credential = AFPasswordItem(fillID: currentPwLength,
@@ -67,5 +53,39 @@ class User {
       return item
     }
     return nil
+  }
+  
+  func getData(mode: AutofillMode) {
+    self.filleMode = mode
+    switch mode {
+    case .password:
+      getPasswords()
+    case .passwordVsPasskey:
+      print("Two")
+    case .otp:
+      print("Three")
+    case .text:
+      print("Three")
+    }
+    
+  func getPasswords() {
+      let passwords: [PasswordItem] = model.getPasswords()
+      if !passwords.isEmpty {
+        for (index, item) in passwords.enumerated() {
+          let credential = AFPasswordItem(fillID: index,
+                                          login: item )
+          self.afPasswords.append(credential)
+        }
+      }
+      
+      let tempPasswords: [TempPasswordItem] = model.getTempPasswords()
+      let currentPwLength = self.afPasswords.count
+      for (index, item) in tempPasswords.enumerated() {
+        let credential = AFPasswordItem(fillID: currentPwLength + index,
+                                        id: currentPwLength + index,
+                                        tmp: item)
+        self.afPasswords.append(credential)
+      }
+    }
   }
 }

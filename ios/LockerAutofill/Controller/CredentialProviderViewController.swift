@@ -13,8 +13,19 @@ import Sentry
 
 
 
+@available(iOS 17.0, *)
+class PasskeyContext {
+    var requestParameters: ASPasskeyCredentialRequestParameters?
+}
+
+@available(iOSApplicationExtension 17.0, *)
+private var passkeyContext: PasskeyContext?   // ✅ always safe
+
+
+
 class CredentialProviderController: ASCredentialProviderViewController {
   private var serviceIdentifier: String = ""
+   
   internal var user: User
   internal var quickBar: Bool = false
   internal var quickBarCredential: AFPasswordItem!
@@ -61,7 +72,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
           },
           onFailed: self.navigateLockScreen,
           notSupported: {
-            //              self.user.faceIdEnabled = false
             self.navigateLockScreen()
           }
         )
@@ -76,21 +86,8 @@ class CredentialProviderController: ASCredentialProviderViewController {
     Mở List Passwords
    */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    // test
-    print("prepareCredentialList", "-------")
-    if (self.loginLocker()) {
-      if serviceIdentifiers.count > 0 {
-        self.serviceIdentifier = serviceIdentifiers[0].identifier
-        if serviceIdentifiers[0].type == .URL {
-          user.setUri(uri: URL(string: serviceIdentifier)?.host ?? "", isDomain: false)
-        } else {
-          user.setUri(uri: serviceIdentifier, isDomain: true)
-          self.serviceIdentifier = "https://" +  serviceIdentifier
-        }
-      } else {
-        user.URI = ""
-      }
-    }
+    print("prepareCredentialList", serviceIdentifiers)
+    prepareAutofillData(sID: serviceIdentifiers, mode: .password)
   }
   
   /**
@@ -99,7 +96,11 @@ class CredentialProviderController: ASCredentialProviderViewController {
   @available(iOS 17.0, *)
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier], requestParameters: ASPasskeyCredentialRequestParameters){
     // test
-    print("prepareCredentialList", serviceIdentifiers, requestParameters)
+    print("prepareCredentialList", serviceIdentifiers, requestParameters.relyingPartyIdentifier)
+    passkeyContext = PasskeyContext()
+    passkeyContext?.requestParameters = requestParameters
+    
+    prepareAutofillData(sID: serviceIdentifiers, mode: .passwordVsPasskey)
   }
   
   /**
@@ -107,17 +108,20 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   @available(iOS 18.0, *)
   override func prepareOneTimeCodeCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    // test
+
     print("prepareCredentialList", serviceIdentifiers)
+    prepareAutofillData(sID: serviceIdentifiers, mode: .otp)
   }
+  
+  
   
   /**
    Mở List để chọn Các Text để fill
    */
   @available(iOS 18.0, *)
   override func prepareInterfaceForUserChoosingTextToInsert() {
-    // test
     print("prepareInterfaceForUserChoosingTextToInsert")
+    prepareAutofillData(sID: [], mode: .text)
   }
   
   /**
@@ -209,7 +213,25 @@ class CredentialProviderController: ASCredentialProviderViewController {
       }
     }
   }
+  
+  private func prepareAutofillData(sID: [ASCredentialServiceIdentifier], mode: AutofillMode) {
+    if sID.count > 0 {
+      self.serviceIdentifier = sID[0].identifier
+      if sID[0].type == .URL {
+        user.setUri(uri: URL(string: serviceIdentifier)?.host ?? "", isDomain: false)
+      } else {
+        user.setUri(uri: serviceIdentifier, isDomain: true)
+        self.serviceIdentifier = "https://" +  serviceIdentifier
+      }
+    } else {
+      user.URI = ""
+    }
+    
+    user.getData(mode: mode)
+  }
 }
+
+
 
 /**
  Navigation
