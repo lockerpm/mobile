@@ -15,19 +15,23 @@ import Sentry
 
 @available(iOS 17.0, *)
 class PasskeyContext {
-    var requestParameters: ASPasskeyCredentialRequestParameters?
+  var requestParameters: ASPasskeyCredentialRequestParameters?
+  var registrationRequest: ASCredentialRequest? // keep minimal context
 }
 
 @available(iOSApplicationExtension 17.0, *)
-private var passkeyContext: PasskeyContext?   // ✅ always safe
+private var passkeyContext: PasskeyContext?
 
-
+enum CredentialActions {
+  case fillRequest
+  case quickBar
+  case createPasskey
+}
 
 class CredentialProviderController: ASCredentialProviderViewController {
   private var serviceIdentifier: String = ""
-   
+  internal var action: CredentialActions = .fillRequest
   internal var user: User
-  internal var quickBar: Bool = false
   internal var quickBarCredential: AFPasswordItem!
   
   @IBOutlet weak var logo: UIImageView!
@@ -36,7 +40,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
     self.user = User()
     super.init(coder: coder)
     print("init ------")
-
+    
   }
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -53,50 +57,27 @@ class CredentialProviderController: ASCredentialProviderViewController {
     i.locale = user.info?.language ?? "en"
   }
   
-  
-  
   override func viewDidAppear(_ animated: Bool) {
     print("viewDidAppear -----")
     self.view.backgroundColor = UIColor(named: "background")
-   
-    if (self.loginLocker()) {
-      if (user.faceIdEnabled){
-        authenService.biometricAuthentication(
-          view: self,
-          onSuccess: {
-            if (self.quickBarCredential == nil) {
-              self.navigateCredentialsList()
-            } else {
-              self.loginSelected(data: self.quickBarCredential)
-            }
-          },
-          onFailed: self.navigateLockScreen,
-          notSupported: {
-            self.navigateLockScreen()
-          }
-        )
-      }
-      else {
-        self.navigateLockScreen()
-      }
-    }
+    self.startExtension()
   }
   
   /*
-    Mở List Passwords
+   Mở List Passwords
    */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    print("prepareCredentialList", serviceIdentifiers)
+    print("prepareCredentialList 16", serviceIdentifiers)
     prepareAutofillData(sID: serviceIdentifiers, mode: .password)
   }
   
   /**
-    Mở List Passwords + Passkeys, Khi chọn Passkeys thì dùng requestParameters
+   Mở List Passwords + Passkeys, Khi chọn Passkeys thì dùng requestParameters
    */
   @available(iOS 17.0, *)
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier], requestParameters: ASPasskeyCredentialRequestParameters){
     // test
-    print("prepareCredentialList", serviceIdentifiers, requestParameters.relyingPartyIdentifier)
+    print("prepareCredentialList 17", serviceIdentifiers, requestParameters.relyingPartyIdentifier)
     passkeyContext = PasskeyContext()
     passkeyContext?.requestParameters = requestParameters
     
@@ -108,11 +89,10 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   @available(iOS 18.0, *)
   override func prepareOneTimeCodeCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-
+    
     print("prepareCredentialList", serviceIdentifiers)
     prepareAutofillData(sID: serviceIdentifiers, mode: .otp)
   }
-  
   
   
   /**
@@ -136,9 +116,10 @@ class CredentialProviderController: ASCredentialProviderViewController {
    * Người dùng chọn Password từ QuickTypeBar -> mở unlock screen để xác thực
    */
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
+    self.action = .quickBar
+    print("prepareInterfaceToProvideCredential", credentialIdentity)
     if (self.loginLocker()) {
       self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
-      self.quickBar = true
       user.URI = URL(string: serviceIdentifier)?.host ?? serviceIdentifier
       
       if let credential = user.getPasswordItemById(id: credentialIdentity.recordIdentifier!)  {
@@ -150,36 +131,47 @@ class CredentialProviderController: ASCredentialProviderViewController {
     }
   }
   
-  
   /**
    Hiện thị giao diện cho việc tạo Passkey
    */
   @available(iOS 17.0, *)
   override func prepareInterface(forPasskeyRegistration registrationRequest: any ASCredentialRequest) {
-    // test
-    print("prepareInterface", registrationRequest)
+    self.action = .createPasskey
+    print("prepareInterface forPasskeyRegistration ")
+    
+    // 1) cast to concrete type
+    guard let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest else {
+      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+      return
+    }
+    guard let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity else {
+      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+      return
+    }
+
+    let rpId = identity.relyingPartyIdentifier
+    let clientDataHash = passkeyReq.clientDataHash // hashed clientData JSON (challenge)
+    let userId = identity.userHandle
+    
+    let userName = identity.userName
+    let supportedAlgos = passkeyReq.supportedAlgorithms // [NSNumber] (COSE alg ids)
+
+    do {
+      let (credential, metadata) = try createPasskeyWithExportableKey(
+        relyingParty: rpId,
+        clientDataHash: clientDataHash,
+        userId: userId
+      )
+      extensionContext.completeRegistrationRequest(
+        using: credential,
+        completionHandler: nil
+      )
+    } catch {
+      print("❌ Failed to create passkey: \(error)")
+      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+    }
   }
   
-  /**
-   Tạo passkey mà ko hiện gì
-   TODO: chấm hỏi, test sau)
-   */
-  @available(iOS 18.0, *)
-  override func performWithoutUserInteractionIfPossible(passkeyRegistration registrationRequest: ASPasskeyCredentialRequest) {
-    // test
-    print("prepareInterface", registrationRequest)
-  }
-  
-  // Unsupported
-  @available(iOS 17.0, *)
-  override func provideCredentialWithoutUserInteraction(for credentialRequest: any ASCredentialRequest) {
-    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
-  }
-  
-  // Unsupported
-  override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
-  }
   
   private func loginLocker() -> Bool {
     if (!user.loginedLocker) {
@@ -199,13 +191,11 @@ class CredentialProviderController: ASCredentialProviderViewController {
             if (self.quickBarCredential == nil) {
               self.navigateCredentialsList()
             } else {
-              self.loginSelected(data: self.quickBarCredential)
+              self.passwordSelected(data: self.quickBarCredential)
             }
           },
-          onFailed: self.navigateLockScreen,
-          notSupported: {
-            self.navigateLockScreen()
-          }
+          onFailed: navigateLockScreen,
+          notSupported: navigateLockScreen
         )
       }
       else {
@@ -233,9 +223,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
 
 
 
-/**
- Navigation
- */
+// MARK: Navigator
 extension CredentialProviderController {
   private func navigateCredentialsList() {
     let credentialsListView = PasswordsListScreen(afd: self, userInfo: user.info)
@@ -243,7 +231,8 @@ extension CredentialProviderController {
   }
   
   private func navigateLockScreen() {
-    let lockView = LockScreen(afd: self, userInfo: user.info)
+    let target = PasswordsListScreen(afd: self, userInfo: user.info)
+    let lockView = LockScreen(afd: self, userInfo: user.info, target: target)
     self.navigateView(view: lockView)
   }
   
@@ -255,24 +244,26 @@ extension CredentialProviderController {
   }
 }
 
-/**
- Autofill Actions
- */
+// MARK: Autofill Actions
 extension CredentialProviderController: AutofillScreenDelegate {
+  func unlock() {
+    
+  }
+  
   func passwordSelected(password: String) {
     completeRequest(user: "", password: password, otp: "")
   }
   
-  func createLoginItem(item: TempPasswordItem) {
+  func createPasswordItem(item: TempPasswordItem) {
     user.saveTempPassword(item)
     completeRequest(user: item.username, password: item.password, otp: "")
   }
   
   func cancel() {
-    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
+    extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
   }
   
-  func loginSelected(data: AFPasswordItem) {
+  func passwordSelected(data: AFPasswordItem) {
     quickTypeBar.replaceCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, username: data.login.username, userID: data.login.id)
     completeRequest(user: data.login.username, password: data.login.password, otp: data.login.otp)
   }

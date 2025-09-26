@@ -2,12 +2,14 @@ import Foundation
 
 
 protocol AutofillScreenDelegate {
-  var quickBar: Bool  { get }
+  var action: CredentialActions { get }
   var quickBarCredential: AFPasswordItem! { get }
   var user: User { get }
   
+  func unlock()
   func cancel()
-  func loginSelected(data: AFPasswordItem)
+  func passwordSelected(data: AFPasswordItem)
+  // Generated strong password
   func passwordSelected(password: String)
-  func createLoginItem(item: TempPasswordItem)
+  func createPasswordItem(item: TempPasswordItem)
 }

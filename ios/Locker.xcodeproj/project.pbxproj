@@ -17,6 +17,7 @@
 		7C0752F22E572EE100D28650 /* CallerIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C0752F12E572EDE00D28650 /* CallerIDManager.m */; };
 		7C0752F42E572F4600D28650 /* CallerIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0752F32E572F4500D28650 /* CallerIDManager.swift */; };
 		7C2F79AEE8745858EA2F0606 /* Pods_Locker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B1234109CC74C946970C33 /* Pods_Locker.framework */; };
+		7C8F69E72E86754F006F49D7 /* SwiftCBOR in Frameworks */ = {isa = PBXBuildFile; productRef = 7C8F69E62E86754F006F49D7 /* SwiftCBOR */; };
 		7C9127F72E0150D1009D80A5 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C9127F62E0150D1009D80A5 /* AuthenticationServices.framework */; };
 		7C9128022E0150D1009D80A5 /* LockerAutofill.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7C9127F52E0150D1009D80A5 /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7C9128092E015114009D80A5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C9128082E015114009D80A5 /* StoreKit.framework */; };
@@ -158,6 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C9127F72E0150D1009D80A5 /* AuthenticationServices.framework in Frameworks */,
+				7C8F69E72E86754F006F49D7 /* SwiftCBOR in Frameworks */,
 				7C91280C2E01528C009D80A5 /* Sentry in Frameworks */,
 				7C91280F2E0152DF009D80A5 /* KeychainAccess in Frameworks */,
 				7C91282A2E015534009D80A5 /* CachedAsyncImage in Frameworks */,
@@ -373,6 +375,7 @@
 				7C9128232E015502009D80A5 /* Crypto */,
 				7C9128262E01551C009D80A5 /* SwiftOTP */,
 				7C9128292E015534009D80A5 /* CachedAsyncImage */,
+				7C8F69E62E86754F006F49D7 /* SwiftCBOR */,
 			);
 			productName = LockerAutofill;
 			productReference = 7C9127F52E0150D1009D80A5 /* LockerAutofill.appex */;
@@ -415,6 +418,7 @@
 				7C9128222E015502009D80A5 /* XCRemoteSwiftPackageReference "swift-crypto" */,
 				7C9128252E01551C009D80A5 /* XCRemoteSwiftPackageReference "SwiftOTP" */,
 				7C9128282E015534009D80A5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
+				7C8F69E52E86754F006F49D7 /* XCRemoteSwiftPackageReference "SwiftCBOR" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -1123,6 +1127,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7C8F69E52E86754F006F49D7 /* XCRemoteSwiftPackageReference "SwiftCBOR" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/valpackett/SwiftCBOR";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		7C91280A2E01528C009D80A5 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
@@ -1166,6 +1178,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7C8F69E62E86754F006F49D7 /* SwiftCBOR */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C8F69E52E86754F006F49D7 /* XCRemoteSwiftPackageReference "SwiftCBOR" */;
+			productName = SwiftCBOR;
+		};
 		7C91280B2E01528C009D80A5 /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7C91280A2E01528C009D80A5 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;

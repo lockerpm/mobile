@@ -1,11 +1,12 @@
 import SwiftUI
 
-struct LockScreen: View {
+struct LockScreen<TargetView: View>: View {
   var afd: AutofillScreenDelegate // autofill delegate
   var userInfo: UserInfo
+  var target: TargetView
   
   @State private var masterPassword: String = ""
-  @State private var isShowCredentialsList = false
+  @State private var isShowTarget = false
   
   var body: some View {
     NavigationView {
@@ -26,9 +27,9 @@ struct LockScreen: View {
         
         MasterPasswordInput(masterPassword: $masterPassword)
         
-        NavigationLink(destination:  PasswordsListScreen(afd: self.afd, userInfo: self.userInfo), isActive: $isShowCredentialsList) {
+        NavigationLink(destination: target, isActive: $isShowTarget) {
           Button {
-            passwordAuthen()
+            unlockWithMasterPassword()
           } label: {
             Text(i.translate("lock.btn"))
               .frame(maxWidth: .infinity)
@@ -42,7 +43,7 @@ struct LockScreen: View {
         
         if self.userInfo.faceIdEnabled{
           Button {
-            biometricAuthen()
+            unlockWithBiometric()
           } label: {
             Label(i.translate("lock.faceid") , systemImage: "faceid")
               .foregroundStyle(AppColors.label)
@@ -64,7 +65,7 @@ struct LockScreen: View {
     .background(AppColors.background)
   }
   
-  private func passwordAuthen() {
+  private func unlockWithMasterPassword() {
     let hash = authenService.makeKeyHash(masterPassword: masterPassword, email: self.userInfo.email)
     if hash == self.userInfo.hashPass {
       authenSuccess()
@@ -73,19 +74,18 @@ struct LockScreen: View {
     }
   }
   
-  private func biometricAuthen() {
+  private func unlockWithBiometric() {
     authenService.biometricAuthentication(onSuccess: {
       authenSuccess()
     }, onFailed: afd.cancel)
   }
   
   private func authenSuccess() {
-    if (afd.quickBarCredential == nil) {
-      self.isShowCredentialsList = true
+    if (afd.action == .fillRequest) {
+      self.isShowTarget = true
     } else {
-      afd.loginSelected(data: afd.quickBarCredential)
+      afd.unlock()
     }
-    
   }
 }
 

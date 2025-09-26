@@ -59,8 +59,8 @@
       launchAutomaticallySubstyle = "2">
       <RemoteRunnable
          runnableDebuggingMode = "0"
-         BundleIdentifier = "com.apple.mobilesafari"
-         RemotePath = "/var/containers/Bundle/Application/C7027C21-564F-45E8-BBC6-0543B1FE4A5C/MobileSafari.app">
+         BundleIdentifier = "com.apple.camera"
+         RemotePath = "/var/containers/Bundle/Application/B58B1AEF-22E1-474D-9DFE-EE83FEF199A1/Camera.app">
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference

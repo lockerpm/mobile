@@ -1,10 +1,10 @@
 import Foundation
 
 enum AutofillMode {
-    case password
-    case passwordVsPasskey
-    case otp
-    case text
+  case password
+  case passwordVsPasskey
+  case otp
+  case text
 }
 
 class User {
@@ -68,23 +68,25 @@ class User {
       print("Three")
     }
     
-  func getPasswords() {
-      let passwords: [PasswordItem] = model.getPasswords()
-      if !passwords.isEmpty {
-        for (index, item) in passwords.enumerated() {
-          let credential = AFPasswordItem(fillID: index,
-                                          login: item )
+    func getPasswords() {
+      if (self.afPasswords.isEmpty) {
+        let passwords: [PasswordItem] = model.getPasswords()
+        if !passwords.isEmpty {
+          for (index, item) in passwords.enumerated() {
+            let credential = AFPasswordItem(fillID: index,
+                                            login: item )
+            self.afPasswords.append(credential)
+          }
+        }
+        
+        let tempPasswords: [TempPasswordItem] = model.getTempPasswords()
+        let currentPwLength = self.afPasswords.count
+        for (index, item) in tempPasswords.enumerated() {
+          let credential = AFPasswordItem(fillID: currentPwLength + index,
+                                          id: currentPwLength + index,
+                                          tmp: item)
           self.afPasswords.append(credential)
         }
-      }
-      
-      let tempPasswords: [TempPasswordItem] = model.getTempPasswords()
-      let currentPwLength = self.afPasswords.count
-      for (index, item) in tempPasswords.enumerated() {
-        let credential = AFPasswordItem(fillID: currentPwLength + index,
-                                        id: currentPwLength + index,
-                                        tmp: item)
-        self.afPasswords.append(credential)
       }
     }
   }

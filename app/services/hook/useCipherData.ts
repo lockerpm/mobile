@@ -309,7 +309,10 @@ export function useCipherData() {
   // Store password for autofill
   const _updateAutofillData = async () => {
     const passwordRes = await getCiphers({
-      filters: [(c: CipherView) => c.type === CipherType.Login],
+      filters: [
+        (c: CipherView) =>
+          c.type === CipherType.Login && (!!c.login?.username || !!c.login?.password),
+      ],
       searchText: "",
       deleted: false,
     })

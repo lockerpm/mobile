@@ -10,7 +10,6 @@ import SwiftUI
 struct PasswordsListScreen: View {
   var afd: AutofillScreenDelegate // autofill delegate
   var userInfo: UserInfo
-
   
   @State private var searchText = ""
   @State private var isShowItemDetailId = -1
@@ -65,26 +64,25 @@ struct PasswordsListScreen: View {
         } else {
           ForEach(passwords, id: \.login.id) { pw in
             Button {
-              afd.loginSelected(data: pw)
+              afd.passwordSelected(data: pw)
             } label: {
               CredentialItem(item: pw, isShowDetailId: $isShowItemDetailId)
             }
             
-            if isShowItemDetailId ==  pw.fillID {
-              if !pw.login.username.isEmpty {
-                CredentialInfo(label: i.translate("item.username"), text: pw.login.username, isCopydable: true)
-              }
-              
-              if !pw.login.password.isEmpty {
-                CredentialInfo(label: i.translate("item.password"), text: pw.login.password, isCopydable: true)
-              }
-              
-              if !pw.login.uri.isEmpty {
-                CredentialInfo(label: "URL", text: pw.login.uri, isCopydable: false)
-              }
-
-              if !pw.login.otp.isEmpty {
-                TOTPView(url: pw.login.otp)
+            if isShowItemDetailId == pw.fillID {
+              VStack {
+                if !pw.login.username.isEmpty {
+                  CredentialInfo(label: i.translate("item.username"), text: pw.login.username, isCopydable: true)
+                }
+                if !pw.login.password.isEmpty {
+                  CredentialInfo(label: i.translate("item.password"), text: pw.login.password, isCopydable: true)
+                }
+                if !pw.login.uri.isEmpty && pw.login.uri != "https://" {
+                  CredentialInfo(label: "URL", text: pw.login.uri, isCopydable: false)
+                }
+                if !pw.login.otp.isEmpty {
+                  TOTPView(url: pw.login.otp)
+                }
               }
             }
           }
@@ -97,7 +95,7 @@ struct PasswordsListScreen: View {
           self.searchText = initSearch
         }
       }
-
+      
       .foregroundStyle(AppColors.title)
       .autocapitalization(.none)
       .navigationTitle(i.translate("list.title"))
@@ -123,7 +121,7 @@ struct PasswordsListScreen: View {
               goBack: {
                 isShowCreatePassword = false
               },
-              saveAndFill: afd.createLoginItem
+              saveAndFill: afd.createPasswordItem
             ),
             isActive: $isShowCreatePassword
           ) {
