@@ -1413,6 +1413,17 @@ const zh: Translations = {
         label:
           "Live Caller ID Lookup 仅在 iOS 18.2 或更高版本上工作。请在“设置”>“通用”>“软件更新”中更新您的 iPhone",
       },
+      anonymous: {
+        title: "匿名报告",
+        label: "在报告诈骗时隐藏您的用户名",
+        alert: {
+          title: "关闭匿名报告？",
+          label:
+            "当匿名报告关闭时，您的用户名将显示在所有报告中。（包括以前的、现在的和将来的报告）",
+          cancel: "Cancel",
+          confirm: "Turn off",
+        },
+      },
     },
     lookup: {
       title: "电话查询",

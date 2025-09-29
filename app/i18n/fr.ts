@@ -1487,6 +1487,17 @@ const fr: Translations = {
         label:
           "La fonctionnalité Live Caller ID Lookup est disponible uniquement sur iOS 18.2 ou une version ultérieure. Veuillez mettre à jour votre iPhone dans Réglages > Général > Mise à jour logicielle.",
       },
+      anonymous: {
+        title: "Signalement anonyme",
+        label: "Masquer votre nom d'utilisateur lors du signalement d'escroqueries",
+        alert: {
+          title: "Désactiver le signalement anonyme ?",
+          label:
+            "Lorsque le signalement anonyme est désactivé, votre nom d'utilisateur sera affiché sur tous vos rapports. (rapports précédents, actuels et futurs)",
+          cancel: "Annuler",
+          confirm: "Désactiver",
+        },
+      },
     },
     lookup: {
       title: "Recherche de Numéro",

@@ -11,8 +11,8 @@ import IdentityLookup
 struct LockerLiveCallerLookup: LiveCallerIDLookupProtocol {
     var context: LiveCallerIDLookupExtensionContext {
         LiveCallerIDLookupExtensionContext(
-            serviceURL: URL(string: "https://api.locker.io/locker_scam_detector/v1/pir_service")!,
-            tokenIssuerURL: URL(string: "https://api.locker.io/locker_scam_detector/v1/pir_service")!,
+            serviceURL: URL(string: "https://api.locker.io/pir")!,
+            tokenIssuerURL: URL(string: "https://api.locker.io/pir")!,
             userTierToken: Data(base64Encoded: "AAAA")!
         )
     }

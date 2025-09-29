@@ -1453,9 +1453,20 @@ const en = {
         label:
           "Live Caller ID Lookup works only on iOS 18.2 or later. Update your iPhone in Settings > General > Software Update",
       },
+      anonymous: {
+        title: "Anonymous reporting",
+        label: "Hide your username when reporting scams",
+        alert: {
+          title: "Turn off anonymous reporting?",
+          label:
+            "When anonymous reporting is off, your username will be displayed on all your reports. (previous, now and future reports)",
+          cancel: "Cancel",
+          confirm: "Turn off",
+        },
+      },
     },
     lookup: {
-      title: "Phone Lookup",
+      title: "VN phone number lookup",
       label:
         "Check if a phone number has been reported by Locker users or users from other communities.",
       btn: "Check",
@@ -1483,7 +1494,7 @@ const en = {
       },
     },
     report: {
-      title: "Report Phone",
+      title: "Report VN phone number",
       label: "Notice something suspicious? Share your experience with the community.",
       btn: "Submit Report",
       enterPhone: "Enter phone number (*)",

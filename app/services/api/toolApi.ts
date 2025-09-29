@@ -564,6 +564,60 @@ class ToolApi {
       return { kind: "bad-data" }
     }
   }
+
+  async scamCheckAnonymous(token: string): Promise<
+    | {
+        kind: "ok"
+        isAnonymous: boolean
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/locker_scam_detector/v1/reports/is_anonymous`
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", isAnonymous: response.data.is_anonymous }
+    } catch (e) {
+      Logger.error("editSubdomain", e)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async scamUpdateAnonymous(
+    token: string,
+    isAnonymous: boolean
+  ): Promise<
+    | {
+        kind: "ok"
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(
+        `/locker_scam_detector/v1/reports/is_anonymous`,
+        { is_anonymous: isAnonymous }
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      console.log("scamCheckAnonymous response", response.data)
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error("editSubdomain", e)
+      return { kind: "bad-data" }
+    }
+  }
 }
 
 export const toolApi = new ToolApi()
