@@ -24,18 +24,19 @@ private var passkeyContext: PasskeyContext?
 
 enum CredentialActions {
   case fillRequest
-  case quickBar
+  case quickBarPassword
+  case quickBarPasskey
   case createPasskey
 }
 
 class CredentialProviderController: ASCredentialProviderViewController {
   private var serviceIdentifier: String = ""
+  internal var quickBarCredential: AFPasswordItem!
   internal var action: CredentialActions = .fillRequest
   internal var user: User
-  internal var quickBarCredential: AFPasswordItem!
+  
   
   @IBOutlet weak var logo: UIImageView!
-  
   required init?(coder: NSCoder) {
     self.user = User()
     super.init(coder: coder)
@@ -56,7 +57,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
     
     i.locale = user.info?.language ?? "en"
   }
-  
   override func viewDidAppear(_ animated: Bool) {
     print("viewDidAppear -----")
     self.view.backgroundColor = UIColor(named: "background")
@@ -116,7 +116,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
    * Người dùng chọn Password từ QuickTypeBar -> mở unlock screen để xác thực
    */
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-    self.action = .quickBar
+    self.action = .quickBarPassword
     print("prepareInterfaceToProvideCredential", credentialIdentity)
     if (self.loginLocker()) {
       self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
@@ -136,40 +136,10 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   @available(iOS 17.0, *)
   override func prepareInterface(forPasskeyRegistration registrationRequest: any ASCredentialRequest) {
-    self.action = .createPasskey
     print("prepareInterface forPasskeyRegistration ")
-    
-    // 1) cast to concrete type
-    guard let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest else {
-      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
-      return
-    }
-    guard let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity else {
-      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
-      return
-    }
-
-    let rpId = identity.relyingPartyIdentifier
-    let clientDataHash = passkeyReq.clientDataHash // hashed clientData JSON (challenge)
-    let userId = identity.userHandle
-    
-    let userName = identity.userName
-    let supportedAlgos = passkeyReq.supportedAlgorithms // [NSNumber] (COSE alg ids)
-
-    do {
-      let (credential, metadata) = try createPasskeyWithExportableKey(
-        relyingParty: rpId,
-        clientDataHash: clientDataHash,
-        userId: userId
-      )
-      extensionContext.completeRegistrationRequest(
-        using: credential,
-        completionHandler: nil
-      )
-    } catch {
-      print("❌ Failed to create passkey: \(error)")
-      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
-    }
+    self.action = .createPasskey
+    passkeyContext = PasskeyContext()
+    passkeyContext?.registrationRequest = registrationRequest
   }
   
   
@@ -187,13 +157,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
       if (user.faceIdEnabled){
         authenService.biometricAuthentication(
           view: self,
-          onSuccess: {
-            if (self.quickBarCredential == nil) {
-              self.navigateCredentialsList()
-            } else {
-              self.passwordSelected(data: self.quickBarCredential)
-            }
-          },
+          onSuccess: unlockSuccess,
           onFailed: navigateLockScreen,
           notSupported: navigateLockScreen
         )
@@ -225,13 +189,17 @@ class CredentialProviderController: ASCredentialProviderViewController {
 
 // MARK: Navigator
 extension CredentialProviderController {
-  private func navigateCredentialsList() {
-    let credentialsListView = PasswordsListScreen(afd: self, userInfo: user.info)
-    self.navigateView(view: credentialsListView)
+  private func getTargetViewAfterUnlock() -> some View {
+    let target = PasswordsListScreen(afd: self, userInfo: user.info)
+    return target
+  }
+  private func navigateToTargetView() {
+    let target = getTargetViewAfterUnlock()
+    self.navigateView(view: target)
   }
   
   private func navigateLockScreen() {
-    let target = PasswordsListScreen(afd: self, userInfo: user.info)
+    let target = getTargetViewAfterUnlock()
     let lockView = LockScreen(afd: self, userInfo: user.info, target: target)
     self.navigateView(view: lockView)
   }
@@ -246,8 +214,26 @@ extension CredentialProviderController {
 
 // MARK: Autofill Actions
 extension CredentialProviderController: AutofillScreenDelegate {
-  func unlock() {
+  func unlockSuccess() {
+    if (action == CredentialActions.quickBarPassword) {
+      passwordSelected(data: self.quickBarCredential)
+      return
+    }
     
+    if (action == CredentialActions.fillRequest) {
+      navigateToTargetView()
+      return
+    }
+    if #available(iOSApplicationExtension 17.0, *) {
+      if (action == CredentialActions.createPasskey) {
+        createAndFillPasskey()
+        return
+      }
+    }
+    if (action == CredentialActions.quickBarPasskey) {
+      print("quickBarPasskey")
+      return
+    }
   }
   
   func passwordSelected(password: String) {
@@ -278,4 +264,58 @@ extension CredentialProviderController: AutofillScreenDelegate {
     }
     self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
   }
+}
+
+// MARK: Passkey
+extension CredentialProviderController {
+  @available(iOS 17.0, *)
+  func createAndFillPasskey() {
+    let registrationRequest = passkeyContext?.registrationRequest
+    print("prepareInterface forPasskeyRegistration ")
+    
+    // 1) cast to concrete type
+    guard let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest else {
+      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+      return
+    }
+    guard let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity else {
+      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+      return
+    }
+    
+    let rpId = identity.relyingPartyIdentifier
+    let clientDataHash = passkeyReq.clientDataHash // hashed clientData JSON (challenge)
+    let userId = identity.userHandle
+    
+    let userName = identity.userName
+    let supportedAlgos = passkeyReq.supportedAlgorithms // [NSNumber] (COSE alg ids)
+    
+    print("🟢 Relying Party ID:", rpId)
+    print("🟢 User Name:", userName)
+    print("🟢 User ID (base64):", userId.base64EncodedString())
+    print("🟢 clientDataHash (base64):", clientDataHash.base64EncodedString())
+
+    
+    do {
+      let (credential, metadata) = try createPasskeyWithExportableKey(
+        relyingParty: rpId,
+        clientDataHash: clientDataHash,
+        userId: userId,
+        userName: userName,
+        supportedAlgos: supportedAlgos
+      )
+      print("credential", credential)
+      print("metadata", metadata)
+      extensionContext.completeRegistrationRequest(
+        using: credential,
+        completionHandler: nil
+      )
+      print("completeRegistrationRequest")
+      return
+    } catch {
+      print("❌ Failed to create passkey: \(error)")
+      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+    }
+  }
+  
 }

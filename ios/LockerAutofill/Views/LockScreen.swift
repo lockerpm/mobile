@@ -84,7 +84,7 @@ struct LockScreen<TargetView: View>: View {
     if (afd.action == .fillRequest) {
       self.isShowTarget = true
     } else {
-      afd.unlock()
+      afd.unlockSuccess()
     }
   }
 }

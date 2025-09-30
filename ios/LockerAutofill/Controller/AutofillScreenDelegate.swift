@@ -6,7 +6,7 @@ protocol AutofillScreenDelegate {
   var quickBarCredential: AFPasswordItem! { get }
   var user: User { get }
   
-  func unlock()
+  func unlockSuccess()
   func cancel()
   func passwordSelected(data: AFPasswordItem)
   // Generated strong password
