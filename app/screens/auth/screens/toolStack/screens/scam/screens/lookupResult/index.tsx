@@ -39,7 +39,6 @@ export const ScamLookupResultScreen: FC<ScamScreenProps<"lookupResult">> = ({
   useEffect(() => {
     checkUsersReport()
   }, [checkUsersReport])
-
   return (
     <Screen
       safeAreaEdges={["bottom"]}

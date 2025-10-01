@@ -1490,7 +1490,7 @@ const en = {
       btn: "Report scam phone number",
       user: {
         title: "A user",
-        label: " warned",
+        label: " reported",
       },
     },
     report: {

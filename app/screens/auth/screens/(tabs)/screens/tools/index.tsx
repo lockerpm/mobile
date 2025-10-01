@@ -7,6 +7,20 @@ import { PremiumTag } from "app/components/utils"
 import { TabsScreenProps, ToolsRoute } from "app/navigators"
 import { TxKeyPath } from "app/i18n"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { getLocales } from "expo-localization"
+
+const isVietnam = () => {
+  const locales = getLocales()
+  let isVietnam = false
+  if (locales.length > 0) {
+    locales.forEach((locale) => {
+      if (locale.regionCode === "VN") {
+        isVietnam = true
+      }
+    })
+  }
+  return isVietnam
+}
 
 type ToolsItem = {
   label: TxKeyPath
@@ -49,6 +63,7 @@ const TOOLS_ITEMS: ToolsItem[] = [
     desc: "scam:tool.label",
     icon: "lookup",
     routeName: "scamStack",
+    hide: !isVietnam(), // Hide if not in Vietnam
   },
 ]
 
@@ -81,6 +96,7 @@ export const ToolsListScreen: FC<TabsScreenProps<"toolsTab">> = ({ navigation })
   }
   return (
     <Screen
+      preset="auto"
       disableAvoidkeyboard
       backgroundColor={colors.block}
       header={<TabHeader titleTx="common:tools" />}
@@ -156,6 +172,7 @@ export const styles = StyleSheet.create({
     marginRight: 8,
   },
   ph16: {
+    paddingBottom: 16,
     paddingHorizontal: 16,
   },
 })

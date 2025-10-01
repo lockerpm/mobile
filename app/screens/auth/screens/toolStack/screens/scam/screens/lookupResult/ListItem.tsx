@@ -14,14 +14,14 @@ export const ListItem = ({ item }: Props) => {
 
   return (
     <View style={themed($userReport)}>
-      {item.is_anonymous && (
+      {!item.user?.full_name && (
         <View style={styles.row}>
           <Icon icon="user" size={16} containerStyle={styles.mr8} />
           <Text weight="semiBold" tx="scam:lookupResult.user.title" />
           <Text tx="scam:lookupResult.user.label" />
         </View>
       )}
-      {!item.is_anonymous && (
+      {!!item.user?.full_name && (
         <View style={styles.row}>
           <Image style={styles.avatar} source={{ uri: item.user?.avatar }} />
           <Text weight="semiBold" text={item.user?.full_name} />
