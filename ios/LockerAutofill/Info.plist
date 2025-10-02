@@ -17,7 +17,7 @@
 				<key>ProvidesTextToInsert</key>
 				<true/>
 				<key>SupportsConditionalPasskeyRegistration</key>
-				<true/>
+				<false/>
 			</dict>
 		</dict>
 		<key>NSExtensionMainStoryboard</key>

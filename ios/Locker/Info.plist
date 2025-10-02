@@ -128,5 +128,10 @@
 	<string>Automatic</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>ASCredentialProviderExtensionCapabilities</key>
+		<dict>
+			<key>ProvidesPasskeys</key>
+			<true/>
+		</dict>
 </dict>
 </plist>

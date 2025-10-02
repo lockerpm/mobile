@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -33,6 +33,7 @@
 		7C9128242E015502009D80A5 /* Crypto in Frameworks */ = {isa = PBXBuildFile; productRef = 7C9128232E015502009D80A5 /* Crypto */; };
 		7C9128272E01551C009D80A5 /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = 7C9128262E01551C009D80A5 /* SwiftOTP */; };
 		7C91282A2E015534009D80A5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7C9128292E015534009D80A5 /* CachedAsyncImage */; };
+		7CBB27D12E8E3E8B00D0471E /* SwiftASN1 in Frameworks */ = {isa = PBXBuildFile; productRef = 7CBB27D02E8E3E8B00D0471E /* SwiftASN1 */; };
 		7CED7E722E03CDB900223FE4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7CED7E712E03CDB900223FE4 /* GoogleService-Info.plist */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
@@ -116,14 +117,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7C0752E32E56F9B600D28650 /* Exceptions for "LockerLiveCallerLookup" folder in "LockerLiveCallerLookup" target */ = {
+		7C0752E32E56F9B600D28650 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = 7C0752D72E56F9B600D28650 /* LockerLiveCallerLookup */;
 		};
-		7C9128032E0150D1009D80A5 /* Exceptions for "LockerAutofill" folder in "LockerAutofill" target */ = {
+		7C9128032E0150D1009D80A5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -133,30 +134,8 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		7C0752D92E56F9B600D28650 /* LockerLiveCallerLookup */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				7C0752E32E56F9B600D28650 /* Exceptions for "LockerLiveCallerLookup" folder in "LockerLiveCallerLookup" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = LockerLiveCallerLookup;
-			sourceTree = "<group>";
-		};
-		7C9127F82E0150D1009D80A5 /* LockerAutofill */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				7C9128032E0150D1009D80A5 /* Exceptions for "LockerAutofill" folder in "LockerAutofill" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = LockerAutofill;
-			sourceTree = "<group>";
-		};
+		7C0752D92E56F9B600D28650 /* LockerLiveCallerLookup */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7C0752E32E56F9B600D28650 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LockerLiveCallerLookup; sourceTree = "<group>"; };
+		7C9127F82E0150D1009D80A5 /* LockerAutofill */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7C9128032E0150D1009D80A5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LockerAutofill; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +160,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C9127F72E0150D1009D80A5 /* AuthenticationServices.framework in Frameworks */,
+				7CBB27D12E8E3E8B00D0471E /* SwiftASN1 in Frameworks */,
 				7C8F69E72E86754F006F49D7 /* SwiftCBOR in Frameworks */,
 				7C91280C2E01528C009D80A5 /* Sentry in Frameworks */,
 				7C91280F2E0152DF009D80A5 /* KeychainAccess in Frameworks */,
@@ -398,6 +378,7 @@
 				7C9128262E01551C009D80A5 /* SwiftOTP */,
 				7C9128292E015534009D80A5 /* CachedAsyncImage */,
 				7C8F69E62E86754F006F49D7 /* SwiftCBOR */,
+				7CBB27D02E8E3E8B00D0471E /* SwiftASN1 */,
 			);
 			productName = LockerAutofill;
 			productReference = 7C9127F52E0150D1009D80A5 /* LockerAutofill.appex */;
@@ -441,6 +422,7 @@
 				7C9128252E01551C009D80A5 /* XCRemoteSwiftPackageReference "SwiftOTP" */,
 				7C9128282E015534009D80A5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				7C8F69E52E86754F006F49D7 /* XCRemoteSwiftPackageReference "SwiftCBOR" */,
+				7CBB27CF2E8E3E8B00D0471E /* XCRemoteSwiftPackageReference "swift-asn1" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -1033,10 +1015,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -1102,10 +1081,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -1203,6 +1179,14 @@
 				minimumVersion = 2.1.1;
 			};
 		};
+		7CBB27CF2E8E3E8B00D0471E /* XCRemoteSwiftPackageReference "swift-asn1" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-asn1.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1235,6 +1219,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7C9128282E015534009D80A5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
 			productName = CachedAsyncImage;
+		};
+		7CBB27D02E8E3E8B00D0471E /* SwiftASN1 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CBB27CF2E8E3E8B00D0471E /* XCRemoteSwiftPackageReference "swift-asn1" */;
+			productName = SwiftASN1;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

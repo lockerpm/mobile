@@ -140,6 +140,8 @@ class CredentialProviderController: ASCredentialProviderViewController {
     self.action = .createPasskey
     passkeyContext = PasskeyContext()
     passkeyContext?.registrationRequest = registrationRequest
+    
+    loadView()
   }
   
   
@@ -283,32 +285,33 @@ extension CredentialProviderController {
       return
     }
     
-    let rpId = identity.relyingPartyIdentifier
-    let clientDataHash = passkeyReq.clientDataHash // hashed clientData JSON (challenge)
-    let userId = identity.userHandle
-    
-    let userName = identity.userName
-    let supportedAlgos = passkeyReq.supportedAlgorithms // [NSNumber] (COSE alg ids)
-    
-    print("🟢 Relying Party ID:", rpId)
-    print("🟢 User Name:", userName)
-    print("🟢 User ID (base64):", userId.base64EncodedString())
-    print("🟢 clientDataHash (base64):", clientDataHash.base64EncodedString())
-
-    
     do {
+      let test = passkeyReq.userVerificationPreference
+      let rpId = identity.relyingPartyIdentifier
+      let clientDataHash = passkeyReq.clientDataHash // hashed clientData JSON (challenge)
+      let userId = identity.userHandle
+      
+      let userName = identity.userName
+      let supportedAlgos = passkeyReq.supportedAlgorithms // [NSNumber] (COSE alg ids)
+      
+      print("🟢 Relying Party ID:", rpId)
+      print("🟢 User Name:", userName)
+      print("🟢 User ID (base64):", userId.base64EncodedString())
+      print("🟢 clientDataHash (base64):", clientDataHash.base64EncodedString())
+      
+      
       let (credential, metadata) = try createPasskeyWithExportableKey(
         relyingParty: rpId,
         clientDataHash: clientDataHash,
         userId: userId,
         userName: userName,
-        supportedAlgos: supportedAlgos
+        supportedAlgos: supportedAlgos,
+        userVerification: test
       )
       print("credential", credential)
       print("metadata", metadata)
       extensionContext.completeRegistrationRequest(
-        using: credential,
-        completionHandler: nil
+        using: credential
       )
       print("completeRegistrationRequest")
       return
