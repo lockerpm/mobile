@@ -81,7 +81,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
     passkeyContext = PasskeyContext()
     passkeyContext?.requestParameters = requestParameters
     
-    prepareAutofillData(sID: serviceIdentifiers, mode: .passwordVsPasskey)
+    prepareAutofillData(sID: serviceIdentifiers, mode: .passkey)
   }
   
   /**
@@ -188,12 +188,22 @@ class CredentialProviderController: ASCredentialProviderViewController {
 }
 
 
-
 // MARK: Navigator
 extension CredentialProviderController {
+  @ViewBuilder
   private func getTargetViewAfterUnlock() -> some View {
-    let target = PasswordsListScreen(afd: self, userInfo: user.info)
-    return target
+    switch user.filleMode {
+    case .otp:
+      PasswordsListScreen(afd: self, userInfo: user.info)
+    case .password:
+      PasswordsListScreen(afd: self, userInfo: user.info)
+    case .passkey:
+      PasskeysListScreen(afd: self, userInfo: user.info)
+    case .passwordVsPasskey:
+      PasswordsListScreen(afd: self, userInfo: user.info)
+    case .text:
+      PasswordsListScreen(afd: self, userInfo: user.info)
+    }
   }
   private func navigateToTargetView() {
     let target = getTargetViewAfterUnlock()
@@ -273,52 +283,61 @@ extension CredentialProviderController {
   @available(iOS 17.0, *)
   func createAndFillPasskey() {
     let registrationRequest = passkeyContext?.registrationRequest
-    print("prepareInterface forPasskeyRegistration ")
+    print("PasskeyRegistration start")
     
-    // 1) cast to concrete type
-    guard let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest else {
-      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
-      return
-    }
-    guard let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity else {
+    guard
+      let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest,
+      let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity
+    else {
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
       return
     }
     
     do {
-      let test = passkeyReq.userVerificationPreference
-      let rpId = identity.relyingPartyIdentifier
-      let clientDataHash = passkeyReq.clientDataHash // hashed clientData JSON (challenge)
-      let userId = identity.userHandle
-      
-      let userName = identity.userName
-      let supportedAlgos = passkeyReq.supportedAlgorithms // [NSNumber] (COSE alg ids)
-      
-      print("🟢 Relying Party ID:", rpId)
-      print("🟢 User Name:", userName)
-      print("🟢 User ID (base64):", userId.base64EncodedString())
-      print("🟢 clientDataHash (base64):", clientDataHash.base64EncodedString())
-      
-      
-      let (credential, metadata) = try createPasskeyWithExportableKey(
-        relyingParty: rpId,
-        clientDataHash: clientDataHash,
-        userId: userId,
-        userName: userName,
-        supportedAlgos: supportedAlgos,
-        userVerification: test
+      let (credential, metadata) = try passkeyRegistration(
+        passkeyReq: passkeyReq,
+        passkeyId: identity
       )
-      print("credential", credential)
-      print("metadata", metadata)
+      
+      user.saveTempPasskey(metadata)
       extensionContext.completeRegistrationRequest(
         using: credential
       )
-      print("completeRegistrationRequest")
+      
+      print("PasskeyRegistration end--")
       return
     } catch {
-      print("❌ Failed to create passkey: \(error)")
+      print("Failed to create passkey: \(error)")
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
   }
   
+  @available(iOS 17.0, *)
+  func authenAndFillPasskey() {
+    let requestParameters = passkeyContext?.requestParameters
+    print("PasskeyAuthentication start")
+    
+//    guard
+//      let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest,
+//      let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity
+//    else {
+//      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+//      return
+//    }
+//    
+//    do {
+//      let (credential, metadata) = try passkeyRegistration(
+//        passkeyReq: passkeyReq,
+//        passkeyId: identity
+//      )
+//      extensionContext.completeRegistrationRequest(
+//        using: credential
+//      )
+//      print("PasskeyRegistration end--")
+//      return
+//    } catch {
+//      print("Failed to create passkey: \(error)")
+//      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+//    }
+  }
 }

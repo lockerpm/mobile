@@ -1,5 +1,5 @@
 //
-//  CredentialItem.swift
+//  PasswordItemView.swift
 //  LockerAutofill
 //
 //  Created by Nguyen Thinh on 29/02/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CredentialItem: View {
+struct PasswordItemView: View {
   var item: AFPasswordItem
   @Binding var isShowDetailId: Int
   

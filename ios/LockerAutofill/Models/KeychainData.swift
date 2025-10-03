@@ -21,6 +21,16 @@ struct AFPasswordItem {
   }
 }
 
+struct AFPasskeyItem {
+  var fillID: Int
+  var key: TempPasskeyItem
+  
+  init(fillID: Int, key: TempPasskeyItem) {
+    self.fillID = fillID
+    self.key = key
+  }
+}
+
 struct PasswordItem: Hashable, Codable {
   var id: String
   var name: String
@@ -31,11 +41,22 @@ struct PasswordItem: Hashable, Codable {
   var otp: String = ""
 }
 
+
 struct TempPasswordItem: Hashable, Codable {
   var username: String
   var password: String
   var name: String
   var uri: String
+}
+
+struct TempPasskeyItem: Hashable, Codable {
+  let credentialId: String   // Base64URL
+  let rpId: String
+  let userId: String         // Base64URL
+  let userName: String
+  let alg: Int
+  let privateKey: String
+  let createdAt: String
 }
 
 struct UserInfo: Hashable, Codable {
@@ -63,3 +84,5 @@ let passwordKey =
 IosStoreKey(service: KEYCHAIN_SERVICE + ".password", username: "locker_password")
 
 let tempPasswordKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".temp_password", username: "locker_temp_password")
+
+let tempPasskeyKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".temp_passkey", username: "locker_temp_passkey")

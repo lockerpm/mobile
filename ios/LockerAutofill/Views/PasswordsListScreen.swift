@@ -66,7 +66,7 @@ struct PasswordsListScreen: View {
             Button {
               afd.passwordSelected(data: pw)
             } label: {
-              CredentialItem(item: pw, isShowDetailId: $isShowItemDetailId)
+              PasswordItemView(item: pw, isShowDetailId: $isShowItemDetailId)
             }
             
             if isShowItemDetailId == pw.fillID {
