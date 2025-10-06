@@ -9,8 +9,29 @@ import Foundation
 import AuthenticationServices
 
 
-func dataToStringWithoutPadding(_ data: Data) -> String {
-  return data.base64EncodedString().trimmingCharacters(in: CharacterSet(charactersIn: "="))
+extension Data {
+  init?(base64URLEncoded input: String) {
+    var base64 = input
+      .replacingOccurrences(of: "-", with: "+")
+      .replacingOccurrences(of: "_", with: "/")
+    let pad = base64.count % 4
+    if pad > 0 { base64 += String(repeating: "=", count: 4 - pad) }
+    self.init(base64Encoded: base64)
+  }
+  /// Base64URL encoding (RFC 4648 §5) without padding
+  func base64URLEncodedString() -> String {
+    let base64 = self.base64EncodedString()
+    let base64url = base64
+      .replacingOccurrences(of: "+", with: "-")
+      .replacingOccurrences(of: "/", with: "_")
+      .replacingOccurrences(of: "=", with: "") // remove padding
+    return base64url
+  }
+  
+  func toHex(prefix: Bool = false) -> String {
+    let s = map { String(format: "%02x", $0) }.joined()
+    return prefix ? "0x" + s : s
+  }
 }
 
 
@@ -22,7 +43,7 @@ func publicKeyAlgSelect(_ supportedAlgos: [ASCOSEAlgorithmIdentifier]) throws  -
   guard let chosenAlg = priority.first(where: { serverAlgos.contains($0) }) else {
     throw NSError(domain: "Passkey", code: -2, userInfo: [NSLocalizedDescriptionKey: "No compatible algorithm"])
   }
-  print("✅ Chosen algorithm: \(chosenAlg)")
+  print("✅ Chosen algorithm: \(chosenAlg)", supportedAlgos)
   return chosenAlg
 }
 
@@ -78,50 +99,59 @@ func es256CBOREncode(xCoord: [UInt8], yCoord: [UInt8]) -> Data {
 //    CBOR.negativeInt(2): CBOR.byteString([UInt8](e))  // e
 // ]
 func rs256CBOREncode(modulus: [UInt8], exponent: [UInt8]) -> Data {
-    var cbor: [UInt8] = []
-    cbor.append(0xa4)   // map(4)
-
-    // 1: 3 (kty = RSA)
-    cbor.append(0x01)   // key 1
-    cbor.append(0x03)   // value 3
-
-    // 3: -257 (alg = RS256)
-    cbor.append(0x03)   // key 3
-    // encode -257: CBOR negative int(N) = 0x20 + N, with N = (value * -1) - 1
-    // here value = -257 → N = 256 → encoded as 0x39 0x01 0x00
-    cbor.append(0x39)
-    cbor.append(0x01)
-    cbor.append(0x00)
-
-    // -1: n (modulus)
-    cbor.append(0x20)   // -1 as map key
-    if modulus.count < 24 {
-        cbor.append(0x40 | UInt8(modulus.count)) // short length
-    } else if modulus.count <= 0xFF {
-        cbor.append(0x58) // one-byte length
-        cbor.append(UInt8(modulus.count))
-    } else {
-        // RSA modulus is usually 256 bytes (2048-bit)
-        cbor.append(0x59) // two-byte length
-        cbor.append(UInt8((modulus.count >> 8) & 0xff))
-        cbor.append(UInt8(modulus.count & 0xff))
-    }
-    cbor.append(contentsOf: modulus)
-
-    // -2: e (exponent)
-    cbor.append(0x21)   // -2 as map key
-    if exponent.count < 24 {
-        cbor.append(0x40 | UInt8(exponent.count))
-    } else {
-        cbor.append(0x58)
-        cbor.append(UInt8(exponent.count))
-    }
-    cbor.append(contentsOf: exponent)
-
-    return Data(cbor)
+  var cbor: [UInt8] = []
+  cbor.append(0xa4)   // map(4)
+  
+  // 1: 3 (kty = RSA)
+  cbor.append(0x01)   // key 1
+  cbor.append(0x03)   // value 3
+  
+  // 3: -257 (alg = RS256)
+  cbor.append(0x03)   // key 3
+  // encode -257: CBOR negative int(N) = 0x20 + N, with N = (value * -1) - 1
+  // here value = -257 → N = 256 → encoded as 0x39 0x01 0x00
+  cbor.append(0x39)
+  cbor.append(0x01)
+  cbor.append(0x00)
+  
+  // -1: n (modulus)
+  cbor.append(0x20)   // -1 as map key
+  if modulus.count < 24 {
+    cbor.append(0x40 | UInt8(modulus.count)) // short length
+  } else if modulus.count <= 0xFF {
+    cbor.append(0x58) // one-byte length
+    cbor.append(UInt8(modulus.count))
+  } else {
+    // RSA modulus is usually 256 bytes (2048-bit)
+    cbor.append(0x59) // two-byte length
+    cbor.append(UInt8((modulus.count >> 8) & 0xff))
+    cbor.append(UInt8(modulus.count & 0xff))
+  }
+  cbor.append(contentsOf: modulus)
+  
+  // -2: e (exponent)
+  cbor.append(0x21)   // -2 as map key
+  if exponent.count < 24 {
+    cbor.append(0x40 | UInt8(exponent.count))
+  } else {
+    cbor.append(0x58)
+    cbor.append(UInt8(exponent.count))
+  }
+  cbor.append(contentsOf: exponent)
+  
+  return Data(cbor)
 }
 
 
+//  Find allowed credentials hint (if server supplied allowedCredentials)
+//  if let allowed = requestParams.allowedCredentials as [Data]?, !allowed.isEmpty {
+//    let matches = allowed.contains { $0 == credId }
+//    print("  allowedCredentials hint provided; matches saved credential:", matches)
+//    if !matches {
+//      // still allow if server didn't include allowedCredentials for this RP, but log
+//      print("  ⚠️ saved credential not present in allowList")
+//    }
+//  }
 
 // --- Access Control depending on UV preference ---
 //  var accessControl: SecAccessControl? = nil

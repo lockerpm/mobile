@@ -8,8 +8,12 @@ protocol AutofillScreenDelegate {
   
   func unlockSuccess()
   func cancel()
-  func passwordSelected(data: AFPasswordItem)
+
+  // passkey
+  func passkeySelected(data: AFPasskeyItem)
+  
   // Generated strong password
   func passwordSelected(password: String)
+  func passwordSelected(data: AFPasswordItem)
   func createPasswordItem(item: TempPasswordItem)
 }

@@ -226,6 +226,7 @@ extension CredentialProviderController {
 
 // MARK: Autofill Actions
 extension CredentialProviderController: AutofillScreenDelegate {
+  // Called back after successful user authentication using biometric or master password
   func unlockSuccess() {
     if (action == CredentialActions.quickBarPassword) {
       passwordSelected(data: self.quickBarCredential)
@@ -248,25 +249,38 @@ extension CredentialProviderController: AutofillScreenDelegate {
     }
   }
   
+  // Password generated
   func passwordSelected(password: String) {
-    completeRequest(user: "", password: password, otp: "")
+    fillPassword(user: "", password: password, otp: "")
   }
   
   func createPasswordItem(item: TempPasswordItem) {
     user.saveTempPassword(item)
-    completeRequest(user: item.username, password: item.password, otp: "")
+    fillPassword(user: item.username, password: item.password, otp: "")
+  }
+  
+  func passkeySelected(data: AFPasskeyItem) {
+    if #available(iOSApplicationExtension 17.0, *) {
+      authenAndFillPasskey(item: data.key)
+    } else {
+      cancel()
+    }
+  }
+  
+  func passwordSelected(data: AFPasswordItem) {
+    quickTypeBar.replaceCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, username: data.login.username, userID: data.login.id)
+    fillPassword(user: data.login.username, password: data.login.password, otp: data.login.otp)
   }
   
   func cancel() {
     extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
   }
-  
-  func passwordSelected(data: AFPasswordItem) {
-    quickTypeBar.replaceCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, username: data.login.username, userID: data.login.id)
-    completeRequest(user: data.login.username, password: data.login.password, otp: data.login.otp)
-  }
-  
-  private func completeRequest(user: String, password: String, otp: String){
+}
+
+
+// MARK: Password
+extension CredentialProviderController {
+  private func fillPassword(user: String, password: String, otp: String){
     let passwordCredential = ASPasswordCredential(user: user, password: password)
     if (!otp.isEmpty) {
       let otpString = otpService.getOTPFromUri(uri: otp).generate(time: Date()) ?? ""
@@ -277,6 +291,7 @@ extension CredentialProviderController: AutofillScreenDelegate {
     self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
   }
 }
+
 
 // MARK: Passkey
 extension CredentialProviderController {
@@ -313,31 +328,26 @@ extension CredentialProviderController {
   }
   
   @available(iOS 17.0, *)
-  func authenAndFillPasskey() {
-    let requestParameters = passkeyContext?.requestParameters
+  func authenAndFillPasskey(item: TempPasskeyItem) {
+    guard let requestParameters = passkeyContext?.requestParameters else { return  extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+    }
     print("PasskeyAuthentication start")
     
-//    guard
-//      let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest,
-//      let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity
-//    else {
-//      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
-//      return
-//    }
-//    
-//    do {
-//      let (credential, metadata) = try passkeyRegistration(
-//        passkeyReq: passkeyReq,
-//        passkeyId: identity
-//      )
-//      extensionContext.completeRegistrationRequest(
-//        using: credential
-//      )
-//      print("PasskeyRegistration end--")
-//      return
-//    } catch {
-//      print("Failed to create passkey: \(error)")
-//      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
-//    }
+    
+    do {
+      let assertion = try createAssertionFromTempPasskey(
+        item: item,
+        requestParams: requestParameters
+      )
+      
+      extensionContext.completeAssertionRequest(
+        using: assertion
+      )
+      print("PasskeyAuthentication end--")
+      return
+    } catch {
+      print("Failed to authen with passkey: \(error)")
+      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+    }
   }
 }

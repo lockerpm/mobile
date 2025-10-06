@@ -58,7 +58,7 @@ struct PasskeysListScreen: View {
         } else {
           ForEach(passkeys, id: \.key.credentialId) { pk in
             Button {
-              //              afd.passwordSelected(data: pk)
+              afd.passkeySelected(data: pk)
             } label: {
               PasskeyItemView(item: pk)
             }
