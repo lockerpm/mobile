@@ -151,6 +151,7 @@ const fr: Translations = {
     sign_in: "Se connecter",
     from: "De",
     shareWith: "Partager avec :",
+    createdAt: "Créé à ",
   },
   navigator: {
     is_offline: "Locker est actuellement en mode hors ligne.",

@@ -150,6 +150,7 @@ const en = {
     social_login: "Or login with",
     from: "From",
     shareWith: "Share with:",
+    createdAt: "Created at ",
   },
   navigator: {
     is_offline: "Locker is currently in offline mode.",

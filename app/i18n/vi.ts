@@ -151,6 +151,7 @@ const vi: Translations = {
     social_login: "Hoặc đăng nhập với",
     from: "Từ",
     shareWith: "Chia sẻ với:",
+    createdAt: "Tạo lúc ",
   },
   navigator: {
     is_offline: "Locker hiện đang ở chế độ ngoại tuyến.",

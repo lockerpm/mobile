@@ -94,7 +94,6 @@ class CallerID {
     }
     try {
       await CallerIDManager.refreshPIRParameters()
-      console.log("✅ iosRefreshPIRParameters Success")
     } catch (err) {
       console.error("❌ iosRefreshPIRParameters Error:", err)
     }

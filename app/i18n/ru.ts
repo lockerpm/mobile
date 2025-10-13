@@ -151,6 +151,7 @@ const ru: Translations = {
     social_login: "Или войти с",
     from: "От",
     shareWith: "Поделиться с:",
+    createdAt: "Создано в ",
   },
   navigator: {
     is_offline: "В настоящее время Locker находится в офлайн режиме.",

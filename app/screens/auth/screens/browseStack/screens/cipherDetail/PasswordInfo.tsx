@@ -4,7 +4,7 @@ import { useCipherHelper } from "app/services/hook"
 import { CipherType } from "core/enums"
 import { PasswordStrength, Textarea } from "app/components/utils"
 import { CipherAppView } from "app/static/types"
-import { DynamicUris, PasswordOtp } from "@/components/ciphers"
+import { DynamicUris, PasswordOtp, Fido2Info } from "@/components/ciphers"
 import { useAppLocale } from "@/i18n"
 
 type Props = {
@@ -43,6 +43,12 @@ export const PasswordInfo = ({ item }: Props) => {
           editable={false}
         />
       )}
+
+      {
+        item.login.fido2Credentials && item.login.fido2Credentials.length > 0 && (
+          <Fido2Info fido2={item.login.fido2Credentials[0]} />
+        ) /* Only show the first passkey info */
+      }
 
       {item.login.hasTotp && (
         <>

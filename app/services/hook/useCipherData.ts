@@ -26,12 +26,18 @@ import { CollectionRequest } from "core/models/request/collectionRequest"
 import { CipherData, FolderData } from "core/models/data"
 import { OrganizationData } from "core/models/data/organizationData"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
-import { IosAutofillPassword, autofillKeyChain } from "app/utils/autofillData"
+import {
+  IosAutofillPassword,
+  IosAutofillTemporaryPasskey,
+  IosAutofillTemporaryPassword,
+  autofillKeyChain,
+} from "app/utils/autofillData"
 import { useToast } from "../utils"
 import { getTeam } from "app/utils/cipherHelper"
 import { useAppLocale } from "@/i18n"
 import { Logger } from "@/utils/logger"
 import { Base64 } from "@/utils/base64"
+import { Fido2CredentialView } from "core/models/view/fido2CredentialView"
 
 export function useCipherData() {
   const { cipherStore, folderStore, uiStore, collectionStore, user, enterpriseStore } = useStores()
@@ -52,6 +58,32 @@ export function useCipherData() {
   const syncQueue = SyncQueue
 
   // ----------------------------- METHODS ---------------------------
+  // Get ciphers
+  const getCiphers = async (params: GetCiphersParams) => {
+    try {
+      const deletedFilter = (c: CipherView) => c.isDeleted === params.deleted
+      const filters = [deletedFilter, ...params.filters]
+      if (!params.includeExtensions) {
+        filters.unshift((c: CipherView) => ![CipherType.TOTP].includes(c.type))
+      }
+      return (await searchService.searchCiphers(params.searchText || "", filters, null)) || []
+    } catch (e) {
+      notifyTx("error", "error:something_went_wrong")
+      Logger.error("getCiphers: " + e)
+      return []
+    }
+  }
+
+  // Get cipher by id
+  const getCipherById = async (id: string) => {
+    const ciphers = await getCiphers({
+      deleted: false,
+      searchText: "",
+      filters: [(c) => c.id === id],
+    })
+    return ciphers[0] || new CipherView()
+  }
+
   // Prepare to save password
   const createMasterPasswordItem = async (masterPassword: string, passwordStrength: number) => {
     const payload: CipherView = newCipher(CipherType.MasterPassword)
@@ -322,11 +354,136 @@ export function useCipherData() {
       uri: c.login.uri || "",
       username: c.login.username || "",
       password: c.login.password || "",
-      isOwner: !c.organizationId,
       otp: c.login.totp || "",
+      isOwner: !c.organizationId,
+      fido2:
+        c.login.fido2Credentials?.map((f) => ({
+          credentialId: f.credentialId,
+          keyValue: f.keyValue,
+          rpId: f.rpId,
+          userHandle: f.userHandle,
+          userName: f.userName,
+          userDisplayName: f.userDisplayName,
+          creationDate: f.creationDate?.toISOString() || "",
+        })) || [],
     }))
-
     await autofillKeyChain.savePassword(passwordData)
+  }
+
+  const createCipherBaseIosAutofillTempPassword = async (
+    tempPasswords: IosAutofillTemporaryPassword
+  ) => {
+    const ciphers: CipherRequest[] = []
+
+    for (const cipher of tempPasswords) {
+      const payload = newCipher(CipherType.Login)
+      const data = new LoginView()
+      data.username = cipher.username
+      data.password = cipher.password
+      if (cipher.uri) {
+        const uriView = new LoginUriView()
+        uriView.uri = cipher.uri
+        data.uris = [uriView]
+      }
+      payload.name = cipher.name
+      payload.login = data
+
+      const cipherEnc = await cipherService.encrypt(payload)
+      const cipherReq = new CipherRequest(cipherEnc)
+      ciphers.push(cipherReq)
+
+      if (uiStore.isOffline) {
+        await _offlineCreateCipher({
+          cipher: payload,
+          collectionIds: [],
+        })
+      }
+    }
+
+    if (!uiStore.isOffline) {
+      await cipherStore.offlineSyncCipher({
+        ciphers,
+        folders: [],
+        folderRelationships: [],
+      })
+    }
+  }
+
+  const createOrUpdateCipherBaseIosAutofillTempPasskey = async (
+    tempPasskeys: IosAutofillTemporaryPasskey
+  ) => {
+    // map fido2 to cipher id
+    const database: { [key: string]: Fido2CredentialView[] } = {}
+    const ciphers: CipherRequest[] = []
+
+    for (const cipher of tempPasskeys) {
+      // create new cipher
+      if (!cipher.id) {
+        const payload = newCipher(CipherType.Login)
+        const data = new LoginView()
+        data.username = cipher.userName
+        const uriView = new LoginUriView()
+        uriView.uri = cipher.rpId
+        data.uris = [uriView]
+
+        const fido2 = new Fido2CredentialView()
+        fido2.credentialId = cipher.credentialId
+        fido2.keyValue = cipher.keyValue
+        fido2.rpId = cipher.rpId
+        fido2.rpName = cipher.rpId
+        fido2.userHandle = cipher.userHandle
+        fido2.userName = cipher.userName
+        fido2.userDisplayName = cipher.userName
+        fido2.creationDate = new Date(cipher.creationDate)
+        data.fido2Credentials = [fido2]
+
+        payload.name = cipher.rpId
+        payload.login = data
+
+        const cipherEnc = await cipherService.encrypt(payload)
+        const cipherReq = new CipherRequest(cipherEnc)
+        ciphers.push(cipherReq)
+
+        if (uiStore.isOffline) {
+          await _offlineCreateCipher({
+            cipher: payload,
+            collectionIds: [],
+          })
+        }
+      } else {
+        // group fido2 by cipher id
+        const fido2 = new Fido2CredentialView()
+        fido2.credentialId = cipher.credentialId
+        fido2.keyValue = cipher.keyValue
+        fido2.rpId = cipher.rpId
+        fido2.userHandle = cipher.userHandle
+        fido2.userName = cipher.userName
+        fido2.userDisplayName = cipher.userName
+        fido2.creationDate = new Date(cipher.creationDate)
+
+        if (database[cipher.id]) {
+          database[cipher.id].push(fido2)
+        } else {
+          database[cipher.id] = [fido2]
+        }
+      }
+    }
+
+    // sync new cipher
+    if (!uiStore.isOffline) {
+      await cipherStore.offlineSyncCipher({
+        ciphers,
+        folders: [],
+        folderRelationships: [],
+      })
+    }
+
+    // update existing cipher
+    for (const id in database) {
+      const cipher = await getCipherById(id)
+      cipher.login.fido2Credentials = database[id]
+      await updateCipher(id, cipher, 5, [], true)
+    }
   }
 
   // Sync autofill data
@@ -341,43 +498,17 @@ export function useCipherData() {
       // sync temporary passwords
       const tempPasswords = await autofillKeyChain.getTempPassword()
       if (tempPasswords && Array.isArray(tempPasswords)) {
-        const ciphers: CipherRequest[] = []
+        await createCipherBaseIosAutofillTempPassword(tempPasswords)
+      }
 
-        for (const cipher of tempPasswords) {
-          const payload = newCipher(CipherType.Login)
-          const data = new LoginView()
-          data.username = cipher.username
-          data.password = cipher.password
-          if (cipher.uri) {
-            const uriView = new LoginUriView()
-            uriView.uri = cipher.uri
-            data.uris = [uriView]
-          }
-          payload.name = cipher.name
-          payload.login = data
-
-          const cipherEnc = await cipherService.encrypt(payload)
-          const cipherReq = new CipherRequest(cipherEnc)
-          ciphers.push(cipherReq)
-
-          if (uiStore.isOffline) {
-            await _offlineCreateCipher({
-              cipher: payload,
-              collectionIds: [],
-            })
-          }
-        }
-
-        if (!uiStore.isOffline) {
-          await cipherStore.offlineSyncCipher({
-            ciphers,
-            folders: [],
-            folderRelationships: [],
-          })
-        }
+      // sync tempPasskeys
+      const tempPasskeys = await autofillKeyChain.getTempPasskey()
+      if (tempPasskeys && Array.isArray(tempPasskeys)) {
+        await createOrUpdateCipherBaseIosAutofillTempPasskey(tempPasskeys)
       }
 
       await autofillKeyChain.resetTempPassword()
+      await autofillKeyChain.resetTempPasskey()
       await _updateAutofillData()
     } catch (e) {
       Logger.error("syncAutofillData: " + e)
@@ -516,22 +647,6 @@ export function useCipherData() {
     }
   }
 
-  // Get ciphers
-  const getCiphers = async (params: GetCiphersParams) => {
-    try {
-      const deletedFilter = (c: CipherView) => c.isDeleted === params.deleted
-      const filters = [deletedFilter, ...params.filters]
-      if (!params.includeExtensions) {
-        filters.unshift((c: CipherView) => ![CipherType.TOTP].includes(c.type))
-      }
-      return (await searchService.searchCiphers(params.searchText || "", filters, null)) || []
-    } catch (e) {
-      notifyTx("error", "error:something_went_wrong")
-      Logger.error("getCiphers: " + e)
-      return []
-    }
-  }
-
   // Get ciphers from cache only
   const getCiphersFromCache: (params: GetCiphersParams) => Promise<CipherView[]> = async (
     params: GetCiphersParams
@@ -550,16 +665,6 @@ export function useCipherData() {
       Logger.error("getCiphersFromCache: " + e)
       return []
     }
-  }
-
-  // Get cipher by id
-  const getCipherById = async (id: string) => {
-    const ciphers = await getCiphers({
-      deleted: false,
-      searchText: "",
-      filters: [(c) => c.id === id],
-    })
-    return ciphers[0] || new CipherView()
   }
 
   // Get collections
@@ -981,7 +1086,39 @@ export function useCipherData() {
     cipher.id = finalId
     await minimalReloadCache({ cipher })
   }
+  // Offline update
+  const _offlineUpdateCipher = async (payload: {
+    cipher: CipherView
+    collectionIds: string[]
+    isAccepted?: boolean
+    cipherRequest?: CipherRequest
+  }) => {
+    const { cipher, collectionIds, isAccepted, cipherRequest } = payload
 
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = (await storageService.get(key)) || {}
+
+    const cipherEnc = await cipherService.encrypt(cipher)
+    const data = cipherRequest || new CipherRequest(cipherEnc)
+    const revisionDate = new Date()
+
+    res[cipher.id] = {
+      ...res[cipher.id],
+      ...data,
+      collectionIds,
+      revisionDate: revisionDate.toISOString(),
+    }
+    await storageService.save(key, res)
+    if (!isAccepted) {
+      cipherStore.addNotSync(cipher.id)
+    }
+
+    // Update cache
+    cipher.collectionIds = collectionIds
+    cipher.revisionDate = revisionDate
+    await minimalReloadCache({ cipher })
+  }
   // Update
   const updateCipher = async (
     id: string,
@@ -1026,40 +1163,6 @@ export function useCipherData() {
       Logger.error("updateCipher: " + e)
       return { kind: "unknown" }
     }
-  }
-
-  // Offline update
-  const _offlineUpdateCipher = async (payload: {
-    cipher: CipherView
-    collectionIds: string[]
-    isAccepted?: boolean
-    cipherRequest?: CipherRequest
-  }) => {
-    const { cipher, collectionIds, isAccepted, cipherRequest } = payload
-
-    const userId = await userService.getUserId()
-    const key = `ciphers_${userId}`
-    const res = (await storageService.get(key)) || {}
-
-    const cipherEnc = await cipherService.encrypt(cipher)
-    const data = cipherRequest || new CipherRequest(cipherEnc)
-    const revisionDate = new Date()
-
-    res[cipher.id] = {
-      ...res[cipher.id],
-      ...data,
-      collectionIds,
-      revisionDate: revisionDate.toISOString(),
-    }
-    await storageService.save(key, res)
-    if (!isAccepted) {
-      cipherStore.addNotSync(cipher.id)
-    }
-
-    // Update cache
-    cipher.collectionIds = collectionIds
-    cipher.revisionDate = revisionDate
-    await minimalReloadCache({ cipher })
   }
 
   // Delete

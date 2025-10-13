@@ -151,6 +151,7 @@ const zh: Translations = {
     social_login: "或使用以下方式登入",
     from: "來自",
     shareWith: "分享給:",
+    createdAt: "創建於 ",
   },
   navigator: {
     is_offline: "Locker 目前在離線模式。",

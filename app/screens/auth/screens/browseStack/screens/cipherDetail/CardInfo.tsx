@@ -11,7 +11,6 @@ type Props = {
 export const CardInfo = ({ item }: Props) => {
   const brand = (CARD_BRANDS.find((i) => i.value === item.card.brand) || { label: "" }).label
 
-  console.log(item.card.expMonth, item.card.expYear)
   return (
     <View>
       {item.card.cardholderName && (

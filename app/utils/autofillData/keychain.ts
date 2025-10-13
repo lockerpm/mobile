@@ -4,6 +4,7 @@ import {
   IosAutofillTemporaryPassword,
   AutofillUserInfo,
   AutofillStorekey,
+  IosAutofillTemporaryPasskey,
 } from "./autofillType"
 import { Platform } from "react-native"
 import Config from "@/config"
@@ -43,6 +44,9 @@ class KeychainService {
     ReactNativeKeychain.resetGenericPassword({
       service: AutofillStorekey.TEMP_PASSWORD.service,
     })
+    ReactNativeKeychain.resetGenericPassword({
+      service: AutofillStorekey.TEMP_PASSKEY.service,
+    })
   }
 
   // local autofill password creation
@@ -73,6 +77,28 @@ class KeychainService {
     await this.saveShared(
       AutofillStorekey.TEMP_PASSWORD.service,
       AutofillStorekey.TEMP_PASSWORD.username,
+      ""
+    )
+  }
+
+  // Passkey
+  public async getTempPasskey(): Promise<IosAutofillTemporaryPasskey | null> {
+    if (!IS_IOS) return null
+
+    const res = await this.loadShared(AutofillStorekey.TEMP_PASSKEY.service)
+    if (!res || !res.password) {
+      return null
+    }
+
+    return JSON.parse(res.password)
+  }
+
+  public async resetTempPasskey() {
+    if (!IS_IOS) return
+
+    await this.saveShared(
+      AutofillStorekey.TEMP_PASSKEY.service,
+      AutofillStorekey.TEMP_PASSKEY.username,
       ""
     )
   }
