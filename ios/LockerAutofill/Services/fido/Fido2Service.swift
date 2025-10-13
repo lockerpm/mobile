@@ -11,10 +11,10 @@ import AuthenticationServices
 
 
 @available(iOS 17.0, *)
-func passkeyRegistration(
+func createPasskeyRegistrationCredential(
   passkeyReq: ASPasskeyCredentialRequest,
   passkeyId: ASPasskeyCredentialIdentity
-) throws -> (ASPasskeyRegistrationCredential, TempPasskeyItem) {
+) throws -> (ASPasskeyRegistrationCredential, PasskeyItem) {
   let relyingParty = passkeyId.relyingPartyIdentifier
   let clientDataHash = passkeyReq.clientDataHash // hashed clientData JSON (challenge)
   let userId = passkeyId.userHandle
@@ -125,14 +125,12 @@ func passkeyRegistration(
     attestationObject: attestationCBOR
   )
   
-  let metadata = TempPasskeyItem(
+  let metadata = PasskeyItem(
     credentialId: credentialId.base64URLEncodedString(),
+    keyValue: privateKeyData.base64URLEncodedString(),
     rpId: relyingParty,
-    userId: userId.base64URLEncodedString(),
-    userName: userName,
-    alg: chosenAlg,
-    privateKey: privateKeyData.base64URLEncodedString(),
-    createdAt: ISO8601DateFormatter().string(from: Date())
+    userHandle: userId.base64URLEncodedString(),
+    userName: userName
   )
   
   print("TempPasskeyItem", metadata)
@@ -143,10 +141,10 @@ func passkeyRegistration(
 // The main function
 @available(iOS 17.0, *)
 func createAssertionFromTempPasskey(
-  item: TempPasskeyItem,
+  item: PasskeyItem,
   requestParams: ASPasskeyCredentialRequestParameters
 ) throws -> ASPasskeyAssertionCredential {
-  print("➡️ rpId (item):", item.rpId, "credentialId ", item.credentialId, "userId ", item.userId, "alg :", item.alg)
+  print("➡️ rpId (item):", item)
   print("  rpId (request):", requestParams.relyingPartyIdentifier)
   print("  allowedCredentials count:", requestParams.allowedCredentials.count)
   print("  userVerificationPreference:", requestParams.userVerificationPreference.rawValue)
@@ -159,48 +157,25 @@ func createAssertionFromTempPasskey(
   
   // 2) Credential ID, userHandle, privatekey Data
   guard let credId = Data(base64URLEncoded: item.credentialId),
-        let userHandle =  Data(base64URLEncoded: item.userId),
-        let privData = Data(base64URLEncoded: item.privateKey)
+        let userHandle =  Data(base64URLEncoded: item.userHandle),
+        let privData = Data(base64URLEncoded: item.keyValue)
   else {
     throw NSError(domain: "Passkey", code: -2, userInfo: [NSLocalizedDescriptionKey: "Invalid credentialId, userId, privateKey encoding"])
   }
   
   
   // 3) Attempt direct import privateKey
-  let keyType = (item.alg == -7) ? kSecAttrKeyTypeECSECPrimeRandom : kSecAttrKeyTypeRSA
-  let keySize = (item.alg == -7) ? 256 : 2048
-  var importOptions: [String: Any] = [
-    kSecAttrKeyType as String: keyType,
+  let importOptions: [String: Any] = [
+    kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
     kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
-    kSecAttrKeySizeInBits as String: keySize,
+    kSecAttrKeySizeInBits as String: 256,
   ]
   var cfErr: Unmanaged<CFError>?
-  var signingKey: SecKey? = SecKeyCreateWithData(privData as CFData, importOptions as CFDictionary, &cfErr)
-  if signingKey == nil {
+  guard let privateKey = SecKeyCreateWithData(privData as CFData, importOptions as CFDictionary, &cfErr) as SecKey?
+  else {
     print("  ⚠️ SecKeyCreateWithData failed:", cfErr?.takeRetainedValue() as Any)
-    if item.alg == -257 {
-      // Try wrap PKCS#1 -> PKCS#8 for RSA private key and re-import
-      print("  Attempting PKCS#1 -> PKCS#8 wrap for RSA private key")
-      let wrapped = wrapRSAPKCS1ToPKCS8(privData)
-      cfErr = nil
-      signingKey = SecKeyCreateWithData(wrapped as CFData, importOptions as CFDictionary, &cfErr)
-      if signingKey != nil {
-        print("  ✅ Re-import succeeded after wrapping PKCS#1 -> PKCS#8")
-      } else {
-        print("  ❌ Re-import after wrap failed:", cfErr?.takeRetainedValue() as Any)
-      }
-    } else {
-      // Optionally: attempt to wrap EC raw into PKCS#8 if you know format — omitted here
-      print("  No fallback available for EC import in this helper (you may need PKCS#8/SEC1 encoding)")
-    }
-  } else {
-    print("  ✅ SecKeyCreateWithData succeeded (private key imported)")
+    throw NSError(domain: "Passkey", code: -2, userInfo: [NSLocalizedDescriptionKey: "SecKeyCreateWithData failed:"])
   }
-  
-  guard let privateKey = signingKey else {
-    throw NSError(domain: "Passkey", code: -5, userInfo: [NSLocalizedDescriptionKey: "Failed to import private key; expected DER PKCS#8 or wrapped PKCS#1 for RSA"])
-  }
-  
   
   // 4) Build authenticatorData for assertion: rpIdHash(32) + flags(1) + signCount(4)
   let rpIdHash = Data(SHA256.hash(data: requestParams.relyingPartyIdentifier.data(using: .utf8)!))
@@ -224,20 +199,13 @@ func createAssertionFromTempPasskey(
   
   
   // 7) Sign using SecKey (use message variant so SecKey does the hashing)
-  let algorithm: SecKeyAlgorithm = {
-    switch item.alg {
-    case -7:   return .ecdsaSignatureMessageX962SHA256   // ES256
-     case -257: return .rsaSignatureMessagePKCS1v15SHA256 // RS256
-     default:   return .ecdsaSignatureMessageX962SHA256
-    }
-  }()
-  guard SecKeyIsAlgorithmSupported(privateKey, .sign, algorithm) else {
+  guard SecKeyIsAlgorithmSupported(privateKey, .sign, .ecdsaSignatureMessageX962SHA256) else {
     print("❌ Signing algorithm not supported by key")
     throw NSError(domain: "Passkey", code: -6, userInfo: [NSLocalizedDescriptionKey: "Signing algorithm not supported by key"])
   }
   
   cfErr = nil
-  guard let signature = SecKeyCreateSignature(privateKey, algorithm, messageToSign as CFData, &cfErr) as Data? else {
+  guard let signature = SecKeyCreateSignature(privateKey, .ecdsaSignatureMessageX962SHA256, messageToSign as CFData, &cfErr) as Data? else {
     print("❌ SecKeyCreateSignature failed:", cfErr?.takeRetainedValue() as Any)
     throw NSError(domain: "Passkey", code: -7, userInfo: [NSLocalizedDescriptionKey: "Signature generation failed"])
   }

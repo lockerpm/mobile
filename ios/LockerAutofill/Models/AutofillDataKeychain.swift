@@ -5,7 +5,8 @@ import Sentry
 
 class AutofillDataModel {
   // Trường hợp tạo nhiều temp credentials trong ext
-  private var tempPasswords: [TempPasswordItem] = []
+  private var currTempPasswords: [TempPasswordItem] = []
+  private var currTempPasskeys: [PasskeyItem] = []
   
   func getUserInfo() -> UserInfo! {
     do {
@@ -36,12 +37,9 @@ class AutofillDataModel {
       }
       return []
     } catch {
+      print("Couldn't decode jsonData when getPasswords: \(error)")
       SentrySDK.capture(message: "Couldn't decode jsonData when getPasswords: \(error)")
     }
-    return []
-  }
-  
-  func getPasskeys() -> [TempPasskeyItem] {
     return []
   }
   
@@ -53,7 +51,7 @@ class AutofillDataModel {
         let jsonData = Data(keychainData.utf8)
         let decoder = JSONDecoder()
         let decodeData = try decoder.decode([TempPasswordItem].self, from: jsonData)
-        self.tempPasswords.append(contentsOf: decodeData)
+        self.currTempPasswords.append(contentsOf: decodeData)
         return decodeData
       }
       return []
@@ -64,14 +62,15 @@ class AutofillDataModel {
   }
   
   
-  func getTempPasskeys() -> [TempPasskeyItem] {
+  func getTempPasskeys() -> [PasskeyItem] {
     do {
       let keychain = Keychain(service: tempPasskeyKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
       let keychainData = try! keychain.get(tempPasskeyKey.username) ?? ""
       if (!keychainData.isEmpty) {
         let jsonData = Data(keychainData.utf8)
         let decoder = JSONDecoder()
-        let decodeData = try decoder.decode([TempPasskeyItem].self, from: jsonData)
+        let decodeData = try decoder.decode([PasskeyItem].self, from: jsonData)
+        self.currTempPasskeys.append(contentsOf: decodeData)
         return decodeData
       }
       return []
@@ -83,10 +82,10 @@ class AutofillDataModel {
   
   func saveTempPassword(_ tempItem: TempPasswordItem) {
     do {
-      self.tempPasswords.append(tempItem)
+      self.currTempPasswords.append(tempItem)
       
       let jsonEncoder = JSONEncoder()
-      let jsonData = try jsonEncoder.encode(self.tempPasswords)
+      let jsonData = try jsonEncoder.encode(self.currTempPasswords)
       let json = String(data: jsonData, encoding: String.Encoding.utf8)
       
       let keychain = Keychain(service: tempPasswordKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
@@ -96,9 +95,9 @@ class AutofillDataModel {
     }
   }
   
-  func saveTempPasskey(_ tempItem: TempPasskeyItem) {
+  func saveTempPasskey(_ tempItem: PasskeyItem) {
     do {
-      var storedPKs = getTempPasskeys()
+      var storedPKs = self.currTempPasskeys
       storedPKs.append(tempItem)
       let jsonEncoder = JSONEncoder()
       let jsonData = try jsonEncoder.encode(storedPKs)

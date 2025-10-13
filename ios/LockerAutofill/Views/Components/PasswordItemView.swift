@@ -42,7 +42,42 @@ struct PasswordItemView: View {
           .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 0))
       }
     }
-    
-    
+  }
+}
+
+struct PasswordItemSimpleView: View {
+  var item: AFPasswordItem
+  var body: some View {
+    VStack(alignment: .leading){
+      HStack {
+        PasswordImage(itemUri: item.login.uri)
+        
+        VStack(alignment: .leading){
+          Text(item.login.name)
+          if !item.login.username.isEmpty {
+            Text(item.login.username)
+              .font(.subheadline)
+              .foregroundStyle(AppColors.label)
+          }
+        }
+        Spacer()
+      }
+    }
+  }
+}
+
+struct PasskeyItemView: View {
+  var item: PasskeyItem
+  var body: some View {
+    VStack(alignment: .leading){
+      HStack {
+        PasskeyImage(rpId: item.rpId)
+        
+        VStack(alignment: .leading){
+          Text(item.userName)
+        }
+        Spacer()
+      }
+    }
   }
 }

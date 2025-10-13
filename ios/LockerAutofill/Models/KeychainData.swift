@@ -14,20 +14,40 @@ struct AFPasswordItem {
     self.fillID = fillID
     self.login = login
   }
-  
   init(fillID: Int, id: Int, tmp: TempPasswordItem) {
     self.fillID = fillID
     self.login = PasswordItem(id: "tempPassword" + String(id), name: tmp.name, uri: tmp.uri, username: tmp.username, password: tmp.password)
   }
 }
 
-struct AFPasskeyItem {
-  var fillID: Int
-  var key: TempPasskeyItem
+struct PasskeyItem: Hashable, Codable {
+  let credentialId: String // Base64URL
+  var id: String! // login id
+  let keyValue: String // Base64URL
+  let rpId: String
+  let userHandle: String // Base64URL
+  let userName: String
+  let creationDate: String
   
-  init(fillID: Int, key: TempPasskeyItem) {
-    self.fillID = fillID
-    self.key = key
+  init(credentialId: String, keyValue: String, rpId: String, userHandle: String, userName: String) {
+    self.credentialId = credentialId
+    self.keyValue = keyValue
+    self.rpId = rpId
+    self.userHandle = userHandle
+    self.userName = userName
+    self.id = ""
+    self.creationDate = ISO8601DateFormatter().string(from: Date())
+  }
+  
+  init(id: String, data: PasskeyItem){
+    self.id = id
+    
+    self.credentialId = data.credentialId
+    self.keyValue = data.keyValue
+    self.rpId = data.rpId
+    self.userHandle = data.userHandle
+    self.userName = data.userName
+    self.creationDate = data.creationDate
   }
 }
 
@@ -39,8 +59,8 @@ struct PasswordItem: Hashable, Codable {
   var password: String
   var isOwner: Bool = true
   var otp: String = ""
+  var fido2: [PasskeyItem]! = []
 }
-
 
 struct TempPasswordItem: Hashable, Codable {
   var username: String
@@ -49,15 +69,6 @@ struct TempPasswordItem: Hashable, Codable {
   var uri: String
 }
 
-struct TempPasskeyItem: Hashable, Codable {
-  let credentialId: String   // Base64URL
-  let rpId: String
-  let userId: String         // Base64URL
-  let userName: String
-  let alg: Int
-  let privateKey: String
-  let createdAt: String
-}
 
 struct UserInfo: Hashable, Codable {
   var email: String

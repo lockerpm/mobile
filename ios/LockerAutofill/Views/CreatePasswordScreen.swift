@@ -1,5 +1,5 @@
 //
-//  CreateCipherScreen.swift
+//  CreatePasswordScreen.swift
 //  CipherInput
 //
 //  Created by Nguyen Thinh on 21/03/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CreateCipherScreen: View {
+struct CreatePasswordScreen: View {
   var token: String
   var isFree: Bool
   var initWebsite: String

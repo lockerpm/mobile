@@ -114,7 +114,7 @@ struct PasswordsListScreen: View {
         }
         ToolbarItem(placement: .navigationBarTrailing) {
           NavigationLink(
-            destination:  CreateCipherScreen(
+            destination:  CreatePasswordScreen(
               token: userInfo.token,
               isFree: userInfo.isFree,
               initWebsite: initSearch,

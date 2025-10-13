@@ -10,72 +10,72 @@ struct PasskeysListScreen: View {
   var afd: AutofillScreenDelegate // autofill delegate
   var userInfo: UserInfo
   
-  @State private var searchText = ""
-  @State private var isInitSearch = false
   
   // if user search for domain or url with no result. show suggest search text for best resutl
-  var suggestSearchs: [String] {
-    parseDomain(of: afd.user.URI)
+  var requestRpId: String {
+    afd.user.URI
   }
   
-  var initSearch: String {
-    if suggestSearchs.isEmpty {
-      return ""
-    } else {
-      return suggestSearchs[0]
-    }
-  }
-  
-  var passkeys: [AFPasskeyItem] {
-    if searchText.isEmpty {
+  var allPasskeys: [PasskeyItem] {
+    if requestRpId.isEmpty {
       return afd.user.afPasskeys
     } else {
-      let search = searchText.lowercased()
+      let search = requestRpId.lowercased()
       return afd.user.afPasskeys.filter {
-        $0.key.rpId.lowercased().contains(search)
-        || $0.key.userName.lowercased().contains(search)
+        $0.rpId == search
       }
     }
+  }
+  
+  var allowedCredentials: [PasskeyItem] {
+    allPasskeys.filter { item in
+      afd.user.allowedCredentialIDs.contains(item.credentialId)
+    }
+  }
+  
+  var passkeys: [PasskeyItem] {
+    allowedCredentials.isEmpty ? allPasskeys : allowedCredentials
   }
   
   var body: some View {
     NavigationView{
       List {
-        if !searchText.isEmpty && passkeys.isEmpty {
-          Text(i.translate("list.noDataSearch") +  "'\(searchText)'")
-            .foregroundStyle(AppColors.label)
-          if searchText == initSearch &&  suggestSearchs.count > 1{
-            Text(i.translate("list.suggestSearch") )
+        if passkeys.isEmpty {
+          VStack(alignment: .center) {
+            Image(systemName: "key.slash") // Use an SF Symbol
+              .resizable()
+              .frame(width: 46, height: 46)
               .foregroundStyle(AppColors.label)
-            ForEach(suggestSearchs[1..<suggestSearchs.count], id: \.self) { searchText in
+            Text("Không có key nào phù hợp với (\(requestRpId))")
+              .frame(maxWidth: .infinity, alignment: .center)
+              .multilineTextAlignment(.center)
+            Button {
+              afd.cancel()
+            } label: {
+              Text("Lựa chọn khác")
+            }
+            .buttonStyle(.bordered)
+          }
+          .padding(.vertical, 16)
+          .frame(maxWidth: .infinity, alignment: .center)
+          
+        } else {
+          Section {
+            ForEach(passkeys, id: \.credentialId) { pk in
               Button {
-                self.searchText = searchText
+                afd.passkeySelected(data: pk)
               } label: {
-                Text(searchText)
+                PasskeyItemView(item: pk)
               }
             }
-          }
-        } else {
-          ForEach(passkeys, id: \.key.credentialId) { pk in
-            Button {
-              afd.passkeySelected(data: pk)
-            } label: {
-              PasskeyItemView(item: pk)
-            }
+          } header: {
+            Text("Danh sách khoá cho (\(requestRpId))")
           }
         }
       }
-      .padding(.top, -24)
-      .onAppear{
-        if !isInitSearch {
-          self.isInitSearch = true
-          self.searchText = initSearch
-        }
-      }
-      
       .foregroundStyle(AppColors.title)
       .autocapitalization(.none)
-      .navigationTitle(i.translate("list.title"))
+      .navigationTitle("Danh sách Passkey")
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
           Button(i.translate("c.cancel")) {
@@ -85,7 +85,6 @@ struct PasskeysListScreen: View {
       }
       .navigationBarTitleDisplayMode(.inline)
     }
-    .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
     .navigationBarHidden(true)
     .navigationBarBackButtonHidden()
     .background(AppColors.background)

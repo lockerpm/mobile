@@ -81,7 +81,8 @@ struct LockScreen<TargetView: View>: View {
   }
   
   private func authenSuccess() {
-    if (afd.action == .fillRequest) {
+    let mode = afd.user.mode
+    if (mode != .quickBarPassword && mode != .quickBarPasskey) {
       self.isShowTarget = true
     } else {
       afd.unlockSuccess()

@@ -22,17 +22,10 @@ class PasskeyContext {
 @available(iOSApplicationExtension 17.0, *)
 private var passkeyContext: PasskeyContext?
 
-enum CredentialActions {
-  case fillRequest
-  case quickBarPassword
-  case quickBarPasskey
-  case createPasskey
-}
 
 class CredentialProviderController: ASCredentialProviderViewController {
   private var serviceIdentifier: String = ""
   internal var quickBarCredential: AFPasswordItem!
-  internal var action: CredentialActions = .fillRequest
   internal var user: User
   
   
@@ -68,7 +61,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     print("prepareCredentialList 16", serviceIdentifiers)
-    prepareAutofillData(sID: serviceIdentifiers, mode: .password)
+    prepareAutofillData(sID: serviceIdentifiers, mode: .fillPassword)
   }
   
   /**
@@ -81,7 +74,14 @@ class CredentialProviderController: ASCredentialProviderViewController {
     passkeyContext = PasskeyContext()
     passkeyContext?.requestParameters = requestParameters
     
-    prepareAutofillData(sID: serviceIdentifiers, mode: .passkey)
+    prepareAutofillData(sID: serviceIdentifiers, mode: .fillPasskey)
+    
+    // Find allowed credentials hint (if server supplied allowedCredentials)
+    if let allowed = requestParameters.allowedCredentials as [Data]?, !allowed.isEmpty {
+      user.allowedCredentialIDs = allowed.map { $0.base64URLEncodedString() }
+    }
+    
+    user.URI = requestParameters.relyingPartyIdentifier
   }
   
   /**
@@ -91,7 +91,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   override func prepareOneTimeCodeCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     
     print("prepareCredentialList", serviceIdentifiers)
-    prepareAutofillData(sID: serviceIdentifiers, mode: .otp)
+    prepareAutofillData(sID: serviceIdentifiers, mode: .fillOtp)
   }
   
   
@@ -101,7 +101,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   @available(iOS 18.0, *)
   override func prepareInterfaceForUserChoosingTextToInsert() {
     print("prepareInterfaceForUserChoosingTextToInsert")
-    prepareAutofillData(sID: [], mode: .text)
+    prepareAutofillData(sID: [], mode: .fillText)
   }
   
   /**
@@ -109,6 +109,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   @available(iOS 17.0, *)
   override func prepareInterfaceToProvideCredential(for credentialRequest: any ASCredentialRequest) {
+    user.mode = .quickBarPasskey
     // test
     print("prepareInterfaceToProvideCredential", credentialRequest)
   }
@@ -116,7 +117,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
    * Người dùng chọn Password từ QuickTypeBar -> mở unlock screen để xác thực
    */
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-    self.action = .quickBarPassword
+    user.mode = .quickBarPassword
     print("prepareInterfaceToProvideCredential", credentialIdentity)
     if (self.loginLocker()) {
       self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
@@ -137,10 +138,22 @@ class CredentialProviderController: ASCredentialProviderViewController {
   @available(iOS 17.0, *)
   override func prepareInterface(forPasskeyRegistration registrationRequest: any ASCredentialRequest) {
     print("prepareInterface forPasskeyRegistration ")
-    self.action = .createPasskey
+    
+    guard
+      let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest,
+      let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity
+    else {
+      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+      return
+    }
+
     passkeyContext = PasskeyContext()
     passkeyContext?.registrationRequest = registrationRequest
-    
+    prepareAutofillData(sID: [], mode: .createPasskey)
+
+    // use this to check for duplicates
+    user.newPasskeyUsername = identity.userName
+    user.newPasskeyRpID = identity.relyingPartyIdentifier
     loadView()
   }
   
@@ -170,7 +183,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
     }
   }
   
-  private func prepareAutofillData(sID: [ASCredentialServiceIdentifier], mode: AutofillMode) {
+  private func prepareAutofillData(sID: [ASCredentialServiceIdentifier], mode: CredentialActions) {
     if sID.count > 0 {
       self.serviceIdentifier = sID[0].identifier
       if sID[0].type == .URL {
@@ -179,8 +192,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
         user.setUri(uri: serviceIdentifier, isDomain: true)
         self.serviceIdentifier = "https://" +  serviceIdentifier
       }
-    } else {
-      user.URI = ""
     }
     
     user.getData(mode: mode)
@@ -192,16 +203,14 @@ class CredentialProviderController: ASCredentialProviderViewController {
 extension CredentialProviderController {
   @ViewBuilder
   private func getTargetViewAfterUnlock() -> some View {
-    switch user.filleMode {
-    case .otp:
+    switch user.mode {
+    case .fillPassword:
       PasswordsListScreen(afd: self, userInfo: user.info)
-    case .password:
-      PasswordsListScreen(afd: self, userInfo: user.info)
-    case .passkey:
+    case .fillPasskey:
       PasskeysListScreen(afd: self, userInfo: user.info)
-    case .passwordVsPasskey:
-      PasswordsListScreen(afd: self, userInfo: user.info)
-    case .text:
+    case .createPasskey:
+      CreatePasskeyScreen(afd: self, userInfo: user.info)
+    default:
       PasswordsListScreen(afd: self, userInfo: user.info)
     }
   }
@@ -226,54 +235,56 @@ extension CredentialProviderController {
 
 // MARK: Autofill Actions
 extension CredentialProviderController: AutofillScreenDelegate {
+  func cancel() {
+    extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
+  }
+  
   // Called back after successful user authentication using biometric or master password
   func unlockSuccess() {
-    if (action == CredentialActions.quickBarPassword) {
+    if (user.mode == CredentialActions.quickBarPassword) {
       passwordSelected(data: self.quickBarCredential)
       return
     }
     
-    if (action == CredentialActions.fillRequest) {
-      navigateToTargetView()
-      return
-    }
     if #available(iOSApplicationExtension 17.0, *) {
-      if (action == CredentialActions.createPasskey) {
-        createAndFillPasskey()
+      if (user.mode == CredentialActions.quickBarPasskey) {
+        print("quickBarPasskey")
         return
       }
     }
-    if (action == CredentialActions.quickBarPasskey) {
-      print("quickBarPasskey")
-      return
-    }
+    
+    navigateToTargetView()
   }
   
   // Password generated
   func passwordSelected(password: String) {
     fillPassword(user: "", password: password, otp: "")
   }
-  
   func createPasswordItem(item: TempPasswordItem) {
     user.saveTempPassword(item)
     fillPassword(user: item.username, password: item.password, otp: "")
   }
-  
-  func passkeySelected(data: AFPasskeyItem) {
-    if #available(iOSApplicationExtension 17.0, *) {
-      authenAndFillPasskey(item: data.key)
-    } else {
-      cancel()
-    }
-  }
-  
   func passwordSelected(data: AFPasswordItem) {
     quickTypeBar.replaceCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, username: data.login.username, userID: data.login.id)
     fillPassword(user: data.login.username, password: data.login.password, otp: data.login.otp)
   }
   
-  func cancel() {
-    extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
+  
+  // Passkey
+  func passkeySelected(data: PasskeyItem) {
+    if #available(iOSApplicationExtension 17.0, *) {
+      authenAndFillPasskey(item: data)
+    } else {
+      cancel()
+    }
+  }
+  
+  func passkeyRegistration(id: String) {
+    if #available(iOSApplicationExtension 17.0, *) {
+      createAndFillPasskey(id: id)
+    } else {
+      cancel()
+    }
   }
 }
 
@@ -296,7 +307,7 @@ extension CredentialProviderController {
 // MARK: Passkey
 extension CredentialProviderController {
   @available(iOS 17.0, *)
-  func createAndFillPasskey() {
+  func createAndFillPasskey(id: String) {
     let registrationRequest = passkeyContext?.registrationRequest
     print("PasskeyRegistration start")
     
@@ -309,12 +320,12 @@ extension CredentialProviderController {
     }
     
     do {
-      let (credential, metadata) = try passkeyRegistration(
+      let (credential, metadata) = try createPasskeyRegistrationCredential(
         passkeyReq: passkeyReq,
         passkeyId: identity
       )
       
-      user.saveTempPasskey(metadata)
+      user.saveTempPasskey(id: id, data: metadata)
       extensionContext.completeRegistrationRequest(
         using: credential
       )
@@ -328,11 +339,10 @@ extension CredentialProviderController {
   }
   
   @available(iOS 17.0, *)
-  func authenAndFillPasskey(item: TempPasskeyItem) {
+  func authenAndFillPasskey(item: PasskeyItem) {
     guard let requestParameters = passkeyContext?.requestParameters else { return  extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
     print("PasskeyAuthentication start")
-    
     
     do {
       let assertion = try createAssertionFromTempPasskey(

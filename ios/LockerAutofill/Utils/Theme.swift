@@ -16,4 +16,5 @@ struct AppColors {
   static let border = Color("border")
   static let block = Color("block")
   static let background = Color("background")
+  static let warning = Color("warning")
 }
