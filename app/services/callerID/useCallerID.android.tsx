@@ -1,6 +1,5 @@
 import { callerID } from "app/services/callerID/CallerID"
 import { useCallback, useState } from "react"
-import { PermissionsAndroid } from "react-native"
 import SQLite from "react-native-sqlite-storage"
 import { useStores } from "@/models"
 import { toolApi } from "../api"
@@ -10,46 +9,6 @@ import { ScamPhonesData } from "@/static/types"
 const BATCH_SIZE = 1000
 const SYNC_PAGE_SIZE = 30000
 SQLite.enablePromise(true)
-
-const requestLiveCallPermissions = async () => {
-  try {
-    const granted = await PermissionsAndroid.requestMultiple([
-      PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE,
-      PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
-    ])
-
-    const phoneStateGranted =
-      granted["android.permission.READ_PHONE_STATE"] === PermissionsAndroid.RESULTS.GRANTED
-    const callLogGranted =
-      granted["android.permission.READ_CALL_LOG"] === PermissionsAndroid.RESULTS.GRANTED
-
-    if (phoneStateGranted && callLogGranted) {
-      return true
-    } else {
-      return false
-    }
-  } catch (err) {
-    console.warn(err)
-    return false
-  }
-}
-
-const checkLiveCallPermissions = async (): Promise<boolean> => {
-  try {
-    const phoneStateGranted = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE
-    )
-
-    const callLogGranted = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.READ_CALL_LOG
-    )
-
-    return phoneStateGranted && callLogGranted
-  } catch (err) {
-    console.warn("Permission check error:", err)
-    return false
-  }
-}
 
 /**
  * Call api to get caller ID data and update local database
@@ -192,39 +151,26 @@ export const useCallerIDData = () => {
 }
 
 export const useCallerID = () => {
-  const [isEnabledOverlayPermission, setEnabledOverlayPermission] = useState(false)
+  const [isEnabledCallScreeningPermission, setIsEnabledCallScreeningPermission] = useState(false)
 
   // ---------------------------METHOD-----------------------
-
-  const openOverlayPermissionSettings = useCallback(async () => {
-    callerID.androidOpenOverlayPermissionSettings()
+  const isCallScreeningEnabled = useCallback(async () => {
+    const isEnabled = await callerID.androidCheckCallScreeningPermission()
+    setIsEnabledCallScreeningPermission(isEnabled)
+    console.log("isOverlayEnabled", isEnabled)
   }, [])
 
-  const requestLiveCallPermission = useCallback(async () => {
-    const result = await requestLiveCallPermissions()
-    if (result) {
-      const isEnabled = await callerID.androidRequestOverlayPermission()
-      setEnabledOverlayPermission(isEnabled)
-    }
-  }, [])
-
-  const checkEnabledOverlayPermission = useCallback(async () => {
-    const isOverlayEnabled = await callerID.isOverlayPermissionEnabled()
-
-    if (isOverlayEnabled) {
-      const result = await checkLiveCallPermissions()
-      setEnabledOverlayPermission(result)
-    } else {
-      setEnabledOverlayPermission(false)
-    }
+  const requestCallScreeningApp = useCallback(async () => {
+    const isEnabled = await callerID.androidRequestCallScreeningService()
+    setIsEnabledCallScreeningPermission(isEnabled)
+    console.log("isOverlayEnabled", isEnabled)
   }, [])
 
   // ---------------------------EFFECT-----------------------
 
   return {
-    isEnabledOverlayPermission,
-    openOverlayPermissionSettings,
-    requestLiveCallPermission,
-    checkEnabledOverlayPermission,
+    isEnabledCallScreeningPermission,
+    isCallScreeningEnabled,
+    requestCallScreeningApp,
   }
 }

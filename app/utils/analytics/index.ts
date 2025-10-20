@@ -22,6 +22,10 @@ export enum AnalyticEvents {
   GENERATE_PASSWORD = "generate_password",
   PASSWORD_HEALTH = "password_health",
   DATA_BREACH_SCANNER = "data_breach_scanner",
+  SCAM_REPORT = "scam_report",
+  SCAM_LOOKUP = "scam_lookup",
+  SCAM_DELETE_REPORT = "scam_delete_report",
+  SCAM_ENABLE_CALLERID = "scam_enable_callerid",
 }
 
 export const setCookiesFromUrl = (url: string) => {

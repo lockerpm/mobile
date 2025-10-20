@@ -18,6 +18,11 @@ export const useBiometricType = () => {
 
     if (biometryType === BiometryTypes.FaceID) {
       setBiometryType(BiometricsType.FaceID)
+      return
+    }
+
+    if (biometryType === BiometryTypes.Biometrics) {
+      setBiometryType(BiometricsType.Biometrics)
     }
   }
 

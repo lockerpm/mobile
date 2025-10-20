@@ -1450,29 +1450,31 @@ const en = {
       checkNow: "Check Now",
       android: {
         title: "Call warning",
-        desc: "Receive a warning when a scam phone number calls you",
-        disable: {
-          title: "Disable call warning",
-          label: "In Settings, toggle off the option to display Locker over other apps",
-          btn: "Open Settings",
-        },
-        enable: {
-          title: "Enable call warning by allowing the permissions:",
-          first: "1. Allow Locker to access Phone State",
-          second: "2. Allow Locker to access Call Logs",
-          third: "3. Allow Locker to display over other apps",
-          btn: "Enable Permission",
-        },
+        desc: "Receive a warning when a scam phone number calls you. You need to set Locker as your default phone app.",
         update: "Update data on suspicious phone numbers",
+        alertTitle: "Update Required",
+        alertLabel:
+          "Live Caller ID Lookup works only on Android 10.0 or later. Update your phone in Settings > System > System update",
       },
       ios: {
         title: "Update Required",
         label:
           "Live Caller ID Lookup works only on iOS 18.2 or later. Update your iPhone in Settings > General > Software Update",
       },
+      anonymous: {
+        title: "Anonymous reporting",
+        label: "Hide your username when reporting scams",
+        alert: {
+          title: "Turn off anonymous reporting?",
+          label:
+            "When anonymous reporting is off, your username will be displayed on all your reports. (previous, now and future reports)",
+          cancel: "Cancel",
+          confirm: "Turn off",
+        },
+      },
     },
     lookup: {
-      title: "Phone Lookup",
+      title: "VN phone number lookup",
       label:
         "Check if a phone number has been reported by Locker users or users from other communities.",
       btn: "Check",
@@ -1496,11 +1498,11 @@ const en = {
       btn: "Report scam phone number",
       user: {
         title: "A user",
-        label: " warned",
+        label: " reported",
       },
     },
     report: {
-      title: "Report Phone",
+      title: "Report VN phone number",
       label: "Notice something suspicious? Share your experience with the community.",
       btn: "Submit Report",
       enterPhone: "Enter phone number (*)",

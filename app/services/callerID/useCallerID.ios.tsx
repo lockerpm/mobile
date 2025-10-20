@@ -1,8 +1,11 @@
+import { useStores } from "@/models"
+import { AnalyticEvents, logFirebaseEvent } from "@/utils/analytics"
 import { callerID } from "app/services/callerID/CallerID"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { AppState } from "react-native"
 
 export const useCallerID = () => {
+  const { user } = useStores()
   const appState = useRef(AppState.currentState)
   const [appStateVisible, setAppStateVisible] = useState(appState.current)
   const [isExtensionEnabled, setIsExtensionEnabled] = useState(false)
@@ -15,6 +18,7 @@ export const useCallerID = () => {
 
   const openSettings = useCallback(async () => {
     await callerID.iosOpenSetting()
+    logFirebaseEvent(AnalyticEvents.SCAM_ENABLE_CALLERID, user.email)
   }, [])
 
   // ---------------------------EFFECT-----------------------

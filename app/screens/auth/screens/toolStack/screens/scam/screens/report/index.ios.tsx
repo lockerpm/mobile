@@ -1,7 +1,7 @@
-import { Button, Checkbox, Header, Screen, Text, TextInput } from "@/components/cores"
+import { Button, Header, Screen, Text, TextInput } from "@/components/cores"
 import { ScamScreenProps } from "@/navigators"
 import { FC, useCallback, useState } from "react"
-import { Keyboard, StyleSheet, TouchableOpacity } from "react-native"
+import { StyleSheet } from "react-native"
 import { ScamTypeInput } from "./ScamTypeInput"
 import { ScamPhoneType, ScamType } from "@/static/types"
 import { toolApi } from "@/services/api"
@@ -20,13 +20,7 @@ export const ScamReportScreen: FC<ScamScreenProps<"report">> = observer(
     const [phoneNumber, setPhoneNumber] = useState(params?.phoneNumber || "")
     const [scamType, setScamType] = useState<ScamPhoneType>(ScamPhoneType.PhoneSpam)
     const [description, setDescription] = useState("")
-    const [anonymos, setAnonymos] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-
-    const toggleAnonymos = useCallback(() => {
-      Keyboard.dismiss()
-      setAnonymos((prev) => !prev)
-    }, [])
 
     const isValidPhoneNumber = validateVietnamesePhoneNumber(phoneNumber)
     const canSubmit = phoneNumber.trim() !== "" && isValidPhoneNumber && !isLoading
@@ -43,7 +37,7 @@ export const ScamReportScreen: FC<ScamScreenProps<"report">> = observer(
         description: description || "",
         phishing_type: scamType,
         target_entity: "",
-        is_anonymous: anonymos,
+        is_anonymous: false,
       })
 
       if (res.kind === "ok") {
@@ -111,11 +105,6 @@ export const ScamReportScreen: FC<ScamScreenProps<"report">> = observer(
           onChangeText={setDescription}
           autoCorrect={false}
         />
-
-        <TouchableOpacity style={styles.anonymos} onPress={toggleAnonymos}>
-          <Checkbox value={anonymos} onPress={toggleAnonymos} />
-          <Text tx="scam:report.anonymos" style={styles.ml8} />
-        </TouchableOpacity>
       </Screen>
     )
   }

@@ -1449,30 +1449,31 @@ const vi: Translations = {
       checkNow: "Kiểm tra ngay",
       android: {
         title: "Cảnh báo cuộc gọi đến",
-        desc: "Nhận cảnh báo khi có số điện thoại khả nghi gọi đến",
-        disable: {
-          title: "Tắt cảnh báo cuộc gọi",
-          label: "Tại Cài đặt, tắt nút cho phép hiển thị Locker trong các ứng dụng khác",
-          btn: "Mở Cài đặt",
-        },
-        enable: {
-          title: "Bật nhận cảnh báo bằng cách cấp quyền cho Locker:",
-          first: "1. Truy cập Phone State",
-          second: "2. Truy cập Nhật ký cuộc gọi",
-          third:
-            "3. Hiển thị trên các ứng dụng khác (trong Cài đặt, bấm vào Locker > bật nút Cho phép)",
-          btn: "Cấp quyền",
-        },
+        desc: "Nhận cảnh báo khi có số điện thoại lừa đảo gọi đến. Bạn cần đặt Locker làm ứng dụng điện thoại mặc định.",
         update: "Cập nhật dữ liệu SDT khả nghi mới nhất",
+        alertTitle: "Cần cập nhật",
+        alertLabel:
+          "Tính năng chỉ hoạt động trên Android 10.0 hoặc phiên bản mới hơn. Vui lòng cập nhật điện thoại của bạn trong Cài đặt > Hệ thống > Cập nhật hệ thống",
       },
       ios: {
         title: "Cần cập nhật",
         label:
           "Tính năng Live Caller ID Lookup chỉ hoạt động trên iOS 18.2 hoặc phiên bản mới hơn. Vui lòng cập nhật iPhone của bạn trong Cài đặt > Chung > Cập nhật phần mềm",
       },
+      anonymous: {
+        title: "Báo cáo ẩn danh",
+        label: "Ẩn tên người dùng của bạn khi báo cáo lừa đảo",
+        alert: {
+          title: "Tắt báo cáo ẩn danh?",
+          label:
+            "Khi báo cáo ẩn danh bị tắt, tên người dùng của bạn sẽ được hiển thị trên tất cả các báo cáo của bạn. (bao gồm cả các báo cáo trước đây)",
+          cancel: "Huỷ",
+          confirm: "Tắt",
+        },
+      },
     },
     lookup: {
-      title: "Tra cứu SĐT",
+      title: "Tra cứu SĐT Việt Nam",
       label:
         "Kiểm tra nếu số điện thoại từng bị cảnh báo bởi người dùng Locker hoặc người dùng trên các cộng đồng khác.",
       btn: "Kiểm tra",
@@ -1500,7 +1501,7 @@ const vi: Translations = {
       },
     },
     report: {
-      title: "Báo cáo SĐT",
+      title: "Báo cáo SĐT Việt Nam",
       label: "Nhận thấy điều đáng ngờ? Chia sẻ trải nghiệm của bạn với cộng đồng.",
       btn: "Gửi báo cáo",
       enterPhone: "Nhập số điện thoại (*)",

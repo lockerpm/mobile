@@ -3,7 +3,6 @@ import { ActivityIndicator, StyleSheet, View, ViewStyle } from "react-native"
 import { PressableIcon, Text } from "@/components/cores"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { formatDate } from "@/utils/formatDate"
-import { useAppLocale } from "@/i18n"
 import { useState } from "react"
 import { ThemedStyle } from "@/theme"
 
@@ -17,7 +16,6 @@ export const ListItem = ({ item, onDelete }: Props) => {
     themed,
     theme: { colors },
   } = useAppTheme()
-  const { translate } = useAppLocale()
 
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -38,9 +36,6 @@ export const ListItem = ({ item, onDelete }: Props) => {
       </View>
       <View style={styles.row}>
         <Text size="sm" preset="label" text={formatDate(item.created_time * 1000)} />
-        {item.is_anonymous && (
-          <Text size="sm" preset="label" text={" - " + translate("scam:report.anonymos")} />
-        )}
       </View>
 
       <Text size="sm" weight="semiBold" tx="scam:myReportList.scanType" />

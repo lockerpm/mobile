@@ -1,5 +1,5 @@
 package com.cystack.locker;
-import com.cystack.locker.scam.ScamManager;
+import com.cystack.locker.screening.CallScreeningModule;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -26,8 +26,7 @@ public class RNPackagesManager implements ReactPackage {
         modules.add(new RNAutofillServiceAndroid(reactContext));
         modules.add(new RNManufacturerSettingsAndroid(reactContext));
         modules.add(new RNFileEncryptor(reactContext));
-        modules.add(new ScamManager(reactContext));
+        modules.add(new CallScreeningModule(reactContext));
         return modules;
     }
-
 }

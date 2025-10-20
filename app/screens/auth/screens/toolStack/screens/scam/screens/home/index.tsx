@@ -18,6 +18,7 @@ import { StyleSheet, View } from "react-native"
 // @ts-ignore
 import { CallerContent } from "./CallerContent"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+import { AnonumousReport } from "./AnonymousReport"
 
 type ToolsItem = {
   label: TxKeyPath
@@ -60,6 +61,7 @@ export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) 
   return (
     <Screen
       preset="scroll"
+      safeAreaEdges={["bottom"]}
       disableAvoidkeyboard
       backgroundColor={colors.block}
       header={
@@ -91,6 +93,8 @@ export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) 
       </MenuItemContainer>
 
       <CallerContent />
+      <AnonumousReport />
+
       <MenuItemContainer>
         <PressableScale onPress={openScamUrl}>
           <View style={styles.itemContainer2}>

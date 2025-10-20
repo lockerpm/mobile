@@ -96,6 +96,7 @@ export const ToolsListScreen: FC<TabsScreenProps<"toolsTab">> = ({ navigation })
   }
   return (
     <Screen
+      preset="auto"
       disableAvoidkeyboard
       backgroundColor={colors.block}
       header={<TabHeader titleTx="common:tools" />}
@@ -128,8 +129,8 @@ export const ToolsListScreen: FC<TabsScreenProps<"toolsTab">> = ({ navigation })
 
                 <View style={styles.itemContent}>
                   <View style={styles.itemText}>
-                    <Text tx={item.label} />
-                    {item.premium && isFreeAccount && <PremiumTag style={styles.ml8} />}
+                    <Text tx={item.label} style={styles.mr8} />
+                    {item.premium && isFreeAccount && <PremiumTag />}
                   </View>
 
                   <Text preset="label" tx={item.desc} size="sm" />
@@ -167,10 +168,11 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     marginBottom: 2,
   },
-  ml8: {
-    marginLeft: 8,
+  mr8: {
+    marginRight: 8,
   },
   ph16: {
+    paddingBottom: 16,
     paddingHorizontal: 16,
   },
 })
