@@ -682,6 +682,13 @@ const zh: Translations = {
       empty: "您還沒有產生任何私人電子郵件",
     },
     addWebsite: "新增網站",
+    fido2: {
+      delete_alert: {
+        title: "刪除 FIDO2 憑證",
+        desc: "您確定要刪除此 FIDO2 憑證嗎？",
+        btn: "刪除",
+      },
+    },
   },
   shares: {
     shares: "分享",

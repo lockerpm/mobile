@@ -60,6 +60,10 @@ struct PasswordItem: Hashable, Codable {
   var isOwner: Bool = true
   var otp: String = ""
   var fido2: [PasskeyItem]! = []
+  
+  func isHavePasskey() -> Bool {
+    return fido2 != nil && !fido2.isEmpty
+  }
 }
 
 struct TempPasswordItem: Hashable, Codable {

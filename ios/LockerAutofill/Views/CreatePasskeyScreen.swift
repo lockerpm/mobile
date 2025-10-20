@@ -4,20 +4,20 @@ struct CreatePasskeyScreen: View {
   var afd: AutofillScreenDelegate // autofill delegate
   var userInfo: UserInfo
   
-  
   var passwords: [AFPasswordItem] {
     return afd.user.afPasswords.filter{ item in
-      return item.login.isOwner && (item.login.fido2?.isEmpty ?? true)
+      return item.login.isOwner && item.login.uri.localizedCaseInsensitiveContains(afd.user.newPasskeyRpID)
     }
   }
   
   var duplicatedPasskey: PasskeyItem! {
-    if let foundNumber = afd.user.afPasskeys.first(where: { $0.rpId == afd.user.newPasskeyRpID && $0.userName == afd.user.newPasskeyUsername }) {
-      print(foundNumber)
-      return foundNumber
+    if let foundKey = afd.user.afPasskeys.first(where: { $0.rpId == afd.user.newPasskeyRpID && $0.userName == afd.user.newPasskeyUsername }) {
+      return foundKey
     }
     return nil
   }
+  @State private var showAlert = false
+  @State private var selectedPassword: AFPasswordItem! = nil
   
   var body: some View {
     NavigationView {
@@ -52,7 +52,7 @@ struct CreatePasskeyScreen: View {
         Section {
           ForEach(passwords, id: \.login.id) { pw in
             Button {
-              afd.passkeyRegistration(id: pw.login.id)
+              selectPassword(pw: pw)
             } label: {
               PasswordItemSimpleView(item: pw)
             }
@@ -60,6 +60,17 @@ struct CreatePasskeyScreen: View {
         } header: {
           Text("Thêm passkey vào password có sẵn")
             .foregroundStyle(AppColors.label)
+        }
+        .alert("This login already contain a passkey",
+               isPresented: $showAlert) {
+          Button("Yes") {
+            confirmReplacePasskey()
+          }
+          Button("No", role: .cancel) {
+            print("Item deleted")
+          }
+        } message: {
+          Text("Do you want to create a new one and replace the current passkey?")
         }
       }
       .foregroundStyle(AppColors.title)
@@ -78,6 +89,21 @@ struct CreatePasskeyScreen: View {
     .navigationBarHidden(true)
     .navigationBarBackButtonHidden()
     .background(AppColors.background)
+  }
+  
+  func selectPassword(pw: AFPasswordItem) {
+    if (pw.login.isHavePasskey()) {
+      showAlert = true
+      selectedPassword = pw
+    } else {
+      afd.passkeyRegistration(id: pw.login.id)
+    }
+  }
+  
+  func confirmReplacePasskey() {
+    if (self.selectedPassword != nil) {
+      afd.passkeyRegistration(id: selectedPassword.login.id)
+    }
   }
 }
 

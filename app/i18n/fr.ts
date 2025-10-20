@@ -685,6 +685,13 @@ const fr: Translations = {
       empty: "Vous n'avez pas généré d'e-mail privé",
     },
     addWebsite: "Ajouter un site Web",
+    fido2: {
+      delete_alert: {
+        title: "Supprimer l'identifiant FIDO2",
+        desc: "Êtes-vous sûr de vouloir supprimer cet identifiant FIDO2 ?",
+        btn: "Supprimer",
+      },
+    },
   },
   shares: {
     shares: "Partages",

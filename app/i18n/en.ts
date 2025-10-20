@@ -705,6 +705,13 @@ const en = {
       empty: "You haven't generated any private email",
     },
     addWebsite: "Add Website",
+    fido2: {
+      delete_alert: {
+        title: "Delete FIDO2 Credential",
+        desc: "Are you sure you want to delete this FIDO2 credential?",
+        btn: "Delete",
+      },
+    },
   },
   shares: {
     shares: "Shares",

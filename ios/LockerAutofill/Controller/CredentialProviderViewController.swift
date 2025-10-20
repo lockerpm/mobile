@@ -168,6 +168,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   private func startExtension() {
+//    unlockSuccess()
     if (self.loginLocker()) {
       if (user.faceIdEnabled){
         authenService.biometricAuthentication(

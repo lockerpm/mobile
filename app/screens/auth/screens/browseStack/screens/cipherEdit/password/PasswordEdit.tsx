@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ViewStyle,
   ImageStyle,
+  Alert,
 } from "react-native"
 import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
 import { useStores } from "app/models"
@@ -30,6 +31,8 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
 import { AppEventType, EventBus } from "@/utils/eventBus"
+import { Fido2CredentialView } from "core/models/view/fido2CredentialView"
+import { formatDate } from "@/utils/formatDate"
 
 type Props = {
   item: CipherAppView
@@ -106,6 +109,8 @@ export const PasswordEdit = observer(
           : [initialUrl || "https://"]
     )
 
+    const [fido2, setFido2] = useState<Fido2CredentialView[] | null>(item.login.fido2Credentials) // fido2
+
     // other
     const [fields, setFields] = useState<FieldView[]>(item.fields ?? [])
     const [note, setNote] = useState(item.notes) // custom note
@@ -119,6 +124,26 @@ export const PasswordEdit = observer(
       } else {
         navigation.goBack()
       }
+    }, [])
+
+    const removeFido = useCallback(() => {
+      Alert.alert(
+        translate("password:fido2.delete_alert.title"),
+        translate("password:fido2.delete_alert.desc"),
+        [
+          {
+            text: translate("common:cancel"),
+            style: "cancel",
+          },
+          {
+            text: translate("password:fido2.delete_alert.btn"),
+            style: "destructive",
+            onPress: () => {
+              setFido2(null)
+            },
+          },
+        ]
+      )
     }, [])
 
     const navigatePlanStorageLimit = useCallback(() => {
@@ -355,6 +380,27 @@ export const PasswordEdit = observer(
 
           <DynamicUris fields={urls} setFields={setUrls} />
         </View>
+
+        {/** Passkey section */}
+        {fido2 && fido2.length > 0 && fido2[0].creationDate?.getTime() && (
+          <>
+            <View style={themed($block)}>
+              <Text preset="label" size="sm" text={"Passkey"} />
+            </View>
+
+            <TouchableOpacity onPress={removeFido}>
+              <View style={styles.totp}>
+                <Text
+                  text={
+                    translate("common:createdAt") + formatDate(fido2[0].creationDate?.getTime())
+                  }
+                />
+
+                <Icon icon="trash" size={20} color={colors.error} />
+              </View>
+            </TouchableOpacity>
+          </>
+        )}
 
         <View style={themed($block)}>
           <Text preset="label" size="sm" tx={"password:2fa_setup"} />

@@ -61,6 +61,11 @@ struct PasswordItemSimpleView: View {
           }
         }
         Spacer()
+        if ((item.login.fido2) != nil && !item.login.fido2.isEmpty) {
+          Image(systemName: "key.fill")
+            .foregroundColor(AppColors.label)
+            .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 0))
+        }
       }
     }
   }

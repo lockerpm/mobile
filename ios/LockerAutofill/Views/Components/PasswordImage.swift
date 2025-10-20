@@ -13,11 +13,18 @@ struct PasswordImage: View {
   
   var websiteLogo: String {
     get {
-      let url = URL(string: itemUri)
-      let domain = url?.host ?? ""
-      return domain.isEmpty ? "" : "https://locker.io/logo/\(domain)?size=120"
+      if (itemUri.isEmpty) {
+        return ""
+      }
+      if (itemUri.contains("https://")) {
+        let url = URL(string: itemUri)
+        let domain = url?.host ?? ""
+        return domain.isEmpty ? "" : "https://locker.io/logo/\(domain)?size=120"
+      }
+      return "https://locker.io/logo/\(itemUri)?size=120"
     }
   }
+  
   var body: some View {
     if websiteLogo.isEmpty {
       Image("password")

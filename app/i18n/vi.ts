@@ -702,6 +702,13 @@ const vi: Translations = {
       empty: "Bạn chưa taọ bất kì email ẩn danh nào",
     },
     addWebsite: "Thêm Website",
+    fido2: {
+      delete_alert: {
+        title: "Xóa thông tin xác thực FIDO2",
+        desc: "Bạn có chắc chắn muốn xóa thông tin xác thực FIDO2 này không?",
+        btn: "Xóa",
+      },
+    },
   },
   shares: {
     shares: "Chia sẻ",
