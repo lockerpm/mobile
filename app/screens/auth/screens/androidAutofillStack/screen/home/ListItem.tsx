@@ -42,7 +42,12 @@ export const AutofillListItem = memo(({ item, openActionMenu }: Prop) => {
       style={styles.container}
     >
       <View style={styles.row}>
-        <CipherIconImage resizeMode="contain" source={item.imgLogo} cipherType={CipherType.Login} />
+        <CipherIconImage
+          isHaveKey={item.login.hasFido2Credentials}
+          resizeMode="contain"
+          source={item.imgLogo}
+          cipherType={CipherType.Login}
+        />
 
         <View style={styles.content}>
           <Text preset="bold" numberOfLines={1} text={item.name} />

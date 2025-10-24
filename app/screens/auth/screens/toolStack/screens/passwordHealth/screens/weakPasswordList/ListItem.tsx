@@ -22,7 +22,12 @@ export const ListItem = memo(
     return (
       <TouchableOpacity onPress={() => goToDetail(item)} style={styles.container}>
         <View style={styles.row}>
-          <CipherIconImage cipherType={item.type} source={item.imgLogo} style={styles.logo} />
+          <CipherIconImage
+            isHaveKey={item.login.hasFido2Credentials}
+            cipherType={item.type}
+            source={item.imgLogo}
+            style={styles.logo}
+          />
 
           <View style={styles.content}>
             <View style={styles.row}>

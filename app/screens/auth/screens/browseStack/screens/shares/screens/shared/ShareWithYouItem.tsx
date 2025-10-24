@@ -56,7 +56,11 @@ export const ShareWithYouItem = memo((props: Prop) => {
       style={styles.container}
     >
       <View style={styles.row}>
-        <CipherIconImage cipherType={item.type} source={item.imgLogo} />
+        <CipherIconImage
+          isHaveKey={item.login.hasFido2Credentials}
+          cipherType={item.type}
+          source={item.imgLogo}
+        />
 
         <View style={styles.content}>
           <View style={styles.row}>

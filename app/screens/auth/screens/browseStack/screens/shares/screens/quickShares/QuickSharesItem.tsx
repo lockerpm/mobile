@@ -38,7 +38,12 @@ export const QuickSharesItem = memo((props: Prop) => {
       // eslint-disable-next-line react-native/no-inline-styles
       style={[styles.container, { opacity: isExpired ? 0.7 : 1 }]}
     >
-      <CipherIconImage source={cipher.imgLogo} style={styles.image} cipherType={cipher.type} />
+      <CipherIconImage
+        isHaveKey={cipher.login.hasFido2Credentials}
+        source={cipher.imgLogo}
+        style={styles.image}
+        cipherType={cipher.type}
+      />
 
       <View style={styles.row}>
         <View style={styles.content}>

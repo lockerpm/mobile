@@ -30,7 +30,11 @@ export const YourShareCipherItem = memo((props: Prop) => {
         style={styles.container}
       >
         <View style={styles.content}>
-          <CipherIconImage cipherType={item.type} source={item.imgLogo} />
+          <CipherIconImage
+            isHaveKey={item.login.hasFido2Credentials}
+            cipherType={item.type}
+            source={item.imgLogo}
+          />
 
           <View style={styles.content2}>
             <View style={styles.row}>

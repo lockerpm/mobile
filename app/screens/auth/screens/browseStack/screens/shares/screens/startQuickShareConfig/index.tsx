@@ -183,7 +183,11 @@ export const QuickSharesScreen: FC<ShareScreenProps<"quickShares">> = observer(
         contentContainerStyle={styles.p16}
       >
         <View style={[styles.row, { borderColor: colors.border }]}>
-          <CipherIconImage cipherType={cipher.type} source={cipher.imgLogo} />
+          <CipherIconImage
+            isHaveKey={cipher.login.hasFido2Credentials}
+            cipherType={cipher.type}
+            source={cipher.imgLogo}
+          />
 
           <View style={styles.name}>
             <Text preset="bold" numberOfLines={1} text={cipher.name} />

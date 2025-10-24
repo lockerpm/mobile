@@ -49,29 +49,32 @@ struct CreatePasskeyScreen: View {
             .foregroundStyle(AppColors.label)
         }
         
-        Section {
-          ForEach(passwords, id: \.login.id) { pw in
-            Button {
-              selectPassword(pw: pw)
-            } label: {
-              PasswordItemSimpleView(item: pw)
+        if (passwords.count > 0) {
+          Section {
+            ForEach(passwords, id: \.login.id) { pw in
+              Button {
+                selectPassword(pw: pw)
+              } label: {
+                PasswordItemSimpleView(item: pw)
+              }
             }
+          } header: {
+            Text("Thêm passkey vào password có sẵn")
+              .foregroundStyle(AppColors.label)
           }
-        } header: {
-          Text("Thêm passkey vào password có sẵn")
-            .foregroundStyle(AppColors.label)
+          .alert("This login already contain a passkey",
+                 isPresented: $showAlert) {
+            Button("Yes") {
+              confirmReplacePasskey()
+            }
+            Button("No", role: .cancel) {
+              print("Item deleted")
+            }
+          } message: {
+            Text("Do you want to create a new one and replace the current passkey?")
+          }
         }
-        .alert("This login already contain a passkey",
-               isPresented: $showAlert) {
-          Button("Yes") {
-            confirmReplacePasskey()
-          }
-          Button("No", role: .cancel) {
-            print("Item deleted")
-          }
-        } message: {
-          Text("Do you want to create a new one and replace the current passkey?")
-        }
+        
       }
       .foregroundStyle(AppColors.title)
       .autocapitalization(.none)

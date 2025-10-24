@@ -80,6 +80,7 @@ export const CipherDetailScreen: FC<BrowseScreenProps<"cipherDetail">> = observe
       >
         <CipherIconImage
           resizeMode="contain"
+          isHaveKey={cipher.login.hasFido2Credentials}
           cipherType={cipher.type}
           source={cipher.imgLogo}
           style={styles.logo}

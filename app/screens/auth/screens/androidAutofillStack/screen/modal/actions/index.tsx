@@ -30,7 +30,12 @@ export const AndroidAutofillCipherActionsModalScreen: FC<
 
       <BottomModalContainer>
         <View style={styles.headerContainer}>
-          <CipherIconImage cipherType={item.type} source={item.imgLogo} resizeMode="contain" />
+          <CipherIconImage
+            isHaveKey={item.login.hasFido2Credentials}
+            cipherType={item.type}
+            source={item.imgLogo}
+            resizeMode="contain"
+          />
           <View style={styles.headerContent}>
             <Text preset="bold" text={item.name} numberOfLines={2} />
             {!!cipherDescription && (

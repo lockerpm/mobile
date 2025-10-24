@@ -11,11 +11,11 @@
 				<key>ProvidesPasswords</key>
 				<true/>
 				<key>ProvidesOneTimeCodes</key>
-				<true/>
+				<false/>
 				<key>ProvidesPasskeys</key>
 				<true/>
 				<key>ProvidesTextToInsert</key>
-				<true/>
+				<false/>
 				<key>SupportsConditionalPasskeyRegistration</key>
 				<false/>
 			</dict>

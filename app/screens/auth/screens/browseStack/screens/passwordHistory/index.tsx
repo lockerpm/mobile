@@ -56,6 +56,7 @@ export const PasswordHistoryScreen: FC<BrowseScreenProps<"passwordsHistory">> = 
 
         <CipherIconImage
           resizeMode="contain"
+          isHaveKey={cipher.login.hasFido2Credentials}
           cipherType={cipher.type}
           source={cipher.imgLogo}
           style={styles.image}

@@ -126,7 +126,7 @@ export const PasswordEdit = observer(
       }
     }, [])
 
-    const removeFido = useCallback(() => {
+    const removeFido = () => {
       Alert.alert(
         translate("password:fido2.delete_alert.title"),
         translate("password:fido2.delete_alert.desc"),
@@ -140,11 +140,12 @@ export const PasswordEdit = observer(
             style: "destructive",
             onPress: () => {
               setFido2(null)
+              preparePassword()
             },
           },
         ]
       )
-    }, [])
+    }
 
     const navigatePlanStorageLimit = useCallback(() => {
       navigation.navigate("cipherEditHelperModal", {
@@ -323,6 +324,7 @@ export const PasswordEdit = observer(
         <View style={styles.header}>
           <View style={styles.row}>
             <CipherIconImage
+              isHaveKey={item.login.hasFido2Credentials}
               cipherType={item.type}
               resizeMode="contain"
               source={item.imgLogo}
