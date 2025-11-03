@@ -142,16 +142,13 @@ func createPasskeyRegistrationCredential(
 @available(iOS 17.0, *)
 func createAssertionFromTempPasskey(
   item: PasskeyItem,
-  requestParams: ASPasskeyCredentialRequestParameters
+  rpId: String,
+  clientDataHash: Data
 ) throws -> ASPasskeyAssertionCredential {
   print("➡️ rpId (item):", item)
-  print("  rpId (request):", requestParams.relyingPartyIdentifier)
-  print("  allowedCredentials count:", requestParams.allowedCredentials.count)
-  print("  userVerificationPreference:", requestParams.userVerificationPreference.rawValue)
-  print("  clientDataHash length (bytes):", requestParams.clientDataHash.count)
-  
+ 
   // 1) Basic RP check
-  guard item.rpId == requestParams.relyingPartyIdentifier else {
+  guard item.rpId == rpId else {
     throw NSError(domain: "Passkey", code: -1, userInfo: [NSLocalizedDescriptionKey: "RP mismatch"])
   }
   
@@ -178,12 +175,12 @@ func createAssertionFromTempPasskey(
   }
   
   // 4) Build authenticatorData for assertion: rpIdHash(32) + flags(1) + signCount(4)
-  let rpIdHash = Data(SHA256.hash(data: requestParams.relyingPartyIdentifier.data(using: .utf8)!))
-  var flags: UInt8 = 0x01 | 0x08 | 0x10  // UP + BE + BS
+  let rpIdHash = Data(SHA256.hash(data: rpId.data(using: .utf8)!))
+  var flags: UInt8 = 0x01 | 0x08 | 0x10 | 0x04  // UP + BE + BS
   // set UV bit if requestParams requires user verification (optional)
-  if requestParams.userVerificationPreference == .required {
-    flags |= 0x04
-  }
+//  if requestParams.userVerificationPreference == .required {
+//    flags |= 0x04
+//  }
   let signCount: [UInt8] = [0,0,0,0]
   var authData = Data()
   authData.append(rpIdHash)
@@ -194,8 +191,7 @@ func createAssertionFromTempPasskey(
   // 6) Build message to sign = authenticatorData || clientDataHash (the system provided clientDataHash)
   var messageToSign = Data()
   messageToSign.append(authData)
-  messageToSign.append(requestParams.clientDataHash) // already a SHA-256 of clientDataJSON
-  print("  messageToSign len:", messageToSign.count, "clientDataHash len:", requestParams.clientDataHash.count)
+  messageToSign.append(clientDataHash) // already a SHA-256 of clientDataJSON
   
   
   // 7) Sign using SecKey (use message variant so SecKey does the hashing)
@@ -214,9 +210,9 @@ func createAssertionFromTempPasskey(
   // 8) build and return ASPasskeyAssertionCredential
   let assertion = ASPasskeyAssertionCredential(
     userHandle: userHandle,
-    relyingParty: requestParams.relyingPartyIdentifier,
+    relyingParty: rpId,
     signature: signature,
-    clientDataHash: requestParams.clientDataHash,
+    clientDataHash: clientDataHash,
     authenticatorData: authData,
     credentialID: credId
   )

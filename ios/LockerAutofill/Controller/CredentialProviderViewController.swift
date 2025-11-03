@@ -13,10 +13,14 @@ import Sentry
 
 
 
-@available(iOS 17.0, *)
+@available(iOSApplicationExtension 17.0, *)
 class PasskeyContext {
   var requestParameters: ASPasskeyCredentialRequestParameters?
   var registrationRequest: ASCredentialRequest? // keep minimal context
+  
+  // MARK: Quick type bar passkey
+  var quickBarPasskeyCredentialRequest: ASPasskeyCredentialRequest?
+  var quickBarPasskeyCredential: PasskeyItem?
 }
 
 @available(iOSApplicationExtension 17.0, *)
@@ -67,7 +71,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   /**
    Mở List Passwords + Passkeys, Khi chọn Passkeys thì dùng requestParameters
    */
-  @available(iOS 17.0, *)
+  @available(iOSApplicationExtension 17.0, *)
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier], requestParameters: ASPasskeyCredentialRequestParameters){
     // test
     print("prepareCredentialList 17", serviceIdentifiers, requestParameters.relyingPartyIdentifier)
@@ -87,7 +91,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   /**
    Mở List OTP
    */
-  @available(iOS 18.0, *)
+  @available(iOSApplicationExtension 18.0, *)
   override func prepareOneTimeCodeCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     
     print("prepareCredentialList", serviceIdentifiers)
@@ -98,27 +102,78 @@ class CredentialProviderController: ASCredentialProviderViewController {
   /**
    Mở List để chọn Các Text để fill
    */
-  @available(iOS 18.0, *)
+  @available(iOSApplicationExtension 18.0, *)
   override func prepareInterfaceForUserChoosingTextToInsert() {
     print("prepareInterfaceForUserChoosingTextToInsert")
     prepareAutofillData(sID: [], mode: .fillText)
   }
   
+  
+  
+  /**
+   Implement this method if your extension supports showing credentials in the QuickType bar.
+   When the user selects a credential from your app, this method will be called with the
+   ASPasswordCredentialIdentity your app has previously saved to the ASCredentialIdentityStore.
+   Provide the password by completing the extension request with the associated ASPasswordCredential.
+   If using the credential would require showing custom UI for authenticating the user, cancel
+   the request with error code ASExtensionError.userInteractionRequired.
+   */
+  override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
+    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
+  }
+  @available(iOSApplicationExtension 17.0, *)
+  override func provideCredentialWithoutUserInteraction(for credentialRequest: any ASCredentialRequest) {
+    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
+  }
+  
+  
   /**
    * Người dùng chọn Passkey từ QuickTypeBar -> mở unlock screen để xác thực
    */
-  @available(iOS 17.0, *)
+  @available(iOSApplicationExtension 17.0, *)
   override func prepareInterfaceToProvideCredential(for credentialRequest: any ASCredentialRequest) {
-    user.mode = .quickBarPasskey
-    // test
-    print("prepareInterfaceToProvideCredential", credentialRequest)
+    print("prepareInterfaceToProvideCredential 17.0", credentialRequest)
+    switch credentialRequest {
+    case let passwordRequest as ASPasswordCredentialRequest:
+      if let passwordIdentity = passwordRequest.credentialIdentity as? ASPasswordCredentialIdentity {
+        prepareInterfaceToProvideCredential(for: passwordIdentity)
+      }
+    case let passkeyRequest as ASPasskeyCredentialRequest:
+      prepareInterfaceToProvideCredential(for: passkeyRequest)
+    default:
+      return
+      //      if #available(iOSApplicationExtension 18.0, *),
+      //         let otpRequest = credentialRequest as? ASOneTimeCodeCredentialRequest,
+      //         let otpIdentity = otpRequest.credentialIdentity as? ASOneTimeCodeCredentialIdentity {
+      //        initializeApp(with: DefaultCredentialProviderContext(
+      //          .autofillOTPCredential(otpIdentity, userInteraction: true),
+      //        ))
+      //      }
+    }
+  }
+  
+  /**
+   * Người dùng chọn Password từ QuickTypeBar -> mở unlock screen để xác thực
+   */
+  @available(iOSApplicationExtension 17.0, *)
+  func prepareInterfaceToProvideCredential(for passkeyRequest: ASPasskeyCredentialRequest) {
+    if let identity = passkeyRequest.credentialIdentity as? ASPasskeyCredentialIdentity {
+      passkeyContext = PasskeyContext()
+      passkeyContext?.quickBarPasskeyCredentialRequest = passkeyRequest
+      if (self.loginLocker()) {
+        if let credential = user.getPasskeyItemById(userName: identity.userName, rpId: identity.relyingPartyIdentifier) {
+          passkeyContext?.quickBarPasskeyCredential = credential
+        } else {
+          quickTypeBar.removePasskeyCredentialIdentities(identity)
+        }
+      }
+    }
   }
   /**
    * Người dùng chọn Password từ QuickTypeBar -> mở unlock screen để xác thực
    */
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-    user.mode = .quickBarPassword
-    print("prepareInterfaceToProvideCredential", credentialIdentity)
+    print("prepareInterfaceToProvideCredential 12", credentialIdentity)
     if (self.loginLocker()) {
       self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
       user.URI = URL(string: serviceIdentifier)?.host ?? serviceIdentifier
@@ -128,14 +183,13 @@ class CredentialProviderController: ASCredentialProviderViewController {
       } else {
         quickTypeBar.removeCredentialIdentities(credentialIdentity)
       }
-      loadView()
     }
   }
   
   /**
    Hiện thị giao diện cho việc tạo Passkey
    */
-  @available(iOS 17.0, *)
+  @available(iOSApplicationExtension 17.0, *)
   override func prepareInterface(forPasskeyRegistration registrationRequest: any ASCredentialRequest) {
     print("prepareInterface forPasskeyRegistration ")
     
@@ -146,11 +200,11 @@ class CredentialProviderController: ASCredentialProviderViewController {
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
       return
     }
-
+    
     passkeyContext = PasskeyContext()
     passkeyContext?.registrationRequest = registrationRequest
     prepareAutofillData(sID: [], mode: .createPasskey)
-
+    
     // use this to check for duplicates
     user.newPasskeyUsername = identity.userName
     user.newPasskeyRpID = identity.relyingPartyIdentifier
@@ -168,7 +222,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   private func startExtension() {
-//    unlockSuccess()
     if (self.loginLocker()) {
       if (user.faceIdEnabled){
         authenService.biometricAuthentication(
@@ -249,7 +302,7 @@ extension CredentialProviderController: AutofillScreenDelegate {
     
     if #available(iOSApplicationExtension 17.0, *) {
       if (user.mode == CredentialActions.quickBarPasskey) {
-        print("quickBarPasskey")
+        quickbarPasskeyAuthen()
         return
       }
     }
@@ -274,6 +327,7 @@ extension CredentialProviderController: AutofillScreenDelegate {
   // Passkey
   func passkeySelected(data: PasskeyItem) {
     if #available(iOSApplicationExtension 17.0, *) {
+      quickTypeBar.replacePasskeyCredentialIdentities(data)
       authenAndFillPasskey(item: data)
     } else {
       cancel()
@@ -307,11 +361,36 @@ extension CredentialProviderController {
 
 // MARK: Passkey
 extension CredentialProviderController {
-  @available(iOS 17.0, *)
+  @available(iOSApplicationExtension 17.0, *)
+  func quickbarPasskeyAuthen() {
+    guard
+      let request = passkeyContext?.quickBarPasskeyCredentialRequest,
+      let identity = request.credentialIdentity as? ASPasskeyCredentialIdentity,
+      let item = passkeyContext?.quickBarPasskeyCredential
+    else {
+      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+      return
+    }
+    do {
+      let assertion = try createAssertionFromTempPasskey(
+        item: item,
+        rpId: identity.relyingPartyIdentifier,
+        clientDataHash: request.clientDataHash
+      )
+      
+      extensionContext.completeAssertionRequest(
+        using: assertion
+      )
+      return
+    } catch {
+      print("Failed to authen with passkey: \(error)")
+      extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+    }
+  }
+  
+  @available(iOSApplicationExtension 17.0, *)
   func createAndFillPasskey(id: String) {
     let registrationRequest = passkeyContext?.registrationRequest
-    print("PasskeyRegistration start")
-    
     guard
       let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest,
       let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity
@@ -325,13 +404,12 @@ extension CredentialProviderController {
         passkeyReq: passkeyReq,
         passkeyId: identity
       )
-      
-      user.saveTempPasskey(id: id, data: metadata)
+      let saveItem = PasskeyItem(id: id, data: metadata)
+      user.saveTempPasskey(saveItem)
+      quickTypeBar.replacePasskeyCredentialIdentities(saveItem)
       extensionContext.completeRegistrationRequest(
         using: credential
       )
-      
-      print("PasskeyRegistration end--")
       return
     } catch {
       print("Failed to create passkey: \(error)")
@@ -339,22 +417,20 @@ extension CredentialProviderController {
     }
   }
   
-  @available(iOS 17.0, *)
+  @available(iOSApplicationExtension 17.0, *)
   func authenAndFillPasskey(item: PasskeyItem) {
     guard let requestParameters = passkeyContext?.requestParameters else { return  extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
-    print("PasskeyAuthentication start")
-    
     do {
       let assertion = try createAssertionFromTempPasskey(
         item: item,
-        requestParams: requestParameters
+        rpId: requestParameters.relyingPartyIdentifier,
+        clientDataHash: requestParameters.clientDataHash
       )
       
       extensionContext.completeAssertionRequest(
         using: assertion
       )
-      print("PasskeyAuthentication end--")
       return
     } catch {
       print("Failed to authen with passkey: \(error)")

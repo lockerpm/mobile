@@ -58,3 +58,18 @@
 "relay.empty" = "Vous n'avez généré aucun e-mail privé";
 "relay.freeLimit" = "Le stockage de votre forfait gratuit est limité";
 "relay.upgrade" = "Vous utilisez l'offre gratuite. Passez à l'offre Premium pour bénéficier de plus d'adresses e-mail privées.";
+
+// create passkey
+"create_pk.title" = "Créer une nouvelle clé d’accès";
+"create_pk.existing_key" = "Une clé d’accès existe déjà pour cet e-mail/nom d’utilisateur";
+"create_pk.action_header" = "Créer une clé d’accès pour un nouvel élément";
+"create_pk.action_btn" = "Créer une clé d’accès";
+"create_pk.replace_header" = "Ajouter une clé d’accès aux éléments de connexion existants";
+"create_pk.replace_alert_t" = "Cette connexion contient déjà une clé d’accès";
+"create_pk.replace_alert_d" = "Voulez-vous en créer une nouvelle et remplacer la clé d’accès existante?";
+
+// list passkey
+"pk_list.t" = "Liste des clés d’accès";
+"pk_list.h" = "Liste des clés d’accès pour ";
+"pk_list.e_text" = "Aucune clé d’accès correspondante pour ";
+"pk_list.e_action" = "Choisir une autre option";

@@ -10,46 +10,54 @@ struct CreatePasskeyScreen: View {
     }
   }
   
-  var duplicatedPasskey: PasskeyItem! {
+  var existingPasskeyWithSameIdentities: PasskeyItem! {
     if let foundKey = afd.user.afPasskeys.first(where: { $0.rpId == afd.user.newPasskeyRpID && $0.userName == afd.user.newPasskeyUsername }) {
       return foundKey
     }
     return nil
   }
+  
+  var isExistingPasskeyWithSameIdentitie: Bool {
+    return existingPasskeyWithSameIdentities != nil
+  }
+  
   @State private var showAlert = false
   @State private var selectedPassword: AFPasswordItem! = nil
   
   var body: some View {
     NavigationView {
       List {
-        if (duplicatedPasskey != nil) {
+        if (isExistingPasskeyWithSameIdentitie) {
           Section {
-            PasskeyItemView(item: duplicatedPasskey)
-          } header: {
-            Text("Key đã có")
-          } footer: {
-            Text("Cảnh báo: vault của bạn đã có một key với cùng tên username: \(afd.user.URI) và cùng rpId: \(afd.user.newPasskeyUsername), không nên tạo thêm key mới.")
-              .foregroundStyle(AppColors.warning)
-          }
-        }
-        
-        Section {
-          Button {
-            afd.passkeyRegistration(id: "")
-          } label: {
-            HStack {
-              Image(systemName: "person.badge.key") // Use an SF Symbol
-                .resizable()
-                .frame(width: 24, height: 24)
-              Text("Tạo mới Passkey")
+            Button {
+              afd.cancel()
+            } label: {
+              PasskeyItemView(item: existingPasskeyWithSameIdentities)
             }
+          } header: {
+            Text(i.translate("create_pk.existing_key"))
           }
-        } header: {
-          Text("Tạo mới item password")
-            .foregroundStyle(AppColors.label)
         }
         
-        if (passwords.count > 0) {
+        if (!isExistingPasskeyWithSameIdentitie) {
+          Section {
+            Button {
+              afd.passkeyRegistration(id: "")
+            } label: {
+              HStack {
+                Image(systemName: "person.badge.key") // Use an SF Symbol
+                  .resizable()
+                  .frame(width: 24, height: 24)
+                Text(i.translate("create_pk.action_btn"))
+              }
+            }
+          } header: {
+            Text(i.translate("create_pk.action_header"))
+              .foregroundStyle(AppColors.label)
+          }
+        }
+        
+        if (passwords.count > 0 && !isExistingPasskeyWithSameIdentitie) {
           Section {
             ForEach(passwords, id: \.login.id) { pw in
               Button {
@@ -59,19 +67,19 @@ struct CreatePasskeyScreen: View {
               }
             }
           } header: {
-            Text("Thêm passkey vào password có sẵn")
+            Text(i.translate("create_pk.replace_header"))
               .foregroundStyle(AppColors.label)
           }
-          .alert("This login already contain a passkey",
+          .alert(i.translate("create_pk.replace_alert_t"),
                  isPresented: $showAlert) {
             Button("Yes") {
               confirmReplacePasskey()
             }
             Button("No", role: .cancel) {
-              print("Item deleted")
+              print("No")
             }
           } message: {
-            Text("Do you want to create a new one and replace the current passkey?")
+            Text(i.translate("create_pk.replace_alert_d"))
           }
         }
         
@@ -80,7 +88,7 @@ struct CreatePasskeyScreen: View {
       .autocapitalization(.none)
       .navigationBarBackButtonHidden()
       .navigationBarTitleDisplayMode(.inline)
-      .navigationTitle("Create Passkey")
+      .navigationTitle(i.translate("create_pk.title"))
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
           Button(i.translate("c.cancel")) {

@@ -58,3 +58,19 @@
 "relay.empty" = "You haven't generated any private email";
 "relay.freeLimit" = "Your Free Plan Storage is Limited";
 "relay.upgrade" = "You are in Free plan. Upgrade to Premium to add more Private Email";
+
+// create passkey
+"create_pk.title" = "Create new passkey";
+"create_pk.existing_key" = "A passkey already exists for this email/username";
+"create_pk.action_header" = "Create passkey for a new item";
+"create_pk.action_btn" = "Create passkey";
+"create_pk.replace_header" = "Add a passkey to existing login items";
+"create_pk.replace_alert_t" = "This login already contains a passkey";
+"create_pk.replace_alert_d" = "Do you want to create a new one and replace the existing passkey?";
+
+// list passkey
+"pk_list.t" = "List Passkey";
+"pk_list.h" = "Passkey list for ";
+"pk_list.e_text" = "No matching passkeys or passwords for ";
+"pk_list.e_action" = "Choose another option";
+

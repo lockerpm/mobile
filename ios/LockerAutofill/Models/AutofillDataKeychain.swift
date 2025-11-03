@@ -37,7 +37,6 @@ class AutofillDataModel {
       }
       return []
     } catch {
-      print("Couldn't decode jsonData when getPasswords: \(error)")
       SentrySDK.capture(message: "Couldn't decode jsonData when getPasswords: \(error)")
     }
     return []
@@ -105,9 +104,7 @@ class AutofillDataModel {
       
       let keychain = Keychain(service: tempPasskeyKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
       try keychain.set( json!, key: tempPasskeyKey.username)
-      print("savedTempPasskey")
     }  catch {
-      print("Couldn't encode jsonData to saveTempPasskey: \(error)")
       SentrySDK.capture(message: "Couldn't encode jsonData to saveTempPasskey: \(error)")
     }
   }

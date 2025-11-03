@@ -45,17 +45,27 @@ class User {
     self.model.saveTempPassword(tempItem)
   }
   
-  func saveTempPasskey(id: String, data: PasskeyItem) {
-    let saveItem = PasskeyItem(id: id, data: data)
-    self.afPasskeys.append(saveItem)
-    self.model.saveTempPasskey(saveItem)
+  func saveTempPasskey(_ item: PasskeyItem) {
+    self.afPasskeys.append(item)
+    self.model.saveTempPasskey(item)
   }
   
   func getPasswordItemById(id: String?) -> AFPasswordItem? {
+    getData(mode: .quickBarPassword)
     if id == nil {
       return nil
     }
     if let item = self.afPasswords.first(where: {$0.login.id == id}){
+      return item
+    }
+    return nil
+  }
+  
+  func getPasskeyItemById(userName: String, rpId: String) -> PasskeyItem? {
+    getData(mode: .quickBarPasskey)
+    if let item = self.afPasskeys.first(where: {
+      $0.userName == userName && $0.rpId == rpId
+    }){
       return item
     }
     return nil
@@ -68,7 +78,7 @@ class User {
       print("fillText")
     case .fillOtp:
       print("fillOtp")
-    case .fillPasskey, .createPasskey:
+    case .fillPasskey, .createPasskey, .quickBarPasskey:
       getPasswordsAndPasskeys()
     default:
       getPasswords()

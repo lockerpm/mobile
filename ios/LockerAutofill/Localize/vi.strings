@@ -59,3 +59,18 @@
 "relay.empty" = "Bạn chưa taọ bất kì email ẩn danh nào";
 "relay.freeLimit" = "Số lượng email ẩn danh đã đạt tối đa";
 "relay.upgrade" = "Truy cập ứng dụng locker để nâng cấp lên gói Premium để có thể tạo email ẩn danh không giới hạn";
+
+// create passkey
+"create_pk.title" = "Tạo passkey mới";
+"create_pk.existing_key" = "Đã có passkey cho email/tên người dùng này";
+"create_pk.action_header" = "Tạo passkey cho mục đăng nhập mới";
+"create_pk.action_btn" = "Tạo passkey";
+"create_pk.replace_header" = "Thêm passkey vào các mục đăng nhập hiện có";
+"create_pk.replace_alert_t" = "Mục đăng nhập này đã có passkey";
+"create_pk.replace_alert_d" = "Bạn có muốn tạo passkey mới và thay thế passkey hiện tại không?";
+
+// list passkey
+"pk_list.t" = "Danh sách passkey";
+"pk_list.h" = "Danh sách passkey cho ";
+"pk_list.e_text" = "Không có passkey phù hợp cho ";
+"pk_list.e_action" = "Chọn tùy chọn khác";

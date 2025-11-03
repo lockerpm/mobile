@@ -11,9 +11,17 @@ struct PasskeysListScreen: View {
   var userInfo: UserInfo
   
   
+  @State private var searchText = ""
+  @State private var isShowItemDetailId = -1
+  @State private var isShowCreatePassword = false
+  
   // if user search for domain or url with no result. show suggest search text for best resutl
   var requestRpId: String {
     afd.user.URI
+  }
+  
+  var search: String {
+    searchText.lowercased()
   }
   
   var allPasskeys: [PasskeyItem] {
@@ -34,27 +42,38 @@ struct PasskeysListScreen: View {
   }
   
   var passkeys: [PasskeyItem] {
-    allowedCredentials.isEmpty ? allPasskeys : allowedCredentials
+    if (allowedCredentials.isEmpty) {
+      return search.isEmpty ? allPasskeys : allPasskeys.filter {
+        $0.userName.lowercased().contains(search)
+      }
+    }
+    return allowedCredentials
+  }
+  
+  var passwords: [AFPasswordItem] {
+    if search.isEmpty {
+      return afd.user.afPasswords
+    } else {
+      return afd.user.afPasswords.filter {
+        $0.login.name.lowercased().contains(search)
+        || $0.login.uri.lowercased().contains(search)
+        || $0.login.username.lowercased().contains(search)
+      }
+    }
   }
   
   var body: some View {
     NavigationView{
       List {
-        if passkeys.isEmpty {
+        if passkeys.isEmpty && passwords.isEmpty {
           VStack(alignment: .center) {
             Image(systemName: "key.slash") // Use an SF Symbol
               .resizable()
               .frame(width: 46, height: 46)
               .foregroundStyle(AppColors.label)
-            Text("Không có key nào phù hợp với (\(requestRpId))")
+            Text(i.translate("pk_list.e_text") + "(\(requestRpId))")
               .frame(maxWidth: .infinity, alignment: .center)
               .multilineTextAlignment(.center)
-            Button {
-              afd.cancel()
-            } label: {
-              Text("Lựa chọn khác")
-            }
-            .buttonStyle(.bordered)
           }
           .padding(.vertical, 16)
           .frame(maxWidth: .infinity, alignment: .center)
@@ -69,22 +88,71 @@ struct PasskeysListScreen: View {
               }
             }
           } header: {
-            Text("Danh sách khoá cho (\(requestRpId))")
+            Text(i.translate("pk_list.h") + "(\(requestRpId))")
+          }
+          Section {
+            ForEach(passwords, id: \.login.id) { pw in
+              Button {
+                afd.passwordSelected(data: pw)
+              } label: {
+                PasswordItemView(item: pw, isShowDetailId: $isShowItemDetailId)
+              }
+              if isShowItemDetailId == pw.fillID {
+                VStack {
+                  if !pw.login.username.isEmpty {
+                    CredentialInfo(label: i.translate("item.username"), text: pw.login.username, isCopydable: true)
+                  }
+                  if !pw.login.password.isEmpty {
+                    CredentialInfo(label: i.translate("item.password"), text: pw.login.password, isCopydable: true)
+                  }
+                  if !pw.login.uri.isEmpty && pw.login.uri != "https://" {
+                    CredentialInfo(label: "URL", text: pw.login.uri, isCopydable: false)
+                  }
+                  if !pw.login.otp.isEmpty {
+                    TOTPView(url: pw.login.otp)
+                  }
+                }
+              }
+            }
+          }
+          header: {
+            Text(i.translate("list.title"))
           }
         }
       }
       .foregroundStyle(AppColors.title)
       .autocapitalization(.none)
-      .navigationTitle("Danh sách Passkey")
+      .navigationTitle(i.translate("pk_list.t"))
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
           Button(i.translate("c.cancel")) {
             afd.cancel()
           }
         }
+        ToolbarItem(placement: .navigationBarTrailing) {
+          NavigationLink(
+            destination:  CreatePasswordScreen(
+              token: userInfo.token,
+              isFree: userInfo.isFree,
+              initWebsite: requestRpId,
+              goBack: {
+                isShowCreatePassword = false
+              },
+              saveAndFill: afd.createPasswordItem
+            ),
+            isActive: $isShowCreatePassword
+          ) {
+            Button {
+              isShowCreatePassword = true
+            } label: {
+              Image(systemName: "plus")
+            }
+          }
+        }
       }
       .navigationBarTitleDisplayMode(.inline)
     }
+    .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .automatic))
     .navigationBarHidden(true)
     .navigationBarBackButtonHidden()
     .background(AppColors.background)

@@ -65,3 +65,18 @@
 "relay.empty" = "Вы не создали ни одного личного адреса электронной почты";
 "relay.freeLimit" = "Ваш бесплатный тарифный план имеет ограниченное хранилище";
 "relay.upgrade" = "Вы находитесь на бесплатном плане. Обновитесь до Premium, чтобы добавить больше личных адресов электронной почты";
+
+// create passkey
+"create_pk.title" = "Создать новый passkey";
+"create_pk.existing_key" = "Passkey уже существует для этого e-mail/имени пользователя";
+"create_pk.action_header" = "Создать passkey для нового элемента";
+"create_pk.action_btn" = "Создать passkey";
+"create_pk.replace_header" = "Добавить passkey к существующим записям входа";
+"create_pk.replace_alert_t" = "Эта запись уже содержит passkey";
+"create_pk.replace_alert_d" = "Хотите создать новый и заменить существующий passkey?";
+
+// list passkey
+"pk_list.t" = "Список passkey";
+"pk_list.h" = "Список passkey для ";
+"pk_list.e_text" = "Нет подходящих passkey для ";
+"pk_list.e_action" = "Выбрать другой вариант";

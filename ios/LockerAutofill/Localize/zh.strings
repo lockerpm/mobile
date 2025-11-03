@@ -59,4 +59,18 @@
 "relay.freeLimit" = "您的免費方案儲存空間有限";
 "relay.upgrade" = "您處於免費方案。升級到高級版以添加更多私人電子郵件";
 
+// create passkey
+"create_pk.title" = "创建新的通行密钥";
+"create_pk.existing_key" = "此邮箱/用户名已存在通行密钥";
+"create_pk.action_header" = "为新项目创建通行密钥";
+"create_pk.action_btn" = "创建通行密钥";
+"create_pk.replace_header" = "将通行密钥添加到现有登录项";
+"create_pk.replace_alert_t" = "此登录项已包含通行密钥";
+"create_pk.replace_alert_d" = "是否要创建新的并替换现有的通行密钥？";
+
+// list passkey
+"pk_list.t" = "通行密钥列表";
+"pk_list.h" = "通行密钥列表：";
+"pk_list.e_text" = "没有与之匹配的通行密钥：";
+"pk_list.e_action" = "选择其他选项";
 
