@@ -10,6 +10,7 @@ class User {
   
   // support passkey
   var allowedCredentialIDs: [String] = []
+  var rpID: String = ""
   var newPasskeyUsername: String = ""
   var newPasskeyRpID: String = ""
   

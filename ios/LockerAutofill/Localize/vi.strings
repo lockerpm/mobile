@@ -14,7 +14,7 @@
 "noti.loginLocker" = "Đăng nhập vào Locker trước khi sử dụng dịch vụ tự động điền";
 
 // CredentialsListScreen
-"list.title" = "Danh sách mật khẩu";
+"list.title" = "Danh sách đăng nhập";
 "list.noDataSearch" = "Oops! Không tìm thấy dữ liệu phù hợp ";
 "list.suggestSearch" = "Tìm kiếm theo: ";
 
@@ -71,6 +71,7 @@
 
 // list passkey
 "pk_list.t" = "Danh sách passkey";
+"pk_list.t2" = "Danh sách đăng nhập";
 "pk_list.h" = "Danh sách passkey cho ";
 "pk_list.e_text" = "Không có passkey phù hợp cho ";
 "pk_list.e_action" = "Chọn tùy chọn khác";

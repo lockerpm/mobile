@@ -70,6 +70,7 @@
 
 // list passkey
 "pk_list.t" = "通行密钥列表";
+"pk_list.t2" = "登录列表";
 "pk_list.h" = "通行密钥列表：";
 "pk_list.e_text" = "没有与之匹配的通行密钥：";
 "pk_list.e_action" = "选择其他选项";

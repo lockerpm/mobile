@@ -159,3 +159,8 @@ export interface UrlsEntity {
   label: string
   url: string
 }
+export enum VaultType {
+  Personal = "P",
+  UserCreated = "U",
+  Everyone = "E",
+}

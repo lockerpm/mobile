@@ -76,7 +76,8 @@
 "create_pk.replace_alert_d" = "Хотите создать новый и заменить существующий passkey?";
 
 // list passkey
-"pk_list.t" = "Список passkey";
+"pk_list.t" = "Список паролей";
+"pk_list.t2" = "Список паролей";
 "pk_list.h" = "Список passkey для ";
 "pk_list.e_text" = "Нет подходящих passkey для ";
 "pk_list.e_action" = "Выбрать другой вариант";

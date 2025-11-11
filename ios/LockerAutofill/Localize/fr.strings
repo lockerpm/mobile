@@ -69,7 +69,8 @@
 "create_pk.replace_alert_d" = "Voulez-vous en créer une nouvelle et remplacer la clé d’accès existante?";
 
 // list passkey
-"pk_list.t" = "Liste des clés d’accès";
+"pk_list.t" = "Liste de connexion";
+"pk_list.t2" = "Liste de connexion";
 "pk_list.h" = "Liste des clés d’accès pour ";
 "pk_list.e_text" = "Aucune clé d’accès correspondante pour ";
 "pk_list.e_action" = "Choisir une autre option";

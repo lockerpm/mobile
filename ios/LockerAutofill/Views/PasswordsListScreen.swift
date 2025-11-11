@@ -95,7 +95,6 @@ struct PasswordsListScreen: View {
           self.searchText = initSearch
         }
       }
-      
       .foregroundStyle(AppColors.title)
       .autocapitalization(.none)
       .navigationTitle(i.translate("list.title"))

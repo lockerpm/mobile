@@ -10,14 +10,13 @@ struct PasskeysListScreen: View {
   var afd: AutofillScreenDelegate // autofill delegate
   var userInfo: UserInfo
   
-  
   @State private var searchText = ""
   @State private var isShowItemDetailId = -1
   @State private var isShowCreatePassword = false
   
   // if user search for domain or url with no result. show suggest search text for best resutl
   var requestRpId: String {
-    afd.user.URI
+    afd.user.rpID
   }
   
   var search: String {
@@ -28,9 +27,8 @@ struct PasskeysListScreen: View {
     if requestRpId.isEmpty {
       return afd.user.afPasskeys
     } else {
-      let search = requestRpId.lowercased()
       return afd.user.afPasskeys.filter {
-        $0.rpId == search
+        $0.rpId == requestRpId
       }
     }
   }
@@ -44,7 +42,7 @@ struct PasskeysListScreen: View {
   var passkeys: [PasskeyItem] {
     if (allowedCredentials.isEmpty) {
       return search.isEmpty ? allPasskeys : allPasskeys.filter {
-        $0.userName.lowercased().contains(search)
+        $0.userName.lowercased().contains(search) || $0.rpId.contains(search)
       }
     }
     return allowedCredentials
@@ -71,14 +69,14 @@ struct PasskeysListScreen: View {
               .resizable()
               .frame(width: 46, height: 46)
               .foregroundStyle(AppColors.label)
-            Text(i.translate("pk_list.e_text") + "(\(requestRpId))")
+            Text(i.translate("pk_list.e_text") +  "(\(!search.isEmpty ? search :requestRpId))")
               .frame(maxWidth: .infinity, alignment: .center)
               .multilineTextAlignment(.center)
           }
           .padding(.vertical, 16)
           .frame(maxWidth: .infinity, alignment: .center)
-          
-        } else {
+        }
+        if !passkeys.isEmpty {
           Section {
             ForEach(passkeys, id: \.credentialId) { pk in
               Button {
@@ -90,6 +88,8 @@ struct PasskeysListScreen: View {
           } header: {
             Text(i.translate("pk_list.h") + "(\(requestRpId))")
           }
+        }
+        if !passwords.isEmpty {
           Section {
             ForEach(passwords, id: \.login.id) { pw in
               Button {
@@ -120,9 +120,12 @@ struct PasskeysListScreen: View {
           }
         }
       }
+      .onAppear{
+        initSearch()
+      }
       .foregroundStyle(AppColors.title)
       .autocapitalization(.none)
-      .navigationTitle(i.translate("pk_list.t"))
+      .navigationTitle(i.translate("pk_list.t2"))
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
           Button(i.translate("c.cancel")) {
@@ -156,6 +159,15 @@ struct PasskeysListScreen: View {
     .navigationBarHidden(true)
     .navigationBarBackButtonHidden()
     .background(AppColors.background)
+  }
+  
+  func initSearch() {
+    let suggestSearchs: [String] = parseDomain(of: afd.user.URI)
+    if suggestSearchs.isEmpty {
+      self.searchText = ""
+    } else {
+      self.searchText = suggestSearchs[0]
+    }
   }
 }
 
