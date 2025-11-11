@@ -5,6 +5,8 @@ import {
   ScamLookupScreen,
   ScamLookupResultScreen,
   ScamMyReportListScreen,
+
+  // @ts-ignore
   ScamReportScreen,
 } from "./screens"
 import { ScamRoute } from "@/navigators"

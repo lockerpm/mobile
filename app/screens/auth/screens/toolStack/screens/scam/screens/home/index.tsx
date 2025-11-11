@@ -92,7 +92,7 @@ export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) 
         })}
       </MenuItemContainer>
 
-      <CallerContent />
+      {/* <CallerContent /> */}
       <AnonumousReport />
 
       <MenuItemContainer>

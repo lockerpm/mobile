@@ -1,5 +1,14 @@
+import CookieManager from "@react-native-cookies/cookies"
 import analytics from "@react-native-firebase/analytics"
+import moment from "moment"
 import DeviceInfo from "react-native-device-info"
+
+import { Logger } from "../logger"
+import { getUrlParameterByName } from "../utils"
+
+const WHITELIST_HOSTS = ["https://locker.io", "https://id.locker.io", "https://staging.locker.io"]
+const COOKIES_URL = "https://locker.io"
+const TAGS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
 
 export enum AnalyticEvents {
   REGISTER_SUCCESS = "register_success",
@@ -20,25 +29,64 @@ export enum AnalyticEvents {
   SCAM_ENABLE_CALLERID = "scam_enable_callerid",
 }
 
-export const logRegisterSuccessEvent = async () => {
-  if (__DEV__) {
+export const setCookiesFromUrl = (url: string) => {
+  if (!url || !WHITELIST_HOSTS.some((host) => url.startsWith(host))) {
     return
   }
+  const values = new Array<string>(TAGS.length)
+  let hasChange = false
+  TAGS.forEach((t, index) => {
+    const val = getUrlParameterByName(t, url)
+    if (val && val.trim()) {
+      hasChange = true
+      values[index] = val
+    }
+  })
+  if (hasChange) {
+    Logger.debug(`Set cookies: ${JSON.stringify(values)}`)
+    const now = moment()
+    now.add(30, "days")
+    TAGS.forEach((t, index) => {
+      CookieManager.set(COOKIES_URL, {
+        name: t,
+        value: values[index],
+        expires: now.toISOString(true),
+      })
+    })
+  }
+}
 
+export const getUtmCookies = async () => {
+  const cookies = await CookieManager.get(COOKIES_URL)
+  const res = {}
+  Object.keys(cookies).forEach((k) => {
+    if (TAGS.includes(k)) {
+      res[k] = cookies[k].value
+    }
+  })
+  return res
+}
+
+export const getCookies = async (name: string) => {
+  const cookies = await getUtmCookies()
+  return cookies[name]
+}
+
+export const logRegisterSuccessEvent = async () => {
+  const cookies = await getUtmCookies()
   const device_identifier = await DeviceInfo.getUniqueId()
   await analytics().logEvent(AnalyticEvents.REGISTER_SUCCESS, {
+    ...cookies,
     device_identifier,
   })
 }
 
 // Create master pw
 export const logCreateMasterPwEvent = async () => {
-  if (__DEV__) {
-    return
-  }
-
+  const cookies = await getUtmCookies()
   const device_identifier = await DeviceInfo.getUniqueId()
   await analytics().logEvent(AnalyticEvents.CREATE_MASTER_PW, {
+    ...cookies,
     device_identifier,
   })
 }
@@ -54,10 +102,7 @@ export const trackScreenView = (screenName: string) => {
   })
 }
 
-export const logFirebaseEvent = async (event: AnalyticEvents, email: string | null) => {
-  if (__DEV__) {
-    return
-  }
+export const logFirebaseEvent = async (event: AnalyticEvents, email: string) => {
   const device_identifier = await DeviceInfo.getUniqueId()
   await analytics().logEvent(event, {
     device_identifier,

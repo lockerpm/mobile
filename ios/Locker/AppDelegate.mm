@@ -1,8 +1,7 @@
 #import "AppDelegate.h"
-
 #import <Firebase.h>
 #import <React/RCTBundleURLProvider.h>
-#import <React/RCTLinkingManager.h>
+
 
 // ssl PINNING
 #import "RNCConfig.h"
@@ -11,6 +10,7 @@
 #import <AuthenticationServices/AuthenticationServices.h>
 #import <SafariServices/SafariServices.h>
 #import <FBSDKCoreKit/FBSDKCoreKit-swift.h>
+#import <React/RCTLinkingManager.h>
 
 @implementation AppDelegate
 
