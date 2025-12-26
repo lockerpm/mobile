@@ -1,12 +1,15 @@
 import { FC, useRef, useState } from "react"
 import { Dimensions, StyleSheet } from "react-native"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { AnimatedFooter } from "./animatedFooter/AnimatedFooter"
-import { Wave } from "./Wave"
-import { Intro1, Intro2, Intro3, Intro4 } from "./intro/Intro"
-import { UnAuthScreenProps } from "app/navigators"
+
 import { useStores } from "app/models"
+import { UnAuthScreenProps } from "app/navigators"
+
 import { Screen } from "@/components/cores"
+
+import { AnimatedFooter } from "./animatedFooter/AnimatedFooter"
+import { Intro1, Intro2, Intro3, Intro4 } from "./intro/Intro"
+import { Wave } from "./Wave"
 
 const SCREEN_WIDTH = Dimensions.get("screen").width
 
@@ -26,7 +29,7 @@ export const IntroScreen: FC<UnAuthScreenProps<"intro">> = ({ navigation }) => {
 
   const goStart = () => {
     uiStore.setIsShowedAppIntro(true)
-    navigation.navigate("onBoarding")
+    navigation.replace("onBoarding")
   }
 
   const scrollTo = (index: number) => {

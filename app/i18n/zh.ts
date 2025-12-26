@@ -822,6 +822,7 @@ const zh: Translations = {
     use_symbol: "使用符號（@!$%*）",
     avoid_ambiguous: "避免容易混淆的字元",
     use_password: "使用密碼",
+    copy_fill: "複製並填入",
   },
   authenticator: {
     title: "驗證器",
@@ -928,6 +929,25 @@ const zh: Translations = {
         header: "自動填寫服務",
         name: "Android 自動填寫",
         desc: "Locker 自動填寫服務使用 Android 自動填寫框架來協助將登入訊息填進您裝置上的其他應用程式。",
+        chrome_name: "Chrome 自動填寫",
+        chrome_desc: "啟用 Chrome 自動填寫，讓 Locker 快速且安全地在網站上填入您的登入資訊",
+      },
+    },
+    android_service: {
+      create_passkey: {
+        title: "创建新的通行密钥",
+        existing_key: "此电子邮件/用户名已存在通行密钥",
+        action_header: "为新项目创建通行密钥",
+        action_btn: "创建通行密钥",
+        replace_header: "向现有登录项目添加通行密钥",
+        replace_alert_t: "此登录已包含通行密钥",
+        replace_alert_d: "您想创建一个新的通行密钥并替换现有的通行密钥吗？",
+      },
+      list_passkey: {
+        title: "通行密钥列表",
+        header: "通行密钥列表：",
+        empty_title: "没有可用的通行密钥",
+        empty_label: "此账户中没有适用于 {{rpId}} 的通行密钥",
       },
     },
   },

@@ -1,10 +1,13 @@
+import { NativeModules, Platform } from "react-native"
+import { Buffer } from "buffer"
 import Upload, { UploadOptions } from "react-native-background-upload"
 import RNFS from "react-native-fs"
 import crypto from "react-native-quick-crypto"
-import { Buffer } from "buffer"
+
 import { GetUploadFormResult } from "app/static/types"
-import { NativeModules, Platform } from "react-native"
+
 import { Logger } from "@/utils/logger"
+
 const { FileEncryptor } = NativeModules
 
 const IS_IOS = Platform.OS === "ios"

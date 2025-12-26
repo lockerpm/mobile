@@ -1,15 +1,17 @@
 import { FC, useState } from "react"
 import { StyleSheet, View } from "react-native"
-import { debounce } from "app/utils/utils"
-import { AuthScreenProps } from "app/navigators"
+
 import { ModalBackdrop } from "app/components/cores"
-import { Actions } from "./Actions"
+import { AuthScreenProps } from "app/navigators"
 import { CipherActionsModal } from "app/static/types"
+import { debounce } from "app/utils/utils"
+
+import { Actions } from "./Actions"
 import { Delete } from "./Delete"
-import { ShareOptions } from "./ShareOptions"
-import { PremiumAction } from "./PremiumAction"
 import { LeaveShared } from "./LeaveShared"
 import { OtpActions } from "./OtpActions"
+import { PremiumAction } from "./PremiumAction"
+import { ShareOptions } from "./ShareOptions"
 
 export const CipherActionsModalScreen: FC<AuthScreenProps<"cipherActionsModal">> = ({
   navigation,

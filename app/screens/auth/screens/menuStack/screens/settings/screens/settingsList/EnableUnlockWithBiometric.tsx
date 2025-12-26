@@ -1,12 +1,14 @@
-import { SettingsItem } from "app/components/utils"
+import { observer } from "mobx-react-lite"
+import ReactNativeBiometrics from "react-native-biometrics"
+
 import { Switch } from "app/components/cores"
+import { SettingsItem } from "app/components/utils"
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
-import ReactNativeBiometrics from "react-native-biometrics"
-import { autofillKeyChain } from "app/utils/autofillData"
-import { observer } from "mobx-react-lite"
 import { useBiometricType, useToast } from "app/services/utils"
+
 import { useAppLocale } from "@/i18n"
+import { autofillKeyChain } from "@/utils/autofill.ios"
 
 const rn = new ReactNativeBiometrics()
 

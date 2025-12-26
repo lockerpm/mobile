@@ -1,7 +1,9 @@
+import { CommonActions, useNavigation } from "@react-navigation/native"
+
+import { AuthScreenProps } from "app/navigators/navigators.types"
+
 import { useAuthentication } from "@/services/hook"
 import { LockType } from "@/static/types"
-import { CommonActions, useNavigation } from "@react-navigation/native"
-import { AuthScreenProps } from "app/navigators/navigators.types"
 
 export const useMenuListNavigation = () => {
   const navigation = useNavigation<AuthScreenProps<"mainTab">["navigation"]>()

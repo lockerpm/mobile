@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1620"
+   LastUpgradeVersion = "2600"
    wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
@@ -16,7 +16,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7C0752D72E56F9B600D28650"
+               BlueprintIdentifier = "7C47A3AF2EB9DE660017315B"
                BuildableName = "LockerLiveCallerLookup.appex"
                BlueprintName = "LockerLiveCallerLookup"
                ReferencedContainer = "container:Locker.xcodeproj">

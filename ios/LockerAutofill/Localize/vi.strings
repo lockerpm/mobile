@@ -14,7 +14,7 @@
 "noti.loginLocker" = "Đăng nhập vào Locker trước khi sử dụng dịch vụ tự động điền";
 
 // CredentialsListScreen
-"list.title" = "Danh sách đăng nhập";
+"list.title" = "Danh sách mật khẩu";
 "list.noDataSearch" = "Oops! Không tìm thấy dữ liệu phù hợp ";
 "list.suggestSearch" = "Tìm kiếm theo: ";
 
@@ -40,6 +40,7 @@
 "pw.useBtn" = "Sử dụng mật khẩu";
 "pw.generator" = "Tạo mật khẩu mạnh";
 "pw.regenerate" = "Tạo lại";
+"pw.copyFill" = "Sao chép và điền";
 
 // create password
 "create.title" = "Tạo mật khẩu";

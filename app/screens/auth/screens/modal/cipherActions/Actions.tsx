@@ -1,15 +1,18 @@
-import { View, StyleSheet } from "react-native"
-import { BottomModalContainer, Text } from "app/components/cores"
-import { AccountRole, CipherActionsModal, CipherAppView, MyShareType } from "app/static/types"
-import { useStores } from "app/models"
-import { CipherType } from "core/enums"
-import { getCipherDescription, getTeam } from "app/utils/cipherHelper"
-import { CipherActionsByType, CipherIconImage } from "app/components/ciphers"
-import { NewActionSheetItem } from "app/components/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { useActionsNavigate } from "./useActionsNavigate"
-import { useCipherData } from "@/services/hook"
 import { useState } from "react"
+import { View, StyleSheet } from "react-native"
+
+import { CipherActionsByType, CipherIconImage } from "app/components/ciphers"
+import { BottomModalContainer, Text } from "app/components/cores"
+import { NewActionSheetItem } from "app/components/utils"
+import { useStores } from "app/models"
+import { AccountRole, CipherActionsModal, CipherAppView, MyShareType } from "app/static/types"
+import { getCipherDescription, getTeam } from "app/utils/cipherHelper"
+import { CipherType } from "core/enums"
+
+import { useCipherData } from "@/services/hook"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { useActionsNavigate } from "./useActionsNavigate"
 
 interface Props {
   isDeleted: boolean

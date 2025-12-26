@@ -1,5 +1,3 @@
-import { useScrollToTop } from "@react-navigation/native"
-import { StatusBar, StatusBarProps, StatusBarStyle } from "expo-status-bar"
 import { ReactNode, useRef, useState } from "react"
 import {
   KeyboardAvoidingView,
@@ -11,10 +9,13 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { $styles } from "@/theme"
-import { ExtendedEdge, useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
+import { useScrollToTop } from "@react-navigation/native"
+import { SystemBars, SystemBarsProps, SystemBarStyle } from "react-native-edge-to-edge"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
+
+import { $styles } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { ExtendedEdge, useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
 
 export const DEFAULT_BOTTOM_OFFSET = 50
 
@@ -47,7 +48,7 @@ interface BaseScreenProps {
   /**
    * Status bar setting. Defaults to dark.
    */
-  statusBarStyle?: StatusBarStyle
+  statusBarStyle?: SystemBarStyle
   /**
    * By how much should we offset the keyboard? Defaults to 0.
    */
@@ -63,7 +64,7 @@ interface BaseScreenProps {
   /**
    * Pass any additional props directly to the StatusBar component.
    */
-  StatusBarProps?: StatusBarProps
+  StatusBarProps?: SystemBarsProps
 }
 
 interface FixedScreenProps extends BaseScreenProps {
@@ -265,8 +266,7 @@ export function Screen(props: ScreenProps) {
         $containerInsets,
       ]}
     >
-      <StatusBar
-        backgroundColor={colors.background} // Android only
+      <SystemBars
         style={statusBarStyle || (themeContext === "dark" ? "light" : "dark")}
         {...StatusBarProps}
       />

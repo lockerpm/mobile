@@ -1,26 +1,23 @@
 import * as bigInt from "big-integer"
 
-import { EncryptionType } from "../enums/encryptionType"
-import { HashPurpose } from "../enums/hashPurpose"
-import { KdfType } from "../enums/kdfType"
-
-import { EncArrayBuffer } from "../models/domain/encArrayBuffer"
-import { EncryptedObject } from "../models/domain/encryptedObject"
-import { EncString } from "../models/domain/encString"
-import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey"
-import { ProfileOrganizationResponse } from "../models/response/profileOrganizationResponse"
-
+import { ConstantsService } from "./constants.service"
+import { loadSecure, saveSecure } from "../../app/utils/storage"
 import { CryptoService as CryptoServiceAbstraction } from "../abstractions/crypto.service"
 import { CryptoFunctionService } from "../abstractions/cryptoFunction.service"
 import { LogService } from "../abstractions/log.service"
 import { PlatformUtilsService } from "../abstractions/platformUtils.service"
 import { KeySuffixOptions, StorageService } from "../abstractions/storage.service"
-
-import { ConstantsService } from "./constants.service"
+import { EncryptionType } from "../enums/encryptionType"
+import { HashPurpose } from "../enums/hashPurpose"
+import { KdfType } from "../enums/kdfType"
 import { sequentialize } from "../misc/sequentialize"
-import { EEFLongWordList } from "../misc/wordlist"
 import { Utils } from "../misc/utils"
-import { loadSecure, saveSecure } from "../../app/utils/storage"
+import { EEFLongWordList } from "../misc/wordlist"
+import { EncArrayBuffer } from "../models/domain/encArrayBuffer"
+import { EncryptedObject } from "../models/domain/encryptedObject"
+import { EncString } from "../models/domain/encString"
+import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey"
+import { ProfileOrganizationResponse } from "../models/response/profileOrganizationResponse"
 
 export const Keys = {
   key: "key", // Master Key

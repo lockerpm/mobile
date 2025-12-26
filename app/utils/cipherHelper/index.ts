@@ -1,14 +1,17 @@
-import { CipherAppView } from "app/static/types"
-import { CipherType } from "core/enums"
-import { CipherView } from "core/models/view"
 import { ImageSourcePropType } from "react-native"
 import extractDomain from "extract-domain"
-import { WALLET_APP_LIST } from "../crypto/applist"
-import { VAULT_LOGO } from "app/static/vault"
 import find from "lodash/find"
-import { toCryptoWalletData } from "../crypto"
+
+import { CipherAppView } from "app/static/types"
+import { VAULT_LOGO } from "app/static/vault"
+import { CipherType } from "core/enums"
+import { CipherView } from "core/models/view"
+
 import Config from "@/config"
 import { CARD_BRANDS } from "@/static/constants"
+
+import { toCryptoWalletData } from "../crypto"
+import { WALLET_APP_LIST } from "../crypto/applist"
 
 // Card detection logic
 export const detectCardBrand = (cardNumber: string) => {

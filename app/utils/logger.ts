@@ -1,5 +1,5 @@
-import moment from "moment"
 import { Platform } from "react-native"
+import moment from "moment"
 
 export class Logger {
   static getTime() {

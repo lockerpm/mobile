@@ -1,5 +1,9 @@
 import { cast, types } from "mobx-state-tree"
-import { withSetPropAction } from "../helpers/withSetPropAction"
+import DeviceInfo from "react-native-device-info"
+
+import { idApi } from "app/services/api/idApi"
+import { toolApi } from "app/services/api/toolApi"
+import { userApi } from "app/services/api/userApi"
 import {
   AuthPasskeyRequest,
   ChangePasswordRequest,
@@ -28,11 +32,9 @@ import {
   PolicyType,
   TimeoutActionType,
 } from "app/static/types/enum"
-import { userApi } from "app/services/api/userApi"
 import { AppEventType, EventBus } from "app/utils/eventBus"
-import { idApi } from "app/services/api/idApi"
-import { toolApi } from "app/services/api/toolApi"
-import DeviceInfo from "react-native-device-info"
+
+import { withSetPropAction } from "../helpers/withSetPropAction"
 
 /**
  * Model description here for TypeScript hints.
@@ -671,21 +673,6 @@ export const UserModel = types
       return res
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({
-    purchaseValidation: async (
-      receipt?: string,
-      subscriptionId?: string,
-      originalTransactionIdentifierIOS?: string
-    ) => {
-      const res = await userApi.purchaseValidation(
-        self.apiToken,
-        receipt,
-        subscriptionId,
-        originalTransactionIdentifierIOS
-      )
-      return res
-    },
-  }))
   .postProcessSnapshot((snapShot) => {
     return {
       ...snapShot,

@@ -1,11 +1,13 @@
 import { useState } from "react"
 import { StyleSheet, View } from "react-native"
-import { useStores } from "app/models"
+import { observer } from "mobx-react-lite"
+import Animated, { FadeInUp, LinearTransition } from "react-native-reanimated"
+
 import { Icon, PressableScale, Text } from "app/components/cores"
 import { MenuItemContainer } from "app/components/utils"
-import { observer } from "mobx-react-lite"
+import { useStores } from "app/models"
+
 import { useAppTheme } from "@/utils/useAppTheme"
-import Animated, { FadeInUp, LinearTransition } from "react-native-reanimated"
 
 export const Fingerprint = observer(() => {
   const {

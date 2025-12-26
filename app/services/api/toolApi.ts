@@ -1,6 +1,7 @@
+import { decode } from "@msgpack/msgpack"
 import { ApiResponse } from "apisauce"
-import { Api, api } from "./api"
-import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
+import { gunzipSync } from "fflate"
+
 import {
   AppNotification,
   BreanchResult,
@@ -12,10 +13,12 @@ import {
   ScamSyncPhonesResponse,
   SubdomainData,
 } from "app/static/types"
-import { Logger } from "@/utils/logger"
-import { gunzipSync } from "fflate"
-import { decode } from "@msgpack/msgpack"
+
 import Config from "@/config"
+import { Logger } from "@/utils/logger"
+
+import { Api, api } from "./api"
+import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
 
 class ToolApi {
   private api: Api = api
@@ -611,7 +614,6 @@ class ToolApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      console.log("scamCheckAnonymous response", response.data)
       return { kind: "ok" }
     } catch (e) {
       Logger.error("editSubdomain", e)

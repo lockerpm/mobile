@@ -1,10 +1,12 @@
 import { View, ViewStyle, StyleSheet, TextStyle } from "react-native"
-import { ThemedStyle, typography } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { Text } from "@/components/cores"
+
 import { Fido2CredentialView } from "core/models/view/fido2CredentialView"
-import { formatDate } from "@/utils/formatDate"
+
+import { Text } from "@/components/cores"
 import { useAppLocale } from "@/i18n"
+import { ThemedStyle, typography } from "@/theme"
+import { formatDate } from "@/utils/formatDate"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type Props = {
   fido2: Fido2CredentialView

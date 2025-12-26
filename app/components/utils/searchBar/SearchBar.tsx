@@ -1,8 +1,10 @@
 /* eslint-disable no-restricted-imports */
 import { Platform, StyleProp, TextInput, TextInputProps, View, ViewStyle } from "react-native"
-import { Icon, PressableIcon } from "../../cores"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { Icon, PressableIcon } from "../../cores"
 
 export interface SearchBarProps extends TextInputProps {
   /**

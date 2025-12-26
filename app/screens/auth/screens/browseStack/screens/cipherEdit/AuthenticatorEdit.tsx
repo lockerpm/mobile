@@ -1,19 +1,21 @@
 import { useMemo, useState } from "react"
-import { observer } from "mobx-react-lite"
 import { StyleSheet, View } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { Header, ImageIcon, Screen, TextInput } from "app/components/cores"
-import { useCipherData } from "app/services/hook"
 import { useStores } from "app/models"
-import { CipherView } from "core/models/view"
-import { beautifyName, getTOTP, OTPData, parseOTPUri } from "app/utils/totp"
-import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
+import { useCipherData } from "app/services/hook"
 import { useToast } from "app/services/utils"
+import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
+import { beautifyName, getTOTP, OTPData, parseOTPUri } from "app/utils/totp"
+import { SecureNoteType } from "core/enums"
+import { CipherView } from "core/models/view"
+
+import { CipherEditActionField, PasswordOtp } from "@/components/ciphers"
 import { BrowseScreenProps } from "@/navigators"
 import { CipherAppView, CipherEditMode } from "@/static/types"
 import { Logger } from "@/utils/logger"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { SecureNoteType } from "core/enums"
-import { CipherEditActionField, PasswordOtp } from "@/components/ciphers"
 
 type Props = {
   initOtpUri?: string
@@ -62,7 +64,7 @@ export const AuthenticatorEdit = observer(({ navigation, item, mode, initOtpUri 
   // ---------------------- METHODS -----------------------
   const handleSave = async () => {
     try {
-      const otp = getTOTP({ secret: secretKey })
+      const otp = await getTOTP({ secret: secretKey })
       if (!otp) {
         notifyTx("error", "authenticator:invalid_key")
         return

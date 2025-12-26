@@ -5,16 +5,13 @@ import {
   PartialState,
   createNavigationContainerRef,
 } from "@react-navigation/native"
-import Config from "../config"
-import type { PersistNavigationConfig } from "../config/config.base"
-import { useIsMounted } from "../utils/useIsMounted"
-import type { NavigationProps } from "./AppNavigator"
-
-import * as storage from "../utils/storage"
-import { AppRoute } from "./navigators.types"
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 
-type Storage = typeof storage
+import Config from "../config"
+import type { NavigationProps } from "./AppNavigator"
+import { AppRoute } from "./navigators.types"
+import type { PersistNavigationConfig } from "../config/config.base"
+import { useIsMounted } from "../utils/useIsMounted"
 
 /**
  * Reference to the root App Navigator.
@@ -88,10 +85,10 @@ export function useBackButtonHandler(canExit: (routeName: string) => boolean) {
     }
 
     // Subscribe when we come to life
-    BackHandler.addEventListener("hardwareBackPress", onBackPress)
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", onBackPress)
 
     // Unsubscribe when we're done
-    return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress)
+    return () => backHandler.remove()
   }, [])
 }
 
@@ -111,24 +108,20 @@ function navigationRestoredDefaultState(persistNavigation: PersistNavigationConf
 
 /**
  * Custom hook for persisting navigation state.
- * @param {Storage} storage - The storage utility to use.
- * @param {string} persistenceKey - The key to use for storing the navigation state.
  * @returns {object} - The navigation state and persistence functions.
  */
-export function useNavigationPersistence(storage: Storage, persistenceKey: string) {
-  const [initialNavigationState, setInitialNavigationState] =
-    useState<NavigationProps["initialState"]>()
+export function useNavigationPersistence() {
+  const [initialNavigationState] = useState<NavigationProps["initialState"]>()
   const isMounted = useIsMounted()
 
   const initNavState = navigationRestoredDefaultState(Config.persistNavigation)
   const [isRestored, setIsRestored] = useState(initNavState)
 
-  const routeNameRef = useRef<keyof AppRoute | undefined>()
+  const routeNameRef = useRef<keyof AppRoute | undefined>(undefined)
 
   const onNavigationStateChange = (state: NavigationState | undefined) => {
     const previousRouteName = routeNameRef.current
     if (state !== undefined) {
-      // console.log("onNavigationStateChange", state)
       const currentRouteName = getActiveRouteName(state)
 
       if (previousRouteName !== currentRouteName) {

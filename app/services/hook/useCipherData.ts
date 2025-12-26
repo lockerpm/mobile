@@ -1,43 +1,46 @@
+import chunk from "lodash/chunk"
+
 import { useStores } from "app/models"
-import { useCoreService } from "../coreService"
-import { useHelper } from "./useHelper"
-import { useCipherHelper } from "./useCipherHelper"
-import { SyncQueue } from "app/utils/queue"
-import { CipherType } from "core/enums"
-import { AppEventType, EventBus } from "app/utils/eventBus"
-import { CipherView, LoginUriView, LoginView } from "core/models/view"
-import { CipherRequest, FolderRequest } from "core/models/request"
 import {
   FREE_PLAN_LIMIT,
   IMPORT_BATCH_SIZE,
   MAX_MULTIPLE_SHARE_COUNT,
   TEMP_PREFIX,
 } from "app/static/constants"
-import { Cipher, EncString, SymmetricCryptoKey } from "core/models/domain"
-import { FolderView } from "core/models/view/folderView"
 import { GetCiphersParams } from "app/static/types"
-import { ImportCiphersRequest } from "core/models/request/importCiphersRequest"
-import { KvpRequest } from "core/models/request/kvpRequest"
-import chunk from "lodash/chunk"
-import { ImportResult } from "core/models/domain/importResult"
 import { AccountRoleText, EmergencyAccessType } from "app/static/types/enum"
-import { CollectionView } from "core/models/view/collectionView"
-import { CollectionRequest } from "core/models/request/collectionRequest"
+import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
+import { getTeam } from "app/utils/cipherHelper"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+import { SyncQueue } from "app/utils/queue"
+import { CipherType } from "core/enums"
 import { CipherData, FolderData } from "core/models/data"
 import { OrganizationData } from "core/models/data/organizationData"
-import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
+import { Cipher, EncString, SymmetricCryptoKey } from "core/models/domain"
+import { ImportResult } from "core/models/domain/importResult"
+import { CipherRequest, FolderRequest } from "core/models/request"
+import { CollectionRequest } from "core/models/request/collectionRequest"
+import { ImportCiphersRequest } from "core/models/request/importCiphersRequest"
+import { KvpRequest } from "core/models/request/kvpRequest"
+import { CipherView, LoginUriView, LoginView } from "core/models/view"
+import { CollectionView } from "core/models/view/collectionView"
+import { Fido2CredentialView } from "core/models/view/fido2CredentialView"
+import { FolderView } from "core/models/view/folderView"
+
+import { useAppLocale } from "@/i18n"
 import {
   IosAutofillPassword,
   IosAutofillTemporaryPasskey,
   IosAutofillTemporaryPassword,
   autofillKeyChain,
-} from "app/utils/autofillData"
-import { useToast } from "../utils"
-import { getTeam } from "app/utils/cipherHelper"
-import { useAppLocale } from "@/i18n"
-import { Logger } from "@/utils/logger"
+} from "@/utils/autofill.ios"
 import { Base64 } from "@/utils/base64"
-import { Fido2CredentialView } from "core/models/view/fido2CredentialView"
+import { Logger } from "@/utils/logger"
+
+import { useToast } from "../utils"
+import { useCipherHelper } from "./useCipherHelper"
+import { useHelper } from "./useHelper"
+import { useCoreService } from "../coreService"
 
 export function useCipherData() {
   const { cipherStore, folderStore, uiStore, collectionStore, user, enterpriseStore } = useStores()
@@ -430,10 +433,8 @@ export function useCipherData() {
         fido2.credentialId = cipher.credentialId
         fido2.keyValue = cipher.keyValue
         fido2.rpId = cipher.rpId
-        fido2.rpName = cipher.rpId
         fido2.userHandle = cipher.userHandle
         fido2.userName = cipher.userName
-        fido2.userDisplayName = cipher.userName
         fido2.creationDate = new Date(cipher.creationDate)
         data.fido2Credentials = [fido2]
 

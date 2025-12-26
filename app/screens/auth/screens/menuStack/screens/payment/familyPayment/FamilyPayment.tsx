@@ -1,9 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Image } from "react-native"
-import { SKU } from "../PricePlan.sku"
+
 import { Text, Button, Icon } from "app/components/cores"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { useAppLocale } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { SKU } from "../PricePlan.sku"
 
 interface Props {
   purchase: (subID: string) => void

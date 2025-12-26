@@ -1,21 +1,24 @@
 import { FC, useCallback, useEffect, useState } from "react"
 import { Alert, View, Image, StyleSheet, ViewStyle } from "react-native"
-import { ConfirmCreateMPModal } from "./ConfirmCreateMpModal"
-import { useStores } from "app/models"
-import { logCreateMasterPwEvent } from "app/utils/analytics"
-import { useAuthentication, useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import NetInfo from "@react-native-community/netinfo"
+import { CommonActions } from "@react-navigation/native"
+import { observer } from "mobx-react-lite"
+import Animated, { FadeInUp } from "react-native-reanimated"
+
 import { Button, Logo, PressableText, Screen, Text, TextInput } from "app/components/cores"
 import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/utils"
-import Animated, { FadeInUp } from "react-native-reanimated"
-import { observer } from "mobx-react-lite"
-import { LockType, PolicyType } from "app/static/types"
-import NetInfo from "@react-native-community/netinfo"
-import { useBiometricType } from "app/services/utils"
+import { useStores } from "app/models"
 import { UnAuthScreenProps } from "app/navigators"
+import { useAuthentication, useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useBiometricType } from "app/services/utils"
+import { LockType, PolicyType } from "app/static/types"
+import { logCreateMasterPwEvent } from "app/utils/analytics"
+
 import { useAppLocale } from "@/i18n"
-import { useAppTheme } from "@/utils/useAppTheme"
 import { ThemedStyle } from "@/theme"
-import { CommonActions } from "@react-navigation/native"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { ConfirmCreateMPModal } from "./ConfirmCreateMpModal"
 
 export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassword">> = observer(
   ({ navigation }) => {
@@ -312,6 +315,7 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
 
 const $user: ThemedStyle<ViewStyle> = ({ colors }) => ({
   marginVertical: 16,
+  marginHorizontal: 12,
   borderRadius: 20,
   backgroundColor: colors.block,
   flexDirection: "row",

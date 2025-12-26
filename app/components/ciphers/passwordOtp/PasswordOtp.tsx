@@ -1,12 +1,14 @@
 /* eslint-disable no-restricted-imports */
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { View, TextInput, StyleSheet, ViewStyle } from "react-native"
-import { Text, PressableIcon } from "app/components/cores"
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer"
-import { getTOTP, parseOTPUri } from "app/utils/totp"
+
+import { Text, PressableIcon } from "app/components/cores"
 import { useClipboard } from "app/services/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { getTOTP, parseOTPUri } from "app/utils/totp"
+
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type Prop = {
   data: string
@@ -25,14 +27,24 @@ export const PasswordOtp = (props: Prop) => {
 
   const otpData = parseOTPUri(data)
 
-  const [otp, setOtp] = useState(getTOTP(otpData))
-
   const [hide, setHide] = useState(!!secure)
+
+  const [otp, setOtp] = useState("000000")
+
+  const getOtp = useCallback(async () => {
+    const res = await getTOTP(otpData)
+    setOtp(res)
+  }, [otpData])
+
   // Calculate remaining time
   const getRemainingTime = (period: number) => {
     // Better late 1 sec than early
     return period + 1 - (Math.floor(new Date().getTime() / 1000) % period)
   }
+
+  useEffect(() => {
+    getOtp()
+  }, [getOtp])
 
   return (
     <View style={[themed($container), containerStyle]}>
@@ -61,8 +73,9 @@ export const PasswordOtp = (props: Prop) => {
           />
           <CountdownCircleTimer
             onComplete={() => {
-              // index === 0 && updateOtp()
-              setOtp(getTOTP(otpData))
+              getTOTP(otpData).then((newOtp) => {
+                setOtp(newOtp)
+              })
               return {
                 shouldRepeat: true,
               }
@@ -93,7 +106,9 @@ export const PasswordOtp = (props: Prop) => {
             size={20}
             color={colors.title}
             onPress={() => {
-              copyToClipboard(getTOTP(otpData))
+              getTOTP(otpData).then((newOtp) => {
+                copyToClipboard(newOtp)
+              })
             }}
           />
         </View>

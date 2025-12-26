@@ -2,8 +2,9 @@
  * If you're using Sentry
  *   Expo https://docs.expo.dev/guides/using-sentry/
  */
-import Config from "@/config"
 import * as Sentry from "@sentry/react-native"
+
+import Config from "@/config"
 
 /**
  * If you're using Crashlytics: https://rnfirebase.io/crashlytics/usage

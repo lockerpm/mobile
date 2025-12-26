@@ -1,21 +1,25 @@
-import orderBy from "lodash/orderBy"
-import { useState, useEffect, useCallback, useMemo } from "react"
+import { useState, useEffect, useCallback, useMemo, ReactElement } from "react"
 import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native"
+import orderBy from "lodash/orderBy"
+import { observer } from "mobx-react-lite"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+
+import { SearchBar } from "app/components/utils"
 import { useStores } from "app/models"
 import { useCipherData } from "app/services/hook"
+import { useToast } from "app/services/utils"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { AccountRole, CipherAppView } from "app/static/types"
+import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
 import { CipherType } from "core/enums"
 import { CipherView } from "core/models/view"
-import { CipherListItem } from "./CipherListItem"
-import { Text } from "../../cores"
-import { observer } from "mobx-react-lite"
-import { useToast } from "app/services/utils"
-import { SearchBar } from "app/components/utils"
-import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { useAppLocale } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { CipherListItem } from "./CipherListItem"
+import { useSearchCipher } from "./useSearchCipher"
+import { Text } from "../../cores"
 
 export interface CipherListProps {
   /**
@@ -25,7 +29,7 @@ export interface CipherListProps {
   /**
    * List empty component
    */
-  ListEmptyComponent?: JSX.Element
+  ListEmptyComponent?: ReactElement
   /**
    * Cipher type to filter
    */
@@ -102,12 +106,11 @@ export const CipherList = observer(
     const { getCiphersFromCache } = useCipherData()
 
     // ------------------------ PARAMS ----------------------------
-    console.log(12)
-    const [searchText, setSearchText] = useState("")
 
     const [ciphers, setCiphers] = useState<CipherAppView[]>([])
-
     const [isLoadingDone, setIsLoadingDone] = useState(false)
+
+    const { searchText, onChangeText, filteredCiphers } = useSearchCipher(ciphers)
 
     // ------------------------ COMPUTED ----------------------------
     const data = useMemo(() => {
@@ -121,10 +124,10 @@ export const CipherList = observer(
       }
 
       if (isSelecting) {
-        return ciphers.filter(checkSelectingEditPermission)
+        return filteredCiphers.filter(checkSelectingEditPermission)
       }
-      return ciphers
-    }, [ciphers, cipherStore.organizations, isSelecting])
+      return filteredCiphers
+    }, [filteredCiphers, cipherStore.organizations, isSelecting])
 
     const masterPassword =
       data.length === 1 && data[0].type === CipherType.MasterPassword ? data[0] : null
@@ -138,14 +141,17 @@ export const CipherList = observer(
 
     // check if cipher is shared from other user
     // if true, show shared icon
-    const isShared = (organizationId: string | null) => {
-      if (!organizationId) return false
-      const share = cipherStore.myShares.find((s) => s.id === organizationId)
-      if (share) {
-        return share.members.length > 0 || share.groups.length > 0
-      }
-      return !!organizationId
-    }
+    const isShared = useCallback(
+      (organizationId: string | null) => {
+        if (!organizationId) return false
+        const share = cipherStore.myShares.find((s) => s.id === organizationId)
+        if (share) {
+          return share.members.length > 0 || share.groups.length > 0
+        }
+        return !!organizationId
+      },
+      [cipherStore.myShares]
+    )
 
     // Check if cipher is not synced or updated
     const isSync = useCallback(
@@ -182,7 +188,7 @@ export const CipherList = observer(
       // Search
       const searchRes = await getCiphersFromCache({
         filters,
-        searchText,
+        searchText: "",
         deleted: isdeleted,
       })
 
@@ -223,38 +229,31 @@ export const CipherList = observer(
       setAllItems(res)
       setIsLoadingDone(true)
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-      cipherTypes,
-      collectionId,
-      folderId,
-      isSync,
-      isdeleted,
-      organizationId,
-      searchText,
-      setAllItems,
-      sort,
-    ])
+    }, [cipherTypes, collectionId, folderId, isSync, isdeleted, organizationId, setAllItems, sort])
 
     // Toggle item selection
-    const toggleItemSelection = (item: CipherAppView) => {
-      if (collectionId) {
-        return
-      }
-      if (!isSelecting) {
-        setIsSelecting(true)
-      }
-      let selected = [...selectedCiphers]
-      if (!selected.find((i) => i.id === item.id)) {
-        if (selected.length === MAX_CIPHER_SELECTION) {
-          notifyTx("error", "error:cannot_select_more", { count: MAX_CIPHER_SELECTION })
+    const toggleItemSelection = useCallback(
+      (item: CipherAppView) => {
+        if (collectionId) {
           return
         }
-        selected.push(item)
-      } else {
-        selected = selected.filter((i) => i.id !== item.id)
-      }
-      setSelectedCiphers(selected)
-    }
+        if (!isSelecting) {
+          setIsSelecting(true)
+        }
+        let selected = [...selectedCiphers]
+        if (!selected.find((i) => i.id === item.id)) {
+          if (selected.length === MAX_CIPHER_SELECTION) {
+            notifyTx("error", "error:cannot_select_more", { count: MAX_CIPHER_SELECTION })
+            return
+          }
+          selected.push(item)
+        } else {
+          selected = selected.filter((i) => i.id !== item.id)
+        }
+        setSelectedCiphers(selected)
+      },
+      [collectionId, isSelecting, notifyTx, selectedCiphers, setIsSelecting, setSelectedCiphers]
+    )
 
     // ------------------------ EFFECTS ----------------------------
 
@@ -320,7 +319,7 @@ export const CipherList = observer(
             <>
               <SearchBar
                 containerStyle={styles.searchContainer}
-                onChangeText={setSearchText}
+                onChangeText={onChangeText}
                 value={searchText}
               />
               {masterPassword && (

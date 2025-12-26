@@ -849,6 +849,7 @@ const en = {
     use_symbol: "Use symbols (@!$%*)",
     avoid_ambiguous: "Avoid ambiguous characters",
     use_password: "Use Password",
+    copy_fill: "Copy & Fill",
   },
   authenticator: {
     title: "Authenticator",
@@ -957,6 +958,26 @@ const en = {
         header: "Autofill Service",
         name: "Android Auto-fill",
         desc: "The Locker auto-fill service uses the Android Autofill Framework to assist in filling logins into other apps on your device",
+        chrome_name: "Chrome Auto-fill",
+        chrome_desc:
+          "Enable Chrome AutoFill and let Locker quickly and securely fill your login details across websites",
+      },
+    },
+    android_service: {
+      create_passkey: {
+        title: "Create new Passkey",
+        existing_key: "A passkey already exists for this email/username",
+        action_header: "Create passkey for a new item",
+        action_btn: "Create passkey",
+        replace_header: "Add a passkey to existing login items",
+        replace_alert_t: "This login already contains a passkey",
+        replace_alert_d: "Do you want to create a new one and replace the existing passkey?",
+      },
+      list_passkey: {
+        title: "Passkey List",
+        header: "Passkey list for ",
+        empty_title: "No passkeys available",
+        empty_label: "There aren't any passkeys for {{rpId}} on this account",
       },
     },
   },

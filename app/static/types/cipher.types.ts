@@ -1,5 +1,8 @@
+import { ImageSourcePropType } from "react-native"
+
+import { CipherType } from "core/enums"
+import { CipherRepromptType } from "core/enums/cipherRepromptType"
 import { CipherRequest } from "core/models/request/cipherRequest"
-import { AccountRoleText, SharingStatus, SharingType } from "./enum"
 import { FolderRequest } from "core/models/request/folderRequest"
 import {
   AttachmentView,
@@ -10,10 +13,10 @@ import {
   LoginView,
   SecureNoteView,
 } from "core/models/view"
-import { ImageSourcePropType } from "react-native"
-import { CipherType } from "core/enums"
+import { Fido2CredentialView } from "core/models/view/fido2CredentialView"
 import { PasswordHistoryView } from "core/models/view/passwordHistoryView"
-import { CipherRepromptType } from "core/enums/cipherRepromptType"
+
+import { AccountRoleText, SharingStatus, SharingType } from "./enum"
 
 export enum CipherActionsModal {
   DEFAULT = "default",
@@ -234,4 +237,13 @@ export interface FileData {
 
 export type CipherRequestWithId = CipherRequest & {
   id: string
+}
+
+export type Fido2SimpleView = {
+  credentialId: string // Base64URL
+  keyValue: string // Base64URL
+  rpId: string
+  userHandle: string // Base64URL
+  userName: string
+  creationDate: string
 }

@@ -4,22 +4,26 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
+import { ComponentProps, useEffect, useMemo } from "react"
+import { Platform } from "react-native"
+import NetInfo from "@react-native-community/netinfo"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import NetInfo from "@react-native-community/netinfo"
 import { observer } from "mobx-react-lite"
+import Toast, { BaseToastProps } from "react-native-toast-message"
+
+import { ErrorToast, InfoToast, SuccessToast } from "app/components/cores"
+
+import { useStores } from "@/models"
 import * as Screens from "@/screens"
+import { AndroidAppProps } from "@/utils/autofill.android"
+import { Logger } from "@/utils/logger"
+import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme"
+
 import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
-import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme"
-import { ComponentProps, useEffect, useMemo } from "react"
 import { AppRoute } from "./navigators.types"
-import Toast, { BaseToastProps } from "react-native-toast-message"
-import { ErrorToast, InfoToast, SuccessToast } from "app/components/cores"
-import { useStores } from "@/models"
-import { Logger } from "@/utils/logger"
 import { useMonitorApiResponse } from "./useMonitorApiResponse"
-import { isAndroidAutofillService } from "@/utils/autofillHelper"
 
 const exitRoutes = Config.exitRoutes
 
@@ -51,7 +55,10 @@ const linking = {
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<AppRoute>()
 
-const AppStack = observer(function AppStack() {
+type AppProps = {
+  fido2: AndroidAppProps // android credential provider and autofill service
+}
+const AppStack = observer(function AppStack(props: AppProps) {
   const {
     theme: { colors },
   } = useAppTheme()
@@ -74,22 +81,33 @@ const AppStack = observer(function AppStack() {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        navigationBarColor: colors.background,
         contentStyle: {
           backgroundColor: colors.background,
         },
       }}
     >
-      <Stack.Screen name="init" component={Screens.SplashScreen} />
+      <Stack.Screen
+        name="init"
+        component={Screens.SplashScreen}
+        initialParams={{
+          fido2: props.fido2,
+        }}
+      />
       <Stack.Screen name="lock" component={Screens.LockScreen} />
-      <Stack.Screen name="authStack" component={Screens.AuthStack} />
+      <Stack.Screen
+        name="authStack"
+        component={Screens.AuthStack}
+        initialParams={{
+          fido2: props.fido2,
+        }}
+      />
       <Stack.Screen name="unAuthStack" component={Screens.UnAuthStack} />
     </Stack.Navigator>
   )
 })
 
-export interface NavigationProps
-  extends Partial<ComponentProps<typeof NavigationContainer<AppRoute>>> {}
+export type NavigationProps = Partial<ComponentProps<typeof NavigationContainer<AppRoute>>> &
+  AppProps
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const { themeScheme, navigationTheme, setThemeContextOverride, ThemeProvider } =
@@ -109,7 +127,7 @@ export const AppNavigator = observer(function AppNavigator(props: NavigationProp
     []
   )
 
-  const enableDeeplink = !isAndroidAutofillService
+  const enableDeeplink = !(Platform.OS === "android" && props.fido2.type)
 
   return (
     <ThemeProvider value={{ themeScheme, setThemeContextOverride }}>
@@ -119,7 +137,7 @@ export const AppNavigator = observer(function AppNavigator(props: NavigationProp
         linking={enableDeeplink ? linking : undefined}
         {...props}
       >
-        <AppStack />
+        <AppStack fido2={props.fido2} />
         <Toast position="top" config={toastConfig} />
       </NavigationContainer>
     </ThemeProvider>

@@ -1,12 +1,14 @@
 import { StyleSheet, View, ViewStyle } from "react-native"
-import Animated from "react-native-reanimated"
+import Animated, { SharedValue } from "react-native-reanimated"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+
 import { Button } from "app/components/cores"
+
 import { AnimatedTitle } from "./AnimatedText"
 import { AnimatedTabIndicator } from "./Indicator"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
 interface Props {
-  animIndex: Animated.SharedValue<number>
+  animIndex: SharedValue<number>
   scrollTo: (index: number) => void
   index: number
   goStart: () => void
@@ -14,6 +16,7 @@ interface Props {
 const INTRO_LENGTH = 4
 
 export const AnimatedFooter = ({ animIndex, scrollTo, index, goStart }: Props) => {
+  const insets = useSafeAreaInsets()
   const goNext = () => {
     if (index < INTRO_LENGTH - 1) {
       scrollTo(index + 1)
@@ -25,7 +28,7 @@ export const AnimatedFooter = ({ animIndex, scrollTo, index, goStart }: Props) =
   // -------------RENDER-----------------
 
   return (
-    <Animated.View style={styles.container}>
+    <Animated.View style={[styles.container, { paddingBottom: insets.bottom + 6 }]}>
       {/** Display intro content */}
       <AnimatedTitle animIndex={animIndex} />
 
@@ -44,7 +47,6 @@ export const AnimatedFooter = ({ animIndex, scrollTo, index, goStart }: Props) =
 const styles = StyleSheet.create({
   container: {
     height: "35%",
-    paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom + 10,
     paddingHorizontal: 26,
   },
 })

@@ -115,7 +115,7 @@ struct StrongPasswordGenerator: View {
             Button {
               usePassword(password)
             } label: {
-              Text(i.translate("pw.useBtn"))
+              Text(i.translate("pw.copyFill"))
                 .frame(maxWidth: .infinity)
                 .foregroundStyle(.white)
             }

@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from "react"
-import { observer } from "mobx-react-lite"
 import {
   BackHandler,
   TouchableOpacity,
@@ -9,15 +8,9 @@ import {
   ImageStyle,
   Alert,
 } from "react-native"
-import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
-import { useStores } from "app/models"
-import { CollectionView } from "core/models/view/collectionView"
-import { CipherView, FieldView, LoginUriView, LoginView } from "core/models/view"
-import { Header, Screen, TextInput, Text, Icon } from "app/components/cores"
-import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/utils"
-import { BrowseScreenProps } from "app/navigators"
-import { CipherAppView, CipherEditHelperModal, CipherEditMode } from "app/static/types"
-import { AndroidAutofillServiceData } from "app/utils/autofillHelper"
+import { observer } from "mobx-react-lite"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+
 import {
   CipherIconImage,
   CipherOthersInfo,
@@ -25,14 +18,23 @@ import {
   DynamicUris,
   PasswordOtp,
 } from "app/components/ciphers"
+import { Header, Screen, TextInput, Text, Icon } from "app/components/cores"
+import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/utils"
+import { useStores } from "app/models"
+import { BrowseScreenProps } from "app/navigators"
+import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
+import { CipherAppView, CipherEditHelperModal, CipherEditMode } from "app/static/types"
+import { CipherView, FieldView, LoginUriView, LoginView } from "core/models/view"
+import { CollectionView } from "core/models/view/collectionView"
+import { Fido2CredentialView } from "core/models/view/fido2CredentialView"
 import { FolderView } from "core/models/view/folderView"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
+import { AndroidAFSavePassword } from "@/utils/autofill.android"
 import { AppEventType, EventBus } from "@/utils/eventBus"
-import { Fido2CredentialView } from "core/models/view/fido2CredentialView"
 import { formatDate } from "@/utils/formatDate"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type Props = {
   item: CipherAppView
@@ -49,7 +51,7 @@ type Props = {
 
   // autofill android service
   initialUrl?: string
-  androidAutofillSavedData?: AndroidAutofillServiceData
+  androidAutofillSavedData?: AndroidAFSavePassword
 }
 
 export const PasswordEdit = observer(
@@ -91,7 +93,7 @@ export const PasswordEdit = observer(
 
     // Forms
     const [name, setName] = useState(
-      onSaveFillService ? saveData.domain?.replace("https://", "") : item.name
+      onSaveFillService ? saveData.url?.replace("https://", "") : item.name
     )
     const [username, setUsername] = useState(
       onSaveFillService ? saveData.username : item.login.username
@@ -103,7 +105,7 @@ export const PasswordEdit = observer(
 
     const [urls, setUrls] = useState(
       onSaveFillService
-        ? [saveData.domain]
+        ? [saveData.url]
         : item.login.uris?.length > 0
           ? item.login.uris.map((e) => e.uri)
           : [initialUrl || "https://"]
@@ -464,10 +466,10 @@ const $block: ThemedStyle<ViewStyle> = ({ colors }) => ({
 })
 
 const $image: ThemedStyle<ImageStyle> = ({ colors }) => ({
-  height: 50,
+  height: 40,
   marginRight: 10,
-  marginTop: 26,
-  width: 50,
+  marginTop: 20,
+  width: 40,
   borderRadius: 8,
   backgroundColor: colors.block,
 })

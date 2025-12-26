@@ -1,17 +1,20 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, ReactElement } from "react"
 import { StyleSheet, View, FlatList } from "react-native"
+import { orderBy } from "lodash"
 import { observer } from "mobx-react-lite"
-import { OtpListItem } from "./OtpListItem"
+
 import { Text } from "app/components/cores"
-import { useCipherData } from "app/services/hook"
 import { useStores } from "app/models"
-import { CipherView } from "core/models/view"
+import { useCipherData } from "app/services/hook"
 import { CipherType } from "core/enums"
-import { useAppLocale } from "@/i18n"
+import { CipherView } from "core/models/view"
+
 import { EmptyCipherList } from "@/components/ciphers"
 import { SearchBar } from "@/components/utils"
+import { useAppLocale } from "@/i18n"
 import { CipherAppView } from "@/static/types"
-import { orderBy } from "lodash"
+
+import { OtpListItem } from "./OtpListItem"
 
 const EMPTY = require("assets/images/emptyCipherList/password-empty-img.png")
 
@@ -21,7 +24,7 @@ interface Props {
   setOtpCount: (val: number) => void
   openActionMenu: (val: CipherAppView) => void
   openAddMenu?: () => void
-  ListHeaderComponent?: JSX.Element
+  ListHeaderComponent?: ReactElement
 }
 
 /**

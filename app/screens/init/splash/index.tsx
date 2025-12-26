@@ -1,15 +1,18 @@
 import { FC, useState, useEffect, useCallback } from "react"
 import { StyleSheet, View } from "react-native"
-import DeviceInfo from "react-native-device-info"
 import JailMonkey from "jail-monkey"
-import { useStores } from "app/models"
+import DeviceInfo from "react-native-device-info"
+
 import { Text, Screen } from "app/components/cores"
-import { LockType } from "app/static/types"
-import { useAppUpdate } from "./useAppUpdate"
-import { useToast } from "app/services/utils"
+import { useStores } from "app/models"
 import { idApi } from "app/services/api"
-import { AppScreenProps } from "@/navigators"
+import { useToast } from "app/services/utils"
+import { LockType } from "app/static/types"
+
 import { MotionLoading } from "@/components/utils"
+import { AppScreenProps } from "@/navigators"
+
+import { useAppUpdate } from "./useAppUpdate"
 
 /**
  * Init screen for the app, checks if the device is rooted/jailbroken,
@@ -17,7 +20,12 @@ import { MotionLoading } from "@/components/utils"
  * @param param0
  * @returns
  */
-export const SplashScreen: FC<AppScreenProps<"init">> = ({ navigation }) => {
+export const SplashScreen: FC<AppScreenProps<"init">> = ({
+  navigation,
+  route: {
+    params: { fido2 },
+  },
+}) => {
   const { user, uiStore } = useStores()
   const { notifyApiError } = useToast()
 
@@ -86,16 +94,16 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({ navigation }) => {
       if (userRes.kind !== "ok") {
         notifyApiError(userRes)
       }
-      navigation.replace("lock", { type: LockType.Individual })
+      navigation.replace("lock", { type: LockType.Individual, fido2: fido2 })
     } else {
       navigateToLogin()
     }
   }
 
   const mounted = useCallback(async () => {
-    // if (checkTrustFall()) {
-    //   return
-    // }
+    if (checkTrustFall()) {
+      return
+    }
 
     if (!user.deviceId) {
       user.setDeviceId(await DeviceInfo.getUniqueId())

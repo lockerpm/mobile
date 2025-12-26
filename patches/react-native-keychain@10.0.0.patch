@@ -1,0 +1,81 @@
+diff --git a/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt b/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt
+index 70912a95a36d1e1b2998916cb3f9604eda435bbd..300925a0fd48daa7decfe7a158ed7bd282eb75b9 100644
+--- a/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt
++++ b/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt
+@@ -9,7 +9,6 @@ import androidx.datastore.preferences.core.Preferences
+ import androidx.datastore.preferences.core.edit
+ import androidx.datastore.preferences.core.stringPreferencesKey
+ import androidx.datastore.preferences.preferencesDataStore
+-import com.facebook.react.bridge.ReactApplicationContext
+ import com.oblador.keychain.PrefsStorageBase.Companion.KEYCHAIN_DATA
+ import com.oblador.keychain.PrefsStorageBase.Companion.getKeyForCipherStorage
+ import com.oblador.keychain.PrefsStorageBase.Companion.getKeyForPassword
+@@ -18,20 +17,21 @@ import com.oblador.keychain.PrefsStorageBase.Companion.isKeyForCipherStorage
+ import com.oblador.keychain.PrefsStorageBase.ResultSet
+ import com.oblador.keychain.cipherStorage.CipherStorage
+ import kotlinx.coroutines.CoroutineScope
++import kotlinx.coroutines.Dispatchers
++import kotlinx.coroutines.SupervisorJob
+ import kotlinx.coroutines.flow.first
+ import kotlinx.coroutines.runBlocking
+ 
+-class DataStorePrefsStorage(
+-  reactContext: ReactApplicationContext,
+-  private val coroutineScope: CoroutineScope,
+-) : PrefsStorageBase {
++class DataStorePrefsStorage private constructor(context: Context) : PrefsStorageBase {
++
++  val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+ 
+   private val Context.prefs: DataStore<Preferences> by preferencesDataStore(
+     name = KEYCHAIN_DATA,
+     produceMigrations = ::sharedPreferencesMigration,
+     scope = coroutineScope,
+   )
+-  private val prefs: DataStore<Preferences> = reactContext.prefs
++  private val prefs: DataStore<Preferences> = context.applicationContext.prefs
+   private val prefsData: Preferences get() = callSuspendable { prefs.data.first() }
+ 
+   private fun sharedPreferencesMigration(context: Context): List<DataMigration<Preferences>> {
+@@ -114,4 +114,16 @@ class DataStorePrefsStorage(
+   private fun getBytes(prefKey: Preferences.Key<String>): ByteArray? {
+     return prefsData[prefKey]?.let { Base64.decode(it, Base64.DEFAULT) }
+   }
++
++  companion object {
++    @Volatile
++    private var instance: DataStorePrefsStorage? = null
++
++    @JvmStatic
++    fun getInstance(context: Context): DataStorePrefsStorage {
++      return instance ?: synchronized(this) {
++        instance ?: DataStorePrefsStorage(context.applicationContext).also { instance = it }
++      }
++    }
++  }
+ }
+diff --git a/android/src/main/java/com/oblador/keychain/KeychainModule.kt b/android/src/main/java/com/oblador/keychain/KeychainModule.kt
+index 722a5ed990c2a1baa15546351d36928ec2b6d268..bb65e1fe07802e72145d3c250478bdf340be6b3f 100644
+--- a/android/src/main/java/com/oblador/keychain/KeychainModule.kt
++++ b/android/src/main/java/com/oblador/keychain/KeychainModule.kt
+@@ -126,10 +126,10 @@ class KeychainModule(reactContext: ReactApplicationContext) :
+   private val cipherStorageMap: MutableMap<String, CipherStorage> = HashMap()
+ 
+   /** Shared preferences storage. */
+-  private val prefsStorage: PrefsStorageBase
++  private val prefsStorage = DataStorePrefsStorage.getInstance(reactContext)
+ 
+   /** Launches a coroutine to perform non-blocking UI operations */
+-  private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
++  private val coroutineScope: CoroutineScope = prefsStorage.coroutineScope
+ 
+   /** Mutex to prevent concurrent calls to Cipher, which doesn't support multi-threading */
+   private val mutex = Mutex()
+@@ -138,7 +138,6 @@ class KeychainModule(reactContext: ReactApplicationContext) :
+   // region Initialization
+   /** Default constructor. */
+   init {
+-    prefsStorage = DataStorePrefsStorage(reactContext, coroutineScope)
+     addCipherStorageToMap(CipherStorageKeystoreAesCbc(reactContext))
+     addCipherStorageToMap(CipherStorageKeystoreAesGcm(reactContext, false))
+     addCipherStorageToMap(CipherStorageKeystoreAesGcm(reactContext, true))

@@ -1,11 +1,13 @@
 import { StyleProp, ViewStyle, Modal, View, StyleSheet, Platform } from "react-native"
-import { TextProps } from "../text/Text"
-import { BottomModalHeader } from "./BottomModalHeader"
-import { useAppTheme } from "@/utils/useAppTheme"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { ThemedStyle } from "@/theme"
-import { debounce } from "@/utils/utils"
 import Animated, { FadeInDown } from "react-native-reanimated"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+
+import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { debounce } from "@/utils/utils"
+
+import { BottomModalHeader } from "./BottomModalHeader"
+import { TextProps } from "../text/Text"
 
 interface Props {
   /**
@@ -45,6 +47,7 @@ export const BottomModal = ({
   onDismiss,
 }: Props) => {
   const { themed } = useAppTheme()
+  const insets = useSafeAreaInsets()
 
   return (
     <Modal
@@ -61,7 +64,9 @@ export const BottomModal = ({
         style={themed($contentBackground)}
       >
         <BottomModalHeader tx={tx} onClose={onClose} />
-        <View style={[$contentContainer, contentContainer]}>{children}</View>
+        <View style={[$contentContainer, contentContainer, { paddingBottom: insets.bottom }]}>
+          {children}
+        </View>
       </Animated.View>
     </Modal>
   )
@@ -81,7 +86,6 @@ const $backdrop: ThemedStyle<ViewStyle> = ({ colors }) => ({
 })
 
 const $contentContainer: StyleProp<ViewStyle> = {
-  paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom + (Platform.OS === "ios" ? 0 : 24),
   paddingHorizontal: 16,
   maxHeight: "80%",
 }

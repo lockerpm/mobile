@@ -82,6 +82,7 @@ export function ImageIcon(props: IconProps) {
 export const imageRegistry = {
   apple: require("assets/images/icons/apple.png"),
   facebook: require("assets/images/icons/facebook.png"),
+  microsoft: require("assets/images/icons/microsoft.png"),
   github: require("assets/images/icons/github.png"),
   google: require("assets/images/icons/google.png"),
   sso: require("assets/images/icons/sso.png"),

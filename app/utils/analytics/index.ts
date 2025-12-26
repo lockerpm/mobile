@@ -1,5 +1,5 @@
 import CookieManager from "@react-native-cookies/cookies"
-import analytics from "@react-native-firebase/analytics"
+import { getAnalytics, logEvent, logScreenView } from "@react-native-firebase/analytics"
 import moment from "moment"
 import DeviceInfo from "react-native-device-info"
 
@@ -75,7 +75,8 @@ export const getCookies = async (name: string) => {
 export const logRegisterSuccessEvent = async () => {
   const cookies = await getUtmCookies()
   const device_identifier = await DeviceInfo.getUniqueId()
-  await analytics().logEvent(AnalyticEvents.REGISTER_SUCCESS, {
+  const analytics = getAnalytics()
+  await logEvent(analytics, AnalyticEvents.REGISTER_SUCCESS, {
     ...cookies,
     device_identifier,
   })
@@ -85,7 +86,8 @@ export const logRegisterSuccessEvent = async () => {
 export const logCreateMasterPwEvent = async () => {
   const cookies = await getUtmCookies()
   const device_identifier = await DeviceInfo.getUniqueId()
-  await analytics().logEvent(AnalyticEvents.CREATE_MASTER_PW, {
+  const analytics = getAnalytics()
+  await logEvent(analytics, AnalyticEvents.CREATE_MASTER_PW, {
     ...cookies,
     device_identifier,
   })
@@ -95,8 +97,8 @@ export const trackScreenView = (screenName: string) => {
   if (__DEV__) {
     return
   }
-
-  analytics().logScreenView({
+  const analytics = getAnalytics()
+  logScreenView(analytics, {
     screen_name: screenName,
     screen_class: screenName,
   })
@@ -104,7 +106,8 @@ export const trackScreenView = (screenName: string) => {
 
 export const logFirebaseEvent = async (event: AnalyticEvents, email: string) => {
   const device_identifier = await DeviceInfo.getUniqueId()
-  await analytics().logEvent(event, {
+  const analytics = getAnalytics()
+  await logEvent(analytics, event, {
     device_identifier,
     email,
   })

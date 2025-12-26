@@ -1,10 +1,12 @@
-import { PlatformUtilsService } from "core/abstractions"
-import { DeviceType } from "core/enums"
 import { Platform, Linking, Alert } from "react-native"
 import Clipboard from "@react-native-clipboard/clipboard"
 import DeviceInfo from "react-native-device-info"
-import Toast from "react-native-toast-message"
 import RNFS from "react-native-fs"
+import Toast from "react-native-toast-message"
+
+import { PlatformUtilsService } from "core/abstractions"
+import { DeviceType } from "core/enums"
+
 import { Logger } from "@/utils/logger"
 
 export class MobilePlatformUtilsService implements PlatformUtilsService {

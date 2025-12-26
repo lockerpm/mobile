@@ -1,11 +1,14 @@
 import { FC } from "react"
 import { StyleSheet, View } from "react-native"
-import { debounce } from "app/utils/utils"
-import { AndroidAutofillScreenProps } from "app/navigators"
+
 import { BottomModalContainer, ModalBackdrop, Text } from "app/components/cores"
+import { AndroidAutofillScreenProps } from "app/navigators"
+import { debounce } from "app/utils/utils"
+
 import { CipherActionsByType, CipherIconImage } from "@/components/ciphers"
-import { getCipherDescription } from "@/utils/cipherHelper"
 import { NewActionSheetItem } from "@/components/utils"
+import { getCipherDescription } from "@/utils/cipherHelper"
+
 import { useActionsNavigate } from "./useActionsNavigate"
 
 export const AndroidAutofillCipherActionsModalScreen: FC<

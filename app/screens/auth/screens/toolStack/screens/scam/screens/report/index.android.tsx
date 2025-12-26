@@ -1,16 +1,18 @@
-import { Button, Header, Screen, Text, TextInput } from "@/components/cores"
-import { ScamScreenProps } from "@/navigators"
 import { FC, useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
-import { ScamTypeInput } from "./ScamTypeInput"
-import { ScamPhoneType, ScamType } from "@/static/types"
-import { toolApi } from "@/services/api"
-import { observer } from "mobx-react-lite"
-import { useStores } from "@/models"
-import { formatVietnamesePhoneNumber, validateVietnamesePhoneNumber } from "@/utils/utils"
-import { useToast } from "@/services/utils"
 import { CommonActions } from "@react-navigation/native"
+import { observer } from "mobx-react-lite"
+
+import { Button, Header, Screen, Text, TextInput } from "@/components/cores"
+import { useStores } from "@/models"
+import { ScamScreenProps } from "@/navigators"
+import { toolApi } from "@/services/api"
 import { useCallerIDData } from "@/services/callerID/useCallerID.android"
+import { useToast } from "@/services/utils"
+import { ScamPhoneType, ScamType } from "@/static/types"
+import { formatVietnamesePhoneNumber, validateVietnamesePhoneNumber } from "@/utils/utils"
+
+import { ScamTypeInput } from "./ScamTypeInput"
 
 export const ScamReportScreen: FC<ScamScreenProps<"report">> = observer(
   ({ navigation, route: { params } }) => {

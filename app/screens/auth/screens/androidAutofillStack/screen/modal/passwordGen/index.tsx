@@ -1,10 +1,9 @@
-import { ModalBackdrop } from "app/components/cores"
-import { AndroidAutofillScreenProps } from "app/navigators"
-import { debounce } from "app/utils/utils"
 import { FC, useState, useEffect, useCallback } from "react"
 import { ViewStyle, View, StyleSheet, NativeModules } from "react-native"
-import { useCipherHelper } from "app/services/hook"
-import { useCoreService } from "app/services/coreService"
+import Slider from "@react-native-community/slider"
+import { useSharedValue } from "react-native-reanimated"
+import { ReText } from "react-native-redash"
+
 import {
   BottomModalContainer,
   BottomModalHeader,
@@ -12,13 +11,17 @@ import {
   Checkbox,
   Text,
 } from "app/components/cores"
+import { ModalBackdrop } from "app/components/cores"
 import { PasswordStrength } from "app/components/utils"
-import Slider from "@react-native-community/slider"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { AndroidAutofillScreenProps } from "app/navigators"
+import { useCoreService } from "app/services/coreService"
+import { useCipherHelper } from "app/services/hook"
+import { debounce } from "app/utils/utils"
+
 import { TxKeyPath, useAppLocale } from "@/i18n"
-import { useSharedValue } from "react-native-reanimated"
-import { ReText } from "react-native-redash"
+import { useClipboard } from "@/services/utils"
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
@@ -30,6 +33,7 @@ export const AndroidAutofillPasswordGenModalScreen: FC<
     themed,
     theme: { colors },
   } = useAppTheme()
+  const { copyToClipboard } = useClipboard()
   const { translate } = useAppLocale()
   const { getPasswordStrength } = useCipherHelper()
   const { passwordGenerationService } = useCoreService()
@@ -77,6 +81,7 @@ export const AndroidAutofillPasswordGenModalScreen: FC<
   ]
 
   const usePassword = useCallback(() => {
+    copyToClipboard(password)
     RNAutofillServiceAndroid.addAutofillValue("", "", password, "", "")
   }, [password])
 
@@ -164,7 +169,7 @@ export const AndroidAutofillPasswordGenModalScreen: FC<
           </View>
         </View>
         <View style={styles.ph16}>
-          <Button tx="pass_generator:use_password" onPress={usePassword} />
+          <Button tx="pass_generator:copy_fill" onPress={usePassword} />
           <Button
             preset="secondary"
             tx="common:regenerate"

@@ -1,9 +1,11 @@
+import { Children } from "react"
 import { View, ViewProps, Image, StyleSheet, ViewStyle } from "react-native"
+
 import { Icon, IconTypes, PressableScale, Text } from "app/components/cores"
 import { TxKeyPath, useAppLocale } from "app/i18n"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { ThemedStyle } from "@/theme"
-import { Children } from "react"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 export type MenuItemProps = {
   /**
@@ -84,7 +86,10 @@ export const MenuItemContainer = ({
   } = useAppTheme()
   const { translate } = useAppLocale()
   const titleText = title || (titleTx && translate(titleTx))
-  const arrayLength = Array.isArray(children) ? children.length : 1
+
+  // Filter out null/undefined children
+  const validChildren = Children.toArray(children).filter((child) => child != null)
+  const arrayLength = validChildren.length
 
   return (
     <View style={styles.mt16}>
@@ -97,7 +102,7 @@ export const MenuItemContainer = ({
         />
       )}
       <View style={themed([$menuContainer, style])} {...viewProps}>
-        {Children.map(children, (child, index) => {
+        {validChildren.map((child, index) => {
           return (
             <View key={index}>
               {child}

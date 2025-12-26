@@ -1,4 +1,5 @@
-import { NativeModules, Platform } from "react-native"
+import { createContext, useContext } from "react"
+
 import {
   CryptoService,
   PasswordGenerationService,
@@ -17,12 +18,17 @@ import {
   ContainerService,
   AuditService,
 } from "core/services"
-import { PolicyService } from "core/services/policy.service"
+import { ExportService } from "core/services/export.service"
 import { FileUploadService } from "core/services/fileUpload.service"
+import { ImportService } from "core/services/import.service"
+import { PolicyService } from "core/services/policy.service"
 import { SearchService } from "core/services/search.service"
 import { SendService } from "core/services/send.service"
-import { ExportService } from "core/services/export.service"
-import { ImportService } from "core/services/import.service"
+
+import en from "@/i18n/en"
+import vi from "@/i18n/vi"
+
+import { AttachmentService } from "./AttachmentsService"
 import {
   MobileStorageService,
   SecureStorageService,
@@ -31,17 +37,8 @@ import {
   MobileLogService,
   MobileMessagingService,
 } from "./services"
-import en from "@/i18n/en"
-import vi from "@/i18n/vi"
-import { AttachmentService } from "./AttachmentsService"
-import { createContext, useContext } from "react"
 
 const localesDirectory = "app/i18n"
-const deviceLanguage =
-  Platform.OS === "ios"
-    ? NativeModules.SettingsManager.settings.AppleLocale ||
-      NativeModules.SettingsManager.settings.AppleLanguages[0] // iOS 13
-    : NativeModules.I18nManager.localeIdentifier
 
 // Simple services
 const storageService = new MobileStorageService()
@@ -50,7 +47,7 @@ const cryptoFunctionService = new MobileCryptoFunctionService()
 const platformUtilsService = new MobilePlatformUtilsService()
 const logService = new MobileLogService()
 const messagingService = new MobileMessagingService()
-const i18nService = new I18nService(deviceLanguage, localesDirectory, (formattedLocale: string) => {
+const i18nService = new I18nService("en", localesDirectory, (formattedLocale: string) => {
   return new Promise((resolve) => {
     const localeJson = formattedLocale.toLowerCase() === "vi" ? vi : en
     resolve(localeJson)

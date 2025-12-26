@@ -1,21 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { View, Dimensions, ViewStyle, AppState } from "react-native"
-import { SuggestEnableFaceID } from "./SuggestEnableFaceID"
-import { SuggestEnableAutofill } from "./SuggestEnableAutofill"
+import { observer } from "mobx-react-lite"
 import Animated, {
   LinearTransition,
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated"
+
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
-import { autofillKeyChain } from "app/utils/autofillData"
-import { AutofillServiceEnabled } from "app/utils/autofillHelper"
-import { observer } from "mobx-react-lite"
 import { useBiometricType } from "app/services/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
+import { isDeviceAutofillServiceEnabled } from "@/utils/autofill.android"
+import { autofillKeyChain } from "@/utils/autofill.ios"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { SuggestEnableAutofill } from "./SuggestEnableAutofill"
+import { SuggestEnableFaceID } from "./SuggestEnableFaceID"
 
 enum SliderEnum {
   SuggestEnableFaceID = "SuggestEnableFaceID",
@@ -109,8 +112,8 @@ export const HomeSlider = observer(() => {
   }, [])
 
   useEffect(() => {
-    AutofillServiceEnabled((isActived, androidNotSupport) => {
-      if (!androidNotSupport && !isActived) {
+    isDeviceAutofillServiceEnabled().then((isActived) => {
+      if (!isActived) {
         setData((prev) => [
           ...prev.filter((item) => item.id !== "SuggestEnableAutofill"),
           {

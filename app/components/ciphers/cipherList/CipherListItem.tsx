@@ -1,9 +1,11 @@
 import { memo } from "react"
 import { View, TouchableOpacity, StyleSheet } from "react-native"
-import { Checkbox, Icon, Text } from "../../cores"
+
 import { CipherAppView } from "app/static/types"
-import { CipherIconImage } from "./CipherIconImage"
 import { getCipherDescription } from "app/utils/cipherHelper"
+
+import { CipherIconImage } from "./CipherIconImage"
+import { Checkbox, Icon, Text } from "../../cores"
 
 type Prop = {
   /**

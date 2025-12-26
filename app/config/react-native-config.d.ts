@@ -13,8 +13,8 @@ declare module "react-native-config" {
     SHARED_KEYCHAIN_SERVICE: string
     SHARED_KEYCHAIN_ACCESS_GROUP: string
 
-    GITHUB_CONFIG_REDIRECTURL: string
     GITHUB_CONFIG_CLIENTID: string
+    MICROSOFT_CONFIG_CLIENTID: string
 
     RECAPTCHA_SITE_KEY: string
     RECAPTCHA_BASE_URL: string
@@ -27,9 +27,6 @@ declare module "react-native-config" {
     CF_ACCESS_CLIENT_SECRET: string
 
     DSN_SENTRY: string
-
-    APPS_FLYER_DEV_KEY: string
-    APPS_FLYER_APP_ID: string
 
     CHATWOOT_WEBSITE_TOKEN: string
     CHATWOOT_BASE_URL: string

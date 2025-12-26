@@ -6,7 +6,7 @@ struct CreatePasskeyScreen: View {
   
   var passwords: [AFPasswordItem] {
     return afd.user.afPasswords.filter{ item in
-      return item.login.isOwner && item.login.uri.localizedCaseInsensitiveContains(afd.user.newPasskeyRpID)
+      return item.login.isOwner && isUriHostMatch(item.login.uri, afd.user.newPasskeyRpID)
     }
   }
   

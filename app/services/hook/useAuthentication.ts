@@ -1,22 +1,25 @@
-import { useStores } from "app/models"
-import { useHelper } from "./useHelper"
-import { useSocialLogin } from "./useSocialLogin"
-import { useCoreService } from "../coreService"
-import { SymmetricCryptoKey } from "core/models/domain"
 import moment from "moment"
-import DeviceInfo from "react-native-device-info"
-import { KdfType } from "core/enums/kdfType"
 import ReactNativeBiometrics from "react-native-biometrics"
-import { CipherRequest } from "core/models/request"
-import { CipherType } from "core/enums"
-import { CipherView, LoginUriView, LoginView } from "core/models/view"
+import DeviceInfo from "react-native-device-info"
+
+import { useStores } from "app/models"
 import { removeSecure } from "app/utils/storage"
-import { autofillKeyChain } from "app/utils/autofillData"
-import { useToast } from "../utils"
+import { CipherType } from "core/enums"
+import { KdfType } from "core/enums/kdfType"
+import { SymmetricCryptoKey } from "core/models/domain"
+import { CipherRequest } from "core/models/request"
+import { CipherView, LoginUriView, LoginView } from "core/models/view"
+
 import { useAppLocale } from "@/i18n"
+import { autofillKeyChain } from "@/utils/autofill.ios"
+import { Base64 } from "@/utils/base64"
 import { delay } from "@/utils/delay"
 import { Logger } from "@/utils/logger"
-import { Base64 } from "@/utils/base64"
+
+import { useHelper } from "./useHelper"
+import { useSocialLogout } from "./useSocialLogin"
+import { useCoreService } from "../coreService"
+import { useToast } from "../utils"
 
 const rnBiometrics = new ReactNativeBiometrics()
 
@@ -37,7 +40,7 @@ export function useAuthentication() {
   const { translate } = useAppLocale()
   const { setApiTokens } = useHelper()
   const { notify, notifyTx, notifyApiError } = useToast()
-  const { logoutAllServices } = useSocialLogin()
+  const { logoutAllServices } = useSocialLogout()
 
   // -------------------- AUTHENTICATION --------------------
 
@@ -615,7 +618,6 @@ export function useAuthentication() {
   const lock = async () => {
     folderService.clearCache()
     cipherService.clearCache()
-    // searchService.clearCache()
     collectionService.clearCache()
 
     cipherStore.lock()
@@ -627,34 +629,39 @@ export function useAuthentication() {
 
   // Clear all data
   const clearAllData = async (dataOnly?: boolean) => {
-    cipherStore.clearStore(dataOnly)
-    collectionStore.clearStore(dataOnly)
-    folderStore.clearStore(dataOnly)
-    toolStore.clearStore(dataOnly)
-    enterpriseStore.clearStore(dataOnly)
+    try {
+      // console.log("Clear all data called")
+      cipherStore.clearStore(dataOnly)
+      collectionStore.clearStore(dataOnly)
+      folderStore.clearStore(dataOnly)
+      toolStore.clearStore(dataOnly)
+      enterpriseStore.clearStore(dataOnly)
 
-    // Reset shared data
-    await autofillKeyChain.resetAll()
+      // Reset shared data
+      await autofillKeyChain.resetAll()
 
-    // TODO: remove this when RSA problem is fixed
-    await removeSecure("decOrgKeys")
+      // TODO: remove this when RSA problem is fixed
+      await removeSecure("decOrgKeys")
 
-    // Clear services
-    await Promise.all([
-      folderService.clearCache(),
-      cipherService.clearCache(),
-      // searchService.clearCache()
-      collectionService.clearCache(),
-    ])
+      // Clear services
+      await Promise.all([
+        folderService.clearCache(),
+        cipherService.clearCache(),
+        // searchService.clearCache()
+        collectionService.clearCache(),
+      ])
 
-    const userId = await userService.getUserId()
-    await Promise.all([
-      folderService.clear(userId),
-      cipherService.clear(userId),
-      collectionService.clear(userId),
-      cryptoService.clearKeys(),
-      userService.clear(),
-    ])
+      const userId = await userService.getUserId()
+      await Promise.all([
+        folderService.clear(userId),
+        cipherService.clear(userId),
+        collectionService.clear(userId),
+        cryptoService.clearKeys(),
+        userService.clear(),
+      ])
+    } catch (e) {
+      Logger.error("clearAllData: " + e)
+    }
   }
 
   return {

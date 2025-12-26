@@ -1,12 +1,14 @@
-import { useStores } from "app/models"
 import { View, Image, StyleProp, ViewStyle, StyleSheet } from "react-native"
-import ReactNativeBiometrics from "react-native-biometrics"
-import { PressableIcon, Text, PressableText } from "app/components/cores"
-import { useCoreService } from "app/services/coreService"
-import { autofillKeyChain } from "app/utils/autofillData"
 import { observer } from "mobx-react-lite"
+import ReactNativeBiometrics from "react-native-biometrics"
+
+import { PressableIcon, Text, PressableText } from "app/components/cores"
+import { useStores } from "app/models"
+import { useCoreService } from "app/services/coreService"
 import { useToast } from "app/services/utils"
+
 import { useAppLocale } from "@/i18n"
+import { autofillKeyChain } from "@/utils/autofill.ios"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 const FACEID = require("assets/images/intro/faceid.png")

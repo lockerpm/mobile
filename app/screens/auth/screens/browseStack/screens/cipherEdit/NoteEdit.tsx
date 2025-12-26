@@ -1,19 +1,21 @@
 import { useCallback, useState } from "react"
-import { observer } from "mobx-react-lite"
 import { Image, View, StyleSheet, ViewStyle } from "react-native"
-import { CipherView, FieldView } from "core/models/view"
-import { useCipherData, useFolder } from "app/services/hook"
+import { observer } from "mobx-react-lite"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+
+import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
 import { Header, Screen, TextInput, Text } from "app/components/cores"
 import { Textarea } from "app/components/utils"
-import { CollectionView } from "core/models/view/collectionView"
 import { BrowseScreenProps } from "app/navigators"
+import { useCipherData, useFolder } from "app/services/hook"
 import { CipherAppView, CipherEditHelperModal, CipherEditMode } from "app/static/types"
-import { FolderView } from "core/models/view/folderView"
-import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { ThemedStyle } from "@/theme"
 import { SecureNoteType } from "core/enums"
+import { CipherView, FieldView } from "core/models/view"
+import { CollectionView } from "core/models/view/collectionView"
+import { FolderView } from "core/models/view/folderView"
+
+import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type Props = {
   item: CipherAppView
@@ -171,10 +173,10 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   image: {
-    height: 50,
+    height: 40,
     marginRight: 10,
-    marginTop: 26,
-    width: 50,
+    marginTop: 28,
+    width: 40,
   },
   notes: {
     padding: 16,

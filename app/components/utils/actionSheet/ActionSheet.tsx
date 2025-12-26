@@ -1,10 +1,12 @@
 import { View, Modal, StyleSheet, ViewStyle, Platform } from "react-native"
+import Animated, { FadeInDown } from "react-native-reanimated"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
 import { Text, PressableScale, ModalBackdrop, TextProps } from "app/components/cores"
-import Animated, { FadeInDown } from "react-native-reanimated"
+
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
 interface Props {
   /**
@@ -55,6 +57,7 @@ export const NewActionSheet = ({
     themed,
     theme: { colors },
   } = useAppTheme()
+  const insets = useSafeAreaInsets()
 
   const isArray = Array.isArray(children)
 
@@ -70,7 +73,7 @@ export const NewActionSheet = ({
       visible={isOpen}
       onDismiss={onClose}
     >
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingBottom: insets.bottom + 8 }]}>
         <ModalBackdrop onPress={onClose} backgroundColor={colors.transparentModal} />
 
         <Animated.View entering={IS_IOS ? FadeInDown : undefined} style={themed($content)}>

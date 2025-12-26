@@ -22,10 +22,14 @@ struct PasswordItemView: View {
         
         VStack(alignment: .leading){
           Text(item.login.name)
+            .lineLimit(1)
+            .truncationMode(.tail)
           if !item.login.username.isEmpty {
             Text(item.login.username)
               .font(.subheadline)
               .foregroundStyle(AppColors.label)
+              .lineLimit(1)
+              .truncationMode(.tail)
           }
         }
         Spacer()
@@ -54,10 +58,14 @@ struct PasswordItemSimpleView: View {
         
         VStack(alignment: .leading){
           Text(item.login.name)
+            .lineLimit(1)
+            .truncationMode(.tail)
           if !item.login.username.isEmpty {
             Text(item.login.username)
               .font(.subheadline)
               .foregroundStyle(AppColors.label)
+              .lineLimit(1)
+              .truncationMode(.tail)
           }
         }
         Spacer()

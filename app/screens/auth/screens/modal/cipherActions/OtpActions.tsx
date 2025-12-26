@@ -1,11 +1,14 @@
 import { View, StyleSheet } from "react-native"
+
 import { BottomModalContainer, Text } from "app/components/cores"
-import { CipherActionsModal, CipherAppView } from "app/static/types"
 import { NewActionSheetItem } from "app/components/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { useActionsNavigate } from "./useActionsNavigate"
-import { getTOTP, parseOTPUri } from "@/utils/totp"
+import { CipherActionsModal, CipherAppView } from "app/static/types"
+
 import { useClipboard } from "@/services/utils"
+import { getTOTP, parseOTPUri } from "@/utils/totp"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { useActionsNavigate } from "./useActionsNavigate"
 
 interface Props {
   item: CipherAppView
@@ -41,7 +44,9 @@ export const OtpActions = ({ item, setNextModal, onClose }: Props) => {
         icon="copy"
         onPress={() => {
           onClose()
-          copyToClipboard(getTOTP(otp))
+          getTOTP(otp).then((code) => {
+            copyToClipboard(code)
+          })
         }}
       />
       <NewActionSheetItem bottomBorder tx="common:edit" icon="edit" onPress={navigateCipherEdit} />

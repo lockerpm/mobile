@@ -1,6 +1,7 @@
+import { Platform } from "react-native"
 import { ApiResponse } from "apisauce"
-import { Api, api } from "./api"
-import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
+import { Purchase, PurchaseAndroid, PurchaseIOS } from "react-native-iap"
+
 import {
   Billing,
   BlockFailedLoginPolicy,
@@ -29,10 +30,13 @@ import {
   UserIDType,
   UserLockerType,
 } from "app/static/types"
-import { CipherResponse } from "core/models/response/cipherResponse"
 import { PolicyType } from "app/static/types/enum"
-import { Platform } from "react-native"
+import { CipherResponse } from "core/models/response/cipherResponse"
+
 import { Logger } from "@/utils/logger"
+
+import { Api, api } from "./api"
+import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
 
 const IS_IOS = Platform.OS === "ios"
 
@@ -784,6 +788,59 @@ class UserApi {
       return { kind: "ok", data: response.data }
     } catch (e) {
       Logger.error("purchaseValidation", e)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async purchaseValidationV2(
+    token: string,
+    purchase: Purchase
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          success: boolean
+          detail: any
+        }
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      let response: ApiResponse<any>
+      // make the api call
+      if (IS_IOS) {
+        const purchaseIos = purchase as PurchaseIOS
+        response = await this.api.apisauce.post("/v3/payments/webhook/ios_v2/validate", {
+          scope: "pwdmanager",
+          transaction_id: purchaseIos.transactionId,
+          original_transaction_id: purchaseIos.originalTransactionIdentifierIOS,
+        })
+
+        console.log("purchaseValidationV2 response", token, {
+          scope: "pwdmanager",
+          transaction_id: purchaseIos.transactionId,
+          original_transaction_id: purchaseIos.originalTransactionIdentifierIOS,
+        })
+      } else {
+        const purchaseAndroid = purchase as PurchaseAndroid
+        response = await this.api.apisauce.post("/v3/payments/webhook/android_v2/validate", {
+          scope: "pwdmanager",
+          receipt_data: {
+            token: purchaseAndroid.purchaseToken,
+            plan_id: purchaseAndroid.productId,
+          },
+        })
+      }
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error("purchaseValidation v2", e)
       return { kind: "bad-data" }
     }
   }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 let PAGE_SIZE = 10
 let FREE_LIMIT = 5

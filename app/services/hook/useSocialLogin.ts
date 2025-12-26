@@ -1,41 +1,41 @@
+import { Platform } from "react-native"
+import { appleAuth } from "@invertase/react-native-apple-authentication"
 import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin"
 import { LoginManager, AccessToken, AuthenticationToken } from "react-native-fbsdk-next"
-import { appleAuth } from "@invertase/react-native-apple-authentication"
-import { getCookies, logRegisterSuccessEvent } from "../../utils/analytics"
+
 import { useStores } from "app/models"
-import { useHelper } from "./useHelper"
-import { useToast } from "../utils"
+
 import Config from "@/config"
 import { Logger } from "@/utils/logger"
-import { Platform } from "react-native"
 
-export function useSocialLogin() {
+import { useToast } from "../utils"
+import { useHelper } from "./useHelper"
+import { getCookies, logRegisterSuccessEvent } from "../../utils/analytics"
+
+export function useSocialLogin(payload: {
+  setIsLoading: (val: boolean) => void
+  onLoggedIn: (newUser: boolean, token: string) => void
+}) {
+  const { setIsLoading, onLoggedIn } = payload
   const { user } = useStores()
   const { setApiTokens } = useHelper()
   const { notifyTx, notifyApiError } = useToast()
+  const { logoutAllServices } = useSocialLogout()
 
   // Google
-  const googleLogin = async (payload: {
-    setIsLoading?: (val: boolean) => void
-    onLoggedIn: (newUser: boolean, token: string) => void
-  }) => {
-    const { setIsLoading, onLoggedIn } = payload
+  const googleLogin = async () => {
     try {
       GoogleSignin.configure({
         webClientId: Config.GOOGLE_CLIENT_ID,
       })
       await GoogleSignin.signIn()
       const tokens = await GoogleSignin.getTokens()
-      await _handleSocialLogin({
+      await handleSocialLogin({
         provider: "google",
         token: tokens.accessToken,
-        setIsLoading,
-        onLoggedIn,
       })
     } catch (e: any) {
-      if (setIsLoading) {
-        setIsLoading(false)
-      }
+      setIsLoading(false)
       Logger.debug("googleLogin: " + e)
       switch (e.code) {
         case statusCodes.SIGN_IN_CANCELLED:
@@ -63,71 +63,40 @@ export function useSocialLogin() {
   }
 
   // Facebook
-  const facebookLogin = async (payload: {
-    setIsLoading?: (val: boolean) => void
-    onLoggedIn: (newUser: boolean, token: string) => void
-  }) => {
-    const { setIsLoading, onLoggedIn } = payload
+  const facebookLogin = async () => {
+    setIsLoading(true)
     try {
       await LoginManager.logInWithPermissions(["email"])
       const token = await getFacebookToken()
       if (!token) {
-        if (setIsLoading) {
-          setIsLoading(false)
-        }
+        setIsLoading(false)
         return
       }
-      await _handleSocialLogin({
+      await handleSocialLogin({
         provider: "facebook",
         token: token,
-        setIsLoading,
-        onLoggedIn,
       })
     } catch (e) {
-      if (setIsLoading) {
-        setIsLoading(false)
-      }
+      setIsLoading(false)
       Logger.debug("facebookLogin: " + e)
       notifyTx("error", "error:could_not_complete")
     }
   }
 
-  // GitHub
-  const githubLogin = async (payload: {
-    setIsLoading?: (val: boolean) => void
-    onLoggedIn: (newUser: boolean, token: string) => void
-    code: string
-  }) => {
-    const { setIsLoading, onLoggedIn, code } = payload
-    await _handleSocialLogin({
-      provider: "github",
-      code,
-      setIsLoading,
-      onLoggedIn,
-    })
-  }
-
   // Apple
-  const appleLogin = async (payload: {
-    setIsLoading?: (val: boolean) => void
-    onLoggedIn: (newUser: boolean, token: string) => void
-  }) => {
-    const { setIsLoading, onLoggedIn } = payload
+  const appleLogin = async () => {
+    setIsLoading(true)
     try {
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.EMAIL],
       })
-      await _handleSocialLogin({
+      await handleSocialLogin({
         provider: "apple",
         token: appleAuthRequestResponse.identityToken ?? "",
-        setIsLoading,
-        onLoggedIn,
       })
     } catch (e: any) {
-      if (setIsLoading) {
-        setIsLoading(false)
-      }
+      setIsLoading(false)
       Logger.debug("appleLogin: " + e)
       switch (e.code) {
         case "1001":
@@ -141,37 +110,28 @@ export function useSocialLogin() {
     }
   }
 
-  // Log out all service
-  const logoutAllServices = async () => {
-    await Promise.all([_logoutGoogle(), _logoutFacebook()])
-  }
-
   // ------------------ PRIVATE METHODS ---------------------
 
-  const _handleSocialLogin = async (payload: {
+  const handleSocialLogin = async (payload: {
     provider: string
     token?: string
     code?: string
-    setIsLoading?: (val: boolean) => void
-    onLoggedIn: (newUser: boolean, token: string) => void
+    redirectUri?: string
   }) => {
-    const { provider, token, code, setIsLoading, onLoggedIn } = payload
+    const { provider, token, code } = payload
 
-    if (setIsLoading) {
-      setIsLoading(true)
-    }
+    setIsLoading(true)
 
     const loginRes = await user.socialLogin({
       provider,
       access_token: token,
       code,
+      redirect_uri: payload.redirectUri,
       scope: "pwdmanager",
       utm_source: await getCookies("utm_source"),
     })
 
-    if (setIsLoading) {
-      setIsLoading(false)
-    }
+    setIsLoading(false)
     if (loginRes.kind !== "ok") {
       notifyApiError(loginRes)
       await logoutAllServices()
@@ -194,6 +154,20 @@ export function useSocialLogin() {
         onLoggedIn(loginRes.data.is_first ?? false, loginRes.data.token)
       }
     }
+  }
+
+  return {
+    googleLogin,
+    facebookLogin,
+    appleLogin,
+    handleSocialLogin,
+  }
+}
+
+export const useSocialLogout = () => {
+  // Log out all service
+  const logoutAllServices = async () => {
+    await Promise.all([_logoutGoogle(), _logoutFacebook()])
   }
 
   const _logoutGoogle = async () => {
@@ -220,11 +194,5 @@ export function useSocialLogin() {
     }
   }
 
-  return {
-    googleLogin,
-    facebookLogin,
-    githubLogin,
-    appleLogin,
-    logoutAllServices,
-  }
+  return { logoutAllServices }
 }

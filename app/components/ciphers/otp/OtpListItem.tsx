@@ -1,11 +1,13 @@
-import { memo, useState } from "react"
+import { memo, useCallback, useEffect, useState } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer"
+
 import { PressableScale, Text } from "app/components/cores"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { CipherAppView } from "@/static/types"
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type Prop = {
   seletedOtp?: string
@@ -28,8 +30,30 @@ export const OtpListItem = memo((props: Prop) => {
 
   const [key, setKey] = useState(0)
   const [initTime, setInitTime] = useState(getRemainingTime(otpData.period || 0))
-  const [otp, setOtp] = useState(getTOTP(otpData))
+  const [otp, setOtp] = useState("000000")
 
+  const getOtp = useCallback(async () => {
+    const res = await getTOTP(otpData)
+    setOtp(res)
+  }, [otpData])
+
+  const onTimerUpdate = async (remainingTime: number) => {
+    if (remainingTime < 5) {
+      const newOtp = await getTOTP(otpData)
+
+      if (otp !== newOtp) {
+        setOtp(newOtp)
+        setInitTime(getRemainingTime(otpData.period || 0))
+        setKey((prev) => prev + 1)
+      }
+    }
+  }
+
+  useEffect(() => {
+    getOtp()
+  }, [getOtp])
+
+  // ----------------------- RENDER ------------------------
   return (
     <PressableScale
       onPress={() => {
@@ -57,17 +81,7 @@ export const OtpListItem = memo((props: Prop) => {
               shouldRepeat: true,
             }
           }}
-          onUpdate={(remainingTime: number) => {
-            if (remainingTime < 5) {
-              const newOtp = getTOTP(otpData)
-
-              if (otp !== newOtp) {
-                setOtp(getTOTP(otpData))
-                setInitTime(getRemainingTime(otpData.period || 0))
-                setKey((prev) => prev + 1)
-              }
-            }
-          }}
+          onUpdate={onTimerUpdate}
           updateInterval={1}
           size={25}
           isPlaying

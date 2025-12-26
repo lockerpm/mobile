@@ -1,14 +1,17 @@
 import { StyleSheet, View, ViewStyle } from "react-native"
-import DocumentPicker from "react-native-document-picker"
-import { useCoreService } from "app/services/coreService"
+import { pick, types } from "@react-native-documents/picker"
+
 import { Button, Text } from "app/components/cores"
 import { SettingsItem } from "app/components/utils"
-import { FileData } from "app/static/types"
-import { FileFormatPickerModal } from "./FileFormatPickerModal"
+import { useCoreService } from "app/services/coreService"
 import { useToast } from "app/services/utils"
+import { FileData } from "app/static/types"
+
+import { ThemedStyle } from "@/theme"
 import { Logger } from "@/utils/logger"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { ThemedStyle } from "@/theme"
+
+import { FileFormatPickerModal } from "./FileFormatPickerModal"
 
 interface Props {
   format: string
@@ -59,8 +62,8 @@ export const PickFile = ({ format, setFormat, file, setFile, handleImport }: Pro
       const targetFormat = formats.find((i) => i.value === format)
       const targetExtension = targetFormat?.label?.split(" (")[1]?.split(")")[0]
 
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
+      const [res] = await pick({
+        type: [types.allFiles],
       })
 
       if (getFileName(res).endsWith(`.${targetExtension}`)) {
@@ -74,12 +77,7 @@ export const PickFile = ({ format, setFormat, file, setFile, handleImport }: Pro
         notifyTx("error", "import:pls_select_right_format", { format: targetExtension })
       }
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        Logger.error("Import pick file: " + err)
-        notifyTx("error", "error:something_went_wrong")
-      }
+      Logger.error("Import pick file: " + err)
     }
   }
 

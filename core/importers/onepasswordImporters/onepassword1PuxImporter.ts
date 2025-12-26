@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { AttachmentView } from "core/models/view"
+
 import { CipherRepromptType } from "../../enums/cipherRepromptType"
 import { CipherType } from "../../enums/cipherType"
 import { FieldType } from "../../enums/fieldType"
@@ -13,7 +14,6 @@ import { PasswordHistoryView } from "../../models/view/passwordHistoryView"
 import { SecureNoteView } from "../../models/view/secureNoteView"
 import { BaseImporter } from "../baseImporter"
 import { Importer } from "../importer"
-
 import {
   CategoryEnum,
   Details,
@@ -173,8 +173,12 @@ export class OnePassword1PuxImporter extends BaseImporter implements Importer {
           //   key: '<redacted>'
           // }))
         }
-
-        this.processFolder(this.result, vault.attrs.name)
+        // If item is archived -> move to archived folder, else to vault name folder
+        if (item.state === "archived") {
+          this.processFolder(this.result, "Archived Items")
+        } else {
+          this.processFolder(this.result, vault.attrs.name)
+        }
 
         this.result.ciphers.push(cipher)
       })

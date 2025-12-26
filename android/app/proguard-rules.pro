@@ -15,3 +15,6 @@
 
 # react-native-skia
 -keep class com.shopify.reactnative.skia.** { *; }
+
+-keep class com.android.billingclient.** { *; }
+-keep class com.android.vending.billing.** { *; }

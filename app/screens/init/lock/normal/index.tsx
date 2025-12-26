@@ -9,10 +9,8 @@ import {
   ViewStyle,
   TouchableOpacity,
 } from "react-native"
-import { useAuthentication, useCipherData, useCipherHelper } from "app/services/hook"
-import { useStores } from "app/models"
-import { BiometricsType, EnterpriseInvitation } from "app/static/types"
 import { useNavigation } from "@react-navigation/native"
+
 import {
   Logo,
   Button,
@@ -23,17 +21,23 @@ import {
   PressableText,
   Icon,
 } from "app/components/cores"
-import { EnterpriseInvitationModal } from "./EnterpriseInvitationModal"
+import { useStores } from "app/models"
 import { AppScreenProps } from "app/navigators/navigators.types"
+import { useAuthentication, useCipherData, useCipherHelper } from "app/services/hook"
 import { useToast } from "app/services/utils"
-import { useAppLocale } from "@/i18n"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { ThemedStyle } from "@/theme"
-import { isAndroidAutofillService } from "@/utils/autofillHelper"
-import { useCoreService } from "@/services/coreService"
+import { BiometricsType, EnterpriseInvitation } from "app/static/types"
+
 import Config from "@/config"
+import { useAppLocale } from "@/i18n"
+import { useCoreService } from "@/services/coreService"
+import { ThemedStyle } from "@/theme"
+import { AndroidAppProps, isAndroidAutofillService } from "@/utils/autofill.android"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { EnterpriseInvitationModal } from "./EnterpriseInvitationModal"
 
 interface Props {
+  fido2?: AndroidAppProps
   handleLogout: () => void
   handleUnlock: () => Promise<void>
   isUnlocking: boolean
@@ -44,6 +48,7 @@ interface Props {
 const SCREEN_HEIGHT = Dimensions.get("window").height
 const hideLogo = SCREEN_HEIGHT < 700
 export const LockByMasterPassword = ({
+  fido2,
   isUnlocking,
   biometryType,
   setIsUnlocking,
@@ -76,7 +81,7 @@ export const LockByMasterPassword = ({
   const [enterpeiseInvitations, setEnterpriseInvitations] = useState<EnterpriseInvitation[]>([])
 
   // ---------------------- METHODS -------------------------
-
+  const isAndroidService = isAndroidAutofillService(fido2)
   const showInvitation = enterpeiseInvitations.length > 0
 
   // ---------------------- METHODS -------------------------
@@ -171,7 +176,7 @@ export const LockByMasterPassword = ({
 
   // -------------- EFFECT ------------------
   useEffect(() => {
-    if (!isAndroidAutofillService) {
+    if (!isAndroidService) {
       fetchEnterpriseInvitation()
     }
   }, [])
@@ -181,7 +186,7 @@ export const LockByMasterPassword = ({
     () => (
       <Header
         RightActionComponent={
-          isAndroidAutofillService ? (
+          isAndroidService ? (
             <PressableText
               weight="bold"
               color={colors.primary}

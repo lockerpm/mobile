@@ -39,6 +39,7 @@
 "pw.useBtn" = "Utiliser un mot de passe";
 "pw.generator" = "Générer un mot de passe fort";
 "pw.regenerate" = "Régénérer";
+"pw.copyFill" = "Copier et remplir";
 
 // create password
 "create.title" = "Créer une connexion";

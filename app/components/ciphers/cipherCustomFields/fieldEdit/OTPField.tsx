@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react"
 // eslint-disable-next-line no-restricted-imports
 import { StyleSheet, TextInput, TextStyle, View } from "react-native"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { ThemedStyle } from "@/theme"
-import { PasswordOtp } from "../../passwordOtp/PasswordOtp"
-import { getTOTP } from "@/utils/totp"
+
 import { useToast } from "@/services/utils"
+import { ThemedStyle } from "@/theme"
 import { Logger } from "@/utils/logger"
+import { getTOTP } from "@/utils/totp"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { PasswordOtp } from "../../passwordOtp/PasswordOtp"
 
 type Props = {
   value: string
@@ -26,10 +28,10 @@ export const OTPField = (props: Props) => {
 
   const [isOtp, setIsOtp] = useState(false)
 
-  const onBlur = () => {
+  const onBlur = async () => {
     propsBlur()
     try {
-      const otp = getTOTP({ secret: value })
+      const otp = await getTOTP({ secret: value })
       if (!otp) {
         notifyTx("error", "authenticator:invalid_key")
         return
@@ -42,13 +44,17 @@ export const OTPField = (props: Props) => {
     setIsOtp(true)
   }
 
-  useEffect(() => {
+  const init = async () => {
     if (!!value) {
-      const otp = getTOTP({ secret: value })
+      const otp = await getTOTP({ secret: value })
       if (!!otp) {
         setIsOtp(true)
       }
     }
+  }
+
+  useEffect(() => {
+    init()
   }, [])
 
   return (

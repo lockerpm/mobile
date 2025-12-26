@@ -1,14 +1,16 @@
 import { useState } from "react"
-import { BackHandler, View, Image, StyleSheet, ViewStyle } from "react-native"
+import { View, Image, StyleSheet, ViewStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { useStores } from "app/models"
-import { OnPremisePreloginData } from "app/static/types"
-import { useAuthentication } from "app/services/hook"
+
 import { Logo, Button, Screen, Text, TextInput } from "app/components/cores"
+import { useStores } from "app/models"
 import { AppScreenProps } from "app/navigators/navigators.types"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { useAuthentication } from "app/services/hook"
+import { OnPremisePreloginData } from "app/static/types"
+
 import { useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 interface Props {
   data: OnPremisePreloginData
@@ -19,7 +21,7 @@ interface Props {
 
 export const OnPremiseLockMasterPassword = ({ data, email, handleLogout, handleUnlock }: Props) => {
   const navigation = useNavigation<AppScreenProps<"lock">["navigation"]>()
-  const { user, uiStore } = useStores()
+  const { user } = useStores()
   const {
     themed,
     theme: { colors },
@@ -35,8 +37,6 @@ export const OnPremiseLockMasterPassword = ({ data, email, handleLogout, handleU
   const [isError, setIsError] = useState(false)
 
   // ---------------------- METHODS -------------------------
-
-  const isAutofillAnroid = uiStore.isAndroidAutofillService
 
   // ---------------------- METHODS -------------------------
 
@@ -74,21 +74,12 @@ export const OnPremiseLockMasterPassword = ({ data, email, handleLogout, handleU
   return (
     <Screen contentContainerStyle={styles.flex}>
       <View style={styles.header}>
-        {isAutofillAnroid ? (
-          <Text
-            preset="bold"
-            text={translate("common:cancel").toUpperCase()}
-            onPress={() => BackHandler.exitApp()}
-            color={colors.primary}
-          />
-        ) : (
-          <Text
-            preset="bold"
-            text={translate("common:signout").toUpperCase()}
-            onPress={handleLogout}
-            color={colors.primary}
-          />
-        )}
+        <Text
+          preset="bold"
+          text={translate("common:signout").toUpperCase()}
+          onPress={handleLogout}
+          color={colors.primary}
+        />
       </View>
       <View style={styles.content}>
         <Logo preset={"cystack-logo"} style={styles.logo} />

@@ -1,8 +1,10 @@
-import { observer } from "mobx-react-lite"
-import { LoginScreen, PinCodeLoginScreen, TwoFAAuthenScreen } from "./screens"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { observer } from "mobx-react-lite"
+
 import { LoginRoute, modalScreenOptions } from "app/navigators"
 import { LoginOptions } from "app/static/types"
+
+import { LoginScreen, PinCodeLoginScreen, TwoFAAuthenScreen } from "./screens"
 
 const Stack = createNativeStackNavigator<LoginRoute>()
 

@@ -1,8 +1,10 @@
-import { useStores } from "@/models"
-import { AnalyticEvents, logFirebaseEvent } from "@/utils/analytics"
-import { callerID } from "app/services/callerID/CallerID"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { AppState } from "react-native"
+
+import { callerID } from "app/services/callerID/CallerID"
+
+import { useStores } from "@/models"
+import { AnalyticEvents, logFirebaseEvent } from "@/utils/analytics"
 
 export const useCallerID = () => {
   const { user } = useStores()

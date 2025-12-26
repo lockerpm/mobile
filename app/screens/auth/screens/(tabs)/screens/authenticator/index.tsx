@@ -1,15 +1,18 @@
 import { FC, useCallback, useState } from "react"
-import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { Screen } from "app/components/cores"
 import { useStores } from "app/models"
 import { FREE_PLAN_LIMIT } from "app/static/constants"
-import { AuthenticatorHeader } from "./OTPHeader"
-import { CipherActionsModal, CipherAppView } from "@/static/types"
-import { TabsScreenProps } from "@/navigators"
 import { CipherType } from "core/enums"
-import { delay } from "@/utils/delay"
+
 import { OTPAddAction, OtpList } from "@/components/ciphers"
+import { TabsScreenProps } from "@/navigators"
+import { CipherActionsModal, CipherAppView } from "@/static/types"
+import { delay } from "@/utils/delay"
+
+import { AuthenticatorHeader } from "./OTPHeader"
 
 export const AuthenticatorScreen: FC<TabsScreenProps<"authenticatorTab">> = observer(
   ({ navigation }) => {
@@ -89,7 +92,6 @@ export const AuthenticatorScreen: FC<TabsScreenProps<"authenticatorTab">> = obse
           navigateToQrScan={navigateToQrScan}
           navigateToAddCipher={navigateToAddCipher}
         />
-
         <OtpList
           setOtpCount={setOtpCount}
           openActionMenu={navigateToCipherActions}

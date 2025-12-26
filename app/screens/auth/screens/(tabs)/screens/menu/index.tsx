@@ -1,20 +1,23 @@
 import { useState, useEffect, FC, useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { useStores } from "app/models"
-import { ChatWootUser, PlanType } from "app/static/types"
+import ChatWootWidget from "@chatwoot/react-native-widget"
+import { observer } from "mobx-react-lite"
+
 import { Screen, TabHeader } from "app/components/cores"
 import { MenuItem, MenuItemContainer, MenuItemProps } from "app/components/utils"
-import { ReferFriendMenuItem } from "./ReferFriendMenuItem"
-import { observer } from "mobx-react-lite"
-import ChatWootWidget from "@chatwoot/react-native-widget"
+import { useStores } from "app/models"
 import { TabsScreenProps } from "app/navigators/navigators.types"
-import { useMenuListNavigation } from "./useMenuListNavigation"
 import { useToast } from "app/services/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { useAppLocale } from "@/i18n"
+import { ChatWootUser, PlanType } from "app/static/types"
+
 import Config from "@/config"
-import { AppVersion } from "./AppVersion"
+import { useAppLocale } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
+
 import { AppUser } from "./appUser"
+import { AppVersion } from "./AppVersion"
+import { ReferFriendMenuItem } from "./ReferFriendMenuItem"
+import { useMenuListNavigation } from "./useMenuListNavigation"
 
 export const MenuListScreen: FC<TabsScreenProps<"menuTab">> = observer(() => {
   const { user } = useStores()
@@ -136,7 +139,6 @@ export const MenuListScreen: FC<TabsScreenProps<"menuTab">> = observer(() => {
           (user.isLifeTimeFamilyPlan && <ReferFriendMenuItem onPress={navigateToReferfriend} />)
         )
       }
-
       <MenuItemContainer>
         <MenuItem
           icon={"headset"}

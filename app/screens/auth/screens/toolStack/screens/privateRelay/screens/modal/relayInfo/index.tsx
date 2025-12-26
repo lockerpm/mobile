@@ -1,12 +1,14 @@
 import { FC } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+
 import { Button, Text } from "app/components/cores"
-import { debounce } from "app/utils/utils"
-import { PrivateRelayScreenProps } from "app/navigators"
 import { TxKeyPath } from "app/i18n"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { PrivateRelayScreenProps } from "app/navigators"
+import { debounce } from "app/utils/utils"
+
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 export const RelayInfoScreen: FC<PrivateRelayScreenProps<"relayInfo">> = ({
   navigation,
@@ -18,6 +20,7 @@ export const RelayInfoScreen: FC<PrivateRelayScreenProps<"relayInfo">> = ({
     themed,
     theme: { colors },
   } = useAppTheme()
+  const insets = useSafeAreaInsets()
 
   const rootEmailDesc: TxKeyPath[] = freeAccount
     ? ["private_relay:desc.one", "private_relay:desc.two", "private_relay:desc.three"]
@@ -39,7 +42,7 @@ export const RelayInfoScreen: FC<PrivateRelayScreenProps<"relayInfo">> = ({
 
   return (
     <View style={styles.flex}>
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingBottom: insets.bottom + 8 }]}>
         <View style={[styles.content, { backgroundColor: colors.background }]}>
           {!!title && <Text preset="bold" text={title} style={styles.title} />}
           <View style={[styles.info, { borderColor: colors.border }]}>
@@ -72,7 +75,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-end",
-    marginBottom: StaticSafeAreaInsets.safeAreaInsetsBottom,
     padding: 16,
   },
   content: {

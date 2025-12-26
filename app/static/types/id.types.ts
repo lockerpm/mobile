@@ -1,4 +1,5 @@
 import { PasskeyGetResult, PasskeyCreateResult } from "react-native-passkey"
+
 import { User2FAMethod } from "./user.types"
 
 export type UseLoginMethod = {
@@ -72,6 +73,7 @@ export type SocialLoginRequest = {
   code?: string
   scope?: string
   utm_source?: string
+  redirect_uri?: string
 }
 
 export type RegisterRequest = {

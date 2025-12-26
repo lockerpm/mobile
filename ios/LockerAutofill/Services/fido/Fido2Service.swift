@@ -25,68 +25,29 @@ func createPasskeyRegistrationCredential(
   
   let flags: UInt8 = 0x41 | 0x08 | 0x10 | 0x80 | 0x04 // AT + UP + ED + BE + BS + UV
   
-  let chosenAlg = try publicKeyAlgSelect(passkeyReq.supportedAlgorithms)
-  var coseKeyCBOR: Data = Data()
-  var publicKeyData: Data
-  var privateKeyData: Data
   
   // Generate keypair depending on algorithm
-  switch chosenAlg {
-  case -7: // ES256, P-256
-    let keyAttr = [
-      kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
-      kSecAttrKeySizeInBits as String: 256,
-      kSecAttrIsPermanent as String: false,
-      kSecAttrIsExtractable as String: true // 🔑 allow export
-    ] as [String : Any]
-    guard
-      let privateKey = SecKeyCreateRandomKey(keyAttr as CFDictionary, nil),
-      let publicKey = SecKeyCopyPublicKey(privateKey),
-      let pubRaw = SecKeyCopyExternalRepresentation(publicKey, nil) as Data?,
-      let privRaw = SecKeyCopyExternalRepresentation(privateKey, nil) as Data?
-    else {
-      throw NSError(domain: "Passkey", code: -1, userInfo: [NSLocalizedDescriptionKey: "Key generation failed (EC)"])
-    }
-    publicKeyData = pubRaw
-    privateKeyData = privRaw
-    let xCoord = publicKeyData.dropFirst(1).prefix(32)
-    let yCoord = publicKeyData.dropFirst(33).prefix(32)
-    
-    
-    coseKeyCBOR = es256CBOREncode(xCoord: Array(xCoord), yCoord: Array(yCoord))
-  case -257: // RS256
-    let keyAttr = [
-      kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
-      kSecAttrKeySizeInBits as String: 2048,
-      kSecAttrIsPermanent as String: false,
-      kSecAttrIsExtractable as String: true // 🔑 allow export
-    ] as [String : Any]
-    
-    guard
-      let privateKey = SecKeyCreateRandomKey(keyAttr as CFDictionary, nil),
-      let publicKey = SecKeyCopyPublicKey(privateKey),
-      let pubRaw = SecKeyCopyExternalRepresentation(publicKey, nil) as Data?,
-      let privRaw = SecKeyCopyExternalRepresentation(privateKey, nil) as Data?
-    else {
-      throw NSError(domain: "Passkey", code: -1, userInfo: [NSLocalizedDescriptionKey: "Key generation failed (RSA)"])
-    }
-    publicKeyData = pubRaw
-    privateKeyData = privRaw
-    let rsa = try extractRSAComponents(from: publicKey)
-    
-    coseKeyCBOR = es256CBOREncode(xCoord: Array(rsa.modulus), yCoord: Array(rsa.exponent))
-  default:
-    throw NSError(domain: "Passkey", code: -3, userInfo: [NSLocalizedDescriptionKey: "Unsupported algorithm"])
-  }
+  let privateKey = P256.Signing.PrivateKey()
+  let publicKey = privateKey.publicKey
   
-  // Encode COSE key
-  //  let coseKeyCBOR = Data(CBOR.encode(CBOR.map(coseKey)))
-  print("✅ COSE key encoded, size: \(coseKeyCBOR.count)", coseKeyCBOR.map { String(format: "%02x", $0) }.joined())
+  let publicKeyData = publicKey.rawRepresentation
+  let xCoord = publicKeyData.prefix(32)
+  let yCoord = publicKeyData.suffix(32)
+  
+  let coseKeyCBOR: Data = es256CBOREncode(xCoord: Array(xCoord), yCoord: Array(yCoord))
+
+
+  guard
+    let guid = GuidUtils.newGuid() as String?,
+    let credentialId = try? GuidUtils.guidToRawFormat(guid)
+  else {
+    throw NSError(domain: "GUID", code: 2, userInfo: [NSLocalizedDescriptionKey: "Can not create credentialId"])
+  }
+  print("credentialId", credentialId.base64URLEncodedString())
   
   // Build authenticator data (same for all algs)
   let rpIdHash = SHA256.hash(data: relyingParty.data(using: .utf8)!)
   let signCount: [UInt8] = [0,0,0,0]
-  let credentialId = Data((0..<16).map { _ in UInt8.random(in: 0...255) })
   let credentialIdLen: [UInt8] = [UInt8(credentialId.count >> 8), UInt8(credentialId.count & 0xff)]
   let aaguid = Data(repeating: 0, count: 16)
   
@@ -109,7 +70,6 @@ func createPasskeyRegistrationCredential(
   let extBytes = Data(extBytesArray)
   authData.append(extBytes) // append whole extension map after COSE key
   
-  print("📦 authData hex:", authData.map { String(format: "%02x", $0) }.joined())
   
   let attestationObject: [CBOR: CBOR] = [
     CBOR.utf8String("fmt"): CBOR.utf8String("none"),
@@ -125,9 +85,11 @@ func createPasskeyRegistrationCredential(
     attestationObject: attestationCBOR
   )
   
+  let pkcs8Key = exportP256ToPKCS8(privateKey)
+  
   let metadata = PasskeyItem(
-    credentialId: credentialId.base64URLEncodedString(),
-    keyValue: privateKeyData.base64URLEncodedString(),
+    credentialId: guid,
+    keyValue: pkcs8Key.base64URLEncodedString(),
     rpId: relyingParty,
     userHandle: userId.base64URLEncodedString(),
     userName: userName
@@ -140,13 +102,81 @@ func createPasskeyRegistrationCredential(
 
 // The main function
 @available(iOS 17.0, *)
-func createAssertionFromTempPasskey(
+func createAssertionFromGuid(
   item: PasskeyItem,
   rpId: String,
   clientDataHash: Data
 ) throws -> ASPasskeyAssertionCredential {
   print("➡️ rpId (item):", item)
  
+  // 1) Basic RP check
+  guard item.rpId == rpId else {
+    throw NSError(domain: "Passkey", code: -1, userInfo: [NSLocalizedDescriptionKey: "RP mismatch"])
+  }
+  
+  // 2) Credential ID, userHandle, privatekey Data
+  guard let credId = try GuidUtils.guidToRawFormat(item.credentialId) as Data?,
+        let userHandle =  Data(base64URLEncoded: item.userHandle),
+        let privData = Data(base64URLEncoded: item.keyValue)
+  else {
+    throw NSError(domain: "Passkey", code: -2, userInfo: [NSLocalizedDescriptionKey: "Invalid credentialId, userId, privateKey encoding"])
+  }
+  print("Credential id :", credId.base64URLEncodedString(), item.credentialId)
+  // 3) Create p256 private key
+  guard let privateKey = fromPKCS8ToP256(privData)
+  else {
+    throw NSError(domain: "Passkey", code: -2, userInfo: [NSLocalizedDescriptionKey: "webCryptoPKCS8Base64URLToP256PrivateKey failed"])
+  }
+
+  print("Imported key:", privateKey)
+  
+  
+  // 4) Build authenticatorData for assertion: rpIdHash(32) + flags(1) + signCount(4)
+  let rpIdHash = Data(SHA256.hash(data: rpId.data(using: .utf8)!))
+  let flags: UInt8 = 0x01 | 0x08 | 0x10 | 0x04  // UP + BE + BS
+  // set UV bit if requestParams requires user verification (optional)
+
+  let signCount: [UInt8] = [0,0,0,0]
+  var authData = Data()
+  authData.append(rpIdHash)
+  authData.append(flags)
+  authData.append(contentsOf: signCount)
+  print("  authData len:", authData.count, "hex prefix:", authData.prefix(48).toHex())
+  
+  // 6) Build message to sign = authenticatorData || clientDataHash (the system provided clientDataHash)
+  var messageToSign = Data()
+  messageToSign.append(authData)
+  messageToSign.append(clientDataHash) // already a SHA-256 of clientDataJSON
+  
+  
+  guard let signature = try! privateKey.signature(for: messageToSign) as P256.Signing.ECDSASignature?
+  else {
+    throw NSError(domain: "Passkey", code: -7, userInfo: [NSLocalizedDescriptionKey: "Signature generation failed"])
+  }
+
+
+  // 8) build and return ASPasskeyAssertionCredential
+  let assertion = ASPasskeyAssertionCredential(
+    userHandle: userHandle,
+    relyingParty: rpId,
+    signature: signature.derRepresentation,
+    clientDataHash: clientDataHash,
+    authenticatorData: authData,
+    credentialID: credId
+  )
+  
+  print("✅ Created ASPasskeyAssertionCredential — returning to system")
+  return assertion
+}
+
+
+// Deprecated
+@available(iOS 17.0, *)
+func createAssertionRaw(
+  item: PasskeyItem,
+  rpId: String,
+  clientDataHash: Data
+) throws -> ASPasskeyAssertionCredential {
   // 1) Basic RP check
   guard item.rpId == rpId else {
     throw NSError(domain: "Passkey", code: -1, userInfo: [NSLocalizedDescriptionKey: "RP mismatch"])
@@ -219,52 +249,4 @@ func createAssertionFromTempPasskey(
   
   print("✅ Created ASPasskeyAssertionCredential — returning to system")
   return assertion
-}
-
-
-fileprivate func wrapRSAPKCS1ToPKCS8(_ privPKCS1: Data) -> Data {
-  // Wrap PKCS#1 RSAPrivateKey into PKCS#8 PrivateKeyInfo (ASN.1)
-  // Minimal wrapper for typical keys. See earlier message for explanation.
-  let oidRSA: [UInt8] = [0x2a,0x86,0x48,0x86,0xf7,0x0d,0x01,0x01,0x01] // 1.2.840.113549.1.1.1
-  let algSeq: [UInt8] = [0x30, 0x0d, 0x06, 0x09] + oidRSA + [0x05, 0x00]
-  let pkcs1Len = privPKCS1.count
-  
-  var octetHeader: [UInt8] = []
-  if pkcs1Len < 24 {
-    octetHeader.append(0x04 | UInt8(pkcs1Len))
-  } else if pkcs1Len <= 0xFF {
-    octetHeader += [0x04, 0x58, UInt8(pkcs1Len)]
-  } else {
-    octetHeader += [0x04, 0x59, UInt8((pkcs1Len >> 8) & 0xff), UInt8(pkcs1Len & 0xff)]
-  }
-  
-  let innerLen = algSeq.count + octetHeader.count + pkcs1Len
-  var innerHeader: [UInt8] = []
-  if innerLen < 128 {
-    innerHeader = [0x30, UInt8(innerLen)]
-  } else if innerLen <= 0xFF {
-    innerHeader = [0x30, 0x81, UInt8(innerLen)]
-  } else {
-    innerHeader = [0x30, 0x82, UInt8((innerLen>>8)&0xff), UInt8(innerLen&0xff)]
-  }
-  
-  let versionBytes: [UInt8] = [0x02, 0x01, 0x00] // INTEGER 0
-  let totalLen = versionBytes.count + innerHeader.count + innerLen
-  var totalHeader: [UInt8] = []
-  if totalLen < 128 {
-    totalHeader = [0x30, UInt8(totalLen)]
-  } else if totalLen <= 0xFF {
-    totalHeader = [0x30, 0x81, UInt8(totalLen)]
-  } else {
-    totalHeader = [0x30, 0x82, UInt8((totalLen>>8)&0xff), UInt8(totalLen&0xff)]
-  }
-  
-  var out = Data()
-  out.append(contentsOf: totalHeader)
-  out.append(contentsOf: versionBytes)
-  out.append(contentsOf: innerHeader)
-  out.append(contentsOf: algSeq)
-  out.append(contentsOf: octetHeader)
-  out.append(privPKCS1)
-  return out
 }

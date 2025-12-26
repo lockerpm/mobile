@@ -11,6 +11,7 @@ import {
   PublicKeyCredentialDescriptor,
 } from "../abstractions/fido2Authenticator.service"
 import { CipherType } from "../enums"
+import { CBOR } from "../misc/fido2/cbor"
 import { checkForAbort, Utils } from "../misc/fido2/common"
 import { compareCredentialIds, parseCredentialId } from "../misc/fido2/credential-id-utils"
 import {
@@ -21,7 +22,6 @@ import {
 } from "../misc/fido2/crypto"
 import { Fido2Utils } from "../misc/fido2/fido2-utils"
 import { guidToStandardFormat } from "../misc/fido2/guid-utils"
-import { CBOR } from "../misc/fido2/cbor"
 import { CipherView } from "../models/view"
 import { Fido2CredentialView } from "../models/view/fido2CredentialView"
 
@@ -80,7 +80,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       this.logService?.info(
         "[Fido2Authenticator] Aborting due to excluded credential found in vault."
       )
-      throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotAllowed)
+      throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.CredentialExcluded)
     }
 
     let fido2Credential: Fido2CredentialView
@@ -170,7 +170,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       this.logService.info(
         "[Fido2Authenticator] Aborting because no matching credentials were found in the vault."
       )
-      throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotAllowed)
+      throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NoCredentials)
     }
 
     const credentials: Fido2CredentialView[] = []
@@ -201,7 +201,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         `[Fido2Authenticator] No credentials found for RP ID: ${params.rpId}. Aborting assertion.`
       )
 
-      throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotAllowed)
+      throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NoCredentials)
     }
 
     // TODO: Implement user verification logic if needed

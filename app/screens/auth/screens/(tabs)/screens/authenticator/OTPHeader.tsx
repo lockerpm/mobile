@@ -1,4 +1,5 @@
 import { StyleSheet, View } from "react-native"
+
 import { Text, PressableIcon } from "app/components/cores"
 
 interface Props {

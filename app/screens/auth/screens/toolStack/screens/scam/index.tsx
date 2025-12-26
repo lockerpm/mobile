@@ -1,5 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
+
+import { ScamRoute } from "@/navigators"
+
 import {
   ScamHomeScreen,
   ScamLookupScreen,
@@ -9,7 +12,6 @@ import {
   // @ts-ignore
   ScamReportScreen,
 } from "./screens"
-import { ScamRoute } from "@/navigators"
 
 const Stack = createNativeStackNavigator<ScamRoute>()
 

@@ -3,121 +3,155 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		006FE765D7E947E8890CDD70 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7A4C6F607A4653A6B7AB54 /* noop-file.swift */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		60F07F86129C43A8A922BF43 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 20E7CF42EF8149078C54EA4C /* PrivacyInfo.xcprivacy */; };
-		7C0752F22E572EE100D28650 /* CallerIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C0752F12E572EDE00D28650 /* CallerIDManager.m */; };
-		7C0752F42E572F4600D28650 /* CallerIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0752F32E572F4500D28650 /* CallerIDManager.swift */; };
-		7C2F79AEE8745858EA2F0606 /* Pods_Locker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B1234109CC74C946970C33 /* Pods_Locker.framework */; };
-		7C8F69E72E86754F006F49D7 /* SwiftCBOR in Frameworks */ = {isa = PBXBuildFile; productRef = 7C8F69E62E86754F006F49D7 /* SwiftCBOR */; };
-		7C9127F72E0150D1009D80A5 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C9127F62E0150D1009D80A5 /* AuthenticationServices.framework */; };
-		7C9128022E0150D1009D80A5 /* LockerAutofill.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7C9127F52E0150D1009D80A5 /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		7C9128092E015114009D80A5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C9128082E015114009D80A5 /* StoreKit.framework */; };
-		7C91280C2E01528C009D80A5 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 7C91280B2E01528C009D80A5 /* Sentry */; };
-		7C91280F2E0152DF009D80A5 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7C91280E2E0152DF009D80A5 /* KeychainAccess */; };
-		7C9128132E01536F009D80A5 /* RNAutofillServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9128122E01536D009D80A5 /* RNAutofillServiceIos.swift */; };
-		7C9128152E01537B009D80A5 /* RNAutofillServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C9128142E015373009D80A5 /* RNAutofillServiceIos.m */; };
-		7C9128172E0153C2009D80A5 /* FileEncryptorBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C9128162E0153C1009D80A5 /* FileEncryptorBridge.m */; };
-		7C9128192E0153DD009D80A5 /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9128182E0153D8009D80A5 /* FileEncryptor.swift */; };
-		7C91281B2E0153E5009D80A5 /* RSAUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C91281A2E0153E3009D80A5 /* RSAUtils.swift */; };
-		7C91281F2E0153FC009D80A5 /* RNCryptoServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C91281E2E0153F7009D80A5 /* RNCryptoServiceIos.m */; };
-		7C9128212E015405009D80A5 /* RNCryptoServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9128202E015403009D80A5 /* RNCryptoServiceIos.swift */; };
-		7C9128242E015502009D80A5 /* Crypto in Frameworks */ = {isa = PBXBuildFile; productRef = 7C9128232E015502009D80A5 /* Crypto */; };
-		7C9128272E01551C009D80A5 /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = 7C9128262E01551C009D80A5 /* SwiftOTP */; };
-		7C91282A2E015534009D80A5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7C9128292E015534009D80A5 /* CachedAsyncImage */; };
-		7CED7E722E03CDB900223FE4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7CED7E712E03CDB900223FE4 /* GoogleService-Info.plist */; };
-		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
+		61E19FD18FE247F5828FB015 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7917C30583F8490CBFBA78CA /* PrivacyInfo.xcprivacy */; };
+		67497C155BC99B73DC757762 /* Pods_Locker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D587EA5ADDA4297ACDDC2C /* Pods_Locker.framework */; };
+		7C47A39B2EB9DE3D0017315B /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C47A39A2EB9DE3D0017315B /* AuthenticationServices.framework */; };
+		7C47A3A62EB9DE3D0017315B /* LockerAutofill.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7C47A3992EB9DE3D0017315B /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7C47A3B72EB9DE660017315B /* LockerLiveCallerLookup.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = 7C47A3B02EB9DE660017315B /* LockerLiveCallerLookup.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7C47A3C92EB9DEF20017315B /* FileEncryptorBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C47A3C42EB9DEF20017315B /* FileEncryptorBridge.m */; };
+		7C47A3CA2EB9DEF20017315B /* RNAutofillServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C47A3C02EB9DEF20017315B /* RNAutofillServiceIos.m */; };
+		7C47A3CB2EB9DEF20017315B /* CallerIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C47A3BE2EB9DEF20017315B /* CallerIDManager.swift */; };
+		7C47A3CC2EB9DEF20017315B /* CallerIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C47A3BD2EB9DEF20017315B /* CallerIDManager.m */; };
+		7C47A3CD2EB9DEF20017315B /* RNCryptoServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C47A3C62EB9DEF20017315B /* RNCryptoServiceIos.swift */; };
+		7C47A3CE2EB9DEF20017315B /* RNAutofillServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C47A3C12EB9DEF20017315B /* RNAutofillServiceIos.swift */; };
+		7C47A3CF2EB9DEF20017315B /* RSAUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C47A3C72EB9DEF20017315B /* RSAUtils.swift */; };
+		7C47A3D02EB9DEF20017315B /* RNCryptoServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C47A3C52EB9DEF20017315B /* RNCryptoServiceIos.m */; };
+		7C47A3D12EB9DEF20017315B /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C47A3C32EB9DEF20017315B /* FileEncryptor.swift */; };
+		7C47A4352EB9E0A20017315B /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7C47A4342EB9E0A20017315B /* CachedAsyncImage */; };
+		7C47A4382EB9E1FC0017315B /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 7C47A4372EB9E1FC0017315B /* Sentry */; };
+		7C47A43E2EB9E7290017315B /* SwiftCBOR in Frameworks */ = {isa = PBXBuildFile; productRef = 7C47A43D2EB9E7290017315B /* SwiftCBOR */; };
+		7C47A4412EB9E7400017315B /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7C47A4402EB9E7400017315B /* KeychainAccess */; };
+		7C47A4442EB9E94C0017315B /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = 7C47A4432EB9E94C0017315B /* SwiftOTP */; };
+		7C47A4472EB9ED420017315B /* Crypto in Frameworks */ = {isa = PBXBuildFile; productRef = 7C47A4462EB9ED420017315B /* Crypto */; };
+		7C47A5792EBB17AF0017315B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C47A5782EBB17AF0017315B /* StoreKit.framework */; };
+		80D8527593E241E291590728 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 557DD73B21F54278AFF4350B /* GoogleService-Info.plist */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		CB3EEE9A28AF4A7524D0A4AE /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20456B9232E0DB702C43FD20 /* ExpoModulesProvider.swift */; };
+		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7C9128002E0150D1009D80A5 /* PBXContainerItemProxy */ = {
+		7C47A3A42EB9DE3D0017315B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 7C9127F42E0150D1009D80A5;
+			remoteGlobalIDString = 7C47A3982EB9DE3D0017315B;
 			remoteInfo = LockerAutofill;
+		};
+		7C47A3B52EB9DE660017315B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C47A3AF2EB9DE660017315B;
+			remoteInfo = LockerLiveCallerLookup;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		7C0752E02E56F9B600D28650 /* Embed ExtensionKit Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			name = "Embed ExtensionKit Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7C9128072E0150D1009D80A5 /* Embed Foundation Extensions */ = {
+		7C47A3AB2EB9DE3E0017315B /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				7C9128022E0150D1009D80A5 /* LockerAutofill.appex in Embed Foundation Extensions */,
+				7C47A3A62EB9DE3D0017315B /* LockerAutofill.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C47A3BC2EB9DE660017315B /* Embed ExtensionKit Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				7C47A3B72EB9DE660017315B /* LockerLiveCallerLookup.appex in Embed ExtensionKit Extensions */,
+			);
+			name = "Embed ExtensionKit Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* Locker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Locker.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Locker/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Locker/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Locker/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Locker/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Locker/main.m; sourceTree = "<group>"; };
-		20E7CF42EF8149078C54EA4C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = PrivacyInfo.xcprivacy; path = Locker/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		6C2E3173556A471DD304B334 /* Pods-Locker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker.debug.xcconfig"; path = "Target Support Files/Pods-Locker/Pods-Locker.debug.xcconfig"; sourceTree = "<group>"; };
-		7A4D352CD337FB3A3BF06240 /* Pods-Locker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker.release.xcconfig"; path = "Target Support Files/Pods-Locker/Pods-Locker.release.xcconfig"; sourceTree = "<group>"; };
-		7C0752F12E572EDE00D28650 /* CallerIDManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CallerIDManager.m; sourceTree = "<group>"; };
-		7C0752F32E572F4500D28650 /* CallerIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerIDManager.swift; sourceTree = "<group>"; };
-		7C9127F52E0150D1009D80A5 /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		7C9127F62E0150D1009D80A5 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
-		7C9128082E015114009D80A5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		7C9128122E01536D009D80A5 /* RNAutofillServiceIos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNAutofillServiceIos.swift; sourceTree = "<group>"; };
-		7C9128142E015373009D80A5 /* RNAutofillServiceIos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNAutofillServiceIos.m; sourceTree = "<group>"; };
-		7C9128162E0153C1009D80A5 /* FileEncryptorBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileEncryptorBridge.m; sourceTree = "<group>"; };
-		7C9128182E0153D8009D80A5 /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
-		7C91281A2E0153E3009D80A5 /* RSAUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAUtils.swift; sourceTree = "<group>"; };
-		7C91281E2E0153F7009D80A5 /* RNCryptoServiceIos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCryptoServiceIos.m; sourceTree = "<group>"; };
-		7C9128202E015403009D80A5 /* RNCryptoServiceIos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCryptoServiceIos.swift; sourceTree = "<group>"; };
-		7C91287E2E0158B0009D80A5 /* Locker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Locker.entitlements; sourceTree = "<group>"; };
-		7C91287F2E0158B0009D80A5 /* LockerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerRelease.entitlements; sourceTree = "<group>"; };
-		7CED7E712E03CDB900223FE4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		7D7A4C6F607A4653A6B7AB54 /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "Locker/noop-file.swift"; sourceTree = "<group>"; };
+		1D7BEB912ACF6374D62603AB /* Pods-Locker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker.release.xcconfig"; path = "Target Support Files/Pods-Locker/Pods-Locker.release.xcconfig"; sourceTree = "<group>"; };
+		20456B9232E0DB702C43FD20 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Locker/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		2F53A1B42429584045F0880B /* Pods-Locker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker.debug.xcconfig"; path = "Target Support Files/Pods-Locker/Pods-Locker.debug.xcconfig"; sourceTree = "<group>"; };
+		32D587EA5ADDA4297ACDDC2C /* Pods_Locker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Locker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		557DD73B21F54278AFF4350B /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Locker/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7917C30583F8490CBFBA78CA /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = PrivacyInfo.xcprivacy; path = Locker/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		7C47A3812EB9D8B70017315B /* Locker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Locker.entitlements; sourceTree = "<group>"; };
+		7C47A3822EB9D8B70017315B /* LockerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerRelease.entitlements; sourceTree = "<group>"; };
+		7C47A3992EB9DE3D0017315B /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C47A39A2EB9DE3D0017315B /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		7C47A3B02EB9DE660017315B /* LockerLiveCallerLookup.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = LockerLiveCallerLookup.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C47A3BD2EB9DEF20017315B /* CallerIDManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CallerIDManager.m; sourceTree = "<group>"; };
+		7C47A3BE2EB9DEF20017315B /* CallerIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerIDManager.swift; sourceTree = "<group>"; };
+		7C47A3C02EB9DEF20017315B /* RNAutofillServiceIos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNAutofillServiceIos.m; sourceTree = "<group>"; };
+		7C47A3C12EB9DEF20017315B /* RNAutofillServiceIos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNAutofillServiceIos.swift; sourceTree = "<group>"; };
+		7C47A3C32EB9DEF20017315B /* FileEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEncryptor.swift; sourceTree = "<group>"; };
+		7C47A3C42EB9DEF20017315B /* FileEncryptorBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileEncryptorBridge.m; sourceTree = "<group>"; };
+		7C47A3C52EB9DEF20017315B /* RNCryptoServiceIos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCryptoServiceIos.m; sourceTree = "<group>"; };
+		7C47A3C62EB9DEF20017315B /* RNCryptoServiceIos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCryptoServiceIos.swift; sourceTree = "<group>"; };
+		7C47A3C72EB9DEF20017315B /* RSAUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAUtils.swift; sourceTree = "<group>"; };
+		7C47A5782EBB17AF0017315B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Locker/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		E4B1234109CC74C946970C33 /* Pods_Locker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Locker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Locker/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		FBC47ED18E374508912F6056 /* Locker-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "Locker-Bridging-Header.h"; path = "Locker/Locker-Bridging-Header.h"; sourceTree = "<group>"; };
+		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Locker/AppDelegate.swift; sourceTree = "<group>"; };
+		F11748442D0722820044C1D9 /* Locker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Locker-Bridging-Header.h"; path = "Locker/Locker-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7C9128032E0150D1009D80A5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		7C47A3B82EB9DE660017315B /* Exceptions for "LockerLiveCallerLookup" folder in "LockerLiveCallerLookup" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 7C9127F42E0150D1009D80A5 /* LockerAutofill */;
+			target = 7C47A3AF2EB9DE660017315B /* LockerLiveCallerLookup */;
+		};
+		7C47A4482EB9F0380017315B /* Exceptions for "LockerAutofill" folder in "LockerAutofill" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7C47A3982EB9DE3D0017315B /* LockerAutofill */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		7C0752D92E56F9B600D28650 /* LockerLiveCallerLookup */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LockerLiveCallerLookup; sourceTree = "<group>"; };
-		7C9127F82E0150D1009D80A5 /* LockerAutofill */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7C9128032E0150D1009D80A5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LockerAutofill; sourceTree = "<group>"; };
+		7C47A39C2EB9DE3D0017315B /* LockerAutofill */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7C47A4482EB9F0380017315B /* Exceptions for "LockerAutofill" folder in "LockerAutofill" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = LockerAutofill;
+			sourceTree = "<group>";
+		};
+		7C47A3B12EB9DE660017315B /* LockerLiveCallerLookup */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7C47A3B82EB9DE660017315B /* Exceptions for "LockerLiveCallerLookup" folder in "LockerLiveCallerLookup" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = LockerLiveCallerLookup;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,22 +159,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C9128092E015114009D80A5 /* StoreKit.framework in Frameworks */,
-				7C2F79AEE8745858EA2F0606 /* Pods_Locker.framework in Frameworks */,
+				67497C155BC99B73DC757762 /* Pods_Locker.framework in Frameworks */,
+				7C47A5792EBB17AF0017315B /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7C9127F22E0150D1009D80A5 /* Frameworks */ = {
+		7C47A3962EB9DE3D0017315B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C9127F72E0150D1009D80A5 /* AuthenticationServices.framework in Frameworks */,
-				7C8F69E72E86754F006F49D7 /* SwiftCBOR in Frameworks */,
-				7C91280C2E01528C009D80A5 /* Sentry in Frameworks */,
-				7C91280F2E0152DF009D80A5 /* KeychainAccess in Frameworks */,
-				7C91282A2E015534009D80A5 /* CachedAsyncImage in Frameworks */,
-				7C9128272E01551C009D80A5 /* SwiftOTP in Frameworks */,
-				7C9128242E015502009D80A5 /* Crypto in Frameworks */,
+				7C47A39B2EB9DE3D0017315B /* AuthenticationServices.framework in Frameworks */,
+				7C47A4352EB9E0A20017315B /* CachedAsyncImage in Frameworks */,
+				7C47A4412EB9E7400017315B /* KeychainAccess in Frameworks */,
+				7C47A43E2EB9E7290017315B /* SwiftCBOR in Frameworks */,
+				7C47A4442EB9E94C0017315B /* SwiftOTP in Frameworks */,
+				7C47A4472EB9ED420017315B /* Crypto in Frameworks */,
+				7C47A4382EB9E1FC0017315B /* Sentry in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C47A3AD2EB9DE660017315B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,21 +191,19 @@
 		13B07FAE1A68108700A75B9A /* Locker */ = {
 			isa = PBXGroup;
 			children = (
-				7C91287E2E0158B0009D80A5 /* Locker.entitlements */,
-				7C91287F2E0158B0009D80A5 /* LockerRelease.entitlements */,
-				7C0752EE2E572AA400D28650 /* CallerID */,
-				7C9128102E015325009D80A5 /* RNAutofillService */,
-				7C9128112E015337009D80A5 /* RNCryptoService */,
+				7C47A3BF2EB9DEF20017315B /* CallerID */,
+				7C47A3C22EB9DEF20017315B /* RNAutofillService */,
+				7C47A3C82EB9DEF20017315B /* RNCryptoService */,
+				7C47A3812EB9D8B70017315B /* Locker.entitlements */,
+				7C47A3822EB9D8B70017315B /* LockerRelease.entitlements */,
+				F11748412D0307B40044C1D9 /* AppDelegate.swift */,
+				F11748442D0722820044C1D9 /* Locker-Bridging-Header.h */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				20E7CF42EF8149078C54EA4C /* PrivacyInfo.xcprivacy */,
-				7D7A4C6F607A4653A6B7AB54 /* noop-file.swift */,
-				FBC47ED18E374508912F6056 /* Locker-Bridging-Header.h */,
+				7917C30583F8490CBFBA78CA /* PrivacyInfo.xcprivacy */,
+				557DD73B21F54278AFF4350B /* GoogleService-Info.plist */,
 			);
 			name = Locker;
 			sourceTree = "<group>";
@@ -172,42 +211,53 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7C9128082E015114009D80A5 /* StoreKit.framework */,
+				7C47A5782EBB17AF0017315B /* StoreKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				7C9127F62E0150D1009D80A5 /* AuthenticationServices.framework */,
-				E4B1234109CC74C946970C33 /* Pods_Locker.framework */,
+				32D587EA5ADDA4297ACDDC2C /* Pods_Locker.framework */,
+				7C47A39A2EB9DE3D0017315B /* AuthenticationServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7C0752EE2E572AA400D28650 /* CallerID */ = {
+		376713764F25E28E68930A5C /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				7C0752F32E572F4500D28650 /* CallerIDManager.swift */,
-				7C0752F12E572EDE00D28650 /* CallerIDManager.m */,
+				ECB0C19E8EAAE3E17823A742 /* Locker */,
 			);
-			path = CallerID;
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
-		7C9128102E015325009D80A5 /* RNAutofillService */ = {
+		7C47A3BF2EB9DEF20017315B /* CallerID */ = {
 			isa = PBXGroup;
 			children = (
-				7C9128142E015373009D80A5 /* RNAutofillServiceIos.m */,
-				7C9128122E01536D009D80A5 /* RNAutofillServiceIos.swift */,
+				7C47A3BD2EB9DEF20017315B /* CallerIDManager.m */,
+				7C47A3BE2EB9DEF20017315B /* CallerIDManager.swift */,
 			);
-			path = RNAutofillService;
+			name = CallerID;
+			path = Locker/CallerID;
 			sourceTree = "<group>";
 		};
-		7C9128112E015337009D80A5 /* RNCryptoService */ = {
+		7C47A3C22EB9DEF20017315B /* RNAutofillService */ = {
 			isa = PBXGroup;
 			children = (
-				7C9128202E015403009D80A5 /* RNCryptoServiceIos.swift */,
-				7C91281E2E0153F7009D80A5 /* RNCryptoServiceIos.m */,
-				7C91281A2E0153E3009D80A5 /* RSAUtils.swift */,
-				7C9128182E0153D8009D80A5 /* FileEncryptor.swift */,
-				7C9128162E0153C1009D80A5 /* FileEncryptorBridge.m */,
+				7C47A3C02EB9DEF20017315B /* RNAutofillServiceIos.m */,
+				7C47A3C12EB9DEF20017315B /* RNAutofillServiceIos.swift */,
 			);
-			path = RNCryptoService;
+			name = RNAutofillService;
+			path = Locker/RNAutofillService;
+			sourceTree = "<group>";
+		};
+		7C47A3C82EB9DEF20017315B /* RNCryptoService */ = {
+			isa = PBXGroup;
+			children = (
+				7C47A3C32EB9DEF20017315B /* FileEncryptor.swift */,
+				7C47A3C42EB9DEF20017315B /* FileEncryptorBridge.m */,
+				7C47A3C52EB9DEF20017315B /* RNCryptoServiceIos.m */,
+				7C47A3C62EB9DEF20017315B /* RNCryptoServiceIos.swift */,
+				7C47A3C72EB9DEF20017315B /* RSAUtils.swift */,
+			);
+			name = RNCryptoService;
+			path = Locker/RNCryptoService;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -220,15 +270,14 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				7CED7E712E03CDB900223FE4 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Locker */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				7C9127F82E0150D1009D80A5 /* LockerAutofill */,
-				7C0752D92E56F9B600D28650 /* LockerLiveCallerLookup */,
+				7C47A39C2EB9DE3D0017315B /* LockerAutofill */,
+				7C47A3B12EB9DE660017315B /* LockerLiveCallerLookup */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				D65327D7A22EEC0BE12398D9 /* Pods */,
-				D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */,
+				C4A5C37FCBA66C4D427BC888 /* Pods */,
+				376713764F25E28E68930A5C /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -239,17 +288,10 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* Locker.app */,
-				7C9127F52E0150D1009D80A5 /* LockerAutofill.appex */,
+				7C47A3992EB9DE3D0017315B /* LockerAutofill.appex */,
+				7C47A3B02EB9DE660017315B /* LockerLiveCallerLookup.appex */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		92DBD88DE9BF7D494EA9DA96 /* Locker */ = {
-			isa = PBXGroup;
-			children = (
-				FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */,
-			);
-			name = Locker;
 			sourceTree = "<group>";
 		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
@@ -261,21 +303,21 @@
 			path = Locker/Supporting;
 			sourceTree = "<group>";
 		};
-		D65327D7A22EEC0BE12398D9 /* Pods */ = {
+		C4A5C37FCBA66C4D427BC888 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6C2E3173556A471DD304B334 /* Pods-Locker.debug.xcconfig */,
-				7A4D352CD337FB3A3BF06240 /* Pods-Locker.release.xcconfig */,
+				2F53A1B42429584045F0880B /* Pods-Locker.debug.xcconfig */,
+				1D7BEB912ACF6374D62603AB /* Pods-Locker.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */ = {
+		ECB0C19E8EAAE3E17823A742 /* Locker */ = {
 			isa = PBXGroup;
 			children = (
-				92DBD88DE9BF7D494EA9DA96 /* Locker */,
+				20456B9232E0DB702C43FD20 /* ExpoModulesProvider.swift */,
 			);
-			name = ExpoModulesProviders;
+			name = Locker;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,54 +328,75 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Locker" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				4039A99273A5CB2E19F73A04 /* [Expo] Configure project */,
+				0D6671C6737A9FF557DAE973 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				F616AE7BAA7AB7ECC26D895C /* [CP] Embed Pods Frameworks */,
-				7C0752E02E56F9B600D28650 /* Embed ExtensionKit Extensions */,
-				7C9128072E0150D1009D80A5 /* Embed Foundation Extensions */,
-				43AB6BD70D9F7A7F2BE73804 /* [CP-User] [RNFB] Core Configuration */,
+				825B50B47757274FC81EE73D /* [CP] Embed Pods Frameworks */,
+				7C47A3AB2EB9DE3E0017315B /* Embed Foundation Extensions */,
+				7C47A3BC2EB9DE660017315B /* Embed ExtensionKit Extensions */,
+				1717D5FDEDF10DF94B39395C /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				7C9128012E0150D1009D80A5 /* PBXTargetDependency */,
+				7C47A3A52EB9DE3D0017315B /* PBXTargetDependency */,
+				7C47A3B62EB9DE660017315B /* PBXTargetDependency */,
 			);
 			name = Locker;
 			productName = Locker;
 			productReference = 13B07F961A680F5B00A75B9A /* Locker.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7C9127F42E0150D1009D80A5 /* LockerAutofill */ = {
+		7C47A3982EB9DE3D0017315B /* LockerAutofill */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7C9128042E0150D1009D80A5 /* Build configuration list for PBXNativeTarget "LockerAutofill" */;
+			buildConfigurationList = 7C47A3A82EB9DE3E0017315B /* Build configuration list for PBXNativeTarget "LockerAutofill" */;
 			buildPhases = (
-				7C9127F12E0150D1009D80A5 /* Sources */,
-				7C9127F22E0150D1009D80A5 /* Frameworks */,
-				7C9127F32E0150D1009D80A5 /* Resources */,
+				7C47A3952EB9DE3D0017315B /* Sources */,
+				7C47A3962EB9DE3D0017315B /* Frameworks */,
+				7C47A3972EB9DE3D0017315B /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				7C9127F82E0150D1009D80A5 /* LockerAutofill */,
+				7C47A39C2EB9DE3D0017315B /* LockerAutofill */,
 			);
 			name = LockerAutofill;
 			packageProductDependencies = (
-				7C91280B2E01528C009D80A5 /* Sentry */,
-				7C91280E2E0152DF009D80A5 /* KeychainAccess */,
-				7C9128232E015502009D80A5 /* Crypto */,
-				7C9128262E01551C009D80A5 /* SwiftOTP */,
-				7C9128292E015534009D80A5 /* CachedAsyncImage */,
-				7C8F69E62E86754F006F49D7 /* SwiftCBOR */,
+				7C47A4342EB9E0A20017315B /* CachedAsyncImage */,
+				7C47A4372EB9E1FC0017315B /* Sentry */,
+				7C47A43D2EB9E7290017315B /* SwiftCBOR */,
+				7C47A4402EB9E7400017315B /* KeychainAccess */,
+				7C47A4432EB9E94C0017315B /* SwiftOTP */,
+				7C47A4462EB9ED420017315B /* Crypto */,
 			);
 			productName = LockerAutofill;
-			productReference = 7C9127F52E0150D1009D80A5 /* LockerAutofill.appex */;
+			productReference = 7C47A3992EB9DE3D0017315B /* LockerAutofill.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		7C47A3AF2EB9DE660017315B /* LockerLiveCallerLookup */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7C47A3B92EB9DE660017315B /* Build configuration list for PBXNativeTarget "LockerLiveCallerLookup" */;
+			buildPhases = (
+				7C47A3AC2EB9DE660017315B /* Sources */,
+				7C47A3AD2EB9DE660017315B /* Frameworks */,
+				7C47A3AE2EB9DE660017315B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7C47A3B12EB9DE660017315B /* LockerLiveCallerLookup */,
+			);
+			name = LockerLiveCallerLookup;
+			productName = LockerLiveCallerLookup;
+			productReference = 7C47A3B02EB9DE660017315B /* LockerLiveCallerLookup.appex */;
+			productType = "com.apple.product-type.extensionkit-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -341,14 +404,17 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1250;
 					};
-					7C9127F42E0150D1009D80A5 = {
-						CreatedOnToolsVersion = 16.2;
+					7C47A3982EB9DE3D0017315B = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+					7C47A3AF2EB9DE660017315B = {
+						CreatedOnToolsVersion = 26.0.1;
 					};
 				};
 			};
@@ -364,19 +430,20 @@
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
-				7C91280A2E01528C009D80A5 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
-				7C91280D2E0152DF009D80A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				7C9128222E015502009D80A5 /* XCRemoteSwiftPackageReference "swift-crypto" */,
-				7C9128252E01551C009D80A5 /* XCRemoteSwiftPackageReference "SwiftOTP" */,
-				7C9128282E015534009D80A5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
-				7C8F69E52E86754F006F49D7 /* XCRemoteSwiftPackageReference "SwiftCBOR" */,
+				7C47A4332EB9E0A20017315B /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
+				7C47A4362EB9E1FC0017315B /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				7C47A43C2EB9E7290017315B /* XCRemoteSwiftPackageReference "SwiftCBOR" */,
+				7C47A43F2EB9E7400017315B /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				7C47A4422EB9E94C0017315B /* XCRemoteSwiftPackageReference "SwiftOTP" */,
+				7C47A4452EB9ED420017315B /* XCRemoteSwiftPackageReference "swift-crypto" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* Locker */,
-				7C9127F42E0150D1009D80A5 /* LockerAutofill */,
+				7C47A3982EB9DE3D0017315B /* LockerAutofill */,
+				7C47A3AF2EB9DE660017315B /* LockerLiveCallerLookup */,
 			);
 		};
 /* End PBXProject section */
@@ -388,13 +455,20 @@
 			files = (
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				7CED7E722E03CDB900223FE4 /* GoogleService-Info.plist in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				60F07F86129C43A8A922BF43 /* PrivacyInfo.xcprivacy in Resources */,
+				61E19FD18FE247F5828FB015 /* PrivacyInfo.xcprivacy in Resources */,
+				80D8527593E241E291590728 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7C9127F32E0150D1009D80A5 /* Resources */ = {
+		7C47A3972EB9DE3D0017315B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C47A3AE2EB9DE660017315B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -411,6 +485,8 @@
 			files = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+				"$(SRCROOT)/.xcode.env.local",
 			);
 			name = "Bundle React Native code and images";
 			outputPaths = (
@@ -441,7 +517,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4039A99273A5CB2E19F73A04 /* [Expo] Configure project */ = {
+		0D6671C6737A9FF557DAE973 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -450,17 +526,22 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/Locker/Locker.entitlements",
+				"$(SRCROOT)/Pods/Target Support Files/Pods-Locker/expo-configure-project.sh",
 			);
 			name = "[Expo] Configure project";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(SRCROOT)/Pods/Target Support Files/Pods-Locker/ExpoModulesProvider.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-Locker/expo-configure-project.sh\"\n";
 		};
-		43AB6BD70D9F7A7F2BE73804 /* [CP-User] [RNFB] Core Configuration */ = {
+		1717D5FDEDF10DF94B39395C /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -469,11 +550,9 @@
 				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
 			);
 			name = "[CP-User] [RNFB] Core Configuration";
-			outputPaths = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\n\n##########################################################################\n##########################################################################\n#\n#  NOTE THAT IF YOU CHANGE THIS FILE YOU MUST RUN pod install AFTERWARDS\n#\n#  This file is installed as an Xcode build script in the project file\n#  by cocoapods, and you will not see your changes until you pod install\n#\n##########################################################################\n##########################################################################\n\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"info:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"info:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"info: -> RNFB build script started\"\necho \"info: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"info:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | /usr/bin/head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"info:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  _RN_ROOT_EXISTS=$(ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\" || echo '')\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    if ! python3 --version >/dev/null 2>&1; then echo \"python3 not found, firebase.json file processing error.\" && exit 1; fi\n    _JSON_OUTPUT_BASE64=$(python3 -c 'import json,sys,base64;print(base64.b64encode(bytes(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"', '\"'rb'\"').read())['${_JSON_ROOT}']), '\"'utf-8'\"')).decode())' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.app_data_collection_default_enabled\n  _APP_DATA_COLLECTION_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_data_collection_default_enabled\")\n  if [[ $_APP_DATA_COLLECTION_ENABLED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseDataCollectionDefaultEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_DATA_COLLECTION_ENABLED\")\")\n  fi\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.analytics_collection_deactivated\n  _ANALYTICS_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_collection_deactivated\")\n  if [[ $_ANALYTICS_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_DEACTIVATED\")\")\n  fi\n\n  # config.analytics_idfv_collection_enabled\n  _ANALYTICS_IDFV_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_idfv_collection_enabled\")\n  if [[ $_ANALYTICS_IDFV_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_IDFV_COLLECTION\")\")\n  fi\n\n  # config.analytics_default_allow_analytics_storage\n  _ANALYTICS_STORAGE=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_analytics_storage\")\n  if [[ $_ANALYTICS_STORAGE ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_ANALYTICS_STORAGE\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_STORAGE\")\")\n  fi\n\n  # config.analytics_default_allow_ad_storage\n  _ANALYTICS_AD_STORAGE=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_storage\")\n  if [[ $_ANALYTICS_AD_STORAGE ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_STORAGE\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AD_STORAGE\")\")\n  fi\n\n  # config.analytics_default_allow_ad_user_data\n  _ANALYTICS_AD_USER_DATA=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_user_data\")\n  if [[ $_ANALYTICS_AD_USER_DATA ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_USER_DATA\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AD_USER_DATA\")\")\n  fi\n\n  # config.analytics_default_allow_ad_personalization_signals\n  _ANALYTICS_PERSONALIZATION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_personalization_signals\")\n  if [[ $_ANALYTICS_PERSONALIZATION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_PERSONALIZATION\")\")\n  fi\n\n  # config.analytics_registration_with_ad_network_enabled\n  _ANALYTICS_REGISTRATION_WITH_AD_NETWORK=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_registration_with_ad_network_enabled\")\n  if [[ $_ANALYTICS_REGISTRATION_WITH_AD_NETWORK ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_REGISTRATION_WITH_AD_NETWORK_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_REGISTRATION_WITH_AD_NETWORK\")\")\n  fi\n\n  # config.google_analytics_automatic_screen_reporting_enabled\n  _ANALYTICS_AUTO_SCREEN_REPORTING=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_automatic_screen_reporting_enabled\")\n  if [[ $_ANALYTICS_AUTO_SCREEN_REPORTING ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAutomaticScreenReportingEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_SCREEN_REPORTING\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_collection_deactivated\n  _PERF_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_collection_deactivated\")\n  if [[ $_PERF_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_deactivated\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_DEACTIVATED\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.in_app_messaging_auto_colllection_enabled\n  _FIAM_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"in_app_messaging_auto_collection_enabled\")\n  if [[ $_FIAM_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseInAppMessagingAutomaticDataCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_FIAM_AUTO_INIT\")\")\n  fi\n\n  # config.app_check_token_auto_refresh\n  _APP_CHECK_TOKEN_AUTO_REFRESH=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_check_token_auto_refresh\")\n  if [[ $_APP_CHECK_TOKEN_AUTO_REFRESH ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAppCheckTokenAutoRefreshEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_CHECK_TOKEN_AUTO_REFRESH\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"info: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"info: <- RNFB build script finished\"\n";
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\n\n##########################################################################\n##########################################################################\n#\n#  NOTE THAT IF YOU CHANGE THIS FILE YOU MUST RUN pod install AFTERWARDS\n#\n#  This file is installed as an Xcode build script in the project file\n#  by cocoapods, and you will not see your changes until you pod install\n#\n##########################################################################\n##########################################################################\n\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"note:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"note:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"note: -> RNFB build script started\"\necho \"note: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"note:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | /usr/bin/head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"note:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  if ! _RN_ROOT_EXISTS=$(ruby -Ku -e \"require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\"); then\n    echo \"error: Failed to parse firebase.json, check for syntax errors.\"\n    exit 1\n  fi\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    if ! python3 --version >/dev/null 2>&1; then echo \"error: python3 not found, firebase.json file processing error.\" && exit 1; fi\n    _JSON_OUTPUT_BASE64=$(python3 -c 'import json,sys,base64;print(base64.b64encode(bytes(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"', '\"'rb'\"').read())['${_JSON_ROOT}']), '\"'utf-8'\"')).decode())' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.app_data_collection_default_enabled\n  _APP_DATA_COLLECTION_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_data_collection_default_enabled\")\n  if [[ $_APP_DATA_COLLECTION_ENABLED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseDataCollectionDefaultEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_DATA_COLLECTION_ENABLED\")\")\n  fi\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.analytics_collection_deactivated\n  _ANALYTICS_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_collection_deactivated\")\n  if [[ $_ANALYTICS_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_DEACTIVATED\")\")\n  fi\n\n  # config.analytics_idfv_collection_enabled\n  _ANALYTICS_IDFV_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_idfv_collection_enabled\")\n  if [[ $_ANALYTICS_IDFV_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_IDFV_COLLECTION\")\")\n  fi\n\n  # config.analytics_default_allow_analytics_storage\n  _ANALYTICS_STORAGE=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_analytics_storage\")\n  if [[ $_ANALYTICS_STORAGE ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_ANALYTICS_STORAGE\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_STORAGE\")\")\n  fi\n\n  # config.analytics_default_allow_ad_storage\n  _ANALYTICS_AD_STORAGE=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_storage\")\n  if [[ $_ANALYTICS_AD_STORAGE ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_STORAGE\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AD_STORAGE\")\")\n  fi\n\n  # config.analytics_default_allow_ad_user_data\n  _ANALYTICS_AD_USER_DATA=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_user_data\")\n  if [[ $_ANALYTICS_AD_USER_DATA ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_USER_DATA\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AD_USER_DATA\")\")\n  fi\n\n  # config.analytics_default_allow_ad_personalization_signals\n  _ANALYTICS_PERSONALIZATION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_personalization_signals\")\n  if [[ $_ANALYTICS_PERSONALIZATION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_PERSONALIZATION\")\")\n  fi\n\n  # config.analytics_registration_with_ad_network_enabled\n  _ANALYTICS_REGISTRATION_WITH_AD_NETWORK=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_registration_with_ad_network_enabled\")\n  if [[ $_ANALYTICS_REGISTRATION_WITH_AD_NETWORK ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_REGISTRATION_WITH_AD_NETWORK_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_REGISTRATION_WITH_AD_NETWORK\")\")\n  fi\n\n  # config.google_analytics_automatic_screen_reporting_enabled\n  _ANALYTICS_AUTO_SCREEN_REPORTING=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_automatic_screen_reporting_enabled\")\n  if [[ $_ANALYTICS_AUTO_SCREEN_REPORTING ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAutomaticScreenReportingEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_SCREEN_REPORTING\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_collection_deactivated\n  _PERF_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_collection_deactivated\")\n  if [[ $_PERF_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_deactivated\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_DEACTIVATED\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.in_app_messaging_auto_colllection_enabled\n  _FIAM_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"in_app_messaging_auto_collection_enabled\")\n  if [[ $_FIAM_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseInAppMessagingAutomaticDataCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_FIAM_AUTO_INIT\")\")\n  fi\n\n  # config.app_check_token_auto_refresh\n  _APP_CHECK_TOKEN_AUTO_REFRESH=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_check_token_auto_refresh\")\n  if [[ $_APP_CHECK_TOKEN_AUTO_REFRESH ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAppCheckTokenAutoRefreshEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_CHECK_TOKEN_AUTO_REFRESH\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"note: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"note: <- RNFB build script finished\"\n";
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -483,6 +562,7 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth/AppAuthCore_Privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXApplication/ExpoApplication_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
@@ -506,7 +586,6 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/Sentry/Sentry.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/TrustKit/TrustKit.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/boost/boost_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-launcher/EXDevLauncher.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-menu/EXDevMenu.bundle",
@@ -518,6 +597,7 @@
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppAuthCore_Privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoApplication_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoFileSystem_privacy.bundle",
@@ -541,7 +621,6 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Sentry.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TrustKit.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/boost_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevLauncher.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevMenu.bundle",
@@ -555,7 +634,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F616AE7BAA7AB7ECC26D895C /* [CP] Embed Pods Frameworks */ = {
+		825B50B47757274FC81EE73D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -594,23 +673,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				7C0752F22E572EE100D28650 /* CallerIDManager.m in Sources */,
-				7C9128132E01536F009D80A5 /* RNAutofillServiceIos.swift in Sources */,
-				7C9128212E015405009D80A5 /* RNCryptoServiceIos.swift in Sources */,
-				7C91281F2E0153FC009D80A5 /* RNCryptoServiceIos.m in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				7C9128152E01537B009D80A5 /* RNAutofillServiceIos.m in Sources */,
-				7C91281B2E0153E5009D80A5 /* RSAUtils.swift in Sources */,
-				7C9128192E0153DD009D80A5 /* FileEncryptor.swift in Sources */,
-				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				7C0752F42E572F4600D28650 /* CallerIDManager.swift in Sources */,
-				7C9128172E0153C2009D80A5 /* FileEncryptorBridge.m in Sources */,
-				006FE765D7E947E8890CDD70 /* noop-file.swift in Sources */,
+				7C47A3C92EB9DEF20017315B /* FileEncryptorBridge.m in Sources */,
+				7C47A3CA2EB9DEF20017315B /* RNAutofillServiceIos.m in Sources */,
+				7C47A3CB2EB9DEF20017315B /* CallerIDManager.swift in Sources */,
+				7C47A3CC2EB9DEF20017315B /* CallerIDManager.m in Sources */,
+				7C47A3CD2EB9DEF20017315B /* RNCryptoServiceIos.swift in Sources */,
+				7C47A3CE2EB9DEF20017315B /* RNAutofillServiceIos.swift in Sources */,
+				7C47A3CF2EB9DEF20017315B /* RSAUtils.swift in Sources */,
+				7C47A3D02EB9DEF20017315B /* RNCryptoServiceIos.m in Sources */,
+				7C47A3D12EB9DEF20017315B /* FileEncryptor.swift in Sources */,
+				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
+				CB3EEE9A28AF4A7524D0A4AE /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7C9127F12E0150D1009D80A5 /* Sources */ = {
+		7C47A3952EB9DE3D0017315B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C47A3AC2EB9DE660017315B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -620,22 +704,28 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7C9128012E0150D1009D80A5 /* PBXTargetDependency */ = {
+		7C47A3A52EB9DE3D0017315B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7C9127F42E0150D1009D80A5 /* LockerAutofill */;
-			targetProxy = 7C9128002E0150D1009D80A5 /* PBXContainerItemProxy */;
+			target = 7C47A3982EB9DE3D0017315B /* LockerAutofill */;
+			targetProxy = 7C47A3A42EB9DE3D0017315B /* PBXContainerItemProxy */;
+		};
+		7C47A3B62EB9DE660017315B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C47A3AF2EB9DE660017315B /* LockerLiveCallerLookup */;
+			targetProxy = 7C47A3B52EB9DE660017315B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6C2E3173556A471DD304B334 /* Pods-Locker.debug.xcconfig */;
+			baseConfigurationReference = 2F53A1B42429584045F0880B /* Pods-Locker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 49;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -649,7 +739,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6;
+				MARKETING_VERSION = 2.7;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -668,12 +758,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A4D352CD337FB3A3BF06240 /* Pods-Locker.release.xcconfig */;
+			baseConfigurationReference = 1D7BEB912ACF6374D62603AB /* Pods-Locker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 49;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				INFOPLIST_FILE = Locker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -682,7 +773,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6;
+				MARKETING_VERSION = 2.7;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -698,7 +789,7 @@
 			};
 			name = Release;
 		};
-		7C9128052E0150D1009D80A5 /* Debug */ = {
+		7C47A3A92EB9DE3E0017315B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -719,7 +810,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LockerAutofill/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = LockerAutofill;
+				INFOPLIST_KEY_CFBundleDisplayName = Locker;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -738,15 +829,18 @@
 				SHARED_KEYCHAIN_ACCESS_GROUP = group.com.cystack.lockerapp;
 				SHARED_KEYCHAIN_SERVICE = W7S57TNBH5.com.cystack.lockerapp;
 				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		7C9128062E0150D1009D80A5 /* Release */ = {
+		7C47A3AA2EB9DE3E0017315B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -768,7 +862,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LockerAutofill/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = LockerAutofill;
+				INFOPLIST_KEY_CFBundleDisplayName = Locker;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -786,8 +880,102 @@
 				SHARED_KEYCHAIN_ACCESS_GROUP = group.com.cystack.lockerapp;
 				SHARED_KEYCHAIN_SERVICE = W7S57TNBH5.com.cystack.lockerapp;
 				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7C47A3BA2EB9DE660017315B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = W7S57TNBH5;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockerLiveCallerLookup/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Locker ID";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.LockerLiveCallerLookup;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7C47A3BB2EB9DE660017315B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = W7S57TNBH5;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockerLiveCallerLookup/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Locker ID";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.LockerLiveCallerLookup;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -844,6 +1032,8 @@
 					"$(inherited)",
 					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
 					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-runtimeexecutor/React_runtimeexecutor.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-runtimeexecutor/React_runtimeexecutor.framework/Headers/platform/ios",
 					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
 					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
@@ -859,7 +1049,6 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -911,6 +1100,8 @@
 					"$(inherited)",
 					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
 					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-runtimeexecutor/React_runtimeexecutor.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-runtimeexecutor/React_runtimeexecutor.framework/Headers/platform/ios",
 					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
 					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
@@ -925,7 +1116,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -945,11 +1135,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7C9128042E0150D1009D80A5 /* Build configuration list for PBXNativeTarget "LockerAutofill" */ = {
+		7C47A3A82EB9DE3E0017315B /* Build configuration list for PBXNativeTarget "LockerAutofill" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7C9128052E0150D1009D80A5 /* Debug */,
-				7C9128062E0150D1009D80A5 /* Release */,
+				7C47A3A92EB9DE3E0017315B /* Debug */,
+				7C47A3AA2EB9DE3E0017315B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7C47A3B92EB9DE660017315B /* Build configuration list for PBXNativeTarget "LockerLiveCallerLookup" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C47A3BA2EB9DE660017315B /* Debug */,
+				7C47A3BB2EB9DE660017315B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -966,47 +1165,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7C8F69E52E86754F006F49D7 /* XCRemoteSwiftPackageReference "SwiftCBOR" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/valpackett/SwiftCBOR";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		7C91280A2E01528C009D80A5 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.52.1;
-			};
-		};
-		7C91280D2E0152DF009D80A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		7C9128222E015502009D80A5 /* XCRemoteSwiftPackageReference "swift-crypto" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-crypto.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.12.3;
-			};
-		};
-		7C9128252E01551C009D80A5 /* XCRemoteSwiftPackageReference "SwiftOTP" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.2;
-			};
-		};
-		7C9128282E015534009D80A5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
+		7C47A4332EB9E0A20017315B /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
 			requirement = {
@@ -1014,38 +1173,78 @@
 				minimumVersion = 2.1.1;
 			};
 		};
+		7C47A4362EB9E1FC0017315B /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.57.1;
+			};
+		};
+		7C47A43C2EB9E7290017315B /* XCRemoteSwiftPackageReference "SwiftCBOR" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/valpackett/SwiftCBOR";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		7C47A43F2EB9E7400017315B /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		7C47A4422EB9E94C0017315B /* XCRemoteSwiftPackageReference "SwiftOTP" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.2;
+			};
+		};
+		7C47A4452EB9ED420017315B /* XCRemoteSwiftPackageReference "swift-crypto" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-crypto.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.15.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7C8F69E62E86754F006F49D7 /* SwiftCBOR */ = {
+		7C47A4342EB9E0A20017315B /* CachedAsyncImage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C8F69E52E86754F006F49D7 /* XCRemoteSwiftPackageReference "SwiftCBOR" */;
-			productName = SwiftCBOR;
+			package = 7C47A4332EB9E0A20017315B /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
 		};
-		7C91280B2E01528C009D80A5 /* Sentry */ = {
+		7C47A4372EB9E1FC0017315B /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C91280A2E01528C009D80A5 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			package = 7C47A4362EB9E1FC0017315B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
-		7C91280E2E0152DF009D80A5 /* KeychainAccess */ = {
+		7C47A43D2EB9E7290017315B /* SwiftCBOR */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C91280D2E0152DF009D80A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			package = 7C47A43C2EB9E7290017315B /* XCRemoteSwiftPackageReference "SwiftCBOR" */;
+			productName = SwiftCBOR;
+		};
+		7C47A4402EB9E7400017315B /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C47A43F2EB9E7400017315B /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
 		};
-		7C9128232E015502009D80A5 /* Crypto */ = {
+		7C47A4432EB9E94C0017315B /* SwiftOTP */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C9128222E015502009D80A5 /* XCRemoteSwiftPackageReference "swift-crypto" */;
-			productName = Crypto;
-		};
-		7C9128262E01551C009D80A5 /* SwiftOTP */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7C9128252E01551C009D80A5 /* XCRemoteSwiftPackageReference "SwiftOTP" */;
+			package = 7C47A4422EB9E94C0017315B /* XCRemoteSwiftPackageReference "SwiftOTP" */;
 			productName = SwiftOTP;
 		};
-		7C9128292E015534009D80A5 /* CachedAsyncImage */ = {
+		7C47A4462EB9ED420017315B /* Crypto */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C9128282E015534009D80A5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
-			productName = CachedAsyncImage;
+			package = 7C47A4452EB9ED420017315B /* XCRemoteSwiftPackageReference "swift-crypto" */;
+			productName = Crypto;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

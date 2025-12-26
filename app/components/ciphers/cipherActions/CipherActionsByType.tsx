@@ -1,11 +1,13 @@
+import { View } from "react-native"
+
 import { CipherAppView } from "app/static/types"
 import { CipherType } from "core/enums"
-import { View } from "react-native"
-import { PasswordAction } from "./PasswordActions"
-import { NoteAction } from "./NoteActions"
+
 import { CardActions } from "./CardActions"
 import { CryptoWalletActions } from "./CryptoActions"
 import { IdentityAction } from "./IdentitiesActions"
+import { NoteAction } from "./NoteActions"
+import { PasswordAction } from "./PasswordActions"
 
 type Props = {
   item: CipherAppView

@@ -1,13 +1,15 @@
 import { FC, useCallback } from "react"
 import { View, StyleSheet, ViewStyle } from "react-native"
-import { useStores } from "app/models"
+import { getLocales } from "expo-localization"
+
 import { Text, Screen, Icon, ImageIcon, ImageIconTypes, PressableScale } from "app/components/cores"
 import { TabHeader } from "app/components/cores/header/TabHeader"
 import { PremiumTag } from "app/components/utils"
-import { TabsScreenProps, ToolsRoute } from "app/navigators"
 import { TxKeyPath } from "app/i18n"
+import { useStores } from "app/models"
+import { TabsScreenProps, ToolsRoute } from "app/navigators"
+
 import { useAppTheme } from "@/utils/useAppTheme"
-import { getLocales } from "expo-localization"
 
 const isVietnam = () => {
   const locales = getLocales()

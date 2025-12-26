@@ -1,7 +1,7 @@
-import { AndroidAutofillServiceData } from "@/utils/autofillHelper"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps, NavigatorScreenParams } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
+
 import { TxKeyPath } from "app/i18n"
 import {
   AccountRoleText,
@@ -33,13 +33,22 @@ import { CollectionView } from "core/models/view/collectionView"
 import { FolderView } from "core/models/view/folderView"
 import { SendView } from "core/models/view/sendView"
 
+import {
+  AndroidAFCreatePasskey,
+  AndroidAFGetPasskey,
+  AndroidAppProps,
+} from "@/utils/autofill.android"
+
 // ---------------------------ROOT Navigator---------------------------
 export type AppRoute = {
-  init: undefined
+  init: {
+    fido2?: AndroidAppProps
+  }
   lock:
     | {
         temporaryLock?: boolean
         type: LockType.Individual
+        fido2?: AndroidAppProps
       }
     | {
         temporaryLock?: boolean
@@ -48,7 +57,9 @@ export type AppRoute = {
         email: string
       }
   unAuthStack: NavigatorScreenParams<UnAuthRoute>
-  authStack: NavigatorScreenParams<AuthRoute>
+  authStack: NavigatorScreenParams<AuthRoute> & {
+    fido2?: AndroidAppProps
+  }
 }
 
 export type AppScreenProps<T extends keyof AppRoute> = NativeStackScreenProps<AppRoute, T>
@@ -160,10 +171,16 @@ export type UnAuthScreenProps<T extends keyof UnAuthRoute> = CompositeScreenProp
 
 export type AndroidAutofillRoute = {
   passwordList: {
-    data: AndroidAutofillServiceData
+    data: AndroidAppProps
   }
   passwordActionsModal: {
     item: CipherAppView
+  }
+  createPasskey: {
+    data: AndroidAFCreatePasskey
+  }
+  passkeyList: {
+    data: AndroidAFGetPasskey
   }
   passwordGenModal: undefined
 }
@@ -198,7 +215,9 @@ export type AuthRoute = {
 
   qrScannerModal: undefined
 
-  androidAutofillStack: NavigatorScreenParams<AndroidAutofillRoute>
+  androidAutofillStack: NavigatorScreenParams<AndroidAutofillRoute> & {
+    fido2: AndroidAppProps
+  }
   mainTab: NavigatorScreenParams<TabsRoute>
   toolsStack: NavigatorScreenParams<ToolsRoute>
   menuStack: NavigatorScreenParams<MenuRoute>
@@ -363,7 +382,7 @@ export type BrowseRoute = {
 
     // add password from android Autofill Service
     initialUrl?: string // app domain
-    androidAutofillSavedData?: AndroidAutofillServiceData
+    androidAutofillSavedData?: AndroidAppProps
 
     // otp qrscan uri
     otpUri?: string

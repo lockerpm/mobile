@@ -46,6 +46,7 @@
 "pw.useBtn" = "Использовать пароль";
 "pw.generator" = "Создайте надежный пароль";
 "pw.regenerate" = "Регенерировать";
+"pw.copyFill" = "Копировать и заполнить";
 
 // create password
 "create.title" = "Создать пароль";

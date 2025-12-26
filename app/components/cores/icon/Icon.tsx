@@ -9,6 +9,7 @@ import {
   ViewProps,
   ViewStyle,
 } from "react-native"
+
 import { useAppTheme } from "@/utils/useAppTheme"
 
 export type IconTypes = keyof typeof iconRegistry
@@ -174,6 +175,7 @@ export const iconRegistry = {
   "sign-out": require("assets/icons/sign-out.png"),
   invite: require("assets/icons/invite.png"),
   headset: require("assets/icons/headset.png"),
+  "person-key": require("assets/icons/person-key.png"),
   user: require("assets/icons/user.png"),
   link: require("assets/icons/link.png"),
   warning: require("assets/icons/warning.png"),

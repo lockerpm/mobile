@@ -1,6 +1,8 @@
-import { View, Image, Dimensions, FlatList, StyleSheet } from "react-native"
-import { Text } from "app/components/cores"
 import { memo } from "react"
+import { View, Image, Dimensions, FlatList, StyleSheet } from "react-native"
+
+import { Text } from "app/components/cores"
+
 import { TxKeyPath } from "@/i18n"
 
 const SCREEN_WIDTH = Dimensions.get("screen").width

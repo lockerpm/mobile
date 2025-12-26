@@ -10,54 +10,34 @@
  * The app navigation resides in ./app/navigators, so head over there
  * if you're interested in adding screens and navigators.
  */
-if (__DEV__) {
-  // Load Reactotron in development only.
-  // Note that you must be using metro's `inlineRequires` for this to work.
-  // If you turn it off in metro.config.js, you'll have to manually import it.
-  require("./devtools/ReactotronConfig.ts")
-}
+
 import "./utils/gestureHandler"
-import { initI18n, LanguageSupportType, LocaleContextProvider } from "./i18n"
-import { useFonts } from "expo-font"
 import { FC, useEffect, useState } from "react"
-import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
+import { Platform, StatusBar } from "react-native"
+import { useFonts } from "expo-font"
 import * as SplashScreen from "expo-splash-screen"
 import * as Sentry from "@sentry/react-native"
-import * as storage from "./utils/storage"
+import { Settings } from "react-native-fbsdk-next"
+import { KeyboardProvider } from "react-native-keyboard-controller"
+import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
+
+import { initI18n, LanguageSupportType, LocaleContextProvider } from "./i18n"
 import { useInitialRootStore } from "./models"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { customFontsToLoad } from "./theme"
-import { KeyboardProvider } from "react-native-keyboard-controller"
-import { loadDateFnsLocale } from "./utils/formatDate"
+import { setAndroidAutofillServiceData, AndroidAppProps } from "./utils/autofill.android"
 import { initCrashReporting } from "./utils/crashReporting"
-import { Platform, StatusBar } from "react-native"
-import { Settings } from "react-native-fbsdk-next"
-import { setAndroidAutofillServiceData } from "./utils/autofillHelper"
-
-export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
-
-export interface AppProps {
-  lastFill?: number
-  autofill?: number
-  savePassword?: number
-  domain?: string
-  lastUserPasswordID?: string
-  username?: string
-  password?: string
-}
+import { loadDateFnsLocale } from "./utils/formatDate"
 
 initCrashReporting()
 Settings.initializeSDK()
 
-/**
- * This is the root component of our app.
- * @param {AppProps} props - The props for the `App` component.
- * @returns {JSX.Element} The rendered `App` component.
- */
+type AppProps = AndroidAppProps & {}
+
 const App: FC<AppProps> = (props) => {
   setAndroidAutofillServiceData(props)
   const { onNavigationStateChange, isRestored: isNavigationStateRestored } =
-    useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
+    useNavigationPersistence()
 
   const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
   const [isI18nInitialized, setIsI18nInitialized] = useState<null | string>(null)
@@ -105,7 +85,7 @@ const App: FC<AppProps> = (props) => {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <KeyboardProvider>
         <LocaleContextProvider initLanguage={isI18nInitialized as LanguageSupportType}>
-          <AppNavigator onStateChange={onNavigationStateChange} />
+          <AppNavigator onStateChange={onNavigationStateChange} fido2={props} />
         </LocaleContextProvider>
       </KeyboardProvider>
     </SafeAreaProvider>

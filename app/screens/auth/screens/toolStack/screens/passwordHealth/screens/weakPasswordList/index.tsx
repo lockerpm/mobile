@@ -1,17 +1,20 @@
 import { FC, useCallback } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
-import { LoadingHeader } from "../LoadingHeader"
-import { ListItem, WeakPasswordView } from "./ListItem"
-import { useStores } from "app/models"
-import { CipherView } from "core/models/view"
-import { Header, ListView, Screen, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { PasswordHealthScreenProps } from "app/navigators/navigators.types"
-import { getCipherLogo } from "@/utils/cipherHelper"
-import { CipherAppView } from "@/static/types"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { useAppTheme } from "@/utils/useAppTheme"
+
+import { Header, ListView, Screen, Text } from "app/components/cores"
+import { useStores } from "app/models"
+import { PasswordHealthScreenProps } from "app/navigators/navigators.types"
+import { CipherView } from "core/models/view"
+
+import { CipherAppView } from "@/static/types"
 import { ThemedStyle } from "@/theme"
+import { getCipherLogo } from "@/utils/cipherHelper"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { ListItem, WeakPasswordView } from "./ListItem"
+import { LoadingHeader } from "../LoadingHeader"
 
 export const WeakPasswordListScreen: FC<PasswordHealthScreenProps<"weakPasswordList">> = observer(
   ({ navigation }) => {
@@ -72,7 +75,6 @@ export const WeakPasswordListScreen: FC<PasswordHealthScreenProps<"weakPasswordL
           ListEmptyComponent={<Text tx="common:nothing_here" style={styles.emptyText} />}
           renderItem={({ item }) => <ListItem item={item} goToDetail={goToDetail} />}
           ItemSeparatorComponent={() => <View style={themed($divider)} />}
-          estimatedItemSize={71}
         />
       </Screen>
     )

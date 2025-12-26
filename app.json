@@ -1,52 +1,74 @@
 {
   "name": "Locker",
-  "displayName": "Locker",
-  "expo": {
-    "name": "Locker",
-    "slug": "Locker",
-    "scheme": "locker",
-    "version": "2.0.1",
-    "orientation": "portrait",
-    "userInterfaceStyle": "automatic",
-    "icon": "./assets/images/appIcons/app-icon-all.png",
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "newArchEnabled": false,
-    "jsEngine": "hermes",
-    "assetBundlePatterns": ["**/*"],
-    "android": {
-      "icon": "./assets/images/appIcons/app-icon-android-legacy.png",
-      "package": "com.cystack.locker",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/appIcons/app-icon-android-adaptive-foreground.png",
-        "backgroundImage": "./assets/images/appIcons/app-icon-android-adaptive-background.png"
-      },
-      "allowBackup": false
-    },
-    "ios": {
-      "icon": "./assets/images/appIcons/app-icon-ios.png",
-      "supportsTablet": true,
-      "bundleIdentifier": "com.cystack.lockerapp"
-    },
-    "plugins": [
-      "expo-localization",
-      "expo-font",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/appIcons/app-icon-android-adaptive-foreground.png",
-          "imageWidth": 250,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ]
-    ],
-    "experiments": {
-      "tsconfigPaths": true
-    }
+  "slug": "Locker",
+  "scheme": ["locker", "com.cystack.lockerapp", "com.cystack.locker"],
+  "version": "2.6.1",
+  "orientation": "portrait",
+  "userInterfaceStyle": "automatic",
+  "icon": "./assets/images/appIcons/app-icon-all.png",
+  "updates": {
+    "fallbackToCacheTimeout": 0
   },
-  "ignite": {
-    "version": "10.5.3"
+  "newArchEnabled": true,
+  "jsEngine": "hermes",
+  "assetBundlePatterns": ["**/*"],
+  "android": {
+    "icon": "./assets/images/appIcons/app-icon-android-legacy.png",
+    "package": "com.cystack.locker",
+    "googleServicesFile": "./google-services.json",
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/images/appIcons/app-icon-android-adaptive-foreground.png",
+      "backgroundImage": "./assets/images/appIcons/app-icon-android-adaptive-background.png"
+    },
+    "allowBackup": false,
+    "edgeToEdgeEnabled": true
+  },
+  "ios": {
+    "icon": "./assets/images/appIcons/app-icon-ios.png",
+    "bundleIdentifier": "com.cystack.lockerapp",
+    "googleServicesFile": "./GoogleService-Info.plist",
+    "supportsTablet": true,
+    "usesAppleSignIn": true
+  },
+  "plugins": [
+    "@react-native-firebase/app",
+    "@react-native-firebase/messaging",
+    "expo-localization",
+    "expo-font",
+    [
+      "expo-splash-screen",
+      {
+        "image": "./assets/images/appIcons/app-icon-android-adaptive-foreground.png",
+        "imageWidth": 250,
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
+    ],
+    [
+      "react-native-edge-to-edge",
+      {
+        "android": {
+          "parentTheme": "Light",
+          "enforceNavigationBarContrast": false
+        }
+      }
+    ],
+    [
+      "expo-build-properties",
+      {
+        "ios": {
+          "useFrameworks": "static",
+          "buildReactNativeFromSource": true
+        }
+      }
+    ]
+  ],
+  "experiments": {
+    "tsconfigPaths": true
+  },
+  "extra": {
+    "ignite": {
+      "version": "11.3.2"
+    }
   }
 }

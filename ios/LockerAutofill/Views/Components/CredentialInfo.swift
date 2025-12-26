@@ -9,6 +9,8 @@ import SwiftUI
 
 
 struct CredentialInfo: View {
+  @Environment(\.colorScheme) var colorScheme
+  
   var label: String
   var text: String
   var isCopydable: Bool
@@ -50,9 +52,8 @@ struct CredentialInfo: View {
         Text(label)
           .font(.subheadline)
           .foregroundStyle(AppColors.label)
+          .background(colorScheme == .dark  ? Color(.secondarySystemBackground) : AppColors.background )
           .padding(EdgeInsets(top: -10, leading: 8, bottom: 0, trailing: 4))
-          .background(AppColors.background)
-          
       }
       .onTapGesture {
         UIPasteboard.general.string = text

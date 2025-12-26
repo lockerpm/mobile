@@ -1,9 +1,11 @@
 import { Linking } from "react-native"
-import { CipherType } from "core/enums"
-import { getTOTP, parseOTPUri } from "app/utils/totp"
-import { CipherAppView } from "app/static/types"
-import { useClipboard } from "app/services/utils"
+
 import { NewActionSheetItem } from "app/components/utils"
+import { useClipboard } from "app/services/utils"
+import { CipherAppView } from "app/static/types"
+import { getTOTP, parseOTPUri } from "app/utils/totp"
+import { CipherType } from "core/enums"
+
 import { Logger } from "@/utils/logger"
 
 type Props = {
@@ -62,7 +64,9 @@ export const PasswordAction = ({ item, onClose }: Props) => {
         icon="copy"
         onPress={() => {
           onClose()
-          copyToClipboard(getTOTP(parseOTPUri(item.login.totp)))
+          getTOTP(parseOTPUri(item.login.totp)).then((otp) => {
+            copyToClipboard(otp)
+          })
         }}
       />
     </>

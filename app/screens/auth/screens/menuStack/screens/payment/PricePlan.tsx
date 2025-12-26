@@ -9,21 +9,64 @@ import {
   ViewStyle,
   ActivityIndicator,
 } from "react-native"
-import { SKU } from "./PricePlan.sku"
-import { Subscription } from "react-native-iap"
+import { ProductSubscription } from "react-native-iap"
+
 import { Text, Checkbox } from "app/components/cores"
-import { useStores } from "app/models"
-import { useToast } from "app/services/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { useAppLocale } from "@/i18n"
+
+import { TxKeyPath, useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { SKU } from "./PricePlan.sku"
+
+type PlanTextType = {
+  subId: string
+  title: TxKeyPath
+  subtitle: TxKeyPath
+  onSale: TxKeyPath
+  pay_title: TxKeyPath
+}
+const planText = {
+  per: {
+    monthly: {
+      subId: SKU.PRE_MON,
+      title: "payment:price.per.monthly.title",
+      subtitle: "payment:price.per.monthly.subtitle",
+      onSale: "payment:price.per.monthly.sale",
+      pay_title: "payment:price.per.monthly.pay_title",
+    } as PlanTextType,
+    yearly: {
+      subId: SKU.PRE_YEAR,
+      title: "payment:price.per.yearly.title",
+      subtitle: "payment:price.per.yearly.subtitle",
+      onSale: "payment:price.per.yearly.sale",
+      pay_title: "payment:price.per.yearly.pay_title",
+    } as PlanTextType,
+  },
+  fam: {
+    monthly: {
+      subId: SKU.FAM_MON,
+      title: "payment:price.fam.monthly.title",
+      subtitle: "payment:price.fam.monthly.subtitle",
+      onSale: "payment:price.fam.monthly.sale",
+      pay_title: "payment:price.fam.monthly.pay_title",
+    } as PlanTextType,
+    yearly: {
+      subId: SKU.FAM_YEAR,
+      title: "payment:price.fam.yearly.title",
+      subtitle: "payment:price.fam.yearly.subtitle",
+      onSale: "payment:price.fam.yearly.sale",
+      pay_title: "payment:price.fam.yearly.pay_title",
+    } as PlanTextType,
+  },
+}
 
 interface PricePlanItemProps {
   onPress: () => void
   isEnable: boolean
-  onSale?: string
-  title: string
-  subtitle: string
+  onSale?: TxKeyPath
+  title: TxKeyPath
+  subtitle: TxKeyPath
 }
 
 const PricePlanItem = (prop: PricePlanItemProps) => {
@@ -48,19 +91,18 @@ const PricePlanItem = (prop: PricePlanItemProps) => {
             <Text
               preset={prop.isEnable ? "bold" : "default"}
               style={styles.planItemTitle}
-              text={prop.title}
+              tx={prop.title}
             />
             <Text
-              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 opacity: prop.isEnable ? 1 : 0.5,
               }}
               color={colors.error}
               size="sm"
-              text={prop.onSale}
+              tx={prop.onSale}
             />
           </View>
-          <Text text={prop.subtitle} preset={prop.isEnable ? "default" : "label"} size="sm" />
+          <Text tx={prop.subtitle} preset={prop.isEnable ? "default" : "label"} size="sm" />
         </View>
       </View>
     </TouchableOpacity>
@@ -116,7 +158,7 @@ const Segment = ({
 }
 
 interface PricePlanProps {
-  subscriptions: Subscription[]
+  subscriptions: ProductSubscription[]
   purchase: (subID: string) => void
   isProcessPayment: boolean
 }
@@ -126,73 +168,20 @@ export const PricePlan = (props: PricePlanProps) => {
     themed,
     theme: { colors },
   } = useAppTheme()
-  const { notifyApiError } = useToast()
   const { translate } = useAppLocale()
 
   const [payIndividual, setPayIndividual] = useState(true)
   const [isMonthly, setIsMonthly] = useState(true)
-  const [isTrial, setIsTrial] = useState(false)
-
-  const { user } = useStores()
-
-  const getEligibleTrial = async () => {
-    const res = await user.getTrialEligible()
-    if (res.kind === "ok") {
-      setIsTrial(!res.data.personal_trial_applied)
-    } else {
-      notifyApiError(res)
-    }
-  }
-
-  useEffect(() => {
-    getEligibleTrial()
-  }, [])
-
-  const planText = {
-    per: {
-      monthly: {
-        subId: SKU.PRE_MON,
-        title: translate("payment:price.per.monthly.title"),
-        subtitle: translate("payment:price.per.monthly.subtitle"),
-        onSale: translate("payment:price.per.monthly.sale"),
-        pay_title: translate("payment:price.per.monthly.pay_title"),
-      },
-      yearly: {
-        subId: SKU.PRE_YEAR,
-        title: translate("payment:price.per.yearly.title"),
-        subtitle: translate("payment:price.per.yearly.subtitle"),
-        onSale: translate("payment:price.per.yearly.sale"),
-        pay_title: translate("payment:price.per.yearly.pay_title"),
-      },
-    },
-    fam: {
-      monthly: {
-        subId: SKU.FAM_MON,
-        title: translate("payment:price.fam.monthly.title"),
-        subtitle: translate("payment:price.fam.monthly.subtitle"),
-        onSale: translate("payment:price.fam.monthly.sale"),
-        pay_title: translate("payment:price.fam.monthly.pay_title"),
-      },
-      yearly: {
-        subId: SKU.FAM_YEAR,
-        title: translate("payment:price.fam.yearly.title"),
-        subtitle: translate("payment:price.fam.yearly.subtitle"),
-        onSale: translate("payment:price.fam.yearly.sale"),
-        pay_title: translate("payment:price.fam.yearly.pay_title"),
-      },
-    },
-  }
 
   const plan = payIndividual ? planText.per : planText.fam
   const billingCycle = !isMonthly ? plan.yearly : plan.monthly
   const ads = payIndividual ? translate("payment:ads") : translate("payment:ads_family")
-  const trial = isTrial ? translate("payment:trial") : ""
 
   return (
     <View style={themed($container)}>
       <Segment payIndividual={payIndividual} setPayIndividual={setPayIndividual} />
 
-      <Text text={ads + trial} style={styles.mv12} />
+      <Text text={ads} style={styles.mv12} />
 
       <PricePlanItem
         onPress={() => setIsMonthly(false)}
@@ -225,12 +214,12 @@ export const PricePlan = (props: PricePlanProps) => {
         <View style={styles.center}>
           {!props.isProcessPayment && (
             <>
-              <Text text={billingCycle.pay_title} preset="bold" color={colors.white} />
+              <Text tx={billingCycle.pay_title} preset="bold" color={colors.white} />
 
               <Text tx={"payment:cancel_text"} color={colors.white} />
             </>
           )}
-          {props.isProcessPayment && <ActivityIndicator size="large" color={colors.white} />}
+          {props.isProcessPayment && <ActivityIndicator size="small" color={colors.white} />}
         </View>
       </TouchableOpacity>
     </View>
@@ -268,6 +257,8 @@ const $segmentContainer: ThemedStyle<ViewStyle> = ({ colors }) => ({
 const styles = StyleSheet.create({
   center: {
     alignItems: "center",
+    height: 48,
+    justifyContent: "center",
   },
   mv12: {
     marginVertical: 12,

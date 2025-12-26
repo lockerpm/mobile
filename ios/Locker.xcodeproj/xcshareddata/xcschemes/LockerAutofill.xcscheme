@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1620"
+   LastUpgradeVersion = "2600"
    wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
@@ -16,7 +16,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7C9127F42E0150D1009D80A5"
+               BlueprintIdentifier = "7C47A3982EB9DE3D0017315B"
                BuildableName = "LockerAutofill.appex"
                BlueprintName = "LockerAutofill"
                ReferencedContainer = "container:Locker.xcodeproj">
@@ -57,12 +57,8 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "2">
-      <RemoteRunnable
-         runnableDebuggingMode = "0"
-         BundleIdentifier = "com.apple.mobilesafari"
-         RemotePath = "/var/containers/Bundle/Application/C7027C21-564F-45E8-BBC6-0543B1FE4A5C/MobileSafari.app">
-      </RemoteRunnable>
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
@@ -70,7 +66,7 @@
             BlueprintName = "Locker"
             ReferencedContainer = "container:Locker.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

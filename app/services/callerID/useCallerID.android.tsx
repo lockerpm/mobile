@@ -1,10 +1,13 @@
-import { callerID } from "app/services/callerID/CallerID"
 import { useCallback, useState } from "react"
 import SQLite from "react-native-sqlite-storage"
+
+import { callerID } from "app/services/callerID/CallerID"
+
 import { useStores } from "@/models"
+import { ScamPhonesData } from "@/static/types"
+
 import { toolApi } from "../api"
 import { useToast } from "../utils"
-import { ScamPhonesData } from "@/static/types"
 
 const BATCH_SIZE = 1000
 const SYNC_PAGE_SIZE = 30000
@@ -157,13 +160,11 @@ export const useCallerID = () => {
   const isCallScreeningEnabled = useCallback(async () => {
     const isEnabled = await callerID.androidCheckCallScreeningPermission()
     setIsEnabledCallScreeningPermission(isEnabled)
-    console.log("isOverlayEnabled", isEnabled)
   }, [])
 
   const requestCallScreeningApp = useCallback(async () => {
     const isEnabled = await callerID.androidRequestCallScreeningService()
     setIsEnabledCallScreeningPermission(isEnabled)
-    console.log("isOverlayEnabled", isEnabled)
   }, [])
 
   // ---------------------------EFFECT-----------------------

@@ -1,9 +1,11 @@
-import { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { VAULT_LOGO } from "app/static/vault"
-import { CipherType } from "core/enums"
 import { useState } from "react"
 import { ImageProps, Image, ImageStyle, View } from "react-native"
+
+import { VAULT_LOGO } from "app/static/vault"
+import { CipherType } from "core/enums"
+
+import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 const getDefaultLogo = (type: CipherType) => {
   switch (type) {

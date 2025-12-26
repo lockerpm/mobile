@@ -1,7 +1,9 @@
 import { View, Image, TouchableOpacity, ViewStyle, StyleSheet } from "react-native"
+
 import { Icon, Text } from "app/components/cores"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 const REFER_LOCKER = require("assets/images/intro/refer-locker.png")
 

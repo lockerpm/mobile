@@ -1,0 +1,146 @@
+{
+  "project_info": {
+    "project_number": "576960862167",
+    "project_id": "lockerio",
+    "storage_bucket": "lockerio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576960862167:android:63b008e043cd57dbbb1d92",
+        "android_client_info": {
+          "package_name": "com.cystack.locker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576960862167-8la1nh8p3d39niu4dfcfnlhjr6a2b2jr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cystack.locker",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "576960862167-cefrs9ri8spjtbhb9r2bbgddnsg46nrl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cystack.locker",
+            "certificate_hash": "a7230d97d1a3115fc3e859ecdc51f700aaedbefe"
+          }
+        },
+        {
+          "client_id": "576960862167-i103j0mmu3ra4eaptdu231ui702cekjo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cystack.locker",
+            "certificate_hash": "23d4880dbf7c4aaedd5f61669b2a35e5510ef0db"
+          }
+        },
+        {
+          "client_id": "576960862167-lc8olcaucvvaoenhggqfh1ucnmq4bakb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cystack.locker",
+            "certificate_hash": "41b5da6e0b83c08d3ae966fb7b5a09aec1e8d345"
+          }
+        },
+        {
+          "client_id": "576960862167-pkdut94knunmlmjhqijrmncevg6d1asa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrEP8SIOgd0FJTTbcEe0LZWLl5gxgvLBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576960862167-pkdut94knunmlmjhqijrmncevg6d1asa.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "576960862167-0gor6mqlftu7co4tdn58rg4vdgqlsten.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cystack.lockerapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576960862167:android:1c31b3e6c837b21fbb1d92",
+        "android_client_info": {
+          "package_name": "com.cystack.locker.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576960862167-2t98r555c7rbm5kdt82bgcf6ij3lh0rk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cystack.locker.staging",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "576960862167-ei2lkkp1i7qrt1plbj7npp9b1nk0992k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cystack.locker.staging",
+            "certificate_hash": "a7230d97d1a3115fc3e859ecdc51f700aaedbefe"
+          }
+        },
+        {
+          "client_id": "576960862167-mskljnjjqqbrim2c2pacgp73s427s6ng.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cystack.locker.staging",
+            "certificate_hash": "b75d1f340fb9913b838368d854581f7f5ab493c2"
+          }
+        },
+        {
+          "client_id": "576960862167-ru9g5vbl812gt4hqu7lreo80dtkhq75v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cystack.locker.staging",
+            "certificate_hash": "41b5da6e0b83c08d3ae966fb7b5a09aec1e8d345"
+          }
+        },
+        {
+          "client_id": "576960862167-pkdut94knunmlmjhqijrmncevg6d1asa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrEP8SIOgd0FJTTbcEe0LZWLl5gxgvLBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576960862167-pkdut94knunmlmjhqijrmncevg6d1asa.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "576960862167-0gor6mqlftu7co4tdn58rg4vdgqlsten.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cystack.lockerapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

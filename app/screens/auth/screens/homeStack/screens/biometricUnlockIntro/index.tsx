@@ -1,14 +1,16 @@
 import { FC, useEffect, useState } from "react"
 import { View, Image, TouchableOpacity, StyleSheet } from "react-native"
-import ReactNativeBiometrics from "react-native-biometrics"
-import { useStores } from "app/models"
-import { Button, Screen, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { useCoreService } from "app/services/coreService"
-import { autofillKeyChain } from "app/utils/autofillData"
-import { useBiometricType, useToast } from "app/services/utils"
+import ReactNativeBiometrics from "react-native-biometrics"
+
+import { Button, Screen, Text } from "app/components/cores"
+import { useStores } from "app/models"
 import { HomeScreenProps } from "app/navigators"
+import { useCoreService } from "app/services/coreService"
+import { useBiometricType, useToast } from "app/services/utils"
+
 import { useAppLocale } from "@/i18n"
+import { autofillKeyChain } from "@/utils/autofill.ios"
 
 const FACEID = require("assets/images/intro/faceid.png")
 
@@ -50,12 +52,12 @@ export const BiometricUnlockIntroScreen: FC<HomeScreenProps<"biometricUnlockIntr
       notifyTx("success", "success:biometric_enabled")
       user.setBiometricIntroShown(true)
       setIsLoading(false)
-      navigation.navigate("mainTab", { screen: "homeTab" })
+      navigation.replace("mainTab", { screen: "homeTab" })
     }
 
     const handleSkip = async () => {
       user.setBiometricIntroShown(true)
-      navigation.navigate("mainTab", { screen: "homeTab" })
+      navigation.replace("mainTab", { screen: "homeTab" })
     }
 
     const _updateAutofillFaceIdSetting = async () => {

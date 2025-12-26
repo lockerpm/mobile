@@ -1,63 +1,73 @@
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { View, Image, ColorValue, StyleSheet } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { Screen, Text, Button, Icon } from "app/components/cores"
 import { MenuScreenProps } from "app/navigators/navigators.types"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { TxKeyPath } from "@/i18n"
+import { useStores } from "@/models"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 const HIGH_FIVE = require("assets/images/welcomePremium/HighFive.png")
 const PREMIUM = require("assets/images/welcomePremium/LockerPremium.png")
 
 const backgroundSecondary: ColorValue = "#21632F"
 
-export const WelcomePremiumScreen: FC<MenuScreenProps<"welcomePremium">> = ({ navigation }) => {
-  const {
-    theme: { colors },
-  } = useAppTheme()
+export const WelcomePremiumScreen: FC<MenuScreenProps<"welcomePremium">> = observer(
+  ({ navigation }) => {
+    const { user } = useStores()
+    const {
+      theme: { colors },
+    } = useAppTheme()
 
-  return (
-    <Screen
-      safeAreaEdges={["bottom"]}
-      backgroundColor={colors.primary}
-      footer={
-        <Button
-          preset="secondary"
-          tx={"welcome_premium:btn"}
-          onPress={() => {
-            navigation.navigate("mainTab", {
-              screen: "homeTab",
-            })
-          }}
-          style={styles.mh16}
-        />
-      }
-      contentContainerStyle={styles.container}
-    >
-      <View style={styles.content}>
-        <Image resizeMode="contain" source={PREMIUM} style={styles.premium} />
-        <Image resizeMode="contain" source={HIGH_FIVE} style={styles.highFive} />
+    useEffect(() => {
+      user.loadPlan()
+    }, [])
+    return (
+      <Screen
+        safeAreaEdges={["bottom"]}
+        backgroundColor={colors.primary}
+        footer={
+          <Button
+            preset="secondary"
+            tx={"welcome_premium:btn"}
+            onPress={() => {
+              navigation.navigate("mainTab", {
+                screen: "homeTab",
+              })
+            }}
+            style={styles.mh16}
+          />
+        }
+        contentContainerStyle={styles.container}
+      >
+        <View style={styles.content}>
+          <Image resizeMode="contain" source={PREMIUM} style={styles.premium} />
+          <Image resizeMode="contain" source={HIGH_FIVE} style={styles.highFive} />
 
-        <Text
-          preset="bold"
-          tx={"welcome_premium:title"}
-          color={colors.white}
-          size="xl"
-          style={styles.title}
-        />
-        <Text tx={"welcome_premium:all_features"} color={colors.white} style={styles.allFeats} />
+          <Text
+            preset="bold"
+            tx={"welcome_premium:title"}
+            color={colors.white}
+            size="xl"
+            style={styles.title}
+          />
+          <Text tx={"welcome_premium:all_features"} color={colors.white} style={styles.allFeats} />
 
-        <View style={styles.feats}>
-          <UnlockFeature tx={"welcome_premium:features.unlimited"} />
-          <UnlockFeature tx={"welcome_premium:features.share"} />
-          <UnlockFeature tx={"welcome_premium:features.monitor"} />
-          <UnlockFeature tx={"welcome_premium:features.emergency"} />
+          <View style={styles.feats}>
+            <UnlockFeature tx={"welcome_premium:features.unlimited"} />
+            <UnlockFeature tx={"welcome_premium:features.share"} />
+            <UnlockFeature tx={"welcome_premium:features.monitor"} />
+            <UnlockFeature tx={"welcome_premium:features.emergency"} />
 
-          <Text tx={"welcome_premium:features.more"} color={colors.white} />
+            <Text tx={"welcome_premium:features.more"} color={colors.white} />
+          </View>
         </View>
-      </View>
-    </Screen>
-  )
-}
+      </Screen>
+    )
+  }
+)
 
 const UnlockFeature = ({ tx }: { tx: TxKeyPath }) => {
   const {

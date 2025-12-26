@@ -1,16 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import { useState } from "react"
+import { TouchableOpacity, View } from "react-native"
+import { observer } from "mobx-react-lite"
+
+import { Text } from "app/components/cores"
 import { SettingsItem } from "app/components/utils"
 import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
-import { observer } from "mobx-react-lite"
-import { TouchableOpacity, View } from "react-native"
-import { Text } from "app/components/cores"
+import { LanguageSupportType, useAppLocale } from "app/i18n"
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
-import { autofillKeyChain } from "app/utils/autofillData"
-import { LanguageSupportType, useAppLocale } from "app/i18n"
-import { useAppTheme } from "@/utils/useAppTheme"
+
+import { autofillKeyChain } from "@/utils/autofill.ios"
 import { openLanguageSupport } from "@/utils/openLinkInBrowser"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 export const SetlanguageItem = observer(() => {
   const { cryptoService } = useCoreService()

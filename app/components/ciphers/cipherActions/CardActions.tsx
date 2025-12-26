@@ -1,7 +1,8 @@
+import { View } from "react-native"
+
 import { NewActionSheetItem } from "app/components/utils"
 import { useClipboard } from "app/services/utils"
 import { CipherAppView } from "app/static/types"
-import { View } from "react-native"
 
 type Props = {
   item: CipherAppView

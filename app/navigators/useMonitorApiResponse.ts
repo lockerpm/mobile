@@ -1,11 +1,13 @@
-import { getGeneralApiProblem } from "@/services/api/apiProblem"
-import { Logger } from "@/utils/logger"
-import { ApiResponse } from "apisauce"
-import { navigationRef } from "./navigationUtilities"
-import { RootStore } from "@/models"
-import { autofillKeyChain } from "@/utils/autofillData"
 import { CommonActions } from "@react-navigation/native"
+import { ApiResponse } from "apisauce"
+
+import { RootStore } from "@/models"
 import { api } from "@/services/api"
+import { getGeneralApiProblem } from "@/services/api/apiProblem"
+import { autofillKeyChain } from "@/utils/autofill.ios"
+import { Logger } from "@/utils/logger"
+
+import { navigationRef } from "./navigationUtilities"
 
 export const useMonitorApiResponse = (rootStore: RootStore) => {
   // Set up API listener

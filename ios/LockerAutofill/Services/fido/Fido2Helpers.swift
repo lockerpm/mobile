@@ -6,8 +6,7 @@
 //
 
 import Foundation
-import AuthenticationServices
-
+import CryptoKit
 
 extension Data {
   init?(base64URLEncoded input: String) {
@@ -35,17 +34,6 @@ extension Data {
 }
 
 
-// Select the first supported matching public key algorithm
-// supported: [-7, -257],  prefer ES256 > RSA
-func publicKeyAlgSelect(_ supportedAlgos: [ASCOSEAlgorithmIdentifier]) throws  -> Int {
-  let serverAlgos = Set(supportedAlgos.map { $0.rawValue })
-  let priority: [Int] = [-7, -257] // prefer ES256 > EdDSA > RSA
-  guard let chosenAlg = priority.first(where: { serverAlgos.contains($0) }) else {
-    throw NSError(domain: "Passkey", code: -2, userInfo: [NSLocalizedDescriptionKey: "No compatible algorithm"])
-  }
-  print("✅ Chosen algorithm: \(chosenAlg)", supportedAlgos)
-  return chosenAlg
-}
 
 // ES256, P-256 cbor manual
 // swiftCBOR encoding does not return as expected
@@ -141,3 +129,5 @@ func rs256CBOREncode(modulus: [UInt8], exponent: [UInt8]) -> Data {
   
   return Data(cbor)
 }
+
+

@@ -859,6 +859,7 @@ const ru: Translations = {
     use_symbol: "Используйте символы (@!$%*)",
     avoid_ambiguous: "Избегайте неоднозначных символов",
     use_password: "Использовать пароль",
+    copy_fill: "Копировать и заполнить",
   },
   authenticator: {
     title: "Аутентификатор",
@@ -968,6 +969,26 @@ const ru: Translations = {
         header: "Сервис автозаполнения",
         name: "Автозаполнение Android",
         desc: "Служба автозаполнения Locker использует Android Autofill Framework для помощи в заполнении логинов в других приложениях на вашем устройстве.",
+        chrome_name: "Автозаполнение Chrome",
+        chrome_desc:
+          "Включите автозаполнение Chrome и позвольте Locker быстро и безопасно заполнять ваши данные для входа на сайтах",
+      },
+    },
+    android_service: {
+      create_passkey: {
+        title: "Создать новый passkey",
+        existing_key: "Passkey уже существует для этого e-mail/имени пользователя",
+        action_header: "Создать passkey для нового элемента",
+        action_btn: "Создать passkey",
+        replace_header: "Добавить passkey к существующим элементам входа",
+        replace_alert_t: "Этот вход уже содержит passkey",
+        replace_alert_d: "Вы хотите создать новый и заменить существующий passkey?",
+      },
+      list_passkey: {
+        title: "Список passkey",
+        header: "Список passkey для ",
+        empty_title: "Нет доступных passkey",
+        empty_label: "На этом аккаунте нет passkey для {{rpId}}",
       },
     },
   },

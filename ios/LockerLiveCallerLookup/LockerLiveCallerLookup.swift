@@ -2,9 +2,10 @@
 //  LockerLiveCallerLookup.swift
 //  LockerLiveCallerLookup
 //
-//  Created by Nguyen Thinh on 21/8/25.
+//  Created by Nguyen Thinh on 4/11/25.
 //
 
+import ExtensionFoundation
 import IdentityLookup
 
 @main

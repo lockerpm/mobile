@@ -19,25 +19,27 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import Animated, {
-  interpolate,
-  interpolateColor,
-  useAnimatedStyle,
-  useDerivedValue,
-  withTiming,
-} from "react-native-reanimated"
-import { bin } from "react-native-redash"
-import { PressableIcon } from "../icon/Icon"
-import { Text, TextProps } from "../text/Text"
-import { typography } from "app/theme"
 import {
   MaskService,
   TextInputMaskTypeProp,
   TextInputMaskOptionProp,
 } from "react-native-masked-text"
+import Animated, {
+  interpolate,
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
+
+import { typography } from "app/theme"
+
 import { useAppLocale } from "@/i18n"
-import { useAppTheme } from "@/utils/useAppTheme"
 import { useClipboard } from "@/services/utils"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { PressableIcon } from "../icon/Icon"
+import { Text, TextProps } from "../text/Text"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
@@ -87,10 +89,6 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
    * Title txoptions
    */
   labelTxOption?: TextProps["txOptions"]
-  /**
-   * Pass any additional props directly to the label Text component.
-   */
-  LabelTextProps?: TextProps
   /**
    * The helper text to display if not using .
    */
@@ -167,7 +165,6 @@ export const TextInput = forwardRef(function TextField(
     RightAccessory,
     LeftAccessory,
     HelperTextProps,
-    LabelTextProps,
     style: $inputStyleOverride,
     containerStyle: $containerStyleOverride,
     inputWrapperStyle: $inputWrapperStyleOverride,
@@ -210,14 +207,6 @@ export const TextInput = forwardRef(function TextField(
   const $containerStyles: StyleProp<ViewStyle> = [
     { width: "100%", alignItems: "flex-start", marginVertical: 2 },
     $containerStyleOverride,
-  ]
-  const $labelStyles: StyleProp<TextStyle> = [
-    {
-      fontSize: 16,
-      fontFamily: typography.primary.medium,
-      marginBottom: 4,
-    },
-    LabelTextProps?.style,
   ]
 
   const $inputWrapperStyles = [
@@ -285,39 +274,45 @@ export const TextInput = forwardRef(function TextField(
     }
   }
 
-  const toggleStyle = useDerivedValue(() => {
-    return withTiming(bin(isFocus || !!value || disabled))
-  }, [isFocus, value])
+  // const toggleStyle = useDerivedValue(() => {
+  //   return withTiming(bin(isFocus || !!value || disabled))
+  // }, [isFocus, value, disabled])
+  const toggleStyle = useSharedValue(0)
 
   useEffect(() => {
     if (isRequiredProps && !!value) {
       setIsRequired(false)
     }
-  }, [value])
+  }, [value, isRequiredProps])
+
+  const haveValue = !!value
+  useEffect(() => {
+    if (isFocus || haveValue || disabled) {
+      toggleStyle.value = withTiming(1)
+    } else {
+      toggleStyle.value = withTiming(0)
+    }
+  }, [isFocus, haveValue, disabled])
 
   const $titleAnim = useAnimatedStyle(() => {
     return {
       zIndex: 2,
       backgroundColor: colors.background,
       paddingHorizontal: 4,
-      transform: animated
-        ? [
-            {
-              scale: interpolate(toggleStyle.value, [0, 1], [1, 0.9]),
-            },
-            {
-              translateX: interpolate(toggleStyle.value, [0, 1], [12, 0]),
-            },
-            {
-              translateY: interpolate(toggleStyle.value, [0, 1], [39, 14]),
-            },
-          ]
-        : [],
-      color: animated
-        ? interpolateColor(toggleStyle.value, [0, 1], [colors.disable, colors.text])
-        : colors.text,
+      transform: [
+        {
+          scale: interpolate(toggleStyle.value, [0, 1], [1, 0.9]),
+        },
+        {
+          translateX: interpolate(toggleStyle.value, [0, 1], [12, 0]),
+        },
+        {
+          translateY: interpolate(toggleStyle.value, [0, 1], [39, 14]),
+        },
+      ],
+      color: interpolateColor(toggleStyle.value, [0, 1], [colors.disable, colors.text]),
     }
-  })
+  }, [toggleStyle])
 
   return (
     <TouchableOpacity
@@ -327,7 +322,7 @@ export const TextInput = forwardRef(function TextField(
       accessibilityState={{ disabled }}
     >
       {!!labelProps && (
-        <Animated.Text style={[$labelStyles, $titleAnim]} {...LabelTextProps}>
+        <Animated.Text style={[$labelStyles, $titleAnim]}>
           {labelProps + (isRequiredProps ? " (*)" : "")}
         </Animated.Text>
       )}
@@ -394,6 +389,12 @@ export const TextInput = forwardRef(function TextField(
     </TouchableOpacity>
   )
 })
+
+const $labelStyles: StyleProp<TextStyle> = {
+  fontSize: 16,
+  fontFamily: typography.primary.medium,
+  marginBottom: 4,
+}
 
 const $inputWrapperStyle: ViewStyle = {
   flexDirection: "row",

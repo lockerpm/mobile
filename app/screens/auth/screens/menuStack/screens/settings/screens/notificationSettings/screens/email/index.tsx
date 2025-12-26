@@ -1,12 +1,14 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react"
+import { ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { useStores } from "app/models"
-import { NotificationCategory } from "app/static/types"
+
 import { Screen, Header, Switch } from "app/components/cores"
 import { MenuItemContainer, SettingsItem } from "app/components/utils"
+import { useStores } from "app/models"
 import { NotificationSettingsScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
-import { ViewStyle } from "react-native"
+import { NotificationCategory } from "app/static/types"
+
 import { useAppTheme } from "@/utils/useAppTheme"
 
 type AppNotiType = {

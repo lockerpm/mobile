@@ -2,12 +2,13 @@
 import { FC, useEffect, useRef, useState } from "react"
 // eslint-disable-next-line no-restricted-imports
 import { View, TextInput, KeyboardAvoidingView, StyleSheet, Platform } from "react-native"
+
 import { Text, Button, BottomModalHeader, ModalBackdrop } from "app/components/cores"
 import { useStores } from "app/models"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { AppEventType, EventBus } from "app/utils/eventBus"
 import { PrivateRelayScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+
 import { useAppTheme } from "@/utils/useAppTheme"
 import { debounce } from "@/utils/utils"
 
@@ -140,7 +141,6 @@ const styles = StyleSheet.create({
   content: {
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
-    paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom + (Platform.OS === "ios" ? 0 : 16),
   },
   domain: {
     marginLeft: 2,

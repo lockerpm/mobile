@@ -829,6 +829,7 @@ const fr: Translations = {
     use_symbol: "Utiliser des symboles (@!$%*)",
     avoid_ambiguous: "Éviter les caractères ambigus",
     use_password: "Utiliser le mot de passe",
+    copy_fill: "Copier et remplir",
   },
   authenticator: {
     title: "Application d’authentification",
@@ -937,6 +938,27 @@ const fr: Translations = {
         header: "Service de remplissage automatique",
         name: "Remplissage automatique Android",
         desc: "Le service de remplissage automatique de Locker utilise le service de remplissage d’Android pour aider à remplir les identifiants dans ’'autres applications sur votre appareil",
+        chrome_name: "Chrome Auto-fill",
+        chrome_desc:
+          "Activez le remplissage automatique de Chrome et laissez Locker remplir rapidement et en toute sécurité vos identifiants de connexion sur les sites Web",
+      },
+    },
+    android_service: {
+      create_passkey: {
+        title: "Créer une nouvelle clé d’accès",
+        existing_key: "Une clé d’accès existe déjà pour cet e-mail/nom d’utilisateur",
+        action_header: "Créer une clé d’accès pour un nouvel élément",
+        action_btn: "Créer une clé d’accès",
+        replace_header: "Ajouter une clé d’accès aux éléments de connexion existants",
+        replace_alert_t: "Cette connexion contient déjà une clé d’accès",
+        replace_alert_d:
+          "Voulez-vous en créer une nouvelle et remplacer la clé d’accès existante ?",
+      },
+      list_passkey: {
+        title: "Liste des clés d’accès",
+        header: "Liste des clés d’accès pour ",
+        empty_title: "Aucune clé d’accès disponible",
+        empty_label: "Il n'y a pas de clés d’accès pour {{rpId}} sur ce compte",
       },
     },
     deleted: "Ce mot de passe a été supprimé.",

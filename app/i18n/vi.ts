@@ -845,6 +845,7 @@ const vi: Translations = {
     use_symbol: "Sử dụng ký tự đặc biệt (@!$%*)",
     avoid_ambiguous: "Tránh các ký tự dễ nhầm lẫn",
     use_password: "Sử dụng mật khẩu",
+    copy_fill: "Sao chép và điền",
   },
   authenticator: {
     title: "Mã xác thực",
@@ -953,6 +954,26 @@ const vi: Translations = {
         header: "Dịch vụ tự động điền",
         name: "Tự động điền mật khẩu",
         desc: "Dịch vụ tự động điền của Locker sử dụng AutoFill Framework của Android để hỗ trợ điền thông tin đăng nhập vào các ứng dụng khác trên thiết bị của bạn",
+        chrome_name: "Tự động điền trong Chrome",
+        chrome_desc:
+          "Bật tính năng tự động điền của Chrome và để Locker nhanh chóng và an toàn điền thông tin đăng nhập của bạn trên các trang web",
+      },
+    },
+    android_service: {
+      create_passkey: {
+        title: "Tạo passkey mới",
+        existing_key: "Một passkey đã tồn tại cho email/tên người dùng này",
+        action_header: "Tạo passkey cho một mục mới",
+        action_btn: "Tạo passkey",
+        replace_header: "Thêm passkey vào các mục đăng nhập hiện có",
+        replace_alert_t: "Đăng nhập này đã chứa một passkey",
+        replace_alert_d: "Bạn có muốn tạo một passkey mới và thay thế passkey hiện có không?",
+      },
+      list_passkey: {
+        title: "Danh sách passkey",
+        header: "Danh sách passkey cho ",
+        empty_title: "Không có passkey",
+        empty_label: "Không có passkey nào cho {{rpId}} trên tài khoản này",
       },
     },
   },

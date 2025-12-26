@@ -1,7 +1,8 @@
-import { useStores } from "@/models"
-import { Logger } from "@/utils/logger"
 import { useEffect } from "react"
 import InAppReview from "react-native-in-app-review"
+
+import { useStores } from "@/models"
+import { Logger } from "@/utils/logger"
 /**
  * Request in-app review
  * This function checks if the in-app review is available and if the user has not already been shown the review prompt.

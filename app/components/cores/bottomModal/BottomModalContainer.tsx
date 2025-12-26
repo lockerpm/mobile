@@ -1,8 +1,9 @@
-import { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
 import { Dimensions, ScrollView, StyleSheet, View, ViewProps, ViewStyle } from "react-native"
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+
+import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 const height = Dimensions.get("window").height
 
@@ -33,9 +34,14 @@ export const BottomModalContainer = ({
   ...props
 }: BottomModalContainerProps) => {
   const { themed } = useAppTheme()
+  const insets = useSafeAreaInsets()
 
   return (
-    <Animated.View entering={FadeInDown} exiting={FadeOutDown} style={themed($container)}>
+    <Animated.View
+      entering={FadeInDown}
+      exiting={FadeOutDown}
+      style={[themed($container), { paddingBottom: insets.bottom + 6 }]}
+    >
       {preset === "default" ? <StaticContent {...props} /> : <ScrollContent {...props} />}
     </Animated.View>
   )
@@ -44,7 +50,6 @@ export const BottomModalContainer = ({
 const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
   borderTopLeftRadius: 16,
   borderTopRightRadius: 16,
-  paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom + 6,
   backgroundColor: colors.background,
 })
 

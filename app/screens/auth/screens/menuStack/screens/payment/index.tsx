@@ -1,172 +1,155 @@
 import { useState, useEffect, FC } from "react"
-import { View, Alert, Platform, StyleSheet } from "react-native"
-import { observer } from "mobx-react-lite"
-import { Logo, PressableIcon, Screen } from "app/components/cores"
-
+import { View, Alert, StyleSheet } from "react-native"
 import {
-  PurchaseError,
-  clearTransactionIOS,
-  flushFailedPurchasesCachedAsPendingAndroid,
-  requestSubscription,
+  ErrorCode,
+  ProductSubscriptionAndroid,
+  ProductSubscriptionAndroidOfferDetails,
   useIAP,
 } from "react-native-iap"
-import { SKU } from "./PricePlan.sku"
-import { PremiumBenefits } from "./PremiumBenefits"
-import { PricePlan } from "./PricePlan"
-import { FamilyPayment } from "./familyPayment/FamilyPayment"
-import { PremiumPayment } from "./premiumPayment/PremiumPayment"
-import { useStores } from "app/models"
+
+import { Logo, PressableIcon, Screen } from "app/components/cores"
 import { MenuScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
+
 import { useAppLocale } from "@/i18n"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { useStores } from "@/models"
+import { userApi } from "@/services/api"
 import { Logger } from "@/utils/logger"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { FamilyPayment } from "./familyPayment/FamilyPayment"
+import { PremiumBenefits } from "./PremiumBenefits"
+import { PremiumPayment } from "./premiumPayment/PremiumPayment"
+import { PricePlan } from "./PricePlan"
+import { SKU } from "./PricePlan.sku"
 
 const subSkus = [SKU.PRE_MON, SKU.PRE_YEAR, SKU.FAM_MON, SKU.FAM_YEAR]
 
-const IS_IOS = Platform.OS === "ios"
-const IS_ANDROID = Platform.OS === "android"
+export const PaymentScreen: FC<MenuScreenProps<"payment">> = ({
+  navigation,
+  route: { params },
+}) => {
+  const { user } = useStores()
+  const { notifyApiError } = useToast()
+  const { translate } = useAppLocale()
+  const {
+    theme: { colors },
+    themeContext,
+  } = useAppTheme()
+  const isDark = themeContext === "dark"
+  // -------------------- STATE ----------------------
+  const [processPayment, setProcessPayment] = useState<boolean>(false)
+  console.log("rerender")
+  // -------------------- METHOD ----------------------
 
-export const PaymentScreen: FC<MenuScreenProps<"payment">> = observer(
-  ({ navigation, route: { params } }) => {
-    const { subscriptions, getSubscriptions, currentPurchase, finishTransaction } = useIAP()
-    const { user } = useStores()
-    const { notifyApiError } = useToast()
-    const { translate } = useAppLocale()
-    const {
-      theme: { colors },
-      themeContext,
-    } = useAppTheme()
-    const isDark = themeContext === "dark"
-    // -------------------- STATE ----------------------
-    const [processPayment, setProcessPayment] = useState<boolean>(false)
-
-    // -------------------- METHOD ----------------------
-
-    const getSubscription = async () => {
+  const { connected, subscriptions, fetchProducts, requestPurchase, finishTransaction } = useIAP({
+    onPurchaseSuccess: async (purchase) => {
       try {
-        if (!IS_IOS) {
-          await flushFailedPurchasesCachedAsPendingAndroid()
-        } else {
-          if (__DEV__) await clearTransactionIOS()
-        }
-
-        await getSubscriptions({ skus: subSkus })
-      } catch (error) {
-        Logger.error({ message: "handleGetSubscriptions", error })
-        Alert.alert("Fail to get in-app-purchase information", "", [
-          {
-            text: "OK",
-            onPress: () => {
-              navigation.goBack()
-            },
-          },
-        ])
-      }
-    }
-
-    const purchase = async (productId: string) => {
-      setProcessPayment(true)
-      if (IS_IOS) {
-        await clearTransactionIOS()
-      }
-      try {
-        if (IS_IOS) {
-          await requestSubscription({
-            sku: productId,
-          })
-        }
-        if (IS_ANDROID) {
-          // Stupid code :V but it works. improve in future
-          // On Google Play Billing V5 you might have  multiple offers for a single sku
-          const subscription = subscriptions.find((s) => s.productId === productId)
-          if (subscription && "subscriptionOfferDetails" in subscription) {
-            const offerToken =
-              subscription?.subscriptionOfferDetails.length > 0 &&
-              subscription?.subscriptionOfferDetails[0].offerToken
-            if (offerToken) {
-              await requestSubscription({
-                sku: productId,
-                subscriptionOffers: [{ sku: productId, offerToken }],
-              })
-            }
+        // console.log("Purchase successful:", purchase)
+        // setOwnedSubscriptions((prev) => [...prev, currentPurchase?.productId])
+        const res = await userApi.purchaseValidationV2(user.apiToken, purchase)
+        if (res.kind === "ok") {
+          if (res.data.success) {
+            navigation.navigate("welcomePremium")
+          } else {
+            Alert.alert(translate("manage_plan:verify"), res.data.detail?.message || "")
           }
-        }
-      } catch (error) {
-        if (error instanceof PurchaseError) {
-          Logger.error({ message: `[${error.code}]: ${error.message}`, error })
         } else {
-          Logger.error({ message: "handleBuySubscription", error })
+          notifyApiError(res)
         }
+
+        await finishTransaction({
+          purchase,
+          isConsumable: false,
+        })
+      } catch (error) {
+        console.error("Failed to complete purchase:", error)
       }
       setProcessPayment(false)
-    }
-
-    // -------------------- EFFECT ----------------------
-    const checkCurrentPurchase = async () => {
-      try {
-        if (currentPurchase?.productId) {
-          await finishTransaction({
-            purchase: currentPurchase,
-            // isConsumable: true,
-          })
-
-          // setOwnedSubscriptions((prev) => [...prev, currentPurchase?.productId])
-          if (currentPurchase.transactionReceipt) {
-            let res
-            if (IS_IOS) {
-              res = await user.purchaseValidation(
-                currentPurchase.transactionReceipt,
-                currentPurchase.productId,
-                currentPurchase.originalTransactionIdentifierIOS
-              )
-            } else {
-              res = await user.purchaseValidation(
-                currentPurchase.purchaseToken,
-                currentPurchase.productId
-              )
-            }
-            if (res.kind === "ok") {
-              if (res.data.success) {
-                await user.loadPlan()
-                navigation.navigate("welcomePremium")
-              } else {
-                Alert.alert(translate("manage_plan:verify"), res.data.detail)
-              }
-            } else {
-              notifyApiError(res)
-            }
-          }
-
-          setProcessPayment(false)
-        }
-      } catch (error) {
-        setProcessPayment(false)
-        if (error instanceof PurchaseError) {
-          Logger.error({ message: `[${error.code}]: ${error.message}`, error })
-        } else {
-          Logger.error({ message: "handleBuyProduct", error })
-        }
+    },
+    onPurchaseError: (error) => {
+      if (error.code !== ErrorCode.UserCancelled) {
+        console.log("Purchase error:", error.message)
       }
+      setProcessPayment(false)
+    },
+  })
+  const getSubscription = async () => {
+    try {
+      // Fetch your products
+      await fetchProducts({ skus: subSkus, type: "subs" })
+    } catch (error) {
+      Logger.error({ message: "handleGetSubscriptions", error })
+      Alert.alert("Failed to get in-app-purchase information", "", [
+        {
+          text: "OK",
+          onPress: () => {
+            navigation.goBack()
+          },
+        },
+      ])
     }
+  }
 
-    useEffect(() => {
+  const purchase = async (productId: string) => {
+    setProcessPayment(true)
+    try {
+      // Find the subscription product
+      const subscription = subscriptions.find((sub) => sub.id === productId)
+      if (!subscription) {
+        Logger.error("Subscription not found")
+        setProcessPayment(false)
+        return
+      }
+      await requestPurchase({
+        request: {
+          ios: {
+            sku: productId,
+            andDangerouslyFinishTransactionAutomatically: false,
+          },
+          android: {
+            skus: [productId],
+            // Android requires subscriptionOffers for subscriptions
+            subscriptionOffers:
+              (subscription as ProductSubscriptionAndroid).subscriptionOfferDetailsAndroid?.map(
+                (offer: ProductSubscriptionAndroidOfferDetails) => ({
+                  sku: subscription.id,
+                  offerToken: offer.offerToken,
+                })
+              ) || [],
+          },
+        },
+        type: "subs",
+      })
+    } catch (error) {
+      Logger.error({ message: "handleBuySubscription", error })
+    }
+  }
+
+  // -------------------- EFFECT ----------------------
+  useEffect(() => {
+    if (connected) {
       getSubscription()
-    }, [])
+    }
+  }, [connected])
 
-    useEffect(() => {
-      checkCurrentPurchase()
-    }, [currentPurchase, finishTransaction])
+  // ------------------ RENDER ----------------------
 
-    // ------------------ RENDER ----------------------
-
-    const Content = () => {
-      if (params?.family)
-        return <FamilyPayment isProcessPayment={processPayment} purchase={purchase} />
-      if (params?.premium)
-        return <PremiumPayment isProcessPayment={processPayment} purchase={purchase} />
-
-      return (
+  return (
+    <Screen
+      safeAreaEdges={["top"]}
+      backgroundColor={params?.family || params?.premium ? colors.background : colors.block}
+      header={
+        <View style={styles.headerContainer}>
+          <Logo preset={!isDark ? "locker-premium" : "locker-premium-dark"} style={styles.logo} />
+          <PressableIcon icon="x" onPress={navigation.goBack} disabled={processPayment} />
+        </View>
+      }
+      contentContainerStyle={styles.flex}
+    >
+      {params?.family && <FamilyPayment isProcessPayment={processPayment} purchase={purchase} />}
+      {params?.premium && <PremiumPayment isProcessPayment={processPayment} purchase={purchase} />}
+      {!params?.family && !params?.premium && (
         <View style={styles.flex}>
           <PremiumBenefits />
 
@@ -176,26 +159,10 @@ export const PaymentScreen: FC<MenuScreenProps<"payment">> = observer(
             purchase={purchase}
           />
         </View>
-      )
-    }
-
-    return (
-      <Screen
-        safeAreaEdges={["top"]}
-        backgroundColor={params?.family || params?.premium ? colors.background : colors.block}
-        header={
-          <View style={styles.headerContainer}>
-            <Logo preset={!isDark ? "locker-premium" : "locker-premium-dark"} style={styles.logo} />
-            <PressableIcon icon="x" onPress={navigation.goBack} disabled={processPayment} />
-          </View>
-        }
-        contentContainerStyle={styles.flex}
-      >
-        <Content />
-      </Screen>
-    )
-  }
-)
+      )}
+    </Screen>
+  )
+}
 
 const styles = StyleSheet.create({
   flex: {

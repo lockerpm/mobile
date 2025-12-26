@@ -1,8 +1,7 @@
-import { Fido2CredentialView } from "../../models/view/fido2CredentialView"
 import { Utils } from "./common"
 import { p1363ToDer } from "./ecdsa-utils"
 import { Fido2Utils } from "./fido2-utils"
-
+import { Fido2CredentialView } from "../../models/view/fido2CredentialView"
 // ------------------- TYPES -------------------
 
 const KeyUsages: KeyUsage[] = ["sign"]

@@ -1,34 +1,33 @@
 import { FC, useCallback, useEffect, useState } from "react"
-import {
-  View,
-  Share,
-  TouchableOpacity,
-  Image,
-  SafeAreaView,
-  Platform,
-  StyleSheet,
-  ViewStyle,
-} from "react-native"
-import { Button, Icon, PressableIcon, Text } from "app/components/cores"
+import { View, Share, TouchableOpacity, Image, Platform, StyleSheet, ViewStyle } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
-import { useClipboard, useToast } from "app/services/utils"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+
+import { Button, Icon, PressableIcon, Text } from "app/components/cores"
 import { MenuScreenProps } from "app/navigators"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { useClipboard, useToast } from "app/services/utils"
+
 import { useAppLocale } from "@/i18n"
-import { Logger } from "@/utils/logger"
-import { ThemedStyle } from "@/theme"
 import { useStores } from "@/models"
+import { ThemedStyle } from "@/theme"
+import { Logger } from "@/utils/logger"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 const IS_IOS = Platform.OS === "ios"
 
 const REFER = require("assets/images/intro/refer.png")
 
 export const ReferFriendScreen: FC<MenuScreenProps<"referFriend">> = ({ navigation }) => {
-  const { themed } = useAppTheme()
+  const {
+    themed,
+    theme: { colors },
+  } = useAppTheme()
   const { user } = useStores()
   const { copyToClipboard } = useClipboard()
   const { translate } = useAppLocale()
   const { notifyApiError } = useToast()
+  const insets = useSafeAreaInsets()
 
   const [referLink, setReferLink] = useState<string>("")
   const [isSharing, setIsSharing] = useState(false)
@@ -78,12 +77,13 @@ export const ReferFriendScreen: FC<MenuScreenProps<"referFriend">> = ({ navigati
 
   // ----------------------- RENDER -----------------------
   return (
-    <SafeAreaView style={themed($container)}>
+    <View style={themed($container)}>
       <LinearGradient colors={gradientColor} style={styles.gradient}>
         <PressableIcon
           icon={"x"}
           size={24}
-          containerStyle={styles.icon}
+          color={colors.black}
+          containerStyle={[styles.icon, { top: insets.top }]}
           onPress={navigation.goBack}
         />
         <Image resizeMode="contain" source={REFER} style={styles.image} />
@@ -109,7 +109,7 @@ export const ReferFriendScreen: FC<MenuScreenProps<"referFriend">> = ({ navigati
         tx={"refer_friend:btn"}
         onPress={onShare}
       />
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     left: 16,
     position: "absolute",
-    top: 0,
+    top: StaticSafeAreaInsets.safeAreaInsetsTop + 16,
     zIndex: 2,
   },
   image: {

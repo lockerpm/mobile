@@ -1,14 +1,6 @@
 import { FC, useEffect, useState } from "react"
-import { useStores } from "app/models"
-import { useCipherData, useCipherHelper } from "app/services/hook"
-import { beautifyName, decodeGoogleAuthenticatorImport } from "app/utils/totp"
-import { CipherType } from "core/enums"
-import { Header, Screen } from "app/components/cores"
+import { ActivityIndicator, Dimensions, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { AuthScreenProps } from "app/navigators/navigators.types"
-import { useToast } from "app/services/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { Logger } from "@/utils/logger"
 import {
   Camera,
   Code,
@@ -16,9 +8,19 @@ import {
   useCameraPermission,
   useCodeScanner,
 } from "react-native-vision-camera"
-import { ActivityIndicator, Dimensions, StyleSheet, View, ViewStyle } from "react-native"
+
+import { Header, Screen } from "app/components/cores"
+import { useStores } from "app/models"
+import { AuthScreenProps } from "app/navigators/navigators.types"
+import { useCipherData, useCipherHelper } from "app/services/hook"
+import { useToast } from "app/services/utils"
+import { beautifyName, decodeGoogleAuthenticatorImport } from "app/utils/totp"
+import { CipherType } from "core/enums"
+
 import { ThemedStyle } from "@/theme"
 import { delay } from "@/utils/delay"
+import { Logger } from "@/utils/logger"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 const { width, height } = Dimensions.get("screen")
 
@@ -62,24 +64,6 @@ export const QRScannerScreen: FC<AuthScreenProps<"qrScannerModal">> = observer((
         },
       })
     })
-
-    // const payload = parseOTPUri(uri)
-    // try {
-    //   const otp = getTOTP(payload)
-    //   if (otp) {
-    //     const cipher = newCipher(CipherType.TOTP)
-    //     cipher.name = beautifyName(payload.account || "")
-    //     cipher.notes = uri
-    //     await createCipher(cipher, 0, [])
-    //   } else {
-    //     notifyTx("error", "authenticator:invalid_qr")
-    //   }
-    // } catch (e) {
-    //   Logger.error("Save QR: " + e)
-    //   notifyTx("error", "authenticator:invalid_qr")
-    // }
-    // setIsLoading(false)
-    // navigation.goBack()
   }
 
   const handleGoogleAuthenticatorImport = async (uri: string) => {

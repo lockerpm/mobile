@@ -1,16 +1,19 @@
 import { useState, useRef, useEffect, FC } from "react"
 import { View, Image, Linking, AppState, StyleSheet } from "react-native"
-import { AutofillServiceEnabled } from "app/utils/autofillHelper"
-import { Step } from "./EnableAutofillStep"
+
 import { Button, Header, Screen, Text } from "app/components/cores"
 import { SettingsScreenProps } from "app/navigators"
 
+import { isDeviceAutofillServiceEnabled } from "@/utils/autofill.android"
+
+import { Step } from "./EnableAutofillStep"
+
 const ACTIVE = require("assets/images/autofill/autofillActive.png")
 const IOS_HINT = require("assets/images/autofill/IosHint.png")
-const Keyboard = require("assets/images/icons/autofill/keyboard.png")
-const Switch = require("assets/images/icons/autofill/switch.png")
 const Key = require("assets/images/icons/autofill/key.png")
+const Keyboard = require("assets/images/icons/autofill/keyboard.png")
 const Locker = require("assets/images/icons/autofill/locker.png")
+const Switch = require("assets/images/icons/autofill/switch.png")
 
 export const AutofillServiceScreen: FC<SettingsScreenProps<"autofillService">> = ({
   navigation,
@@ -30,7 +33,7 @@ export const AutofillServiceScreen: FC<SettingsScreenProps<"autofillService">> =
   }, [])
 
   useEffect(() => {
-    AutofillServiceEnabled((isActived) => {
+    isDeviceAutofillServiceEnabled().then((isActived) => {
       setEnabled(isActived)
     })
   }, [appStateVisible])

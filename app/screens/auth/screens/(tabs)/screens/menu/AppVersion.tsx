@@ -1,6 +1,7 @@
 import { View, StyleSheet } from "react-native"
-import { Text } from "@/components/cores"
 import { getVersion } from "react-native-device-info"
+
+import { Text } from "@/components/cores"
 
 export const AppVersion = () => {
   const appVersion = `${getVersion()}`

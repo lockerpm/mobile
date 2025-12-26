@@ -1,14 +1,17 @@
-import RNFS from "react-native-fs"
-import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker"
-import { launchImageLibrary } from "react-native-image-picker"
-import { usePermission } from "./permission"
-import { useCoreService } from "app/services/coreService"
-import { useStores } from "app/models"
 import { Platform } from "react-native"
+import { keepLocalCopy, pick } from "@react-native-documents/picker"
+import RNFS from "react-native-fs"
+import { launchImageLibrary } from "react-native-image-picker"
 import crypto from "react-native-quick-crypto"
+
+import { useStores } from "app/models"
 import { attachmentApi } from "app/services/api"
+import { useCoreService } from "app/services/coreService"
 import { useToast } from "app/services/utils"
+
 import { Logger } from "@/utils/logger"
+
+import { usePermission } from "./permission"
 
 export const MAX_UPLOAD_SIZE = 52428800 // 50MB
 export const IS_ANDROID = Platform.OS === "android"
@@ -36,18 +39,34 @@ export const usePickAttachment = () => {
   const pickFile = async (): Promise<AttachmentType | null> => {
     try {
       // (Android) Cannot directly read msf:// and content:// file -> need copy to cache
-      const pickerFile: DocumentPickerResponse = await DocumentPicker.pickSingle(
-        IS_ANDROID ? { copyTo: "cachesDirectory" } : undefined
-      )
-      const file: AttachmentType = {
-        id: Date.now().toString(),
-        fileName: pickerFile.name ?? "",
-        size: pickerFile.size ?? 0,
-        url: pickerFile.uri,
-        key: null,
-      }
-      if (pickerFile.fileCopyUri) {
-        file.url = pickerFile.fileCopyUri
+      const [file1] = await pick()
+      const [localCopy] = await keepLocalCopy({
+        files: [
+          {
+            uri: file1.uri,
+            fileName: file1.name ?? "fallbackName",
+          },
+        ],
+        destination: "cachesDirectory",
+      })
+
+      const file: AttachmentType = IS_ANDROID
+        ? {
+            id: Date.now().toString(),
+            fileName: file1.name ?? "",
+            size: file1.size ?? 0,
+            url: "",
+            key: null,
+          }
+        : {
+            id: Date.now().toString(),
+            fileName: file1.name ?? "",
+            size: file1.size ?? 0,
+            url: file1.uri,
+            key: null,
+          }
+      if (IS_ANDROID && localCopy.status === "success" && localCopy.localUri) {
+        file.url = localCopy.localUri
       }
 
       if (!file.size || file.size === 0) {

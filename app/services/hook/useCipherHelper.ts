@@ -1,7 +1,9 @@
-import { useStores } from "app/models"
 import extractDomain from "extract-domain"
-import { useCoreService } from "../coreService"
-import Config from "react-native-config"
+
+import { useStores } from "app/models"
+import { MasterPasswordPolicy, PasswordPolicy } from "app/static/types"
+import { PolicyType } from "app/static/types/enum"
+import { CipherType, FieldType, SecureNoteType } from "core/enums"
 import {
   CardView,
   CipherView,
@@ -10,10 +12,11 @@ import {
   LoginView,
   SecureNoteView,
 } from "core/models/view"
-import { CipherType, FieldType, SecureNoteType } from "core/enums"
-import { PolicyType } from "app/static/types/enum"
-import { MasterPasswordPolicy, PasswordPolicy } from "app/static/types"
+
+import Config from "@/config"
 import { useAppLocale } from "@/i18n"
+
+import { useCoreService } from "../coreService"
 
 export function useCipherHelper() {
   const { translate } = useAppLocale()

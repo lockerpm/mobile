@@ -1,12 +1,14 @@
 import { ActivityIndicator, StyleSheet, ViewStyle } from "react-native"
+
 import { Icon, PressableScale, Text } from "app/components/cores"
 import { TxKeyPath } from "app/i18n"
+
 import { useAppTheme } from "@/utils/useAppTheme"
 
 type SettingsItemProps = {
   text?: string
   textTx?: TxKeyPath
-  RightAccessory?: JSX.Element
+  RightAccessory?: React.ReactNode
   color?: string
   onPress?: () => void
   disabled?: boolean

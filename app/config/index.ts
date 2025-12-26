@@ -13,8 +13,8 @@
  *
  * Read more here: https://reactnative.dev/docs/security#storing-sensitive-info
  */
-import BaseConfig from "./config.base"
 import ProdConfig from "./config"
+import BaseConfig from "./config.base"
 
 const Config = { ...BaseConfig, ...ProdConfig }
 

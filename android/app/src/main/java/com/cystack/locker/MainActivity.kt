@@ -1,32 +1,31 @@
 package com.cystack.locker
+import expo.modules.splashscreen.SplashScreenManager
 
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+
+import androidx.credentials.provider.PendingIntentHandler
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
-import com.facebook.react.defaults.DefaultReactActivityDelegate
 import expo.modules.ReactActivityDelegateWrapper
-import expo.modules.splashscreen.SplashScreenManager
-
 
 class MainActivity : ReactActivity() {
-  private var TAG = "MainActivity___"
-
   override fun onCreate(savedInstanceState: Bundle?) {
-    // Set the theme to AppTheme BEFORE onCreate to support
-    // coloring the background, status bar, and navigation bar.
-    // This is required for expo-splash-screen.
-    // setTheme(R.style.AppTheme);
     // @generated begin expo-splashscreen - expo prebuild (DO NOT MODIFY) sync-f3ff59a738c56c9a6119210cb55f0b613eb8b6af
     SplashScreenManager.registerOnActivity(this)
     // @generated end expo-splashscreen
     super.onCreate(null)
-    Log.d(TAG, "MainActivity: Action: ${intent?.action}, Extras: ${intent?.extras}")
   }
 
+//  override fun onUserLeaveHint() {
+//    if (reactNativeHost.hasInstance()) {
+//        super.onUserLeaveHint()
+//    }
+//    // else ignore to prevent NullPointerException
+//  }
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule

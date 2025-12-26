@@ -1,8 +1,8 @@
+import { Platform } from "react-native"
+
 import { DeviceActionService as DeviceActionServiceAbstraction } from "core/abstractions"
 import { DeviceType } from "core/enums"
 import { CipherView } from "core/models/view"
-
-import { Platform } from "react-native"
 
 export class DeviceActionService implements DeviceActionServiceAbstraction {
   // --------- Requirements for autofill -------------

@@ -1,3 +1,7 @@
+import { FC } from "react"
+import { StyleSheet, View } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+
 import {
   Header,
   Icon,
@@ -12,13 +16,10 @@ import { TxKeyPath } from "@/i18n"
 import { ScamRoute, ScamScreenProps } from "@/navigators"
 import { openScamUrl } from "@/utils/openLinkInBrowser"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { FC } from "react"
-import { StyleSheet, View } from "react-native"
 
+import { AnonumousReport } from "./AnonymousReport"
 // @ts-ignore
 import { CallerContent } from "./CallerContent"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { AnonumousReport } from "./AnonymousReport"
 
 type ToolsItem = {
   label: TxKeyPath
@@ -52,6 +53,7 @@ export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) 
   const {
     theme: { colors },
   } = useAppTheme()
+  const insets = useSafeAreaInsets()
 
   const handleNavigate = (item: ToolsItem) => {
     // @ts-ignore
@@ -67,7 +69,7 @@ export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) 
       header={
         <Header titleTx="scam:tool.title" leftIcon="arrow-left" onLeftPress={navigation.goBack} />
       }
-      contentContainerStyle={styles.container}
+      contentContainerStyle={[styles.container, { paddingBottom: insets.bottom }]}
     >
       <MenuItemContainer>
         {Object.values(SCAM_ITEMS).map((item, index) => {
@@ -92,7 +94,7 @@ export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) 
         })}
       </MenuItemContainer>
 
-      {/* <CallerContent /> */}
+      <CallerContent />
       <AnonumousReport />
 
       <MenuItemContainer>
@@ -125,7 +127,6 @@ export const ScamHomeScreen: FC<ScamScreenProps<"scamList">> = ({ navigation }) 
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom + 16,
     paddingHorizontal: 16,
   },
   image: {

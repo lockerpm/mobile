@@ -57,6 +57,7 @@ export interface Item {
   categoryUuid: string
   details: Details
   overview: Overview
+  state: "archived" | "active"
 }
 export interface Details {
   loginFields?: (LoginFieldsEntity | null)[] | null

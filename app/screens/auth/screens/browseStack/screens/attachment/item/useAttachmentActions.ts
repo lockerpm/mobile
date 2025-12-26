@@ -1,14 +1,16 @@
 /* eslint-disable react-native/split-platform-components */
-import { AttachmentType } from "../usePickAttachment"
-import { attachmentApi } from "app/services/api"
-import { useStores } from "app/models"
-import RNFS from "react-native-fs"
-import { useCoreService } from "app/services/coreService"
 import { Platform } from "react-native"
-import { usePermission } from "../permission"
-import Share, { ShareOptions } from "react-native-share"
 import { CameraRoll } from "@react-native-camera-roll/camera-roll"
+import RNFS from "react-native-fs"
+import Share, { ShareOptions } from "react-native-share"
+
+import { useStores } from "app/models"
+import { attachmentApi } from "app/services/api"
+import { useCoreService } from "app/services/coreService"
 import { useToast } from "app/services/utils"
+
+import { usePermission } from "../permission"
+import { AttachmentType } from "../usePickAttachment"
 
 const DOWNLOAD_PATH =
   Platform.OS === "android"
@@ -102,7 +104,7 @@ export const useAttachmentActions = (
           await CameraRoll.saveAsset(filePath)
           notifyTx("success", "file_attachment:download_media_success")
         } catch (error) {
-          console.error("Error saving media:", error)
+          // console.error("Error saving media:", error)
         }
       }
     } catch (error) {

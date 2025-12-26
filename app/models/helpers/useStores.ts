@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
+
 import { RootStore, RootStoreModel } from "../RootStore"
 import { setupRootStore } from "./setupRootStore"
 
@@ -60,12 +61,6 @@ export const useInitialRootStore = (callback?: () => void | Promise<void>) => {
       // set up the RootStore (returns the state restored from AsyncStorage)
       const { unsubscribe } = await setupRootStore(rootStore)
       _unsubscribe = unsubscribe
-
-      // reactotron integration with the MST root store (DEV only)
-      if (__DEV__) {
-        // @ts-ignore
-        console.tron.trackMstNode(rootStore)
-      }
 
       // let the app know we've finished rehydrating
       setRehydrated(true)

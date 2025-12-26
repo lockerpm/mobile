@@ -8,15 +8,17 @@ import {
   TextStyle,
   View,
 } from "react-native"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+
 import { BottomModalHeader, Button, ModalBackdrop, Text } from "app/components/cores"
 import { useStores } from "app/models"
-import { SubdomainData } from "app/static/types"
 import { useToast } from "app/services/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { SubdomainData } from "app/static/types"
+
 import { PrivateRelayScreenProps } from "@/navigators"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { AppEventType, EventBus } from "@/utils/eventBus"
 import { ThemedStyle } from "@/theme"
+import { AppEventType, EventBus } from "@/utils/eventBus"
+import { useAppTheme } from "@/utils/useAppTheme"
 import { debounce } from "@/utils/utils"
 
 export const CreateSubdomainScreen: FC<PrivateRelayScreenProps<"createSubdomain">> = ({

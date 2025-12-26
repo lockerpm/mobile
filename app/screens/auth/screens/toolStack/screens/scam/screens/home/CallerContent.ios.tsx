@@ -1,8 +1,9 @@
+import { Alert, Platform, StyleSheet, View } from "react-native"
+
 import { PressableScale, Text, Switch } from "@/components/cores"
 import { MenuItemContainer } from "@/components/utils"
 import { useAppLocale } from "@/i18n"
 import { useCallerID } from "@/services/callerID/useCallerID.ios"
-import { Alert, Platform, StyleSheet, View } from "react-native"
 
 export const CallerContent = () => {
   const { isExtensionEnabled, openSettings } = useCallerID()

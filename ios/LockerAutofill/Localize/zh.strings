@@ -39,6 +39,7 @@
 "pw.useBtn" = "使用密碼";
 "pw.generator" = "密碼產生器";
 "pw.regenerate" = "再生";
+"pw.copyFill" = "複製並填入";
 
 // create password
 "create.title" = "创建登录名";

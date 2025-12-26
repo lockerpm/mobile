@@ -1,194 +1,60 @@
-import { useCallback, useState } from "react"
-import { Dimensions, ImageStyle, Platform, StyleProp, View, ViewStyle } from "react-native"
-import { ImageIcon } from "../../cores"
-import { useHelper, useSocialLogin } from "app/services/hook"
-import { getUrlParameterByName } from "app/utils/utils"
-import { WebViewModal } from "../../webviewModal/WebviewModal"
+import { ImageStyle, Platform, StyleProp, View, ViewStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
+
 import { UnAuthScreenProps } from "app/navigators"
-import Config from "@/config"
+import { useSocialLogin } from "app/services/hook"
+
+import { GithubLogin } from "./GithubLogin"
+import { MicrosoftLogin } from "./MicrosoftLogin"
+import { ImageIcon } from "../../cores"
 
 const IS_IOS = Platform.OS === "ios"
-const SCREEN_WIDTH = Dimensions.get("screen").width
 
 interface Props {
   isSingIn: boolean
-
   setIsLoading: (val: boolean) => void
-  /**
-   * Callback when social authen success
-   */
-  onLoggedIn: () => Promise<void>
-
+  onLoggedIn: (newUser: boolean, token: string) => Promise<void>
   style?: StyleProp<ViewStyle>
 }
 
-export const SocialLogin = ({ onLoggedIn, setIsLoading, style, isSingIn }: Props) => {
+export const SocialLogin = ({ style, isSingIn, ...callbackProps }: Props) => {
   const navigation = useNavigation<UnAuthScreenProps<"loginStack">["navigation"]>()
-  const [showGitHubLogin, setShowGitHubLogin] = useState(false)
-  const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLogin()
-
-  const SOCIAL_LOGIN: {
-    [service: string]: {
-      hide?: boolean
-      icon: "apple" | "google" | "facebook" | "github" | "sso"
-      handler: () => void
-    }
-  } = {
-    google: {
-      icon: "google",
-      handler: () => {
-        setIsLoading(true)
-        return googleLogin({
-          setIsLoading,
-          onLoggedIn,
-        })
-      },
-    },
-    apple: {
-      hide: !IS_IOS,
-      icon: "apple",
-      handler: () => {
-        setIsLoading(true)
-        return appleLogin({
-          setIsLoading,
-          onLoggedIn,
-        })
-      },
-    },
-    github: {
-      icon: "github",
-      handler: () => {
-        setShowGitHubLogin(true)
-      },
-    },
-    facebook: {
-      icon: "facebook",
-      handler: () => {
-        setIsLoading(true)
-        return facebookLogin({
-          setIsLoading,
-          onLoggedIn,
-        })
-      },
-    },
-    sso: {
-      hide: !isSingIn,
-      icon: "sso",
-      handler: () => {
-        navigation.navigate("unAuthStack", {
-          screen: "ssoStack",
-          params: {
-            screen: "ssoIdentifier",
-          },
-        })
-      },
-    },
-  }
-
-  const SocialLoginFlexLayout = useCallback(() => {
-    if (Platform.OS === "android" || SCREEN_WIDTH > 320) {
-      return (
-        <View style={$centerRowSpaceBtw}>
-          {Object.values(SOCIAL_LOGIN)
-            .filter((item) => !item.hide)
-            .map((item, index) => (
-              <ImageIcon
-                style={$mh16 as ImageStyle}
-                key={index}
-                icon={item.icon}
-                size={32}
-                onPress={item.handler}
-              />
-            ))}
-        </View>
-      )
-    }
-    return (
-      <View>
-        <View style={$centerRowSpaceBtw}>
-          {Object.values(SOCIAL_LOGIN)
-            .slice(0, 3)
-            .map((item, index) => (
-              <ImageIcon
-                style={$mh16 as ImageStyle}
-                key={index}
-                icon={item.icon}
-                size={40}
-                onPress={item.handler}
-              />
-            ))}
-        </View>
-        <View style={[$centerRowSpaceBtw, $mh16]}>
-          {Object.values(SOCIAL_LOGIN)
-            .slice(3)
-            .map((item, index) => (
-              <ImageIcon
-                style={$mh16 as ImageStyle}
-                key={index}
-                icon={item.icon}
-                size={40}
-                onPress={item.handler}
-              />
-            ))}
-        </View>
-      </View>
-    )
-  }, [])
+  const { googleLogin, facebookLogin, appleLogin } = useSocialLogin(callbackProps)
 
   return (
-    <View style={style}>
-      <GitHubLoginModal
-        isOpen={showGitHubLogin}
-        onClose={() => setShowGitHubLogin(false)}
-        onDone={(code) => {
-          setIsLoading(true)
-          githubLogin({
-            setIsLoading,
-            onLoggedIn,
-            code,
-          })
-        }}
-      />
+    <View style={[style, $centerRowSpaceBtw]}>
+      <ImageIcon style={$mh16} icon={"google"} size={32} onPress={googleLogin} />
+      {IS_IOS && <ImageIcon style={$mh16} icon={"apple"} size={32} onPress={appleLogin} />}
+      <ImageIcon style={$mh16} icon={"facebook"} size={32} onPress={facebookLogin} />
 
-      <SocialLoginFlexLayout />
+      <GithubLogin {...callbackProps} />
+      <MicrosoftLogin {...callbackProps} />
+      {isSingIn && (
+        <ImageIcon
+          style={$mh16}
+          icon={"sso"}
+          size={32}
+          onPress={() => {
+            navigation.navigate("unAuthStack", {
+              screen: "ssoStack",
+              params: {
+                screen: "ssoIdentifier",
+              },
+            })
+          }}
+        />
+      )}
     </View>
   )
 }
 
-type GitHubLoginModalProps = {
-  isOpen: boolean
-  onClose: () => void
-  onDone: (code: string) => void
-}
-
-export const GitHubLoginModal = (props: GitHubLoginModalProps) => {
-  const { isOpen, onClose, onDone } = props
-  const { randomString } = useHelper()
-
-  const url = `${Config.GITHUB_CONFIG.authorizationEndpoint}?client_id=${
-    Config.GITHUB_CONFIG.clientId
-  }&redirect_uri=${encodeURIComponent(Config.GITHUB_CONFIG.redirectUrl)}&scope=${encodeURIComponent(
-    Config.GITHUB_CONFIG.scopes.join(" ")
-  )}&state=${randomString()}`
-
-  const onURLChange = (url: string) => {
-    if (url.startsWith(Config.GITHUB_CONFIG.redirectUrl)) {
-      const code = getUrlParameterByName("code", url)
-      onClose()
-      onDone(code)
-    }
-  }
-
-  return <WebViewModal url={url} isOpen={isOpen} onClose={onClose} onURLChange={onURLChange} />
-}
-
 const $centerRowSpaceBtw: ViewStyle = {
   flexDirection: "row",
+  flexWrap: "wrap",
   alignItems: "center",
   justifyContent: "center",
 }
 
-const $mh16: ViewStyle | ImageStyle = {
-  marginHorizontal: 16,
+const $mh16: ImageStyle = {
+  marginHorizontal: 12,
 }

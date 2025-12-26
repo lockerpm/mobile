@@ -1,11 +1,18 @@
 import { useCallback } from "react"
 import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { Icon, Text } from "app/components/cores"
-import { SharingStatus } from "app/static/types"
 import { observer } from "mobx-react-lite"
-import { TabsRoute } from "app/navigators"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+
+import { Icon, Text } from "app/components/cores"
 import { useStores } from "app/models"
+import { TabsRoute } from "app/navigators"
+import { SharingStatus } from "app/static/types"
+
+import { useAppLocale } from "@/i18n"
+import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
+
 import {
   AuthenticatorScreen,
   BrowseListScreen,
@@ -13,10 +20,6 @@ import {
   MenuListScreen,
   ToolsListScreen,
 } from "./screens"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { useAppLocale } from "@/i18n"
-import { ThemedStyle } from "@/theme"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
 const Tab = createBottomTabNavigator<TabsRoute>()
 
@@ -26,6 +29,7 @@ const TabBar = observer(({ state, navigation }: BottomTabBarProps) => {
     theme: { colors },
   } = useAppTheme()
   const { translate } = useAppLocale()
+  const insets = useSafeAreaInsets()
   const { uiStore, cipherStore } = useStores()
 
   const mappings = {
@@ -72,7 +76,7 @@ const TabBar = observer(({ state, navigation }: BottomTabBarProps) => {
     alignItems: "center",
   }
   return (
-    <View style={themed($container)}>
+    <View style={[themed($container), { paddingBottom: insets.bottom }]}>
       {/* Status bar */}
       {isStatusBarVisible && (
         <View style={themed($statusContainer)}>
@@ -179,7 +183,6 @@ export const TabNavigator = observer(() => {
 })
 
 const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
-  paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom,
   backgroundColor: colors.background,
   paddingTop: 8,
 })

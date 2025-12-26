@@ -1,23 +1,26 @@
-import totp from "totp-generator"
-import proto from "./migration-payload_pb"
 import base32 from "hi-base32"
+import { TOTP, TOTPAlgorithm } from "totp-generator"
+
+// @ts-ignore
+import proto from "./migration-payload_pb"
+import { Logger } from "../logger"
 
 export interface OTPData {
   account?: string
   secret: string
-  algorithm?: "SHA-1" | "SHA-256" | "SHA-512" | "MD-5" | string
+  algorithm?: TOTPAlgorithm
   period?: number
   digits?: number
 }
 
-export const getTOTP = (otp: OTPData) => {
+export const getTOTP = async (otp: OTPData) => {
   try {
-    const res = totp(_removeInvalidBase32Chars(otp.secret), {
+    const res = await TOTP.generate(_removeInvalidBase32Chars(otp.secret), {
       algorithm: otp.algorithm || "SHA-1",
       period: otp.period || 30,
       digits: otp.digits || 6,
     })
-    return res
+    return res.otp
   } catch (e) {
     console.error(e)
     return "N/A"
@@ -28,7 +31,7 @@ export const getTOTP = (otp: OTPData) => {
 export const parseOTPUri = (uri: string) => {
   const res: OTPData = {
     account: undefined,
-    secret: undefined,
+    secret: "",
     algorithm: "SHA-1",
     period: 30,
     digits: 6,
@@ -65,7 +68,7 @@ export const parseOTPUri = (uri: string) => {
   try {
     res.period = parseInt(query.period)
   } catch (e) {
-    // Do nothing
+    Logger.error("TOTP", "parseOTPUri", "Failed to parse period", e)
   }
   if (!res.period) {
     res.period = 30
@@ -73,7 +76,7 @@ export const parseOTPUri = (uri: string) => {
   try {
     res.digits = parseInt(query.digits)
   } catch (e) {
-    // Do nothing
+    Logger.error("TOTP", "parseOTPUri", "Failed to parse digits", e)
   }
   if (!res.digits) {
     res.digits = 6
@@ -101,9 +104,9 @@ export const decodeGoogleAuthenticatorImport = (uri: string): OTPData[] => {
 
   // Currently only accept TOTP
   return data.otpParametersList
-    .filter((item) => item.type === 2)
-    .map((item) => {
-      let algorithm: string
+    .filter((item: any) => item.type === 2)
+    .map((item: any) => {
+      let algorithm: TOTPAlgorithm
       let digits: number
 
       switch (item.algorithm) {
@@ -115,9 +118,6 @@ export const decodeGoogleAuthenticatorImport = (uri: string): OTPData[] => {
           break
         case 3:
           algorithm = "SHA-512"
-          break
-        case 4:
-          algorithm = "MD5"
           break
         default:
           algorithm = "SHA-1"
@@ -154,7 +154,7 @@ export const decodeGoogleAuthenticatorImport = (uri: string): OTPData[] => {
 
 const _parseQueryString = (query: string) => {
   const vars = query.split("&")
-  const queryString = {
+  const queryString: Record<string, any> = {
     account: undefined,
     secret: undefined,
     algorithm: undefined,
@@ -191,8 +191,6 @@ const _parseAlgorithm = (algo: string) => {
       return "SHA-256"
     case "sha512":
       return "SHA-512"
-    case "md5":
-      return "MD5"
   }
   return "SHA-1"
 }
@@ -206,6 +204,7 @@ export const beautifyName = (name: string) => {
       return `${provider} (${account})`
     }
   } catch (e) {
+    Logger.error("TOTP", "beautifyName", "Failed to beautify name", e)
     return name
   }
 

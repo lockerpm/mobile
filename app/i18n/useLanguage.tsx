@@ -1,7 +1,9 @@
 import { createContext, useContext, useMemo, useState } from "react"
-import { LanguageSupportType, TxKeyPath } from "./i18n"
 import i18n, { TOptions } from "i18next"
+
 import { AppStorageKey, saveString } from "@/utils/storage"
+
+import { LanguageSupportType, TxKeyPath } from "./i18n"
 
 const LocaleContext = createContext<{
   lang: LanguageSupportType
@@ -19,7 +21,7 @@ function LocaleContextProvider({
   children,
   initLanguage = "vi",
 }: {
-  children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal
+  children: boolean | React.ReactPortal | React.ReactNode
   initLanguage?: LanguageSupportType
 }) {
   // const [isDark, setIsDark] = useState(false)

@@ -10,6 +10,7 @@ import LocalAuthentication
 import AuthenticationServices
 import SwiftUI
 import Sentry
+import SwiftOTP
 
 
 
@@ -37,10 +38,12 @@ class CredentialProviderController: ASCredentialProviderViewController {
   required init?(coder: NSCoder) {
     self.user = User()
     super.init(coder: coder)
+    print("init ------")
+    
   }
-  
   override func viewDidLoad() {
     super.viewDidLoad()
+    print("viewDidLoad ------")
     
     SentrySDK.start { options in
       options.dsn = getStringInfo(key: "DSN_SENTRY")
@@ -53,6 +56,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
     i.locale = user.info?.language ?? "en"
   }
   override func viewDidAppear(_ animated: Bool) {
+    print("viewDidAppear -----")
     self.view.backgroundColor = UIColor(named: "background")
     self.startExtension()
   }
@@ -61,6 +65,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
    Mở List Passwords
    */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+    print("prepareCredentialList 16", serviceIdentifiers)
     prepareAutofillData(sID: serviceIdentifiers, mode: .fillPassword)
   }
   
@@ -75,7 +80,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
     // passkey
     passkeyContext = PasskeyContext()
     passkeyContext?.requestParameters = requestParameters
-    
     // Find allowed credentials hint (if server supplied allowedCredentials)
     if let allowed = requestParameters.allowedCredentials as [Data]?, !allowed.isEmpty {
       user.allowedCredentialIDs = allowed.map { $0.base64URLEncodedString() }
@@ -367,11 +371,20 @@ extension CredentialProviderController {
       return
     }
     do {
-      let assertion = try createAssertionFromTempPasskey(
-        item: item,
-        rpId: identity.relyingPartyIdentifier,
-        clientDataHash: request.clientDataHash
-      )
+      let assertion: ASPasskeyAssertionCredential
+      if (GuidUtils.isGuid(item.credentialId)) {
+        assertion = try createAssertionFromGuid(
+          item: item,
+          rpId: identity.relyingPartyIdentifier,
+          clientDataHash: request.clientDataHash
+        )
+      } else {
+        assertion = try createAssertionRaw(
+          item: item,
+          rpId: identity.relyingPartyIdentifier,
+          clientDataHash: request.clientDataHash
+        )
+      }
       
       extensionContext.completeAssertionRequest(
         using: assertion
@@ -417,11 +430,20 @@ extension CredentialProviderController {
     guard let requestParameters = passkeyContext?.requestParameters else { return  extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
     do {
-      let assertion = try createAssertionFromTempPasskey(
-        item: item,
-        rpId: requestParameters.relyingPartyIdentifier,
-        clientDataHash: requestParameters.clientDataHash
-      )
+      let assertion: ASPasskeyAssertionCredential
+      if (GuidUtils.isGuid(item.credentialId)) {
+        assertion = try createAssertionFromGuid(
+          item: item,
+          rpId: requestParameters.relyingPartyIdentifier,
+          clientDataHash: requestParameters.clientDataHash
+        )
+      } else {
+        assertion = try createAssertionRaw(
+          item: item,
+          rpId: requestParameters.relyingPartyIdentifier,
+          clientDataHash: requestParameters.clientDataHash
+        )
+      }
       
       extensionContext.completeAssertionRequest(
         using: assertion

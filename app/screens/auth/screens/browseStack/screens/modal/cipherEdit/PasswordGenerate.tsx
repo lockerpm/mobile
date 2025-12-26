@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
-import { useCipherHelper } from "app/services/hook"
-import { useCoreService } from "app/services/coreService"
-import { useStores } from "app/models"
+import Slider from "@react-native-community/slider"
+import { useSharedValue } from "react-native-reanimated"
+import { ReText } from "react-native-redash"
+
 import {
   BottomModalContainer,
   BottomModalHeader,
@@ -11,14 +12,15 @@ import {
   Text,
 } from "app/components/cores"
 import { PasswordStrength } from "app/components/utils"
+import { useStores } from "app/models"
+import { useCoreService } from "app/services/coreService"
+import { useCipherHelper } from "app/services/hook"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
-import Slider from "@react-native-community/slider"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { TxKeyPath, useAppLocale } from "@/i18n"
-import { useSharedValue } from "react-native-reanimated"
-import { ReText } from "react-native-redash"
 import { ThemedStyle } from "@/theme"
 import { AppEventType, EventBus } from "@/utils/eventBus"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type Props = {
   onClose: () => void

@@ -31,7 +31,7 @@
             android:layout_marginTop="4dp"
             android:background="@android:color/transparent"
             android:contentDescription="Close"
-            android:src="@drawable/_expodevclientcomponents_assets_xicon" />
+            android:src="@drawable/x_close" />
 
         <TextView
             android:id="@+id/carrier"

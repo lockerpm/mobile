@@ -1,19 +1,22 @@
 import { useState, FC, useCallback, useRef, useEffect } from "react"
-import { MAX_CIPHER_SELECTION } from "app/static/constants"
-import { Screen } from "app/components/cores"
-import { HomeHeader } from "./HomeHeader"
-import { observer } from "mobx-react-lite"
-import { HomeSlider } from "./sliderBar/HomeSlider"
-import { HomeEmpty } from "./HomeEmpty"
-import { TabsScreenProps } from "app/navigators"
-import { useFetchMarketingContent } from "./useFetchMarketingContent"
-import { useHomeBackHandler } from "./useHomeBackHandler"
-import { CipherList, SortActionConfigModal, SortConfigType } from "app/components/ciphers"
 import { StyleSheet } from "react-native"
-import { CipherType } from "core/enums"
+import { observer } from "mobx-react-lite"
+
+import { CipherList, SortActionConfigModal, SortConfigType } from "app/components/ciphers"
+import { Screen } from "app/components/cores"
+import { TabsScreenProps } from "app/navigators"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { AppNotification, CipherActionsModal, CipherAppView } from "app/static/types"
+import { CipherType } from "core/enums"
+
 import { useStores } from "@/models"
 import { AppEventType, EventBus } from "@/utils/eventBus"
+
+import { HomeEmpty } from "./HomeEmpty"
+import { HomeHeader } from "./HomeHeader"
+import { HomeSlider } from "./sliderBar/HomeSlider"
+import { useFetchMarketingContent } from "./useFetchMarketingContent"
+import { useHomeBackHandler } from "./useHomeBackHandler"
 
 const allCipherType = [
   CipherType.Card,

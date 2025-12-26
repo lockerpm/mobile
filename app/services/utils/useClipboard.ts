@@ -1,4 +1,5 @@
 import Clipboard from "@react-native-clipboard/clipboard"
+
 import { useToast } from "./useToast"
 
 export const useClipboard = () => {

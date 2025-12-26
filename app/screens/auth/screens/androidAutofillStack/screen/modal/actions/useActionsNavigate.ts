@@ -1,9 +1,10 @@
+import { useCallback } from "react"
+import { Platform } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+
 import { AuthScreenProps } from "@/navigators"
 import { CipherAppView } from "@/static/types"
 import { delay } from "@/utils/delay"
-import { useNavigation } from "@react-navigation/native"
-import { useCallback } from "react"
-import { Platform } from "react-native"
 
 export const useActionsNavigate = (item: CipherAppView, onClose: () => void) => {
   const navigation = useNavigation<AuthScreenProps<"cipherActionsModal">["navigation"]>()
