@@ -87,10 +87,9 @@ web-build/
 !env.js
 .env
 **/.env.*
-android/app/google-services.json
 android/gradle.properties
-ios/GoogleService-Info.plist
-
+**/GoogleService-Info.plist
+**/google-services.json
 
 /coverage
 
