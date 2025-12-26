@@ -27,7 +27,7 @@ export const useAttachmentActions = (
   const { cipherStore } = useStores()
   const { attachmentService } = useCoreService()
   const { notifyTx, notifyApiError } = useToast()
-  const { requestStoragePermission, hasAndroidGalleryPermission } = usePermission()
+  const { requestStoragePermission } = usePermission()
 
   const onDownloadAttachment = async () => {
     if (!attachment.key) return
@@ -85,7 +85,7 @@ export const useAttachmentActions = (
 
             try {
               await Share.open(options)
-            } catch (error) {
+            } catch (error: any) {
               if (error.message === "User did not share") {
                 // "User canceled sharing"
               } else {
@@ -98,16 +98,18 @@ export const useAttachmentActions = (
         }
       } else {
         try {
-          if (Platform.OS === "android" && !(await hasAndroidGalleryPermission())) {
+          if (Platform.OS === "android" && Platform.Version < 30) {
             return
           }
           await CameraRoll.saveAsset(filePath)
           notifyTx("success", "file_attachment:download_media_success")
         } catch (error) {
-          // console.error("Error saving media:", error)
+          console.error("Error saving media:", error)
         }
       }
     } catch (error) {
+      console.error("Error saving media:", error)
+
       notifyTx("error", "file_attachment:error.download_error")
     } finally {
       if (await RNFS.exists(tempEncFile)) {

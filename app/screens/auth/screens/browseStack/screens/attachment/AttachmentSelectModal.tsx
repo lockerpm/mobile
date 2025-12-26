@@ -1,12 +1,15 @@
 import { useCallback, useMemo } from "react"
-import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
 import { StyleSheet, View } from "react-native"
-import { Icon, IconTypes, PressableIcon, Text } from "app/components/cores"
-import { AttachmentType, usePickAttachment } from "./usePickAttachment"
 import { useNavigation } from "@react-navigation/native"
+
+import { Icon, IconTypes, PressableIcon, Text } from "app/components/cores"
+import { NewActionSheet, NewActionSheetItem } from "app/components/utils"
 import { BrowseScreenProps } from "app/navigators"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { useAppLocale } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { AttachmentType, usePickAttachment } from "./usePickAttachment"
 
 interface Props {
   isAddOpen: boolean

@@ -1,8 +1,4 @@
-import { Header, PressableScale, Screen, Text } from "app/components/cores"
 import { FC, useCallback, useState } from "react"
-import { AttachmentSelectIcon } from "./AttachmentSelectModal"
-import { observer } from "mobx-react-lite"
-import { useStores } from "app/models"
 import {
   FlatList,
   Image,
@@ -12,13 +8,20 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { Attachment } from "./item/Attachment"
-import { AttachmentType } from "./usePickAttachment"
-import { AttachmentView, CipherView } from "core/models/view"
-import { useCipherData } from "app/services/hook"
+import { observer } from "mobx-react-lite"
+
+import { Header, PressableScale, Screen, Text } from "app/components/cores"
+import { useStores } from "app/models"
 import { BrowseScreenProps } from "app/navigators"
+import { useCipherData } from "app/services/hook"
+import { AttachmentView, CipherView } from "core/models/view"
+
 import { useAppTheme } from "@/utils/useAppTheme"
+
+import { AttachmentSelectIcon } from "./AttachmentSelectModal"
+import { Attachment } from "./item/Attachment"
 import { FilePreview } from "./item/FilePreview"
+import { AttachmentType } from "./usePickAttachment"
 
 const EMPTY_IMAGE = require("assets/images/empty_attachment.png")
 
