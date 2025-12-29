@@ -144,6 +144,16 @@ public class PasswordUtils {
         return af.hasEnabledAutofillServices();
     }
 
+    public static boolean IsChromeInstalled(Context context) {
+        final String CHROME_PACKAGE = "com.android.chrome";
+        try {
+            context.getPackageManager().getPackageInfo(CHROME_PACKAGE, 0);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static boolean IsLockerAutofillServicesEnabledChrome(Context context) {
         final String CHROME_CHANNEL_PACKAGE = "com.android.chrome";  // Chrome Stable.
         final String CONTENT_PROVIDER_NAME = ".AutofillThirdPartyModeContentProvider";
@@ -178,7 +188,11 @@ public class PasswordUtils {
         return 0 != cursor.getInt(index);
     }
 
-    public static void openChromeDeepLinkSettings(Context context)  {
+    public static void openChromeDeepLinkSettings(Context context) throws Exception {
+        if (!IsChromeInstalled(context)) {
+            throw new Exception("Chrome is not installed on this device");
+        }
+        
         Intent autofillSettingsIntent = new Intent(Intent.ACTION_APPLICATION_PREFERENCES);
         autofillSettingsIntent.addCategory(Intent.CATEGORY_DEFAULT);
         autofillSettingsIntent.addCategory(Intent.CATEGORY_APP_BROWSER);

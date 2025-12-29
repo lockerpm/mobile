@@ -21,6 +21,7 @@ import {
   isDeviceAutofillServiceEnabled,
   isChromeAutofillServiceEnabled,
   openChromeAutofillSettings,
+  isChromeInstalled,
 } from "@/utils/autofill.android"
 import { useAppTheme } from "@/utils/useAppTheme"
 
@@ -38,6 +39,7 @@ export const AutofillServiceScreen: FC<SettingsScreenProps<"autofillService">> =
     // ---------------------- STATES ----------------------
     const [deviceEnabled, setDeviceEnabled] = useState(false)
     const [chromeEnabled, setChromeEnabled] = useState(false)
+    const [chromeAvailable, setChromeAvailable] = useState(false)
 
     const appState = useRef(AppState.currentState)
     const [appStateVisible, setAppStateVisible] = useState(appState.current)
@@ -51,8 +53,12 @@ export const AutofillServiceScreen: FC<SettingsScreenProps<"autofillService">> =
     const checkAutofillEnabled = async () => {
       const checkDevice = await isDeviceAutofillServiceEnabled()
       setDeviceEnabled(checkDevice)
-      const checkChrome = await isChromeAutofillServiceEnabled()
-      setChromeEnabled(checkChrome)
+      const checkChromeInstalled = await isChromeInstalled()
+      setChromeAvailable(checkChromeInstalled)
+      if (checkChromeInstalled) {
+        const checkChrome = await isChromeAutofillServiceEnabled()
+        setChromeEnabled(checkChrome)
+      }
     }
 
     useEffect(() => {
@@ -95,21 +101,23 @@ export const AutofillServiceScreen: FC<SettingsScreenProps<"autofillService">> =
           )}
         </MenuItemContainer>
 
-        <MenuItemContainer>
-          <SettingsItem
-            disabled={chromeEnabled && api < 26}
-            textTx={"autofill_service:android.android_autofill.chrome_name"}
-            onPress={openChromeAutofillSettings}
-            RightAccessory={<Switch value={chromeEnabled} onPress={openChromeAutofillSettings} />}
-          />
-          {!chromeEnabled && (
-            <TouchableOpacity onPress={openChromeAutofillSettings}>
-              <AutofillServiceRender
-                desc={translate("autofill_service:android.android_autofill.chrome_desc")}
-              />
-            </TouchableOpacity>
-          )}
-        </MenuItemContainer>
+        {chromeAvailable && (
+          <MenuItemContainer>
+            <SettingsItem
+              disabled={chromeEnabled && api < 26}
+              textTx={"autofill_service:android.android_autofill.chrome_name"}
+              onPress={openChromeAutofillSettings}
+              RightAccessory={<Switch value={chromeEnabled} onPress={openChromeAutofillSettings} />}
+            />
+            {!chromeEnabled && (
+              <TouchableOpacity onPress={openChromeAutofillSettings}>
+                <AutofillServiceRender
+                  desc={translate("autofill_service:android.android_autofill.chrome_desc")}
+                />
+              </TouchableOpacity>
+            )}
+          </MenuItemContainer>
+        )}
       </Screen>
     )
   }

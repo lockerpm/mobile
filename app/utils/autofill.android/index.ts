@@ -64,6 +64,10 @@ export const isChromeAutofillServiceEnabled = async () => {
   return RNAutofillServiceAndroid.isChromeAutofillServiceActived()
 }
 
+export const isChromeInstalled = async (): Promise<boolean> => {
+  return RNAutofillServiceAndroid.isChromeInstalled()
+}
+
 export const openChromeAutofillSettings = async () => {
   return RNAutofillServiceAndroid.openChromeAutofillSettings()
 }

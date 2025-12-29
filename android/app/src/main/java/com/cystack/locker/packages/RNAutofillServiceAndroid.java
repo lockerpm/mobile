@@ -164,6 +164,11 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void isChromeInstalled(Promise promise) {
+        promise.resolve(PasswordUtils.IsChromeInstalled(getReactApplicationContext()));
+    }
+
+    @ReactMethod
     public void openChromeAutofillSettings(Promise promise) {
         try {
             PasswordUtils.openChromeDeepLinkSettings(getReactApplicationContext());
