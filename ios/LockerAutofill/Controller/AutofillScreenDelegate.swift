@@ -7,17 +7,20 @@ enum CredentialActions {
   case fillPassword
   case fillPasskey
   case quickBarPassword
+  case quickBarOTP
   case quickBarPasskey
   case createPasskey
 }
 
 protocol AutofillScreenDelegate {
-  var quickBarCredential: AFPasswordItem! { get }
   var user: User { get }
   
   func unlockSuccess()
   func cancel()
 
+  //otp
+  func otpSelected(item: OTPItem)
+  
   // passkey
   func passkeySelected(data: PasskeyItem)
   func passkeyRegistration(id: String)

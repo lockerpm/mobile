@@ -76,3 +76,7 @@
 "pk_list.h" = "Danh sách passkey cho ";
 "pk_list.e_text" = "Không có passkey phù hợp cho ";
 "pk_list.e_action" = "Chọn tùy chọn khác";
+
+
+"otp.t" = "Mã OTP";
+"otp.e_text" = "Không có dữ liệu";

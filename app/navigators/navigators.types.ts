@@ -49,12 +49,18 @@ export type AppRoute = {
         temporaryLock?: boolean
         type: LockType.Individual
         fido2?: AndroidAppProps
+
+        // otpauth uri label from deeplink
+        label?: string
       }
     | {
         temporaryLock?: boolean
         type: LockType.OnPremise
         data: OnPremisePreloginData
         email: string
+
+        // otpauth uri label from deeplink
+        label?: string
       }
   unAuthStack: NavigatorScreenParams<UnAuthRoute>
   authStack: NavigatorScreenParams<AuthRoute> & {

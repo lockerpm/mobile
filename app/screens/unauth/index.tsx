@@ -1,4 +1,8 @@
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
+
+import { UnAuthRoute } from "app/navigators"
+
 import {
   ActivateAccountScreen,
   CreateMasterPasswordScreen,
@@ -9,8 +13,6 @@ import {
   SignupStack,
   SSOStack,
 } from "./screens"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { UnAuthRoute } from "app/navigators"
 
 const Stack = createNativeStackNavigator<UnAuthRoute>()
 

@@ -7,6 +7,7 @@ class User {
   var mode: CredentialActions = .fillPassword
   var afPasswords: [AFPasswordItem] = []
   var afPasskeys: [PasskeyItem] = []
+  var afOTPs: [OTPItem] = []
   
   // support passkey
   var allowedCredentialIDs: [String] = []
@@ -62,6 +63,17 @@ class User {
     return nil
   }
   
+  func getOTPItemById(id: String?) -> OTPItem? {
+    getData(mode: .quickBarOTP)
+    if id == nil {
+      return nil
+    }
+    if let item = self.afOTPs.first(where: {$0.id == id}){
+      return item
+    }
+    return nil
+  }
+  
   func getPasskeyItemById(userName: String, rpId: String) -> PasskeyItem? {
     getData(mode: .quickBarPasskey)
     if let item = self.afPasskeys.first(where: {
@@ -77,8 +89,8 @@ class User {
     switch mode {
     case .fillText:
       print("fillText")
-    case .fillOtp:
-      print("fillOtp")
+    case .fillOtp, .quickBarOTP:
+      getOTPs()
     case .fillPasskey, .createPasskey, .quickBarPasskey:
       getPasswordsAndPasskeys()
     default:
@@ -112,5 +124,9 @@ class User {
                                       tmp: item)
       self.afPasswords.append(credential)
     }
+  }
+  
+  private func getOTPs() {
+    self.afOTPs = model.getOTPs()
   }
 }

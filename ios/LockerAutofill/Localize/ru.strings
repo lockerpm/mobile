@@ -82,3 +82,6 @@
 "pk_list.h" = "Список passkey для ";
 "pk_list.e_text" = "Нет подходящих passkey для ";
 "pk_list.e_action" = "Выбрать другой вариант";
+
+"otp.t" = "Коды OTP";
+"otp.e_text" = "Нет данных";

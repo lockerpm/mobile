@@ -38,6 +38,19 @@ struct QuickTypeBar {
     return credential
   }
   
+  @available(iOSApplicationExtension 18.0, *)
+  func otpCredentialIndentity(_ identifier: String, _ type: ASCredentialServiceIdentifier.IdentifierType = .domain, _ item: OTPItem) -> ASOneTimeCodeCredentialIdentity {
+    let credential = ASOneTimeCodeCredentialIdentity(
+      serviceIdentifier: ASCredentialServiceIdentifier(
+        identifier: identifier,
+        type: type),
+      label: item.name,
+      recordIdentifier: item.id
+    )
+    credential.rank = currentTimeInMilliSeconds()
+    return credential
+  }
+  
   
   func removeCredentialIdentities(_ credentialIdentities: ASPasswordCredentialIdentity){
     let store = ASCredentialIdentityStore.shared
@@ -67,6 +80,27 @@ struct QuickTypeBar {
       }
     }
   }
+  
+  @available(iOSApplicationExtension 18.0, *)
+  func removeOTPCredentialIdentities(_ otpIdentities: ASOneTimeCodeCredentialIdentity){
+    let store = ASCredentialIdentityStore.shared
+    store.getState { state in
+      if state.isEnabled {
+        ASCredentialIdentityStore.shared.removeCredentialIdentities([otpIdentities])
+      }
+    }
+  }
+  
+  @available(iOSApplicationExtension 18.0, *)
+  func replaceOTPCredentialIdentities(identifier: String, type: ASCredentialServiceIdentifier.IdentifierType,item: OTPItem) {
+    let store = ASCredentialIdentityStore.shared
+    store.getState { state in
+      if state.isEnabled {
+        ASCredentialIdentityStore.shared.saveCredentialIdentities([otpCredentialIndentity(identifier, type, item)])
+      }
+    }
+  }
+  
   
   func replaceCredentialIdentities(identifier: String, type: ASCredentialServiceIdentifier.IdentifierType, username: String, userID: String) {
     let store = ASCredentialIdentityStore.shared

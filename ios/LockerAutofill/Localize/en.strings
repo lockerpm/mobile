@@ -76,3 +76,7 @@
 "pk_list.e_text" = "No matching passkeys or passwords for ";
 "pk_list.e_action" = "Choose another option";
 
+// list otp
+"otp.t" = "OTP codes";
+"otp.e_text" = "No Data";
+

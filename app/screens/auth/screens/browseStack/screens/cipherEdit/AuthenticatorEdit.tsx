@@ -62,6 +62,14 @@ export const AuthenticatorEdit = observer(({ navigation, item, mode, initOtpUri 
   const [secretKey, setSecretKey] = useState(payload?.secret || "")
 
   // ---------------------- METHODS -----------------------
+
+  const handleGoBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack()
+    } else {
+      navigation.replace("mainTab", { screen: "authenticatorTab" })
+    }
+  }
   const handleSave = async () => {
     try {
       const otp = await getTOTP({ secret: secretKey })
@@ -96,7 +104,7 @@ export const AuthenticatorEdit = observer(({ navigation, item, mode, initOtpUri 
     setIsLoading(false)
     if (res.kind === "ok") {
       logFirebaseEvent(AnalyticEvents.ADD_OTP, user.email)
-      navigation.goBack()
+      handleGoBack()
     }
   }
 
@@ -109,7 +117,7 @@ export const AuthenticatorEdit = observer(({ navigation, item, mode, initOtpUri 
       header={
         <Header
           titleTx={mode === "add" ? "authenticator:enter_key" : "common:edit"}
-          onLeftPress={navigation.goBack}
+          onLeftPress={handleGoBack}
           leftTx={"common:cancel"}
           rightTx="common:save"
           rightIconColor={colors.primary}

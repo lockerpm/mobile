@@ -76,3 +76,5 @@
 "pk_list.e_text" = "没有与之匹配的通行密钥：";
 "pk_list.e_action" = "选择其他选项";
 
+"otp.t" = "OTP 验证码";
+"otp.e_text" = "无数据";

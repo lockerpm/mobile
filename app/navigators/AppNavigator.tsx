@@ -24,6 +24,7 @@ import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { AppRoute } from "./navigators.types"
 import { useMonitorApiResponse } from "./useMonitorApiResponse"
+import { useLiveOtpAuthDeeplinkHandler } from "./useOtpAuthDeeplinkHandler"
 
 const exitRoutes = Config.exitRoutes
 
@@ -65,6 +66,7 @@ const AppStack = observer(function AppStack(props: AppProps) {
   const { uiStore } = useStores()
 
   // ------------------- EFFECTS -------------------
+  useLiveOtpAuthDeeplinkHandler()
 
   useEffect(() => {
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {

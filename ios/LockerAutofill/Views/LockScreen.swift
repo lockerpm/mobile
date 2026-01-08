@@ -5,7 +5,7 @@ struct LockScreen<TargetView: View>: View {
   var userInfo: UserInfo
   var target: TargetView
   
-  @State private var masterPassword: String = ""
+  @State private var masterPassword: String = "demo@123"
   @State private var isShowTarget = false
   
   var body: some View {
@@ -82,7 +82,7 @@ struct LockScreen<TargetView: View>: View {
   
   private func authenSuccess() {
     let mode = afd.user.mode
-    if (mode != .quickBarPassword && mode != .quickBarPasskey) {
+    if (mode != .quickBarPassword && mode != .quickBarPasskey && mode != .quickBarOTP) {
       self.isShowTarget = true
     } else {
       afd.unlockSuccess()

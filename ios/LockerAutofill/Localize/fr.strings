@@ -75,3 +75,7 @@
 "pk_list.h" = "Liste des clés d’accès pour ";
 "pk_list.e_text" = "Aucune clé d’accès correspondante pour ";
 "pk_list.e_action" = "Choisir une autre option";
+
+
+"otp.t" = "Codes OTP";
+"otp.e_text" = "Aucune donnée";
