@@ -17,7 +17,7 @@
 				<key>ProvidesPasswords</key>
 				<true/>
 				<key>ProvidesTextToInsert</key>
-				<false/>
+				<true/>
 				<key>SupportsConditionalPasskeyRegistration</key>
 				<false/>
 			</dict>

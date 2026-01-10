@@ -88,7 +88,7 @@ class User {
     self.mode = mode
     switch mode {
     case .fillText:
-      print("fillText")
+      getFillText()
     case .fillOtp, .quickBarOTP:
       getOTPs()
     case .fillPasskey, .createPasskey, .quickBarPasskey:
@@ -96,6 +96,11 @@ class User {
     default:
       getPasswords()
     }
+  }
+  
+  private func getFillText() {
+    getOTPs()
+    getPasswords()
   }
   
   private func getPasswordsAndPasskeys() {

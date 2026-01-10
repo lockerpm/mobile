@@ -14,6 +14,7 @@
 
 // CredentialsListScreen
 "list.title" = "Liste de connexion";
+"list.goToOtp" = "Remplissage automatique de l’OTP";
 "list.noDataSearch" = "Oups ! Il semble qu'il n'y ait aucune correspondance de données.";
 "list.suggestSearch" = "Vous pouvez rechercher par le(s) texte(s) suivant(s)";
 

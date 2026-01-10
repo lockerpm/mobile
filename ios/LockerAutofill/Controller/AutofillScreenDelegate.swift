@@ -18,8 +18,11 @@ protocol AutofillScreenDelegate {
   func unlockSuccess()
   func cancel()
 
-  //otp
-  func otpSelected(item: OTPItem)
+  // text
+  func textSelected(data: String)
+  
+  // otp
+  func otpSelected(data: OTPItem)
   
   // passkey
   func passkeySelected(data: PasskeyItem)
@@ -28,5 +31,5 @@ protocol AutofillScreenDelegate {
   // Generated strong password
   func passwordSelected(password: String)
   func passwordSelected(data: AFPasswordItem)
-  func createPasswordItem(item: TempPasswordItem)
+  func createPasswordItem(data: TempPasswordItem)
 }

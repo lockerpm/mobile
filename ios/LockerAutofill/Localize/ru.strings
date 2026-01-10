@@ -21,6 +21,7 @@
 
 // CredentialsListScreen
 "list.title" = "Список паролей";
+"list.goToOtp" = "Автозаполнение OTP";
 "list.noDataSearch" = "Упс! Похоже, что сопоставление данных не найдено. ";
 "list.suggestSearch" = "Вы можете выполнить поиск по следующему тексту";
 

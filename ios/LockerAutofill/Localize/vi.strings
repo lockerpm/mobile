@@ -15,6 +15,7 @@
 
 // CredentialsListScreen
 "list.title" = "Danh sách mật khẩu";
+"list.goToOtp" = "Mã OTP";
 "list.noDataSearch" = "Oops! Không tìm thấy dữ liệu phù hợp ";
 "list.suggestSearch" = "Tìm kiếm theo: ";
 

@@ -108,7 +108,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   
-  
   /**
    Implement this method if your extension supports showing credentials in the QuickType bar.
    When the user selects a credential from your app, this method will be called with the
@@ -272,7 +271,7 @@ extension CredentialProviderController {
   @ViewBuilder
   private func getTargetViewAfterUnlock() -> some View {
     switch user.mode {
-    case .fillPassword:
+    case .fillPassword, .fillText:
       PasswordsListScreen(afd: self, userInfo: user.info)
     case .fillOtp:
       OTPsListScreen(afd: self, userInfo: user.info)
@@ -325,7 +324,7 @@ extension CredentialProviderController: AutofillScreenDelegate {
     
     if #available(iOSApplicationExtension 18.0, *) {
       if (user.mode == CredentialActions.quickBarOTP) {
-        otpSelected(item: self.quickBarOTP)
+        otpSelected(data: self.quickBarOTP)
         return
       }
     }
@@ -337,20 +336,36 @@ extension CredentialProviderController: AutofillScreenDelegate {
   func passwordSelected(password: String) {
     fillPassword(user: "", password: password, otp: "")
   }
-  func createPasswordItem(item: TempPasswordItem) {
-    user.saveTempPassword(item)
-    fillPassword(user: item.username, password: item.password, otp: "")
+  func createPasswordItem(data: TempPasswordItem) {
+    user.saveTempPassword(data)
+    
+    if (user.mode == .fillText) {
+      if #available(iOS 18.0, *) {
+        fillText(text: data.password)
+      }
+    } else {
+      fillPassword(user: data.username, password: data.password, otp: "")
+    }
   }
   func passwordSelected(data: AFPasswordItem) {
     quickTypeBar.replaceCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, username: data.login.username, userID: data.login.id)
     fillPassword(user: data.login.username, password: data.login.password, otp: data.login.otp)
   }
   
-  // OTP
-  func otpSelected(item: OTPItem) {
+  // text
+  func textSelected(data: String) {
     if #available(iOSApplicationExtension 18.0, *) {
-      quickTypeBar.replaceOTPCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, item: item)
-      fillOtp(otpUri: item.otp)
+      fillText(text: data)
+    } else {
+      cancel()
+    }
+  }
+  
+  // OTP
+  func otpSelected(data: OTPItem) {
+    if #available(iOSApplicationExtension 18.0, *) {
+      quickTypeBar.replaceOTPCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, item: data)
+      fillOtp(otpUri: data.otp)
     } else {
       cancel()
     }
@@ -372,6 +387,14 @@ extension CredentialProviderController: AutofillScreenDelegate {
     } else {
       cancel()
     }
+  }
+}
+
+// MARK: text
+extension CredentialProviderController {
+  @available(iOSApplicationExtension 18.0, *)
+  private func fillText(text: String){
+    self.extensionContext.completeRequest(withTextToInsert: text, completionHandler: nil)
   }
 }
 

@@ -15,9 +15,16 @@ struct PasswordsListScreen: View {
   @State private var isShowItemDetailId = -1
   
   @State private var isShowCreatePassword = false
+  @State private var isShowOtpListScreen = false
   @State private var isShowPasswordGenerator = 0
   @State private var isInitSearch = false
   
+  
+  var allPasswords: [AFPasswordItem] {
+    return afd.user.mode == .fillText ? afd.user.afPasswords.filter {
+      !$0.login.password.isEmpty
+    } : afd.user.afPasswords
+  }
   // if user search for domain or url with no result. show suggest search text for best resutl
   var suggestSearchs: [String] {
     parseDomain(of: afd.user.URI)
@@ -33,10 +40,10 @@ struct PasswordsListScreen: View {
   
   var passwords: [AFPasswordItem] {
     if searchText.isEmpty {
-      return afd.user.afPasswords
+      return allPasswords
     } else {
       let search = searchText.lowercased()
-      return afd.user.afPasswords.filter {
+      return allPasswords.filter {
         $0.login.name.lowercased().contains(search)
         || $0.login.uri.lowercased().contains(search)
         || $0.login.username.lowercased().contains(search)
@@ -47,6 +54,24 @@ struct PasswordsListScreen: View {
   var body: some View {
     NavigationView{
       List {
+        if (afd.user.mode == .fillText && afd.user.afOTPs.count > 0) {
+          Section {
+            NavigationLink(
+              destination:  OTPsListScreen(
+                afd: afd,
+                userInfo: userInfo
+              ),
+              isActive: $isShowOtpListScreen
+            ) {
+              Button {
+                isShowOtpListScreen = true
+              } label: {
+                Text(i.translate("list.goToOtp"))
+              }
+            }
+          }
+        }
+        
         if !searchText.isEmpty && passwords.isEmpty {
           Text(i.translate("list.noDataSearch") +  "'\(searchText)'")
             .foregroundStyle(AppColors.label)
@@ -64,7 +89,7 @@ struct PasswordsListScreen: View {
         } else {
           ForEach(passwords, id: \.login.id) { pw in
             Button {
-              afd.passwordSelected(data: pw)
+              onClickPassword(data: pw)
             } label: {
               PasswordItemView(item: pw, isShowDetailId: $isShowItemDetailId)
             }
@@ -144,6 +169,15 @@ struct PasswordsListScreen: View {
       })
     }
     .background(AppColors.background)
+  }
+  
+  
+  func onClickPassword(data: AFPasswordItem) {
+    if (afd.user.mode == .fillText) {
+      afd.textSelected(data: data.login.password)
+    } else {
+      afd.passwordSelected(data: data)
+    }
   }
 }
 

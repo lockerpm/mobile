@@ -91,7 +91,7 @@ struct OTPsListScreen: View {
           } else {
             ForEach(otps, id: \.id) { code in
               Button {
-                afd.otpSelected(item: code)
+                onClickOtp(data: code)
               } label: {
                 if #available(iOS 17.0, *) {
                   OtpItemView(item: code, globalRemaining: firstOTPRemaining)
@@ -161,6 +161,14 @@ struct OTPsListScreen: View {
     .background(AppColors.background)
   }
   
+  func onClickOtp(data: OTPItem) {
+    if (afd.user.mode == .fillText) {
+      let otpCode = otpService.getOTPFromUri(uri: data.otp).generate(time: Date()) ?? ""
+      afd.textSelected(data: otpCode)
+    } else {
+      afd.otpSelected(data: data)
+    }
+  }
   
   // Helper to compute remaining for a given period
   private func computeRemaining(for period: Int, now: Date = Date()) -> Int {
