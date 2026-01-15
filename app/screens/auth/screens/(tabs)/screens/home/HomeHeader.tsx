@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react"
 import { View, StyleSheet } from "react-native"
-import { Logo, PressableIcon } from "app/components/cores"
-import { AppNotification } from "app/static/types"
-import { useStores } from "app/models"
-import { useToast } from "app/services/utils"
 import Animated, {
   FadeInDown,
   FadeOutDown,
@@ -11,7 +7,13 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated"
+
 import { CipherListSelectionHeader } from "app/components/ciphers"
+import { Logo, PressableIcon } from "app/components/cores"
+import { useStores } from "app/models"
+import { useToast } from "app/services/utils"
+import { AppNotification } from "app/static/types"
+
 import { useAppTheme } from "@/utils/useAppTheme"
 
 interface Props {
@@ -95,7 +97,7 @@ export const HomeHeader = (props: Props) => {
         <Animated.View entering={FadeInUp} exiting={FadeOutUp} style={styles.container}>
           <Logo preset={isDark ? "horizontal-light" : "horizontal-dark"} style={styles.logo} />
           <View style={styles.rowContainer}>
-            {!!notifications && (
+            {/* {!!notifications && (
               <View>
                 {unreadCount > 0 && (
                   <View
@@ -113,7 +115,7 @@ export const HomeHeader = (props: Props) => {
                   containerStyle={styles.iconContainer}
                 />
               </View>
-            )}
+            )} */}
 
             <PressableIcon
               icon="sliders-horizontal"

@@ -1,5 +1,6 @@
 import { Instance, SnapshotIn, SnapshotOut, cast, types } from "mobx-state-tree"
-import { withSetPropAction } from "../helpers/withSetPropAction"
+
+import { cipherApi } from "app/services/api/cipherApi"
 import {
   ConfirmShareCipherData,
   EditShareCipherData,
@@ -14,12 +15,14 @@ import {
   SharingStatus,
   StopShareCipherData,
 } from "app/static/types"
-import { CipherView } from "core/models/view/cipherView"
 import { Organization } from "core/models/domain/organization"
-import { cipherApi } from "app/services/api/cipherApi"
 import { CipherRequest } from "core/models/request/cipherRequest"
 import { SendRequest } from "core/models/request/sendRequest"
+import { CipherView } from "core/models/view/cipherView"
+
 import Config from "@/config"
+
+import { withSetPropAction } from "../helpers/withSetPropAction"
 
 /**
  * Model description here for TypeScript hints.

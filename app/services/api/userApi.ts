@@ -816,12 +816,6 @@ class UserApi {
           transaction_id: purchaseIos.transactionId,
           original_transaction_id: purchaseIos.originalTransactionIdentifierIOS,
         })
-
-        console.log("purchaseValidationV2 response", token, {
-          scope: "pwdmanager",
-          transaction_id: purchaseIos.transactionId,
-          original_transaction_id: purchaseIos.originalTransactionIdentifierIOS,
-        })
       } else {
         const purchaseAndroid = purchase as PurchaseAndroid
         response = await this.api.apisauce.post("/v3/payments/webhook/android_v2/validate", {

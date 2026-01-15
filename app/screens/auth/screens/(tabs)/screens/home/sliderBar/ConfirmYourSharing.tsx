@@ -12,7 +12,7 @@ interface Props {
   style: StyleProp<ViewStyle>
 }
 
-export const SuggestEnableAutofill = observer(({ onClose, style }: Props) => {
+export const ConfirmYourSharing = observer(({ onClose, style }: Props) => {
   const navigation = useNavigation<TabsScreenProps<"homeTab">["navigation"]>()
   const {
     theme: { colors },
@@ -20,19 +20,19 @@ export const SuggestEnableAutofill = observer(({ onClose, style }: Props) => {
 
   return (
     <View style={style}>
-      <Icon icon="keyboard" size={32} />
+      <Icon icon="share-network" size={32} />
       <View style={styles.content}>
-        <Text tx={"all_items:enable_autofill.content"} />
+        <Text tx={"shares:confirm_share.noti_label"} size="xs" />
         <PressableText
           preset="bold"
-          tx={"all_items:enable_autofill.btn"}
+          tx={"shares:confirm_share.noti_btn"}
           color={colors.link}
           style={styles.label}
           onPress={() => {
-            navigation.navigate("menuStack", {
-              screen: "settingsStack",
+            navigation.navigate("browseStack", {
+              screen: "shareStack",
               params: {
-                screen: "autofillService",
+                screen: "yourShareCipherList",
               },
             })
           }}

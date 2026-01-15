@@ -748,10 +748,11 @@ const zh: Translations = {
     share_x_items: "共享 {{count}} 個項目",
     share_x_item: "共享 {{count}} 個項目",
     confirm_share: {
-      verify_fingerprint: "驗證指紋短語",
-      verification_desc: "為了確保您的加密金鑰的完整性，請在繼續之前驗證使用者指紋短語。",
-      fingerprint_desc:
-        "指紋短語是一個獨特的詞彙（類似於密碼），使用者可以使用它來向另一位使用者驗證他們的公鑰，以進行共享。",
+      title: "确认共享",
+      des: "您已将该项目共享给刚刚注册 Locker 帐户并创建了自己密钥的电子邮箱。请再次确认共享，以便使用他们的密钥对该项目进行加密，从而允许他们访问。",
+      list: "新的 Locker 用户列表：",
+      noti_label: "某些项目/文件夹已与新注册的用户共享，需要您再次确认。",
+      noti_btn: "查看共享项目 →",
     },
     suggestion: "企業中的使用者或群組",
     confirm: "一名使用者已透過您的分享請求註冊了一個 Locker 帳戶。請確認您的分享請求",

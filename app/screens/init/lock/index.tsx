@@ -47,8 +47,6 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     const isAndroidService = isAndroidAutofillService(fido2)
     // ---------------------- METHODS -------------------------
 
-    console.log("LockScreen otpauthLabel:", otpauthLabel)
-
     const fetchLockType = async () => {
       if (params.type === LockType.Individual) {
         const res = await user.businessLoginMethod()

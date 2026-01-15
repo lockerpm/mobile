@@ -181,6 +181,7 @@ export const iconRegistry = {
   warning: require("assets/icons/warning.png"),
   "file-arrow-up": require("assets/icons/file-arrow-up.png"),
   repeat: require("assets/icons/repeat.png"),
+  "share-network": require("assets/icons/share-network.png"),
   "plus-circle": require("assets/icons/plus-circle.png"),
   "minus-circle": require("assets/icons/minus-circle.png"),
 

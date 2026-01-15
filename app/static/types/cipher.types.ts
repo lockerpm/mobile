@@ -13,7 +13,6 @@ import {
   LoginView,
   SecureNoteView,
 } from "core/models/view"
-import { Fido2CredentialView } from "core/models/view/fido2CredentialView"
 import { PasswordHistoryView } from "core/models/view/passwordHistoryView"
 
 import { AccountRoleText, SharingStatus, SharingType } from "./enum"
@@ -97,7 +96,7 @@ export type ShareCipherData = {
 export type ShareMultipleCiphersMembers = {
   username: string
   role: AccountRoleText
-  key: string
+  key: string | null
   hide_passwords: boolean
 }[]
 
@@ -106,7 +105,7 @@ export type ShareMultipleCiphersGroups = {
   role: string
   members: {
     username: string
-    key: string
+    key: string | null
   }[]
 }[]
 
@@ -218,8 +217,8 @@ export type CipherAppView = {
 export type CipherShareType = CipherAppView & {
   description: string
   status?: string
-  member?: SharedMemberType
-  group?: SharedGroupType
+  members?: SharedMemberType[]
+  groups?: SharedGroupType[]
 }
 
 export type SharedWithYouType = CipherAppView & {

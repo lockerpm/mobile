@@ -1,16 +1,19 @@
 import { FC, useCallback } from "react"
-import { observer } from "mobx-react-lite"
-import { useStores } from "app/models"
 import { StyleSheet } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { Header, Screen } from "app/components/cores"
+import { useStores } from "app/models"
 import { ShareScreenProps } from "app/navigators"
 import {
   CipherActionsModal,
   CipherAppView,
   CipherShareType,
   FolderActionsModal,
+  SharingStatus,
 } from "app/static/types"
 import { CollectionView } from "core/models/view/collectionView"
+
 import { YourShareCipherList } from "./YourShareCipherList"
 
 export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = observer(
@@ -44,9 +47,9 @@ export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = obse
     }, [])
 
     const navigateToShareConfirmModal = useCallback((item: CipherShareType) => {
-      if (!!item.member && item.organizationId) {
+      if (!!item.members && item.organizationId) {
         navigation.navigate("confirmYourShareModal", {
-          member: item.member,
+          members: item.members.filter((m) => m.status === SharingStatus.ACCEPTED),
           organizationId: item.organizationId,
         })
       }
@@ -84,8 +87,6 @@ export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = obse
             leftIcon="arrow-left"
             onLeftPress={navigation.goBack}
             titleTx="shares:share_items"
-            // rightIcon="plus"
-            // onRightPress={navigateToAddShareItem}
           />
         }
         contentContainerStyle={styles.flex}

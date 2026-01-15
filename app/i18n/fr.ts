@@ -746,11 +746,9 @@ const fr: Translations = {
     share_x_items: "Partager les {{count}} éléments",
     share_x_item: "Partager {{count}} élément",
     confirm_share: {
-      verify_fingerprint: "Vérifier la phrase d’empreinte digitale",
-      verification_desc:
-        "Pour assurer l’intégrité de vos clés de chiffrement, veuillez vérifier la phrase d'empreinte digitale de l'utilisateur avant de continuer.",
-      fingerprint_desc:
-        "Une « phrase d’empreinte digitale » est une phrase de mots unique (similaire à une phrase secrète) qu’un utilisateur peut utiliser pour authentifier sa clé publique avec un autre utilisateur, à des fins de partage.",
+      title: "Confirmer le partage",
+      des: "Vous avez partagé l’élément avec l’adresse e-mail qui vient de créer un compte Locker et de générer ses propres clés. Veuillez confirmer à nouveau le partage afin que leurs clés puissent être utilisées pour chiffrer l’élément et leur permettre d’y accéder.",
+      list: "Liste des nouveaux utilisateurs Locker : ",
     },
     suggestion: "Utilisateurs ou groupes en entreprise",
     confirm:

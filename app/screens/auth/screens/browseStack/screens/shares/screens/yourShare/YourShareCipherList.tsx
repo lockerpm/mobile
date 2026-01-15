@@ -1,19 +1,23 @@
 import { useState, useEffect } from "react"
 import { View, SectionList, StyleSheet, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { useCipherData } from "app/services/hook"
+import { TOptions } from "node_modules/i18next/typescript/options"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+
+import { CollectionItem, EmptyCipherList } from "app/components/ciphers"
 import { useStores } from "app/models"
-import { CollectionView } from "core/models/view/collectionView"
+import { useCipherData } from "app/services/hook"
 import { AccountRole, CipherAppView, CipherShareType } from "app/static/types"
+import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
 import { Organization } from "core/models/domain/organization"
 import { CipherView } from "core/models/view"
-import { CollectionItem, EmptyCipherList } from "app/components/ciphers"
-import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { YourShareCipherItem } from "./YourShareCipherItem"
-import { useAppLocale } from "@/i18n"
+import { CollectionView } from "core/models/view/collectionView"
+
+import { TxKeyPath, useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
+
+import { YourShareCipherItem } from "./YourShareCipherItem"
 
 type Props = {
   openAdd: () => void
@@ -21,6 +25,11 @@ type Props = {
   openCipherAction: (item: CipherAppView) => void
   openCollectionCiphers: (collectionId: string, orgId: string, name: string) => void
   openShowConfirmModal: (item: CipherShareType) => void
+}
+
+enum SectionType {
+  CIPHER = 1,
+  COLLECTION = 2,
 }
 
 const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")
@@ -53,7 +62,9 @@ export const YourShareCipherList = observer(
       const isOwner = shareRole === AccountRole.OWNER
       return isOwner
     })
-    const sharesCiphers = ciphers.filter((c) => !c.collectionIds?.length)
+    const sharesCiphers = ciphers
+      .filter((c) => !c.collectionIds?.length)
+      .sort((a, b) => b.revisionDate!.getTime() - a.revisionDate!.getTime())
 
     // ------------------------ METHODS ----------------------------
 
@@ -94,15 +105,12 @@ export const YourShareCipherList = observer(
         deleted: false,
       })
       const res: CipherShareType[] = []
-
       // Add image + share info
       searchRes.forEach((c: CipherView) => {
         const data: CipherShareType = {
           ...c,
           imgLogo: getCipherLogo(c),
-          notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-            c.id
-          ),
+          notSync: false,
           isDeleted: c.isDeleted,
           description: "",
         }
@@ -112,46 +120,31 @@ export const YourShareCipherList = observer(
         if (share) {
           const ml = share.members.length
           const gl = share.groups.length
-          if (ml > 0 && gl > 0) {
-            data.description =
-              translate("shares:shared_with") +
-              ` ${ml} ` +
-              translate(ml > 1 ? "shares:users" : "shares:user") +
-              ` - ${gl} ` +
-              translate(gl > 1 ? "shares:groups" : "shares:group")
-          } else if (ml > 0) {
-            data.description =
-              translate("shares:shared_with") +
-              ` ${ml} ` +
-              translate(ml > 1 ? "shares:users" : "shares:user")
-          } else if (gl > 0) {
-            data.description =
-              translate("shares:shared_with") +
-              ` ${gl} ` +
-              translate(gl > 1 ? "shares:groups" : "shares:group")
-          }
+          data.description = getShareDescription(translate, ml, gl)
+          data.members = share.members
+          data.groups = share.groups
         }
         res.push(data)
       })
       // Done
-      setCiphers(res)
+      setCiphers(res.sort((a, b) => a.revisionDate!.getTime() - b.revisionDate!.getTime()))
     }
 
     // ------------------------ EFFECTS ----------------------------
 
     useEffect(() => {
       loadData()
-    }, [cipherStore.lastSync, cipherStore.lastCacheUpdate, cipherStore.myShares])
+    }, [cipherStore.lastSync, cipherStore.lastCacheUpdate, myShares, organizations])
 
     // ------------------------ RENDER ----------------------------
     const DATA = [
       {
-        type: 2,
-        data: sharesCollection,
+        type: SectionType.CIPHER,
+        data: sharesCiphers,
       },
       {
-        type: 1,
-        data: sharesCiphers,
+        type: SectionType.COLLECTION,
+        data: sharesCollection,
       },
     ]
 
@@ -163,14 +156,14 @@ export const YourShareCipherList = observer(
           keyExtractor={(_, index) => String(index)}
           renderItem={({ item, section }) => (
             <View>
-              {section.type === 1 && (
+              {section.type === SectionType.CIPHER && (
                 <YourShareCipherItem
                   item={item}
                   openAction={openCipherAction}
                   openConfirmModal={openShowConfirmModal}
                 />
               )}
-              {section.type === 2 && (
+              {section.type === SectionType.COLLECTION && (
                 <CollectionItem
                   isYourSharedScreen
                   item={item}
@@ -196,6 +189,35 @@ export const YourShareCipherList = observer(
     )
   }
 )
+
+const getShareDescription = (
+  translate: (tx: TxKeyPath, options?: TOptions | undefined) => string,
+  ml: number,
+  gl: number
+) => {
+  if (ml > 0 && gl > 0) {
+    return (
+      translate("shares:shared_with") +
+      ` ${ml} ` +
+      translate(ml > 1 ? "shares:users" : "shares:user") +
+      ` - ${gl} ` +
+      translate(gl > 1 ? "shares:groups" : "shares:group")
+    )
+  } else if (ml > 0) {
+    return (
+      translate("shares:shared_with") +
+      ` ${ml} ` +
+      translate(ml > 1 ? "shares:users" : "shares:user")
+    )
+  } else if (gl > 0) {
+    return (
+      translate("shares:shared_with") +
+      ` ${gl} ` +
+      translate(gl > 1 ? "shares:groups" : "shares:group")
+    )
+  }
+  return ""
+}
 
 const $divider: ThemedStyle<ViewStyle> = ({ colors }) => ({
   height: 1,

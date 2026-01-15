@@ -1,5 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
+
+import { modalScreenOptions, ShareRoute } from "@/navigators"
+
 import {
   SharedWithYouScreen,
   SharesHomeScreen,
@@ -19,7 +22,6 @@ import {
   ManageFolderShareMemberModalScreen,
   EditShareMemberPermissionModalScreen,
 } from "./screens"
-import { modalScreenOptions, ShareRoute } from "@/navigators"
 
 const Stack = createNativeStackNavigator<ShareRoute>()
 

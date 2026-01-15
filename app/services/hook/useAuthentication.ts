@@ -630,7 +630,6 @@ export function useAuthentication() {
   // Clear all data
   const clearAllData = async (dataOnly?: boolean) => {
     try {
-      // console.log("Clear all data called")
       cipherStore.clearStore(dataOnly)
       collectionStore.clearStore(dataOnly)
       folderStore.clearStore(dataOnly)

@@ -1,3 +1,7 @@
+import { EncString, SymmetricCryptoKey } from "core/models/domain"
+import { CipherRequest } from "core/models/request"
+import { CipherView } from "core/models/view"
+
 import { useStores } from "@/models"
 import { useCoreService } from "@/services/coreService"
 import { useToast } from "@/services/utils"
@@ -11,9 +15,6 @@ import {
 import { AnalyticEvents, logFirebaseEvent } from "@/utils/analytics"
 import { Base64 } from "@/utils/base64"
 import { Logger } from "@/utils/logger"
-import { EncString, SymmetricCryptoKey } from "core/models/domain"
-import { CipherRequest } from "core/models/request"
-import { CipherView } from "core/models/view"
 
 export const useShareMultipleCiphers = () => {
   const { cipherStore, user, enterpriseStore } = useStores()
@@ -35,7 +36,7 @@ export const useShareMultipleCiphers = () => {
       username: string
       role: AccountRoleText
       hide_passwords: boolean
-      key: string
+      key: string | null
     }[]
   ) => {
     return await Promise.all(
@@ -44,7 +45,7 @@ export const useShareMultipleCiphers = () => {
           username: m.email,
           role: m.role,
           hide_passwords: autofillOnly,
-          key: m.publicKey ? (await generateMemberKey(m.publicKey, orgKey)) || "" : "",
+          key: m.publicKey ? (await generateMemberKey(m.publicKey, orgKey)) || null : null,
         }
       })
     )
@@ -73,8 +74,8 @@ export const useShareMultipleCiphers = () => {
               return {
                 username: member.email,
                 key: member.public_key
-                  ? (await generateMemberKey(member.public_key, orgKey)) || ""
-                  : "",
+                  ? (await generateMemberKey(member.public_key, orgKey)) || null
+                  : null,
               }
             })
         )
@@ -122,7 +123,7 @@ export const useShareMultipleCiphers = () => {
             username: e.email,
             role: e.role,
             hide_passwords: autofillOnly,
-            key: publicKey ? (await generateMemberKey(publicKey, orgKey)) || "" : "",
+            key: publicKey ? (await generateMemberKey(publicKey, orgKey)) || null : null,
           }
         })
       )

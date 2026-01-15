@@ -275,7 +275,7 @@ export type TabsScreenProps<T extends keyof TabsRoute> = CompositeScreenProps<
 export type ShareRoute = {
   confirmYourShareModal: {
     organizationId: string
-    member: SharedMemberType
+    members: SharedMemberType[]
   }
   pendingSharedCipherModal: {
     cipher: SharedWithYouType
