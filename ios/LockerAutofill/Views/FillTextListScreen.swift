@@ -7,34 +7,20 @@
 
 import SwiftUI
 
-struct PasswordsListScreen: View {
+struct FillTextListScreen: View {
   var afd: AutofillScreenDelegate // autofill delegate
   var userInfo: UserInfo
   
   @State private var searchText = ""
   @State private var isShowItemDetailId = -1
-  
-  @State private var isShowCreatePassword = false
-  @State private var isShowPasswordGenerator = 0
-  @State private var isInitSearch = false
+
+  @State private var isShowOtpListScreen = false
   
   
   var allPasswords: [AFPasswordItem] {
     return afd.user.mode == .fillText ? afd.user.afPasswords.filter {
       !$0.login.password.isEmpty
     } : afd.user.afPasswords
-  }
-  // if user search for domain or url with no result. show suggest search text for best resutl
-  var suggestSearchs: [String] {
-    parseDomain(of: afd.user.URI)
-  }
-  
-  var initSearch: String {
-    if suggestSearchs.isEmpty {
-      return ""
-    } else {
-      return suggestSearchs[0]
-    }
   }
   
   var passwords: [AFPasswordItem] {
@@ -53,20 +39,27 @@ struct PasswordsListScreen: View {
   var body: some View {
     NavigationView{
       List {
-        if !searchText.isEmpty && passwords.isEmpty {
-          Text(i.translate("list.noDataSearch") +  "'\(searchText)'")
-            .foregroundStyle(AppColors.label)
-          if searchText == initSearch &&  suggestSearchs.count > 1{
-            Text(i.translate("list.suggestSearch") )
-              .foregroundStyle(AppColors.label)
-            ForEach(suggestSearchs[1..<suggestSearchs.count], id: \.self) { searchText in
+        if (afd.user.mode == .fillText && afd.user.afOTPs.count > 0) {
+          Section {
+            NavigationLink(
+              destination:  OTPsListScreen(
+                afd: afd,
+                userInfo: userInfo
+              ),
+              isActive: $isShowOtpListScreen
+            ) {
               Button {
-                self.searchText = searchText
+                isShowOtpListScreen = true
               } label: {
-                Text(searchText)
+                Text(i.translate("list.goToOtp"))
               }
             }
           }
+        }
+        
+        if !searchText.isEmpty && passwords.isEmpty {
+          Text(i.translate("list.noDataSearch") +  "'\(searchText)'")
+            .foregroundStyle(AppColors.label)
         } else {
           ForEach(passwords, id: \.login.id) { pw in
             Button {
@@ -95,12 +88,6 @@ struct PasswordsListScreen: View {
         }
       }
       .padding(.top, -24)
-      .onAppear{
-        if !isInitSearch {
-          self.isInitSearch = true
-          self.searchText = initSearch
-        }
-      }
       .foregroundStyle(AppColors.title)
       .autocapitalization(.none)
       .navigationTitle(i.translate("list.title"))
@@ -110,51 +97,22 @@ struct PasswordsListScreen: View {
             afd.cancel()
           }
         }
-        ToolbarItem(placement: .navigationBarTrailing) {
-          Button {
-            isShowPasswordGenerator = 1
-          } label: {
-            Image(systemName: "ellipsis.rectangle.fill")
-          }
-        }
-        ToolbarItem(placement: .navigationBarTrailing) {
-          NavigationLink(
-            destination:  CreatePasswordScreen(
-              token: userInfo.token,
-              isFree: userInfo.isFree,
-              initWebsite: initSearch,
-              goBack: {
-                isShowCreatePassword = false
-              },
-              saveAndFill: afd.createPasswordItem
-            ),
-            isActive: $isShowCreatePassword
-          ) {
-            Button {
-              isShowCreatePassword = true
-            } label: {
-              Image(systemName: "plus")
-            }
-          }
-        }
       }
       .navigationBarTitleDisplayMode(.inline)
     }
     .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
     .navigationBarHidden(true)
     .navigationBarBackButtonHidden()
-    .halfSheet(showSheet: $isShowPasswordGenerator) {
-      StrongPasswordGenerator(usePassword: {password in
-        afd.passwordSelected(password: password)
-        isShowPasswordGenerator = 2
-      })
-    }
     .background(AppColors.background)
   }
   
   
   func onClickPassword(data: AFPasswordItem) {
-    afd.passwordSelected(data: data)
+    if (afd.user.mode == .fillText) {
+      afd.textSelected(data: data.login.password)
+    } else {
+      afd.passwordSelected(data: data)
+    }
   }
 }
 

@@ -39,12 +39,11 @@ class CredentialProviderController: ASCredentialProviderViewController {
   required init?(coder: NSCoder) {
     self.user = User()
     super.init(coder: coder)
-    print("init ------")
-    
   }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    print("viewDidLoad ------")
+//    print("viewDidLoad ------")
     
     SentrySDK.start { options in
       options.dsn = getStringInfo(key: "DSN_SENTRY")
@@ -56,6 +55,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
     
     i.locale = user.info?.language ?? "en"
   }
+  
   override func viewDidAppear(_ animated: Bool) {
     print("viewDidAppear -----")
     self.view.backgroundColor = UIColor(named: "background")
@@ -123,7 +123,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   override func provideCredentialWithoutUserInteraction(for credentialRequest: any ASCredentialRequest) {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
   }
- 
+  
   
   /**
    * Người dùng chọn Passkey từ QuickTypeBar -> mở unlock screen để xác thực
@@ -142,7 +142,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
       if #available(iOSApplicationExtension 18.0, *),
          let otpRequest = credentialRequest as? ASOneTimeCodeCredentialRequest,
          let otpIdentity = otpRequest.credentialIdentity as? ASOneTimeCodeCredentialIdentity {
-            prepareInterfaceToProvideCredential(for: otpIdentity)
+        prepareInterfaceToProvideCredential(for: otpIdentity)
       }
     }
   }
@@ -271,7 +271,9 @@ extension CredentialProviderController {
   @ViewBuilder
   private func getTargetViewAfterUnlock() -> some View {
     switch user.mode {
-    case .fillPassword, .fillText:
+    case .fillText:
+      FillTextListScreen(afd: self, userInfo: user.info)
+    case .fillPassword:
       PasswordsListScreen(afd: self, userInfo: user.info)
     case .fillOtp:
       OTPsListScreen(afd: self, userInfo: user.info)
@@ -354,7 +356,7 @@ extension CredentialProviderController: AutofillScreenDelegate {
   
   // text
   func textSelected(data: String) {
-    if #available(iOSApplicationExtension 18.0, *) {
+    if #available(iOS 18.0, *) {
       fillText(text: data)
     } else {
       cancel()
@@ -391,15 +393,15 @@ extension CredentialProviderController: AutofillScreenDelegate {
 }
 
 // MARK: text
+@available(iOS 18.0, *)
 extension CredentialProviderController {
-  @available(iOSApplicationExtension 18.0, *)
   private func fillText(text: String){
     self.extensionContext.completeRequest(withTextToInsert: text, completionHandler: nil)
   }
 }
 
 // MARK: otp
-extension CredentialProviderController {  
+extension CredentialProviderController {
   @available(iOSApplicationExtension 18.0, *)
   private func fillOtp(otpUri: String){
     let otpCode = otpService.getOTPFromUri(uri: otpUri).generate(time: Date()) ?? ""
