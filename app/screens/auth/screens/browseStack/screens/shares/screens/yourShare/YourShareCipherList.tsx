@@ -7,7 +7,7 @@ import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 import { CollectionItem, EmptyCipherList } from "app/components/ciphers"
 import { useStores } from "app/models"
 import { useCipherData } from "app/services/hook"
-import { AccountRole, CipherAppView, CipherShareType } from "app/static/types"
+import { AccountRole, CipherAppView, CipherShareType, SharedMemberType } from "app/static/types"
 import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
 import { Organization } from "core/models/domain/organization"
 import { CipherView } from "core/models/view"
@@ -118,9 +118,8 @@ export const YourShareCipherList = observer(
         const share = _getShare(c.organizationId)
 
         if (share) {
-          const ml = share.members.length
           const gl = share.groups.length
-          data.description = getShareDescription(translate, ml, gl)
+          data.description = getShareDescription(translate, share.members, gl)
           data.members = share.members
           data.groups = share.groups
         }
@@ -134,7 +133,12 @@ export const YourShareCipherList = observer(
 
     useEffect(() => {
       loadData()
-    }, [cipherStore.lastSync, cipherStore.lastCacheUpdate, myShares, organizations])
+    }, [
+      cipherStore.lastSync,
+      cipherStore.lastCacheUpdate,
+      cipherStore.myShares,
+      cipherStore.organizations,
+    ])
 
     // ------------------------ RENDER ----------------------------
     const DATA = [
@@ -192,9 +196,10 @@ export const YourShareCipherList = observer(
 
 const getShareDescription = (
   translate: (tx: TxKeyPath, options?: TOptions | undefined) => string,
-  ml: number,
+  members: SharedMemberType[],
   gl: number
 ) => {
+  const ml = members.length
   if (ml > 0 && gl > 0) {
     return (
       translate("shares:shared_with") +
@@ -204,6 +209,9 @@ const getShareDescription = (
       translate(gl > 1 ? "shares:groups" : "shares:group")
     )
   } else if (ml > 0) {
+    if (ml === 1) {
+      return translate("shares:shared_with") + ` ${members[0].email} `
+    }
     return (
       translate("shares:shared_with") +
       ` ${ml} ` +

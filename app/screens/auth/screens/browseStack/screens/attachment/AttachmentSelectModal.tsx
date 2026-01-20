@@ -23,7 +23,7 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
   } = useAppTheme()
   const navigation = useNavigation<BrowseScreenProps<"attachment">["navigation"]>()
   const { translate } = useAppLocale()
-  const { pickFile, pickMedia } = usePickAttachment()
+  const { pickFile, pickMedia, takeImage } = usePickAttachment()
 
   const openModal = useCallback(() => {
     if (isFree) {
@@ -41,6 +41,18 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
 
   const options: { id: string; icon: IconTypes; label: string; onPress: () => void }[] = useMemo(
     () => [
+      {
+        id: "take photo",
+        icon: "camera",
+        label: translate("file_attachment:take_photo"),
+        onPress: async () => {
+          const res = await takeImage()
+          closeModal()
+          if (res) {
+            setLocalFile(res)
+          }
+        },
+      },
       {
         id: "upload photo",
         icon: "image",

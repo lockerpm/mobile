@@ -749,6 +749,9 @@ const fr: Translations = {
       title: "Confirmer le partage",
       des: "Vous avez partagé l’élément avec l’adresse e-mail qui vient de créer un compte Locker et de générer ses propres clés. Veuillez confirmer à nouveau le partage afin que leurs clés puissent être utilisées pour chiffrer l’élément et leur permettre d’y accéder.",
       list: "Liste des nouveaux utilisateurs Locker : ",
+      noti_label:
+        "Certains éléments/dossiers ont été partagés avec des utilisateurs récemment inscrits et nécessitent votre confirmation.",
+      noti_btn: "Voir les éléments partagés →",
     },
     suggestion: "Utilisateurs ou groupes en entreprise",
     confirm:
@@ -1443,6 +1446,7 @@ const fr: Translations = {
   file_attachment: {
     title: "Pièce jointe",
     upload_photo: "Télécharger une photo",
+    take_photo: "Prendre une photo",
     upload_file: "Télécharger un fichier",
     max_size: "La taille maximale du fichier est de 50 Mo",
     upload_success: "Fichier téléchargé avec succès",

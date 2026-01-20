@@ -1,14 +1,16 @@
 import { FC } from "react"
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { useStores } from "app/models"
-import { SharingStatus } from "app/static/types"
+
 import { Header, Icon, Screen, Text } from "app/components/cores"
 import { MenuItemContainer } from "app/components/utils"
-import { ShareScreenProps } from "app/navigators"
 import { TxKeyPath } from "app/i18n"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { useStores } from "app/models"
+import { ShareScreenProps } from "app/navigators"
+import { SharingStatus } from "app/static/types"
+
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type ItemType = {
   onPress: () => void

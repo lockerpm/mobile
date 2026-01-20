@@ -194,6 +194,7 @@ export const iconRegistry = {
   "zap-fast": require("assets/icons/zap-fast.png"),
   "mail-03": require("assets/icons/mail-03.png"),
   image: require("assets/icons/image.png"),
+  camera: require("assets/icons/camera.png"),
   "download-simple": require("assets/icons/download-simple.png"),
 }
 

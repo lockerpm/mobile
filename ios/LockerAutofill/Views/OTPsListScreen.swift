@@ -60,8 +60,8 @@ struct OTPsListScreen: View {
         if !hasData {
           VStack(spacing: 8) {
             Text(
-              i.translate("otp.t")
-            ) // fallback key; adjust to your localization keys
+              i.translate("otp.e_text")
+            )
             .font(.system(size: 16, weight: .semibold))
             .foregroundStyle(AppColors.title)
            
@@ -210,7 +210,7 @@ struct OTPsListScreen: View {
 }
 
 // Simple circular countdown using a trimmed Circle
-private struct CircleCountdownView: View {
+struct CircleCountdownView: View {
   let remaining: Int
   let period: Int
   

@@ -1413,6 +1413,7 @@ const en = {
   file_attachment: {
     title: "File Attachment",
     upload_photo: "Upload Photo",
+    take_photo: "Take Photo",
     upload_file: "Upload File",
     max_size: "Max file size is 50MB",
     upload_success: "File uploaded successfully",

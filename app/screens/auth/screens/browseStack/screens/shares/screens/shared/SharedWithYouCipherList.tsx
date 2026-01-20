@@ -134,7 +134,7 @@ export const SharedWithYouCipherList = observer(
       cipherStore.lastSync,
       cipherStore.lastCacheUpdate,
       cipherStore.notSynchedCiphers,
-      organizations,
+      cipherStore.organizations,
     ])
 
     const DATA = [

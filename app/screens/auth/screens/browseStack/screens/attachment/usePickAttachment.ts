@@ -1,7 +1,7 @@
 import { Platform } from "react-native"
 import { keepLocalCopy, pick } from "@react-native-documents/picker"
 import RNFS from "react-native-fs"
-import { launchImageLibrary } from "react-native-image-picker"
+import { launchCamera, launchImageLibrary } from "react-native-image-picker"
 import crypto from "react-native-quick-crypto"
 
 import { useStores } from "app/models"
@@ -87,6 +87,54 @@ export const usePickAttachment = () => {
       if ("code" in e && e?.code !== "DOCUMENT_PICKER_CANCELED") {
         Logger.debug(e)
       }
+      return null
+    }
+  }
+
+  const takeImage = async (): Promise<AttachmentType | null> => {
+    try {
+      // Pick image
+      const res = await launchCamera({
+        mediaType: "photo",
+        quality: 0.8,
+        cameraType: "back",
+        saveToPhotos: false,
+      })
+      if (res.errorCode) {
+        if (res.errorCode === "permission") {
+          handleUserDeniedPermission("Photos")
+          return null
+        }
+        return null
+      }
+
+      if (res.didCancel || !res.assets) {
+        return null
+      }
+      if (res.assets.length === 0) {
+        notifyTx("error", "file_attachment:error.file_zero")
+        return null
+      }
+
+      // Limit size
+      if ((res.assets[0].fileSize ?? 0) > MAX_UPLOAD_SIZE) {
+        notifyTx("error", "file_attachment:error.max_size_error")
+        return null
+      }
+
+      const file: AttachmentType = {
+        id: Date.now().toString(),
+        fileName: res.assets[0].fileName ?? "",
+        size: res.assets[0].fileSize ?? 0,
+        url: res.assets[0].uri ?? "",
+        key: null,
+      }
+      file.fileName = prepareFileName(file.fileName, res.assets[0].type)
+      file.url = await prepareFileUri(file.url)
+
+      return file
+    } catch (error) {
+      Logger.error("Error taking image:", error)
       return null
     }
   }
@@ -206,7 +254,7 @@ export const usePickAttachment = () => {
     return null
   }
 
-  return { pickFile, pickMedia, encryptAndUploadFile }
+  return { takeImage, pickFile, pickMedia, encryptAndUploadFile }
 }
 
 const prepareFileUri = async (uri: string) => {

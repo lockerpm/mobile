@@ -1412,6 +1412,7 @@ const vi: Translations = {
   file_attachment: {
     title: "Tệp đính kèm",
     upload_photo: "Tải lên ảnh",
+    take_photo: "Chụp ảnh",
     upload_file: "Tải lên tệp",
     max_size: "Kích thước tệp tối đa là 50MB",
     upload_success: "Tệp đã được tải lên thành công",

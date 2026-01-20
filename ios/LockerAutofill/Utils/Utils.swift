@@ -10,6 +10,9 @@ import UIKit
 
 
 func parseDomain(of domain: String) -> [String] {
+  if domain.isEmpty {
+    return []
+  }
   let meaninglessSearch = ["com", "net", "app", "package", "www"]
   
   // Remove meaning less word, length < 3

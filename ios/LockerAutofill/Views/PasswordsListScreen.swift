@@ -12,12 +12,14 @@ struct PasswordsListScreen: View {
   var userInfo: UserInfo
   
   @State private var searchText = ""
-  @State private var isShowItemDetailId = -1
   
   @State private var isShowCreatePassword = false
   @State private var isShowPasswordGenerator = 0
   @State private var isInitSearch = false
   
+  // Navigation to detail
+  @State private var showDetail = false
+  @State private var selectedItemForDetail: AFPasswordItem = AFPasswordItem(fillID: 1, id: 1, tmp: TempPasswordItem(username: "", password: "", name: "", uri: ""))
   
   var allPasswords: [AFPasswordItem] {
     return afd.user.mode == .fillText ? afd.user.afPasswords.filter {
@@ -72,26 +74,17 @@ struct PasswordsListScreen: View {
             Button {
               onClickPassword(data: pw)
             } label: {
-              PasswordItemView(item: pw, isShowDetailId: $isShowItemDetailId)
-            }
-            
-            if isShowItemDetailId == pw.fillID {
-              VStack {
-                if !pw.login.username.isEmpty {
-                  CredentialInfo(label: i.translate("item.username"), text: pw.login.username, isCopydable: true)
+              PasswordItemView(
+                item: pw,
+                onChevronTap: {
+                  // Navigate to detail when chevron tapped
+                  selectedItemForDetail = pw
+                  showDetail = true
                 }
-                if !pw.login.password.isEmpty {
-                  CredentialInfo(label: i.translate("item.password"), text: pw.login.password, isCopydable: true)
-                }
-                if !pw.login.uri.isEmpty && pw.login.uri != "https://" {
-                  CredentialInfo(label: "URL", text: pw.login.uri, isCopydable: false)
-                }
-                if !pw.login.otp.isEmpty {
-                  TOTPView(url: pw.login.otp)
-                }
-              }
+              )
             }
           }
+          
         }
       }
       .padding(.top, -24)
@@ -139,6 +132,15 @@ struct PasswordsListScreen: View {
         }
       }
       .navigationBarTitleDisplayMode(.inline)
+      // Hidden NavigationLink to drive chevron -> detail navigation
+      .background(
+        NavigationLink(
+          destination: CredentialDetailScreen(afd: afd, userInfo: userInfo, item: selectedItemForDetail),
+          isActive: $showDetail,
+          label: { EmptyView() }
+        )
+        .hidden()
+      )
     }
     .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
     .navigationBarHidden(true)

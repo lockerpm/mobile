@@ -9,11 +9,8 @@ import SwiftUI
 
 struct PasswordItemView: View {
   var item: AFPasswordItem
-  @Binding var isShowDetailId: Int
-  
-  var isShowDetail: Bool {
-    isShowDetailId == item.fillID
-  }
+  var onChevronTap: () -> Void
+
   
   var body: some View {
     VStack(alignment: .leading){
@@ -34,13 +31,9 @@ struct PasswordItemView: View {
         }
         Spacer()
         
-        Image(systemName: isShowDetail ? "chevron.down" : "chevron.right")
+        Image(systemName: "chevron.right")
           .onTapGesture {
-            if isShowDetail {
-              isShowDetailId = -1
-            } else {
-              isShowDetailId = item.fillID
-            }
+            onChevronTap()
           }
           .foregroundColor(AppColors.label)
           .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 0))
@@ -94,3 +87,4 @@ struct PasskeyItemView: View {
     }
   }
 }
+

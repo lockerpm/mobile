@@ -751,8 +751,8 @@ const zh: Translations = {
       title: "确认共享",
       des: "您已将该项目共享给刚刚注册 Locker 帐户并创建了自己密钥的电子邮箱。请再次确认共享，以便使用他们的密钥对该项目进行加密，从而允许他们访问。",
       list: "新的 Locker 用户列表：",
-      noti_label: "某些项目/文件夹已与新注册的用户共享，需要您再次确认。",
-      noti_btn: "查看共享项目 →",
+      noti_label: "部分項目／資料夾已與新註冊的使用者分享，並需要您再次確認。",
+      noti_btn: "查看已分享的項目 →",
     },
     suggestion: "企業中的使用者或群組",
     confirm: "一名使用者已透過您的分享請求註冊了一個 Locker 帳戶。請確認您的分享請求",
@@ -1374,6 +1374,7 @@ const zh: Translations = {
   file_attachment: {
     title: "文件附件",
     upload_photo: "上传照片",
+    take_photo: "拍照",
     upload_file: "上传文件",
     max_size: "文件最大大小为50MB",
     upload_success: "文件上传成功",

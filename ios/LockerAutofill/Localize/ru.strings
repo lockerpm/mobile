@@ -48,6 +48,7 @@
 "pw.generator" = "Создайте надежный пароль";
 "pw.regenerate" = "Регенерировать";
 "pw.copyFill" = "Копировать и заполнить";
+"pw.fill" = "Заполнить";
 
 // create password
 "create.title" = "Создать пароль";

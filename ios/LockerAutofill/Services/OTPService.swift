@@ -11,7 +11,7 @@ import SwiftOTP
 let otpService = OTPService()
 
 struct OTPService {
-   func getOTPAlgorithm(algr: String) -> OTPAlgorithm {
+  func getOTPAlgorithm(algr: String) -> OTPAlgorithm {
     switch algr {
     case "SHA1":
       return .sha1
@@ -27,21 +27,29 @@ struct OTPService {
     let queryItems = URLComponents(string: uri)?.queryItems
     return queryItems?.filter({$0.name == query}).first?.value ?? ""
   }
-
+  
   func getOTPFromUri(uri: String) -> TOTP {
     if !uri.contains("/") {
-      let totp = TOTP(secret: Data(base32Decode(uri)!), digits: 6, timeInterval: 30, algorithm: .sha1)!
+      let secret = normalizeBase32Secret(uri)
+      let totp = TOTP(secret: Data(base32Decode(secret)!), digits: 6, timeInterval: 30, algorithm: .sha1)!
       return totp
     }
     
     let secret: String = getQueryParamValue(uri: uri, query: "secret")
+    let rawSecret = normalizeBase32Secret(secret)
     let algorithm: OTPAlgorithm = getOTPAlgorithm(algr: getQueryParamValue(uri: uri, query: "algorithm"))
     let timeInterval: Int = Int(getQueryParamValue(uri: uri, query: "period")) ?? 30
     let digits: Int = Int(getQueryParamValue(uri: uri, query: "digits")) ?? 6
     
-    let totp = TOTP(secret: Data(base32Decode(secret)!), digits: digits, timeInterval: timeInterval, algorithm: algorithm)!
-  
+    let totp = TOTP(secret: Data(base32Decode(rawSecret)!), digits: digits, timeInterval: timeInterval, algorithm: algorithm)!
+    
     return totp
   }
-
+  
+  func normalizeBase32Secret(_ secret: String) -> String {
+      return secret
+          .uppercased()
+          .replacingOccurrences(of: " ", with: "")
+          .replacingOccurrences(of: "-", with: "")
+  }
 }

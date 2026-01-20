@@ -5,7 +5,7 @@ struct LockScreen<TargetView: View>: View {
   var userInfo: UserInfo
   var target: TargetView
   
-  @State private var masterPassword: String = ""
+  @State private var masterPassword: String = "demo@123"
   @State private var isShowTarget = false
   
   var body: some View {

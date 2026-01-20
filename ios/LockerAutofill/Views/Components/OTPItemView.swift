@@ -19,40 +19,28 @@ struct OtpItemView: View {
     otpService.getOTPFromUri(uri: item.otp)
   }
   
-  // [issuer, email]
-  var account: [String] {
-    parseOtpItemName(item.name)
-  }
-  
   @State private var otp: String = ""
   @State private var timer: Timer?
   @State private var localPeriod: Int = 30
   
-  
-
   var body: some View {
     VStack(alignment: .leading) {
-      HStack(alignment: .top){
-        VStack(alignment: .leading) {
-          Text(account[0])
-            .font(.system(size: 18))
-            .lineLimit(1)
-            .truncationMode(.tail)
-          
-          if (!account[1].isEmpty) {
-            Text(account[1])
-              .foregroundColor(AppColors.label)
-              .lineLimit(1)
-              .truncationMode(.tail)
-          }
-        }
+      HStack(alignment: .center){
+        Text(item.name.capitalized)
+          .font(.system(size: 16))
+          .lineLimit(2)
+          .padding(.trailing, 16)
+          .truncationMode(.tail)
+        
         Spacer()
-        Text(otp)
-          .font(.system(size: 20))
+        Text(groupString(otp))
+          .font(.system(size: 16))
           .fontWeight(.bold)
+          .foregroundColor(AppColors.primary)
       }
       .foregroundColor(AppColors.title)
     }
+    .frame(minHeight: 44)
     .onAppear {
       // Capture token-specific period
       localPeriod = max(1, Int(totp.timeInterval))
@@ -104,19 +92,22 @@ struct OtpItemView: View {
   }
   
   // Keep this helper local to the view
-  private func parseOtpItemName(_ name: String) -> [String] {
-    guard !name.isEmpty else {
-      return ["", ""]
+  private func groupString(_ input: String, groupSize: Int = 3, separator: String = " ") -> String {
+    var result: [String] = []
+    var current = ""
+    
+    for char in input {
+      current.append(char)
+      if current.count == groupSize {
+        result.append(current)
+        current = ""
+      }
     }
-    let parts = name.split(separator: " ")
-    guard let last = parts.last else {
-      return ["", ""]
+    
+    if !current.isEmpty {
+      result.append(current)
     }
-    if parts.count == 1 {
-      return [name, ""]
-    }
-    let title = parts.dropLast().joined(separator: " ")
-    let otp = last.filter { $0 != "(" && $0 != ")" }
-    return [title, otp]
+    
+    return result.joined(separator: separator)
   }
 }

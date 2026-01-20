@@ -69,6 +69,7 @@
     "i18next": "^23.14.0",
     "intl-pluralrules": "^2.0.1",
     "jail-monkey": "^2.8.4",
+    "jotai": "^2.16.2",
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
     "lunr": "^2.3.9",

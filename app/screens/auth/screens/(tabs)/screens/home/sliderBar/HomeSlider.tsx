@@ -53,11 +53,9 @@ export const HomeSlider = observer(() => {
 
   const isShowData = data.filter((item) => item.isShow)
 
-  const shareNotiCount =
-    cipherStore.sharingInvitationsIgnoreAccept.length +
-    cipherStore.myShares.reduce((total, s) => {
-      return total + s.members.filter((m) => m.status === SharingStatus.ACCEPTED).length
-    }, 0)
+  const shareNotiCount = cipherStore.myShares.reduce((total, s) => {
+    return total + s.members.filter((m) => m.status === SharingStatus.ACCEPTED).length
+  }, 0)
 
   // -------------- PARAMS ------------------
 

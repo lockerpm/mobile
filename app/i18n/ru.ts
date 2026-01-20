@@ -1428,6 +1428,7 @@ const ru: Translations = {
   file_attachment: {
     title: "Вложение файла",
     upload_photo: "Загрузить фото",
+    take_photo: "Сделать фото",
     upload_file: "Загрузить файл",
     max_size: "Максимальный размер файла 50МБ",
     upload_success: "Файл успешно загружен",

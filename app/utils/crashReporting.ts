@@ -25,9 +25,6 @@ export const initCrashReporting = () => {
         if (event.exception && event.exception.values) {
           for (const value of event.exception.values) {
             if (value.type === "App Hanging") {
-              // You might add additional logic here to confirm it's a false positive
-              // e.g., check stack trace if possible
-              console.log("Ignoring known App Hanging event")
               return null // Return null to ignore the event
             }
           }

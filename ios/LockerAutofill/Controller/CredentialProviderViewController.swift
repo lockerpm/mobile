@@ -67,7 +67,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     print("prepareCredentialList 16", serviceIdentifiers)
-    prepareAutofillData(sID: serviceIdentifiers, mode: .fillPassword)
+    prepareAutofillData(sID: serviceIdentifiers, mode: .fillText)
   }
   
   /**
@@ -235,19 +235,20 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   private func startExtension() {
-    if (self.loginLocker()) {
-      if (user.faceIdEnabled){
-        authenService.biometricAuthentication(
-          view: self,
-          onSuccess: unlockSuccess,
-          onFailed: navigateLockScreen,
-          notSupported: navigateLockScreen
-        )
-      }
-      else {
-        self.navigateLockScreen()
-      }
-    }
+    unlockSuccess()
+//    if (self.loginLocker()) {
+//      if (user.faceIdEnabled){
+//        authenService.biometricAuthentication(
+//          view: self,
+//          onSuccess: unlockSuccess,
+//          onFailed: navigateLockScreen,
+//          notSupported: navigateLockScreen
+//        )
+//      }
+//      else {
+//        self.navigateLockScreen()
+//      }
+//    }
   }
   
   private func prepareAutofillData(sID: [ASCredentialServiceIdentifier], mode: CredentialActions) {
