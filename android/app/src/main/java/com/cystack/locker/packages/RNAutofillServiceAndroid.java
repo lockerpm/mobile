@@ -27,7 +27,7 @@ import com.facebook.react.bridge.ReactMethod;
 
 import java.util.Random;
 import java.util.ArrayList;
-import java.util.Objects;
+import android.app.Activity;
 
 public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
     public static final int FILL_PASSWORD = 1;
@@ -120,8 +120,13 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
     // --------------------------------PASSKEY---------------------------
     @ReactMethod
     public void handleCreatePasskeyResponse(String requestJson, String credentialId, String publicKey, String origin, String packageName, Promise promise) {
+        Activity activity = getCurrentActivity();
+        if (activity == null) {
+            promise.reject("ACTIVITY_NOT_FOUND", "Activity doesn't exist");
+            return;
+        }
         Fid2Service fido2 = new Fid2Service();
-        fido2.createPasskey(Objects.requireNonNull(getCurrentActivity()), requestJson, credentialId, publicKey, origin, packageName);
+        fido2.createPasskey(activity, requestJson, credentialId, publicKey, origin, packageName);
         promise.resolve(true);
     }
 
@@ -137,9 +142,15 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
         String clientDataHash,
         Promise promise
     ) {
+        Activity activity = getCurrentActivity();
+        if (activity == null) {
+            promise.reject("ACTIVITY_NOT_FOUND", "Activity doesn't exist");
+            return;
+        }
+
         Fid2Service fido2 = new Fid2Service();
         fido2.authenPasskey(
-                Objects.requireNonNull(getCurrentActivity()),
+                activity,
                 requestJson,
                 credentialId,
                 userId,
@@ -226,8 +237,12 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
             Intent replyIntent = new Intent();
             replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, response);
 
-            Objects.requireNonNull(getCurrentActivity()).setResult(-1, replyIntent); //RESULT_OK
-            Objects.requireNonNull(getCurrentActivity()).finish();
+            // Get current activity safely
+            Activity currentActivity = getCurrentActivity();
+            if (currentActivity != null) {
+                currentActivity.setResult(Activity.RESULT_OK, replyIntent);
+                currentActivity.finish();
+            }
         }
 
     }

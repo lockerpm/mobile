@@ -89,7 +89,7 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
         onClose={closeModal}
         closeTx={"common:cancel"}
         footer={
-          <View style={styles.container}>
+          <View style={[styles.container, { borderColor: colors.border }]}>
             <Icon icon={"info"} color={colors.warning} size={18} style={styles.mr8} />
             <Text tx="file_attachment:max_size" size="sm" color={colors.warning} />
           </View>
@@ -97,7 +97,6 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
       >
         {options.map((item) => (
           <NewActionSheetItem
-            bottomBorder
             icon={item.icon}
             key={item.id}
             text={item.label}
@@ -112,6 +111,7 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
+    borderWidth: 1,
     flexDirection: "row",
     paddingHorizontal: 16,
     paddingVertical: 8,

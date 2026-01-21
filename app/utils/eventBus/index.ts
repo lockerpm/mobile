@@ -1,5 +1,6 @@
-import { TEMP_PREFIX } from "app/static/constants"
 import { EventRegister } from "react-native-event-listeners"
+
+import { TEMP_PREFIX } from "app/static/constants"
 
 export enum AppEventType {
   PASSWORD_UPDATE = "PASSWORD_UPDATE",
@@ -34,6 +35,11 @@ export enum AppEventType {
    * Manage share member
    */
   MANAGE_SHARE_MEMBER_UPDATE = "MANAGE_SHARE_MEMBER_UPDATE",
+
+  /**
+   * Reload Your Share
+   */
+  RELOAD_YOUR_SHARE = "RELOAD_YOUR_SHARE",
 
   /**
    * Unselection (home, cipherList)

@@ -12,7 +12,6 @@ import { useCoreService } from "app/services/coreService"
 import { useBiometricType } from "app/services/utils"
 
 import { useAppLocale } from "@/i18n"
-import { SharingStatus } from "@/static/types"
 import { ThemedStyle } from "@/theme"
 import { isDeviceAutofillServiceEnabled } from "@/utils/autofill.android"
 import { autofillKeyChain } from "@/utils/autofill.ios"
@@ -21,6 +20,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { ConfirmYourSharing } from "./ConfirmYourSharing"
 import { SuggestEnableAutofill } from "./SuggestEnableAutofill"
 import { SuggestEnableFaceID } from "./SuggestEnableFaceID"
+import { useLoadConfirmShare } from "./useLoadConfirmShare"
 
 enum SliderEnum {
   ConfirmShare = "ConfirmShare",
@@ -39,7 +39,6 @@ export const HomeSlider = observer(() => {
   const { user } = useStores()
   const { themed } = useAppTheme()
   const { lang } = useAppLocale()
-  const { cipherStore } = useStores()
   const { cryptoService } = useCoreService()
   const { isBiometricAvailable } = useBiometricType()
 
@@ -51,11 +50,9 @@ export const HomeSlider = observer(() => {
 
   const [data, setData] = useState<SliderDataType[]>([])
 
-  const isShowData = data.filter((item) => item.isShow)
+  const { confirmShareCount } = useLoadConfirmShare()
 
-  const shareNotiCount = cipherStore.myShares.reduce((total, s) => {
-    return total + s.members.filter((m) => m.status === SharingStatus.ACCEPTED).length
-  }, 0)
+  const isShowData = data.filter((item) => item.isShow)
 
   // -------------- PARAMS ------------------
 
@@ -103,21 +100,6 @@ export const HomeSlider = observer(() => {
     }
   }
 
-  const handleShowConfirmShare = async () => {
-    if (shareNotiCount > 0) {
-      setData((prev) => [
-        {
-          id: SliderEnum.ConfirmShare,
-          isShow: true,
-          onClose: closeConfirmShare,
-        },
-        ...prev,
-      ])
-    } else {
-      closeConfirmShare()
-    }
-  }
-
   const syncAutofillUserInfo = async () => {
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
 
@@ -134,8 +116,19 @@ export const HomeSlider = observer(() => {
   }
 
   useEffect(() => {
-    handleShowConfirmShare()
-  }, [shareNotiCount])
+    if (confirmShareCount > 0) {
+      setData((prev) => [
+        {
+          id: SliderEnum.ConfirmShare,
+          isShow: true,
+          onClose: closeConfirmShare,
+        },
+        ...prev,
+      ])
+    } else {
+      closeConfirmShare()
+    }
+  }, [confirmShareCount, closeConfirmShare])
 
   useEffect(() => {
     isDeviceAutofillServiceEnabled().then((isActived) => {

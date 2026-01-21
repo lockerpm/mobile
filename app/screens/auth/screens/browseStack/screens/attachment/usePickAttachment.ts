@@ -3,6 +3,7 @@ import { keepLocalCopy, pick } from "@react-native-documents/picker"
 import RNFS from "react-native-fs"
 import { launchCamera, launchImageLibrary } from "react-native-image-picker"
 import crypto from "react-native-quick-crypto"
+import { Camera } from "react-native-vision-camera"
 
 import { useStores } from "app/models"
 import { attachmentApi } from "app/services/api"
@@ -90,9 +91,18 @@ export const usePickAttachment = () => {
       return null
     }
   }
-
   const takeImage = async (): Promise<AttachmentType | null> => {
     try {
+      const cameraPermission = Camera.getCameraPermissionStatus()
+
+      if (cameraPermission !== "granted") {
+        const newCameraPermission = await Camera.requestCameraPermission()
+
+        if (newCameraPermission !== "granted") {
+          return null
+        }
+      }
+
       // Pick image
       const res = await launchCamera({
         mediaType: "photo",

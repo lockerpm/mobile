@@ -14,7 +14,7 @@
 
 // CredentialsListScreen
 "list.title" = "Login List";
-"list.goToOtp" = "Autofill Otp";
+"list.goToOtp" = "Autofill OTP";
 "list.noDataSearch" = "Oops! Looks like there's no data matching ";
 "list.suggestSearch" = "You can search by the following text(s)";
 

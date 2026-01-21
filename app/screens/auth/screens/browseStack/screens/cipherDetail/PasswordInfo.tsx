@@ -1,9 +1,11 @@
 import { StyleSheet, View } from "react-native"
+
 import { Text, TextInput } from "app/components/cores"
-import { useCipherHelper } from "app/services/hook"
-import { CipherType } from "core/enums"
 import { PasswordStrength, Textarea } from "app/components/utils"
+import { useCipherHelper } from "app/services/hook"
 import { CipherAppView } from "app/static/types"
+import { CipherType } from "core/enums"
+
 import { DynamicUris, PasswordOtp, Fido2Info } from "@/components/ciphers"
 import { useAppLocale } from "@/i18n"
 
@@ -100,6 +102,7 @@ const styles = StyleSheet.create({
   },
   mb4: {
     marginBottom: 4,
+    marginTop: 12,
   },
   mt12: {
     marginTop: 12,

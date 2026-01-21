@@ -1,15 +1,16 @@
 import { useCallback } from "react"
 import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { useAtomValue } from "jotai"
 import { observer } from "mobx-react-lite"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { Icon, Text } from "app/components/cores"
 import { useStores } from "app/models"
 import { TabsRoute } from "app/navigators"
-import { SharingStatus } from "app/static/types"
 
 import { useAppLocale } from "@/i18n"
+import { confirmShareAtom } from "@/services/utils/useConfirmShare"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 
@@ -28,6 +29,8 @@ const TabBar = observer(({ state, navigation }: BottomTabBarProps) => {
     themed,
     theme: { colors },
   } = useAppTheme()
+  const confirmShareCount = useAtomValue(confirmShareAtom)
+
   const { translate } = useAppLocale()
   const insets = useSafeAreaInsets()
   const { uiStore, cipherStore } = useStores()
@@ -41,11 +44,7 @@ const TabBar = observer(({ state, navigation }: BottomTabBarProps) => {
     browseTab: {
       label: translate("common:browse"),
       icon: "browser",
-      notiCount:
-        cipherStore.sharingInvitationsIgnoreAccept.length +
-        cipherStore.myShares.reduce((total, s) => {
-          return total + s.members.filter((m) => m.status === SharingStatus.ACCEPTED).length
-        }, 0),
+      notiCount: cipherStore.sharingInvitationsIgnoreAccept.length + confirmShareCount,
     },
     authenticatorTab: {
       label: "OTP",

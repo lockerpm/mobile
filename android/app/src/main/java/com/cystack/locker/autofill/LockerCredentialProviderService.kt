@@ -42,7 +42,9 @@ class LockerCredentialProviderService: CredentialProviderService() {
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<Void?, ClearCredentialException>
     ) {
-//        TODO("Not yet implemented")
+        // Return null to indicate that the clear credential state operation
+        // has completed successfully with no specific action taken.
+        callback.onResult(null)
     }
 
     // ------------------------------- Get -----------------------------------------

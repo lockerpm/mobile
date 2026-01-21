@@ -43,8 +43,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-//    print("viewDidLoad ------")
-    
     SentrySDK.start { options in
       options.dsn = getStringInfo(key: "DSN_SENTRY")
       options.enableAppHangTracking = false  // Reduce resource usage
@@ -57,7 +55,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   override func viewDidAppear(_ animated: Bool) {
-    print("viewDidAppear -----")
     self.view.backgroundColor = UIColor(named: "background")
     self.startExtension()
   }
@@ -67,7 +64,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     print("prepareCredentialList 16", serviceIdentifiers)
-    prepareAutofillData(sID: serviceIdentifiers, mode: .fillText)
+    prepareAutofillData(sID: serviceIdentifiers, mode: .fillPassword)
   }
   
   /**
@@ -235,20 +232,19 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   private func startExtension() {
-    unlockSuccess()
-//    if (self.loginLocker()) {
-//      if (user.faceIdEnabled){
-//        authenService.biometricAuthentication(
-//          view: self,
-//          onSuccess: unlockSuccess,
-//          onFailed: navigateLockScreen,
-//          notSupported: navigateLockScreen
-//        )
-//      }
-//      else {
-//        self.navigateLockScreen()
-//      }
-//    }
+    if (self.loginLocker()) {
+      if (user.faceIdEnabled){
+        authenService.biometricAuthentication(
+          view: self,
+          onSuccess: unlockSuccess,
+          onFailed: navigateLockScreen,
+          notSupported: navigateLockScreen
+        )
+      }
+      else {
+        self.navigateLockScreen()
+      }
+    }
   }
   
   private func prepareAutofillData(sID: [ASCredentialServiceIdentifier], mode: CredentialActions) {

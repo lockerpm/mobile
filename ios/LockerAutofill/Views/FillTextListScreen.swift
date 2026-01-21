@@ -50,7 +50,7 @@ struct FillTextListScreen: View {
                 isShowOtpListScreen = true
               } label: {
                 Text(i.translate("list.goToOtp"))
-                  .padding(.vertical, 6)
+                  .padding(.vertical, 7)
               }
             }
           }

@@ -1,5 +1,6 @@
 import { FC } from "react"
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
+import { useAtomValue } from "jotai"
 import { observer } from "mobx-react-lite"
 
 import { Header, Icon, Screen, Text } from "app/components/cores"
@@ -7,8 +8,8 @@ import { MenuItemContainer } from "app/components/utils"
 import { TxKeyPath } from "app/i18n"
 import { useStores } from "app/models"
 import { ShareScreenProps } from "app/navigators"
-import { SharingStatus } from "app/static/types"
 
+import { confirmShareAtom } from "@/services/utils/useConfirmShare"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 
@@ -23,6 +24,7 @@ export const SharesHomeScreen: FC<ShareScreenProps<"sharesHome">> = observer(({ 
   const {
     theme: { colors },
   } = useAppTheme()
+  const confirmShareCount = useAtomValue(confirmShareAtom)
 
   const menu: ItemType[] = [
     {
@@ -37,9 +39,7 @@ export const SharesHomeScreen: FC<ShareScreenProps<"sharesHome">> = observer(({ 
         navigation.navigate("yourShareCipherList")
       },
       tx: "quick_shares:share_option.normal.tl",
-      notiCount: cipherStore.myShares.reduce((total, s) => {
-        return total + s.members.filter((m) => m.status === SharingStatus.ACCEPTED).length
-      }, 0),
+      notiCount: confirmShareCount,
     },
     {
       onPress: () => {
