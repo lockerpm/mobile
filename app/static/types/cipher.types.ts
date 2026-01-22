@@ -230,6 +230,21 @@ export type FolderShareType = {
   groups?: SharedGroupType[]
 }
 
+export type ConfirmShareItemInfo =
+  | {
+      type: "cipher"
+      hasFido2Credentials: boolean
+      cipherType: CipherType
+      imgLogo: ImageSourcePropType
+      name: string
+      description?: string
+    }
+  | {
+      type: "folder"
+      name: string
+      cipherCount?: number
+    }
+
 export type SharedWithYouType = CipherAppView & {
   isShared?: boolean
   description?: string

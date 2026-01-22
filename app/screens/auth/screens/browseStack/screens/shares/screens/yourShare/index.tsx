@@ -8,6 +8,7 @@ import { ShareScreenProps } from "app/navigators"
 import {
   CipherActionsModal,
   CipherAppView,
+  ConfirmShareItemInfo,
   FolderActionsModal,
   SharedMemberType,
   SharingStatus,
@@ -47,8 +48,9 @@ export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = obse
     }, [])
 
     const navigateToShareConfirmModal = useCallback(
-      (members: SharedMemberType[], organizationId: string) => {
-        navigation.navigate("confirmYourShareModal", {
+      (item: ConfirmShareItemInfo, members: SharedMemberType[], organizationId: string) => {
+        navigation.navigate("confirmYourShare", {
+          item,
           members: members.filter((m) => m.status === SharingStatus.ACCEPTED),
           organizationId: organizationId,
         })

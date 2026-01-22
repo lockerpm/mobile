@@ -2,7 +2,12 @@ import { memo } from "react"
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
 
 import { Icon, Text } from "app/components/cores"
-import { CipherShareType, SharedMemberType, SharingStatus } from "app/static/types"
+import {
+  CipherShareType,
+  ConfirmShareItemInfo,
+  SharedMemberType,
+  SharingStatus,
+} from "app/static/types"
 
 import { CipherIconImage } from "@/components/ciphers"
 import { ThemedStyle } from "@/theme"
@@ -11,7 +16,11 @@ import { useAppTheme } from "@/utils/useAppTheme"
 type Prop = {
   item: CipherShareType
   openAction: (item: CipherShareType) => void
-  openConfirmModal: (members: SharedMemberType[], organizationId: string) => void
+  openConfirmModal: (
+    item: ConfirmShareItemInfo,
+    members: SharedMemberType[],
+    organizationId: string
+  ) => void
 }
 
 export const YourShareCipherItem = memo((props: Prop) => {
@@ -68,7 +77,18 @@ export const YourShareCipherItem = memo((props: Prop) => {
               disabled={!item.organizationId}
               onPress={() => {
                 if (item.members && item.organizationId) {
-                  openConfirmModal(item.members, item.organizationId)
+                  openConfirmModal(
+                    {
+                      type: "cipher",
+                      hasFido2Credentials: item.login.hasFido2Credentials,
+                      cipherType: item.type,
+                      imgLogo: item.imgLogo,
+                      name: item.name,
+                      description: item.description,
+                    },
+                    item.members,
+                    item.organizationId
+                  )
                 }
               }}
               style={themed($confirm)}

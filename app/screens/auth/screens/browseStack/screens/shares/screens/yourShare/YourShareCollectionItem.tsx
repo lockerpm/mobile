@@ -4,7 +4,11 @@ import { Icon, ImageIcon, PressableScale, Text } from "app/components/cores"
 import { CollectionView } from "core/models/view/collectionView"
 
 import { useAppLocale } from "@/i18n"
-import { FolderShareType, SharedMemberType } from "@/static/types/cipher.types"
+import {
+  ConfirmShareItemInfo,
+  FolderShareType,
+  SharedMemberType,
+} from "@/static/types/cipher.types"
 import { SharingStatus } from "@/static/types/enum"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
@@ -12,7 +16,11 @@ import { useAppTheme } from "@/utils/useAppTheme"
 type Props = {
   item: FolderShareType
   openAction: (item: CollectionView) => void
-  openConfirmModal: (members: SharedMemberType[], organizationId: string) => void
+  openConfirmModal: (
+    item: ConfirmShareItemInfo,
+    members: SharedMemberType[],
+    organizationId: string
+  ) => void
 }
 
 export const YourShareCollectionItem = ({ item, openAction, openConfirmModal }: Props) => {
@@ -75,7 +83,15 @@ export const YourShareCollectionItem = ({ item, openAction, openConfirmModal }: 
               disabled={!item.collection.organizationId}
               onPress={() => {
                 if (item.members && item.collection.organizationId) {
-                  openConfirmModal(item.members, item.collection.organizationId)
+                  openConfirmModal(
+                    {
+                      type: "folder",
+                      name: item.collection.name,
+                      cipherCount: item.collection.cipherCount,
+                    },
+                    item.members,
+                    item.collection.organizationId
+                  )
                 }
               }}
               style={themed($confirm)}

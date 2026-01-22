@@ -11,6 +11,7 @@ import {
   AccountRole,
   CipherAppView,
   CipherShareType,
+  ConfirmShareItemInfo,
   FolderShareType,
   SharedMemberType,
 } from "app/static/types"
@@ -32,7 +33,11 @@ type Props = {
   openCollectionAction: (collection: CollectionView) => void
   openCipherAction: (item: CipherAppView) => void
   openCollectionCiphers: (collectionId: string, orgId: string, name: string) => void
-  openShowConfirmModal: (members: SharedMemberType[], organizationId: string) => void
+  openShowConfirmModal: (
+    item: ConfirmShareItemInfo,
+    members: SharedMemberType[],
+    organizationId: string
+  ) => void
 }
 
 enum SectionType {

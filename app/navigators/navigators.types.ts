@@ -11,6 +11,7 @@ import {
   CipherAppView,
   CipherEditHelperModal,
   CipherEditMode,
+  ConfirmShareItemInfo,
   FamilyMember,
   FolderActionsModal,
   LockType,
@@ -273,7 +274,8 @@ export type TabsScreenProps<T extends keyof TabsRoute> = CompositeScreenProps<
 // ---------------------------BROWSE Navigator---------------------------
 
 export type ShareRoute = {
-  confirmYourShareModal: {
+  confirmYourShare: {
+    item: ConfirmShareItemInfo
     organizationId: string
     members: SharedMemberType[]
   }

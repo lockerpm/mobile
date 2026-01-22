@@ -2,8 +2,7 @@ import { FC, useState } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 
-import { ModalBackdrop } from "app/components/cores"
-import { Text, Button, BottomModalContainer, BottomModalHeader } from "app/components/cores"
+import { Text, Button } from "app/components/cores"
 import { useStores } from "app/models"
 import { ShareScreenProps } from "app/navigators"
 import { useCipherData } from "app/services/hook"
@@ -14,7 +13,7 @@ import { delay } from "@/utils/delay"
 import { AppEventType, EventBus } from "@/utils/eventBus"
 import { useAppTheme } from "@/utils/useAppTheme"
 
-export const ConfirmYourShareModalScreen: FC<ShareScreenProps<"confirmYourShareModal">> = observer(
+export const ConfirmYourShareScreen: FC<ShareScreenProps<"confirmYourShare">> = observer(
   ({
     navigation,
     route: {
@@ -57,26 +56,23 @@ export const ConfirmYourShareModalScreen: FC<ShareScreenProps<"confirmYourShareM
 
     return (
       <View style={styles.flex}>
-        <ModalBackdrop onPress={onClose} />
-        <BottomModalContainer>
-          <BottomModalHeader tx="shares:confirm_share.title" onClose={onClose} />
-          <View style={styles.ph16}>
-            <Text tx="shares:confirm_share.list" />
-            <View style={themed($fingerprint)}>
-              {members.map((member) => (
-                <Text key={member.email} text={member.email} />
-              ))}
-            </View>
-            <Text preset="label" tx="shares:confirm_share.des" style={styles.mb24} />
-
-            <Button
-              tx="common:confirm"
-              disabled={isLoading}
-              loading={isLoading}
-              onPress={handleConfirmShare}
-            />
+        <Text tx="shares:confirm_share.title" />
+        <View style={styles.ph16}>
+          <Text tx="shares:confirm_share.list" />
+          <View style={themed($fingerprint)}>
+            {members.map((member) => (
+              <Text key={member.email} text={member.email} />
+            ))}
           </View>
-        </BottomModalContainer>
+          <Text preset="label" tx="shares:confirm_share.des" style={styles.mb24} />
+
+          <Button
+            tx="common:confirm"
+            disabled={isLoading}
+            loading={isLoading}
+            onPress={handleConfirmShare}
+          />
+        </View>
       </View>
     )
   }
