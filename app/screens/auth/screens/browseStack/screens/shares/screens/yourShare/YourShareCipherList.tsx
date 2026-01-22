@@ -4,10 +4,16 @@ import { observer } from "mobx-react-lite"
 import { TOptions } from "node_modules/i18next/typescript/options"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
-import { CollectionItem, EmptyCipherList } from "app/components/ciphers"
+import { EmptyCipherList } from "app/components/ciphers"
 import { useStores } from "app/models"
 import { useCipherData } from "app/services/hook"
-import { AccountRole, CipherAppView, CipherShareType, SharedMemberType } from "app/static/types"
+import {
+  AccountRole,
+  CipherAppView,
+  CipherShareType,
+  FolderShareType,
+  SharedMemberType,
+} from "app/static/types"
 import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
 import { Organization } from "core/models/domain/organization"
 import { CipherView } from "core/models/view"
@@ -19,13 +25,14 @@ import { AppEventType, EventBus } from "@/utils/eventBus"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 import { YourShareCipherItem } from "./YourShareCipherItem"
+import { YourShareCollectionItem } from "./YourShareCollectionItem"
 
 type Props = {
   openAdd: () => void
   openCollectionAction: (collection: CollectionView) => void
   openCipherAction: (item: CipherAppView) => void
   openCollectionCiphers: (collectionId: string, orgId: string, name: string) => void
-  openShowConfirmModal: (item: CipherShareType) => void
+  openShowConfirmModal: (members: SharedMemberType[], organizationId: string) => void
 }
 
 enum SectionType {
@@ -36,13 +43,7 @@ enum SectionType {
 const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")
 
 export const YourShareCipherList = observer(
-  ({
-    openAdd,
-    openCollectionAction,
-    openCipherAction,
-    openCollectionCiphers,
-    openShowConfirmModal,
-  }: Props) => {
+  ({ openAdd, openCollectionAction, openCipherAction, openShowConfirmModal }: Props) => {
     const { themed } = useAppTheme()
     const { translate } = useAppLocale()
     const { getCiphersFromCache } = useCipherData()
@@ -57,18 +58,6 @@ export const YourShareCipherList = observer(
 
     const organizations = [...cipherStore.organizations]
     const myShares = [...cipherStore.myShares]
-    const sharesCollection = [...collectionStore.collections].filter((i) => {
-      // Computed
-      const shareRole = getTeam(organizations, i.organizationId).type
-      const isOwner = shareRole === AccountRole.OWNER
-      return isOwner
-    })
-    const sharesCiphers = ciphers
-      .filter((c) => !c.collectionIds?.length)
-      .sort((a, b) => b.revisionDate!.getTime() - a.revisionDate!.getTime())
-
-    // ------------------------ METHODS ----------------------------
-
     const _getOrg = (id: string) => {
       return organizations.find((o: Organization) => o.id === id)
     }
@@ -76,6 +65,29 @@ export const YourShareCipherList = observer(
     const _getShare = (id: string) => {
       return myShares.find((s) => s.id === id)
     }
+
+    const sharesCollection: FolderShareType[] = [...collectionStore.collections]
+      .filter((i) => {
+        // Computed
+        const shareRole = getTeam(organizations, i.organizationId).type
+        const isOwner = shareRole === AccountRole.OWNER
+        return isOwner
+      })
+      .map((i) => {
+        // Display for each sharing member
+        const share = _getShare(i.organizationId)
+        return {
+          collection: i,
+          description: "",
+          members: share?.members || [],
+          groups: share?.groups || [],
+        }
+      })
+    const sharesCiphers = ciphers
+      .filter((c) => !c.collectionIds?.length)
+      .sort((a, b) => b.revisionDate!.getTime() - a.revisionDate!.getTime())
+
+    // ------------------------ METHODS ----------------------------
 
     // Get ciphers list
     const loadData = async () => {
@@ -177,11 +189,10 @@ export const YourShareCipherList = observer(
                 />
               )}
               {section.type === SectionType.COLLECTION && (
-                <CollectionItem
-                  isYourSharedScreen
+                <YourShareCollectionItem
                   item={item}
                   openAction={openCollectionAction}
-                  openCollectionCipher={openCollectionCiphers}
+                  openConfirmModal={openShowConfirmModal}
                 />
               )}
             </View>

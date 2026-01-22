@@ -8,8 +8,8 @@ import { ShareScreenProps } from "app/navigators"
 import {
   CipherActionsModal,
   CipherAppView,
-  CipherShareType,
   FolderActionsModal,
+  SharedMemberType,
   SharingStatus,
 } from "app/static/types"
 import { CollectionView } from "core/models/view/collectionView"
@@ -46,14 +46,15 @@ export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = obse
       })
     }, [])
 
-    const navigateToShareConfirmModal = useCallback((item: CipherShareType) => {
-      if (!!item.members && item.organizationId) {
+    const navigateToShareConfirmModal = useCallback(
+      (members: SharedMemberType[], organizationId: string) => {
         navigation.navigate("confirmYourShareModal", {
-          members: item.members.filter((m) => m.status === SharingStatus.ACCEPTED),
-          organizationId: item.organizationId,
+          members: members.filter((m) => m.status === SharingStatus.ACCEPTED),
+          organizationId: organizationId,
         })
-      }
-    }, [])
+      },
+      []
+    )
 
     const navigateToCollectionCiphers = useCallback(
       (collectionId: string, orgId: string, name: string) => {

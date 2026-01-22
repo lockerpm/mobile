@@ -1,11 +1,13 @@
 import { Instance, SnapshotIn, SnapshotOut, cast, types } from "mobx-state-tree"
-import { withSetPropAction } from "../helpers/withSetPropAction"
-import { CollectionView } from "core/models/view/collectionView"
-import { CollectionRequest } from "core/models/request/collectionRequest"
+
 import { folderApi } from "app/services/api/folderApi"
 import { CollectionActionData } from "app/static/types"
 import { AccountRoleText } from "app/static/types/enum"
 import { CipherRequest } from "core/models/request/cipherRequest"
+import { CollectionRequest } from "core/models/request/collectionRequest"
+import { CollectionView } from "core/models/view/collectionView"
+
+import { withSetPropAction } from "../helpers/withSetPropAction"
 
 /**
  * Model description here for TypeScript hints.
@@ -123,7 +125,7 @@ export const CollectionStoreModel = types
       members: {
         username: string
         role: AccountRoleText
-        key: string
+        key: string | null
         hide_passwords: boolean
       }[]
     ) => {

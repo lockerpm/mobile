@@ -49,7 +49,7 @@ export const ShareWithYouItem = memo((props: Prop) => {
 
   return (
     <PressableScale
-      disabled={!openActionMenu}
+      disabled={!openActionMenu || item.isAccepted}
       onPress={() => {
         if (openActionMenu) {
           openActionMenu(item)

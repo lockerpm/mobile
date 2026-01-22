@@ -13,6 +13,7 @@ import {
   LoginView,
   SecureNoteView,
 } from "core/models/view"
+import { CollectionView } from "core/models/view/collectionView"
 import { PasswordHistoryView } from "core/models/view/passwordHistoryView"
 
 import { AccountRoleText, SharingStatus, SharingType } from "./enum"
@@ -215,6 +216,14 @@ export type CipherAppView = {
 }
 
 export type CipherShareType = CipherAppView & {
+  description: string
+  status?: string
+  members?: SharedMemberType[]
+  groups?: SharedGroupType[]
+}
+
+export type FolderShareType = {
+  collection: CollectionView
   description: string
   status?: string
   members?: SharedMemberType[]

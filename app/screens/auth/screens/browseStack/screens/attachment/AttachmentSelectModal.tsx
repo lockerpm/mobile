@@ -111,7 +111,7 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    borderWidth: 1,
+    borderTopWidth: 1,
     flexDirection: "row",
     paddingHorizontal: 16,
     paddingVertical: 8,

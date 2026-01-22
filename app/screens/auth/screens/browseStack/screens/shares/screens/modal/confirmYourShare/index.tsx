@@ -10,6 +10,7 @@ import { useCipherData } from "app/services/hook"
 import { debounce } from "app/utils/utils"
 
 import { ThemedStyle } from "@/theme"
+import { delay } from "@/utils/delay"
 import { AppEventType, EventBus } from "@/utils/eventBus"
 import { useAppTheme } from "@/utils/useAppTheme"
 
@@ -44,8 +45,9 @@ export const ConfirmYourShareModalScreen: FC<ShareScreenProps<"confirmYourShareM
         })
       )
 
-      setIsLoading(false)
+      await delay(1000)
       EventBus.emit(AppEventType.RELOAD_YOUR_SHARE, null)
+      setIsLoading(false)
       onClose()
     }
 

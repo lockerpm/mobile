@@ -1,21 +1,22 @@
-import { memo } from "react"
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
+import { View, StyleSheet, ViewStyle, TouchableOpacity } from "react-native"
 
-import { Icon, Text } from "app/components/cores"
-import { CipherShareType, SharedMemberType, SharingStatus } from "app/static/types"
+import { Icon, ImageIcon, PressableScale, Text } from "app/components/cores"
+import { CollectionView } from "core/models/view/collectionView"
 
-import { CipherIconImage } from "@/components/ciphers"
+import { useAppLocale } from "@/i18n"
+import { FolderShareType, SharedMemberType } from "@/static/types/cipher.types"
+import { SharingStatus } from "@/static/types/enum"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 
-type Prop = {
-  item: CipherShareType
-  openAction: (item: CipherShareType) => void
+type Props = {
+  item: FolderShareType
+  openAction: (item: CollectionView) => void
   openConfirmModal: (members: SharedMemberType[], organizationId: string) => void
 }
 
-export const YourShareCipherItem = memo((props: Prop) => {
-  const { item, openAction, openConfirmModal } = props
+export const YourShareCollectionItem = ({ item, openAction, openConfirmModal }: Props) => {
+  const { translate } = useAppLocale()
   const {
     themed,
     theme: { colors },
@@ -26,23 +27,23 @@ export const YourShareCipherItem = memo((props: Prop) => {
 
   return (
     <View>
-      <TouchableOpacity
+      <PressableScale
+        disabled={!item.collection.id}
         onPress={() => {
-          openAction(item)
+          openAction(item.collection)
         }}
-        style={styles.container}
+        style={styles.pv12}
       >
-        <View style={styles.content}>
-          <CipherIconImage
-            isHaveKey={item.login.hasFido2Credentials}
-            cipherType={item.type}
-            source={item.imgLogo}
-          />
-
-          <View style={styles.content2}>
+        <View style={styles.row}>
+          <ImageIcon icon={"folder-share"} size={30} />
+          <View style={styles.content}>
             <View style={styles.row}>
-              <Text preset="bold" text={item.name} numberOfLines={1} style={styles.name} />
-
+              <Text
+                preset="bold"
+                text={item.collection.name}
+                numberOfLines={2}
+                style={styles.name}
+              />
               {/* Sharing status */}
               {isNeedToConfirm && (
                 <View style={styles.status}>
@@ -53,22 +54,28 @@ export const YourShareCipherItem = memo((props: Prop) => {
               )}
             </View>
 
-            {!!item.description && (
-              <Text preset="label" size="xs" text={item.description} numberOfLines={2} />
-            )}
+            <Text
+              size="sm"
+              preset="label"
+              text={
+                (item.collection.cipherCount !== undefined
+                  ? `${item.collection.cipherCount} `
+                  : "0 ") +
+                translate(item.collection.cipherCount > 1 ? "common:items" : "common:item")
+              }
+            />
           </View>
         </View>
-      </TouchableOpacity>
-
+      </PressableScale>
       {isNeedToConfirm && (
         <View style={styles.acceptContainer}>
           <Text tx={"shares:confirm"} size="xs" style={styles.name} />
           <View>
             <TouchableOpacity
-              disabled={!item.organizationId}
+              disabled={!item.collection.organizationId}
               onPress={() => {
-                if (item.members && item.organizationId) {
-                  openConfirmModal(item.members, item.organizationId)
+                if (item.members && item.collection.organizationId) {
+                  openConfirmModal(item.members, item.collection.organizationId)
                 }
               }}
               style={themed($confirm)}
@@ -81,9 +88,7 @@ export const YourShareCipherItem = memo((props: Prop) => {
       )}
     </View>
   )
-})
-
-YourShareCipherItem.displayName = "YourShareCipherItem"
+}
 
 const $accepted: ThemedStyle<ViewStyle> = ({ colors }) => ({
   marginRight: 4,
@@ -111,20 +116,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 8,
   },
-  container: {
-    minHeight: 71,
-    paddingVertical: 12,
-  },
   content: {
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  content2: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  flex: {
-    flex: 1,
+    flexGrow: 1,
+    flexShrink: 1,
+    marginHorizontal: 12,
   },
   ml8: {
     marginLeft: 8,
@@ -133,8 +128,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
   },
-  notSync: {
-    marginLeft: 10,
+
+  pv12: {
+    paddingVertical: 12,
   },
   row: {
     alignItems: "center",
@@ -144,12 +140,5 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     paddingHorizontal: 10,
     paddingVertical: 4,
-  },
-  status2: {
-    alignItems: "center",
-    borderRadius: 6,
-    flexDirection: "row",
-    marginLeft: 10,
-    paddingHorizontal: 10,
   },
 })
