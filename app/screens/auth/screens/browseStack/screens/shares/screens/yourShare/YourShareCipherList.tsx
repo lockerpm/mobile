@@ -22,7 +22,6 @@ import { CollectionView } from "core/models/view/collectionView"
 
 import { TxKeyPath, useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
-import { AppEventType, EventBus } from "@/utils/eventBus"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 import { YourShareCipherItem } from "./YourShareCipherItem"
@@ -155,16 +154,6 @@ export const YourShareCipherList = observer(
       cipherStore.myShares,
       cipherStore.organizations,
     ])
-
-    useEffect(() => {
-      const listener1 = EventBus.createListener(AppEventType.RELOAD_YOUR_SHARE, () => {
-        loadData()
-      })
-
-      return () => {
-        EventBus.removeListener(listener1)
-      }
-    }, [])
 
     // ------------------------ RENDER ----------------------------
     const DATA = [

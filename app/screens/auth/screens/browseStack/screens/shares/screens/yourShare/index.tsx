@@ -49,7 +49,7 @@ export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = obse
 
     const navigateToShareConfirmModal = useCallback(
       (item: ConfirmShareItemInfo, members: SharedMemberType[], organizationId: string) => {
-        navigation.navigate("confirmYourShare", {
+        navigation.replace("confirmYourShare", {
           item,
           members: members.filter((m) => m.status === SharingStatus.ACCEPTED),
           organizationId: organizationId,

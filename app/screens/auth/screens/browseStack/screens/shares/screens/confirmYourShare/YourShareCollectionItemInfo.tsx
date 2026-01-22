@@ -9,7 +9,7 @@ type Props = {
   cipherCount?: number
 }
 
-export const YourShareCollectionItem = (item: Props) => {
+export const YourShareCollectionItemInfo = (item: Props) => {
   const { translate } = useAppLocale()
   return (
     <View style={styles.pv12}>

@@ -1,13 +1,9 @@
-import { memo } from "react"
-import { ImageSourcePropType, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
+import { ImageSourcePropType, StyleSheet, View } from "react-native"
 
-import { Icon, Text } from "app/components/cores"
-import { SharingStatus } from "app/static/types"
+import { Text } from "app/components/cores"
 import { CipherType } from "core/enums"
 
 import { CipherIconImage } from "@/components/ciphers"
-import { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
 
 type Prop = {
   hasFido2Credentials: boolean
@@ -17,7 +13,7 @@ type Prop = {
   description?: string
 }
 
-export const YourShareCipherItem = memo((item: Prop) => {
+export const YourShareCipherItemInfo = (item: Prop) => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -39,15 +35,9 @@ export const YourShareCipherItem = memo((item: Prop) => {
       </View>
     </View>
   )
-})
-
-YourShareCipherItem.displayName = "YourShareCipherItem"
+}
 
 const styles = StyleSheet.create({
-  acceptContainer: {
-    flexDirection: "row",
-    marginBottom: 8,
-  },
   container: {
     minHeight: 71,
     paddingVertical: 12,
@@ -60,33 +50,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 12,
   },
-  flex: {
-    flex: 1,
-  },
-  ml8: {
-    marginLeft: 8,
-  },
   name: {
     flexGrow: 1,
     flexShrink: 1,
   },
-  notSync: {
-    marginLeft: 10,
-  },
   row: {
     alignItems: "center",
     flexDirection: "row",
-  },
-  status: {
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  status2: {
-    alignItems: "center",
-    borderRadius: 6,
-    flexDirection: "row",
-    marginLeft: 10,
-    paddingHorizontal: 10,
   },
 })

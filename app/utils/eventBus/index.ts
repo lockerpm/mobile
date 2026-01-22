@@ -37,11 +37,6 @@ export enum AppEventType {
   MANAGE_SHARE_MEMBER_UPDATE = "MANAGE_SHARE_MEMBER_UPDATE",
 
   /**
-   * Reload Your Share
-   */
-  RELOAD_YOUR_SHARE = "RELOAD_YOUR_SHARE",
-
-  /**
    * Unselection (home, cipherList)
    */
   UNSELECT_ALL = "UNSELECT_ALL",
