@@ -12,12 +12,20 @@ struct PasswordsListScreen: View {
   var userInfo: UserInfo
   
   @State private var searchText = ""
-  @State private var isShowItemDetailId = -1
   
   @State private var isShowCreatePassword = false
   @State private var isShowPasswordGenerator = 0
   @State private var isInitSearch = false
   
+  // Navigation to detail
+  @State private var showDetail = false
+  @State private var selectedItemForDetail: AFPasswordItem = AFPasswordItem(fillID: 1, id: 1, tmp: TempPasswordItem(username: "", password: "", name: "", uri: ""))
+  
+  var allPasswords: [AFPasswordItem] {
+    return afd.user.mode == .fillText ? afd.user.afPasswords.filter {
+      !$0.login.password.isEmpty
+    } : afd.user.afPasswords
+  }
   // if user search for domain or url with no result. show suggest search text for best resutl
   var suggestSearchs: [String] {
     parseDomain(of: afd.user.URI)
@@ -33,10 +41,10 @@ struct PasswordsListScreen: View {
   
   var passwords: [AFPasswordItem] {
     if searchText.isEmpty {
-      return afd.user.afPasswords
+      return allPasswords
     } else {
       let search = searchText.lowercased()
-      return afd.user.afPasswords.filter {
+      return allPasswords.filter {
         $0.login.name.lowercased().contains(search)
         || $0.login.uri.lowercased().contains(search)
         || $0.login.username.lowercased().contains(search)
@@ -64,28 +72,19 @@ struct PasswordsListScreen: View {
         } else {
           ForEach(passwords, id: \.login.id) { pw in
             Button {
-              afd.passwordSelected(data: pw)
+              onClickPassword(data: pw)
             } label: {
-              PasswordItemView(item: pw, isShowDetailId: $isShowItemDetailId)
-            }
-            
-            if isShowItemDetailId == pw.fillID {
-              VStack {
-                if !pw.login.username.isEmpty {
-                  CredentialInfo(label: i.translate("item.username"), text: pw.login.username, isCopydable: true)
+              PasswordItemView(
+                item: pw,
+                onChevronTap: {
+                  // Navigate to detail when chevron tapped
+                  selectedItemForDetail = pw
+                  showDetail = true
                 }
-                if !pw.login.password.isEmpty {
-                  CredentialInfo(label: i.translate("item.password"), text: pw.login.password, isCopydable: true)
-                }
-                if !pw.login.uri.isEmpty && pw.login.uri != "https://" {
-                  CredentialInfo(label: "URL", text: pw.login.uri, isCopydable: false)
-                }
-                if !pw.login.otp.isEmpty {
-                  TOTPView(url: pw.login.otp)
-                }
-              }
+              )
             }
           }
+          
         }
       }
       .padding(.top, -24)
@@ -133,6 +132,15 @@ struct PasswordsListScreen: View {
         }
       }
       .navigationBarTitleDisplayMode(.inline)
+      // Hidden NavigationLink to drive chevron -> detail navigation
+      .background(
+        NavigationLink(
+          destination: CredentialDetailScreen(afd: afd, userInfo: userInfo, item: selectedItemForDetail),
+          isActive: $showDetail,
+          label: { EmptyView() }
+        )
+        .hidden()
+      )
     }
     .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
     .navigationBarHidden(true)
@@ -144,6 +152,11 @@ struct PasswordsListScreen: View {
       })
     }
     .background(AppColors.background)
+  }
+  
+  
+  func onClickPassword(data: AFPasswordItem) {
+    afd.passwordSelected(data: data)
   }
 }
 

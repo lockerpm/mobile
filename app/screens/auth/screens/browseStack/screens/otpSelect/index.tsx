@@ -1,16 +1,18 @@
-import { BrowseScreenProps } from "@/navigators"
 import { FC, useCallback, useState } from "react"
+import { ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
+
 import { Screen, Header, Text, PressableScale } from "app/components/cores"
 import { useStores } from "app/models"
 import { FREE_PLAN_LIMIT } from "app/static/constants"
-import { CipherActionsModal, CipherAppView } from "@/static/types"
 import { CipherType } from "core/enums"
-import { delay } from "@/utils/delay"
+
 import { OTPAddAction, OtpList } from "@/components/ciphers"
-import { ViewStyle } from "react-native"
-import { AppEventType, EventBus } from "@/utils/eventBus"
+import { BrowseScreenProps } from "@/navigators"
+import { CipherActionsModal, CipherAppView } from "@/static/types"
 import { ThemedStyle } from "@/theme"
+import { delay } from "@/utils/delay"
+import { AppEventType, EventBus } from "@/utils/eventBus"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 export const OtpSelectScreen: FC<BrowseScreenProps<"otpSelect">> = observer(

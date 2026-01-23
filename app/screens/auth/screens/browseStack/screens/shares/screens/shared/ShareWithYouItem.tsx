@@ -1,11 +1,13 @@
 import { memo } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
+
+import { CipherIconImage } from "app/components/ciphers"
 import { PressableScale, Text } from "app/components/cores"
 import { AccountRole, SharedWithYouType } from "app/static/types"
-import { CipherIconImage } from "app/components/ciphers"
+
 import { useAppLocale } from "@/i18n"
-import { useAppTheme } from "@/utils/useAppTheme"
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type Prop = {
   item: SharedWithYouType
@@ -47,7 +49,7 @@ export const ShareWithYouItem = memo((props: Prop) => {
 
   return (
     <PressableScale
-      disabled={!openActionMenu}
+      disabled={!openActionMenu || item.isAccepted}
       onPress={() => {
         if (openActionMenu) {
           openActionMenu(item)

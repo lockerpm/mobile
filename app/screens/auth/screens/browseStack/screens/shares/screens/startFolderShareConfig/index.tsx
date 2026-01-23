@@ -1,17 +1,20 @@
 import { FC, useCallback, useEffect, useState } from "react"
 import { View, StyleSheet, ViewStyle, ScrollView } from "react-native"
-import { Header, ImageIcon, PressableText, Screen, Text } from "app/components/cores"
-import { AccountRoleText } from "app/static/types"
-import { useFolder } from "app/services/hook"
 import { observer } from "mobx-react-lite"
-import { ShareScreenProps } from "@/navigators"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { ThemedStyle } from "@/theme"
+
+import { Header, ImageIcon, PressableText, Screen, Text } from "app/components/cores"
+import { useFolder } from "app/services/hook"
+import { AccountRoleText } from "app/static/types"
 import { CollectionView } from "core/models/view/collectionView"
-import { EmailInput } from "../startNormalShareConfig/EmailInput"
+
+import { ShareScreenProps } from "@/navigators"
+import { ThemedStyle } from "@/theme"
 import { AppEventType, EventBus } from "@/utils/eventBus"
-import { Member } from "../startNormalShareConfig/Member"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { EmailInput } from "../startNormalShareConfig/EmailInput"
 import { Group } from "../startNormalShareConfig/Group"
+import { Member } from "../startNormalShareConfig/Member"
 
 export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
   ({

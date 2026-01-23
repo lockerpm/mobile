@@ -74,8 +74,33 @@ export const useUnlockNavigation = () => {
     return
   }
 
+  const navigateToAuthenticatorSetupIfNeeded = (otpauthLabel: string) => {
+    // open the authenticator screen for copying code
+    if (otpauthLabel === "otpauth://") {
+      navigation.replace("authStack", {
+        screen: "mainTab",
+        params: {
+          screen: "authenticatorTab",
+        },
+      })
+    } else {
+      // open the authenticator screen for adding new TOTP
+      navigation.replace("authStack", {
+        screen: "browseStack",
+        params: {
+          screen: "cipherEdit",
+          params: {
+            mode: "add",
+            cipherType: CipherType.TOTP,
+            otpUri: otpauthLabel,
+          },
+        },
+      })
+    }
+  }
   return {
     navigateToIntroIfNeeded,
     navigateToAndroidAutofillSetupIfNeeded,
+    navigateToAuthenticatorSetupIfNeeded,
   }
 }

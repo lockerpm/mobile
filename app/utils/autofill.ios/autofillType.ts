@@ -38,11 +38,19 @@ export type IosAutofillPassword = {
   fido2?: Fido2SimpleView[]
 }[]
 
+export type IosAutofillOTP = {
+  id: string
+  name: string
+  otp: string
+}[]
+
 export enum StoreKey {
   USER_INFO = "USER_INFO",
   TEMP_PASSWORD = "TEMP_PASSWORD",
   PASSWORD = "PASSWORD",
   TEMP_PASSKEY = "TEMP_PASSKEY",
+  OTP = "OTP",
+  TEMP_OTP = "TEMP_OTP",
 }
 
 export const AutofillStorekey: Record<
@@ -67,5 +75,13 @@ export const AutofillStorekey: Record<
   TEMP_PASSKEY: {
     service: Config.SHARED_KEYCHAIN_SERVICE + ".temp_passkey",
     username: "locker_temp_passkey",
+  },
+  OTP: {
+    service: Config.SHARED_KEYCHAIN_SERVICE + ".otp",
+    username: "locker_otp",
+  },
+  TEMP_OTP: {
+    service: Config.SHARED_KEYCHAIN_SERVICE + ".temp_otp",
+    username: "locker_temp_otp",
   },
 }

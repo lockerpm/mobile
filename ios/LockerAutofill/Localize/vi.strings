@@ -15,6 +15,7 @@
 
 // CredentialsListScreen
 "list.title" = "Danh sách mật khẩu";
+"list.goToOtp" = "Mã OTP";
 "list.noDataSearch" = "Oops! Không tìm thấy dữ liệu phù hợp ";
 "list.suggestSearch" = "Tìm kiếm theo: ";
 
@@ -41,6 +42,7 @@
 "pw.generator" = "Tạo mật khẩu mạnh";
 "pw.regenerate" = "Tạo lại";
 "pw.copyFill" = "Sao chép và điền";
+"pw.fill" = "Điền";
 
 // create password
 "create.title" = "Tạo mật khẩu";
@@ -76,3 +78,7 @@
 "pk_list.h" = "Danh sách passkey cho ";
 "pk_list.e_text" = "Không có passkey phù hợp cho ";
 "pk_list.e_action" = "Chọn tùy chọn khác";
+
+
+"otp.t" = "Mã OTP";
+"otp.e_text" = "Không có dữ liệu";

@@ -1,16 +1,20 @@
 import { FC, useCallback } from "react"
-import { observer } from "mobx-react-lite"
-import { useStores } from "app/models"
 import { StyleSheet } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { Header, Screen } from "app/components/cores"
+import { useStores } from "app/models"
 import { ShareScreenProps } from "app/navigators"
 import {
   CipherActionsModal,
   CipherAppView,
-  CipherShareType,
+  ConfirmShareItemInfo,
   FolderActionsModal,
+  SharedMemberType,
+  SharingStatus,
 } from "app/static/types"
 import { CollectionView } from "core/models/view/collectionView"
+
 import { YourShareCipherList } from "./YourShareCipherList"
 
 export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = observer(
@@ -43,14 +47,16 @@ export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = obse
       })
     }, [])
 
-    const navigateToShareConfirmModal = useCallback((item: CipherShareType) => {
-      if (!!item.member && item.organizationId) {
-        navigation.navigate("confirmYourShareModal", {
-          member: item.member,
-          organizationId: item.organizationId,
+    const navigateToShareConfirmModal = useCallback(
+      (item: ConfirmShareItemInfo, members: SharedMemberType[], organizationId: string) => {
+        navigation.replace("confirmYourShare", {
+          item,
+          members: members.filter((m) => m.status === SharingStatus.ACCEPTED),
+          organizationId: organizationId,
         })
-      }
-    }, [])
+      },
+      []
+    )
 
     const navigateToCollectionCiphers = useCallback(
       (collectionId: string, orgId: string, name: string) => {
@@ -84,8 +90,6 @@ export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = obse
             leftIcon="arrow-left"
             onLeftPress={navigation.goBack}
             titleTx="shares:share_items"
-            // rightIcon="plus"
-            // onRightPress={navigateToAddShareItem}
           />
         }
         contentContainerStyle={styles.flex}

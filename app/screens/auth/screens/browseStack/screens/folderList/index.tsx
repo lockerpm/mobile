@@ -1,16 +1,19 @@
 /* eslint-disable react-native/no-inline-styles */
 import { useState, FC, useCallback } from "react"
-import { observer } from "mobx-react-lite"
 import { StyleSheet, useWindowDimensions, View } from "react-native"
+import { observer } from "mobx-react-lite"
+import { TabView, SceneMap } from "react-native-tab-view"
+
 import { Header, PressableScale, Screen, Text } from "app/components/cores"
 import { useStores } from "app/models"
 import { BrowseScreenProps } from "app/navigators"
-import { FolderList } from "./folders"
-import { CollectionList } from "./collections"
-import { TabView, SceneMap } from "react-native-tab-view"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { TxKeyPath } from "@/i18n"
 import { FolderActionsModal } from "@/static/types"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { CollectionList } from "./collections"
+import { FolderList } from "./folders"
 
 const renderScene = SceneMap({
   folder: FolderList,
@@ -45,7 +48,7 @@ export const FolderListScreen: FC<BrowseScreenProps<"folderList">> = observer(({
   }, [navigation])
 
   // ------------------- RENDER ---------------------
-
+  console.log("FolderListScreen Render", index)
   return (
     <Screen
       header={

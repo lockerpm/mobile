@@ -85,4 +85,3 @@ struct TOTPView: View {
     otp = totp.generate(time: Date()) ?? ""
   }
 }
-

@@ -1,6 +1,5 @@
 export * from "./quickShare"
 export * from "./manageShareMember"
 export * from "./pendingSharedAction"
-export * from "./confirmYourShare"
 export * from "./manageFolderShareMember"
 export * from "./editShareMemberPermission"

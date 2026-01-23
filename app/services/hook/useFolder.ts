@@ -1,17 +1,20 @@
-import { useStores } from "app/models"
-import { useCoreService } from "../coreService"
-import { useCipherData } from "./useCipherData"
-import { EncString, SymmetricCryptoKey } from "core/models/domain"
-import { FolderView } from "core/models/view/folderView"
-import { CipherView } from "core/models/view"
 import { Alert } from "react-native"
-import { CipherRequest } from "core/models/request"
-import { CollectionView } from "core/models/view/collectionView"
+
+import { useStores } from "app/models"
 import { AccountRoleText, CipherRequestWithId, ShareMultipleCiphersGroups } from "app/static/types"
-import { useToast } from "../utils"
+import { EncString, SymmetricCryptoKey } from "core/models/domain"
+import { CipherRequest } from "core/models/request"
+import { CipherView } from "core/models/view"
+import { CollectionView } from "core/models/view/collectionView"
+import { FolderView } from "core/models/view/folderView"
+
 import { useAppLocale } from "@/i18n"
 import { Base64 } from "@/utils/base64"
 import { Logger } from "@/utils/logger"
+
+import { useToast } from "../utils"
+import { useCipherData } from "./useCipherData"
+import { useCoreService } from "../coreService"
 
 export function useFolder() {
   const { cipherStore, folderStore, collectionStore, enterpriseStore, user } = useStores()
@@ -49,8 +52,8 @@ export function useFolder() {
               return {
                 username: member.email,
                 key: member.public_key
-                  ? (await _generateMemberKey(member.public_key, orgKey)) || ""
-                  : "",
+                  ? (await _generateMemberKey(member.public_key, orgKey)) || null
+                  : null,
               }
             })
         )
@@ -110,7 +113,7 @@ export function useFolder() {
       const members = await Promise.all(
         emails.map(async (item) => {
           const publicKeyRes = await cipherStore.getSharingPublicKey(item.email)
-          let publicKey = ""
+          let publicKey = null
           if (publicKeyRes.kind === "ok") {
             publicKey = publicKeyRes.data.public_key
           }
@@ -118,7 +121,7 @@ export function useFolder() {
             username: item.email,
             role: item.role,
             hide_passwords: autofillOnly,
-            key: publicKey ? (await _generateMemberKey(publicKey, orgKey)) || "" : "",
+            key: publicKey ? (await _generateMemberKey(publicKey, orgKey)) || null : null,
           }
         })
       )
@@ -144,7 +147,7 @@ export function useFolder() {
       const groupsPayload: ShareMultipleCiphersGroups = await _shareFolderToGroups(orgKey, groups)
 
       const res = await folderStore.shareFolder({
-        sharing_key: shareKey ? shareKey[0].encryptedString || "" : "",
+        sharing_key: shareKey ? shareKey[0].encryptedString || null : null,
         members,
         folder: {
           id: folder.id,
@@ -200,7 +203,7 @@ export function useFolder() {
             username: item.email,
             role: item.role,
             hide_passwords: autofillOnly,
-            key: publicKey ? (await _generateMemberKey(publicKey, orgKey)) || "" : "",
+            key: publicKey ? (await _generateMemberKey(publicKey, orgKey)) || null : null,
           }
         })
       )

@@ -31,6 +31,7 @@ private var passkeyContext: PasskeyContext?
 class CredentialProviderController: ASCredentialProviderViewController {
   private var serviceIdentifier: String = ""
   internal var quickBarCredential: AFPasswordItem!
+  internal var quickBarOTP: OTPItem!
   internal var user: User
   
   
@@ -38,13 +39,10 @@ class CredentialProviderController: ASCredentialProviderViewController {
   required init?(coder: NSCoder) {
     self.user = User()
     super.init(coder: coder)
-    print("init ------")
-    
   }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    print("viewDidLoad ------")
-    
     SentrySDK.start { options in
       options.dsn = getStringInfo(key: "DSN_SENTRY")
       options.enableAppHangTracking = false  // Reduce resource usage
@@ -55,8 +53,8 @@ class CredentialProviderController: ASCredentialProviderViewController {
     
     i.locale = user.info?.language ?? "en"
   }
+  
   override func viewDidAppear(_ animated: Bool) {
-    print("viewDidAppear -----")
     self.view.backgroundColor = UIColor(named: "background")
     self.startExtension()
   }
@@ -92,8 +90,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   @available(iOSApplicationExtension 18.0, *)
   override func prepareOneTimeCodeCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    
-    print("prepareCredentialList", serviceIdentifiers)
+    print("prepareOneTimeCodeCredentialList", serviceIdentifiers)
     prepareAutofillData(sID: serviceIdentifiers, mode: .fillOtp)
   }
   
@@ -106,7 +103,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
     print("prepareInterfaceForUserChoosingTextToInsert")
     prepareAutofillData(sID: [], mode: .fillText)
   }
-  
   
   
   /**
@@ -140,19 +136,34 @@ class CredentialProviderController: ASCredentialProviderViewController {
     case let passkeyRequest as ASPasskeyCredentialRequest:
       prepareInterfaceToProvideCredential(for: passkeyRequest)
     default:
-      return
-      //      if #available(iOSApplicationExtension 18.0, *),
-      //         let otpRequest = credentialRequest as? ASOneTimeCodeCredentialRequest,
-      //         let otpIdentity = otpRequest.credentialIdentity as? ASOneTimeCodeCredentialIdentity {
-      //        initializeApp(with: DefaultCredentialProviderContext(
-      //          .autofillOTPCredential(otpIdentity, userInteraction: true),
-      //        ))
-      //      }
+      if #available(iOSApplicationExtension 18.0, *),
+         let otpRequest = credentialRequest as? ASOneTimeCodeCredentialRequest,
+         let otpIdentity = otpRequest.credentialIdentity as? ASOneTimeCodeCredentialIdentity {
+        prepareInterfaceToProvideCredential(for: otpIdentity)
+      }
     }
   }
   
   /**
-   * Người dùng chọn Password từ QuickTypeBar -> mở unlock screen để xác thực
+   * Người dùng chọn OTP từ QuickTypeBar -> mở unlock screen để xác thực
+   */
+  @available(iOSApplicationExtension 18.0, *)
+  func prepareInterfaceToProvideCredential(for otpIdentity: ASOneTimeCodeCredentialIdentity) {
+    if (self.loginLocker()) {
+      self.serviceIdentifier = otpIdentity.serviceIdentifier.identifier
+      user.URI = URL(string: serviceIdentifier)?.host ?? serviceIdentifier
+      
+      if let otpItem = user.getOTPItemById(id: otpIdentity.recordIdentifier!)  {
+        self.quickBarOTP = otpItem
+      } else {
+        quickTypeBar.removeOTPCredentialIdentities(otpIdentity)
+      }
+    }
+  }
+  
+  
+  /**
+   * Người dùng chọn passkey từ QuickTypeBar -> mở unlock screen để xác thực
    */
   @available(iOSApplicationExtension 17.0, *)
   func prepareInterfaceToProvideCredential(for passkeyRequest: ASPasskeyCredentialRequest) {
@@ -257,8 +268,12 @@ extension CredentialProviderController {
   @ViewBuilder
   private func getTargetViewAfterUnlock() -> some View {
     switch user.mode {
+    case .fillText:
+      FillTextListScreen(afd: self, userInfo: user.info)
     case .fillPassword:
       PasswordsListScreen(afd: self, userInfo: user.info)
+    case .fillOtp:
+      OTPsListScreen(afd: self, userInfo: user.info)
     case .fillPasskey:
       PasskeysListScreen(afd: self, userInfo: user.info)
     case .createPasskey:
@@ -306,6 +321,13 @@ extension CredentialProviderController: AutofillScreenDelegate {
       }
     }
     
+    if #available(iOSApplicationExtension 18.0, *) {
+      if (user.mode == CredentialActions.quickBarOTP) {
+        otpSelected(data: self.quickBarOTP)
+        return
+      }
+    }
+    
     navigateToTargetView()
   }
   
@@ -313,15 +335,40 @@ extension CredentialProviderController: AutofillScreenDelegate {
   func passwordSelected(password: String) {
     fillPassword(user: "", password: password, otp: "")
   }
-  func createPasswordItem(item: TempPasswordItem) {
-    user.saveTempPassword(item)
-    fillPassword(user: item.username, password: item.password, otp: "")
+  func createPasswordItem(data: TempPasswordItem) {
+    user.saveTempPassword(data)
+    
+    if (user.mode == .fillText) {
+      if #available(iOS 18.0, *) {
+        fillText(text: data.password)
+      }
+    } else {
+      fillPassword(user: data.username, password: data.password, otp: "")
+    }
   }
   func passwordSelected(data: AFPasswordItem) {
     quickTypeBar.replaceCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, username: data.login.username, userID: data.login.id)
     fillPassword(user: data.login.username, password: data.login.password, otp: data.login.otp)
   }
   
+  // text
+  func textSelected(data: String) {
+    if #available(iOS 18.0, *) {
+      fillText(text: data)
+    } else {
+      cancel()
+    }
+  }
+  
+  // OTP
+  func otpSelected(data: OTPItem) {
+    if #available(iOSApplicationExtension 18.0, *) {
+      quickTypeBar.replaceOTPCredentialIdentities(identifier: self.serviceIdentifier, type: .URL, item: data)
+      fillOtp(otpUri: data.otp)
+    } else {
+      cancel()
+    }
+  }
   
   // Passkey
   func passkeySelected(data: PasskeyItem) {
@@ -342,6 +389,23 @@ extension CredentialProviderController: AutofillScreenDelegate {
   }
 }
 
+// MARK: text
+@available(iOS 18.0, *)
+extension CredentialProviderController {
+  private func fillText(text: String){
+    self.extensionContext.completeRequest(withTextToInsert: text, completionHandler: nil)
+  }
+}
+
+// MARK: otp
+extension CredentialProviderController {
+  @available(iOSApplicationExtension 18.0, *)
+  private func fillOtp(otpUri: String){
+    let otpCode = otpService.getOTPFromUri(uri: otpUri).generate(time: Date()) ?? ""
+    let otpCredential = ASOneTimeCodeCredential(code: otpCode)
+    self.extensionContext.completeOneTimeCodeRequest(using: otpCredential, completionHandler: nil)
+  }
+}
 
 // MARK: Password
 extension CredentialProviderController {

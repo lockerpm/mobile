@@ -1,9 +1,11 @@
 import { StyleProp, View, ViewStyle, StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { Icon, PressableIcon, Text, PressableText } from "app/components/cores"
 import { observer } from "mobx-react-lite"
-import { useAppTheme } from "@/utils/useAppTheme"
+
+import { Icon, PressableIcon, Text, PressableText } from "app/components/cores"
+
 import { TabsScreenProps } from "@/navigators"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 interface Props {
   onClose: () => void

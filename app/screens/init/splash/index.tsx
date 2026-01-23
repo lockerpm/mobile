@@ -1,5 +1,5 @@
 import { FC, useState, useEffect, useCallback } from "react"
-import { StyleSheet, View } from "react-native"
+import { Linking, StyleSheet, View } from "react-native"
 import JailMonkey from "jail-monkey"
 import DeviceInfo from "react-native-device-info"
 
@@ -62,7 +62,7 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({
    * If user is on-premise user and activated, navigate to lock screen
    * @returns
    */
-  const navigateToOnPremiseLogin = async () => {
+  const navigateToOnPremiseLogin = async (url: string | null) => {
     if (user.email) {
       const res = await idApi.onPremisePreLogin({ email: user.email })
       if (res.kind === "ok") {
@@ -71,6 +71,7 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({
             type: LockType.OnPremise,
             data: res.data[0],
             email: user.email,
+            label: url || undefined,
           })
         }
       } else {
@@ -86,7 +87,7 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({
    * If the user is logged in, it will navigate to the Lock screen with the type Individual
    * If the user is unauthorized, it will notify the user with an error and back to the Login screen
    */
-  const navigateToNormalLogin = async () => {
+  const navigateToNormalLogin = async (url: string | null) => {
     const userRes = await user.getUser()
     if (
       ["ok", "unauthorized", "timeout", "cannot-connect", "network-error"].includes(userRes.kind)
@@ -94,13 +95,17 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({
       if (userRes.kind !== "ok") {
         notifyApiError(userRes)
       }
-      navigation.replace("lock", { type: LockType.Individual, fido2: fido2 })
+      navigation.replace("lock", {
+        type: LockType.Individual,
+        fido2: fido2,
+        label: url || undefined,
+      })
     } else {
       navigateToLogin()
     }
   }
 
-  const mounted = useCallback(async () => {
+  const mounted = useCallback(async (url: string | null) => {
     if (checkTrustFall()) {
       return
     }
@@ -134,9 +139,9 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({
      */
     if (user.is_pwd_manager) {
       if (user.onPremiseUser) {
-        await navigateToOnPremiseLogin()
+        await navigateToOnPremiseLogin(url)
       } else {
-        await navigateToNormalLogin()
+        await navigateToNormalLogin(url)
       }
       return
     }
@@ -148,10 +153,16 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({
 
   useAppUpdate()
 
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener("focus", mounted)
+  //   return unsubscribe
+  // }, [navigation, mounted])
+
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", mounted)
-    return unsubscribe
-  }, [navigation, mounted])
+    Linking.getInitialURL().then((url) => {
+      mounted(url)
+    })
+  }, [mounted])
 
   return (
     <Screen disableAvoidkeyboard contentContainerStyle={$container}>

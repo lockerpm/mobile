@@ -25,6 +25,23 @@ class AutofillDataModel {
     return nil
   }
   
+  func getOTPs() -> [OTPItem] {
+    do {
+      let keychain = Keychain(service: otpKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
+      let keychainData = try! keychain.get(otpKey.username) ?? ""
+      if (!keychainData.isEmpty) {
+        let jsonData = Data(keychainData.utf8)
+        let decoder = JSONDecoder()
+        let decodeData = try decoder.decode([OTPItem].self, from: jsonData)
+        return decodeData
+      }
+      return []
+    } catch {
+      SentrySDK.capture(message: "Couldn't decode jsonData when getOTPs: \(error)")
+    }
+    return []
+  }
+  
   func getPasswords() -> [PasswordItem] {
     do {
       let keychain = Keychain(service: passwordKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)

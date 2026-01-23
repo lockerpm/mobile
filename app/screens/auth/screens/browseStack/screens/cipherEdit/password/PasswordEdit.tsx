@@ -108,7 +108,7 @@ export const PasswordEdit = observer(
         ? [saveData.url]
         : item.login.uris?.length > 0
           ? item.login.uris.map((e) => e.uri)
-          : [initialUrl || "https://"]
+          : [initialUrl || ""]
     )
 
     const [fido2, setFido2] = useState<Fido2CredentialView[] | null>(item.login.fido2Credentials) // fido2

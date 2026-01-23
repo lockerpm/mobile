@@ -771,11 +771,12 @@ const en = {
     share_x_items: "Share {{count}} items",
     share_x_item: "Share {{count}} item",
     confirm_share: {
-      verify_fingerprint: "Verify fingerprint phrase",
-      verification_desc:
-        "To ensure the integrity of your encryption keys, please verify the user's fingerprint phrase before continuing.",
-      fingerprint_desc:
-        "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.",
+      title: "Confirm your sharing",
+      des: "You shared the item with the email address that just registered a Locker account and created their own keys. Please confirm the sharing again so their keys can be used to encrypt the item, allowing them to access it.",
+      list: "List of new locker users: ",
+      noti_label:
+        "Some items/folders have been shared with newly registered users and require your confirmation.",
+      noti_btn: "View shared items →",
     },
     suggestion: "Users or groups in Enterprise",
     confirm:
@@ -1412,6 +1413,7 @@ const en = {
   file_attachment: {
     title: "File Attachment",
     upload_photo: "Upload Photo",
+    take_photo: "Take Photo",
     upload_file: "Upload File",
     max_size: "Max file size is 50MB",
     upload_success: "File uploaded successfully",

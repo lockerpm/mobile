@@ -10,11 +10,11 @@ export enum FolderActionsModal {
 }
 
 export type ShareFolderData = {
-  sharing_key: string
+  sharing_key: string | null
   members: {
     username: string
     role: AccountRoleText
-    key: string
+    key: string | null
     hide_passwords: boolean
   }[]
   groups?: {
@@ -22,7 +22,7 @@ export type ShareFolderData = {
     role: string
     members: {
       username: string
-      key: string
+      key: string | null
     }[]
   }[]
 } & CollectionActionData
