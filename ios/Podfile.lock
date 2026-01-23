@@ -2443,7 +2443,7 @@ PODS:
     - Yoga
   - react-native-netinfo (11.4.1):
     - React-Core
-  - react-native-pager-view (6.9.1):
+  - react-native-pager-view (8.0.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2470,6 +2470,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - SocketRocket
+    - SwiftUIIntrospect (~> 1.0)
     - Yoga
   - react-native-passkey (3.3.2):
     - boost
@@ -3766,6 +3767,7 @@ PODS:
     - Yoga
   - Sentry/HybridSDK (8.57.2)
   - SocketRocket (0.7.1)
+  - SwiftUIIntrospect (1.3.0)
   - VisionCamera (4.7.3):
     - VisionCamera/Core (= 4.7.3)
     - VisionCamera/React (= 4.7.3)
@@ -3950,6 +3952,7 @@ SPEC REPOS:
     - PromisesObjC
     - Sentry
     - SocketRocket
+    - SwiftUIIntrospect
 
 EXTERNAL SOURCES:
   boost:
@@ -4348,7 +4351,7 @@ SPEC CHECKSUMS:
   react-native-keyboard-controller: c4ca61f44d66c2f8987a7e67e9b78e80dc965c45
   react-native-mmkv: 7b9c7469fa0a7e463f9411ad3e4fe273bd5ff030
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
-  react-native-pager-view: 0e228ec2dfdd87807d125c7bbfb83299edede19c
+  react-native-pager-view: c62ab82db28e2d11e7809c59085e2984a45979c5
   react-native-passkey: 5ba85d5ca46808c93360b2e5717b863d5c67643d
   react-native-quick-base64: 6568199bb2ac8e72ecdfdc73a230fbc5c1d3aac4
   react-native-quick-crypto: 2c53f72c27485924b444dda124639ee363cf1d69
@@ -4411,6 +4414,7 @@ SPEC CHECKSUMS:
   RNWorklets: ab618bf7d1c7fd2cb793b9f0f39c3e29274b3ebf
   Sentry: 83a3814c3ca042874b39c5c5bdffb6570d4d760e
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  SwiftUIIntrospect: fee9aa07293ee280373a591e1824e8ddc869ba5d
   VisionCamera: 7187b3dac1ff3071234ead959ce311875748e14f
   Yoga: 9b30b783a17681321b52ac507a37219d7d795ace
 

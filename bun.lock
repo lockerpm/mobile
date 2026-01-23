@@ -92,6 +92,7 @@
         "react-native-masked-text": "^1.13.0",
         "react-native-mmkv": "3.3.3",
         "react-native-nitro-modules": "^0.31.1",
+        "react-native-pager-view": "^8.0.0",
         "react-native-passkey": "^3.1.0",
         "react-native-progress": "^5.0.1",
         "react-native-quick-base64": "^2.2.2",
@@ -2377,7 +2378,7 @@
 
     "react-native-nitro-modules": ["react-native-nitro-modules@0.31.6", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-EcKuLgYwOPrWSGC0VqxqTXjxsQBLCjl/1+ryuKwKDA4iyLr9C/8CBCn6sDS3wbmZDlNl+EPWTPU+VWC6SnPW8Q=="],
 
-    "react-native-pager-view": ["react-native-pager-view@6.9.1", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-uUT0MMMbNtoSbxe9pRvdJJKEi9snjuJ3fXlZhG8F2vVMOBJVt/AFtqMPUHu9yMflmqOr08PewKzj9EPl/Yj+Gw=="],
+    "react-native-pager-view": ["react-native-pager-view@8.0.0", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-oAwlWT1lhTkIs9HhODnjNNl/owxzn9DP1MbP+az6OTUdgbmzA16Up83sBH8NRKwrH8rNm7iuWnX1qMqiiWOLhg=="],
 
     "react-native-passkey": ["react-native-passkey@3.3.2", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-YgXERrBlgVHAYkxGPpncB0zoiRQfZyMMMlWfNTYMyKvOS6muFMlhzk6w5lG4FyEEVrvXHGV4AS6twbmt2Rv8GA=="],
 
