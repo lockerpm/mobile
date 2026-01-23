@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react"
 import { View, SectionList, StyleSheet, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
-import { useCipherData, useCipherHelper } from "app/services/hook"
+import { CollectionItem, EmptyCipherList } from "app/components/ciphers"
 import { useStores } from "app/models"
-import { CollectionView } from "core/models/view/collectionView"
+import { useCipherData, useCipherHelper } from "app/services/hook"
 import { AccountRole, AccountRoleText, SharedWithYouType, SharingStatus } from "app/static/types"
+import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
 import { Organization } from "core/models/domain/organization"
 import { CipherView } from "core/models/view"
-import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
-import { CollectionItem, EmptyCipherList } from "app/components/ciphers"
-import { ShareWithYouItem } from "./ShareWithYouItem"
+import { CollectionView } from "core/models/view/collectionView"
+
 import { useAppLocale } from "@/i18n"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { useAppTheme } from "@/utils/useAppTheme"
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { ShareWithYouItem } from "./ShareWithYouItem"
 
 export interface CipherSharedListProps {
   openCipherActions: (item: SharedWithYouType) => void
@@ -38,7 +40,7 @@ export const SharedWithYouCipherList = observer(
 
     // ------------------------ COMPUTED ----------------------------
 
-    const organizations = cipherStore.organizations
+    const organizations = [...cipherStore.organizations]
     const pendingCiphers = cipherStore.sharingInvitations.map((i) => {
       const cipherView = newCipher(i.cipher_type)
       const cipherLogo = getCipherLogo(cipherView)
@@ -128,7 +130,12 @@ export const SharedWithYouCipherList = observer(
     useEffect(() => {
       loadData()
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cipherStore.lastSync, cipherStore.lastCacheUpdate, cipherStore.notSynchedCiphers])
+    }, [
+      cipherStore.lastSync,
+      cipherStore.lastCacheUpdate,
+      cipherStore.notSynchedCiphers,
+      cipherStore.organizations,
+    ])
 
     const DATA = [
       {

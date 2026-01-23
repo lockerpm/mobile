@@ -768,11 +768,12 @@ const vi: Translations = {
     share_x_items: "Chia sẻ {{count}} mục",
     share_x_item: "Chia sẻ {{count}} mục",
     confirm_share: {
-      verify_fingerprint: "Xác minh Fingerprint",
-      verification_desc:
-        "Để đảm bảo tính minh bạch của khóa mã hóa, vui lòng xác minh Fingerprint trước khi tiếp tục.",
-      fingerprint_desc:
-        "'Fingerprint' là cụm từ duy nhất của mỗi tài khoản, dùng để xác minh khóa công khai với người dùng khác trong trường hợp chia sẻ và tham gia vào một tổ chức.",
+      title: "Xác nhận chia sẻ",
+      des: "Bạn đã chia sẻ mục này với địa chỉ email vừa đăng ký tài khoản Locker và tạo khóa riêng của họ. Vui lòng xác nhận lại việc chia sẻ để các khóa của họ được dùng để mã hóa mục, cho phép họ truy cập.",
+      list: "Danh sách người dùng Locker mới: ",
+      noti_label:
+        "Một số mục/thư mục đã được chia sẻ với các người dùng mới đăng ký, và cần bạn xác nhận lại.",
+      noti_btn: "Xem mục chia sẻ →",
     },
     suggestion: "Người dùng hoặc nhóm trong doanh nghiệp",
     confirm:
@@ -1411,6 +1412,7 @@ const vi: Translations = {
   file_attachment: {
     title: "Tệp đính kèm",
     upload_photo: "Tải lên ảnh",
+    take_photo: "Chụp ảnh",
     upload_file: "Tải lên tệp",
     max_size: "Kích thước tệp tối đa là 50MB",
     upload_success: "Tệp đã được tải lên thành công",

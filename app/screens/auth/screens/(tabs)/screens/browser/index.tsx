@@ -1,16 +1,20 @@
 import { FC, useEffect, useState } from "react"
 import { ImageSourcePropType, ViewStyle } from "react-native"
-import { Screen, TabHeader } from "app/components/cores"
+import { useAtomValue } from "jotai"
 import { observer } from "mobx-react-lite"
-import { useStores } from "app/models"
-import { useTool } from "app/services/hook"
-import { SharingStatus } from "app/static/types"
-import { CipherType } from "core/enums"
-import { TabsScreenProps } from "app/navigators"
-import { TxKeyPath } from "app/i18n"
-import { BrowserItem } from "./BrowserItem"
+
+import { Screen, TabHeader } from "app/components/cores"
 import { MenuItemContainer } from "app/components/utils"
+import { TxKeyPath } from "app/i18n"
+import { useStores } from "app/models"
+import { TabsScreenProps } from "app/navigators"
+import { useTool } from "app/services/hook"
+import { CipherType } from "core/enums"
+
+import { confirmShareAtom } from "@/services/utils/useConfirmShare"
 import { useAppTheme } from "@/utils/useAppTheme"
+
+import { BrowserItem } from "./BrowserItem"
 
 type BrowseData = {
   notiCount?: number
@@ -49,12 +53,9 @@ export const BrowseListScreen: FC<TabsScreenProps<"browseTab">> = observer(({ na
   const { getCipherCount } = useTool()
 
   const [data, setData] = useState<BrowseData[]>([])
+  const confirmShareCount = useAtomValue(confirmShareAtom)
 
-  const shareNotiCount =
-    cipherStore.sharingInvitationsIgnoreAccept.length +
-    cipherStore.myShares.reduce((total, s) => {
-      return total + s.members.filter((m) => m.status === SharingStatus.ACCEPTED).length
-    }, 0)
+  const shareNotiCount = cipherStore.sharingInvitationsIgnoreAccept.length + confirmShareCount
 
   const mount = async () => {
     const temp = Object.keys(BROWSE_ITEMS) as BrowseRoute[]
@@ -193,7 +194,7 @@ export const BrowseListScreen: FC<TabsScreenProps<"browseTab">> = observer(({ na
   }
   useEffect(() => {
     mount()
-  }, [cipherStore.lastSync, cipherStore.lastCacheUpdate])
+  }, [cipherStore.lastSync, cipherStore.lastCacheUpdate, shareNotiCount])
 
   return (
     <Screen

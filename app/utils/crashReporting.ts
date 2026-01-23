@@ -19,6 +19,18 @@ export const initCrashReporting = () => {
     Sentry.init({
       dsn: Config.DSN_SENTRY,
       tracesSampleRate: 0.1,
+      appHangTimeoutInterval: 5000,
+      beforeSend: (event) => {
+        // Check if the event is an "App Hanging" issue
+        if (event.exception && event.exception.values) {
+          for (const value of event.exception.values) {
+            if (value.type === "App Hanging") {
+              return null // Return null to ignore the event
+            }
+          }
+        }
+        return event // Return the event to send it to Sentry
+      },
     })
   }
 }

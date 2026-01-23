@@ -13,7 +13,7 @@ import {
   LoginView,
   SecureNoteView,
 } from "core/models/view"
-import { Fido2CredentialView } from "core/models/view/fido2CredentialView"
+import { CollectionView } from "core/models/view/collectionView"
 import { PasswordHistoryView } from "core/models/view/passwordHistoryView"
 
 import { AccountRoleText, SharingStatus, SharingType } from "./enum"
@@ -97,7 +97,7 @@ export type ShareCipherData = {
 export type ShareMultipleCiphersMembers = {
   username: string
   role: AccountRoleText
-  key: string
+  key: string | null
   hide_passwords: boolean
 }[]
 
@@ -106,7 +106,7 @@ export type ShareMultipleCiphersGroups = {
   role: string
   members: {
     username: string
-    key: string
+    key: string | null
   }[]
 }[]
 
@@ -218,9 +218,32 @@ export type CipherAppView = {
 export type CipherShareType = CipherAppView & {
   description: string
   status?: string
-  member?: SharedMemberType
-  group?: SharedGroupType
+  members?: SharedMemberType[]
+  groups?: SharedGroupType[]
 }
+
+export type FolderShareType = {
+  collection: CollectionView
+  description: string
+  status?: string
+  members?: SharedMemberType[]
+  groups?: SharedGroupType[]
+}
+
+export type ConfirmShareItemInfo =
+  | {
+      type: "cipher"
+      hasFido2Credentials: boolean
+      cipherType: CipherType
+      imgLogo: ImageSourcePropType
+      name: string
+      description?: string
+    }
+  | {
+      type: "folder"
+      name: string
+      cipherCount?: number
+    }
 
 export type SharedWithYouType = CipherAppView & {
   isShared?: boolean

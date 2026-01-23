@@ -1,25 +1,37 @@
 import { memo } from "react"
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
+
 import { Icon, Text } from "app/components/cores"
-import { CipherShareType, SharingStatus } from "app/static/types"
-import { useAppLocale } from "@/i18n"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { ThemedStyle } from "@/theme"
+import {
+  CipherShareType,
+  ConfirmShareItemInfo,
+  SharedMemberType,
+  SharingStatus,
+} from "app/static/types"
+
 import { CipherIconImage } from "@/components/ciphers"
+import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type Prop = {
   item: CipherShareType
   openAction: (item: CipherShareType) => void
-  openConfirmModal: (item: CipherShareType) => void
+  openConfirmModal: (
+    item: ConfirmShareItemInfo,
+    members: SharedMemberType[],
+    organizationId: string
+  ) => void
 }
 
 export const YourShareCipherItem = memo((props: Prop) => {
   const { item, openAction, openConfirmModal } = props
-  const { translate } = useAppLocale()
   const {
     themed,
     theme: { colors },
   } = useAppTheme()
+
+  const isNeedToConfirm =
+    !!item.members && item.members.some((m) => m.status === SharingStatus.ACCEPTED)
 
   return (
     <View>
@@ -41,37 +53,10 @@ export const YourShareCipherItem = memo((props: Prop) => {
               <Text preset="bold" text={item.name} numberOfLines={1} style={styles.name} />
 
               {/* Sharing status */}
-              {item.status && (
+              {isNeedToConfirm && (
                 <View style={styles.status}>
-                  {item.status === SharingStatus.ACCEPTED && (
-                    <View style={themed($accepted)}>
-                      <Text text="1" size="xs" color={colors.white} preset="bold" />
-                    </View>
-                  )}
-                  <View
-                    style={[
-                      styles.status2,
-                      {
-                        backgroundColor:
-                          item.status === SharingStatus.INVITED
-                            ? colors.warning
-                            : item.status === SharingStatus.ACCEPTED
-                              ? colors.title
-                              : colors.primary,
-                      },
-                    ]}
-                  >
-                    <Text
-                      size="xs"
-                      text={
-                        item.status === SharingStatus.ACCEPTED
-                          ? translate("shares:wait_confirm")
-                          : // @ts-ignore
-                            translate(`shares:status.${item.status.toLowerCase()}`)
-                      }
-                      weight="bold"
-                      color={colors.background}
-                    />
+                  <View style={themed($accepted)}>
+                    <Text text="1" size="xs" color={colors.white} preset="bold" />
                   </View>
                 </View>
               )}
@@ -84,13 +69,27 @@ export const YourShareCipherItem = memo((props: Prop) => {
         </View>
       </TouchableOpacity>
 
-      {item?.status === SharingStatus.ACCEPTED && (
+      {isNeedToConfirm && (
         <View style={styles.acceptContainer}>
           <Text tx={"shares:confirm"} size="xs" style={styles.name} />
           <View>
             <TouchableOpacity
+              disabled={!item.organizationId}
               onPress={() => {
-                openConfirmModal(item)
+                if (item.members && item.organizationId) {
+                  openConfirmModal(
+                    {
+                      type: "cipher",
+                      hasFido2Credentials: item.login.hasFido2Credentials,
+                      cipherType: item.type,
+                      imgLogo: item.imgLogo,
+                      name: item.name,
+                      description: item.description,
+                    },
+                    item.members,
+                    item.organizationId
+                  )
+                }
               }}
               style={themed($confirm)}
             >

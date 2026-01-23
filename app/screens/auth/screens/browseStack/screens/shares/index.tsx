@@ -1,5 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
+
+import { modalScreenOptions, ShareRoute } from "@/navigators"
+
 import {
   SharedWithYouScreen,
   SharesHomeScreen,
@@ -12,14 +15,13 @@ import {
   NormalSharesScreen,
   ManageSharedMemberScreen,
   ManageShareMemberModalScreen,
-  ConfirmYourShareModalScreen,
+  ConfirmYourShareScreen,
   PendingSharedCipherModalScreen,
   FolderSharesScreen,
   ManageFolderSharedMemberScreen,
   ManageFolderShareMemberModalScreen,
   EditShareMemberPermissionModalScreen,
 } from "./screens"
-import { modalScreenOptions, ShareRoute } from "@/navigators"
 
 const Stack = createNativeStackNavigator<ShareRoute>()
 
@@ -32,7 +34,7 @@ export const ShareStack = observer(() => {
     >
       <Stack.Group screenOptions={modalScreenOptions}>
         <Stack.Screen name="pendingSharedCipherModal" component={PendingSharedCipherModalScreen} />
-        <Stack.Screen name="confirmYourShareModal" component={ConfirmYourShareModalScreen} />
+
         <Stack.Screen name="quickSharesActionsModal" component={QuickSharesActionsModalScreen} />
         <Stack.Screen name="manageSharedMemberModal" component={ManageShareMemberModalScreen} />
         <Stack.Screen
@@ -52,6 +54,7 @@ export const ShareStack = observer(() => {
       <Stack.Screen name="quickShares" component={QuickSharesScreen} />
       <Stack.Screen name="quickSharesSelectCipher" component={QuickSharesAddScreen} />
       <Stack.Screen name="normalShare" component={NormalSharesScreen} />
+      <Stack.Screen name="confirmYourShare" component={ConfirmYourShareScreen} />
       <Stack.Screen name="manageSharedMember" component={ManageSharedMemberScreen} />
       <Stack.Screen name="folderShare" component={FolderSharesScreen} />
       <Stack.Screen name="manageFolderSharedMember" component={ManageFolderSharedMemberScreen} />

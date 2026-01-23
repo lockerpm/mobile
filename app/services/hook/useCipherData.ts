@@ -1,3 +1,4 @@
+import { Platform } from "react-native"
 import chunk from "lodash/chunk"
 
 import { useStores } from "app/models"
@@ -29,6 +30,7 @@ import { FolderView } from "core/models/view/folderView"
 
 import { useAppLocale } from "@/i18n"
 import {
+  IosAutofillOTP,
   IosAutofillPassword,
   IosAutofillTemporaryPasskey,
   IosAutofillTemporaryPassword,
@@ -343,34 +345,52 @@ export function useCipherData() {
 
   // Store password for autofill
   const _updateAutofillData = async () => {
+    if (Platform.OS !== "ios") {
+      return
+    }
+
+    // get password and otp ciphers
     const passwordRes = await getCiphers({
       filters: [
         (c: CipherView) =>
-          c.type === CipherType.Login && (!!c.login?.username || !!c.login?.password),
+          (c.type === CipherType.Login && (!!c.login?.username || !!c.login?.password)) ||
+          c.type === CipherType.TOTP,
       ],
       searchText: "",
       deleted: false,
+      includeExtensions: true,
     })
-    const passwordData: IosAutofillPassword = passwordRes.map((c: CipherView) => ({
-      id: c.id || "",
-      name: c.name || "",
-      uri: c.login.uri || "",
-      username: c.login.username || "",
-      password: c.login.password || "",
-      otp: c.login.totp || "",
-      isOwner: !c.organizationId,
-      fido2:
-        c.login.fido2Credentials?.map((f) => ({
-          credentialId: f.credentialId,
-          keyValue: f.keyValue,
-          rpId: f.rpId,
-          userHandle: f.userHandle,
-          userName: f.userName,
-          userDisplayName: f.userDisplayName,
-          creationDate: f.creationDate?.toISOString() || "",
-        })) || [],
-    }))
+    const passwordData: IosAutofillPassword = passwordRes
+      .filter((c) => c.type === CipherType.Login)
+      .map((c: CipherView) => ({
+        id: c.id || "",
+        name: c.name || "",
+        uri: c.login.uri || "",
+        username: c.login.username || "",
+        password: c.login.password || "",
+        otp: c.login.totp || "",
+        isOwner: !c.organizationId,
+        fido2:
+          c.login.fido2Credentials?.map((f) => ({
+            credentialId: f.credentialId,
+            keyValue: f.keyValue,
+            rpId: f.rpId,
+            userHandle: f.userHandle,
+            userName: f.userName,
+            userDisplayName: f.userDisplayName,
+            creationDate: f.creationDate?.toISOString() || "",
+          })) || [],
+      }))
     await autofillKeyChain.savePassword(passwordData)
+
+    const otpData: IosAutofillOTP = passwordRes
+      .filter((c) => c.type === CipherType.TOTP)
+      .map((c: CipherView) => ({
+        id: c.id || "",
+        name: c.name || "",
+        otp: c.notes || "",
+      }))
+    await autofillKeyChain.saveOTP(otpData)
   }
 
   const createCipherBaseIosAutofillTempPassword = async (

@@ -29,8 +29,11 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     const { user, enterpriseStore } = useStores()
     const { cryptoService } = useCoreService()
     const { logout, biometricLogin } = useAuthentication()
-    const { navigateToIntroIfNeeded, navigateToAndroidAutofillSetupIfNeeded } =
-      useUnlockNavigation()
+    const {
+      navigateToIntroIfNeeded,
+      navigateToAndroidAutofillSetupIfNeeded,
+      navigateToAuthenticatorSetupIfNeeded,
+    } = useUnlockNavigation()
 
     // ---------------------- PARAMS -------------------------
 
@@ -40,6 +43,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     // ---------------------- COMPUTED -------------------------
 
     const fido2 = "fido2" in params ? params.fido2 : undefined
+    const otpauthLabel = params.label
     const isAndroidService = isAndroidAutofillService(fido2)
     // ---------------------- METHODS -------------------------
 
@@ -125,6 +129,10 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
             screen: "homeStack",
             params: { screen: "enterpriseInvited" },
           })
+          return
+        }
+        if (otpauthLabel) {
+          navigateToAuthenticatorSetupIfNeeded(otpauthLabel)
           return
         }
         navigation.replace("authStack", {

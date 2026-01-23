@@ -39,13 +39,11 @@ export const PaymentScreen: FC<MenuScreenProps<"payment">> = ({
   const isDark = themeContext === "dark"
   // -------------------- STATE ----------------------
   const [processPayment, setProcessPayment] = useState<boolean>(false)
-  console.log("rerender")
   // -------------------- METHOD ----------------------
 
   const { connected, subscriptions, fetchProducts, requestPurchase, finishTransaction } = useIAP({
     onPurchaseSuccess: async (purchase) => {
       try {
-        // console.log("Purchase successful:", purchase)
         // setOwnedSubscriptions((prev) => [...prev, currentPurchase?.productId])
         const res = await userApi.purchaseValidationV2(user.apiToken, purchase)
         if (res.kind === "ok") {

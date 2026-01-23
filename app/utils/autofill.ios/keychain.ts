@@ -9,6 +9,7 @@ import {
   AutofillUserInfo,
   AutofillStorekey,
   IosAutofillTemporaryPasskey,
+  IosAutofillOTP,
 } from "./autofillType"
 import { Logger } from "../logger"
 
@@ -61,8 +62,16 @@ class KeychainService {
       service: AutofillStorekey.TEMP_PASSKEY.service,
       accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
     })
+    ReactNativeKeychain.resetGenericPassword({
+      service: AutofillStorekey.OTP.service,
+      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
+    })
+    ReactNativeKeychain.resetGenericPassword({
+      service: AutofillStorekey.TEMP_OTP.service,
+      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
+    })
   }
-
+  // ---------------------------TEMP PASSWORD--------------------------------
   // local autofill password creation
   public async saveTempPassword(data: IosAutofillTemporaryPassword) {
     if (!IS_IOS) return
@@ -94,7 +103,36 @@ class KeychainService {
       ""
     )
   }
+  // ---------------------------TEMP OTP--------------------------------
+  // local autofill password creation
+  public async saveOTP(data: IosAutofillOTP) {
+    if (!IS_IOS) return
 
+    await this.saveShared(
+      AutofillStorekey.OTP.service,
+      AutofillStorekey.OTP.username,
+      JSON.stringify(data)
+    )
+  }
+
+  public async getTempOTP(): Promise<IosAutofillTemporaryPassword | null> {
+    if (!IS_IOS) return null
+
+    const res = await this.loadShared(AutofillStorekey.TEMP_OTP.service)
+    if (!res || !res.password) {
+      return null
+    }
+
+    return JSON.parse(res.password)
+  }
+
+  public async resetTempPOTP() {
+    if (!IS_IOS) return
+
+    await this.saveShared(AutofillStorekey.TEMP_OTP.service, AutofillStorekey.TEMP_OTP.username, "")
+  }
+
+  // ---------------------------TEMP PASSKEY--------------------------------
   // Passkey
   public async getTempPasskey(): Promise<IosAutofillTemporaryPasskey | null> {
     if (!IS_IOS) return null

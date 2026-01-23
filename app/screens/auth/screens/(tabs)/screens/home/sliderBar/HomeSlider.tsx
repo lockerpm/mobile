@@ -17,17 +17,19 @@ import { isDeviceAutofillServiceEnabled } from "@/utils/autofill.android"
 import { autofillKeyChain } from "@/utils/autofill.ios"
 import { useAppTheme } from "@/utils/useAppTheme"
 
+import { ConfirmYourSharing } from "./ConfirmYourSharing"
 import { SuggestEnableAutofill } from "./SuggestEnableAutofill"
 import { SuggestEnableFaceID } from "./SuggestEnableFaceID"
+import { useLoadConfirmShare } from "./useLoadConfirmShare"
 
 enum SliderEnum {
+  ConfirmShare = "ConfirmShare",
   SuggestEnableFaceID = "SuggestEnableFaceID",
   SuggestEnableAutofill = "SuggestEnableAutofill",
 }
 
 type SliderDataType = {
-  id: string
-  type: SliderEnum
+  id: SliderEnum
   isShow: boolean
   onClose: () => void
 }
@@ -48,19 +50,31 @@ export const HomeSlider = observer(() => {
 
   const [data, setData] = useState<SliderDataType[]>([])
 
+  const { confirmShareCount } = useLoadConfirmShare()
+
   const isShowData = data.filter((item) => item.isShow)
 
   // -------------- PARAMS ------------------
 
   const closeFaceid = useCallback(() => {
     setData((prev) =>
-      prev.map((item) => (item.id === "SuggestEnableFaceID" ? { ...item, isShow: false } : item))
+      prev.map((item) =>
+        item.id === SliderEnum.SuggestEnableFaceID ? { ...item, isShow: false } : item
+      )
     )
   }, [])
 
   const closeAutofill = useCallback(() => {
     setData((prev) =>
-      prev.map((item) => (item.id === "SuggestEnableAutofill" ? { ...item, isShow: false } : item))
+      prev.map((item) =>
+        item.id === SliderEnum.SuggestEnableAutofill ? { ...item, isShow: false } : item
+      )
+    )
+  }, [])
+
+  const closeConfirmShare = useCallback(() => {
+    setData((prev) =>
+      prev.map((item) => (item.id === SliderEnum.ConfirmShare ? { ...item, isShow: false } : item))
     )
   }, [])
 
@@ -77,8 +91,7 @@ export const HomeSlider = observer(() => {
         setData((prev) => [
           ...prev,
           {
-            id: "SuggestEnableFaceID",
-            type: SliderEnum.SuggestEnableFaceID,
+            id: SliderEnum.SuggestEnableFaceID,
             isShow: true,
             onClose: closeFaceid,
           },
@@ -103,22 +116,27 @@ export const HomeSlider = observer(() => {
   }
 
   useEffect(() => {
-    syncAutofillUserInfo()
-    handleShowFaceIDSuggest()
-
-    AppState.addEventListener("change", (nextAppState) => {
-      setAppStateVisible(nextAppState)
-    })
-  }, [])
+    if (confirmShareCount > 0) {
+      setData((prev) => [
+        {
+          id: SliderEnum.ConfirmShare,
+          isShow: true,
+          onClose: closeConfirmShare,
+        },
+        ...prev,
+      ])
+    } else {
+      closeConfirmShare()
+    }
+  }, [confirmShareCount, closeConfirmShare])
 
   useEffect(() => {
     isDeviceAutofillServiceEnabled().then((isActived) => {
       if (!isActived) {
         setData((prev) => [
-          ...prev.filter((item) => item.id !== "SuggestEnableAutofill"),
+          ...prev.filter((item) => item.id !== SliderEnum.SuggestEnableAutofill),
           {
-            id: "SuggestEnableAutofill",
-            type: SliderEnum.SuggestEnableAutofill,
+            id: SliderEnum.SuggestEnableAutofill,
             isShow: true,
             onClose: closeAutofill,
           },
@@ -129,6 +147,15 @@ export const HomeSlider = observer(() => {
       }
     })
   }, [appStateVisible])
+
+  useEffect(() => {
+    syncAutofillUserInfo()
+    handleShowFaceIDSuggest()
+
+    AppState.addEventListener("change", (nextAppState) => {
+      setAppStateVisible(nextAppState)
+    })
+  }, [])
 
   return (
     <View>
@@ -147,11 +174,13 @@ export const HomeSlider = observer(() => {
         itemLayoutAnimation={LinearTransition}
         onScroll={scrollHandler}
         renderItem={({ item }) => {
-          switch (item.type) {
+          switch (item.id) {
             case SliderEnum.SuggestEnableFaceID:
               return <SuggestEnableFaceID style={themed($itemContainer)} onClose={item.onClose} />
             case SliderEnum.SuggestEnableAutofill:
               return <SuggestEnableAutofill style={themed($itemContainer)} onClose={item.onClose} />
+            case SliderEnum.ConfirmShare:
+              return <ConfirmYourSharing style={themed($itemContainer)} onClose={item.onClose} />
             default:
               return null
           }

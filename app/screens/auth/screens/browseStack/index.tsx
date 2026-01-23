@@ -1,4 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { observer } from "mobx-react-lite"
+
+import { BrowseRoute, modalScreenOptions } from "app/navigators"
+
 import {
   CipherDetailScreen,
   CipherEditScreen,
@@ -12,8 +16,6 @@ import {
   ShareStack,
   OtpSelectScreen,
 } from "./screens"
-import { observer } from "mobx-react-lite"
-import { BrowseRoute, modalScreenOptions } from "app/navigators"
 
 const Stack = createNativeStackNavigator<BrowseRoute>()
 

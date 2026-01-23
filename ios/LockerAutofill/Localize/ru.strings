@@ -21,6 +21,7 @@
 
 // CredentialsListScreen
 "list.title" = "Список паролей";
+"list.goToOtp" = "Автозаполнение OTP";
 "list.noDataSearch" = "Упс! Похоже, что сопоставление данных не найдено. ";
 "list.suggestSearch" = "Вы можете выполнить поиск по следующему тексту";
 
@@ -47,6 +48,7 @@
 "pw.generator" = "Создайте надежный пароль";
 "pw.regenerate" = "Регенерировать";
 "pw.copyFill" = "Копировать и заполнить";
+"pw.fill" = "Заполнить";
 
 // create password
 "create.title" = "Создать пароль";
@@ -82,3 +84,6 @@
 "pk_list.h" = "Список passkey для ";
 "pk_list.e_text" = "Нет подходящих passkey для ";
 "pk_list.e_action" = "Выбрать другой вариант";
+
+"otp.t" = "Коды OTP";
+"otp.e_text" = "Нет данных";

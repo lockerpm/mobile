@@ -1,5 +1,6 @@
-import { TEMP_PREFIX } from "app/static/constants"
 import { EventRegister } from "react-native-event-listeners"
+
+import { TEMP_PREFIX } from "app/static/constants"
 
 export enum AppEventType {
   PASSWORD_UPDATE = "PASSWORD_UPDATE",

@@ -1,8 +1,10 @@
-import { useAppTheme } from "@/utils/useAppTheme"
 import { View, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+
 import { Icon, PressableIcon, Text } from "app/components/cores"
+
 import { AccountRoleText } from "@/static/types"
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type MemberProps = {
   member: {

@@ -23,7 +23,7 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
   } = useAppTheme()
   const navigation = useNavigation<BrowseScreenProps<"attachment">["navigation"]>()
   const { translate } = useAppLocale()
-  const { pickFile, pickMedia } = usePickAttachment()
+  const { pickFile, pickMedia, takeImage } = usePickAttachment()
 
   const openModal = useCallback(() => {
     if (isFree) {
@@ -41,6 +41,18 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
 
   const options: { id: string; icon: IconTypes; label: string; onPress: () => void }[] = useMemo(
     () => [
+      {
+        id: "take photo",
+        icon: "camera",
+        label: translate("file_attachment:take_photo"),
+        onPress: async () => {
+          const res = await takeImage()
+          closeModal()
+          if (res) {
+            setLocalFile(res)
+          }
+        },
+      },
       {
         id: "upload photo",
         icon: "image",
@@ -77,7 +89,7 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
         onClose={closeModal}
         closeTx={"common:cancel"}
         footer={
-          <View style={styles.container}>
+          <View style={[styles.container, { borderColor: colors.border }]}>
             <Icon icon={"info"} color={colors.warning} size={18} style={styles.mr8} />
             <Text tx="file_attachment:max_size" size="sm" color={colors.warning} />
           </View>
@@ -85,7 +97,6 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
       >
         {options.map((item) => (
           <NewActionSheetItem
-            bottomBorder
             icon={item.icon}
             key={item.id}
             text={item.label}
@@ -100,6 +111,7 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
+    borderTopWidth: 1,
     flexDirection: "row",
     paddingHorizontal: 16,
     paddingVertical: 8,

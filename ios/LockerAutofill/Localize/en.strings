@@ -14,6 +14,7 @@
 
 // CredentialsListScreen
 "list.title" = "Login List";
+"list.goToOtp" = "Autofill OTP";
 "list.noDataSearch" = "Oops! Looks like there's no data matching ";
 "list.suggestSearch" = "You can search by the following text(s)";
 
@@ -40,6 +41,7 @@
 "pw.generator" = "Generate strong password";
 "pw.regenerate" = "Regenerate";
 "pw.copyFill" = "Copy & fill";
+"pw.fill" = "Fill";
 
 // create password
 "create.title" = "Create Login";
@@ -75,4 +77,8 @@
 "pk_list.h" = "Passkey list for ";
 "pk_list.e_text" = "No matching passkeys or passwords for ";
 "pk_list.e_action" = "Choose another option";
+
+// list otp
+"otp.t" = "OTP codes";
+"otp.e_text" = "No Data";
 

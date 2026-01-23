@@ -1,14 +1,16 @@
-import { UnAuthScreenProps } from "@/navigators"
-import { observer } from "mobx-react-lite"
 import { FC, useEffect, useState } from "react"
-import { Button, Logo, Screen, Text } from "@/components/cores"
 import { StyleSheet } from "react-native"
-import { useStores } from "@/models"
-import { idApi } from "@/services/api"
-import { useLoggedIn } from "../hook/useLoggedIn"
-import { useHelper } from "@/services/hook"
-import { MotionLoading } from "@/components/utils"
 import { useRoute } from "@react-navigation/native"
+import { observer } from "mobx-react-lite"
+
+import { Button, Logo, Screen, Text } from "@/components/cores"
+import { MotionLoading } from "@/components/utils"
+import { useStores } from "@/models"
+import { UnAuthScreenProps } from "@/navigators"
+import { idApi } from "@/services/api"
+import { useHelper } from "@/services/hook"
+
+import { useLoggedIn } from "../hook/useLoggedIn"
 
 export const ActivateAccountScreen: FC<UnAuthScreenProps<"activateAccount">> = observer(
   ({ navigation }) => {

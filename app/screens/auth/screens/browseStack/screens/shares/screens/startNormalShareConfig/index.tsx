@@ -1,16 +1,19 @@
 import { FC, useCallback, useEffect, useState } from "react"
 import { View, StyleSheet, ScrollView } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { Header, PressableText, Screen, Text } from "app/components/cores"
 import { AccountRoleText, CipherAppView } from "app/static/types"
-import { observer } from "mobx-react-lite"
+
 import { ShareScreenProps } from "@/navigators"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { EmailInput } from "./EmailInput"
-import { ShareCipherList } from "./ShareCipherList"
 import { AppEventType, EventBus } from "@/utils/eventBus"
-import { useShareMultipleCiphers } from "./useShareMultipleCiphers"
-import { Member } from "./Member"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { EmailInput } from "./EmailInput"
 import { Group } from "./Group"
+import { Member } from "./Member"
+import { ShareCipherList } from "./ShareCipherList"
+import { useShareMultipleCiphers } from "./useShareMultipleCiphers"
 
 export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
   ({

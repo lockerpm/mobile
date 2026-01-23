@@ -1,6 +1,8 @@
 import { View, StyleSheet } from "react-native"
+
 import { ImageIcon, PressableIcon, PressableScale, Text } from "app/components/cores"
 import { CollectionView } from "core/models/view/collectionView"
+
 import { useAppLocale } from "@/i18n"
 
 type Props = {
