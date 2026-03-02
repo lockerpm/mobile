@@ -364,6 +364,7 @@ export const PasswordEdit = observer(
           <TextInput
             isPassword
             animated
+            multiline
             labelTx={"common:password"}
             value={password}
             onChangeText={setPassword}

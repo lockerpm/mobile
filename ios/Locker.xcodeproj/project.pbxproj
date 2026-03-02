@@ -24,7 +24,6 @@
 		7C47A3D02EB9DEF20017315B /* RNCryptoServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C47A3C52EB9DEF20017315B /* RNCryptoServiceIos.m */; };
 		7C47A3D12EB9DEF20017315B /* FileEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C47A3C32EB9DEF20017315B /* FileEncryptor.swift */; };
 		7C47A4352EB9E0A20017315B /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7C47A4342EB9E0A20017315B /* CachedAsyncImage */; };
-		7C47A4382EB9E1FC0017315B /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 7C47A4372EB9E1FC0017315B /* Sentry */; };
 		7C47A43E2EB9E7290017315B /* SwiftCBOR in Frameworks */ = {isa = PBXBuildFile; productRef = 7C47A43D2EB9E7290017315B /* SwiftCBOR */; };
 		7C47A4412EB9E7400017315B /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7C47A4402EB9E7400017315B /* KeychainAccess */; };
 		7C47A4442EB9E94C0017315B /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = 7C47A4432EB9E94C0017315B /* SwiftOTP */; };
@@ -152,7 +151,6 @@
 				7C47A43E2EB9E7290017315B /* SwiftCBOR in Frameworks */,
 				7C47A4442EB9E94C0017315B /* SwiftOTP in Frameworks */,
 				7C47A4472EB9ED420017315B /* Crypto in Frameworks */,
-				7C47A4382EB9E1FC0017315B /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,7 +344,6 @@
 			name = LockerAutofill;
 			packageProductDependencies = (
 				7C47A4342EB9E0A20017315B /* CachedAsyncImage */,
-				7C47A4372EB9E1FC0017315B /* Sentry */,
 				7C47A43D2EB9E7290017315B /* SwiftCBOR */,
 				7C47A4402EB9E7400017315B /* KeychainAccess */,
 				7C47A4432EB9E94C0017315B /* SwiftOTP */,
@@ -409,7 +406,6 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				7C47A4332EB9E0A20017315B /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
-				7C47A4362EB9E1FC0017315B /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				7C47A43C2EB9E7290017315B /* XCRemoteSwiftPackageReference "SwiftCBOR" */,
 				7C47A43F2EB9E7400017315B /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				7C47A4422EB9E94C0017315B /* XCRemoteSwiftPackageReference "SwiftOTP" */,
@@ -705,7 +701,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 62;
+				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -719,7 +715,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.8;
+				MARKETING_VERSION = 2.9;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -744,7 +740,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 62;
+				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				INFOPLIST_FILE = Locker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -753,7 +749,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.8;
+				MARKETING_VERSION = 2.9;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -786,7 +782,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DSN_SENTRY = "https://5f5e4639380b499b9afffd18201463bb@o256038.ingest.sentry.io/6626141";
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LockerAutofill/Info.plist;
@@ -838,7 +834,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DSN_SENTRY = "https://5f5e4639380b499b9afffd18201463bb@o256038.ingest.sentry.io/6626141";
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LockerAutofill/Info.plist;
@@ -1153,14 +1149,6 @@
 				minimumVersion = 2.1.1;
 			};
 		};
-		7C47A4362EB9E1FC0017315B /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.57.1;
-			};
-		};
 		7C47A43C2EB9E7290017315B /* XCRemoteSwiftPackageReference "SwiftCBOR" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/valpackett/SwiftCBOR";
@@ -1200,11 +1188,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7C47A4332EB9E0A20017315B /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
 			productName = CachedAsyncImage;
-		};
-		7C47A4372EB9E1FC0017315B /* Sentry */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7C47A4362EB9E1FC0017315B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = Sentry;
 		};
 		7C47A43D2EB9E7290017315B /* SwiftCBOR */ = {
 			isa = XCSwiftPackageProductDependency;

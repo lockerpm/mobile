@@ -138,7 +138,6 @@ func fromPKCS8ToP256(_ pkcs8: Data) -> P256.Signing.PrivateKey? {
   do {
     return try P256.Signing.PrivateKey(rawRepresentation: scalar)
   } catch {
-    print("❌ Failed to create P256.Signing.PrivateKey:", error)
     return nil
   }
 }

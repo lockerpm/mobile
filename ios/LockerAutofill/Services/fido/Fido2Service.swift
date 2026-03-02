@@ -10,7 +10,7 @@ import Foundation
 import AuthenticationServices
 
 
-@available(iOS 17.0, *)
+@available(iOSApplicationExtension 17.0, *)
 func createPasskeyRegistrationCredential(
   passkeyReq: ASPasskeyCredentialRequest,
   passkeyId: ASPasskeyCredentialIdentity
@@ -19,9 +19,6 @@ func createPasskeyRegistrationCredential(
   let clientDataHash = passkeyReq.clientDataHash // hashed clientData JSON (challenge)
   let userId = passkeyId.userHandle
   let userName = passkeyId.userName
-  
-  print("🚀 Start creating passkey for RP: \(relyingParty), username: \(userName), userId: \(userId)", "support alg: ", passkeyReq.supportedAlgorithms)
-  
   
   let flags: UInt8 = 0x41 | 0x08 | 0x10 | 0x80 | 0x04 // AT + UP + ED + BE + BS + UV
   
@@ -43,7 +40,6 @@ func createPasskeyRegistrationCredential(
   else {
     throw NSError(domain: "GUID", code: 2, userInfo: [NSLocalizedDescriptionKey: "Can not create credentialId"])
   }
-  print("credentialId", credentialId.base64URLEncodedString())
   
   // Build authenticator data (same for all algs)
   let rpIdHash = SHA256.hash(data: relyingParty.data(using: .utf8)!)
@@ -95,19 +91,17 @@ func createPasskeyRegistrationCredential(
     userName: userName
   )
   
-  print("TempPasskeyItem", metadata)
   return (credential, metadata)
 }
 
 
 // The main function
-@available(iOS 17.0, *)
+@available(iOSApplicationExtension 17.0, *)
 func createAssertionFromGuid(
   item: PasskeyItem,
   rpId: String,
   clientDataHash: Data
 ) throws -> ASPasskeyAssertionCredential {
-  print("➡️ rpId (item):", item)
  
   // 1) Basic RP check
   guard item.rpId == rpId else {
@@ -121,14 +115,11 @@ func createAssertionFromGuid(
   else {
     throw NSError(domain: "Passkey", code: -2, userInfo: [NSLocalizedDescriptionKey: "Invalid credentialId, userId, privateKey encoding"])
   }
-  print("Credential id :", credId.base64URLEncodedString(), item.credentialId)
   // 3) Create p256 private key
   guard let privateKey = fromPKCS8ToP256(privData)
   else {
     throw NSError(domain: "Passkey", code: -2, userInfo: [NSLocalizedDescriptionKey: "webCryptoPKCS8Base64URLToP256PrivateKey failed"])
   }
-
-  print("Imported key:", privateKey)
   
   
   // 4) Build authenticatorData for assertion: rpIdHash(32) + flags(1) + signCount(4)
@@ -141,7 +132,6 @@ func createAssertionFromGuid(
   authData.append(rpIdHash)
   authData.append(flags)
   authData.append(contentsOf: signCount)
-  print("  authData len:", authData.count, "hex prefix:", authData.prefix(48).toHex())
   
   // 6) Build message to sign = authenticatorData || clientDataHash (the system provided clientDataHash)
   var messageToSign = Data()
@@ -171,7 +161,7 @@ func createAssertionFromGuid(
 
 
 // Deprecated
-@available(iOS 17.0, *)
+@available(iOSApplicationExtension 17.0, *)
 func createAssertionRaw(
   item: PasskeyItem,
   rpId: String,
@@ -200,7 +190,6 @@ func createAssertionRaw(
   var cfErr: Unmanaged<CFError>?
   guard let privateKey = SecKeyCreateWithData(privData as CFData, importOptions as CFDictionary, &cfErr) as SecKey?
   else {
-    print("  ⚠️ SecKeyCreateWithData failed:", cfErr?.takeRetainedValue() as Any)
     throw NSError(domain: "Passkey", code: -2, userInfo: [NSLocalizedDescriptionKey: "SecKeyCreateWithData failed:"])
   }
   
@@ -216,7 +205,6 @@ func createAssertionRaw(
   authData.append(rpIdHash)
   authData.append(flags)
   authData.append(contentsOf: signCount)
-  print("  authData len:", authData.count, "hex prefix:", authData.prefix(48).toHex())
   
   // 6) Build message to sign = authenticatorData || clientDataHash (the system provided clientDataHash)
   var messageToSign = Data()
@@ -226,13 +214,11 @@ func createAssertionRaw(
   
   // 7) Sign using SecKey (use message variant so SecKey does the hashing)
   guard SecKeyIsAlgorithmSupported(privateKey, .sign, .ecdsaSignatureMessageX962SHA256) else {
-    print("❌ Signing algorithm not supported by key")
     throw NSError(domain: "Passkey", code: -6, userInfo: [NSLocalizedDescriptionKey: "Signing algorithm not supported by key"])
   }
   
   cfErr = nil
   guard let signature = SecKeyCreateSignature(privateKey, .ecdsaSignatureMessageX962SHA256, messageToSign as CFData, &cfErr) as Data? else {
-    print("❌ SecKeyCreateSignature failed:", cfErr?.takeRetainedValue() as Any)
     throw NSError(domain: "Passkey", code: -7, userInfo: [NSLocalizedDescriptionKey: "Signature generation failed"])
   }
 
@@ -247,6 +233,5 @@ func createAssertionRaw(
     credentialID: credId
   )
   
-  print("✅ Created ASPasskeyAssertionCredential — returning to system")
   return assertion
 }

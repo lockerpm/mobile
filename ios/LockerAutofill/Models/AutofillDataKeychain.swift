@@ -1,7 +1,6 @@
 import Foundation
 import KeychainAccess
 import StoreKit
-import Sentry
 
 class AutofillDataModel {
   // Trường hợp tạo nhiều temp credentials trong ext
@@ -20,7 +19,7 @@ class AutofillDataModel {
       }
       return nil
     } catch {
-      SentrySDK.capture(message: "Couldn't decode jsonData when getUserInfo: \(error)")
+      print("Couldn't decode jsonData when getUserInfo: \(error)")
     }
     return nil
   }
@@ -37,7 +36,7 @@ class AutofillDataModel {
       }
       return []
     } catch {
-      SentrySDK.capture(message: "Couldn't decode jsonData when getOTPs: \(error)")
+      print("Couldn't decode jsonData when getOTPs: \(error)")
     }
     return []
   }
@@ -54,7 +53,7 @@ class AutofillDataModel {
       }
       return []
     } catch {
-      SentrySDK.capture(message: "Couldn't decode jsonData when getPasswords: \(error)")
+      print("Couldn't decode jsonData when getPasswords: \(error)")
     }
     return []
   }
@@ -72,7 +71,7 @@ class AutofillDataModel {
       }
       return []
     } catch {
-      SentrySDK.capture(message: "Couldn't decode jsonData when getTempPasswords: \(error)")
+      print("Couldn't decode jsonData when getTempPasswords: \(error)")
     }
     return []
   }
@@ -91,7 +90,7 @@ class AutofillDataModel {
       }
       return []
     } catch {
-      SentrySDK.capture(message: "Couldn't decode jsonData when getTempPasskeys: \(error)")
+      print("Couldn't decode jsonData when getTempPasskeys: \(error)")
     }
     return []
   }
@@ -107,7 +106,7 @@ class AutofillDataModel {
       let keychain = Keychain(service: tempPasswordKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
       try keychain.set( json!, key: tempPasswordKey.username)
     }  catch {
-      SentrySDK.capture(message: "Couldn't encode jsonData to saveTempPassword: \(error)")
+      print("Couldn't encode jsonData to saveTempPassword: \(error)")
     }
   }
   
@@ -122,7 +121,7 @@ class AutofillDataModel {
       let keychain = Keychain(service: tempPasskeyKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
       try keychain.set( json!, key: tempPasskeyKey.username)
     }  catch {
-      SentrySDK.capture(message: "Couldn't encode jsonData to saveTempPasskey: \(error)")
+      print("Couldn't encode jsonData to saveTempPasskey: \(error)")
     }
   }
 }

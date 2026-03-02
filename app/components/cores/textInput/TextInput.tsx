@@ -69,6 +69,11 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
    * Input password
    */
   isPassword?: boolean
+
+  /**
+   * multiple line
+   */
+  multiline?: boolean
   /**
    * Copy button
    */
@@ -153,6 +158,7 @@ export const TextInput = forwardRef(function TextField(
     isPassword,
     isCopyable,
     animated,
+    multiline,
     placeholder,
     placeholderTx,
     helper: helperProps,
@@ -215,7 +221,7 @@ export const TextInput = forwardRef(function TextField(
       borderColor: isFocus && !disabled ? colors.primary : colors.border,
     },
     status === "error" && { borderColor: colors.error },
-    TextInputProps.multiline && { minHeight: 112 },
+    // multiline && { minHeight: 112 },
     LeftAccessory && { paddingStart: 0 },
     RightAccessory && { paddingEnd: 0 },
     $inputWrapperStyleOverride,
@@ -224,7 +230,7 @@ export const TextInput = forwardRef(function TextField(
   const $inputStyles: StyleProp<TextStyle> = [
     $inputStyle,
     { color: colors.text },
-    TextInputProps.multiline && { height: "auto" },
+    multiline && { height: "auto" },
     $inputStyleOverride,
   ]
 
@@ -344,6 +350,7 @@ export const TextInput = forwardRef(function TextField(
           selectionColor={colors.primary}
           onFocus={onFucus}
           onBlur={onBlur}
+          multiline={isPassword ? isShowText : multiline}
           editable={!disabled}
           onChangeText={onChangeText}
           {...TextInputProps}

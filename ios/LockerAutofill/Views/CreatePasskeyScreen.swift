@@ -76,7 +76,7 @@ struct CreatePasskeyScreen: View {
               confirmReplacePasskey()
             }
             Button("No", role: .cancel) {
-              print("No")
+//              print("No")
             }
           } message: {
             Text(i.translate("create_pk.replace_alert_d"))

@@ -9,10 +9,8 @@ import UIKit
 import LocalAuthentication
 import AuthenticationServices
 import SwiftUI
-import Sentry
 import SwiftOTP
-
-
+import os
 
 @available(iOSApplicationExtension 17.0, *)
 class PasskeyContext {
@@ -33,7 +31,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   internal var quickBarCredential: AFPasswordItem!
   internal var quickBarOTP: OTPItem!
   internal var user: User
-  
+  internal let logger = Logger(subsystem: "com.cystack.lockerapp", category: "AutofillExtension")
   
   @IBOutlet weak var logo: UIImageView!
   required init?(coder: NSCoder) {
@@ -43,13 +41,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    SentrySDK.start { options in
-      options.dsn = getStringInfo(key: "DSN_SENTRY")
-      options.enableAppHangTracking = false  // Reduce resource usage
-      options.enableSwizzling = false  // Avoid conflicts in the extension
-      options.attachStacktrace = true
-      options.sendDefaultPii = true  // Capture user details if necessary
-    }
     
     i.locale = user.info?.language ?? "en"
   }
@@ -63,7 +54,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
    Mở List Passwords
    */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    print("prepareCredentialList 16", serviceIdentifiers)
     prepareAutofillData(sID: serviceIdentifiers, mode: .fillPassword)
   }
   
@@ -90,7 +80,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   @available(iOSApplicationExtension 18.0, *)
   override func prepareOneTimeCodeCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    print("prepareOneTimeCodeCredentialList", serviceIdentifiers)
     prepareAutofillData(sID: serviceIdentifiers, mode: .fillOtp)
   }
   
@@ -100,7 +89,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   @available(iOSApplicationExtension 18.0, *)
   override func prepareInterfaceForUserChoosingTextToInsert() {
-    print("prepareInterfaceForUserChoosingTextToInsert")
     prepareAutofillData(sID: [], mode: .fillText)
   }
   
@@ -127,7 +115,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   @available(iOSApplicationExtension 17.0, *)
   override func prepareInterfaceToProvideCredential(for credentialRequest: any ASCredentialRequest) {
-    print("prepareInterfaceToProvideCredential 17.0", credentialRequest)
     switch credentialRequest {
     case let passwordRequest as ASPasswordCredentialRequest:
       if let passwordIdentity = passwordRequest.credentialIdentity as? ASPasswordCredentialIdentity {
@@ -183,7 +170,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
    * Người dùng chọn Password từ QuickTypeBar -> mở unlock screen để xác thực
    */
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-    print("prepareInterfaceToProvideCredential 12", credentialIdentity)
     if (self.loginLocker()) {
       self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
       user.URI = URL(string: serviceIdentifier)?.host ?? serviceIdentifier
@@ -201,8 +187,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   @available(iOSApplicationExtension 17.0, *)
   override func prepareInterface(forPasskeyRegistration registrationRequest: any ASCredentialRequest) {
-    print("prepareInterface forPasskeyRegistration ")
-    
+
     guard
       let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest,
       let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity
@@ -455,7 +440,6 @@ extension CredentialProviderController {
       )
       return
     } catch {
-      print("Failed to authen with passkey: \(error)")
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
   }
@@ -476,15 +460,19 @@ extension CredentialProviderController {
         passkeyReq: passkeyReq,
         passkeyId: identity
       )
+      logger.log("Thinhnn. rp: \(credential.relyingParty, privacy: .public) user: \(metadata.userName, privacy: .public)")
+
+
       let saveItem = PasskeyItem(id: id, data: metadata)
       user.saveTempPasskey(saveItem)
       quickTypeBar.replacePasskeyCredentialIdentities(saveItem)
+
       extensionContext.completeRegistrationRequest(
         using: credential
       )
+      logger.log("Done \(credential.credentialID, privacy: .public) ")
       return
     } catch {
-      print("Failed to create passkey: \(error)")
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
   }
@@ -514,7 +502,6 @@ extension CredentialProviderController {
       )
       return
     } catch {
-      print("Failed to authen with passkey: \(error)")
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
   }

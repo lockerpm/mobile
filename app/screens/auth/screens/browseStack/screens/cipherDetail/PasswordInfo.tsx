@@ -39,6 +39,7 @@ export const PasswordInfo = ({ item }: Props) => {
         <TextInput
           animated
           isPassword
+          multiline
           isCopyable={item.viewPassword}
           labelTx="common:password"
           value={item.login.password}
