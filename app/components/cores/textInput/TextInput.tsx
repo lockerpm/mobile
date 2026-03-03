@@ -230,7 +230,7 @@ export const TextInput = forwardRef(function TextField(
   const $inputStyles: StyleProp<TextStyle> = [
     $inputStyle,
     { color: colors.text },
-    multiline && { height: "auto" },
+    multiline && { height: "auto", minHeight: 24 },
     $inputStyleOverride,
   ]
 

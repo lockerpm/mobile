@@ -58,9 +58,9 @@
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "2">
       <RemoteRunnable
-         runnableDebuggingMode = "1"
-         BundleIdentifier = "com.apple.mobilesafari"
-         RemotePath = "/Library/Developer/CoreSimulator/Volumes/iOS_22D8075/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 18.3.simruntime/Contents/Resources/RuntimeRoot/Applications/MobileSafari.app">
+         runnableDebuggingMode = "0"
+         BundleIdentifier = "com.google.chrome.ios"
+         RemotePath = "/var/containers/Bundle/Application/250C15EE-2792-48C0-8A2F-96ADF18F7161/stable.app">
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference

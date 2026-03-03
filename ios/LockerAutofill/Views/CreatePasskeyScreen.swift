@@ -1,5 +1,8 @@
 import SwiftUI
 
+
+
+@available(iOSApplicationExtension 17.0, *)
 struct CreatePasskeyScreen: View {
   var afd: AutofillScreenDelegate // autofill delegate
   var userInfo: UserInfo
@@ -9,7 +12,7 @@ struct CreatePasskeyScreen: View {
       return item.login.isOwner && isUriHostMatch(item.login.uri, afd.user.newPasskeyRpID)
     }
   }
-  
+
   var existingPasskeyWithSameIdentities: PasskeyItem! {
     if let foundKey = afd.user.afPasskeys.first(where: { $0.rpId == afd.user.newPasskeyRpID && $0.userName == afd.user.newPasskeyUsername }) {
       return foundKey
@@ -45,7 +48,7 @@ struct CreatePasskeyScreen: View {
               afd.passkeyRegistration(id: "")
             } label: {
               HStack {
-                Image(systemName: "person.badge.key") // Use an SF Symbol
+                Image(systemName: "person.badge.key")
                   .resizable()
                   .frame(width: 24, height: 24)
                 Text(i.translate("create_pk.action_btn"))
@@ -67,8 +70,8 @@ struct CreatePasskeyScreen: View {
               }
             }
           } header: {
-            Text(i.translate("create_pk.replace_header"))
-              .foregroundStyle(AppColors.label)
+              Text(i.translate("create_pk.replace_header"))
+                .foregroundStyle(AppColors.label)
           }
           .alert(i.translate("create_pk.replace_alert_t"),
                  isPresented: $showAlert) {
@@ -76,13 +79,11 @@ struct CreatePasskeyScreen: View {
               confirmReplacePasskey()
             }
             Button("No", role: .cancel) {
-//              print("No")
             }
           } message: {
             Text(i.translate("create_pk.replace_alert_d"))
           }
         }
-        
       }
       .foregroundStyle(AppColors.title)
       .autocapitalization(.none)
@@ -117,4 +118,3 @@ struct CreatePasskeyScreen: View {
     }
   }
 }
-
