@@ -1,0 +1,97 @@
+// Protocol Buffer definitions for iOS Autofill data
+// To compile: protoc --js_out=import_style=commonjs,binary:./ autofill.proto
+
+syntax = "proto3";
+
+// User information for autofill
+message AutofillUserInfo {
+  string email = 1;
+  string avatar = 2;
+  string hash_pass = 3;
+  string token = 4;
+  string language = 5;
+  bool face_id_enabled = 6;
+  bool is_free = 7;
+}
+
+// Temporary password item
+message TemporaryPasswordItem {
+  string username = 1;
+  string password = 2;
+  string name = 3;
+  string uri = 4;
+}
+
+// Temporary password list
+message IosAutofillTemporaryPassword {
+  repeated TemporaryPasswordItem items = 1;
+}
+
+// Fido2 Simple View
+message Fido2SimpleView {
+  string credential_id = 1;
+  string key_type = 2;
+  string key_algorithm = 3;
+  string key_curve = 4;
+  string key_value = 5;
+  string rp_id = 6;
+  string rp_name = 7;
+  int64 counter = 8;
+  string user_handle = 9;
+  string user_name = 10;
+  string user_display_name = 11;
+  bool discoverable = 12;
+  int64 creation_date = 13;
+}
+
+// Temporary passkey item
+message TemporaryPasskeyItem {
+  string id = 1;
+  string credential_id = 2;
+  string key_type = 3;
+  string key_algorithm = 4;
+  string key_curve = 5;
+  string key_value = 6;
+  string rp_id = 7;
+  string rp_name = 8;
+  int64 counter = 9;
+  string user_handle = 10;
+  string user_name = 11;
+  string user_display_name = 12;
+  bool discoverable = 13;
+  int64 creation_date = 14;
+}
+
+// Temporary passkey list
+message IosAutofillTemporaryPasskey {
+  repeated TemporaryPasskeyItem items = 1;
+}
+
+// Password item
+message PasswordItem {
+  string id = 1;
+  string name = 2;
+  string uri = 3;
+  string username = 4;
+  string password = 5;
+  bool is_owner = 6;
+  string otp = 7; // optional
+  repeated Fido2SimpleView fido2 = 8; // optional
+}
+
+// Password list
+message IosAutofillPassword {
+  repeated PasswordItem items = 1;
+}
+
+// OTP item
+message OTPItem {
+  string id = 1;
+  string name = 2;
+  string otp = 3;
+}
+
+// OTP list
+message IosAutofillOTP {
+  repeated OTPItem items = 1;
+}

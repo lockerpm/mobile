@@ -2,10 +2,18 @@ import Foundation
 import KeychainAccess
 import StoreKit
 
+
+
 class AutofillDataModel {
   // Trường hợp tạo nhiều temp credentials trong ext
   private var currTempPasswords: [TempPasswordItem] = []
   private var currTempPasskeys: [PasskeyItem] = []
+  
+  private let infoKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".info", username: "locker_info")
+  private let passwordKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".password", username: "locker_password")
+  private let otpKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".otp", username: "locker_otp")
+  private let tempPasswordKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".temp_password", username: "locker_temp_password")
+  private let tempPasskeyKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".temp_passkey", username: "locker_temp_passkey")
   
   func getUserInfo() -> UserInfo! {
     do {

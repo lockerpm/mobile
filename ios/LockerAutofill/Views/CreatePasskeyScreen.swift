@@ -1,8 +1,6 @@
 import SwiftUI
 
 
-
-@available(iOSApplicationExtension 17.0, *)
 struct CreatePasskeyScreen: View {
   var afd: AutofillScreenDelegate // autofill delegate
   var userInfo: UserInfo

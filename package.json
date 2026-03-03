@@ -151,6 +151,7 @@
     "@babel/runtime": "^7.20.0",
     "@testing-library/react-native": "^13.2.0",
     "@types/base-64": "^1.0.2",
+    "@types/google-protobuf": "^3.15.12",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.20",
     "@types/numeral": "^2.0.5",

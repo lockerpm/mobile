@@ -15,7 +15,7 @@ class User {
   var newPasskeyUsername: String = ""
   var newPasskeyRpID: String = ""
   
-  private var model = AutofillDataModel()
+  private var model = AutofillDataModelProtobuf()
   
   var loginedLocker: Bool {
     get {
@@ -44,12 +44,16 @@ class User {
                                     id: currentPwLength,
                                     tmp: tempItem)
     self.afPasswords.append(credential)
+
     self.model.saveTempPassword(tempItem)
+    
   }
   
   func saveTempPasskey(_ item: PasskeyItem) {
     self.afPasskeys.append(item)
+
     self.model.saveTempPasskey(item)
+    
   }
   
   func getPasswordItemById(id: String?) -> AFPasswordItem? {
@@ -105,7 +109,7 @@ class User {
   
   private func getPasswordsAndPasskeys() {
     getPasswords()
-    let passkeys: [PasskeyItem] = model.getTempPasskeys()
+    let passkeys: [PasskeyItem] =  model.getTempPasskeys()
     self.afPasskeys += passkeys
   }
   

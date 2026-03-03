@@ -61,27 +61,27 @@ export const AutofillStorekey: Record<
   }
 > = {
   USER_INFO: {
-    service: Config.SHARED_KEYCHAIN_SERVICE + ".info",
+    service: Config.SHARED_KEYCHAIN_SERVICE + ".info.proto",
     username: "locker_info",
   },
   TEMP_PASSWORD: {
-    service: Config.SHARED_KEYCHAIN_SERVICE + ".temp_password",
+    service: Config.SHARED_KEYCHAIN_SERVICE + ".temp_password.proto",
     username: "locker_temp_password",
   },
   PASSWORD: {
-    service: Config.SHARED_KEYCHAIN_SERVICE + ".password",
+    service: Config.SHARED_KEYCHAIN_SERVICE + ".password.proto",
     username: "locker_password",
   },
   TEMP_PASSKEY: {
-    service: Config.SHARED_KEYCHAIN_SERVICE + ".temp_passkey",
+    service: Config.SHARED_KEYCHAIN_SERVICE + ".temp_passkey.proto",
     username: "locker_temp_passkey",
   },
   OTP: {
-    service: Config.SHARED_KEYCHAIN_SERVICE + ".otp",
+    service: Config.SHARED_KEYCHAIN_SERVICE + ".otp.proto",
     username: "locker_otp",
   },
   TEMP_OTP: {
-    service: Config.SHARED_KEYCHAIN_SERVICE + ".temp_otp",
+    service: Config.SHARED_KEYCHAIN_SERVICE + ".temp_otp.proto",
     username: "locker_temp_otp",
   },
 }

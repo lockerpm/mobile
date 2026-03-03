@@ -1,2 +1,2 @@
 export * from "./autofillType"
-export * from "./keychain"
+export * from "./keychainProtobuf"

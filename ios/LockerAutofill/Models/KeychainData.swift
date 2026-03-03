@@ -6,6 +6,7 @@
 
 import Foundation
 
+
 struct AFPasswordItem {
   var fillID: Int
   var login: PasswordItem
@@ -91,6 +92,9 @@ struct UserInfo: Hashable, Codable {
   var isFree: Bool
 }
 
+
+
+
 // Struct equivalent to each key's value in `IosStorekey`
 struct IosStoreKey {
   let service: String
@@ -99,9 +103,3 @@ struct IosStoreKey {
 
 let KEYCHAIN_SERVICE: String = getStringInfo(key: "SHARED_KEYCHAIN_SERVICE")
 let KEYCHAIN_ACCESS_GROUP: String = getStringInfo(key: "SHARED_KEYCHAIN_ACCESS_GROUP")
-
-let infoKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".info", username: "locker_info")
-let passwordKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".password", username: "locker_password")
-let otpKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".otp", username: "locker_otp")
-let tempPasswordKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".temp_password", username: "locker_temp_password")
-let tempPasskeyKey = IosStoreKey(service: KEYCHAIN_SERVICE + ".temp_passkey", username: "locker_temp_passkey")

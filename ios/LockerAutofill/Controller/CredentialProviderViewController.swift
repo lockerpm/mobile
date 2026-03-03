@@ -262,9 +262,7 @@ extension CredentialProviderController {
     case .fillPasskey:
       PasskeysListScreen(afd: self, userInfo: user.info)
     case .createPasskey:
-      if #available(iOS 17.0, *) {
-        CreatePasskeyScreen(afd: self, userInfo: user.info)
-      } 
+      CreatePasskeyScreen(afd: self, userInfo: user.info)
     default:
       PasswordsListScreen(afd: self, userInfo: user.info)
     }
