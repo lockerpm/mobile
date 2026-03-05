@@ -462,7 +462,6 @@ extension CredentialProviderController {
       )
       logger.log("Thinhnn. rp: \(credential.relyingParty, privacy: .public) user: \(metadata.userName, privacy: .public)")
 
-
       let saveItem = PasskeyItem(id: id, data: metadata)
       user.saveTempPasskey(saveItem)
       quickTypeBar.replacePasskeyCredentialIdentities(saveItem)

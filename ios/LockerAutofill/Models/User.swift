@@ -109,8 +109,18 @@ class User {
   
   private func getPasswordsAndPasskeys() {
     getPasswords()
+    
+    let currentPwLength = self.afPasswords.count
     let passkeys: [PasskeyItem] =  model.getTempPasskeys()
     self.afPasskeys += passkeys
+    
+    for (index, item) in passkeys.enumerated() {
+      let credential = AFPasswordItem(fillID: currentPwLength + index,
+                                      id: currentPwLength + index,
+                                      tmp: item)
+      self.afPasswords.append(credential)
+    }
+
   }
   
   private func getPasswords() {

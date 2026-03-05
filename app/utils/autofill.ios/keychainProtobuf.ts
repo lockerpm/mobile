@@ -586,11 +586,10 @@ export class KeychainProtobufService {
   public async resetTempPassword() {
     if (!IS_IOS) return
 
-    await this.saveShared(
-      AutofillStorekey.TEMP_PASSWORD.service,
-      AutofillStorekey.TEMP_PASSWORD.username,
-      ""
-    )
+    ReactNativeKeychain.resetGenericPassword({
+      service: AutofillStorekey.TEMP_PASSWORD.service,
+      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
+    })
   }
 
   // Temporary Passkey methods
@@ -627,11 +626,10 @@ export class KeychainProtobufService {
   public async resetTempPasskey() {
     if (!IS_IOS) return
 
-    await this.saveShared(
-      AutofillStorekey.TEMP_PASSKEY.service,
-      AutofillStorekey.TEMP_PASSKEY.username,
-      ""
-    )
+    ReactNativeKeychain.resetGenericPassword({
+      service: AutofillStorekey.TEMP_PASSKEY.service,
+      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
+    })
   }
 
   // OTP methods

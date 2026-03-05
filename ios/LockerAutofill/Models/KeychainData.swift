@@ -19,6 +19,10 @@ struct AFPasswordItem {
     self.fillID = fillID
     self.login = PasswordItem(id: "tempPassword" + String(id), name: tmp.name, uri: tmp.uri, username: tmp.username, password: tmp.password)
   }
+  init(fillID: Int, id: Int, tmp: PasskeyItem) {
+    self.fillID = fillID
+    self.login = PasswordItem(id: "tempPassword" + String(id), name: tmp.userName, uri: tmp.rpId, username: tmp.userName, password: "", fido2: [tmp])
+  }
 }
 
 struct PasskeyItem: Hashable, Codable {

@@ -1,24 +1,26 @@
 import { FC, useState } from "react"
 import { View, ViewStyle } from "react-native"
-import RNFS from "react-native-fs"
-import { observer } from "mobx-react-lite"
-
-import { ImportResult } from "./ImportResult"
-import { ImportProgress } from "./ImportProgress"
-import { PickFile } from "./PickFile"
 import JSZip from "jszip"
+import { observer } from "mobx-react-lite"
+import RNFS from "react-native-fs"
+
 import { Screen, Header } from "app/components/cores"
-import { useCipherData } from "app/services/hook"
-import { useCoreService } from "app/services/coreService"
 import { useStores } from "app/models"
+import { SettingsScreenProps } from "app/navigators"
+import { useCoreService } from "app/services/coreService"
+import { useCipherData } from "app/services/hook"
+import { useToast } from "app/services/utils"
+import { FileData } from "app/static/types"
 import { CipherType } from "core/enums"
 import { Utils } from "core/misc/utils"
-import { FileData } from "app/static/types"
-import { SettingsScreenProps } from "app/navigators"
-import { useToast } from "app/services/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { Logger } from "@/utils/logger"
+
 import { ThemedStyle } from "@/theme"
+import { Logger } from "@/utils/logger"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { ImportProgress } from "./ImportProgress"
+import { ImportResult } from "./ImportResult"
+import { PickFile } from "./PickFile"
 
 const DOMParser = require("react-native-html-parser").DOMParser
 

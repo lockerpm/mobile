@@ -19,7 +19,8 @@ struct CreatePasskeyScreen: View {
   }
   
   var isExistingPasskeyWithSameIdentitie: Bool {
-    return existingPasskeyWithSameIdentities != nil
+    return false
+//    return existingPasskeyWithSameIdentities != nil
   }
   
   @State private var showAlert = false
