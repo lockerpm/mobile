@@ -2,7 +2,6 @@
 // markdown file and add links from here
 
 import { Platform } from "react-native"
-
 import {
   Inter_300Light as interLight,
   Inter_400Regular as interRegular,

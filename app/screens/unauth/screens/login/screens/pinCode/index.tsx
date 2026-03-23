@@ -1,17 +1,20 @@
+import { FC, useCallback, useEffect, useRef, useState } from "react"
+import { StyleSheet } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { Button, Header, Logo, Screen, Text } from "app/components/cores"
 import { DividerText, PasscodeInput } from "app/components/utils"
 import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
-import { observer } from "mobx-react-lite"
-import { FC, useCallback, useEffect, useRef, useState } from "react"
-import { StyleSheet } from "react-native"
-import { LoginOptions, User2FAPincodeConfig } from "app/static/types"
 import { LoginScreenProps } from "app/navigators"
+import { useHelper } from "app/services/hook"
 import { useToast } from "app/services/utils"
-import { useLoggedIn } from "../../../hook/useLoggedIn"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { LoginOptions, User2FAPincodeConfig } from "app/static/types"
+
 import { useAppLocale } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
+
 import { ResendOtp } from "./ResendOtp"
+import { useLoggedIn } from "../../../hook/useLoggedIn"
 
 export const PinCodeLoginScreen: FC<LoginScreenProps<"loginByPincode">> = observer(
   ({ navigation, route: { params } }) => {

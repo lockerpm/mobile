@@ -1,14 +1,17 @@
+import { FC, useCallback, useRef, useState } from "react"
+import { StyleSheet } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { Header, Logo, Screen, Text } from "app/components/cores"
 import { PasscodeInput } from "app/components/utils"
 import { useStores } from "app/models"
 import { SignUpScreenProps } from "app/navigators"
 import { useHelper } from "app/services/hook"
-import { observer } from "mobx-react-lite"
-import { FC, useCallback, useRef, useState } from "react"
-import { StyleSheet } from "react-native"
-import { useLoggedIn } from "../../../hook/useLoggedIn"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { useAppLocale } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { useLoggedIn } from "../../../hook/useLoggedIn"
 import { ResendOtp } from "../../../login/screens/pinCode/ResendOtp"
 
 // TODO: Deprecated!!!!!

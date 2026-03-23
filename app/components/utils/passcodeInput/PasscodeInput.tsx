@@ -1,10 +1,12 @@
 /* eslint-disable no-restricted-imports */
 import { useState, useRef, useEffect } from "react"
 import { View, StyleProp, ViewStyle, TextInput } from "react-native"
-import { PinItemInput } from "./PinItemInput"
 import { useNavigation } from "@react-navigation/native"
+
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
+
+import { PinItemInput } from "./PinItemInput"
 
 interface PasscodeInputProps {
   iniCode?: string

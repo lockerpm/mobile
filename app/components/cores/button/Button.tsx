@@ -8,9 +8,11 @@ import {
   View,
   ActivityIndicator,
 } from "react-native"
+
 import { type ThemedStyle, type ThemedStyleArray } from "@/theme"
-import { Text, TextProps } from "../text/Text"
 import { useAppTheme } from "@/utils/useAppTheme"
+
+import { Text, TextProps } from "../text/Text"
 
 type Presets = "primary" | "secondary" | "teriatary" | "delete"
 

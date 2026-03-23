@@ -1,7 +1,6 @@
 import { ApiResponse } from "apisauce"
-import { Api, api } from "./api"
-import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
 import { PasskeyGetRequest, PasskeyCreateRequest } from "react-native-passkey"
+
 import {
   AccountRecovery,
   LoginData,
@@ -24,7 +23,11 @@ import {
   LoginPinCodeData,
 } from "app/static/types"
 import { LoginMethod } from "app/static/types/enum"
+
 import { Logger } from "@/utils/logger"
+
+import { Api, api } from "./api"
+import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
 
 /**
  * Login to id.locker

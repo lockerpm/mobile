@@ -1,8 +1,10 @@
-import { idApi } from "app/services/api"
-import { useToast } from "app/services/utils"
 import { useEffect, useRef, useState } from "react"
 import { AppState, View, StyleSheet } from "react-native"
+
 import { Text } from "app/components/cores"
+import { idApi } from "app/services/api"
+import { useToast } from "app/services/utils"
+
 import { useAppLocale } from "@/i18n"
 import { useAppTheme } from "@/utils/useAppTheme"
 
