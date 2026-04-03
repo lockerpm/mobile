@@ -194,6 +194,7 @@ export const PasswordEdit = observer(
         })
         data.uris = uriData
       }
+      data.fido2Credentials = fido2 as Fido2CredentialView[]
 
       payload.fields = fields.filter((f) => !!f.value && f.value.trim())
       payload.name = name

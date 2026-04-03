@@ -46,12 +46,10 @@ export const PasswordInfo = ({ item }: Props) => {
           editable={false}
         />
       )}
-
-      {
-        item.login.fido2Credentials && item.login.fido2Credentials.length > 0 && (
-          <Fido2Info fido2={item.login.fido2Credentials[0]} />
-        ) /* Only show the first passkey info */
-      }
+      {!!item.login.password && <PasswordStrength preset="text" value={passwordStrength.score} />}
+      {item.login.fido2Credentials && item.login.fido2Credentials.length > 0 && (
+        <Fido2Info fido2={item.login.fido2Credentials[0]} />
+      )}
 
       {item.login.hasTotp && (
         <>
@@ -62,8 +60,6 @@ export const PasswordInfo = ({ item }: Props) => {
           </View>
         </>
       )}
-
-      {!!item.login.password && <PasswordStrength preset="text" value={passwordStrength.score} />}
 
       {item.login.uris && (
         <DynamicUris editable={false} fields={item.login.uris?.map((e) => e.uri)} />

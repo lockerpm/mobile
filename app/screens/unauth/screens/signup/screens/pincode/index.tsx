@@ -14,7 +14,6 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { useLoggedIn } from "../../../hook/useLoggedIn"
 import { ResendOtp } from "../../../login/screens/pinCode/ResendOtp"
 
-// TODO: Deprecated!!!!!
 export const SignUpWithPinCode: FC<SignUpScreenProps<"signupPinCode">> = observer(
   ({
     navigation,
