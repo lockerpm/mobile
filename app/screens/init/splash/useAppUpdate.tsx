@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react"
 import { Alert, Linking } from "react-native"
 import VersionCheck from "react-native-version-check"
+
 import Config from "@/config"
 import { useAppLocale } from "@/i18n"
 import { Logger } from "@/utils/logger"

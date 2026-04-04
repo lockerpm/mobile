@@ -1,16 +1,17 @@
-import * as Localization from "expo-localization"
 import { I18nManager } from "react-native"
+import * as Localization from "expo-localization"
 import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 import "intl-pluralrules"
 
 // if English isn't your default language, move Translations to the appropriate language file.
+import { AppStorageKey, loadString, saveString } from "@/utils/storage"
+
 import en, { Translations } from "./en"
+import fr from "./fr"
 import ru from "./ru"
 import vi from "./vi"
 import zh from "./zh"
-import fr from "./fr"
-import { AppStorageKey, loadString, saveString } from "@/utils/storage"
 
 const fallbackLocale = "en"
 

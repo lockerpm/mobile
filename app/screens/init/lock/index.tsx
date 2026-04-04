@@ -14,11 +14,13 @@ import { BiometricsType, LockType, LoginMethod } from "app/static/types/enum"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 
 import { useAppLocale } from "@/i18n"
+import { usePushNotifier } from "@/services/hook/usePushnotifier"
 import { isAndroidAutofillService } from "@/utils/autofill.android"
 
 import { BusinessLockByPasswordless } from "./business"
 import { LockByMasterPassword } from "./normal"
 import { OnPremiseLockByPasswordless, OnPremiseLockMasterPassword } from "./onPremise"
+import { usePushNotifionData } from "./usePushNotificationData"
 import { useUnlockNavigation } from "./useUnlockNavigation"
 
 const IS_IOS = Platform.OS === "ios"
@@ -28,6 +30,8 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     const { translate } = useAppLocale()
     const { user, enterpriseStore } = useStores()
     const { cryptoService } = useCoreService()
+    const { boostrapPushNotifier } = usePushNotifier()
+    const { parsePushNotiDataAndNavigateToTargetScreen } = usePushNotifionData()
     const { logout, biometricLogin } = useAuthentication()
     const {
       navigateToIntroIfNeeded,
@@ -101,16 +105,36 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       return true
     }
 
+    const refreshFCM = async () => {
+      if (!user.disablePushNotifications) {
+        let isSuccess = true
+        if (!user.fcmToken) {
+          isSuccess = await boostrapPushNotifier()
+        }
+        if (isSuccess) {
+          user.updateFCM(user.fcmToken)
+        }
+      }
+    }
+
     const handleUnlock = async () => {
       logFirebaseEvent(AnalyticEvents.ENTER_MASTER_PW, user.email ?? "")
       if (!params.temporaryLock) {
         const connectionState = await NetInfo.fetch()
         // Sync
         if (connectionState.isConnected) {
+          // Refresh FCM
+          refreshFCM()
+
           // Sync teams and plan
           if (!isAndroidService) {
             await Promise.all([user.loadTeams(), user.loadPlan()])
           }
+        }
+
+        // Parse push noti data
+        if (parsePushNotiDataAndNavigateToTargetScreen()) {
+          return
         }
 
         if (!isAndroidService) {

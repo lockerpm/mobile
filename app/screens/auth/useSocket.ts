@@ -46,7 +46,6 @@ export const useSocket = ({ isAndroidService }: { isAndroidService: boolean }) =
     if (lastUpdateRes.kind === "ok") {
       bumpTimestamp = lastUpdateRes.data.revision_date * 1000
 
-      console.log("BUMP TIMESTAMP: ", bumpTimestamp, cipherStore.lastSync)
       if (bumpTimestamp <= (cipherStore.lastSync ?? 0)) {
         return
       }

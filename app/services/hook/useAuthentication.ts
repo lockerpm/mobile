@@ -406,7 +406,6 @@ export function useAuthentication() {
       const kdfIterations = 100000
       return _loginUsingApi(key, keyHash, kdf, kdfIterations)
     } catch (e) {
-      Logger.error("biometricLogin: ", e)
       return { kind: "bad-data" }
     }
   }

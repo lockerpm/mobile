@@ -1,11 +1,15 @@
-import { FC, useCallback } from "react"
-import { observer } from "mobx-react-lite"
+import { FC, useCallback, useEffect } from "react"
 import { StyleSheet } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { Header, Screen } from "app/components/cores"
 import { ShareScreenProps } from "app/navigators"
 import { CipherActionsModal, FolderActionsModal, SharedWithYouType } from "app/static/types"
-import { SharedWithYouCipherList } from "./SharedWithYouCipherList"
 import { CollectionView } from "core/models/view/collectionView"
+
+import { PushNotifier } from "@/utils/pushNotification"
+
+import { SharedWithYouCipherList } from "./SharedWithYouCipherList"
 
 export const SharedWithYouScreen: FC<ShareScreenProps<"sharedWithYouCipherList">> = observer(
   ({ navigation }) => {
@@ -51,6 +55,11 @@ export const SharedWithYouScreen: FC<ShareScreenProps<"sharedWithYouCipherList">
       },
       [navigation]
     )
+
+    // Clear noti
+    useEffect(() => {
+      PushNotifier.cancelNotification("share_new")
+    }, [navigation])
 
     // ------------------------ RENDER -------------------------
 

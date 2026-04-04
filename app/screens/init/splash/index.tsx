@@ -1,5 +1,6 @@
 import { FC, useState, useEffect, useCallback } from "react"
 import { Linking, StyleSheet, View } from "react-native"
+import NetInfo from "@react-native-community/netinfo"
 import JailMonkey from "jail-monkey"
 import DeviceInfo from "react-native-device-info"
 
@@ -11,6 +12,7 @@ import { LockType } from "app/static/types"
 
 import { MotionLoading } from "@/components/utils"
 import { AppScreenProps } from "@/navigators"
+import { usePushNotifier } from "@/services/hook/usePushnotifier"
 
 import { useAppUpdate } from "./useAppUpdate"
 
@@ -27,6 +29,7 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({
   },
 }) => {
   const { user, uiStore } = useStores()
+  const { boostrapPushNotifier } = usePushNotifier()
   const { notifyApiError } = useToast()
 
   // -------------- PARAMS ---------------------
@@ -110,8 +113,15 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({
       return
     }
 
+    const connectionState = await NetInfo.fetch()
+
     if (!user.deviceId) {
       user.setDeviceId(await DeviceInfo.getUniqueId())
+    }
+
+    // Reload FCM
+    if (connectionState.isConnected) {
+      await boostrapPushNotifier()
     }
 
     /**

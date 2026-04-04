@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react"
+import { FC, useCallback, useEffect } from "react"
 import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 
@@ -14,6 +14,8 @@ import {
   SharingStatus,
 } from "app/static/types"
 import { CollectionView } from "core/models/view/collectionView"
+
+import { PushNotifier } from "@/utils/pushNotification"
 
 import { YourShareCipherList } from "./YourShareCipherList"
 
@@ -80,7 +82,10 @@ export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = obse
     )
 
     // --------------------- EFFECTS -------------------------
-
+    // Clear noti
+    useEffect(() => {
+      PushNotifier.cancelNotification("share_confirm")
+    }, [])
     // --------------------- RENDER -------------------------
 
     return (

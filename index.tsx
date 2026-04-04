@@ -2,10 +2,12 @@ import "@expo/metro-runtime"
 import "node-libs-react-native/globals"
 import "react-native-quick-base64"
 import "react-native-get-random-values"
-// import { install } from "react-native-quick-crypto"
 import { registerRootComponent } from "expo"
 
 import App from "@/app"
+import { PushNotifier } from "@/utils/pushNotification"
+
+PushNotifier.setupBackgroundHandler()
 
 // install()
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);

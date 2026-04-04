@@ -48,7 +48,6 @@ export const FolderListScreen: FC<BrowseScreenProps<"folderList">> = observer(({
   }, [navigation])
 
   // ------------------- RENDER ---------------------
-  console.log("FolderListScreen Render", index)
   return (
     <Screen
       header={

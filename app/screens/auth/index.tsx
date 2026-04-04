@@ -13,6 +13,7 @@ import { AppEventType, EventBus } from "app/utils/eventBus"
 import { ProtectSplashScreen } from "@/components/utils"
 import { isAndroidAutofillService } from "@/utils/autofill.android"
 import { Logger } from "@/utils/logger"
+import { AppStorageKey, saveString } from "@/utils/storage"
 
 import {
   AddCipherModalScreen,
@@ -88,6 +89,10 @@ export const AuthStack: FC<AppScreenProps<"authStack">> = observer(
     // ------------------ EFFECT --------------------
 
     useInAppReview()
+
+    useEffect(() => {
+      saveString(AppStorageKey.APP_CURRENT_USER_PW_ID, user.pwd_user_id ?? "")
+    }, [user.pwd_user_id])
 
     // Check network to sync
     useEffect(() => {

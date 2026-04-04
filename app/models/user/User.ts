@@ -121,8 +121,8 @@ export const UserModel = types
     setApiToken: (token: string) => {
       self.apiToken = token
     },
-    setFCMToken: (token: string) => {
-      self.fcmToken = token
+    setFCMToken: (token: string | null) => {
+      self.fcmToken = token ?? ""
     },
     setOnPremaiseEmail: (email: string) => {
       self.email = email

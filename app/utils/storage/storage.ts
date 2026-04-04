@@ -1,4 +1,5 @@
 import { MMKV } from "react-native-mmkv"
+
 export const storage = new MMKV()
 
 export enum AppStorageKey {
@@ -13,9 +14,14 @@ export enum AppStorageKey {
   LAST_USED_THEME = "LAST_USED_THEME",
 
   /**
-   * The key for the last used theme.
+   * The key for the current user's password user id.
    */
   APP_CURRENT_USER_PW_ID = "APP_CURRENT_USER_PW_ID",
+
+  /**
+   * The key for push notification data.
+   */
+  PUSH_NOTI_DATA = "PUSH_NOTI_DATA",
 }
 
 /**
