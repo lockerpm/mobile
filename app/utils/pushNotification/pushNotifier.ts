@@ -53,9 +53,9 @@ export class PushNotifier {
   }
 
   static async getPermission() {
-    await notifee.requestPermission()
-
     if (Platform.OS === "ios") {
+      await notifee.requestPermission()
+
       const authStatus = await requestPermission(messaging)
       const enabled =
         authStatus === AuthorizationStatus.AUTHORIZED ||

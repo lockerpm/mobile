@@ -48,8 +48,15 @@ export const useAppUpdate = () => {
         } else {
           const { currentVersion, latestVersion } = res
           try {
-            if (parseFloat(currentVersion) < parseFloat(latestVersion)) {
+            if (currentVersion.length < latestVersion.length) {
               showAlert()
+              return
+            }
+            if (currentVersion.length === latestVersion.length) {
+              if (parseFloat(currentVersion) < parseFloat(latestVersion)) {
+                showAlert()
+                return
+              }
             }
           } catch (e: any) {
             Logger.error(e)

@@ -15,11 +15,10 @@ export const usePushNotifier = () => {
         const token = await PushNotifier.getToken()
 
         user.setFCMToken(token)
-        return true
       } else {
         user.setFCMToken(null)
-        return true
       }
+      return true
     } catch (e) {
       Logger.error("boostrapPushNotifier: " + e)
       return false
