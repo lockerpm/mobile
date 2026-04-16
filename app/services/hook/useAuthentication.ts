@@ -11,6 +11,7 @@ import { CipherRequest } from "core/models/request"
 import { CipherView, LoginUriView, LoginView } from "core/models/view"
 
 import { useAppLocale } from "@/i18n"
+import { MasterPasswordConfig } from "@/static/types/user.types"
 import { autofillKeyChain } from "@/utils/autofill.ios"
 import { Base64 } from "@/utils/base64"
 import { delay } from "@/utils/delay"
@@ -186,6 +187,7 @@ export function useAuthentication() {
 
   // Session login
   const sessionLogin = async (
+    lockConfig: MasterPasswordConfig,
     masterPassword: string,
     createMasterPasswordItem?: () => Promise<void>,
     onPremiseData?: boolean
@@ -193,8 +195,8 @@ export function useAuthentication() {
     try {
       await delay(200)
 
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
+      const kdf = lockConfig.kdf
+      const kdfIterations = lockConfig.kdf_iterations
 
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
 
@@ -232,14 +234,15 @@ export function useAuthentication() {
   }
   // password less qr login
   const sessionQrLogin = async (
+    lockConfig: MasterPasswordConfig,
     qr: string,
     qrOtp: string,
     onPremise?: boolean
   ): Promise<{ kind: string }> => {
     try {
       await delay(100)
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
+      const kdf = lockConfig.kdf
+      const kdfIterations = lockConfig.kdf_iterations
       const keyStr = (qrOtp + qrOtp + qrOtp).slice(0, 16)
       const keyBuff = Base64.fromUtf8ToArray(keyStr).buffer
 
@@ -261,11 +264,15 @@ export function useAuthentication() {
   }
 
   // password less qr login
-  const sessionBusinessQrLogin = async (qr: string, qrOtp: string): Promise<{ kind: string }> => {
+  const sessionBusinessQrLogin = async (
+    lockConfig: MasterPasswordConfig,
+    qr: string,
+    qrOtp: string
+  ): Promise<{ kind: string }> => {
     try {
       await delay(100)
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
+      const kdf = lockConfig.kdf
+      const kdfIterations = lockConfig.kdf_iterations
       const keyStr = (qrOtp + qrOtp + qrOtp).slice(0, 16)
       const keyBuff = Base64.fromUtf8ToArray(keyStr).buffer
 
@@ -289,6 +296,7 @@ export function useAuthentication() {
 
   // Session login
   const sessionOtpLoginWithHashPassword = async (
+    lockConfig: MasterPasswordConfig,
     masterPasswordHash: string,
     key: SymmetricCryptoKey,
     method: string,
@@ -298,8 +306,8 @@ export function useAuthentication() {
     try {
       await delay(200)
 
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
+      const kdf = lockConfig.kdf
+      const kdfIterations = lockConfig.kdf_iterations
 
       return _loginOnPremiseSessionOtp(
         key,
@@ -320,6 +328,7 @@ export function useAuthentication() {
 
   // Session login
   const sessionOtpLogin = async (
+    lockConfig: MasterPasswordConfig,
     masterPassword: string,
     method: string,
     otp: string,
@@ -328,8 +337,8 @@ export function useAuthentication() {
     try {
       await delay(200)
 
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
+      const kdf = lockConfig.kdf
+      const kdfIterations = lockConfig.kdf_iterations
 
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
 
@@ -368,7 +377,7 @@ export function useAuthentication() {
   }
 
   // Biometric login
-  const biometricLogin = async (): Promise<{ kind: string }> => {
+  const biometricLogin = async (lockConfig: MasterPasswordConfig): Promise<{ kind: string }> => {
     try {
       await delay(200)
       const { available } = await rnBiometrics.isSensorAvailable()
@@ -402,8 +411,8 @@ export function useAuthentication() {
       // Online login
       const key = await cryptoService.getKey()
       const keyHash = await cryptoService.getKeyHash()
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
+      const kdf = lockConfig.kdf
+      const kdfIterations = lockConfig.kdf_iterations
       return _loginUsingApi(key, keyHash, kdf, kdfIterations)
     } catch (e) {
       return { kind: "bad-data" }
@@ -468,62 +477,6 @@ export function useAuthentication() {
     }
   }
 
-  // Change master password
-  const updateNewMasterPasswordEA = async (
-    newPassword: string,
-    email: string,
-    eaID: string,
-    lockerPassword?: boolean
-  ): Promise<{ kind: string }> => {
-    try {
-      if (lockerPassword) {
-        const res = await user.lockerPasswordEA(eaID, newPassword)
-        if (res.kind !== "ok") {
-          notifyApiError(res)
-          return { kind: "bad-data" }
-        }
-        // Setup service
-        notifyTx("success", "success:locker_password_updated")
-      } else {
-        const fetchKeyRes = await user.takeoverEA(eaID)
-        if (fetchKeyRes.kind !== "ok") return { kind: "bad-data" }
-        const { key_encrypted, kdf, kdf_iterations } = fetchKeyRes.data
-        const oldKeyBuffer = await cryptoService.rsaDecrypt(key_encrypted)
-        const oldEncKey = new SymmetricCryptoKey(oldKeyBuffer)
-
-        const key = await cryptoService.makeKey(newPassword, email, kdf, kdf_iterations)
-
-        const masterPasswordHash = await cryptoService.hashPassword(newPassword, key)
-        const encKey = await cryptoService.remakeEncKey(key, oldEncKey)
-
-        // Update Master Password item
-        const cipher = _createMasterPwItem(newPassword)
-        const cipherEnc = await cipherService.encrypt(cipher, encKey[0])
-        const data = new CipherRequest(cipherEnc)
-        data.type = CipherType.MasterPassword
-
-        const payload = {
-          key: encKey[1].encryptedString,
-          new_master_password_hash: masterPasswordHash,
-          master_password_cipher: data,
-        }
-        const res = await user.passwordEA(eaID, payload)
-        if (res.kind !== "ok") {
-          notifyApiError(res)
-          return { kind: "bad-data" }
-        }
-        // Setup service
-        notifyTx("success", "success:master_password_updated")
-      }
-
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error("updateNewMasterPasswordEA: " + e)
-      notifyTx("error", "error:something_went_wrong")
-      return { kind: "bad-data" }
-    }
-  }
-
   const _createMasterPwItem = (newPassword: string) => {
     const cipher = new CipherView()
     cipher.type = CipherType.Login
@@ -582,6 +535,8 @@ export function useAuthentication() {
         master_password_hash: oldKeyHash,
         master_password_cipher: data,
         new_master_password_hint: hint,
+        kdf: kdf,
+        kdf_iterations: kdfIterations,
       })
       if (res.kind !== "ok") {
         notifyApiError(res)
@@ -666,14 +621,14 @@ export function useAuthentication() {
     sessionLogin,
     sessionOtpLogin,
     biometricLogin,
+    sessionQrLogin,
+    sessionOtpLoginWithHashPassword,
+    sessionBusinessQrLogin,
+
     logout,
     lock,
     registerLocker,
     changeMasterPassword,
-    updateNewMasterPasswordEA,
     clearAllData,
-    sessionQrLogin,
-    sessionOtpLoginWithHashPassword,
-    sessionBusinessQrLogin,
   }
 }

@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react"
 import { View, Dimensions, StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { useAuthentication } from "app/services/hook"
-import { Header, Text } from "app/components/cores"
-import { useStores } from "app/models"
 import {
   Camera,
   Code,
@@ -11,18 +8,31 @@ import {
   useCameraPermission,
   useCodeScanner,
 } from "react-native-vision-camera"
+
+import { Header, Text } from "app/components/cores"
+import { useStores } from "app/models"
 import { AppScreenProps } from "app/navigators/navigators.types"
+import { useAuthentication } from "app/services/hook"
+
+import { MasterPasswordConfig } from "@/static/types/user.types"
 
 interface Props {
   index: number
   otp: number
+  lockConfig: MasterPasswordConfig
   goBack: () => void
   handleUnlock: () => Promise<void>
 }
 
 const { width, height } = Dimensions.get("screen")
 
-export const BusinessPasswordlessQrScan = ({ otp, goBack, index, handleUnlock }: Props) => {
+export const BusinessPasswordlessQrScan = ({
+  lockConfig,
+  otp,
+  goBack,
+  index,
+  handleUnlock,
+}: Props) => {
   const { uiStore } = useStores()
   const navigation = useNavigation<AppScreenProps<"lock">["navigation"]>()
 
@@ -31,7 +41,7 @@ export const BusinessPasswordlessQrScan = ({ otp, goBack, index, handleUnlock }:
 
   const onSuccess = async (codes: Code[]) => {
     if (codes.length > 0) {
-      const res = await sessionBusinessQrLogin(codes[0].value ?? "", otp.toString())
+      const res = await sessionBusinessQrLogin(lockConfig, codes[0].value ?? "", otp.toString())
 
       if (res.kind === "ok") {
         uiStore.setStartFromPasswordLess(true)

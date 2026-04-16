@@ -25,7 +25,7 @@ import { useStores } from "app/models"
 import { AppScreenProps } from "app/navigators/navigators.types"
 import { useAuthentication, useCipherData, useCipherHelper } from "app/services/hook"
 import { useToast } from "app/services/utils"
-import { BiometricsType, EnterpriseInvitation } from "app/static/types"
+import { BiometricsType, EnterpriseInvitation, MasterPasswordConfig } from "app/static/types"
 
 import Config from "@/config"
 import { useAppLocale } from "@/i18n"
@@ -41,6 +41,7 @@ interface Props {
   handleLogout: () => void
   handleUnlock: () => Promise<void>
   isUnlocking: boolean
+  lockConfig: MasterPasswordConfig
   setIsUnlocking: (val: boolean) => void
   biometryType: BiometricsType
 }
@@ -51,6 +52,7 @@ export const LockByMasterPassword = ({
   fido2,
   isUnlocking,
   biometryType,
+  lockConfig,
   setIsUnlocking,
   handleLogout,
   handleUnlock,
@@ -88,7 +90,7 @@ export const LockByMasterPassword = ({
 
   const unlock = async () => {
     setIsUnlocking(true)
-    const res = await sessionLogin(masterPassword, async () => {
+    const res = await sessionLogin(lockConfig, masterPassword, async () => {
       await createMasterPasswordItem(masterPassword, getPasswordStrength(masterPassword).score)
     })
     if (res.kind === "ok") {
@@ -167,7 +169,7 @@ export const LockByMasterPassword = ({
     }
     setIsUnlocking(true)
 
-    const res = await biometricLogin()
+    const res = await biometricLogin(lockConfig)
     if (res.kind === "ok") {
       await handleUnlock()
     }

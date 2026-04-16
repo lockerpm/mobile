@@ -12,9 +12,11 @@ import { useAuthentication } from "app/services/hook"
 import { useBiometricType } from "app/services/utils"
 import { BiometricsType, LockType, LoginMethod } from "app/static/types/enum"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
+import { KdfType } from "core/enums/kdfType"
 
 import { useAppLocale } from "@/i18n"
 import { usePushNotifier } from "@/services/hook/usePushnotifier"
+import { MasterPasswordConfig } from "@/static/types"
 import { isAndroidAutofillService } from "@/utils/autofill.android"
 
 import { BusinessLockByPasswordless } from "./business"
@@ -41,9 +43,20 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
 
     // ---------------------- PARAMS -------------------------
 
-    const [lockMethod, setLogMethod] = useState<LoginMethod>(LoginMethod.PASSWORD)
+    const [lockConfig, setLockConfig] = useState<{
+      isLoading: boolean
+      kdf: KdfType
+      kdf_iterations: number
+      login_method: LoginMethod
+    }>({
+      isLoading: true,
+      login_method: LoginMethod.PASSWORD,
+      kdf: KdfType.PBKDF2_SHA256,
+      kdf_iterations: 100000,
+    })
     const { biometryType } = useBiometricType()
     const [isUnlocking, setIsUnlocking] = useState(false)
+
     // ---------------------- COMPUTED -------------------------
 
     const fido2 = "fido2" in params ? params.fido2 : undefined
@@ -53,13 +66,23 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
 
     const fetchLockType = async () => {
       if (params.type === LockType.Individual) {
-        const res = await user.businessLoginMethod()
+        const res = await user.preLogin()
         if (res.kind === "ok") {
-          setLogMethod(res.data.login_method)
+          setLockConfig({
+            isLoading: false,
+            login_method: res.data.login_method,
+            kdf: res.data.kdf,
+            kdf_iterations: res.data.kdf_iterations,
+          })
         }
       } else {
         if (params.data.login_method !== LoginMethod.PASSWORD) {
-          setLogMethod(LoginMethod.PASSWORDLESS)
+          setLockConfig({
+            isLoading: false,
+            login_method: LoginMethod.PASSWORDLESS,
+            kdf: 0,
+            kdf_iterations: 100000,
+          })
           user.setPasswordlessLogin(true)
         }
 
@@ -170,11 +193,11 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       }
     }
 
-    const handleUnlockBiometric = async () => {
+    const handleUnlockBiometric = async (lockConfig: MasterPasswordConfig) => {
       const key = await cryptoService.getKey()
       if (!key) return
       setIsUnlocking(true)
-      const res = await biometricLogin()
+      const res = await biometricLogin(lockConfig)
       if (res.kind === "ok") {
         handleUnlock()
       }
@@ -192,9 +215,13 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
 
     // // Handle back press
     useEffect(() => {
+      if (lockConfig.isLoading) return undefined
       const focusHandler = navigation.addListener("focus", () => {
         if (user.isBiometricUnlock) {
-          handleUnlockBiometric()
+          handleUnlockBiometric({
+            kdf: lockConfig.kdf,
+            kdf_iterations: lockConfig.kdf_iterations,
+          })
         }
       })
 
@@ -203,7 +230,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
         backHandler.remove()
         focusHandler()
       }
-    }, [navigation])
+    }, [navigation, lockConfig])
 
     // ---------------------- RENDER -------------------------
     const commonProps = {
@@ -212,10 +239,11 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       isUnlocking,
       setIsUnlocking,
       biometryType,
+      lockConfig,
     }
 
     if (params.type === LockType.OnPremise) {
-      if (lockMethod === LoginMethod.PASSWORD) {
+      if (lockConfig.login_method === LoginMethod.PASSWORD) {
         return (
           <OnPremiseLockMasterPassword data={params.data} email={params.email} {...commonProps} />
         )
@@ -223,7 +251,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       return <OnPremiseLockByPasswordless {...commonProps} />
     }
 
-    if (lockMethod === LoginMethod.PASSWORDLESS) {
+    if (lockConfig.login_method === LoginMethod.PASSWORDLESS) {
       return <BusinessLockByPasswordless {...commonProps} />
     }
 

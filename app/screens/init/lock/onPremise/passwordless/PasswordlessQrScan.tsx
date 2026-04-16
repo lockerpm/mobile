@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react"
+import { View, StyleSheet, Dimensions } from "react-native"
+import { useNavigation } from "@react-navigation/native"
 import {
   Camera,
   Code,
@@ -6,13 +8,15 @@ import {
   useCameraPermission,
   useCodeScanner,
 } from "react-native-vision-camera"
-import { View, StyleSheet, Dimensions } from "react-native"
-import { useNavigation } from "@react-navigation/native"
-import { useAuthentication } from "app/services/hook"
+
 import { Header, Text } from "app/components/cores"
+import { useAuthentication } from "app/services/hook"
+
 import { AppScreenProps } from "@/navigators"
+import { MasterPasswordConfig } from "@/static/types/user.types"
 
 interface Props {
+  lockConfig: MasterPasswordConfig
   index: number
   otp: number
   goBack: () => void
@@ -21,14 +25,14 @@ interface Props {
 
 const { width, height } = Dimensions.get("screen")
 
-export const PasswordlessQrScan = ({ otp, goBack, index, handleUnlock }: Props) => {
+export const PasswordlessQrScan = ({ lockConfig, otp, goBack, index, handleUnlock }: Props) => {
   const navigation = useNavigation<AppScreenProps<"lock">["navigation"]>()
   const [onScanQR, setonScanQR] = useState(false)
   const { sessionQrLogin } = useAuthentication()
 
   const onSuccess = async (codes: Code[]) => {
     if (codes.length > 0) {
-      const res = await sessionQrLogin(codes[0].value ?? "", otp.toString(), true)
+      const res = await sessionQrLogin(lockConfig, codes[0].value ?? "", otp.toString(), true)
 
       if (res.kind === "ok") {
         handleUnlock()

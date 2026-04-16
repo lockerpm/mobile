@@ -1,4 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+
 import { createCipherStoreDefaultModel } from "./cipherStore/CipherStore"
 import { createCollectionStoreDefaultModel } from "./collectionStore/CollectionStore"
 import { createEnterpriseStoreDefaultModel } from "./enterpriseStore/EnterpriseStore"

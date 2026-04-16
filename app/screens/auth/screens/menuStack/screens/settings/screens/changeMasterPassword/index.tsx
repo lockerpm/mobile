@@ -1,13 +1,15 @@
 import { FC, useState } from "react"
+import { StyleSheet, View } from "react-native"
 import { CommonActions } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
-import { useAuthentication, useCipherHelper, useHelper } from "app/services/hook"
-import { useStores } from "app/models"
-import { PolicyType } from "app/static/types"
+
 import { Screen, Header, TextInput, Button } from "app/components/cores"
 import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/utils"
-import { StyleSheet, View } from "react-native"
+import { useStores } from "app/models"
 import { SettingsScreenProps } from "app/navigators"
+import { useAuthentication, useCipherHelper, useHelper } from "app/services/hook"
+import { PolicyType } from "app/static/types"
+
 import { useAppLocale } from "@/i18n"
 
 export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPassword">> = observer(

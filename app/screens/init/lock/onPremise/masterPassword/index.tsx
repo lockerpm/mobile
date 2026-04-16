@@ -6,7 +6,7 @@ import { Logo, Button, Screen, Text, TextInput } from "app/components/cores"
 import { useStores } from "app/models"
 import { AppScreenProps } from "app/navigators/navigators.types"
 import { useAuthentication } from "app/services/hook"
-import { OnPremisePreloginData } from "app/static/types"
+import { MasterPasswordConfig, OnPremisePreloginData } from "app/static/types"
 
 import { useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
@@ -15,11 +15,18 @@ import { useAppTheme } from "@/utils/useAppTheme"
 interface Props {
   data: OnPremisePreloginData
   email: string
+  lockConfig: MasterPasswordConfig
   handleLogout: () => void
   handleUnlock: () => Promise<void>
 }
 
-export const OnPremiseLockMasterPassword = ({ data, email, handleLogout, handleUnlock }: Props) => {
+export const OnPremiseLockMasterPassword = ({
+  data,
+  email,
+  lockConfig,
+  handleLogout,
+  handleUnlock,
+}: Props) => {
   const navigation = useNavigation<AppScreenProps<"lock">["navigation"]>()
   const { user } = useStores()
   const {
@@ -45,6 +52,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, handleLogout, handleU
       setIsError(false)
       setIsUnlocking(true)
       const res = await sessionLogin(
+        lockConfig,
         masterPassword,
         async () => {
           //

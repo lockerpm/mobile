@@ -109,7 +109,11 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
       if (res.kind === "ok") {
         logCreateMasterPwEvent()
 
-        const sessionRes = await sessionLogin(masterPassword, createMasterPasswordLoginType)
+        const sessionRes = await sessionLogin(
+          { kdf: 0, kdf_iterations: 100000 },
+          masterPassword,
+          createMasterPasswordLoginType
+        )
         setIsCreating(false)
 
         if (sessionRes.kind === "ok") {

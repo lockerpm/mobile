@@ -663,6 +663,10 @@ export const UserModel = types
       const res = await idApi.businessLoginMethod()
       return res
     },
+    preLogin: async () => {
+      const res = await userApi.preLogin(self.apiToken)
+      return res
+    },
     // Marketing
     fetchMarketingContent: async (language: string) => {
       const res = await userApi.fetchMarketingContent(self.apiToken, language)

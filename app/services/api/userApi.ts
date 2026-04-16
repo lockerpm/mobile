@@ -30,7 +30,8 @@ import {
   UserIDType,
   UserLockerType,
 } from "app/static/types"
-import { PolicyType } from "app/static/types/enum"
+import { LoginMethod, PolicyType } from "app/static/types/enum"
+import { KdfType } from "core/enums/kdfType"
 import { CipherResponse } from "core/models/response/cipherResponse"
 
 import { Logger } from "@/utils/logger"
@@ -232,6 +233,42 @@ class UserApi {
       return { kind: "ok" }
     } catch (e) {
       Logger.error("setUserLanguage", e)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async preLogin(token: string): Promise<
+    | {
+        kind: "ok"
+        data: {
+          activated: boolean
+          is_factor2: boolean
+          is_password_changed: boolean
+          kdf: KdfType
+          kdf_iterations: number
+          login_method: LoginMethod
+          require_2fa: boolean
+          require_passwordless: boolean
+          set_up_passwordless: boolean
+          sync_all_platforms: boolean
+        }
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/v3/cystack_platform/pm/users/me/prelogin`
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error("preLogin", e)
       return { kind: "bad-data" }
     }
   }
