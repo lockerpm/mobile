@@ -10,7 +10,6 @@
         "@expo/metro-runtime": "~6.1.2",
         "@invertase/react-native-apple-authentication": "^2.4.1",
         "@msgpack/msgpack": "^3.1.2",
-        "@noble/hashes": "^2.2.0",
         "@notifee/react-native": "^9.1.8",
         "@react-native-async-storage/async-storage": "^2.2.0",
         "@react-native-camera-roll/camera-roll": "^7.10.2",
@@ -742,8 +741,6 @@
     "@native-html/css-processor": ["@native-html/css-processor@1.11.0", "", { "dependencies": { "css-to-react-native": "^3.0.0", "csstype": "^3.0.8" }, "peerDependencies": { "@types/react": "*", "@types/react-native": "*" } }, "sha512-NnhBEbJX5M2gBGltPKOetiLlKhNf3OHdRafc8//e2ZQxXN8JaSW/Hy8cm94pnIckQxwaMKxrtaNT3x4ZcffoNQ=="],
 
     "@native-html/transient-render-engine": ["@native-html/transient-render-engine@11.2.3", "", { "dependencies": { "@native-html/css-processor": "1.11.0", "@types/ramda": "^0.27.44", "csstype": "^3.0.9", "domelementtype": "^2.2.0", "domhandler": "^4.2.2", "domutils": "^2.8.0", "htmlparser2": "^7.1.2", "ramda": "^0.27.2" }, "peerDependencies": { "@types/react-native": "*", "react-native": "^*" } }, "sha512-zXwgA3gPUEmFs3I3syfnvDvS6WiUHXEE6jY09OBzK+trq7wkweOSFWIoyXiGkbXrozGYG0KY90YgPyr8Tg8Uyg=="],
-
-    "@noble/hashes": ["@noble/hashes@2.2.0", "", {}, "sha512-IYqDGiTXab6FniAgnSdZwgWbomxpy9FtYvLKs7wCUs2a8RkITG+DFGO1DM9cr+E3/RgADRpFjrKVaJ1z6sjtEg=="],
 
     "@nodelib/fs.scandir": ["@nodelib/fs.scandir@2.1.5", "", { "dependencies": { "@nodelib/fs.stat": "2.0.5", "run-parallel": "^1.1.9" } }, "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g=="],
 
