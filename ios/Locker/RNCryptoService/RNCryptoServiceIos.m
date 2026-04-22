@@ -15,6 +15,8 @@ RCT_EXTERN_METHOD(decryptOAEPSHA1:(NSString *)encryptedB64
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(argon2: (NSString *)password salt:(NSString *)salt config:(NSDictionary *)config resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+
 
 
 @end

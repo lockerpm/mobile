@@ -201,6 +201,8 @@ dependencies {
     implementation "androidx.credentials:credentials-play-services-auth:1.5.0"
 
 
+    implementation 'com.lambdapioneer.argon2kt:argon2kt:1.6.0'
+
     // billing
     implementation 'com.android.billingclient:billing:6.0.0'
 }

@@ -43,7 +43,7 @@ const localesDirectory = "app/i18n"
 // Simple services
 const storageService = new MobileStorageService()
 const secureStorageService = new SecureStorageService()
-const cryptoFunctionService = new MobileCryptoFunctionService()
+export const cryptoFunctionService = new MobileCryptoFunctionService()
 const platformUtilsService = new MobilePlatformUtilsService()
 const logService = new MobileLogService()
 const messagingService = new MobileMessagingService()

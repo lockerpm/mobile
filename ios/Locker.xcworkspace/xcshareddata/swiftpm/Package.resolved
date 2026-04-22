@@ -1,6 +1,15 @@
 {
-  "originHash" : "cba52d46dc74fe4cf177b0dbbde1c71ec606fbe0251ace0bc55dd923160576f6",
+  "originHash" : "a77088f698e37f97de78235b96931438ea17011ba312b7918622ca1c5d6e754f",
   "pins" : [
+    {
+      "identity" : "argon2swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/thinh-nn3386/Argon2Swift.git",
+      "state" : {
+        "revision" : "6e746eb34e5a372bc30672eb5b621808ffe63e29",
+        "version" : "1.0.5"
+      }
+    },
     {
       "identity" : "keychainaccess",
       "kind" : "remoteSourceControl",

@@ -11,6 +11,7 @@
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		61E19FD18FE247F5828FB015 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7917C30583F8490CBFBA78CA /* PrivacyInfo.xcprivacy */; };
 		67497C155BC99B73DC757762 /* Pods_Locker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D587EA5ADDA4297ACDDC2C /* Pods_Locker.framework */; };
+		7C4132B42F98B0D000C57CE6 /* Argon2Swift in Frameworks */ = {isa = PBXBuildFile; productRef = 7C4132B32F98B0D000C57CE6 /* Argon2Swift */; };
 		7C47A39B2EB9DE3D0017315B /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C47A39A2EB9DE3D0017315B /* AuthenticationServices.framework */; };
 		7C47A3A62EB9DE3D0017315B /* LockerAutofill.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7C47A3992EB9DE3D0017315B /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7C47A3B72EB9DE660017315B /* LockerLiveCallerLookup.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = 7C47A3B02EB9DE660017315B /* LockerLiveCallerLookup.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -138,6 +139,7 @@
 			files = (
 				67497C155BC99B73DC757762 /* Pods_Locker.framework in Frameworks */,
 				7C47A5792EBB17AF0017315B /* StoreKit.framework in Frameworks */,
+				7C4132B42F98B0D000C57CE6 /* Argon2Swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,6 +412,7 @@
 				7C47A43F2EB9E7400017315B /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				7C47A4422EB9E94C0017315B /* XCRemoteSwiftPackageReference "SwiftOTP" */,
 				7C47A4452EB9ED420017315B /* XCRemoteSwiftPackageReference "swift-crypto" */,
+				7C4132B22F98B0D000C57CE6 /* XCRemoteSwiftPackageReference "Argon2Swift" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -1141,6 +1144,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7C4132B22F98B0D000C57CE6 /* XCRemoteSwiftPackageReference "Argon2Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/thinh-nn3386/Argon2Swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.0.5;
+			};
+		};
 		7C47A4332EB9E0A20017315B /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
@@ -1184,6 +1195,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7C4132B32F98B0D000C57CE6 /* Argon2Swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C4132B22F98B0D000C57CE6 /* XCRemoteSwiftPackageReference "Argon2Swift" */;
+			productName = Argon2Swift;
+		};
 		7C47A4342EB9E0A20017315B /* CachedAsyncImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7C47A4332EB9E0A20017315B /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
