@@ -25,7 +25,7 @@ import { useStores } from "app/models"
 import { AppScreenProps } from "app/navigators/navigators.types"
 import { useAuthentication, useCipherData, useCipherHelper } from "app/services/hook"
 import { useToast } from "app/services/utils"
-import { BiometricsType, EnterpriseInvitation, MasterPasswordConfig } from "app/static/types"
+import { BiometricsType, EnterpriseInvitation, MPEncodeConfig } from "app/static/types"
 
 import Config from "@/config"
 import { useAppLocale } from "@/i18n"
@@ -41,7 +41,7 @@ interface Props {
   handleLogout: () => void
   handleUnlock: () => Promise<void>
   isUnlocking: boolean
-  lockConfig: MasterPasswordConfig
+  lockConfig: MPEncodeConfig
   setIsUnlocking: (val: boolean) => void
   biometryType: BiometricsType
 }
@@ -276,6 +276,7 @@ export const LockByMasterPassword = ({
         style={styles.mgTop20}
         preset="primary"
       />
+
       {biometryType !== BiometricsType.None && (
         <TouchableOpacity
           disabled={isUnlocking}

@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   mv2: {
+    marginBottom: 4,
     marginVertical: 2,
   },
   row: {

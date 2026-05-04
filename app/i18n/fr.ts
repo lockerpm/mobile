@@ -882,6 +882,24 @@ const fr: Translations = {
     added_date: "Brèche signalée",
     data_classes: "Données compromises",
   },
+  encryption_key: {
+    title: "Paramètres de la clé de chiffrement",
+    desc: {
+      first:
+        "Utilisez au moins PBKDF2 avec 600 000 itérations. Des algorithmes plus puissants peuvent augmenter le temps nécessaire pour déverrouiller votre coffre.",
+      second: "Vous devriez exporter les données de votre coffre en cas de problème improbable.",
+    },
+    encryption_alg: "Algorithme de chiffrement : ",
+    select:
+      "Sélectionnez l'algorithme et la configuration utilisés pour chiffrer votre mot de passe maître.",
+    alg: "Algorithme",
+    interations: "Itérations",
+    memory: "Mémoire (MB)",
+    parallelism: "Parallélisme",
+    recommend_pbkdf2: "Recommandation : 600 000 itérations",
+    recommend_argon2id: "Recommandation : 64 MB mémoire, 3 itérations, 4 parallélisme",
+    recommended: "Recommandé",
+  },
   settings: {
     autofill_service: "Service de remplissage automatique",
     change_master_pass: "Changer le mot de passe maître",

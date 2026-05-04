@@ -6,7 +6,7 @@ import { Logo, Button, Screen, Text, TextInput } from "app/components/cores"
 import { useStores } from "app/models"
 import { AppScreenProps } from "app/navigators/navigators.types"
 import { useAuthentication } from "app/services/hook"
-import { MasterPasswordConfig, OnPremisePreloginData } from "app/static/types"
+import { MPEncodeConfig, OnPremisePreloginData } from "app/static/types"
 
 import { useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
@@ -15,7 +15,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 interface Props {
   data: OnPremisePreloginData
   email: string
-  lockConfig: MasterPasswordConfig
+  lockConfig: MPEncodeConfig
   handleLogout: () => void
   handleUnlock: () => Promise<void>
 }

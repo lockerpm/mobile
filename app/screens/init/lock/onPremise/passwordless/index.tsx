@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import { Dimensions, ScrollView } from "react-native"
 
-import { MasterPasswordConfig } from "@/static/types/user.types"
+import { MPEncodeConfig } from "@/static/types/user.types"
 
 import { OtpPasswordlessGenerator, randomOtpNumber } from "./OtpGenerator"
 import { PasswordlessQrScan } from "./PasswordlessQrScan"
@@ -9,7 +9,7 @@ import { PasswordlessQrScan } from "./PasswordlessQrScan"
 const { width } = Dimensions.get("screen")
 
 interface Props {
-  lockConfig: MasterPasswordConfig
+  lockConfig: MPEncodeConfig
   handleLogout: () => void
   handleUnlock: () => Promise<void>
 }

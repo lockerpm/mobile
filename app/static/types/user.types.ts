@@ -16,9 +16,12 @@ import {
   PolicyType,
 } from "./enum"
 
-export type MasterPasswordConfig = {
+export type MPEncodeConfig = {
   kdf: KdfType
   kdf_iterations: number
+  kdf_memory?: number
+  kdf_parallelism?: number
+  kdf_version?: number
 }
 
 export type UserIDType = {

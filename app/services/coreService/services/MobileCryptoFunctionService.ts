@@ -13,25 +13,35 @@ const { RNCryptoServiceIos, RNCryptoServiceAndroid } = NativeModules
 const IS_IOS = Platform.OS === "ios"
 
 export class MobileCryptoFunctionService implements CryptoFunctionService {
-  argon2(
+  async argon2id(
     password: string,
     salt: string,
-    options?: {
-      memory?: number
-      iterations?: number
-      parallelism?: number
-      hashLength?: number
-      mode?: "argon2id" | "argon2i" | "argon2d"
-      // 'utf8' (default, for backward compatibility)
-      saltEncoding?: "utf8" | "hex"
+    iterations: number,
+    memory: number,
+    parallelism: number,
+    outputByteSize: number
+  ): Promise<ArrayBuffer> {
+    const options = {
+      memory,
+      iterations,
+      parallelism,
+      hashLength: outputByteSize,
+      mode: "argon2id",
+      saltEncoding: "utf8",
     }
-  ): Promise<{
-    rawHash: string
-    encodedHash: string
-  }> {
-    return IS_IOS
-      ? RNCryptoServiceIos.argon2(password, salt, options)
-      : RNCryptoServiceAndroid.argon2(password, salt, options)
+    if (IS_IOS) {
+      const res: {
+        rawHash: string
+        encodedHash: string
+      } = await RNCryptoServiceIos.argon2(password, salt, options)
+      return this.toArrayBuffer(res.rawHash)
+    }
+
+    const res: {
+      rawHash: string
+      encodedHash: string
+    } = await RNCryptoServiceAndroid.argon2(password, salt, options)
+    return this.toArrayBuffer(res.rawHash)
   }
 
   // DONE
@@ -349,7 +359,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   private toArrayBuffer(value: Buffer | string | ArrayBuffer): ArrayBuffer {
     let buf: ArrayBuffer
     if (typeof value === "string") {
-      buf = Utils.fromUtf8ToArray(value).buffer
+      buf = Utils.fromUtf8ToArray(value).buffer as ArrayBuffer
     } else {
       buf = new Uint8Array(value).buffer
     }

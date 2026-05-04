@@ -29,9 +29,9 @@ import {
   User2FAMethod,
   UserIDType,
   UserLockerType,
+  MPEncodeConfig,
 } from "app/static/types"
 import { LoginMethod, PolicyType } from "app/static/types/enum"
-import { KdfType } from "core/enums/kdfType"
 import { CipherResponse } from "core/models/response/cipherResponse"
 
 import { Logger } from "@/utils/logger"
@@ -244,14 +244,12 @@ class UserApi {
           activated: boolean
           is_factor2: boolean
           is_password_changed: boolean
-          kdf: KdfType
-          kdf_iterations: number
           login_method: LoginMethod
           require_2fa: boolean
           require_passwordless: boolean
           set_up_passwordless: boolean
           sync_all_platforms: boolean
-        }
+        } & MPEncodeConfig
       }
     | GeneralApiProblem
   > {

@@ -1,4 +1,4 @@
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { CommonActions } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
@@ -8,9 +8,12 @@ import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/
 import { useStores } from "app/models"
 import { SettingsScreenProps } from "app/navigators"
 import { useAuthentication, useCipherHelper, useHelper } from "app/services/hook"
-import { PolicyType } from "app/static/types"
+import { MPEncodeConfig, PolicyType } from "app/static/types"
 
+import { SetupEncryptionKeyOptions } from "@/components/utils/mpEncodeConfig/SetupEncryptionKeyOptions"
 import { useAppLocale } from "@/i18n"
+import { useCoreService } from "@/services/coreService"
+import { AppEventType, EventBus } from "@/utils/eventBus"
 
 export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPassword">> = observer(
   ({ navigation }) => {
@@ -19,6 +22,8 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
     const { getPasswordStrength, checkPasswordPolicy } = useCipherHelper()
     const { changeMasterPassword } = useAuthentication()
     const { user } = useStores()
+
+    const { userService } = useCoreService()
 
     // -------------- PARAMS --------------
 
@@ -31,6 +36,14 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
 
     const [showViolationModal, setShowViolationModal] = useState(false)
     const [violations, setViolations] = useState<string[]>([])
+
+    const [encodeConfig, setEncodeConfig] = useState<Required<MPEncodeConfig>>({
+      kdf: userService.getKdf(),
+      kdf_iterations: userService.getKdfIterations(),
+      kdf_memory: userService.getKdfMemory(),
+      kdf_parallelism: userService.getKdfParallelism(),
+      kdf_version: userService.getKdfVersion(),
+    })
 
     // -------------- COMPUTED --------------
 
@@ -56,7 +69,7 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
     const handleChangePassword = async () => {
       setIsLoading(true)
 
-      const res = await changeMasterPassword(current, newPass, hint)
+      const res = await changeMasterPassword(current, newPass, hint, encodeConfig)
       if (res.kind === "ok") {
         navigation.dispatch(
           CommonActions.reset({
@@ -67,6 +80,18 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
       }
       setIsLoading(false)
     }
+
+    useEffect(() => {
+      const encryptionChange = EventBus.createListener(
+        AppEventType.SELECT_ENCRYPTION_CONFIG,
+        (config: Required<MPEncodeConfig>) => {
+          setEncodeConfig(config)
+        }
+      )
+      return () => {
+        EventBus.removeListener(encryptionChange)
+      }
+    }, [])
 
     // -------------- RENDER --------------
 
@@ -101,6 +126,8 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
             value={current}
             onChangeText={setCurrent}
           />
+
+          <SetupEncryptionKeyOptions keyConfig={encodeConfig} style={styles.mt16} />
 
           <TextInput
             isPassword
@@ -159,6 +186,7 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
 )
 
 const styles = StyleSheet.create({
+  mt16: { marginTop: 16 },
   mt30: { marginBottom: 30 },
   mt8: { marginTop: 8 },
   mv20: { marginVertical: 20 },

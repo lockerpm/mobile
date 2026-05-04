@@ -902,6 +902,23 @@ const en = {
     added_date: "Breach Reported",
     data_classes: "Compromised data",
   },
+  encryption_key: {
+    title: "Encryption key settings",
+    desc: {
+      first:
+        "Use at least PBKDF2 with 600,000 iterations. Stronger algorithms may increase the time required to unlock your vault.",
+      second: "You should export your vault data in the unlikely event of an issue.",
+    },
+    encryption_alg: "Encryption algorithm: ",
+    select: "Select the algorithm and configuration used to encrypt your master password.",
+    alg: "Algorithm",
+    interations: "Iterations",
+    memory: "Memory (MB)",
+    parallelism: "Parallelism",
+    recommend_pbkdf2: "Recommendation: 600,000 iterations",
+    recommend_argon2id: "Recommendation: 64 MB memory, 3 iterations, 4 parallelism",
+    recommended: "Recommended",
+  },
   settings: {
     autofill_service: "Auto-fill Service",
     change_master_pass: "Change Master Password",

@@ -16,7 +16,7 @@ import { KdfType } from "core/enums/kdfType"
 
 import { useAppLocale } from "@/i18n"
 import { usePushNotifier } from "@/services/hook/usePushnotifier"
-import { MasterPasswordConfig } from "@/static/types"
+import { MPEncodeConfig } from "@/static/types"
 import { isAndroidAutofillService } from "@/utils/autofill.android"
 
 import { BusinessLockByPasswordless } from "./business"
@@ -43,12 +43,12 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
 
     // ---------------------- PARAMS -------------------------
 
-    const [lockConfig, setLockConfig] = useState<{
-      isLoading: boolean
-      kdf: KdfType
-      kdf_iterations: number
-      login_method: LoginMethod
-    }>({
+    const [lockConfig, setLockConfig] = useState<
+      {
+        isLoading: boolean
+        login_method: LoginMethod
+      } & MPEncodeConfig
+    >({
       isLoading: true,
       login_method: LoginMethod.PASSWORD,
       kdf: KdfType.PBKDF2_SHA256,
@@ -67,12 +67,16 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     const fetchLockType = async () => {
       if (params.type === LockType.Individual) {
         const res = await user.preLogin()
+        console.log("preLogin res", res)
         if (res.kind === "ok") {
           setLockConfig({
             isLoading: false,
             login_method: res.data.login_method,
             kdf: res.data.kdf,
             kdf_iterations: res.data.kdf_iterations,
+            kdf_memory: res.data.kdf_memory ?? 0,
+            kdf_parallelism: res.data.kdf_parallelism ?? 0,
+            kdf_version: res.data.kdf_version ?? 0,
           })
         }
       } else {
@@ -81,7 +85,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
             isLoading: false,
             login_method: LoginMethod.PASSWORDLESS,
             kdf: 0,
-            kdf_iterations: 100000,
+            kdf_iterations: 600000,
           })
           user.setPasswordlessLogin(true)
         }
@@ -188,7 +192,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       }
     }
 
-    const handleUnlockBiometric = async (lockConfig: MasterPasswordConfig) => {
+    const handleUnlockBiometric = async (lockConfig: MPEncodeConfig) => {
       const key = await cryptoService.getKey()
       if (!key) return
       setIsUnlocking(true)

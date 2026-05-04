@@ -14,12 +14,12 @@ import { useStores } from "app/models"
 import { AppScreenProps } from "app/navigators/navigators.types"
 import { useAuthentication } from "app/services/hook"
 
-import { MasterPasswordConfig } from "@/static/types/user.types"
+import { MPEncodeConfig } from "@/static/types/user.types"
 
 interface Props {
   index: number
   otp: number
-  lockConfig: MasterPasswordConfig
+  lockConfig: MPEncodeConfig
   goBack: () => void
   handleUnlock: () => Promise<void>
 }

@@ -1,22 +1,25 @@
 import { useCallback, useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
 import { View, Image, TouchableOpacity, StyleSheet, ViewStyle } from "react-native"
-import { ChainSelect } from "./ChainSelect"
-import { AppSelect } from "./AppSelect"
-import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
-import { CipherView, FieldView } from "core/models/view"
-import { CollectionView } from "core/models/view/collectionView"
-import { CryptoWalletData, toCryptoWalletData } from "app/utils/crypto"
+import { observer } from "mobx-react-lite"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+
+import { CipherOthersInfo, CustomFieldsEdit, SeedPhraseInput } from "app/components/ciphers"
 import { Header, Screen, TextInput, Text, Icon } from "app/components/cores"
 import { PasswordStrength } from "app/components/utils"
 import { BrowseScreenProps } from "app/navigators"
+import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
 import { CipherAppView, CipherEditHelperModal, CipherEditMode } from "app/static/types"
-import { CipherOthersInfo, CustomFieldsEdit, SeedPhraseInput } from "app/components/ciphers"
+import { CryptoWalletData, toCryptoWalletData } from "app/utils/crypto"
+import { CipherView, FieldView } from "core/models/view"
+import { CollectionView } from "core/models/view/collectionView"
 import { FolderView } from "core/models/view/folderView"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { ThemedStyle } from "@/theme"
 import { AppEventType, EventBus } from "@/utils/eventBus"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { AppSelect } from "./AppSelect"
+import { ChainSelect } from "./ChainSelect"
 
 type Props = {
   item: CipherAppView

@@ -13,10 +13,10 @@ import { Header, Text } from "app/components/cores"
 import { useAuthentication } from "app/services/hook"
 
 import { AppScreenProps } from "@/navigators"
-import { MasterPasswordConfig } from "@/static/types/user.types"
+import { MPEncodeConfig } from "@/static/types/user.types"
 
 interface Props {
-  lockConfig: MasterPasswordConfig
+  lockConfig: MPEncodeConfig
   index: number
   otp: number
   goBack: () => void

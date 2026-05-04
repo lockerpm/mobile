@@ -1,21 +1,26 @@
 import { FC } from "react"
-import { useStores } from "app/models"
+import { Linking, ViewStyle } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { Header, Screen } from "app/components/cores"
 import { SettingsItem, MenuItemContainer } from "app/components/utils"
-import { observer } from "mobx-react-lite"
+import { useStores } from "app/models"
+import { SettingsScreenProps } from "app/navigators"
+
+import { useCoreService } from "@/services/coreService"
+import { openDeleteAccount } from "@/utils/openLinkInBrowser"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { EnableUnlockWithBiometric } from "./EnableUnlockWithBiometric"
+import { HideMasterPasswordItem } from "./HideMasterPasswordItem"
 import { SetlanguageItem } from "./SetLanguageItem"
 import { SetThemeItem } from "./SetThemeItem"
 import { SyncDataItem } from "./SyncDataItem"
-import { EnableUnlockWithBiometric } from "./EnableUnlockWithBiometric"
 import { useSettingListNavigation } from "./useSettingListNavigation"
-import { Linking, ViewStyle } from "react-native"
-import { SettingsScreenProps } from "app/navigators"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { openDeleteAccount } from "@/utils/openLinkInBrowser"
-import { HideMasterPasswordItem } from "./HideMasterPasswordItem"
 
 export const SettingsScreen: FC<SettingsScreenProps<"settings">> = observer(({ navigation }) => {
   const { user } = useStores()
+  const { userService } = useCoreService()
   const {
     theme: { colors },
   } = useAppTheme()
@@ -35,6 +40,7 @@ export const SettingsScreen: FC<SettingsScreenProps<"settings">> = observer(({ n
     navigateToEnableAutofillService,
     navigateToImport,
     navigateToExport,
+    navigateToEncryptionKey,
   } = useSettingListNavigation()
 
   // ----------------------- RENDER --------------------
@@ -66,6 +72,10 @@ export const SettingsScreen: FC<SettingsScreenProps<"settings">> = observer(({ n
           onPress={navigateToEnableAutofillService}
         />
         <SettingsItem textTx={"passkey:login_passkey_setting"} onPress={openPasskeySettingUrl} />
+
+        {userService.getKdfVersion() >= 1 && (
+          <SettingsItem textTx={"encryption_key:title"} onPress={navigateToEncryptionKey} />
+        )}
 
         <HideMasterPasswordItem />
         <EnableUnlockWithBiometric />

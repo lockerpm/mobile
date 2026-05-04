@@ -1,23 +1,35 @@
-import { OrganizationData } from '../models/data/organizationData';
-import { Organization } from '../models/domain/organization';
-
-import { KdfType } from '../enums/kdfType';
+import { KdfType } from "../enums/kdfType"
+import { OrganizationData } from "../models/data/organizationData"
+import { Organization } from "../models/domain/organization"
 
 export abstract class UserService {
-    setInformation: (userId: string, email: string, kdf: KdfType, kdfIterations: number) => Promise<any>;
-    setEmailVerified: (emailVerified: boolean) => Promise<any>;
-    setSecurityStamp: (stamp: string) => Promise<any>;
-    getUserId: () => Promise<string>;
-    getEmail: () => Promise<string>;
-    getSecurityStamp: () => Promise<string>;
-    getKdf: () => Promise<KdfType>;
-    getKdfIterations: () => Promise<number>;
-    getEmailVerified: () => Promise<boolean>;
-    clear: () => Promise<any>;
-    isAuthenticated: () => Promise<boolean>;
-    canAccessPremium: () => Promise<boolean>;
-    getOrganization: (id: string) => Promise<Organization>;
-    getAllOrganizations: () => Promise<Organization[]>;
-    replaceOrganizations: (organizations: { [id: string]: OrganizationData; }) => Promise<any>;
-    clearOrganizations: (userId: string) => Promise<any>;
+  abstract setInformation: (
+    userId: string,
+    email: string,
+    kdf: KdfType,
+    kdfVersion: number,
+    kdfIterations: number,
+    kdfMemory: number,
+    kdfParallelism: number
+  ) => Promise<void>
+  abstract setEmailVerified: (emailVerified: boolean) => Promise<void>
+  abstract setSecurityStamp: (stamp: string) => Promise<void>
+  abstract getUserId: () => Promise<string>
+  abstract getEmail: () => Promise<string>
+  abstract getSecurityStamp: () => Promise<string>
+  abstract getKdf: () => KdfType
+  abstract getKdfVersion: () => number
+  abstract getKdfIterations: () => number
+  abstract getKdfMemory: () => number
+  abstract getKdfParallelism: () => number
+  abstract getEmailVerified: () => Promise<boolean>
+  abstract clear: () => Promise<void>
+  abstract isAuthenticated: () => Promise<boolean>
+  abstract canAccessPremium: () => Promise<boolean>
+  abstract getOrganization: (id: string) => Promise<Organization | null>
+  abstract getAllOrganizations: () => Promise<Organization[]>
+  abstract replaceOrganizations: (organizations: {
+    [id: string]: OrganizationData
+  }) => Promise<void>
+  abstract clearOrganizations: (userId: string) => Promise<void>
 }

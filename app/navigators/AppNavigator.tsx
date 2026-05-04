@@ -21,7 +21,7 @@ import { Logger } from "@/utils/logger"
 import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme"
 
 import Config from "../config"
-import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
+import { modalScreenOptions, navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { AppRoute } from "./navigators.types"
 import { useMonitorApiResponse } from "./useMonitorApiResponse"
 import { useLiveOtpAuthDeeplinkHandler } from "./useOtpAuthDeeplinkHandler"
@@ -104,6 +104,11 @@ const AppStack = observer(function AppStack(props: AppProps) {
         }}
       />
       <Stack.Screen name="unAuthStack" component={Screens.UnAuthStack} />
+      <Stack.Screen
+        name="encryptionConfigModal"
+        component={Screens.EncryptionConfigModal}
+        options={modalScreenOptions}
+      />
     </Stack.Navigator>
   )
 })

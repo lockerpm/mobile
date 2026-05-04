@@ -874,6 +874,22 @@ const zh: Translations = {
     added_date: "資料洩漏報告於",
     data_classes: "被洩露的資料",
   },
+  encryption_key: {
+    title: "加密金鑰設定",
+    desc: {
+      first: "使用至少 PBKDF2 並進行 600,000 次迭代。更強的算法可能會增加解鎖保險庫所需的時間。",
+      second: "在不太可能發生問題的情況下，您應該導出保險庫數據。",
+    },
+    encryption_alg: "加密算法: ",
+    select: "選擇用於加密主密碼的算法和配置。",
+    alg: "算法",
+    interations: "迭代次數",
+    memory: "記憶體 (MB)",
+    parallelism: "並行度",
+    recommend_pbkdf2: "建議：600,000 次迭代",
+    recommend_argon2id: "建議：64 MB 記憶體，3 次迭代，4 並行度",
+    recommended: "建議",
+  },
   settings: {
     autofill_service: "自動填寫服務",
     change_master_pass: "更改主密碼",

@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
+
 import { SettingsScreenProps } from "app/navigators"
 
 export const useSettingListNavigation = () => {
@@ -12,9 +13,10 @@ export const useSettingListNavigation = () => {
       screen: "notiOptions",
     })
   }
-  // const navigateToEmergencyAccess = () => {
-  //   navigation.navigate("emergencyAccess")
-  // }
+  const navigateToEncryptionKey = () => {
+    navigation.navigate("encryptionKey")
+  }
+
   const navigateToEnableAutofillService = () => {
     navigation.navigate("autofillService")
   }
@@ -32,5 +34,6 @@ export const useSettingListNavigation = () => {
     navigateToEnableAutofillService,
     navigateToImport,
     navigateToExport,
+    navigateToEncryptionKey,
   }
 }

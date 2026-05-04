@@ -40,6 +40,11 @@ export enum AppEventType {
    * Unselection (home, cipherList)
    */
   UNSELECT_ALL = "UNSELECT_ALL",
+
+  /**
+   * Select Encryption Config used for master password setup and change
+   */
+  SELECT_ENCRYPTION_CONFIG = "SELECT_ENCRYPTION_CONFIG",
 }
 
 export class EventBus {

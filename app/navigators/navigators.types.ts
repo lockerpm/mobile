@@ -17,6 +17,7 @@ import {
   LockType,
   LoginOptions,
   MarketingContent,
+  MPEncodeConfig,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
   RelayAddress,
@@ -63,6 +64,9 @@ export type AppRoute = {
         // otpauth uri label from deeplink
         label?: string
       }
+  encryptionConfigModal: {
+    data: MPEncodeConfig
+  }
   unAuthStack: NavigatorScreenParams<UnAuthRoute>
   authStack: NavigatorScreenParams<AuthRoute> & {
     fido2?: AndroidAppProps
@@ -569,6 +573,7 @@ export type InviteToFamilyScreenProps<T extends keyof InviteToFamilyRoute> = Com
 
 export type SettingsRoute = {
   settings: undefined
+  encryptionKey: undefined
   changeMasterPassword: undefined
   autofillService: undefined
   import: undefined
