@@ -109,6 +109,8 @@ export function Icon(props: IconProps) {
 }
 
 export const iconRegistry = {
+  "caret-up-fill": require("assets/icons/caret-up-fill.png"),
+  "caret-down-fill": require("assets/icons/caret-down-fill.png"),
   "caret-up-down-fill": require("assets/icons/caret-up-down-fill.png"),
   "arrow-left": require("assets/icons/arrow-left.png"),
   "arrow-right": require("assets/icons/arrow-right.png"),
