@@ -188,21 +188,15 @@ export const MasterPasswordEncodeConfig = ({ encodeConfig, setEncodeConfig }: Pr
           </>
         )}
 
-        {((encodeConfig.kdf === KdfType.PBKDF2_SHA256 && encodeConfig.kdf_iterations === 1000) ||
-          (encodeConfig.kdf === KdfType.ARGON2ID &&
-            encodeConfig.kdf_iterations !== 3 &&
-            encodeConfig.kdf_memory !== 64 &&
-            encodeConfig.kdf_parallelism !== 4)) && (
-          <Text
-            preset="label"
-            size="xs"
-            tx={
-              encodeConfig.kdf === KdfType.PBKDF2_SHA256
-                ? "encryption_key:recommend_pbkdf2"
-                : "encryption_key:recommend_argon2id"
-            }
-          />
-        )}
+        <Text
+          preset="label"
+          size="xs"
+          tx={
+            encodeConfig.kdf === KdfType.PBKDF2_SHA256
+              ? "encryption_key:recommend_pbkdf2"
+              : "encryption_key:recommend_argon2id"
+          }
+        />
       </View>
       <NewActionSheet
         header={

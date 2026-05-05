@@ -73,9 +73,9 @@ export const SettingsScreen: FC<SettingsScreenProps<"settings">> = observer(({ n
         />
         <SettingsItem textTx={"passkey:login_passkey_setting"} onPress={openPasskeySettingUrl} />
 
-        {userService.getKdfVersion() >= 1 && (
-          <SettingsItem textTx={"encryption_key:title"} onPress={navigateToEncryptionKey} />
-        )}
+        {/* {userService.getKdfVersion() >= 1 && ( */}
+        <SettingsItem textTx={"encryption_key:title"} onPress={navigateToEncryptionKey} />
+        {/* )} */}
 
         <HideMasterPasswordItem />
         <EnableUnlockWithBiometric />

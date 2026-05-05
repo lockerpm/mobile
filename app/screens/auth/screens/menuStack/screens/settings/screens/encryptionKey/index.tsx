@@ -3,7 +3,6 @@ import { StyleSheet, View, ViewStyle } from "react-native"
 
 import { Screen, Header, Text, Button } from "app/components/cores"
 import { SettingsScreenProps } from "app/navigators"
-import { KdfType } from "core/enums/kdfType"
 
 import { MasterPasswordEncodeConfig } from "@/components/utils/mpEncodeConfig"
 import { TxKeyPath } from "@/i18n"
@@ -67,9 +66,7 @@ export const EncryptionKeyScreen: FC<SettingsScreenProps<"encryptionKey">> = ({ 
       contentContainerStyle={styles.screen}
     >
       <View style={themed($container)}>
-        {encodeConfig.kdf === KdfType.PBKDF2_SHA256 && encodeConfig.kdf_iterations < 600000 && (
-          <DescItem tx={"encryption_key:desc.first"} />
-        )}
+        <DescItem tx={"encryption_key:desc.first"} />
 
         <DescItem tx={"encryption_key:desc.second"} />
       </View>

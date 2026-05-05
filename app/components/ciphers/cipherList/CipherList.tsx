@@ -137,8 +137,6 @@ export const CipherList = observer(
     const lastCacheUpdate = cipherStore.lastCacheUpdate
     const notSynchedCiphers = cipherStore.notSynchedCiphers
 
-    console.log("render cipher list", ciphers.length)
-
     // ------------------------ METHODS ----------------------------
 
     // check if cipher is shared from other user

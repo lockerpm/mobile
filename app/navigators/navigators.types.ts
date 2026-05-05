@@ -17,7 +17,6 @@ import {
   LockType,
   LoginOptions,
   MarketingContent,
-  MPEncodeConfig,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
   RelayAddress,
@@ -64,9 +63,6 @@ export type AppRoute = {
         // otpauth uri label from deeplink
         label?: string
       }
-  encryptionConfigModal: {
-    data: MPEncodeConfig
-  }
   unAuthStack: NavigatorScreenParams<UnAuthRoute>
   authStack: NavigatorScreenParams<AuthRoute> & {
     fido2?: AndroidAppProps

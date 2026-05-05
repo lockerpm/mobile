@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from "react"
+import { FC, useCallback, useEffect, useRef, useState } from "react"
 import { Alert, View, Image, StyleSheet, ViewStyle } from "react-native"
 import NetInfo from "@react-native-community/netinfo"
 import { CommonActions } from "@react-navigation/native"
@@ -15,10 +15,8 @@ import { LockType, MPEncodeConfig, PolicyType } from "app/static/types"
 import { logCreateMasterPwEvent } from "app/utils/analytics"
 import { KdfType } from "core/enums/kdfType"
 
-import { SetupEncryptionKeyOptions } from "@/components/utils/mpEncodeConfig/SetupEncryptionKeyOptions"
 import { useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
-import { AppEventType, EventBus } from "@/utils/eventBus"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 import { ConfirmCreateMPModal } from "./ConfirmCreateMpModal"
@@ -38,6 +36,11 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
       theme: { colors },
     } = useAppTheme()
 
+    const encodeConfig = useRef<MPEncodeConfig>({
+      kdf: KdfType.PBKDF2_SHA256,
+      kdf_iterations: 600000,
+    })
+
     // -------------- PARAMS ------------------
 
     const [masterPassword, setMasterPassword] = useState("")
@@ -51,14 +54,6 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
     const [showViolationModal, setShowViolationModal] = useState(false)
     const [showConfirmCreateModal, setShowConfirmCreateModal] = useState<boolean>(false)
     const [violations, setViolations] = useState<string[]>([])
-
-    const [encodeConfig, setEncodeConfig] = useState<Required<MPEncodeConfig>>({
-      kdf: KdfType.PBKDF2_SHA256,
-      kdf_iterations: 600000,
-      kdf_memory: 64,
-      kdf_parallelism: 5,
-      kdf_version: 1,
-    })
 
     // -------------- COMPUTED ------------------
 
@@ -111,19 +106,17 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
       handleCreate()
     }
 
-    console.log("CreateMasterPasswordScreen: render, encodeConfig: ", encodeConfig)
-
     // Confirm master pass
     const handleCreate = async () => {
       setIsCreating(true)
       setShowConfirmCreateModal(false)
 
-      const res = await registerLocker(masterPassword, hint, passwordStrength, encodeConfig)
+      const res = await registerLocker(masterPassword, hint, passwordStrength, encodeConfig.current)
       if (res.kind === "ok") {
         logCreateMasterPwEvent()
 
         const sessionRes = await sessionLogin(
-          encodeConfig,
+          encodeConfig.current,
           masterPassword,
           createMasterPasswordLoginType
         )
@@ -179,18 +172,6 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
     useEffect(() => {
       loadUserTeams()
     }, [loadUserTeams])
-
-    useEffect(() => {
-      const encryptionChange = EventBus.createListener(
-        AppEventType.SELECT_ENCRYPTION_CONFIG,
-        (config: Required<MPEncodeConfig>) => {
-          setEncodeConfig(config)
-        }
-      )
-      return () => {
-        EventBus.removeListener(encryptionChange)
-      }
-    }, [])
 
     // Back handler
     useEffect(() => {
@@ -249,8 +230,6 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
             )}
             <Text size="sm" style={styles.email} text={user.email} />
           </View>
-
-          <SetupEncryptionKeyOptions keyConfig={encodeConfig} style={styles.mt16} />
 
           {/* Master pass input */}
           <TextInput
