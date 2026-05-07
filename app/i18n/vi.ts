@@ -899,6 +899,13 @@ const vi: Translations = {
     data_classes: "Dữ liệu rò rỉ",
   },
   encryption_key: {
+    modal: {
+      header: "Khuyến nghị",
+      title: "Cập nhật mã hóa",
+      desc: "Cập nhật thuật toán mã hóa để tăng cường bảo mật.",
+      learn: "Tìm hiểu thêm",
+      update: "Cập nhật ngay",
+    },
     title: "Cài đặt khóa mã hóa",
     desc: {
       first:

@@ -232,9 +232,6 @@ export function useCipherData() {
         cipherStore.clearNotUpdate()
         folderStore.clearNotUpdate()
         collectionStore.clearNotUpdate()
-        // Save fingerprint
-        const fingerprint = await cryptoService.getFingerprint(userId)
-        user.setFingerprint(fingerprint.join("-"))
 
         // Save to shared keychain for autofill service
         await _updateAutofillData()

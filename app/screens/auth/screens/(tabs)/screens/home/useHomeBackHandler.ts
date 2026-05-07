@@ -1,10 +1,12 @@
-import { useAppLocale } from "@/i18n"
+import { useEffect } from "react"
+import { Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
+
 import { TabsScreenProps } from "app/navigators"
 import { useAuthentication } from "app/services/hook"
 import { LockType } from "app/static/types"
-import { useEffect } from "react"
-import { Alert } from "react-native"
+
+import { useAppLocale } from "@/i18n"
 
 /**
  * Custom hook to handle back navigation in the home tab.

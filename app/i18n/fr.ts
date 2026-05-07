@@ -883,6 +883,13 @@ const fr: Translations = {
     data_classes: "Données compromises",
   },
   encryption_key: {
+    modal: {
+      header: "Action recommandée",
+      title: "Mise à jour du chiffrement",
+      desc: "Mettez à jour la dérivation de la clé de chiffrement pour une meilleure sécurité.",
+      learn: "En savoir plus",
+      update: "Mettre à jour maintenant",
+    },
     title: "Paramètres de la clé de chiffrement",
     desc: {
       first:

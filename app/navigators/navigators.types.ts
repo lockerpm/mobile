@@ -209,6 +209,8 @@ export type AuthRoute = {
     isDeleted?: boolean
   }
 
+  updateEncryption: undefined
+
   addCipherModal:
     | {
         folderId?: string

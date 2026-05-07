@@ -875,6 +875,13 @@ const zh: Translations = {
     data_classes: "被洩露的資料",
   },
   encryption_key: {
+    modal: {
+      header: "建議的操作",
+      title: "加密更新",
+      desc: "更新加密金鑰導出以提高安全性。",
+      learn: "了解更多",
+      update: "立即更新",
+    },
     title: "加密金鑰設定",
     desc: {
       first: "使用至少 PBKDF2 並進行 600,000 次迭代。更強的算法可能會增加解鎖保險庫所需的時間。",

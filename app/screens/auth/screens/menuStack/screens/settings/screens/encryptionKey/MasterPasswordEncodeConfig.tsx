@@ -5,12 +5,11 @@ import { TextInput, View, StyleSheet, ViewStyle, TextStyle } from "react-native"
 import { Icon, PressableIcon, PressableScale, Text, TextProps } from "app/components/cores"
 import { KdfType } from "core/enums/kdfType"
 
+import { NewActionSheet } from "@/components/utils"
 import { TxKeyPath } from "@/i18n"
 import { MPEncodeConfig } from "@/static/types"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
-
-import { NewActionSheet } from "../actionSheet/ActionSheet"
 
 const ALGORITHM_OPTIONS = [
   { label: "PBKDF2", value: KdfType.PBKDF2_SHA256 },
@@ -47,7 +46,7 @@ export const MasterPasswordEncodeConfig = ({ encodeConfig, setEncodeConfig }: Pr
           ...prev,
           kdf: value,
           kdf_iterations: ARGON2_ITERATIONS.default,
-          kdf_memory: ARGON2_MEMORY.default,
+          kdf_memory: ARGON2_MEMORY.default * 1024, // convert to MB
           kdf_parallelism: ARGON2_PARALLELISM.default,
         }
       }
@@ -85,10 +84,10 @@ export const MasterPasswordEncodeConfig = ({ encodeConfig, setEncodeConfig }: Pr
             />
             <NumberStepperInput
               tx={"encryption_key:memory"}
-              value={encodeConfig.kdf_memory}
+              value={encodeConfig.kdf_memory / 1024}
               min={ARGON2_MEMORY.min}
               max={ARGON2_MEMORY.max}
-              onChange={(n) => setEncodeConfig((prev) => ({ ...prev, kdf_memory: n }))}
+              onChange={(n) => setEncodeConfig((prev) => ({ ...prev, kdf_memory: n * 1024 }))}
             />
             <NumberStepperInput
               tx={"encryption_key:parallelism"}
@@ -216,7 +215,15 @@ const NumberStepperInput = ({
   return (
     <View>
       <Text tx={tx} />
-      <View style={themed($dropdownItem)}>
+      <View style={themed($inputItem)}>
+        <PressableIcon
+          onPress={decrement}
+          disabled={decDisabled}
+          icon={"minus"}
+          color={colors.white}
+          size={20}
+          containerStyle={[themed($pressableIcon), decDisabled && styles.disable]}
+        />
         <TextInput
           style={themed($input)}
           keyboardType="number-pad"
@@ -224,23 +231,14 @@ const NumberStepperInput = ({
           onChangeText={handleChangeText}
           onBlur={handleBlur}
         />
-        <View style={styles.stepperButtons}>
-          <PressableIcon
-            onPress={decrement}
-            disabled={decDisabled}
-            icon={"caret-down-fill"}
-            color={decDisabled ? colors.label : colors.text}
-            size={16}
-          />
-
-          <PressableIcon
-            onPress={increment}
-            disabled={incDisabled}
-            icon={"caret-up-fill"}
-            size={16}
-            color={incDisabled ? colors.label : colors.text}
-          />
-        </View>
+        <PressableIcon
+          onPress={increment}
+          disabled={incDisabled}
+          icon={"plus"}
+          size={20}
+          color={colors.white}
+          containerStyle={[themed($pressableIcon), incDisabled && styles.disable]}
+        />
       </View>
     </View>
   )
@@ -284,19 +282,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
+  disable: {
+    opacity: 0.4,
+  },
   header: {
     alignItems: "center",
     paddingVertical: 8,
   },
-  stepperButtons: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 8,
-  },
+})
+
+const $pressableIcon: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  borderRadius: 6,
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundColor: colors.primary,
+  padding: 4,
 })
 
 const $dropdownItem: ThemedStyle<ViewStyle> = ({ colors }) => ({
-  borderRadius: 4,
+  borderRadius: 8,
   borderWidth: 0.9,
   borderColor: colors.border,
   paddingHorizontal: 12,
@@ -305,16 +309,30 @@ const $dropdownItem: ThemedStyle<ViewStyle> = ({ colors }) => ({
   alignItems: "center",
   justifyContent: "space-between",
   marginTop: 8,
+  flexShrink: 1,
+})
+
+const $inputItem: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  borderRadius: 12,
+  borderWidth: 0.9,
+  borderColor: colors.border,
+  padding: 6,
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+  marginTop: 8,
+  flexShrink: 1,
 })
 
 const $input: ThemedStyle<TextStyle> = ({ colors, typography }) => ({
   flex: 1,
-  padding: 0,
+  textAlign: "center",
   color: colors.text,
   fontFamily: typography.primary.normal,
   fontSize: 16,
   alignSelf: "stretch",
-  height: 24,
+  height: 28,
+  marginTop: 2,
   paddingVertical: 0,
   paddingHorizontal: 0,
 })

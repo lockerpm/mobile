@@ -903,6 +903,13 @@ const en = {
     data_classes: "Compromised data",
   },
   encryption_key: {
+    modal: {
+      header: "Recommended Action",
+      title: "Encryption Update",
+      desc: "Update Encryption key derivation for better security.",
+      learn: "Learn more",
+      update: "Update now",
+    },
     title: "Encryption key settings",
     desc: {
       first:

@@ -67,7 +67,6 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     const fetchLockType = async () => {
       if (params.type === LockType.Individual) {
         const res = await user.preLogin()
-        console.log("preLogin res", res)
         if (res.kind === "ok") {
           setLockConfig({
             isLoading: false,

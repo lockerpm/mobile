@@ -1,15 +1,19 @@
-import { FC, useRef, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
+import { CommonActions } from "@react-navigation/native"
 
-import { Screen, Header, Text, Button } from "app/components/cores"
+import { Screen, Header, Text, Button, TextInput } from "app/components/cores"
 import { SettingsScreenProps } from "app/navigators"
 
-import { MasterPasswordEncodeConfig } from "@/components/utils/mpEncodeConfig"
 import { TxKeyPath } from "@/i18n"
 import { useCoreService } from "@/services/coreService"
+import { useAuthentication } from "@/services/hook"
 import { MPEncodeConfig } from "@/static/types/user.types"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
+
+import { MasterPasswordEncodeConfig } from "./MasterPasswordEncodeConfig"
+import { useMasterPasswordCipher } from "./useMasterPasswordCipher"
 
 export const EncryptionKeyScreen: FC<SettingsScreenProps<"encryptionKey">> = ({ navigation }) => {
   const {
@@ -17,6 +21,8 @@ export const EncryptionKeyScreen: FC<SettingsScreenProps<"encryptionKey">> = ({ 
     theme: { colors },
   } = useAppTheme()
   const { userService } = useCoreService()
+  const { masterPassword } = useMasterPasswordCipher()
+  const { changeMasterPassword } = useAuthentication()
 
   const initEncodeConfig = useRef<Required<MPEncodeConfig>>({
     kdf: userService.getKdf(),
@@ -29,6 +35,8 @@ export const EncryptionKeyScreen: FC<SettingsScreenProps<"encryptionKey">> = ({ 
   const [encodeConfig, setEncodeConfig] = useState<Required<MPEncodeConfig>>(
     initEncodeConfig.current
   )
+  const [isLoading, setIsLoading] = useState(false)
+  const [current, setCurrent] = useState("")
 
   const isUserChangeConfig = Object.keys(encodeConfig).some(
     (key) =>
@@ -36,12 +44,31 @@ export const EncryptionKeyScreen: FC<SettingsScreenProps<"encryptionKey">> = ({ 
       initEncodeConfig.current[key as keyof MPEncodeConfig]
   )
 
-  // -------------- COMPUTED --------------
+  // -------------- METHOD --------------
 
-  // -------------- METHODS --------------
+  const handleSave = async () => {
+    setIsLoading(true)
+    const res = await changeMasterPassword(current, current, "", encodeConfig)
+    if (res.kind === "ok") {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "init" }],
+        })
+      )
+    }
+    setIsLoading(false)
+  }
+
+  // -------------- EFFECT --------------
+
+  useEffect(() => {
+    if (masterPassword?.login.password) {
+      setCurrent(masterPassword.login.password)
+    }
+  }, [masterPassword])
 
   // -------------- RENDER --------------
-
   return (
     <Screen
       preset="auto"
@@ -55,8 +82,9 @@ export const EncryptionKeyScreen: FC<SettingsScreenProps<"encryptionKey">> = ({ 
       }
       footer={
         <Button
-          disabled={!isUserChangeConfig}
-          onPress={() => {}}
+          loading={isLoading}
+          disabled={isLoading || !isUserChangeConfig}
+          onPress={handleSave}
           tx={"common:save"}
           style={styles.save}
         />
@@ -70,6 +98,17 @@ export const EncryptionKeyScreen: FC<SettingsScreenProps<"encryptionKey">> = ({ 
 
         <DescItem tx={"encryption_key:desc.second"} />
       </View>
+
+      {!masterPassword?.login.password && (
+        <View style={themed($container)}>
+          <TextInput
+            isPassword
+            placeholderTx={"change_master_pass:current"}
+            value={current}
+            onChangeText={setCurrent}
+          />
+        </View>
+      )}
       <MasterPasswordEncodeConfig encodeConfig={encodeConfig} setEncodeConfig={setEncodeConfig} />
     </Screen>
   )

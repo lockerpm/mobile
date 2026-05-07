@@ -27,21 +27,20 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
       parallelism,
       hashLength: outputByteSize,
       mode: "argon2id",
-      saltEncoding: "utf8",
     }
     if (IS_IOS) {
       const res: {
         rawHash: string
         encodedHash: string
       } = await RNCryptoServiceIos.argon2(password, salt, options)
-      return this.toArrayBuffer(res.rawHash)
+      return Utils.fromHexToArrayBuffer(res.rawHash)
     }
 
     const res: {
       rawHash: string
       encodedHash: string
     } = await RNCryptoServiceAndroid.argon2(password, salt, options)
-    return this.toArrayBuffer(res.rawHash)
+    return Utils.fromHexToArrayBuffer(res.rawHash)
   }
 
   // DONE

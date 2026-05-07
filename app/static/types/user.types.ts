@@ -400,7 +400,7 @@ export type ChangePasswordRequest = {
   new_master_password_hash: string
   master_password_hash: string
   master_password_cipher: CipherRequest
-  new_master_password_hint: string
+  new_master_password_hint?: string
   kdf: number
   kdf_iterations: number
 }

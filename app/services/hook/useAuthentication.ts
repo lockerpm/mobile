@@ -219,8 +219,6 @@ export function useAuthentication() {
         encodeConfig.kdf_parallelism
       )
 
-      console.log("keyConfig: ", key)
-
       // Offline compare
       if (uiStore.isOffline) {
         const storedKeyHash = await cryptoService.getKeyHash()
@@ -236,10 +234,8 @@ export function useAuthentication() {
         }
       }
 
-      console.log("sessionLogin: start online login")
       // Online session login
       const keyHash = await cryptoService.hashPassword(masterPassword, key)
-      console.log("sessionLogin: keyHash: ", keyHash)
       return _loginUsingApi(
         {
           key,
@@ -589,7 +585,7 @@ export function useAuthentication() {
         new_master_password_hash: keyHash,
         master_password_hash: oldKeyHash,
         master_password_cipher: data,
-        new_master_password_hint: hint,
+        new_master_password_hint: hint || undefined,
         kdf: encodeConfig.kdf,
         kdf_iterations: encodeConfig.kdf_iterations,
         kdf_memory: encodeConfig.kdf_memory ?? 0,
