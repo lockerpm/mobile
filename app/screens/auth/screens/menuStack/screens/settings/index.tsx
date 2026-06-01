@@ -5,6 +5,7 @@ import { SettingsRoute } from "app/navigators"
 
 import {
   ChangeMasterPasswordScreen,
+  EncryptionKeyScreen,
   ExportScreen,
   ImportScreen,
   NotificationSettingsStack,
@@ -31,6 +32,7 @@ export const SettingsStack = observer(() => {
       <Stack.Screen name="import" component={ImportScreen} />
       <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
       <Stack.Screen name="export" component={ExportScreen} />
+      <Stack.Screen name="encryptionKey" component={EncryptionKeyScreen} />
       {/* <Stack.Screen name="emergencyStack" component={EmergencyAccessStack} /> */}
     </Stack.Navigator>
   )

@@ -898,6 +898,32 @@ const vi: Translations = {
     added_date: "Ngày báo cáo",
     data_classes: "Dữ liệu rò rỉ",
   },
+  encryption_key: {
+    modal: {
+      header: "Khuyến nghị",
+      title: "Cập nhật mã hóa",
+      desc: "Cập nhật thuật toán mã hóa để tăng cường bảo mật.",
+      learn: "Tìm hiểu thêm",
+      update: "Cập nhật ngay",
+    },
+    title: "Cài đặt khóa mã hóa",
+    desc: {
+      first:
+        "Sử dụng ít nhất PBKDF2 với 600.000 lần lặp. Các thuật toán mạnh hơn có thể tăng thời gian cần thiết để mở khóa kho của bạn.",
+      second: "Bạn nên xuất dữ liệu kho của mình trong trường hợp có sự cố không mong muốn.",
+    },
+    encryption_alg: "Thuật toán mã hóa: ",
+    select: "Chọn thuật toán và cấu hình được sử dụng để mã hóa mật khẩu chính của bạn.",
+    alg: "Thuật toán",
+    interations: "Số lần lặp",
+    memory: "Bộ nhớ (MB)",
+    parallelism: "Đa luồng",
+    recommend_pbkdf2: "Khuyến nghị: 600.000 lần lặp",
+    recommend_argon2id: "Khuyến nghị: 64 MB bộ nhớ, 3 lần lặp, 4 đa luồng",
+    recommended: "Khuyến nghị",
+    min_value_must_be: "Giá trị tối thiểu phải là {{min}}",
+    max_value_must_be: "Giá trị tối đa phải là {{max}}",
+  },
   settings: {
     autofill_service: "Tự động điền (Auto-fill)",
     change_master_pass: "Thay đổi Master Password",

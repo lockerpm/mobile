@@ -1,17 +1,48 @@
-import crypto from "react-native-quick-crypto"
+import { NativeModules, Platform } from "react-native"
 import * as forge from "node-forge"
+import crypto from "react-native-quick-crypto"
+import RNSimpleCrypto from "react-native-simple-crypto"
+
 import { CryptoFunctionService } from "core/abstractions/cryptoFunction.service"
+import { Utils } from "core/misc/utils"
 import { SymmetricCryptoKey } from "core/models/domain"
 import { DecryptParameters } from "core/models/domain/decryptParameters"
-import { Utils } from "core/misc/utils"
-import RNSimpleCrypto from "react-native-simple-crypto"
-import { NativeModules, Platform } from "react-native"
 
 const { RNCryptoServiceIos, RNCryptoServiceAndroid } = NativeModules
 
 const IS_IOS = Platform.OS === "ios"
 
 export class MobileCryptoFunctionService implements CryptoFunctionService {
+  async argon2id(
+    password: string,
+    salt: string,
+    iterations: number,
+    memory: number,
+    parallelism: number,
+    outputByteSize: number
+  ): Promise<ArrayBuffer> {
+    const options = {
+      memory,
+      iterations,
+      parallelism,
+      hashLength: outputByteSize,
+      mode: "argon2id",
+    }
+    if (IS_IOS) {
+      const res: {
+        rawHash: string
+        encodedHash: string
+      } = await RNCryptoServiceIos.argon2(password, salt, options)
+      return Utils.fromHexToArrayBuffer(res.rawHash)
+    }
+
+    const res: {
+      rawHash: string
+      encodedHash: string
+    } = await RNCryptoServiceAndroid.argon2(password, salt, options)
+    return Utils.fromHexToArrayBuffer(res.rawHash)
+  }
+
   // DONE
   pbkdf2(
     password: string | ArrayBuffer,
@@ -327,7 +358,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   private toArrayBuffer(value: Buffer | string | ArrayBuffer): ArrayBuffer {
     let buf: ArrayBuffer
     if (typeof value === "string") {
-      buf = Utils.fromUtf8ToArray(value).buffer
+      buf = Utils.fromUtf8ToArray(value).buffer as ArrayBuffer
     } else {
       buf = new Uint8Array(value).buffer
     }

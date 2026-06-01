@@ -1,8 +1,10 @@
 import { FC } from "react"
 import { StyleSheet, View } from "react-native"
+
 import { Button, Text, Logo, Screen, PressableText } from "app/components/cores"
 import { SetLanguage } from "app/components/utils"
 import { UnAuthScreenProps } from "app/navigators"
+
 import { useAppLocale } from "@/i18n"
 import { useAppTheme } from "@/utils/useAppTheme"
 
@@ -15,7 +17,7 @@ export const OnboardingScreen: FC<UnAuthScreenProps<"onBoarding">> = (props) => 
 
   const isDark = themeContext === "dark"
 
-  const navigateLogin = () => {
+  const navigateLogin = async () => {
     props.navigation.replace("loginStack", {
       screen: "login",
     })

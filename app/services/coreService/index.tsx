@@ -5,7 +5,6 @@ import {
   PasswordGenerationService,
   UserService,
   TokenService,
-  AuthService,
   ApiService,
   AppIdService,
   I18nService,
@@ -43,7 +42,7 @@ const localesDirectory = "app/i18n"
 // Simple services
 const storageService = new MobileStorageService()
 const secureStorageService = new SecureStorageService()
-const cryptoFunctionService = new MobileCryptoFunctionService()
+export const cryptoFunctionService = new MobileCryptoFunctionService()
 const platformUtilsService = new MobilePlatformUtilsService()
 const logService = new MobileLogService()
 const messagingService = new MobileMessagingService()
@@ -121,18 +120,7 @@ const vaultTimeoutService = new VaultTimeoutService(
     return Promise.resolve(null)
   }
 )
-const authService = new AuthService(
-  cryptoService,
-  apiService,
-  userService,
-  tokenService,
-  appIdService,
-  i18nService,
-  platformUtilsService,
-  messagingService,
-  vaultTimeoutService,
-  logService
-)
+
 const sendService = new SendService(
   cryptoService,
   cipherService,
@@ -186,7 +174,6 @@ const services = {
   tokenService,
   userService,
   policyService,
-  authService,
   folderService,
   cipherService,
   searchService,

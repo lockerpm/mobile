@@ -29,7 +29,7 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({
   },
 }) => {
   const { user, uiStore } = useStores()
-  const { boostrapPushNotifier } = usePushNotifier()
+  const { requestPermission } = usePushNotifier()
   const { notifyApiError } = useToast()
 
   // -------------- PARAMS ---------------------
@@ -118,12 +118,10 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({
     if (!user.deviceId) {
       user.setDeviceId(await DeviceInfo.getUniqueId())
     }
-
     // Reload FCM
     if (connectionState.isConnected) {
-      await boostrapPushNotifier()
+      await requestPermission()
     }
-
     /**
      * If the user is not logged in, navigate to the Intro screen
      * If the Intro screen was showned, navigate to the OnBoarding screen
@@ -141,7 +139,6 @@ export const SplashScreen: FC<AppScreenProps<"init">> = ({
       })
       return
     }
-
     /**
      * If the user is logged in, check if the user is a password manager
      * If the user is a password manager, navigate to the OnPremiseLogin or NormalLogin screen

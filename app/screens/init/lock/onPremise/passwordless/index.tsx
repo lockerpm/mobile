@@ -1,16 +1,20 @@
 import { useRef, useState } from "react"
 import { Dimensions, ScrollView } from "react-native"
+
+import { MPEncodeConfig } from "@/static/types/user.types"
+
 import { OtpPasswordlessGenerator, randomOtpNumber } from "./OtpGenerator"
 import { PasswordlessQrScan } from "./PasswordlessQrScan"
 
 const { width } = Dimensions.get("screen")
 
 interface Props {
+  lockConfig: MPEncodeConfig
   handleLogout: () => void
   handleUnlock: () => Promise<void>
 }
 
-export const OnPremiseLockByPasswordless = ({ handleLogout, handleUnlock }: Props) => {
+export const OnPremiseLockByPasswordless = ({ lockConfig, handleLogout, handleUnlock }: Props) => {
   // ---------------------- PARAMS -------------------------
 
   const [otp, setOtp] = useState(randomOtpNumber())
@@ -47,6 +51,7 @@ export const OnPremiseLockByPasswordless = ({ handleLogout, handleUnlock }: Prop
         goBack={handleLogout}
       />
       <PasswordlessQrScan
+        lockConfig={lockConfig}
         otp={otp}
         goBack={() => {
           scrollTo(0)

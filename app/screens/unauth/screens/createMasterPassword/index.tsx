@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from "react"
+import { FC, useCallback, useEffect, useRef, useState } from "react"
 import { Alert, View, Image, StyleSheet, ViewStyle } from "react-native"
 import NetInfo from "@react-native-community/netinfo"
 import { CommonActions } from "@react-navigation/native"
@@ -11,8 +11,9 @@ import { useStores } from "app/models"
 import { UnAuthScreenProps } from "app/navigators"
 import { useAuthentication, useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { useBiometricType } from "app/services/utils"
-import { LockType, PolicyType } from "app/static/types"
+import { LockType, MPEncodeConfig, PolicyType } from "app/static/types"
 import { logCreateMasterPwEvent } from "app/utils/analytics"
+import { KdfType } from "core/enums/kdfType"
 
 import { useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
@@ -34,6 +35,11 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
       themed,
       theme: { colors },
     } = useAppTheme()
+
+    const encodeConfig = useRef<MPEncodeConfig>({
+      kdf: KdfType.PBKDF2_SHA256,
+      kdf_iterations: 600000,
+    })
 
     // -------------- PARAMS ------------------
 
@@ -105,11 +111,15 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
       setIsCreating(true)
       setShowConfirmCreateModal(false)
 
-      const res = await registerLocker(masterPassword, hint, passwordStrength)
+      const res = await registerLocker(masterPassword, hint, passwordStrength, encodeConfig.current)
       if (res.kind === "ok") {
         logCreateMasterPwEvent()
 
-        const sessionRes = await sessionLogin(masterPassword, createMasterPasswordLoginType)
+        const sessionRes = await sessionLogin(
+          encodeConfig.current,
+          masterPassword,
+          createMasterPasswordLoginType
+        )
         setIsCreating(false)
 
         if (sessionRes.kind === "ok") {
@@ -352,6 +362,10 @@ const styles = StyleSheet.create({
   },
   mb10: {
     marginBottom: 10,
+  },
+  mt16: {
+    marginTop: 16,
+    width: "100%",
   },
   passwordStrength: {
     marginTop: 16,

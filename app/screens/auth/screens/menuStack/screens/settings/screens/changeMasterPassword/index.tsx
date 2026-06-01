@@ -1,14 +1,17 @@
-import { FC, useState } from "react"
+import { FC, useRef, useState } from "react"
+import { StyleSheet, View } from "react-native"
 import { CommonActions } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
-import { useAuthentication, useCipherHelper, useHelper } from "app/services/hook"
-import { useStores } from "app/models"
-import { PolicyType } from "app/static/types"
+
 import { Screen, Header, TextInput, Button } from "app/components/cores"
 import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/utils"
-import { StyleSheet, View } from "react-native"
+import { useStores } from "app/models"
 import { SettingsScreenProps } from "app/navigators"
+import { useAuthentication, useCipherHelper, useHelper } from "app/services/hook"
+import { MPEncodeConfig, PolicyType } from "app/static/types"
+
 import { useAppLocale } from "@/i18n"
+import { useCoreService } from "@/services/coreService"
 
 export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPassword">> = observer(
   ({ navigation }) => {
@@ -17,6 +20,16 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
     const { getPasswordStrength, checkPasswordPolicy } = useCipherHelper()
     const { changeMasterPassword } = useAuthentication()
     const { user } = useStores()
+
+    const { userService } = useCoreService()
+
+    const encodeConfig = useRef<MPEncodeConfig>({
+      kdf: userService.getKdf(),
+      kdf_iterations: userService.getKdfIterations(),
+      kdf_memory: userService.getKdfMemory(),
+      kdf_parallelism: userService.getKdfParallelism(),
+      kdf_version: userService.getKdfVersion(),
+    })
 
     // -------------- PARAMS --------------
 
@@ -54,7 +67,7 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
     const handleChangePassword = async () => {
       setIsLoading(true)
 
-      const res = await changeMasterPassword(current, newPass, hint)
+      const res = await changeMasterPassword(current, newPass, hint, encodeConfig.current)
       if (res.kind === "ok") {
         navigation.dispatch(
           CommonActions.reset({
@@ -157,6 +170,7 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
 )
 
 const styles = StyleSheet.create({
+  mt16: { marginTop: 16 },
   mt30: { marginBottom: 30 },
   mt8: { marginTop: 8 },
   mv20: { marginVertical: 20 },

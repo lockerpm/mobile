@@ -5,27 +5,37 @@ import { PushNotifier } from "@/utils/pushNotification"
 export const usePushNotifier = () => {
   const { user } = useStores()
   // Setup push notifier
+  const requestPermission = async () => {
+    try {
+      if (user.haveRequestedPushPermission) {
+        return
+      }
+      await PushNotifier.getPermission()
+      user.setHaveRequestedPushPermission(true)
+    } catch (e) {
+      Logger.error("request push Permission: " + e)
+    }
+  }
+
   const boostrapPushNotifier = async () => {
     try {
       if (user.disablePushNotifications) {
-        return true
+        return null
       }
-      const permissionGranted = await PushNotifier.getPermission()
+      const permissionGranted = await PushNotifier.checkPermission()
       if (permissionGranted) {
         const token = await PushNotifier.getToken()
-
-        user.setFCMToken(token)
-      } else {
-        user.setFCMToken(null)
+        return token
       }
-      return true
+      return null
     } catch (e) {
       Logger.error("boostrapPushNotifier: " + e)
-      return false
+      return null
     }
   }
 
   return {
+    requestPermission,
     boostrapPushNotifier,
   }
 }

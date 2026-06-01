@@ -71,6 +71,13 @@ export class Utils {
     }
   }
 
+  static fromHexToArrayBuffer(hex: string): ArrayBuffer {
+    const bytes = new Uint8Array(hex.length / 2)
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = parseInt(hex.substr(i * 2, 2), 16)
+    }
+    return bytes.buffer
+  }
   static fromUtf8ToArray(str: string): Uint8Array {
     if (Utils.isNode || Utils.isNativeScript) {
       return new Uint8Array(Buffer.from(str, "utf8"))

@@ -1,7 +1,6 @@
 export { ApiService } from "./api.service"
 export { AppIdService } from "./appId.service"
 export { AuditService } from "./audit.service"
-export { AuthService } from "./auth.service"
 export { CipherService } from "./cipher.service"
 export { CollectionService } from "./collection.service"
 export { ConstantsService } from "./constants.service"
