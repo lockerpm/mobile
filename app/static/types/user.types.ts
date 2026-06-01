@@ -1,4 +1,9 @@
 import { DeviceType } from "core/enums"
+import { KdfType } from "core/enums/kdfType"
+import { CipherRequest } from "core/models/request/cipherRequest"
+
+import { LanguageSupportType } from "@/i18n"
+
 import {
   AccountRoleText,
   EmergencyAccessStatus,
@@ -10,8 +15,14 @@ import {
   PlanTypeDuration,
   PolicyType,
 } from "./enum"
-import { CipherRequest } from "core/models/request/cipherRequest"
-import { LanguageSupportType } from "@/i18n"
+
+export type MPEncodeConfig = {
+  kdf: KdfType
+  kdf_iterations: number
+  kdf_memory?: number
+  kdf_parallelism?: number
+  kdf_version?: number
+}
 
 export type UserIDType = {
   full_name: string
@@ -389,7 +400,9 @@ export type ChangePasswordRequest = {
   new_master_password_hash: string
   master_password_hash: string
   master_password_cipher: CipherRequest
-  new_master_password_hint: string
+  new_master_password_hint?: string
+  kdf: number
+  kdf_iterations: number
 }
 
 export type FeedbackRequest = {

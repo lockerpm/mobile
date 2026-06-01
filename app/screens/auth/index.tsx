@@ -26,6 +26,7 @@ import {
   QRScannerScreen,
   TabNavigator,
   ToolStack,
+  UpdateEncryptionModalScreen,
 } from "./screens"
 import { useInAppReview } from "./useInAppReview"
 import { useSocket } from "./useSocket"
@@ -169,6 +170,7 @@ export const AuthStack: FC<AppScreenProps<"authStack">> = observer(
               <Stack.Screen name="addCipherModal" component={AddCipherModalScreen} />
               <Stack.Screen name="marketingModal" component={MarketingScreen} />
               <Stack.Screen name="qrScannerModal" component={QRScannerScreen} />
+              <Stack.Screen name="updateEncryption" component={UpdateEncryptionModalScreen} />
             </Stack.Group>
             <Stack.Screen name="mainTab" component={TabNavigator} />
             <Stack.Screen name="homeStack" component={HomeStack} />

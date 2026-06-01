@@ -209,6 +209,8 @@ export type AuthRoute = {
     isDeleted?: boolean
   }
 
+  updateEncryption: undefined
+
   addCipherModal:
     | {
         folderId?: string
@@ -569,6 +571,7 @@ export type InviteToFamilyScreenProps<T extends keyof InviteToFamilyRoute> = Com
 
 export type SettingsRoute = {
   settings: undefined
+  encryptionKey: undefined
   changeMasterPassword: undefined
   autofillService: undefined
   import: undefined

@@ -96,8 +96,8 @@ android {
         applicationId 'com.cystack.locker'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 42065
-        versionName "2.10"
+        versionCode 42071
+        versionName "2.11"
 
         buildConfigField "String", "REACT_NATIVE_RELEASE_LEVEL", "\"${findProperty('reactNativeReleaseLevel') ?: 'stable'}\""
     }
@@ -200,6 +200,8 @@ dependencies {
     implementation "androidx.credentials:credentials:1.5.0"
     implementation "androidx.credentials:credentials-play-services-auth:1.5.0"
 
+
+    implementation 'com.lambdapioneer.argon2kt:argon2kt:1.6.0'
 
     // billing
     implementation 'com.android.billingclient:billing:6.0.0'

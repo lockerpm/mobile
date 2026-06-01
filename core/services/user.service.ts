@@ -10,18 +10,24 @@ const Keys = {
   userEmail: "userEmail",
   stamp: "securityStamp",
   kdf: "kdf",
+  kdfVersion: "kdfVersion",
   kdfIterations: "kdfIterations",
+  kdfMemory: "kdfMemory",
+  kdfParallelism: "kdfParallelism",
   organizationsPrefix: "organizations_",
   emailVerified: "emailVerified",
 }
 
 export class UserService implements UserServiceAbstraction {
-  private userId: string
-  private email: string
-  private stamp: string
-  private kdf: KdfType
-  private kdfIterations: number
-  private emailVerified: boolean
+  private userId: string | null = null
+  private email: string | null = null
+  private stamp: string | null = null
+  private kdf: KdfType | null = null
+  private kdfVersion: number | null = null
+  private kdfIterations: number | null = null
+  private kdfMemory: number | null = null
+  private kdfParallelism: number | null = null
+  private emailVerified: boolean | null = null
 
   constructor(
     private tokenService: TokenService,
@@ -32,20 +38,31 @@ export class UserService implements UserServiceAbstraction {
     userId: string,
     email: string,
     kdf: KdfType,
-    kdfIterations: number
-  ): Promise<any> {
+    kdfVersion: number,
+    kdfIterations: number,
+    kdfMemory: number,
+    kdfParallelism: number
+  ): Promise<void> {
     this.email = email
     this.userId = userId
     this.kdf = kdf
+    this.kdfVersion = kdfVersion
     this.kdfIterations = kdfIterations
+    this.kdfMemory = kdfMemory
+    this.kdfParallelism = kdfParallelism
 
-    await this.storageService.save(Keys.userEmail, email)
-    await this.storageService.save(Keys.userId, userId)
-    await this.storageService.save(Keys.kdf, kdf)
-    await this.storageService.save(Keys.kdfIterations, kdfIterations)
+    await Promise.all([
+      this.storageService.save(Keys.userEmail, email),
+      this.storageService.save(Keys.userId, userId),
+      this.storageService.save(Keys.kdf, kdf),
+      this.storageService.save(Keys.kdfVersion, kdfVersion),
+      this.storageService.save(Keys.kdfIterations, kdfIterations),
+      this.storageService.save(Keys.kdfMemory, kdfMemory),
+      this.storageService.save(Keys.kdfParallelism, kdfParallelism),
+    ])
   }
 
-  setSecurityStamp(stamp: string): Promise<any> {
+  setSecurityStamp(stamp: string): Promise<void> {
     this.stamp = stamp
     return this.storageService.save(Keys.stamp, stamp)
   }
@@ -76,18 +93,39 @@ export class UserService implements UserServiceAbstraction {
     return this.stamp
   }
 
-  async getKdf(): Promise<KdfType> {
+  getKdf(): KdfType {
     if (this.kdf == null) {
-      this.kdf = await this.storageService.get<KdfType>(Keys.kdf)
+      this.kdf = this.storageService.get<KdfType>(Keys.kdf)
     }
     return this.kdf
   }
 
-  async getKdfIterations(): Promise<number> {
+  getKdfVersion(): number {
+    if (this.kdfVersion == null) {
+      this.kdfVersion = this.storageService.get<number>(Keys.kdfVersion)
+    }
+    return this.kdfVersion
+  }
+
+  getKdfIterations(): number {
     if (this.kdfIterations == null) {
-      this.kdfIterations = await this.storageService.get<number>(Keys.kdfIterations)
+      this.kdfIterations = this.storageService.get<number>(Keys.kdfIterations)
     }
     return this.kdfIterations
+  }
+
+  getKdfMemory(): number {
+    if (this.kdfMemory == null) {
+      this.kdfMemory = this.storageService.get<number>(Keys.kdfMemory)
+    }
+    return this.kdfMemory
+  }
+
+  getKdfParallelism(): number {
+    if (this.kdfParallelism == null) {
+      this.kdfParallelism = this.storageService.get<number>(Keys.kdfParallelism)
+    }
+    return this.kdfParallelism
   }
 
   async getEmailVerified(): Promise<boolean> {
@@ -97,19 +135,27 @@ export class UserService implements UserServiceAbstraction {
     return this.emailVerified
   }
 
-  async clear(): Promise<any> {
+  async clear(): Promise<void> {
     const userId = await this.getUserId()
 
-    await this.storageService.remove(Keys.userId)
-    await this.storageService.remove(Keys.userEmail)
-    await this.storageService.remove(Keys.stamp)
-    await this.storageService.remove(Keys.kdf)
-    await this.storageService.remove(Keys.kdfIterations)
-    await this.clearOrganizations(userId)
+    await Promise.all([
+      this.storageService.remove(Keys.userId),
+      this.storageService.remove(Keys.userEmail),
+      this.storageService.remove(Keys.stamp),
+      this.storageService.remove(Keys.kdf),
+      this.storageService.remove(Keys.kdfVersion),
+      this.storageService.remove(Keys.kdfIterations),
+      this.storageService.remove(Keys.kdfMemory),
+      this.storageService.remove(Keys.kdfParallelism),
+      this.clearOrganizations(userId),
+    ])
 
     this.userId = this.email = this.stamp = null
     this.kdf = null
+    this.kdfVersion = null
     this.kdfIterations = null
+    this.kdfMemory = null
+    this.kdfParallelism = null
   }
 
   async isAuthenticated(): Promise<boolean> {
@@ -142,11 +188,12 @@ export class UserService implements UserServiceAbstraction {
     return false
   }
 
-  async getOrganization(id: string): Promise<Organization> {
+  async getOrganization(id: string): Promise<Organization | null> {
     const userId = await this.getUserId()
-    const organizations = await this.storageService.get<{ [id: string]: OrganizationData }>(
-      Keys.organizationsPrefix + userId
-    )
+    const organizations = await this.storageService.get<{
+      [id: string]: OrganizationData
+    }>(Keys.organizationsPrefix + userId)
+    // eslint-disable-next-line no-prototype-builtins
     if (organizations == null || !organizations.hasOwnProperty(id)) {
       return null
     }
@@ -156,11 +203,12 @@ export class UserService implements UserServiceAbstraction {
 
   async getAllOrganizations(): Promise<Organization[]> {
     const userId = await this.getUserId()
-    const organizations = await this.storageService.get<{ [id: string]: OrganizationData }>(
-      Keys.organizationsPrefix + userId
-    )
+    const organizations = await this.storageService.get<{
+      [id: string]: OrganizationData
+    }>(Keys.organizationsPrefix + userId)
     const response: Organization[] = []
     for (const id in organizations) {
+      // eslint-disable-next-line no-prototype-builtins
       if (organizations.hasOwnProperty(id)) {
         response.push(new Organization(organizations[id]))
       }
@@ -168,12 +216,12 @@ export class UserService implements UserServiceAbstraction {
     return response
   }
 
-  async replaceOrganizations(organizations: { [id: string]: OrganizationData }): Promise<any> {
+  async replaceOrganizations(organizations: { [id: string]: OrganizationData }): Promise<void> {
     const userId = await this.getUserId()
     await this.storageService.save(Keys.organizationsPrefix + userId, organizations)
   }
 
-  async clearOrganizations(userId: string): Promise<any> {
+  async clearOrganizations(userId: string): Promise<void> {
     await this.storageService.remove(Keys.organizationsPrefix + userId)
   }
 }

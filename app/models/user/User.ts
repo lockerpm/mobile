@@ -43,7 +43,6 @@ export const UserModel = types
   .model("User")
   .props({
     apiToken: types.string,
-    fcmToken: types.string,
     deviceId: types.string,
 
     // ID
@@ -89,6 +88,7 @@ export const UserModel = types
     appTimeout: types.optional(types.number, AppTimeoutType.APP_CLOSE),
     appTimeoutAction: types.optional(types.string, TimeoutActionType.LOCK),
     disablePushNotifications: types.maybeNull(types.boolean),
+    haveRequestedPushPermission: types.maybeNull(types.boolean),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -120,9 +120,6 @@ export const UserModel = types
   .actions((self) => ({
     setApiToken: (token: string) => {
       self.apiToken = token
-    },
-    setFCMToken: (token: string | null) => {
-      self.fcmToken = token ?? ""
     },
     setOnPremaiseEmail: (email: string) => {
       self.email = email
@@ -202,6 +199,9 @@ export const UserModel = types
     },
     setPushNotificationsSetting: (val: boolean) => {
       self.disablePushNotifications = val
+    },
+    setHaveRequestedPushPermission: (val: boolean) => {
+      self.haveRequestedPushPermission = val
     },
     clearUser: () => {
       self.apiToken = ""
@@ -663,6 +663,10 @@ export const UserModel = types
       const res = await idApi.businessLoginMethod()
       return res
     },
+    preLogin: async () => {
+      const res = await userApi.preLogin(self.apiToken)
+      return res
+    },
     // Marketing
     fetchMarketingContent: async (language: string) => {
       const res = await userApi.fetchMarketingContent(self.apiToken, language)
@@ -686,7 +690,6 @@ export const createUserStoreDefaultModel = () =>
   types.optional(UserModel, {
     // Data
     apiToken: "",
-    fcmToken: "",
     deviceId: "",
 
     // ID
@@ -722,4 +725,6 @@ export const createUserStoreDefaultModel = () =>
     appTimeoutAction: TimeoutActionType.LOCK,
     disablePushNotifications: false,
     saveIosAutofillInfor: false,
+
+    haveRequestedPushPermission: false,
   })

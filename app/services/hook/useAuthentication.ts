@@ -5,12 +5,12 @@ import DeviceInfo from "react-native-device-info"
 import { useStores } from "app/models"
 import { removeSecure } from "app/utils/storage"
 import { CipherType } from "core/enums"
-import { KdfType } from "core/enums/kdfType"
 import { SymmetricCryptoKey } from "core/models/domain"
 import { CipherRequest } from "core/models/request"
 import { CipherView, LoginUriView, LoginView } from "core/models/view"
 
 import { useAppLocale } from "@/i18n"
+import { MPEncodeConfig } from "@/static/types/user.types"
 import { autofillKeyChain } from "@/utils/autofill.ios"
 import { Base64 } from "@/utils/base64"
 import { delay } from "@/utils/delay"
@@ -46,10 +46,10 @@ export function useAuthentication() {
 
   // Login vault using API
   const _loginUsingApi = async (
-    key: SymmetricCryptoKey,
-    keyHash: string,
-    kdf: number,
-    kdfIterations: number,
+    keyConfig: {
+      key: SymmetricCryptoKey
+      keyHash: string
+    } & MPEncodeConfig,
     masterPassword?: string,
     createMasterPasswordItem?: () => Promise<void>,
     onPremiseData?: boolean
@@ -57,7 +57,7 @@ export function useAuthentication() {
     // Session login API
     const res = await user.sessionLogin({
       client_id: "mobile",
-      password: keyHash, // keyHash,
+      password: keyConfig.keyHash, // keyHash,
       device_name: platformUtilsService.getDeviceString(),
       device_type: platformUtilsService.getDevice(),
       // device_identifier: await storageService.get('device_id') || randomString(),
@@ -104,16 +104,24 @@ export function useAuthentication() {
     messagingService.send("loggedIn")
 
     await tokenService.setTokens(res.data.access_token, res.data.refresh_token)
-    await userService.setInformation(tokenService.getUserId(), user.email, kdf, kdfIterations)
-    await cryptoService.setKey(key)
-    await cryptoService.setKeyHash(keyHash)
+    await userService.setInformation(
+      tokenService.getUserId(),
+      user.email,
+      keyConfig.kdf,
+      keyConfig.kdf_version ?? 0,
+      keyConfig.kdf_iterations,
+      keyConfig.kdf_memory ?? 0,
+      keyConfig.kdf_parallelism ?? 0
+    )
+    await cryptoService.setKey(keyConfig.key)
+    await cryptoService.setKeyHash(keyConfig.keyHash)
     await cryptoService.setEncKey(res.data.key)
     await cryptoService.setEncPrivateKey(res.data.private_key)
     // setup service offline
     if (masterPassword) {
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(
         masterPassword,
-        key.keyB64
+        keyConfig.key.keyB64
       )
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
       // await syncAutofillData();
@@ -128,10 +136,10 @@ export function useAuthentication() {
 
   // Login vault using API
   const _loginOnPremiseSessionOtp = async (
-    key: SymmetricCryptoKey,
-    keyHash: string,
-    kdf: number,
-    kdfIterations: number,
+    keyConfig: {
+      key: SymmetricCryptoKey
+      keyHash: string
+    } & MPEncodeConfig,
     masterPassword: string,
     method: string,
     otp: string,
@@ -140,7 +148,7 @@ export function useAuthentication() {
     // Session login API
     const res = await user.sessionOtpLogin({
       client_id: "mobile",
-      password: keyHash, // keyHash,
+      password: keyConfig.keyHash, // keyHash,
       device_name: platformUtilsService.getDeviceString(),
       device_type: platformUtilsService.getDevice(),
       // device_identifier: await storageService.get('device_id') || randomString(),
@@ -166,16 +174,24 @@ export function useAuthentication() {
     messagingService.send("loggedIn")
 
     await tokenService.setTokens(res.data.access_token, res.data.refresh_token)
-    await userService.setInformation(tokenService.getUserId(), user.email, kdf, kdfIterations)
-    await cryptoService.setKey(key)
-    await cryptoService.setKeyHash(keyHash)
+    await userService.setInformation(
+      tokenService.getUserId(),
+      user.email,
+      keyConfig.kdf,
+      keyConfig.kdf_version ?? 0,
+      keyConfig.kdf_iterations,
+      keyConfig.kdf_memory ?? 0,
+      keyConfig.kdf_parallelism ?? 0
+    )
+    await cryptoService.setKey(keyConfig.key)
+    await cryptoService.setKeyHash(keyConfig.keyHash)
     await cryptoService.setEncKey(res.data.key)
     await cryptoService.setEncPrivateKey(res.data.private_key)
     // setup service offline
     if (masterPassword) {
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(
         masterPassword,
-        key.keyB64
+        keyConfig.key.keyB64
       )
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
       // await syncAutofillData();
@@ -186,17 +202,22 @@ export function useAuthentication() {
 
   // Session login
   const sessionLogin = async (
+    encodeConfig: MPEncodeConfig,
     masterPassword: string,
     createMasterPasswordItem?: () => Promise<void>,
     onPremiseData?: boolean
   ): Promise<{ kind: string }> => {
     try {
-      await delay(200)
+      await delay(100)
 
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
-
-      const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
+      const key = await cryptoService.makeKey(
+        masterPassword,
+        user.email,
+        encodeConfig.kdf,
+        encodeConfig.kdf_iterations,
+        encodeConfig.kdf_memory,
+        encodeConfig.kdf_parallelism
+      )
 
       // Offline compare
       if (uiStore.isOffline) {
@@ -216,10 +237,11 @@ export function useAuthentication() {
       // Online session login
       const keyHash = await cryptoService.hashPassword(masterPassword, key)
       return _loginUsingApi(
-        key,
-        keyHash,
-        kdf,
-        kdfIterations,
+        {
+          key,
+          keyHash,
+          ...encodeConfig,
+        },
         masterPassword,
         createMasterPasswordItem,
         onPremiseData
@@ -232,14 +254,13 @@ export function useAuthentication() {
   }
   // password less qr login
   const sessionQrLogin = async (
+    encodeConfig: MPEncodeConfig,
     qr: string,
     qrOtp: string,
     onPremise?: boolean
   ): Promise<{ kind: string }> => {
     try {
       await delay(100)
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
       const keyStr = (qrOtp + qrOtp + qrOtp).slice(0, 16)
       const keyBuff = Base64.fromUtf8ToArray(keyStr).buffer
 
@@ -253,7 +274,16 @@ export function useAuthentication() {
 
       const key = new SymmetricCryptoKey(Base64.fromB64ToArray(keyB64).buffer, parseInt(encType))
       // Online session login
-      return _loginUsingApi(key, keyHash, kdf, kdfIterations, "", () => null, onPremise)
+      return _loginUsingApi(
+        {
+          key,
+          keyHash,
+          ...encodeConfig,
+        },
+        "",
+        () => null,
+        onPremise
+      )
     } catch (e) {
       notifyTx("error", "error:session_login_failed")
       return { kind: "bad-data" }
@@ -261,11 +291,13 @@ export function useAuthentication() {
   }
 
   // password less qr login
-  const sessionBusinessQrLogin = async (qr: string, qrOtp: string): Promise<{ kind: string }> => {
+  const sessionBusinessQrLogin = async (
+    encodeConfig: MPEncodeConfig,
+    qr: string,
+    qrOtp: string
+  ): Promise<{ kind: string }> => {
     try {
       await delay(100)
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
       const keyStr = (qrOtp + qrOtp + qrOtp).slice(0, 16)
       const keyBuff = Base64.fromUtf8ToArray(keyStr).buffer
 
@@ -279,7 +311,11 @@ export function useAuthentication() {
 
       const key = new SymmetricCryptoKey(Base64.fromB64ToArray(keyB64).buffer, parseInt(encType))
       // Online session login
-      return _loginUsingApi(key, keyHash, kdf, kdfIterations)
+      return _loginUsingApi({
+        key,
+        keyHash,
+        ...encodeConfig,
+      })
     } catch (e) {
       Logger.error("sessionBusinessQrLogin: ", e)
       notifyTx("error", "error:session_login_failed")
@@ -289,6 +325,7 @@ export function useAuthentication() {
 
   // Session login
   const sessionOtpLoginWithHashPassword = async (
+    encodeConfig: MPEncodeConfig,
     masterPasswordHash: string,
     key: SymmetricCryptoKey,
     method: string,
@@ -296,16 +333,13 @@ export function useAuthentication() {
     save_device: boolean
   ): Promise<{ kind: string }> => {
     try {
-      await delay(200)
-
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
-
+      await delay(100)
       return _loginOnPremiseSessionOtp(
-        key,
-        masterPasswordHash,
-        kdf,
-        kdfIterations,
+        {
+          key,
+          keyHash: masterPasswordHash,
+          ...encodeConfig,
+        },
         "",
         method,
         otp,
@@ -320,18 +354,23 @@ export function useAuthentication() {
 
   // Session login
   const sessionOtpLogin = async (
+    encodeConfig: MPEncodeConfig,
     masterPassword: string,
     method: string,
     otp: string,
     save_device: boolean
   ): Promise<{ kind: string }> => {
     try {
-      await delay(200)
+      await delay(100)
 
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
-
-      const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
+      const key = await cryptoService.makeKey(
+        masterPassword,
+        user.email,
+        encodeConfig.kdf,
+        encodeConfig.kdf_iterations,
+        encodeConfig.kdf_memory,
+        encodeConfig.kdf_parallelism
+      )
 
       // Offline compare
       if (uiStore.isOffline) {
@@ -351,10 +390,11 @@ export function useAuthentication() {
       // Online session login
       const keyHash = await cryptoService.hashPassword(masterPassword, key)
       return _loginOnPremiseSessionOtp(
-        key,
-        keyHash,
-        kdf,
-        kdfIterations,
+        {
+          key,
+          keyHash,
+          ...encodeConfig,
+        },
         masterPassword,
         method,
         otp,
@@ -368,9 +408,9 @@ export function useAuthentication() {
   }
 
   // Biometric login
-  const biometricLogin = async (): Promise<{ kind: string }> => {
+  const biometricLogin = async (encodeConfig: MPEncodeConfig): Promise<{ kind: string }> => {
     try {
-      await delay(200)
+      await delay(100)
       const { available } = await rnBiometrics.isSensorAvailable()
       if (!available) {
         notifyTx("error", "error:biometric_not_support")
@@ -402,22 +442,34 @@ export function useAuthentication() {
       // Online login
       const key = await cryptoService.getKey()
       const keyHash = await cryptoService.getKeyHash()
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
-      return _loginUsingApi(key, keyHash, kdf, kdfIterations)
+      return _loginUsingApi({
+        key: key!,
+        keyHash: keyHash!,
+        ...encodeConfig,
+      })
     } catch (e) {
       return { kind: "bad-data" }
     }
   }
 
   // Set master password
-  const registerLocker = async (masterPassword: string, hint: string, passwordStrength: number) => {
+  const registerLocker = async (
+    masterPassword: string,
+    hint: string,
+    passwordStrength: number,
+    encodeConfig: MPEncodeConfig
+  ) => {
     try {
-      await delay(200)
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
+      await delay(100)
       const referenceData = ""
-      const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
+      const key = await cryptoService.makeKey(
+        masterPassword,
+        user.email,
+        encodeConfig.kdf,
+        encodeConfig.kdf_iterations,
+        encodeConfig.kdf_memory,
+        encodeConfig.kdf_parallelism
+      )
       const encKey = await cryptoService.makeEncKey(key)
       const hashedPassword = await cryptoService.hashPassword(masterPassword, key)
       const keys = await cryptoService.makeKeyPair(encKey[0])
@@ -428,8 +480,10 @@ export function useAuthentication() {
         master_password_hash: hashedPassword,
         master_password_hint: hint,
         key: encKey[1].encryptedString,
-        kdf,
-        kdf_iterations: kdfIterations,
+        kdf: encodeConfig.kdf,
+        kdf_iterations: encodeConfig.kdf_iterations,
+        kdf_memory: encodeConfig.kdf_memory,
+        kdf_parallelism: encodeConfig.kdf_parallelism,
         reference_data: referenceData,
         keys: {
           public_key: keys[0],
@@ -458,67 +512,11 @@ export function useAuthentication() {
       // Success
       notifyTx("success", "success:master_password_updated")
 
-      await delay(500)
+      await delay(300)
 
       return { kind: "ok" }
     } catch (e) {
       Logger.error("registerLocker: " + e)
-      notifyTx("error", "error:something_went_wrong")
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Change master password
-  const updateNewMasterPasswordEA = async (
-    newPassword: string,
-    email: string,
-    eaID: string,
-    lockerPassword?: boolean
-  ): Promise<{ kind: string }> => {
-    try {
-      if (lockerPassword) {
-        const res = await user.lockerPasswordEA(eaID, newPassword)
-        if (res.kind !== "ok") {
-          notifyApiError(res)
-          return { kind: "bad-data" }
-        }
-        // Setup service
-        notifyTx("success", "success:locker_password_updated")
-      } else {
-        const fetchKeyRes = await user.takeoverEA(eaID)
-        if (fetchKeyRes.kind !== "ok") return { kind: "bad-data" }
-        const { key_encrypted, kdf, kdf_iterations } = fetchKeyRes.data
-        const oldKeyBuffer = await cryptoService.rsaDecrypt(key_encrypted)
-        const oldEncKey = new SymmetricCryptoKey(oldKeyBuffer)
-
-        const key = await cryptoService.makeKey(newPassword, email, kdf, kdf_iterations)
-
-        const masterPasswordHash = await cryptoService.hashPassword(newPassword, key)
-        const encKey = await cryptoService.remakeEncKey(key, oldEncKey)
-
-        // Update Master Password item
-        const cipher = _createMasterPwItem(newPassword)
-        const cipherEnc = await cipherService.encrypt(cipher, encKey[0])
-        const data = new CipherRequest(cipherEnc)
-        data.type = CipherType.MasterPassword
-
-        const payload = {
-          key: encKey[1].encryptedString,
-          new_master_password_hash: masterPasswordHash,
-          master_password_cipher: data,
-        }
-        const res = await user.passwordEA(eaID, payload)
-        if (res.kind !== "ok") {
-          notifyApiError(res)
-          return { kind: "bad-data" }
-        }
-        // Setup service
-        notifyTx("success", "success:master_password_updated")
-      }
-
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error("updateNewMasterPasswordEA: " + e)
       notifyTx("error", "error:something_went_wrong")
       return { kind: "bad-data" }
     }
@@ -555,16 +553,22 @@ export function useAuthentication() {
   const changeMasterPassword = async (
     oldPassword: string,
     newPassword: string,
-    hint: string
+    hint: string,
+    encodeConfig: MPEncodeConfig
   ): Promise<{ kind: string }> => {
     try {
       // createMasterPwItem
       const data = await _createMasterPwItemRequest(newPassword)
 
-      await delay(200)
-      const kdf = KdfType.PBKDF2_SHA256
-      const kdfIterations = 100000
-      const key = await cryptoService.makeKey(newPassword, user.email, kdf, kdfIterations)
+      await delay(100)
+      const key = await cryptoService.makeKey(
+        newPassword,
+        user.email,
+        encodeConfig.kdf,
+        encodeConfig.kdf_iterations,
+        encodeConfig.kdf_memory,
+        encodeConfig.kdf_parallelism
+      )
       const keyHash = await cryptoService.hashPassword(newPassword, key)
       let encKey = null
       const existingEncKey = await cryptoService.getEncKey()
@@ -581,7 +585,11 @@ export function useAuthentication() {
         new_master_password_hash: keyHash,
         master_password_hash: oldKeyHash,
         master_password_cipher: data,
-        new_master_password_hint: hint,
+        new_master_password_hint: hint || undefined,
+        kdf: encodeConfig.kdf,
+        kdf_iterations: encodeConfig.kdf_iterations,
+        kdf_memory: encodeConfig.kdf_memory ?? 0,
+        kdf_parallelism: encodeConfig.kdf_parallelism ?? 0,
       })
       if (res.kind !== "ok") {
         notifyApiError(res)
@@ -666,14 +674,14 @@ export function useAuthentication() {
     sessionLogin,
     sessionOtpLogin,
     biometricLogin,
+    sessionQrLogin,
+    sessionOtpLoginWithHashPassword,
+    sessionBusinessQrLogin,
+
     logout,
     lock,
     registerLocker,
     changeMasterPassword,
-    updateNewMasterPasswordEA,
     clearAllData,
-    sessionQrLogin,
-    sessionOtpLoginWithHashPassword,
-    sessionBusinessQrLogin,
   }
 }

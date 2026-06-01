@@ -1,7 +1,6 @@
 import { FC, useCallback } from "react"
 import { StyleSheet, View, Image, ViewStyle } from "react-native"
-import { debounce } from "app/utils/utils"
-import { AuthScreenProps } from "app/navigators"
+
 import {
   ModalBackdrop,
   Text,
@@ -9,14 +8,17 @@ import {
   PressableScale,
   Icon,
 } from "app/components/cores"
+import { AuthScreenProps } from "app/navigators"
 import { VAULT_ITEMS } from "app/static/vault"
+import { debounce } from "app/utils/utils"
 import { CipherType } from "core/enums"
-import { delay } from "@/utils/delay"
-import { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { useStores } from "@/models"
-import { getTeam } from "@/utils/cipherHelper"
 import { AccountRole } from "@/static/types"
+import { ThemedStyle } from "@/theme"
+import { getTeam } from "@/utils/cipherHelper"
+import { delay } from "@/utils/delay"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 export const AddCipherModalScreen: FC<AuthScreenProps<"addCipherModal">> = ({
   navigation,
