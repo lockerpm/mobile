@@ -26,11 +26,10 @@ export const useShowRecommendEncryption = () => {
 
   // ------------------------ EFFECT ----------------------------
   useEffect(() => {
-    navigateToUpdateEncryption()
     if (config.current.kdf_version) {
+      if (config.current.kdf === KdfType.PBKDF2_SHA256 && config.current.kdf_iterations < 600000) {
+        navigateToUpdateEncryption()
+      }
     }
-    // if (config.current.kdf === KdfType.PBKDF2_SHA256 && config.current.kdf_iterations < 600000) {
-    //   navigateToUpdateEncryption()
-    // }
   }, [navigateToUpdateEncryption])
 }

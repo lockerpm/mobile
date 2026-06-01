@@ -925,6 +925,8 @@ const en = {
     recommend_pbkdf2: "Recommendation: 600,000 iterations",
     recommend_argon2id: "Recommendation: 64 MB memory, 3 iterations, 4 parallelism",
     recommended: "Recommended",
+    min_value_must_be: "Min value must be {{min}}",
+    max_value_must_be: "Max value must be {{max}}",
   },
   settings: {
     autofill_service: "Auto-fill Service",

@@ -906,6 +906,8 @@ const fr: Translations = {
     recommend_pbkdf2: "Recommandation : 600 000 itérations",
     recommend_argon2id: "Recommandation : 64 MB mémoire, 3 itérations, 4 parallélisme",
     recommended: "Recommandé",
+    min_value_must_be: "La valeur minimale doit être {{min}}",
+    max_value_must_be: "La valeur maximale doit être {{max}}",
   },
   settings: {
     autofill_service: "Service de remplissage automatique",

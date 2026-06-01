@@ -935,6 +935,8 @@ const ru: Translations = {
     recommend_pbkdf2: "Рекомендация: 600 000 итераций",
     recommend_argon2id: "Рекомендация: 64 МБ памяти, 3 итерации, 4 параллелизм",
     recommended: "Рекомендовано",
+    min_value_must_be: "Минимальное значение должно быть {{min}}",
+    max_value_must_be: "Максимальное значение должно быть {{max}}",
   },
   settings: {
     autofill_service: "Функция автозаполнения",

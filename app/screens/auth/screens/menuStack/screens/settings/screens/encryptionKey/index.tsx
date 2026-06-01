@@ -12,7 +12,7 @@ import { MPEncodeConfig } from "@/static/types/user.types"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 
-import { MasterPasswordEncodeConfig } from "./MasterPasswordEncodeConfig"
+import { MasterPasswordEncodeConfig, isEncodeConfigValid } from "./MasterPasswordEncodeConfig"
 import { useMasterPasswordCipher } from "./useMasterPasswordCipher"
 
 export const EncryptionKeyScreen: FC<SettingsScreenProps<"encryptionKey">> = ({ navigation }) => {
@@ -83,7 +83,7 @@ export const EncryptionKeyScreen: FC<SettingsScreenProps<"encryptionKey">> = ({ 
       footer={
         <Button
           loading={isLoading}
-          disabled={isLoading || !isUserChangeConfig}
+          disabled={isLoading || !isUserChangeConfig || !isEncodeConfigValid(encodeConfig)}
           onPress={handleSave}
           tx={"common:save"}
           style={styles.save}

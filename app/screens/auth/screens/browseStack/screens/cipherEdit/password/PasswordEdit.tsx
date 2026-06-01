@@ -142,7 +142,7 @@ export const PasswordEdit = observer(
             style: "destructive",
             onPress: () => {
               setFido2(null)
-              preparePassword()
+              preparePassword(true)
             },
           },
         ]
@@ -174,7 +174,7 @@ export const PasswordEdit = observer(
     }, [navigation])
 
     // Prepare to save password
-    const preparePassword = async () => {
+    const preparePassword = async (isRemoveFido?: boolean) => {
       // @ts-ignore
       const payload: CipherView = {
         ...item,
@@ -194,7 +194,9 @@ export const PasswordEdit = observer(
         })
         data.uris = uriData
       }
-      data.fido2Credentials = fido2 as Fido2CredentialView[]
+      if (!isRemoveFido) {
+        data.fido2Credentials = fido2 as Fido2CredentialView[]
+      }
 
       payload.fields = fields.filter((f) => !!f.value && f.value.trim())
       payload.name = name
@@ -317,7 +319,7 @@ export const PasswordEdit = observer(
             rightIconColor={colors.primary}
             rightLoading={isLoading}
             rightDisabled={isLoading || !name.trim()}
-            onRightPress={preparePassword}
+            onRightPress={() => preparePassword()}
           />
         }
         ScrollViewProps={{

@@ -921,6 +921,8 @@ const vi: Translations = {
     recommend_pbkdf2: "Khuyến nghị: 600.000 lần lặp",
     recommend_argon2id: "Khuyến nghị: 64 MB bộ nhớ, 3 lần lặp, 4 đa luồng",
     recommended: "Khuyến nghị",
+    min_value_must_be: "Giá trị tối thiểu phải là {{min}}",
+    max_value_must_be: "Giá trị tối đa phải là {{max}}",
   },
   settings: {
     autofill_service: "Tự động điền (Auto-fill)",

@@ -896,6 +896,8 @@ const zh: Translations = {
     recommend_pbkdf2: "建議：600,000 次迭代",
     recommend_argon2id: "建議：64 MB 記憶體，3 次迭代，4 並行度",
     recommended: "建議",
+    min_value_must_be: "最小值必須為 {{min}}",
+    max_value_must_be: "最大值必須為 {{max}}",
   },
   settings: {
     autofill_service: "自動填寫服務",

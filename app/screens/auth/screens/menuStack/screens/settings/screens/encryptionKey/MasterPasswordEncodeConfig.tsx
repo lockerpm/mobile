@@ -21,6 +21,23 @@ const ARGON2_ITERATIONS = { min: 1, max: 10, default: 3 }
 const ARGON2_MEMORY = { min: 16, max: 128, default: 64 }
 const ARGON2_PARALLELISM = { min: 1, max: 10, default: 4 }
 
+const inRange = (n: number, range: { min: number; max: number }) =>
+  Number.isFinite(n) && n >= range.min && n <= range.max
+
+export const isEncodeConfigValid = (config: Required<MPEncodeConfig>): boolean => {
+  if (config.kdf === KdfType.PBKDF2_SHA256) {
+    return inRange(config.kdf_iterations, PBKDF2_ITERATIONS)
+  }
+  if (config.kdf === KdfType.ARGON2ID) {
+    return (
+      inRange(config.kdf_iterations, ARGON2_ITERATIONS) &&
+      inRange(config.kdf_memory / 1024, ARGON2_MEMORY) &&
+      inRange(config.kdf_parallelism, ARGON2_PARALLELISM)
+    )
+  }
+  return false
+}
+
 type Props = {
   encodeConfig: Required<MPEncodeConfig>
   setEncodeConfig: React.Dispatch<React.SetStateAction<Required<MPEncodeConfig>>>
@@ -178,23 +195,20 @@ const NumberStepperInput = ({
   const handleChangeText = (next: string) => {
     const digits = next.replace(/[^0-9]/g, "")
     setText(digits)
+    if (digits === "") {
+      onChange(0)
+      return
+    }
+    const parsed = parseInt(digits, 10)
+    if (!Number.isNaN(parsed)) {
+      onChange(parsed)
+    }
   }
 
   const handleBlur = () => {
     if (text === "") {
-      onChange(min)
-      setText(String(min))
-      return
+      setText(String(value))
     }
-    const parsed = parseInt(text, 10)
-    if (Number.isNaN(parsed)) {
-      onChange(min)
-      setText(String(min))
-      return
-    }
-    const clamped = clamp(parsed)
-    onChange(clamped)
-    setText(String(clamped))
   }
 
   const decrement = () => {
@@ -211,6 +225,16 @@ const NumberStepperInput = ({
 
   const decDisabled = value <= min
   const incDisabled = value >= max
+
+  const parsed = text === "" ? NaN : parseInt(text, 10)
+  const errorTx: TxKeyPath | null = Number.isNaN(parsed)
+    ? "encryption_key:min_value_must_be"
+    : parsed < min
+      ? "encryption_key:min_value_must_be"
+      : parsed > max
+        ? "encryption_key:max_value_must_be"
+        : null
+  const errorTxOptions = errorTx === "encryption_key:max_value_must_be" ? { max } : { min }
 
   return (
     <View>
@@ -240,6 +264,15 @@ const NumberStepperInput = ({
           containerStyle={[themed($pressableIcon), incDisabled && styles.disable]}
         />
       </View>
+      {errorTx && (
+        <Text
+          tx={errorTx}
+          txOptions={errorTxOptions}
+          size="xs"
+          color={colors.error}
+          style={styles.error}
+        />
+      )}
     </View>
   )
 }
@@ -284,6 +317,10 @@ const styles = StyleSheet.create({
   },
   disable: {
     opacity: 0.4,
+  },
+  error: {
+    marginLeft: 8,
+    marginTop: 4,
   },
   header: {
     alignItems: "center",
