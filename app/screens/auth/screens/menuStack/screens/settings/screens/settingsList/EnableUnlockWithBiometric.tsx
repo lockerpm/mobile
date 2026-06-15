@@ -39,7 +39,10 @@ export const EnableUnlockWithBiometric = observer(() => {
     // Update autofill settings
     await updateAutofillFaceIdSetting(true)
 
-    notifyTx("success", "success:biometric_enabled")
+    notifyTx(
+      "success",
+      hasBiometric ? "success:biometric_enabled" : "success:device_passcode_enabled",
+    )
   }
 
   const updateAutofillFaceIdSetting = async (enabled: boolean) => {
