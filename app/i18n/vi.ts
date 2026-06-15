@@ -598,10 +598,13 @@ const vi: Translations = {
   },
   biometric_intro: {
     title: "Mở khóa Locker bằng Face ID/Touch ID",
+    title_passcode: "Mở khoá Locker bằng mã thiết bị",
     desc: "Sử dụng nhận dạng khuôn mặt hoặc vân tay để bảo vệ mật khẩu của bạn",
+    desc_passcode: "Dùng mã PIN hoặc mật khẩu thiết bị để mở khoá kho lưu trữ nhanh chóng",
     suggest: "Bật FaceID/TouchID để mở khóa vault dễ dàng.",
     suggest_passcode: "Dùng mã thiết bị để mở khoá kho lưu trữ nhanh chóng",
     use_btn: "Sử dụng Face ID/Touch ID",
+    use_btn_passcode: "Dùng mã thiết bị",
     later_btn: "Để sau",
   },
   card: {

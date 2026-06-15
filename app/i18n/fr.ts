@@ -580,10 +580,13 @@ const fr: Translations = {
   },
   biometric_intro: {
     title: "Débloquez votre coffre avec Face ID/Touch ID",
+    title_passcode: "Déverrouillez votre coffre avec le code de l'appareil",
     desc: "Utiliser la reconnaissance faciale ou l’empreinte digitale pour protéger vos mots de passe",
+    desc_passcode: "Utilisez le code PIN ou le mot de passe de votre appareil pour déverrouiller rapidement votre coffre",
     suggest: "Utiliser Face ID/Touch ID pour déverrouiller facilement votre coffre",
     suggest_passcode: "Utilisez le code de l'appareil pour déverrouiller votre coffre rapidement",
     use_btn: "Utiliser Face ID/Touch ID",
+    use_btn_passcode: "Utiliser le code de l'appareil",
     later_btn: "Je le ferai plus tard",
   },
   card: {

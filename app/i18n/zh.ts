@@ -577,10 +577,13 @@ const zh: Translations = {
   },
   biometric_intro: {
     title: "使用 Face ID/Touch ID 解鎖您的保險庫",
+    title_passcode: "使用裝置密碼解鎖您的保險庫",
     desc: "使用臉部辨識或指紋來保護您的密碼",
+    desc_passcode: "使用裝置 PIN 或密碼快速解鎖您的保險庫",
     suggest: "使用 Face ID/Touch ID 來快速解鎖您的保險庫",
     suggest_passcode: "使用裝置密碼快速解鎖您的保險庫",
     use_btn: "使用 Face ID/Touch ID",
+    use_btn_passcode: "使用裝置密碼",
     later_btn: "稍後再設定",
   },
   card: {

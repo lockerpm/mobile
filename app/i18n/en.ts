@@ -599,10 +599,13 @@ const en = {
   },
   biometric_intro: {
     title: "Unlock your vault with Face ID/Touch ID",
+    title_passcode: "Unlock your vault with device passcode",
     desc: "Use face recognition or fingerprint to protect your passwords",
+    desc_passcode: "Use your device PIN or passcode to quickly unlock your vault",
     suggest: "Use Face ID/Touch ID to easy unlock your vault",
     suggest_passcode: "Use your device passcode to easily unlock your vault",
     use_btn: "Use Face ID/Touch ID",
+    use_btn_passcode: "Use device passcode",
     later_btn: "I'll do it later",
   },
   card: {

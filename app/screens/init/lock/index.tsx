@@ -159,7 +159,10 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
         }
 
         if (!isAndroidService) {
-          if (!user.isBiometricUnlock && biometryType !== BiometricsType.None) {
+          if (
+            !user.isBiometricUnlock &&
+            (biometryType !== BiometricsType.None || hasDevicePasscode)
+          ) {
             navigateToIntroIfNeeded()
             return
           }
