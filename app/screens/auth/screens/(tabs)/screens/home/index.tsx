@@ -17,7 +17,6 @@ import { HomeHeader } from "./HomeHeader"
 import { HomeSlider } from "./sliderBar/HomeSlider"
 import { useFetchMarketingContent } from "./useFetchMarketingContent"
 import { useHomeBackHandler } from "./useHomeBackHandler"
-import { useShowRecommendEncryption } from "./useShowRecommendEncryption"
 
 const allCipherType = [
   CipherType.Card,
@@ -161,7 +160,6 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
 
   useFetchMarketingContent()
   useHomeBackHandler()
-  useShowRecommendEncryption()
 
   useEffect(() => {
     const listener1 = EventBus.createListener(AppEventType.UNSELECT_ALL, () => {

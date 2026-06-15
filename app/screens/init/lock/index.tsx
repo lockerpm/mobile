@@ -54,7 +54,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       kdf: KdfType.PBKDF2_SHA256,
       kdf_iterations: 100000,
     })
-    const { biometryType } = useBiometricType()
+    const { biometryType, hasDevicePasscode } = useBiometricType()
     const [isUnlocking, setIsUnlocking] = useState(false)
 
     // ---------------------- COMPUTED -------------------------
@@ -215,7 +215,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     useEffect(() => {
       if (lockConfig.isLoading) return undefined
       const focusHandler = navigation.addListener("focus", () => {
-        if (user.isBiometricUnlock) {
+        if (user.isBiometricUnlock && (biometryType !== BiometricsType.None || hasDevicePasscode)) {
           handleUnlockBiometric({
             kdf: lockConfig.kdf,
             kdf_iterations: lockConfig.kdf_iterations,
@@ -237,6 +237,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       isUnlocking,
       setIsUnlocking,
       biometryType,
+      hasDevicePasscode,
       lockConfig,
     }
 
