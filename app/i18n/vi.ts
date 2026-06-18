@@ -179,10 +179,14 @@ const vi: Translations = {
     master_password: "Không thể tự động tạo Siêu Mật Khẩu tự động",
     not_supported: "Không hỗ trợ",
     not_valid_for_biometric: "Bạn cần nhập lại Master Password để kích hoạt lại FaceID/TouchID",
+    not_valid_for_device_passcode:
+      "Bạn cần nhập lại Master Password để kích hoạt lại mở khoá bằng mã thiết bị",
     biometric_not_enable: "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
+    device_passcode_not_enable: "Mở khoá bằng mã thiết bị chưa được kích hoạt",
     biometric_not_support:
       "Thiết bị không hỗ trợ mở khoá bằng sinh trắc học hoặc mã thiết bị",
     biometric_unlock_failed: "Xác thực bằng Face ID/Touch ID không thành công",
+    device_passcode_unlock_failed: "Xác thực bằng mã thiết bị không thành công",
     required_data: "Không được để trống thông tin này",
     session_login_failed: "Đăng nhập phiên không thành công! Vui lòng thử lại",
     login_failed: "Đăng nhập không thành công! Vui lòng thử lại",

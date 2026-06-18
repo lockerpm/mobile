@@ -24,6 +24,7 @@ export const BiometricUnlockIntroScreen: FC<HomeScreenProps<"biometricUnlockIntr
 
     const [isLoading, setIsLoading] = useState(false)
     const [hasBiometric, setHasBiometric] = useState(true)
+    const [hasDevicePasscode, setHasDevicePasscode] = useState(false)
 
     // ----------------------- METHODS ----------------------
 
@@ -44,7 +45,10 @@ export const BiometricUnlockIntroScreen: FC<HomeScreenProps<"biometricUnlockIntr
       })
       if (!success) {
         if (error !== "user_cancel" && error !== "system_cancel") {
-          notifyTx("error", "error:biometric_unlock_failed")
+          notifyTx(
+            "error",
+            hasBiometric ? "error:biometric_unlock_failed" : "error:device_passcode_unlock_failed"
+          )
         }
         setIsLoading(false)
         return
@@ -83,7 +87,10 @@ export const BiometricUnlockIntroScreen: FC<HomeScreenProps<"biometricUnlockIntr
     // ----------------------- EFFECT ----------------------
 
     useEffect(() => {
-      getDeviceAuthCapabilities().then((caps) => setHasBiometric(caps.hasBiometric))
+      getDeviceAuthCapabilities().then((caps) => {
+        setHasBiometric(caps.hasBiometric)
+        setHasDevicePasscode(caps.hasDevicePasscode)
+      })
     }, [])
 
     useEffect(() => {
@@ -112,13 +119,15 @@ export const BiometricUnlockIntroScreen: FC<HomeScreenProps<"biometricUnlockIntr
         contentContainerStyle={styles.container}
         footer={
           <View style={styles.ph16}>
-            <Button
-              disabled={isLoading}
-              loading={isLoading}
-              tx={hasBiometric ? "biometric_intro:use_btn" : "biometric_intro:use_btn_passcode"}
-              onPress={handleUseBiometric}
-              style={styles.button}
-            />
+            {(hasBiometric || hasDevicePasscode) && (
+              <Button
+                disabled={isLoading}
+                loading={isLoading}
+                tx={hasBiometric ? "biometric_intro:use_btn" : "biometric_intro:use_btn_passcode"}
+                onPress={handleUseBiometric}
+                style={styles.button}
+              />
+            )}
 
             <TouchableOpacity onPress={handleSkip} style={styles.later}>
               <Text preset="bold" tx={"biometric_intro:later_btn"} style={styles.centerText} />

@@ -35,7 +35,10 @@ export const SuggestEnableFaceID = observer(({ onClose, style, hasBiometric }: P
     })
     if (!success) {
       if (error !== "user_cancel" && error !== "system_cancel") {
-        notifyTx("error", "error:biometric_unlock_failed")
+        notifyTx(
+          "error",
+          hasBiometric ? "error:biometric_unlock_failed" : "error:device_passcode_unlock_failed"
+        )
       }
       onClose()
       return

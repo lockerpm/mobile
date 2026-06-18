@@ -179,9 +179,13 @@ const fr: Translations = {
     not_supported: "Non pris en charge",
     not_valid_for_biometric:
       "Se connecter avec le mot de passe maître pour réactiver FaceID/TouchID",
+    not_valid_for_device_passcode:
+      "Connectez-vous avec le mot de passe maître pour réactiver le déverrouillage par code de l'appareil",
     biometric_not_enable: "Le déverrouillage Face ID/Touch ID n’est pas activé",
+    device_passcode_not_enable: "Le déverrouillage par code de l'appareil n'est pas activé",
     biometric_not_support: "Le déverrouillage Face ID/Touch ID n’est pas pris en charge",
     biometric_unlock_failed: "La vérification de Face ID/Touch ID a échoué",
+    device_passcode_unlock_failed: "La vérification du code de l'appareil a échoué",
     required_data: "Cette donnée est obligatoire",
     session_login_failed: "Échec de la connexion à la session ! Veuillez réessayer",
     login_failed: "Échec de la connexion ! Veuillez réessayer",

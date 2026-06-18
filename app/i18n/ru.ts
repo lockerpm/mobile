@@ -180,9 +180,13 @@ const ru: Translations = {
     not_supported: "Не поддерживается",
     not_valid_for_biometric:
       "Войдите в систему, используя мастер-пароль, чтобы повторно включить FaceID/TouchID",
+    not_valid_for_device_passcode:
+      "Войдите с мастер-паролем, чтобы повторно включить разблокировку кодом устройства",
     biometric_not_enable: "Разблокировка Face ID/Touch ID не включена",
+    device_passcode_not_enable: "Разблокировка кодом устройства не включена",
     biometric_not_support: "Разблокировка Face ID/Touch ID не поддерживается",
     biometric_unlock_failed: "Проверка Face ID/Touch ID не удалась",
+    device_passcode_unlock_failed: "Проверка кода устройства не удалась",
     required_data: "Эти данные являются обязательными",
     session_login_failed: "Сессия входа не удалась! Попробуйте еще раз",
     login_failed: "Не удалось войти! Попробуйте еще раз",

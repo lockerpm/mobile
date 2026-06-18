@@ -155,13 +155,20 @@ export const LockByMasterPassword = ({
   }, [])
 
   const handleUnlockBiometric = async () => {
+    const hasBiometric = biometryType !== BiometricsType.None
     if (!user.isBiometricUnlock) {
-      notifyTx("error", "error:biometric_not_enable")
+      notifyTx(
+        "error",
+        hasBiometric ? "error:biometric_not_enable" : "error:device_passcode_not_enable"
+      )
       return
     }
     const key = await cryptoService.getKey()
     if (!key) {
-      notifyTx("info", "error:not_valid_for_biometric")
+      notifyTx(
+        "info",
+        hasBiometric ? "error:not_valid_for_biometric" : "error:not_valid_for_device_passcode"
+      )
       return
     }
 
