@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { View, SectionList, StyleSheet, ViewStyle } from "react-native"
+import orderBy from "lodash/orderBy"
 import { observer } from "mobx-react-lite"
 import { TOptions } from "node_modules/i18next/typescript/options"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
@@ -119,7 +120,7 @@ export const YourShareCipherList = observer(
         searchText: "",
         deleted: false,
       })
-      const res: CipherShareType[] = []
+      let res: CipherShareType[] = []
       // Add image + share info
       searchRes.forEach((c: CipherView) => {
         const data: CipherShareType = {
@@ -140,8 +141,10 @@ export const YourShareCipherList = observer(
         }
         res.push(data)
       })
+
+      res = orderBy(res, [(c: CipherShareType) => c.revisionDate], []) || []
       // Done
-      setCiphers(res.sort((a, b) => a.revisionDate!.getTime() - b.revisionDate!.getTime()))
+      setCiphers(res)
     }
 
     // ------------------------ EFFECTS ----------------------------

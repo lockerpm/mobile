@@ -181,6 +181,7 @@ export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navig
   return (
     <Screen
       safeAreaEdges={["bottom"]}
+      preset="scroll"
       header={
         <Header leftIcon="arrow-left" onLeftPress={navigation.goBack} titleTx={"settings:import"} />
       }

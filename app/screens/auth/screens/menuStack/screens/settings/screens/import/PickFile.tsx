@@ -1,5 +1,5 @@
-import { StyleSheet, View, ViewStyle } from "react-native"
-import { pick, types } from "@react-native-documents/picker"
+import { Platform, StyleSheet, View, ViewStyle } from "react-native"
+import { keepLocalCopy, pick, types } from "@react-native-documents/picker"
 
 import { Button, Text } from "app/components/cores"
 import { SettingsItem } from "app/components/utils"
@@ -67,9 +67,23 @@ export const PickFile = ({ format, setFormat, file, setFile, handleImport }: Pro
       })
 
       if (getFileName(res).endsWith(`.${targetExtension}`)) {
+        let resolvedUri = res.uri
+
+        if (Platform.OS === "android") {
+          const [localCopy] = await keepLocalCopy({
+            files: [{ uri: res.uri, fileName: res.name ?? "import-file" }],
+            destination: "cachesDirectory",
+          })
+          if (localCopy.status !== "success" || !localCopy.localUri) {
+            notifyTx("error", "error:something_went_wrong")
+            return
+          }
+          resolvedUri = localCopy.localUri
+        }
+
         setFile({
           name: res.name ?? "",
-          uri: res.uri,
+          uri: resolvedUri,
           type: res.type ?? "",
           size: res.size ?? 0,
         })

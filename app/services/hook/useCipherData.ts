@@ -2206,35 +2206,6 @@ export function useCipherData() {
     })
   }
 
-  // Sync single organization
-  // TODO: not used
-  const syncSingleOrganization = async (id: string) => {
-    const userId = await userService.getUserId()
-    const key = `organizations_${userId}`
-    const res = (await storageService.get(key)) || {}
-
-    const orgRes = await cipherStore.getOrganization(id)
-    if (orgRes.kind !== "ok") {
-      if (orgRes.kind === "not-found" || orgRes.kind === "forbidden") {
-        delete res[id]
-      } else {
-        notifyApiError(orgRes)
-        return orgRes
-      }
-    } else {
-      const org = orgRes.data
-      const orgData = new OrganizationData(org)
-
-      // Update organization
-      res[org.id] = {
-        ...orgData,
-      }
-    }
-
-    await storageService.save(key, res)
-    return orgRes
-  }
-
   // Sync profile (nested use only --> no need to add to queue)
   const syncProfile = async () => {
     const res = await cipherStore.getProfile()
@@ -2304,7 +2275,6 @@ export function useCipherData() {
 
     syncSingleCipher,
     syncSingleFolder,
-    syncSingleOrganization,
     syncProfile,
 
     createRandomPasswords,

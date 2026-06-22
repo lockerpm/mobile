@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { View, SectionList, StyleSheet, ViewStyle } from "react-native"
+import orderBy from "lodash/orderBy"
 import { observer } from "mobx-react-lite"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
@@ -106,7 +107,7 @@ export const SharedWithYouCipherList = observer(
       })
 
       // Add image + org info
-      const res = searchRes.map((c: CipherView) => {
+      let res = searchRes.map((c: CipherView) => {
         const cipherLogo = getCipherLogo(c)
         const data: SharedWithYouType = {
           ...c,
@@ -121,6 +122,8 @@ export const SharedWithYouCipherList = observer(
         }
         return data
       })
+
+      res = orderBy(res, [(c: SharedWithYouType) => c.revisionDate], []) || []
 
       setCiphers(res)
     }
