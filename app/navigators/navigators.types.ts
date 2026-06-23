@@ -312,9 +312,11 @@ export type ShareRoute = {
     cipher: CipherAppView
   }
   editShareMemberPermissionModal: {
+    isHaveLoginItem: boolean
     id: string
     value: string
     role: AccountRoleText
+    hidePasswords: boolean
   }
 
   folderShare: {

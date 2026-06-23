@@ -1,7 +1,4 @@
 import { ApiResponse } from "apisauce"
-import { Api, api } from "./api"
-import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
-import { detectTempId } from "../../utils/eventBus"
 
 import {
   ConfirmShareCipherData,
@@ -12,18 +9,22 @@ import {
   MoveFolderData,
   MyShareType,
   QuickShareCipherData,
-  ShareCipherData,
   ShareMultipleCiphersData,
   SharingInvitationType,
   StopShareCipherData,
 } from "app/static/types"
-import { SyncResponse } from "core/models/response/syncResponse"
-import { CipherResponse } from "core/models/response/cipherResponse"
 import { CipherRequest } from "core/models/request/cipherRequest"
-import { ProfileResponse } from "core/models/response/profileResponse"
-import { ProfileOrganizationResponse } from "core/models/response/profileOrganizationResponse"
 import { SendRequest } from "core/models/request/sendRequest"
+import { CipherResponse } from "core/models/response/cipherResponse"
+import { ProfileOrganizationResponse } from "core/models/response/profileOrganizationResponse"
+import { ProfileResponse } from "core/models/response/profileResponse"
+import { SyncResponse } from "core/models/response/syncResponse"
+
 import { Logger } from "@/utils/logger"
+
+import { Api, api } from "./api"
+import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
+import { detectTempId } from "../../utils/eventBus"
 
 class CipherApi {
   private api: Api = api
@@ -465,41 +466,6 @@ class CipherApi {
       return { kind: "ok", data }
     } catch (e) {
       Logger.error("Quick Share cipher: ", e)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Share cipher
-  async shareCipher(
-    token: string,
-    payload: ShareCipherData
-  ): Promise<
-    | {
-        kind: "ok"
-        data: {
-          id: string // organizationId
-        }
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/v3/cystack_platform/pm/sharing`,
-        payload
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const data = response.data
-
-      return { kind: "ok", data }
-    } catch (e) {
-      Logger.error("Share cipher: ", e)
       return { kind: "bad-data" }
     }
   }

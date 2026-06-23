@@ -1,7 +1,6 @@
 import { FC } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
-import { debounce } from "app/utils/utils"
-import { ShareScreenProps } from "app/navigators"
+
 import {
   BottomModalContainer,
   Icon,
@@ -10,14 +9,18 @@ import {
   PressableScale,
   IconTypes,
 } from "app/components/cores"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { AccountRoleText } from "@/static/types"
-import { useCipherData } from "@/services/hook"
+import { ShareScreenProps } from "app/navigators"
+import { debounce } from "app/utils/utils"
+
 import { TxKeyPath } from "@/i18n"
-import { SharedGroup } from "../../manageSharedMember/SharedGroup"
-import { SharedMember } from "../../manageSharedMember/SharedMember"
+import { useCipherData } from "@/services/hook"
+import { AccountRoleText } from "@/static/types"
 import { ThemedStyle } from "@/theme"
 import { AppEventType, EventBus } from "@/utils/eventBus"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { SharedGroup } from "../../manageSharedMember/SharedGroup"
+import { SharedMember } from "../../manageSharedMember/SharedMember"
 
 export const ManageShareMemberModalScreen: FC<ShareScreenProps<"manageSharedMemberModal">> = ({
   navigation,

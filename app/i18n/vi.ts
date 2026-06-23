@@ -183,8 +183,7 @@ const vi: Translations = {
       "Bạn cần nhập lại Master Password để kích hoạt lại mở khoá bằng mã thiết bị",
     biometric_not_enable: "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     device_passcode_not_enable: "Mở khoá bằng mã thiết bị chưa được kích hoạt",
-    biometric_not_support:
-      "Thiết bị không hỗ trợ mở khoá bằng sinh trắc học hoặc mã thiết bị",
+    biometric_not_support: "Thiết bị không hỗ trợ mở khoá bằng sinh trắc học hoặc mã thiết bị",
     biometric_unlock_failed: "Xác thực bằng Face ID/Touch ID không thành công",
     device_passcode_unlock_failed: "Xác thực bằng mã thiết bị không thành công",
     required_data: "Không được để trống thông tin này",
@@ -739,6 +738,8 @@ const vi: Translations = {
       add_email: "Thêm email thành viên",
       viewer: "Chỉ xem",
       editor: "Chỉnh sửa",
+      fill_only: "Ẩn mật khẩu",
+      fill_only_per: "(Chỉ áp dụng cho mục đăng nhập)",
       viewer_per: "Chỉ được quyền xem thông tin",
       editor_per: "Có quyền thanh đổi, sửa dữ liệu",
       remove: "Xoá khỏi thư mục",

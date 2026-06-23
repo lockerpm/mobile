@@ -2,17 +2,19 @@ import { View, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 
 import { Icon, PressableIcon, Text } from "app/components/cores"
 
-import { AccountRoleText } from "@/static/types"
+import { AccountRoleText, ShareMembers } from "@/static/types"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 type MemberProps = {
-  member: {
-    email: string
-    role: AccountRoleText
-  }
+  member: ShareMembers
   removeEmail: (email: string) => void
-  navigateToEditMember: (email: string, name: string, role: AccountRoleText) => void
+  navigateToEditMember: (
+    email: string,
+    name: string,
+    role: AccountRoleText,
+    hidePasswords: boolean
+  ) => void
 }
 
 export const Member = ({ member, removeEmail, navigateToEditMember }: MemberProps) => {
@@ -25,12 +27,16 @@ export const Member = ({ member, removeEmail, navigateToEditMember }: MemberProp
     <View style={themed($shareMember)}>
       <TouchableOpacity
         style={styles.row}
-        onPress={() => navigateToEditMember(member.email, member.email, member.role)}
+        onPress={() =>
+          navigateToEditMember(member.email, member.email, member.role, member.hidePasswords)
+        }
       >
         <Text text={member.email} style={styles.email} ellipsizeMode="tail" numberOfLines={1} />
         <TouchableOpacity
           style={styles.row}
-          onPress={() => navigateToEditMember(member.email, member.email, member.role)}
+          onPress={() =>
+            navigateToEditMember(member.email, member.email, member.role, member.hidePasswords)
+          }
         >
           <Text
             size="xs"

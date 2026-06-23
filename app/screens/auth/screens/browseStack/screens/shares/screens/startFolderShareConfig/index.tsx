@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 
 import { Header, ImageIcon, PressableText, Screen, Text } from "app/components/cores"
 import { useFolder } from "app/services/hook"
-import { AccountRoleText } from "app/static/types"
+import { AccountRoleText, ShareGroups, ShareMembers } from "app/static/types"
 import { CollectionView } from "core/models/view/collectionView"
 
 import { ShareScreenProps } from "@/navigators"
@@ -31,41 +31,36 @@ export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
 
     // --------------- PARAMS ----------------
     const [isSharing, setIsSharing] = useState(false)
-    const [emails, setEmails] = useState<
-      {
-        email: string
-        role: AccountRoleText
-      }[]
-    >([])
-    const [groups, setGroups] = useState<
-      {
-        name: string
-        id: string
-        role: AccountRoleText
-      }[]
-    >([])
+    const [emails, setEmails] = useState<ShareMembers[]>([])
+    const [groups, setGroups] = useState<ShareGroups[]>([])
     // --------------- COMPUTED ----------------
 
     const showManageShare = "organizationId" in folder && !!folder.organizationId
 
     // --------------- METHODS ----------------
 
-    const removeEmail = (val: string) => {
-      setEmails(emails.filter((e) => e.email !== val))
-    }
+    const removeEmail = useCallback(
+      (val: string) => {
+        setEmails(emails.filter((e) => e.email !== val))
+      },
+      [emails]
+    )
 
-    const removeGroup = (id: string) => {
-      setGroups(groups.filter((group) => group.id !== id))
-    }
+    const removeGroup = useCallback(
+      (id: string) => {
+        setGroups(groups.filter((group) => group.id !== id))
+      },
+      [groups]
+    )
 
     // Share single/multiple
     const handleShare = async () => {
       setIsSharing(true)
       let res
       if (showManageShare || folder instanceof CollectionView) {
-        res = await shareFolderAddMember(folder, emails, groups, true)
+        res = await shareFolderAddMember(folder, emails, groups)
       } else {
-        res = await shareFolder(folder, emails, groups, true)
+        res = await shareFolder(folder, emails, groups)
       }
 
       if (res.kind === "ok" || res.kind === "unauthorized") {
@@ -118,11 +113,13 @@ export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
     }, [navigation, folder, showManageShare])
 
     const navigateToEditMember = useCallback(
-      (id: string, val: string, role: AccountRoleText) => {
+      (id: string, val: string, role: AccountRoleText, hidePasswords: boolean) => {
         navigation.navigate("editShareMemberPermissionModal", {
           id,
           value: val,
           role,
+          hidePasswords,
+          isHaveLoginItem: true,
         })
       },
       [navigation]

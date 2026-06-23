@@ -8,6 +8,8 @@ import { useToast } from "@/services/utils"
 import { MAX_MULTIPLE_SHARE_COUNT } from "@/static/constants"
 import {
   AccountRoleText,
+  ShareGroups,
+  ShareMembers,
   ShareMultipleCiphersData,
   ShareMultipleCiphersGroups,
   ShareMultipleCiphersMembers,
@@ -29,7 +31,6 @@ export const useShareMultipleCiphers = () => {
 
   const prepareMemberPayload = async (
     orgKey: SymmetricCryptoKey,
-    autofillOnly: boolean,
     members: {
       email: string
       publicKey: string
@@ -44,7 +45,7 @@ export const useShareMultipleCiphers = () => {
         return {
           username: m.email,
           role: m.role,
-          hide_passwords: autofillOnly,
+          hide_passwords: m.hide_passwords,
           key: m.publicKey ? (await generateMemberKey(m.publicKey, orgKey)) || null : null,
         }
       })
@@ -53,7 +54,7 @@ export const useShareMultipleCiphers = () => {
 
   const prepareGroupPayload = async (
     orgKey: SymmetricCryptoKey,
-    groups: { id: string; name: string; role: AccountRoleText }[]
+    groups: ShareGroups[]
   ): Promise<ShareMultipleCiphersGroups> => {
     if (!groups.length) {
       return []
@@ -83,6 +84,7 @@ export const useShareMultipleCiphers = () => {
           id: group.id,
           role: group.role,
           members,
+          hide_passwords: group.hidePasswords,
         }
       })
     )
@@ -92,9 +94,8 @@ export const useShareMultipleCiphers = () => {
   // Share multiple ciphers
   const shareMultipleCiphers = async (
     ids: string[],
-    emails: { email: string; role: AccountRoleText }[],
-    groups: { id: string; name: string; role: AccountRoleText }[],
-    autofillOnly: boolean
+    emails: ShareMembers[],
+    groups: ShareGroups[]
   ) => {
     try {
       const ciphers =
@@ -122,7 +123,7 @@ export const useShareMultipleCiphers = () => {
             publicKey,
             username: e.email,
             role: e.role,
-            hide_passwords: autofillOnly,
+            hide_passwords: e.hidePasswords,
             key: publicKey ? (await generateMemberKey(publicKey, orgKey)) || null : null,
           }
         })
@@ -131,14 +132,16 @@ export const useShareMultipleCiphers = () => {
       const prepareCipher = async (c: CipherView) => {
         let _orgKey = orgKey
         if (c.organizationId) {
-          _orgKey = await cryptoService.getOrgKey(c.organizationId)
+          const _tempOrgKey = await cryptoService.getOrgKey(c.organizationId)
+          if (_tempOrgKey) {
+            _orgKey = _tempOrgKey
+          }
         }
         const cipherEnc = await cipherService.encrypt(c, _orgKey)
         const data = new CipherRequest(cipherEnc)
 
         const membersPayload: ShareMultipleCiphersMembers = await prepareMemberPayload(
           _orgKey,
-          autofillOnly,
           members
         )
         const groupsPayload: ShareMultipleCiphersGroups = await prepareGroupPayload(_orgKey, groups)

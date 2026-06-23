@@ -717,6 +717,8 @@ const zh: Translations = {
       add_email: "新增電子郵件以共享",
       viewer: "查看者",
       editor: "編輯者",
+      fill_only: "隱藏密碼",
+      fill_only_per: "（僅適用於登入項目）",
       viewer_per: "僅供查看",
       editor_per: "組織、新增和編輯",
       remove: "從資料夾中移除",

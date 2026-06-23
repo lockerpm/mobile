@@ -1,8 +1,10 @@
 import { View, Image, StyleSheet } from "react-native"
-import { SharedMemberType, SharingStatus } from "app/static/types"
+
 import { PressableScale, Text } from "app/components/cores"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { SharedMemberType, SharingStatus } from "app/static/types"
+
 import { TxKeyPath } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 interface Props {
   item: SharedMemberType

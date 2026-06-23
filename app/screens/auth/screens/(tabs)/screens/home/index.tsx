@@ -119,7 +119,7 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
       params: {
         screen: "normalShare",
         params: {
-          ciphers: selectedCiphers,
+          ciphers: selectedCiphers.map((e) => ({ ...e, revisionDate: null })),
         },
       },
     })

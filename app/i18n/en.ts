@@ -178,7 +178,8 @@ const en = {
     master_password: "Cannot auto create Master Password item",
     not_supported: "Not supported",
     not_valid_for_biometric: "Log in with Master Password to re-enable FaceID/TouchID",
-    not_valid_for_device_passcode: "Log in with Master Password to re-enable device passcode unlock",
+    not_valid_for_device_passcode:
+      "Log in with Master Password to re-enable device passcode unlock",
     biometric_not_enable: "Face ID/Touch ID unlocking is not enabled",
     device_passcode_not_enable: "Device passcode unlocking is not enabled",
     biometric_not_support: "Biometric or device passcode unlocking is not available on this device",
@@ -740,6 +741,8 @@ const en = {
       add_email: "Add email to share",
       viewer: "Viewer",
       editor: "Editor",
+      fill_only: "Hide password",
+      fill_only_per: "(Login items only)",
       viewer_per: "Only can View",
       editor_per: "Organize, add, and edit",
       remove: "Remove from folder",

@@ -1,27 +1,28 @@
 import { FC } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
-import { debounce } from "app/utils/utils"
-import { ShareScreenProps } from "app/navigators"
+
 import {
   BottomModalContainer,
   Icon,
   Text,
   ModalBackdrop,
   PressableScale,
-  IconTypes,
+  Checkbox,
 } from "app/components/cores"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { ShareScreenProps } from "app/navigators"
+import { debounce } from "app/utils/utils"
+
 import { AccountRoleText } from "@/static/types"
-import { TxKeyPath } from "@/i18n"
 import { ThemedStyle } from "@/theme"
 import { AppEventType, EventBus } from "@/utils/eventBus"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 export const EditShareMemberPermissionModalScreen: FC<
   ShareScreenProps<"editShareMemberPermissionModal">
 > = ({
   navigation,
   route: {
-    params: { id, value, role },
+    params: { id, value, role, hidePasswords, isHaveLoginItem },
   },
 }) => {
   const {
@@ -33,38 +34,16 @@ export const EditShareMemberPermissionModalScreen: FC<
 
   const isEditable = role === "admin"
 
-  const onEditRole = async (shareType: "only_fill" | "edit") => {
+  const onEditRole = async (shareType: "only_fill" | "edit", hidePasswords: boolean) => {
     const role = shareType === "only_fill" ? AccountRoleText.MEMBER : AccountRoleText.ADMIN
 
     EventBus.emit(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, {
       id,
       role,
+      hidePasswords,
     })
     onClose()
   }
-
-  const permissions: {
-    icon: IconTypes
-    value: boolean
-    title: TxKeyPath
-    decs: TxKeyPath
-    onPress: () => void
-  }[] = [
-    {
-      icon: "eye",
-      value: !isEditable,
-      title: "shares:share_folder.viewer",
-      decs: "shares:share_folder.viewer_per",
-      onPress: () => onEditRole("only_fill"),
-    },
-    {
-      icon: "edit",
-      value: isEditable,
-      title: "shares:share_folder.editor",
-      decs: "shares:share_folder.editor_per",
-      onPress: () => onEditRole("edit"),
-    },
-  ]
 
   return (
     <View style={styles.flex}>
@@ -73,21 +52,51 @@ export const EditShareMemberPermissionModalScreen: FC<
       <BottomModalContainer>
         <Text weight="medium" text={value} style={styles.header} />
 
-        {permissions.map((item, index) => (
-          <PressableScale key={index} onPress={item.onPress}>
-            <View style={themed($item)}>
-              <View style={styles.row}>
-                <Icon icon={item.icon} containerStyle={styles.icon} />
-                <View>
-                  <Text preset="bold" tx={item.title} />
-                  <Text preset="label" tx={item.decs} />
-                </View>
-              </View>
+        <PressableScale onPress={() => onEditRole("only_fill", hidePasswords)}>
+          <View style={themed($item)}>
+            <View style={styles.row}>
+              <Icon icon={"eye"} containerStyle={styles.icon} />
 
-              {item.value && <Icon icon="check-bold" size={24} color={colors.primary} />}
+              <View>
+                <View style={styles.row}>
+                  <View>
+                    <Text preset="bold" tx={"shares:share_folder.viewer"} />
+                    <Text preset="label" tx={"shares:share_folder.viewer_per"} />
+                  </View>
+
+                  {!isEditable && <Icon icon="check-bold" size={24} color={colors.primary} />}
+                </View>
+
+                {isHaveLoginItem && (
+                  <View style={styles.row}>
+                    <View>
+                      <Text preset="bold" tx={"shares:share_folder.viewer"} />
+                      <Text preset="label" tx={"shares:share_folder.viewer_per"} />
+                    </View>
+
+                    <Checkbox
+                      value={hidePasswords}
+                      onValueChange={(value) => onEditRole("only_fill", value)}
+                    />
+                  </View>
+                )}
+              </View>
             </View>
-          </PressableScale>
-        ))}
+          </View>
+        </PressableScale>
+        <PressableScale onPress={() => onEditRole("edit", false)}>
+          <View style={themed($item)}>
+            <View style={styles.row}>
+              <Icon icon={"edit"} containerStyle={styles.icon} />
+              <View>
+                <Text preset="bold" tx={"shares:share_folder.editor"} />
+                <Text preset="label" tx={"shares:share_folder.editor_per"} />
+              </View>
+            </View>
+
+            {isEditable && <Icon icon="check-bold" size={24} color={colors.primary} />}
+          </View>
+        </PressableScale>
       </BottomModalContainer>
     </View>
   )

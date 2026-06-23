@@ -750,6 +750,8 @@ const ru: Translations = {
       add_email: "Добавьте адрес электронной почты, чтобы поделиться",
       viewer: "Просмотр",
       editor: "Редактирование",
+      fill_only: "Fill only",
+      fill_only_per: "ABC XYA akjsdhnakjsdnaksjdnajskd",
       viewer_per: "Может только просматривать",
       editor_per: "Организуйте, добавляйте и редактируйте",
       remove: "Удалить из папки",
