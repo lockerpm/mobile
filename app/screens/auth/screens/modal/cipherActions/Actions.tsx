@@ -41,6 +41,7 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose }: Props) => {
   const editable =
     !item.organizationId || shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER
 
+  console.log(isShared && !editable, !isShared)
   // -----------------------METHODS-----------------------
 
   const {
@@ -115,7 +116,7 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose }: Props) => {
       />
       <NewActionSheetItem
         bottomBorder
-        hide={isDeleted || lockerMasterPassword || isShared || !editable}
+        hide={isDeleted || lockerMasterPassword || (isShared && !editable)}
         tx="file_attachment:title"
         icon="file-arrow-up"
         onPress={() => {

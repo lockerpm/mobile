@@ -361,6 +361,7 @@ export function useCipherData() {
         password: c.login.password || "",
         otp: c.login.totp || "",
         isOwner: !c.organizationId,
+        hidePassword: !c.viewPassword,
         fido2:
           c.login.fido2Credentials?.map((f) => ({
             credentialId: f.credentialId,
@@ -1452,7 +1453,7 @@ export function useCipherData() {
     organizationId: string,
     itemId: string,
     role: AccountRoleText,
-    onlyFill: boolean,
+    hidePasswords: boolean,
     isGroup?: boolean
   ) => {
     try {
@@ -1461,11 +1462,12 @@ export function useCipherData() {
       if (!isGroup) {
         res = await cipherStore.editShareCipher(organizationId, itemId, {
           role,
-          hide_passwords: onlyFill,
+          hide_passwords: hidePasswords,
         })
       } else {
         res = await enterpriseStore.editShareCipher(organizationId, itemId, {
           role,
+          hide_passwords: hidePasswords,
         })
       }
 
@@ -1479,14 +1481,15 @@ export function useCipherData() {
             for (const member of share.members) {
               if (member.id === itemId) {
                 member.role = role
-                member.hide_passwords = onlyFill
+                member.hide_passwords = hidePasswords
               }
             }
-            // for (const group of share.groups) {
-            //   if (group.id === itemId) {
-            //     group.role = role
-            //   }
-            // }
+            for (const group of share.groups) {
+              if (group.id === itemId) {
+                group.role = role
+                group.hide_passwords = hidePasswords
+              }
+            }
           }
         }
         cipherStore.setMyShares(myShares)

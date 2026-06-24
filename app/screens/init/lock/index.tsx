@@ -149,7 +149,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
 
           // Sync teams and plan
           if (!isAndroidService) {
-            await Promise.all([user.loadTeams(), user.loadPlan()])
+            await user.loadPlan()
           }
         }
 

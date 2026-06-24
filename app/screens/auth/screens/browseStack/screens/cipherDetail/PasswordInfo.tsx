@@ -41,6 +41,7 @@ export const PasswordInfo = ({ item }: Props) => {
           isPassword
           multiline
           isCopyable={item.viewPassword}
+          isCanViewPassword={item.viewPassword}
           labelTx="common:password"
           value={item.login.password}
           editable={false}

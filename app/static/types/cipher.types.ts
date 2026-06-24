@@ -171,6 +171,7 @@ export type SharedGroupType = {
   name: string
   role: AccountRoleText
   share_type: SharingType
+  hide_passwords: boolean
 }
 
 export type GetCiphersParams = {

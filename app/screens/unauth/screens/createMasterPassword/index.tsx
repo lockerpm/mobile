@@ -83,11 +83,6 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
       )
     }, [logout, navigation])
 
-    // Load teams to check master password policy
-    const loadUserTeams = useCallback(async () => {
-      await user.loadTeams()
-    }, [user])
-
     // Prepare to create master pass
     const prepareToCreate = async () => {
       setIsCreating(true)
@@ -167,12 +162,6 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
     }
 
     // -------------- EFFECT ------------------
-
-    // Mounted
-    useEffect(() => {
-      loadUserTeams()
-    }, [loadUserTeams])
-
     // Back handler
     useEffect(() => {
       const handleBack = (e: any) => {

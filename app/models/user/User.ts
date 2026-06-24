@@ -518,13 +518,6 @@ export const UserModel = types
     lock: () => {
       self.setLoggedInPw(false)
     },
-    loadTeams: async () => {
-      const res = await userApi.getTeams(self.apiToken)
-      if (res.kind === "ok") {
-        self.setTeams(res.teams)
-      }
-      return res
-    },
     loadPlan: async () => {
       if (self.pwd_user_type === "enterprise") {
         self.setPlan({
