@@ -238,6 +238,9 @@ class ProtobufEncoder {
       if (item.otp) {
         itemBytes.push(...this.writeString(7, item.otp))
       }
+      if (item.hidePassword) {
+        itemBytes.push(...this.writeBool(9, item.hidePassword))
+      }
       if (item.fido2) {
         item.fido2.forEach((fido) => {
           const fidoBytes: number[] = []
@@ -297,6 +300,9 @@ class ProtobufEncoder {
               break
             case 7:
               item.otp = this.readString(bytes, offset)
+              break
+            case 9:
+              item.hidePassword = this.readBool(bytes, offset)
               break
             case 8:
               // Decode Fido2SimpleView

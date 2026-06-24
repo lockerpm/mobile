@@ -116,7 +116,11 @@ class ProtobufEncoder {
       if !item.otp.isEmpty {
         itemBytes.append(contentsOf: writeString(fieldNumber: 7, value: item.otp))
       }
-      
+
+      if item.hidePassword {
+        itemBytes.append(contentsOf: writeBool(fieldNumber: 9, value: item.hidePassword))
+      }
+
       if let fido2Items = item.fido2, !fido2Items.isEmpty {
         for fido in fido2Items {
           var fidoBytes: [UInt8] = []

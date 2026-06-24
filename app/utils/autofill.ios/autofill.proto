@@ -77,6 +77,7 @@ message PasswordItem {
   bool is_owner = 6;
   string otp = 7; // optional
   repeated Fido2SimpleView fido2 = 8; // optional
+  bool hide_password = 9; // optional
 }
 
 // Password list
