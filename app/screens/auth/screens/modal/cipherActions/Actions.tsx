@@ -41,7 +41,6 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose }: Props) => {
   const editable =
     !item.organizationId || shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER
 
-  console.log(isShared && !editable, !isShared)
   // -----------------------METHODS-----------------------
 
   const {
