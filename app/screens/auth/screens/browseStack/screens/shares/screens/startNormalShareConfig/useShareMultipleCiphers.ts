@@ -103,13 +103,11 @@ export const useShareMultipleCiphers = () => {
       if (!ciphers.length || ciphers.length > MAX_MULTIPLE_SHARE_COUNT) {
         return { kind: "ok" }
       }
-
       const sharedCiphers: ShareMultipleCiphersData["ciphers"] = []
 
       // Prepare org key
       const shareKey: [EncString, SymmetricCryptoKey] = await cryptoService.makeShareKey()
       const orgKey: SymmetricCryptoKey = shareKey[1]
-
       // Get public keys
       const members = await Promise.all(
         emails.map(async (e) => {
@@ -156,7 +154,6 @@ export const useShareMultipleCiphers = () => {
         })
       }
       await Promise.all(ciphers.map(prepareCipher))
-
       // Send API
       const res = await cipherStore.shareMultipleCiphers({
         ciphers: sharedCiphers,

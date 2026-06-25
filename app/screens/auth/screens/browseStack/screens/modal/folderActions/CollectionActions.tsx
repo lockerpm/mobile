@@ -1,16 +1,18 @@
+import { useCallback } from "react"
 import { StyleSheet, View } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+
 import { BottomModalContainer, ImageIcon, Text } from "app/components/cores"
-import { CollectionView } from "core/models/view/collectionView"
+import { NewActionSheetItem } from "app/components/utils"
 import { useStores } from "app/models"
 import { useFolder } from "app/services/hook"
 import { AccountRole, AccountRoleText, FolderActionsModal } from "app/static/types"
 import { getTeam } from "app/utils/cipherHelper"
-import { NewActionSheetItem } from "app/components/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { useNavigation } from "@react-navigation/native"
+import { CollectionView } from "core/models/view/collectionView"
+
 import { BrowseScreenProps } from "@/navigators"
 import { delay } from "@/utils/delay"
-import { useCallback } from "react"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type Props = {
   collection: CollectionView
@@ -33,15 +35,11 @@ export const CollectionActions = ({ collection, setNextModal, onClose }: Props) 
 
   // Computed
   const organizations = cipherStore.organizations
-  const teamRole = getTeam(user.teams, organizationId).role
   const shareRole = getTeam(organizations, organizationId).type
   const isOwner = shareRole === AccountRole.OWNER
   const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
   const editable =
-    !organizationId ||
-    (teamRole && teamRole !== AccountRoleText.MEMBER) ||
-    shareRole === AccountRole.ADMIN ||
-    shareRole === AccountRole.OWNER
+    !organizationId || shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER
 
   // ---------------- METHODS -----------------
 

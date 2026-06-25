@@ -603,34 +603,6 @@ export function useCipherData() {
         })
       )
 
-      // Add unassigned
-      const unassignedTeamCiphers = await getEncryptedCiphers({
-        deleted: false,
-        searchText: "",
-        filters: [
-          (c: CipherView) =>
-            !c.collectionIds?.length && !!getTeam(user.teams, c.organizationId).name,
-        ],
-      })
-      unassignedTeamCiphers.forEach((item) => {
-        const target = collections.find(
-          (f) => f.id === null && f.organizationId === item.organizationId
-        )
-        if (target) {
-          target.cipherCount += 1
-        } else {
-          collections.push({
-            cipherCount: 1,
-            hidePasswords: false,
-            id: "",
-            name: "",
-            organizationId: item.organizationId,
-            externalId: "",
-            readOnly: false,
-          })
-        }
-      })
-
       collectionStore.setCollections(collections)
       collectionStore.setLastUpdate()
     } catch (e) {

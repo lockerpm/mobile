@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react"
-import { View, SectionList, StyleSheet, ViewStyle } from "react-native"
-import orderBy from "lodash/orderBy"
+import { View, StyleSheet, ViewStyle, FlatList } from "react-native"
+import find from "lodash/find"
 import { observer } from "mobx-react-lite"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
 import { CollectionItem, EmptyCipherList } from "app/components/ciphers"
 import { useStores } from "app/models"
 import { useCipherData, useCipherHelper } from "app/services/hook"
-import { AccountRole, AccountRoleText, SharedWithYouType, SharingStatus } from "app/static/types"
-import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
+import { AccountRoleText, SharedWithYouType, SharingStatus } from "app/static/types"
+import { getCipherLogo } from "app/utils/cipherHelper"
 import { Organization } from "core/models/domain/organization"
 import { CipherView } from "core/models/view"
 import { CollectionView } from "core/models/view/collectionView"
@@ -27,22 +27,35 @@ export interface CipherSharedListProps {
 
 const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")
 
+type ItemType =
+  | {
+      type: "cipher"
+      data: SharedWithYouType
+      acceptedTime: number
+    }
+  | {
+      type: "folder"
+      data: any
+      isMember: boolean
+      acceptedTime: number
+    }
+
 export const SharedWithYouCipherList = observer(
   ({ openCipherActions, openFolderActions, openCollectionCiphers }: CipherSharedListProps) => {
     const { themed } = useAppTheme()
     const { translate } = useAppLocale()
     const { getCiphersFromCache } = useCipherData()
-    const { cipherStore, collectionStore, user } = useStores()
+    const { cipherStore, collectionStore } = useStores()
     const { newCipher } = useCipherHelper()
 
     // ------------------------ PARAMS ----------------------------
 
-    const [ciphers, setCiphers] = useState<SharedWithYouType[]>([])
+    const [ciphers, setCiphers] = useState<ItemType[]>([])
 
     // ------------------------ COMPUTED ----------------------------
 
     const organizations = [...cipherStore.organizations]
-    const pendingCiphers = cipherStore.sharingInvitations.map((i) => {
+    const pendingCiphers: ItemType[] = cipherStore.sharingInvitations.map((i) => {
       const cipherView = newCipher(i.cipher_type)
       const cipherLogo = getCipherLogo(cipherView)
       const shareType =
@@ -61,22 +74,40 @@ export const SharedWithYouCipherList = observer(
         isAccepted: i.status === SharingStatus.ACCEPTED,
         description: `${i.team.name} - ${shareType}`,
       }
-      return data
+      return {
+        type: "cipher",
+        data,
+        acceptedTime: 9999999999,
+      }
     })
 
-    const allCiphers = [...pendingCiphers, ...ciphers]
+    const allCiphers = [...pendingCiphers, ...ciphers].filter((c) => !c.data.collectionIds?.length)
 
-    const sharedCollection = collectionStore.collections.filter((i) => {
-      // Computed
-      const teamRole = getTeam(user.teams, i.organizationId).role
-      const shareRole = getTeam(organizations, i.organizationId).type
-      const isMember =
-        !i.organizationId ||
-        (teamRole && teamRole !== AccountRoleText.OWNER) ||
-        shareRole === AccountRole.ADMIN ||
-        shareRole === AccountRole.MEMBER
-      return isMember
-    })
+    const sharedCollection: ItemType[] = collectionStore.collections
+      .map((i) => {
+        // Computed
+        const org = getTeam(organizations, i.organizationId)
+        if (!org) {
+          return {
+            type: "folder",
+            data: i,
+            isMember: false,
+            acceptedTime: 0,
+          } as ItemType
+        }
+        const isMember = !i.organizationId || org.type === 1 || org.type === 2
+        return {
+          type: "folder",
+          data: i,
+          isMember,
+          acceptedTime: org.acceptedTime,
+        } as ItemType
+      })
+      .filter((e) => e.type === "folder" && e.isMember)
+
+    const data = [...allCiphers, ...sharedCollection].sort(
+      (a, b) => b.acceptedTime - a.acceptedTime
+    )
 
     // ------------------------ METHODS ----------------------------
 
@@ -107,7 +138,8 @@ export const SharedWithYouCipherList = observer(
       })
 
       // Add image + org info
-      let res = searchRes.map((c: CipherView) => {
+      const res: ItemType[] = searchRes.map((c: CipherView) => {
+        const org = getOrg(c.organizationId)
         const cipherLogo = getCipherLogo(c)
         const data: SharedWithYouType = {
           ...c,
@@ -120,10 +152,12 @@ export const SharedWithYouCipherList = observer(
           description: "",
           isAccepted: false,
         }
-        return data
+        return {
+          type: "cipher",
+          acceptedTime: org?.acceptedTime || 0,
+          data,
+        }
       })
-
-      res = orderBy(res, [(c: SharedWithYouType) => c.revisionDate], []) || []
 
       setCiphers(res)
     }
@@ -140,45 +174,34 @@ export const SharedWithYouCipherList = observer(
       cipherStore.organizations,
     ])
 
-    const DATA = [
-      {
-        type: 2,
-        data: [...sharedCollection],
-      },
-      {
-        type: 1,
-        data: [...allCiphers.filter((c) => !c.collectionIds?.length)],
-      },
-    ]
     // ------------------------ RENDER ----------------------------
 
     return (
       <View style={styles.flex}>
-        <SectionList
+        <FlatList
           contentContainerStyle={styles.content}
-          sections={DATA}
+          data={data}
           keyExtractor={(item, index) => String(index)}
-          renderItem={({ item, section }) => (
+          renderItem={({ item }) => (
             <View>
-              {section.type === 1 && (
+              {item.type === "cipher" && (
                 <ShareWithYouItem
-                  item={item}
+                  item={item.data}
                   openActionMenu={openCipherActions}
                   // @ts-ignore
                   org={getOrg(item)}
                 />
               )}
-              {section.type === 2 && (
+              {item.type === "folder" && (
                 <CollectionItem
                   isYourSharedScreen
-                  item={item}
+                  item={item.data}
                   openCollectionCipher={openCollectionCiphers}
                   openAction={openFolderActions}
                 />
               )}
             </View>
           )}
-          SectionSeparatorComponent={() => <View style={themed($divider)} />}
           ItemSeparatorComponent={() => <View style={themed($divider)} />}
           ListEmptyComponent={
             <EmptyCipherList
@@ -192,6 +215,11 @@ export const SharedWithYouCipherList = observer(
     )
   }
 )
+
+// Get team
+export const getTeam = (teams: Organization[], orgId: string | null) => {
+  return find(teams, (e) => e.id === orgId)
+}
 
 const $divider: ThemedStyle<ViewStyle> = ({ colors }) => ({
   height: 1,

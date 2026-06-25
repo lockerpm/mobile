@@ -21,7 +21,6 @@ import {
   UserInvitations,
   UserLockerType,
   UserPlan,
-  UserTeam,
 } from "app/static/types"
 import {
   AccountType,
@@ -62,7 +61,6 @@ export const UserModel = types
 
     // Others data
     enterprise: types.maybeNull(types.frozen<Enterprise>()),
-    teams: types.array(types.frozen<UserTeam>()),
     plan: types.maybeNull(
       types.frozen<UserPlan>({
         name: "Free",
@@ -164,9 +162,6 @@ export const UserModel = types
     setFingerprint: (fingerprint: string) => {
       self.fingerprint = fingerprint
     },
-    setTeams: (teams: UserTeam[]) => {
-      self.teams = cast(teams)
-    },
     setPlan: (plan: UserPlan) => {
       self.plan = cast(plan)
     },
@@ -219,7 +214,6 @@ export const UserModel = types
       self.pwd_user_type = ""
       self.is_pwd_manager = false
       self.hide_master_password = false
-      self.teams = cast([])
       self.enterprise = null
       self.invitations = cast([])
       self.plan = null
@@ -703,7 +697,6 @@ export const createUserStoreDefaultModel = () =>
     // Others data
     plan: null,
     enterprise: null,
-    teams: [],
     invitations: [],
     biometricIntroShown: false,
 
