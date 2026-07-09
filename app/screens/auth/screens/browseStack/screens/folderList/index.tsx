@@ -76,6 +76,7 @@ export const FolderListScreen: FC<BrowseScreenProps<"folderList">> = observer(({
         />
       </View>
       <TabView
+        swipeEnabled={false}
         renderTabBar={() => null}
         navigationState={{ index, routes }}
         renderScene={renderScene}
