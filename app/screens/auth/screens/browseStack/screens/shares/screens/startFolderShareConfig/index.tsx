@@ -71,33 +71,35 @@ export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
     }
 
     const changeEmailRole = useCallback(
-      (email: string, role: AccountRoleText) => {
+      (email: string, role: AccountRoleText, hidePasswords: boolean) => {
         if (!email) {
           return
         }
         const temp = [...emails]
         const index = temp.findIndex((e) => e.email === email)
 
-        if (index === -1 || temp[index].role === role) {
+        if (index === -1) {
           return
         }
         temp[index].role = role
+        temp[index].hidePasswords = hidePasswords
         setEmails(temp)
       },
       [emails]
     )
 
     const changeGroupRole = useCallback(
-      (id: string, role: AccountRoleText) => {
+      (id: string, role: AccountRoleText, hidePasswords: boolean) => {
         if (!id) {
           return
         }
         const temp = [...groups]
         const index = temp.findIndex((e) => e.id === id)
-        if (index === -1 || temp[index].role === role) {
+        if (index === -1) {
           return
         }
         temp[index].role = role
+        temp[index].hidePasswords = hidePasswords
         setGroups(temp)
       },
       [groups]
@@ -130,8 +132,8 @@ export const FolderSharesScreen: FC<ShareScreenProps<"folderShare">> = observer(
     useEffect(() => {
       const listener1 = EventBus.createListener(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, (data) => {
         if (data) {
-          changeEmailRole(data?.id, data?.role)
-          changeGroupRole(data?.id, data?.role)
+          changeEmailRole(data?.id, data?.role, data?.hidePasswords)
+          changeGroupRole(data?.id, data?.role, data?.hidePasswords)
         }
       })
 

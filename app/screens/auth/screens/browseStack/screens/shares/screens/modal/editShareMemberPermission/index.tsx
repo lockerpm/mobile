@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
 
 import {
@@ -14,6 +14,7 @@ import { debounce } from "app/utils/utils"
 
 import { AccountRoleText } from "@/static/types"
 import { ThemedStyle } from "@/theme"
+import { delay } from "@/utils/delay"
 import { AppEventType, EventBus } from "@/utils/eventBus"
 import { useAppTheme } from "@/utils/useAppTheme"
 
@@ -27,20 +28,33 @@ export const EditShareMemberPermissionModalScreen: FC<
 }) => {
   const { themed } = useAppTheme()
 
+  const [hidePasswordState, setHidePasswordState] = useState(hidePasswords)
+
   const onClose = debounce(navigation.goBack, 400)
 
   const isEditable = role === "admin"
 
-  const onEditRole = async (shareType: "only_fill" | "edit", hidePasswords: boolean) => {
-    const role = shareType === "only_fill" ? AccountRoleText.MEMBER : AccountRoleText.ADMIN
+  const onEditRole = useCallback(
+    async (shareType: "only_fill" | "edit", hidePasswords: boolean) => {
+      const role = shareType === "only_fill" ? AccountRoleText.MEMBER : AccountRoleText.ADMIN
 
-    EventBus.emit(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, {
-      id,
-      role,
-      hidePasswords,
-    })
-    onClose()
-  }
+      EventBus.emit(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, {
+        id,
+        role,
+        hidePasswords,
+      })
+      onClose()
+    },
+    [id, onClose]
+  )
+
+  useEffect(() => {
+    if (hidePasswords !== hidePasswordState) {
+      delay(300).then(() => {
+        onEditRole("only_fill", hidePasswordState)
+      })
+    }
+  }, [hidePasswordState, onEditRole, hidePasswords])
 
   return (
     <View style={styles.flex}>
@@ -72,8 +86,11 @@ export const EditShareMemberPermissionModalScreen: FC<
                 </View>
 
                 <Switch
-                  value={hidePasswords}
-                  onValueChange={(value) => onEditRole("only_fill", value)}
+                  value={hidePasswordState}
+                  onValueChange={(value) => {
+                    setHidePasswordState(value)
+                    //
+                  }}
                 />
               </View>
             )}
