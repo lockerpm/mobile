@@ -707,6 +707,9 @@ const zh: Translations = {
     shared_items: "別人共享給我的項目",
     shared_folder: "共享資料夾",
     encrypted_content: "已加密內容",
+    sort: {
+      accepted_time: "接受時間",
+    },
     share_folder: {
       detail: "查看項目",
       error_share_item:

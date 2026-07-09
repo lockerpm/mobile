@@ -11,20 +11,23 @@ import { useAppTheme } from "@/utils/useAppTheme"
 
 type Prop = {
   item: SharedWithYouType
-  openActionMenu?: (item: SharedWithYouType) => void
+  openActionMenu?: (item: SharedWithYouType, acceptedTime?: number) => void
   org?: {
     type: AccountRole
     name: string
   }
+  acceptedTime?: number
 }
 
 export const ShareWithYouItem = memo((props: Prop) => {
-  const { item, openActionMenu, org } = props
+  const { item, openActionMenu, org, acceptedTime } = props
   const {
     themed,
     theme: { colors },
   } = useAppTheme()
   const { translate } = useAppLocale()
+
+  console.log("ShareWithYouItem render", acceptedTime)
 
   const getDescription = (item: SharedWithYouType) => {
     if (item.isShared) {
@@ -52,7 +55,7 @@ export const ShareWithYouItem = memo((props: Prop) => {
       disabled={!openActionMenu || item.isAccepted}
       onPress={() => {
         if (openActionMenu) {
-          openActionMenu(item)
+          openActionMenu(item, acceptedTime)
         }
       }}
       style={styles.container}

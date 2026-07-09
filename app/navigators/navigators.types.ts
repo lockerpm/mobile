@@ -207,6 +207,9 @@ export type AuthRoute = {
      * Permanent delete, only use in Trash screen
      */
     isDeleted?: boolean
+
+    // shared with you cipher
+    acceptedTime?: number
   }
 
   updateEncryption: undefined

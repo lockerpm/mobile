@@ -25,6 +25,8 @@ export const SharedWithYouScreen: FC<ShareScreenProps<"sharedWithYouCipherList">
   ({ navigation }) => {
     const { sharedItemsData, collectionData, sortConfig, setSortConfig } = useSharedWithYou()
 
+    console.log("SharedWithYouScreen render", sharedItemsData.length, collectionData.length)
+
     // ------------------------ PARAMS -------------------------
 
     const layout = useWindowDimensions()

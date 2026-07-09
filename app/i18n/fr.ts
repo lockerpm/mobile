@@ -712,6 +712,9 @@ const fr: Translations = {
     shared_items: "Partagés avec moi",
     shared_folder: "Dossier partagé",
     encrypted_content: "Contenu chiffré",
+    sort: {
+      accepted_time: "Date d'acceptation",
+    },
     share_folder: {
       detail: "Voir les éléments",
       error_share_item:

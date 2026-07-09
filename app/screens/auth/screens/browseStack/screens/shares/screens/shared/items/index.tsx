@@ -29,7 +29,7 @@ export const SharedItemsList = observer(({ data }: Props) => {
 
   // ------------------------ METHODS ----------------------------
 
-  const openCipherActions = (item: SharedWithYouType) => {
+  const openCipherActions = (item: SharedWithYouType, acceptedTime?: number) => {
     const cipher: SharedWithYouType = {
       ...item,
       revisionDate: null,
@@ -41,6 +41,7 @@ export const SharedItemsList = observer(({ data }: Props) => {
     navigation.navigate("cipherActionsModal", {
       mode: CipherActionsModal.DEFAULT,
       item: cipher,
+      acceptedTime,
       deleteIds: [item.id],
     })
   }
@@ -55,7 +56,12 @@ export const SharedItemsList = observer(({ data }: Props) => {
         data={filtered}
         keyExtractor={(_item, index) => String(index)}
         renderItem={({ item }) => (
-          <ShareWithYouItem item={item.data} org={item.org} openActionMenu={openCipherActions} />
+          <ShareWithYouItem
+            item={item.data}
+            org={item.org}
+            openActionMenu={openCipherActions}
+            acceptedTime={item.acceptedTime}
+          />
         )}
         ItemSeparatorComponent={() => <View style={themed($divider)} />}
         ListEmptyComponent={

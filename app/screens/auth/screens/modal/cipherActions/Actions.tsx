@@ -19,9 +19,10 @@ interface Props {
   item: CipherAppView
   setNextModal: (action: CipherActionsModal) => void
   onClose: () => void
+  acceptedTime?: number
 }
 
-export const Actions = ({ isDeleted, item, setNextModal, onClose }: Props) => {
+export const Actions = ({ isDeleted, item, setNextModal, onClose, acceptedTime }: Props) => {
   const {
     theme: { colors },
   } = useAppTheme()
@@ -31,7 +32,7 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose }: Props) => {
   // ------------------------COMPUTED------------------------
 
   const organizations = cipherStore.organizations
-  const cipherDescription = getCipherDescription(item)
+  const cipherDescription = acceptedTime?.toString() || getCipherDescription(item)
   const lockerMasterPassword = item.type === CipherType.MasterPassword
 
   // Share role and editable status
