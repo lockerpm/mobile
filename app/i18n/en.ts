@@ -734,6 +734,7 @@ const en = {
     sort: {
       accepted_time: "Accepted time",
     },
+    accepted_at: "Accepted {{time}}",
     share_folder: {
       detail: "View items",
       error_share_item:

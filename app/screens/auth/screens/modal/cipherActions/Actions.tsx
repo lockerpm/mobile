@@ -9,7 +9,9 @@ import { AccountRole, CipherActionsModal, CipherAppView, MyShareType } from "app
 import { getCipherDescription, getTeam } from "app/utils/cipherHelper"
 import { CipherType } from "core/enums"
 
+import { useAppLocale } from "@/i18n"
 import { useCipherData } from "@/services/hook"
+import { getRelativeTime } from "@/utils/formatDate"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 import { useActionsNavigate } from "./useActionsNavigate"
@@ -26,13 +28,19 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose, acceptedTime }
   const {
     theme: { colors },
   } = useAppTheme()
+  const { translate } = useAppLocale()
   const { cipherStore } = useStores()
   const { deleteCiphers, restoreCiphers } = useCipherData()
 
   // ------------------------COMPUTED------------------------
 
   const organizations = cipherStore.organizations
-  const cipherDescription = acceptedTime?.toString() || getCipherDescription(item)
+  // acceptedTime is a Unix timestamp in seconds (API `AcceptedTime`) -> convert to ms for relative time
+  const cipherDescription = acceptedTime
+    ? translate("shares:accepted_at", {
+        time: getRelativeTime(acceptedTime * 1000, true),
+      })
+    : getCipherDescription(item)
   const lockerMasterPassword = item.type === CipherType.MasterPassword
 
   // Share role and editable status

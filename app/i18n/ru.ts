@@ -743,6 +743,7 @@ const ru: Translations = {
     sort: {
       accepted_time: "Время принятия",
     },
+    accepted_at: "Принято {{time}}",
     share_folder: {
       detail: "Просмотреть элементы",
       error_share_item:

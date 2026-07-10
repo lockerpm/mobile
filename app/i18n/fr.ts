@@ -715,6 +715,7 @@ const fr: Translations = {
     sort: {
       accepted_time: "Date d'acceptation",
     },
+    accepted_at: "Accepté {{time}}",
     share_folder: {
       detail: "Voir les éléments",
       error_share_item:

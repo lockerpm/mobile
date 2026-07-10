@@ -27,8 +27,6 @@ export const ShareWithYouItem = memo((props: Prop) => {
   } = useAppTheme()
   const { translate } = useAppLocale()
 
-  console.log("ShareWithYouItem render", acceptedTime)
-
   const getDescription = (item: SharedWithYouType) => {
     if (item.isShared) {
       return item.description
