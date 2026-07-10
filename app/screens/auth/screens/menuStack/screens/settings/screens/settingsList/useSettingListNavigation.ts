@@ -24,7 +24,7 @@ export const useSettingListNavigation = () => {
     navigation.navigate("import")
   }
   const navigateToExport = () => {
-    navigation.navigate("export")
+    navigation.navigate("verifyMasterPassword")
   }
 
   return {

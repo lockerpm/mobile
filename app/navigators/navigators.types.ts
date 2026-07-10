@@ -581,6 +581,7 @@ export type SettingsRoute = {
   autofillService: undefined
   import: undefined
   export: undefined
+  verifyMasterPassword: undefined
   emergencyStack: NavigatorScreenParams<EmergencyAccessRoute>
   notiConfigStack: NavigatorScreenParams<NotificationSettingsRoute>
 }

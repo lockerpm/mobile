@@ -1,11 +1,12 @@
 import { FC } from "react"
 import { observer } from "mobx-react-lite"
-import { useCoreService } from "app/services/coreService"
 
 import { Screen, Header } from "app/components/cores"
 import { MenuItemContainer, SettingsItem } from "app/components/utils"
 import { SettingsScreenProps } from "app/navigators"
+import { useCoreService } from "app/services/coreService"
 import { useToast } from "app/services/utils"
+
 import { useAppTheme } from "@/utils/useAppTheme"
 
 export const ExportScreen: FC<SettingsScreenProps<"export">> = observer(({ navigation }) => {
