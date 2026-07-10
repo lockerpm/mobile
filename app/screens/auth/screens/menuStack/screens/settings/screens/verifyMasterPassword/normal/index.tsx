@@ -60,7 +60,7 @@ export const LockByMasterPassword = ({
 
   // ---------------------- PARAMS -------------------------
 
-  const [masterPassword, setMasterPassword] = useState("demo@1234")
+  const [masterPassword, setMasterPassword] = useState("")
   const [isFocused, setIsFocused] = useState(false)
   const [isError, setIsError] = useState(false)
 
@@ -142,7 +142,7 @@ export const LockByMasterPassword = ({
       contentContainerStyle={styles.container}
     >
       {!(isFocused && hideLogo) && <Logo preset={"cystack-logo"} style={styles.logo} />}
-      <Text style={styles.textCenter} tx={"lock:desc"} />
+      <Text style={styles.textCenter} tx={"export:verify_desc"} />
       <View style={styles.center}>
         <View style={themed($email)}>
           {!!user.avatar && (
@@ -177,7 +177,7 @@ export const LockByMasterPassword = ({
       <Button
         loading={isUnlocking}
         disabled={isUnlocking || !masterPassword}
-        tx={"common:unlock"}
+        tx={"export:verify"}
         onPress={unlock}
         style={styles.mgTop20}
         preset="primary"

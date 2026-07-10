@@ -1041,6 +1041,8 @@ const ru: Translations = {
   },
   export: {
     success: "Данные экспортированы!",
+    verify: "Подтвердить",
+    verify_desc: "Введите ваш Master Password для подтверждения",
   },
   import: {
     format: "Формат",

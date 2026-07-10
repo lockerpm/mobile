@@ -1026,6 +1026,8 @@ const vi: Translations = {
   },
   export: {
     success: "Dữ liệu đã được xuất!",
+    verify: "Xác thực",
+    verify_desc: "Nhập Master Password của bạn để xác thực",
   },
   import: {
     format: "Định dạng",

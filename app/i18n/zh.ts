@@ -998,6 +998,8 @@ const zh: Translations = {
   },
   export: {
     success: "資料已匯出！",
+    verify: "驗證",
+    verify_desc: "輸入您的 Master Password 以驗證",
   },
   import: {
     format: "格式",

@@ -1030,6 +1030,8 @@ const en = {
   },
   export: {
     success: "Data exported!",
+    verify: "Verify",
+    verify_desc: "Enter your Master Password to verify",
   },
   import: {
     format: "Format",

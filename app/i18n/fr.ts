@@ -1015,6 +1015,8 @@ const fr: Translations = {
   },
   export: {
     success: "Données exportées !",
+    verify: "Vérifier",
+    verify_desc: "Saisissez votre Master Password pour vérifier",
   },
   import: {
     format: "Format",
