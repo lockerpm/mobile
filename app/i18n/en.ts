@@ -972,6 +972,8 @@ const en = {
     import_export: "Import and Export",
     import: "Import Data",
     export: "Export Data",
+    export_note:
+      "Note: Items shared with you without permission to view their passwords will not be exported.",
     sync_now: "Synchronize Data",
     theme: "Theme",
     dark_theme: "Dark",

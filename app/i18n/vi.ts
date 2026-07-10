@@ -968,6 +968,8 @@ const vi: Translations = {
     import_export: "Nhập và xuất dữ liệu",
     import: "Nhập dữ liệu",
     export: "Xuất dữ liệu",
+    export_note:
+      "Lưu ý: Bạn không thể xuất các mục được chia sẻ bởi người khác nhưng bị ẩn mật khẩu.",
     sync_now: "Đồng bộ dữ liệu",
     theme: "Chủ đề",
     dark_theme: "Tối",

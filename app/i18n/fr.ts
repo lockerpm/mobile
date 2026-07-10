@@ -955,6 +955,8 @@ const fr: Translations = {
     import_export: "Import et export",
     import: "Import de données",
     export: "Export de données",
+    export_note:
+      "Remarque : Les éléments partagés avec vous sans autorisation d'afficher leur mot de passe ne seront pas exportés.",
     sync_now: "Synchroniser les données",
     theme: "Thème",
     dark_theme: "Sombre",

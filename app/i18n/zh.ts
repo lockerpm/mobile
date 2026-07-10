@@ -941,6 +941,7 @@ const zh: Translations = {
     import_export: "匯入和匯出",
     import: "匯入資料",
     export: "匯出資料",
+    export_note: "注意： 与您共享但未授予查看密码权限的项目将不会被导出。",
     sync_now: "同步資料",
     theme: "主題",
     dark_theme: "深色",
