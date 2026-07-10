@@ -727,6 +727,7 @@ const vi: Translations = {
     share_items: "Bạn đã chia sẻ",
     shared_items: "Được chia sẻ với tôi",
     shared_folder: "Thư mục chia sẻ",
+    item: "Mục",
     encrypted_content: "Nội dung mã hoá",
     sort: {
       accepted_time: "Thời gian chấp nhận",

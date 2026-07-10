@@ -730,6 +730,7 @@ const en = {
     share_items: "Your Shares",
     shared_items: "Shared with me",
     shared_folder: "Shared folder",
+    item: "Item",
     encrypted_content: "Encrypted Content",
     sort: {
       accepted_time: "Accepted time",

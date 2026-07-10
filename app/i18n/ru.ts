@@ -739,6 +739,7 @@ const ru: Translations = {
     share_items: "Ваш общий доступ",
     shared_items: "Доступ со мной",
     shared_folder: "Папка общего доступа",
+    item: "Элемент",
     encrypted_content: "Зашифрованный контент",
     sort: {
       accepted_time: "Время принятия",
