@@ -745,6 +745,7 @@ const ru: Translations = {
       accepted_time: "Время принятия",
     },
     accepted_at: "Принято {{time}}",
+    last_updated_at: "Последнее обновление {{time}}",
     share_folder: {
       detail: "Просмотреть элементы",
       error_share_item:

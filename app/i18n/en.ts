@@ -736,6 +736,7 @@ const en = {
       accepted_time: "Accepted time",
     },
     accepted_at: "Accepted {{time}}",
+    last_updated_at: "Last updated at {{time}}",
     share_folder: {
       detail: "View items",
       error_share_item:

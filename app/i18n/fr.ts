@@ -717,6 +717,7 @@ const fr: Translations = {
       accepted_time: "Date d'acceptation",
     },
     accepted_at: "Accepté {{time}}",
+    last_updated_at: "Dernière mise à jour le {{time}}",
     share_folder: {
       detail: "Voir les éléments",
       error_share_item:

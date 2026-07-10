@@ -12,7 +12,7 @@ import { CollectionView } from "core/models/view/collectionView"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 
-import { useSearch } from "../useSearch"
+import { useSearch } from "../../useSearch"
 import { FolderItemType } from "../useSharedWithYou"
 
 const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")

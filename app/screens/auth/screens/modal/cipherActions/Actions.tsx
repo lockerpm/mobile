@@ -11,7 +11,7 @@ import { CipherType } from "core/enums"
 
 import { useAppLocale } from "@/i18n"
 import { useCipherData } from "@/services/hook"
-import { getRelativeTime } from "@/utils/formatDate"
+import { formatDate, getRelativeTime } from "@/utils/formatDate"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 import { useActionsNavigate } from "./useActionsNavigate"
@@ -40,7 +40,11 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose, acceptedTime }
     ? translate("shares:accepted_at", {
         time: getRelativeTime(acceptedTime * 1000, true),
       })
-    : getCipherDescription(item)
+    : item.revisionDate
+      ? translate("shares:last_updated_at", {
+          time: formatDate(item.revisionDate.getTime()),
+        })
+      : getCipherDescription(item)
   const lockerMasterPassword = item.type === CipherType.MasterPassword
 
   // Share role and editable status
@@ -79,7 +83,7 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose, acceptedTime }
               preset="label"
               size="sm"
               text={cipherDescription}
-              numberOfLines={1}
+              numberOfLines={2}
               ellipsizeMode="tail"
             />
           )}

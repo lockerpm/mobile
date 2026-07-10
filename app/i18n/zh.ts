@@ -712,6 +712,7 @@ const zh: Translations = {
       accepted_time: "接受時間",
     },
     accepted_at: "接受 {{time}}",
+    last_updated_at: "最後更新於 {{time}}",
     share_folder: {
       detail: "查看項目",
       error_share_item:

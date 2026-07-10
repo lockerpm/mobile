@@ -11,8 +11,8 @@ import { CipherActionsModal, SharedWithYouType } from "app/static/types"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 
+import { useSearch } from "../../useSearch"
 import { ShareWithYouItem } from "../ShareWithYouItem"
-import { useSearch } from "../useSearch"
 import { CipherItemType } from "../useSharedWithYou"
 
 const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")

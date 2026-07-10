@@ -733,6 +733,7 @@ const vi: Translations = {
       accepted_time: "Thời gian chấp nhận",
     },
     accepted_at: "Chấp nhận {{time}}",
+    last_updated_at: "Cập nhật lần cuối lúc {{time}}",
     share_folder: {
       detail: "Xem các mục",
       error_share_item:
