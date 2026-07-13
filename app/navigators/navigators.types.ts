@@ -342,6 +342,8 @@ export type BrowseRoute = {
 
     folder?: FolderView
     collection?: CollectionView
+
+    acceptedTime?: number
   }
 
   cipherEditHelperModal: {

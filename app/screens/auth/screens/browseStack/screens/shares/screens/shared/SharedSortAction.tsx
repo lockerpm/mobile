@@ -23,16 +23,28 @@ export const SharedSortAction = ({ isOpen, onClose, option, onSelect }: Props) =
 
   const options: (SharedSortConfig & { label: string })[] = [
     {
-      label: translate("shares:sort.accepted_time"),
-      option: "accepted_time",
+      label: translate("shares:sort.accepted_newest"),
+      option: "accepted_newest",
       orderField: "acceptedTime",
       order: "desc",
+    },
+    {
+      label: translate("shares:sort.accepted_oldest"),
+      option: "accepted_oldest",
+      orderField: "acceptedTime",
+      order: "asc",
     },
     {
       label: "A - Z",
       option: "az",
       orderField: "name",
       order: "asc",
+    },
+    {
+      label: "Z - A",
+      option: "za",
+      orderField: "name",
+      order: "desc",
     },
   ]
 

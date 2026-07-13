@@ -155,6 +155,7 @@ const vi: Translations = {
     from: "Từ",
     shareWith: "Chia sẻ với:",
     createdAt: "Tạo lúc ",
+    wrong_key: "(Không thể giải mã mục)",
   },
   navigator: {
     is_offline: "Locker hiện đang ở chế độ ngoại tuyến.",
@@ -724,16 +725,18 @@ const vi: Translations = {
   },
   shares: {
     shares: "Chia sẻ",
-    share_items: "Bạn đã chia sẻ",
+    share_items: "Tôi đã chia sẻ",
     shared_items: "Được chia sẻ với tôi",
     shared_folder: "Thư mục chia sẻ",
     item: "Mục",
     encrypted_content: "Nội dung mã hoá",
     sort: {
       accepted_time: "Thời gian chấp nhận",
+      accepted_newest: "Thời gian chấp nhận (mới nhất)",
+      accepted_oldest: "Thời gian chấp nhận (cũ nhất)",
     },
     accepted_at: "Chấp nhận {{time}}",
-    last_updated_at: "Cập nhật lần cuối lúc {{time}}",
+    last_updated_at: "Cập nhật lần cuối {{time}}",
     share_folder: {
       detail: "Xem các mục",
       error_share_item:

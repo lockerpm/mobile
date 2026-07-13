@@ -155,6 +155,7 @@ const zh: Translations = {
     from: "來自",
     shareWith: "分享給:",
     createdAt: "創建於 ",
+    wrong_key: "（無法解密項目）",
   },
   navigator: {
     is_offline: "Locker 目前在離線模式。",
@@ -710,6 +711,8 @@ const zh: Translations = {
     encrypted_content: "已加密內容",
     sort: {
       accepted_time: "接受時間",
+      accepted_newest: "接受時間（最新）",
+      accepted_oldest: "接受時間（最舊）",
     },
     accepted_at: "接受 {{time}}",
     last_updated_at: "最後更新於 {{time}}",

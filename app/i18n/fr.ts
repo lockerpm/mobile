@@ -155,6 +155,7 @@ const fr: Translations = {
     from: "De",
     shareWith: "Partager avec :",
     createdAt: "Créé à ",
+    wrong_key: "(Impossible de déchiffrer l'élément)",
   },
   navigator: {
     is_offline: "Locker est actuellement en mode hors ligne.",
@@ -715,6 +716,8 @@ const fr: Translations = {
     encrypted_content: "Contenu chiffré",
     sort: {
       accepted_time: "Date d'acceptation",
+      accepted_newest: "Date d'acceptation (plus récentes)",
+      accepted_oldest: "Date d'acceptation (plus anciennes)",
     },
     accepted_at: "Accepté {{time}}",
     last_updated_at: "Dernière mise à jour le {{time}}",

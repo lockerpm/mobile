@@ -155,6 +155,7 @@ const ru: Translations = {
     from: "От",
     shareWith: "Поделиться с:",
     createdAt: "Создано в ",
+    wrong_key: "(Не удаётся расшифровать элемент)",
   },
   navigator: {
     is_offline: "В настоящее время Locker находится в офлайн режиме.",
@@ -743,6 +744,8 @@ const ru: Translations = {
     encrypted_content: "Зашифрованный контент",
     sort: {
       accepted_time: "Время принятия",
+      accepted_newest: "Время принятия (сначала новые)",
+      accepted_oldest: "Время принятия (сначала старые)",
     },
     accepted_at: "Принято {{time}}",
     last_updated_at: "Последнее обновление {{time}}",

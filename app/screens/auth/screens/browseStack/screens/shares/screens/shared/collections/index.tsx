@@ -37,10 +37,11 @@ export const SharedCollectionList = observer(({ data }: Props) => {
     })
   }
 
-  const openFolderActions = (collection: CollectionView) => {
+  const openFolderActions = (collection: CollectionView, acceptedTime?: number) => {
     navigation.navigate("folderActionModal", {
       mode: FolderActionsModal.DEFAULT,
       collection,
+      acceptedTime,
     })
   }
 
@@ -56,6 +57,7 @@ export const SharedCollectionList = observer(({ data }: Props) => {
         renderItem={({ item }) => (
           <CollectionItem
             isYourSharedScreen
+            acceptedTime={item.acceptedTime}
             item={item.data}
             openCollectionCipher={openCollectionCiphers}
             openAction={openFolderActions}

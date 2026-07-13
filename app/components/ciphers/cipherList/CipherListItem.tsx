@@ -4,6 +4,8 @@ import { View, TouchableOpacity, StyleSheet } from "react-native"
 import { CipherAppView } from "app/static/types"
 import { getCipherDescription } from "app/utils/cipherHelper"
 
+import { useAppLocale } from "@/i18n/useLanguage"
+
 import { CipherIconImage } from "./CipherIconImage"
 import { Checkbox, Icon, Text } from "../../cores"
 
@@ -38,6 +40,8 @@ export const CipherListItem = memo(
   ({ item, isSelecting, toggleItemSelection, openActionMenu, isSelected, isShared }: Prop) => {
     const description = getCipherDescription(item)
 
+    const { translate } = useAppLocale()
+
     const onPress = () => {
       if (isSelecting && toggleItemSelection) {
         toggleItemSelection(item)
@@ -51,8 +55,10 @@ export const CipherListItem = memo(
       }
     }
 
+    const name = item.name || translate("common:wrong_key")
+
     return (
-      <TouchableOpacity onPress={onPress} onLongPress={longPress}>
+      <TouchableOpacity disabled={!item.name} onPress={onPress} onLongPress={longPress}>
         <View style={styles.container}>
           <CipherIconImage
             isHaveKey={item.login.hasFido2Credentials}
@@ -63,7 +69,7 @@ export const CipherListItem = memo(
 
           <View style={styles.content}>
             {/* Name */}
-            <Text preset="bold" numberOfLines={1} text={item.name} />
+            <Text preset="bold" numberOfLines={1} text={name} />
 
             {!!description && (
               <Text preset="label" size="sm" text={description} numberOfLines={1} />

@@ -154,6 +154,7 @@ const en = {
     from: "From",
     shareWith: "Share with:",
     createdAt: "Created at ",
+    wrong_key: "(Can not decrypt item)",
   },
   navigator: {
     is_offline: "Locker is currently in offline mode.",
@@ -734,9 +735,11 @@ const en = {
     encrypted_content: "Encrypted Content",
     sort: {
       accepted_time: "Accepted time",
+      accepted_newest: "Accepted time (newest)",
+      accepted_oldest: "Accepted time (oldest)",
     },
     accepted_at: "Accepted {{time}}",
-    last_updated_at: "Last updated at {{time}}",
+    last_updated_at: "Last updated {{time}}",
     share_folder: {
       detail: "View items",
       error_share_item:

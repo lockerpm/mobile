@@ -11,7 +11,7 @@ import { CipherType } from "core/enums"
 
 import { useAppLocale } from "@/i18n"
 import { useCipherData } from "@/services/hook"
-import { formatDate, getRelativeTime } from "@/utils/formatDate"
+import { getRelativeTime } from "@/utils/formatDate"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 import { useActionsNavigate } from "./useActionsNavigate"
@@ -42,7 +42,7 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose, acceptedTime }
       })
     : item.revisionDate
       ? translate("shares:last_updated_at", {
-          time: formatDate(item.revisionDate.getTime()),
+          time: getRelativeTime(item.revisionDate.getTime(), true),
         })
       : getCipherDescription(item)
   const lockerMasterPassword = item.type === CipherType.MasterPassword

@@ -1,27 +1,29 @@
+import { FC, useState } from "react"
+import { KeyboardAvoidingView, View, StyleSheet, Platform } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { ModalBackdrop } from "app/components/cores"
 import { BrowseScreenProps } from "app/navigators"
 import { FolderActionsModal } from "app/static/types"
 import { debounce } from "app/utils/utils"
-import { FC, useState } from "react"
-import { KeyboardAvoidingView, View, StyleSheet, Platform } from "react-native"
 
 // action
-import { FolderAction } from "./FolderActions"
 import { CollectionActions } from "./CollectionActions"
 import { Delete } from "./Delete"
-import { Premium } from "./Premium"
+import { FolderAction } from "./FolderActions"
 import { LeaveShare } from "./LeaveShare"
 import { NewFolder } from "./NewFolder"
-import { RenameFolder } from "./RenameFolder"
+import { Premium } from "./Premium"
 import { RenameCollection } from "./RenameCollection"
-import { observer } from "mobx-react-lite"
+import { RenameFolder } from "./RenameFolder"
+
 const IS_IOS = Platform.OS === "ios"
 
 export const FolderActionsModalScreen: FC<BrowseScreenProps<"folderActionModal">> = observer(
   ({
     navigation,
     route: {
-      params: { mode, folder, collection },
+      params: { mode, folder, collection, acceptedTime },
     },
   }) => {
     const [targetModal, setTargetModal] = useState(mode)
@@ -42,6 +44,7 @@ export const FolderActionsModalScreen: FC<BrowseScreenProps<"folderActionModal">
 
           {targetModal === FolderActionsModal.DEFAULT && !!collection && (
             <CollectionActions
+              acceptedTime={acceptedTime}
               collection={collection}
               setNextModal={setTargetModal}
               onClose={onClose}

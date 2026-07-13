@@ -6,22 +6,26 @@ import { BottomModalContainer, ImageIcon, Text } from "app/components/cores"
 import { NewActionSheetItem } from "app/components/utils"
 import { useStores } from "app/models"
 import { useFolder } from "app/services/hook"
-import { AccountRole, AccountRoleText, FolderActionsModal } from "app/static/types"
+import { AccountRole, FolderActionsModal } from "app/static/types"
 import { getTeam } from "app/utils/cipherHelper"
 import { CollectionView } from "core/models/view/collectionView"
 
+import { useAppLocale } from "@/i18n/useLanguage"
 import { BrowseScreenProps } from "@/navigators"
 import { delay } from "@/utils/delay"
+import { getRelativeTime } from "@/utils/formatDate"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 type Props = {
+  acceptedTime?: number
   collection: CollectionView
   setNextModal: (action: FolderActionsModal) => void
   onClose: () => void
 }
 
-export const CollectionActions = ({ collection, setNextModal, onClose }: Props) => {
-  const { cipherStore, user } = useStores()
+export const CollectionActions = ({ acceptedTime, collection, setNextModal, onClose }: Props) => {
+  const { cipherStore } = useStores()
+  const { translate } = useAppLocale()
   const {
     theme: { colors },
   } = useAppTheme()
@@ -40,6 +44,12 @@ export const CollectionActions = ({ collection, setNextModal, onClose }: Props) 
   const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
   const editable =
     !organizationId || shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER
+
+  const acceptTime = acceptedTime
+    ? translate("shares:accepted_at", {
+        time: getRelativeTime(acceptedTime * 1000, true),
+      })
+    : ""
 
   // ---------------- METHODS -----------------
 
@@ -72,13 +82,10 @@ export const CollectionActions = ({ collection, setNextModal, onClose }: Props) 
     <BottomModalContainer>
       <View style={styles.header}>
         <ImageIcon icon={"folder-share"} size={30} />
-        <Text
-          preset="bold"
-          text={collection.name}
-          ellipsizeMode="tail"
-          numberOfLines={2}
-          style={styles.name}
-        />
+        <View style={styles.name}>
+          <Text preset="bold" text={collection.name} ellipsizeMode="tail" numberOfLines={1} />
+          <Text preset="label" size="sm" text={acceptTime} ellipsizeMode="tail" numberOfLines={2} />
+        </View>
       </View>
 
       <NewActionSheetItem

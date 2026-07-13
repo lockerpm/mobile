@@ -137,7 +137,6 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
     (item: CipherAppView) => {
       const data: CipherAppView = {
         ...item,
-        revisionDate: null,
       }
       navigation.navigate("cipherActionsModal", {
         mode: CipherActionsModal.DEFAULT,

@@ -33,7 +33,7 @@ export type SharedSortConfig = {
 export const DEFAULT_SHARED_SORT: SharedSortConfig = {
   orderField: "acceptedTime",
   order: "desc",
-  option: "accepted_time",
+  option: "accepted_newest",
 }
 
 // Sort items/folders by the selected config. Both wrap their name at `item.data.name`.
