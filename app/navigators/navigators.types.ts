@@ -19,6 +19,7 @@ import {
   MarketingContent,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
+  PendingSharedFolderType,
   RelayAddress,
   ScamLookupResult,
   SharedGroupType,
@@ -286,6 +287,9 @@ export type ShareRoute = {
   }
   pendingSharedCipherModal: {
     cipher: SharedWithYouType
+  }
+  pendingSharedFolderModal: {
+    folder: PendingSharedFolderType
   }
   quickSharesActionsModal: {
     cipher: SendView

@@ -1,8 +1,5 @@
 import extractDomain from "extract-domain"
 
-import { useStores } from "app/models"
-import { MasterPasswordPolicy, PasswordPolicy } from "app/static/types"
-import { PolicyType } from "app/static/types/enum"
 import { CipherType, FieldType, SecureNoteType } from "core/enums"
 import {
   CardView,
@@ -21,7 +18,6 @@ import { useCoreService } from "../coreService"
 export function useCipherHelper() {
   const { translate } = useAppLocale()
   const { passwordGenerationService } = useCoreService()
-  const { user, uiStore } = useStores()
 
   // ------------------ METHODS ---------------------------
 

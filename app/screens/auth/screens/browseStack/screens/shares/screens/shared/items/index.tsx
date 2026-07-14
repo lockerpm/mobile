@@ -54,7 +54,7 @@ export const SharedItemsList = observer(({ data }: Props) => {
       <FlatList
         contentContainerStyle={styles.content}
         data={filtered}
-        keyExtractor={(_item, index) => String(index)}
+        keyExtractor={(item, index) => item.data.id ?? String(index)}
         renderItem={({ item }) => (
           <ShareWithYouItem
             item={item.data}

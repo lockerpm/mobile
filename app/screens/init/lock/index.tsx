@@ -134,7 +134,6 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     const refreshFCM = async () => {
       const token = await boostrapPushNotifier()
 
-      console.log(token, "refreshFCM")
       if (token) {
         user.updateFCM(token)
       }

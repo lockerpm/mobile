@@ -126,7 +126,7 @@ export type SharingInvitationType = {
   access_time: number
   cipher_type: number
   id: string
-  item_type: string
+  item_type: "folder" | "cipher"
   owner: {
     email: string
     full_name: string
@@ -245,6 +245,15 @@ export type SharedWithYouType = CipherAppView & {
   isShared?: boolean
   description?: string
   isAccepted?: boolean
+}
+
+export type PendingSharedFolderType = {
+  // invitation id — used for accept/reject
+  id: string
+  organizationId: string
+  name: string
+  description: string
+  isAccepted: boolean
 }
 
 export interface FileData {

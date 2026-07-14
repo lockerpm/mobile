@@ -6,19 +6,20 @@ import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 import { CollectionItem, EmptyCipherList } from "app/components/ciphers"
 import { SearchBar } from "app/components/utils"
 import { ShareScreenProps } from "app/navigators"
-import { FolderActionsModal } from "app/static/types"
+import { FolderActionsModal, PendingSharedFolderType } from "app/static/types"
 import { CollectionView } from "core/models/view/collectionView"
 
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 import { useSearch } from "../../useSearch"
-import { FolderItemType } from "../useSharedWithYou"
+import { ShareWithYouFolder } from "../ShareWithYouFolder"
+import { FolderItemType, PendingFolderItemType } from "../useSharedWithYou"
 
 const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")
 
 type Props = {
-  data: FolderItemType[]
+  data: (FolderItemType | PendingFolderItemType)[]
 }
 
 export const SharedCollectionList = observer(({ data }: Props) => {
@@ -45,6 +46,10 @@ export const SharedCollectionList = observer(({ data }: Props) => {
     })
   }
 
+  const openPendingFolderActions = (folder: PendingSharedFolderType) => {
+    navigation.navigate("pendingSharedFolderModal", { folder })
+  }
+
   // ------------------------ RENDER ----------------------------
 
   return (
@@ -53,16 +58,20 @@ export const SharedCollectionList = observer(({ data }: Props) => {
       <FlatList
         contentContainerStyle={styles.content}
         data={filtered}
-        keyExtractor={(_item, index) => String(index)}
-        renderItem={({ item }) => (
-          <CollectionItem
-            isYourSharedScreen
-            acceptedTime={item.acceptedTime}
-            item={item.data}
-            openCollectionCipher={openCollectionCiphers}
-            openAction={openFolderActions}
-          />
-        )}
+        keyExtractor={(item, index) => item.data.id ?? String(index)}
+        renderItem={({ item }) =>
+          item.type === "pendingFolder" ? (
+            <ShareWithYouFolder item={item.data} openActionMenu={openPendingFolderActions} />
+          ) : (
+            <CollectionItem
+              isYourSharedScreen
+              acceptedTime={item.acceptedTime}
+              item={item.data}
+              openCollectionCipher={openCollectionCiphers}
+              openAction={openFolderActions}
+            />
+          )
+        }
         ItemSeparatorComponent={() => <View style={themed($divider)} />}
         ListEmptyComponent={
           <EmptyCipherList

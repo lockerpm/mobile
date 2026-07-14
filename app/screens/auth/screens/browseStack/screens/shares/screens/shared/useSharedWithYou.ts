@@ -2,7 +2,13 @@ import { useEffect, useState } from "react"
 
 import { useStores } from "app/models"
 import { useCipherData, useCipherHelper } from "app/services/hook"
-import { AccountRole, AccountRoleText, SharedWithYouType, SharingStatus } from "app/static/types"
+import {
+  AccountRole,
+  AccountRoleText,
+  PendingSharedFolderType,
+  SharedWithYouType,
+  SharingStatus,
+} from "app/static/types"
 import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
 import { OrganizationUserType } from "core/enums/organizationUserType"
 import { Organization } from "core/models/domain/organization"
@@ -21,6 +27,12 @@ export type FolderItemType = {
   type: "folder"
   data: any
   isMember: boolean
+  acceptedTime: number
+}
+
+export type PendingFolderItemType = {
+  type: "pendingFolder"
+  data: PendingSharedFolderType
   acceptedTime: number
 }
 
@@ -76,13 +88,19 @@ export const useSharedWithYou = () => {
 
   const getOrg = (id: string) => organizations.find((o: Organization) => o.id === id)
 
-  const pendingCiphers: CipherItemType[] = cipherStore.sharingInvitations.map((i) => {
+  // A missing/legacy item_type degrades to today's behavior: shown as a cipher
+  const cipherInvitations = cipherStore.sharingInvitations.filter((i) => i.item_type !== "folder")
+  const folderInvitations = cipherStore.sharingInvitations.filter((i) => i.item_type === "folder")
+
+  const getShareTypeLabel = (role: AccountRoleText) =>
+    role === AccountRoleText.MEMBER
+      ? translate("shares:share_type.view")
+      : translate("shares:share_type.edit")
+
+  const pendingCiphers: CipherItemType[] = cipherInvitations.map((i) => {
     const cipherView = newCipher(i.cipher_type)
     const cipherLogo = getCipherLogo(cipherView)
-    const shareType =
-      i.role === AccountRoleText.MEMBER
-        ? translate("shares:share_type.view")
-        : translate("shares:share_type.edit")
+    const shareType = getShareTypeLabel(i.role)
     const data: SharedWithYouType = {
       ...cipherView,
       imgLogo: cipherLogo,
@@ -103,6 +121,18 @@ export const useSharedWithYou = () => {
   })
 
   const allCiphers = [...pendingCiphers, ...ciphers].filter((c) => !c.data.collectionIds?.length)
+
+  const pendingFolders: PendingFolderItemType[] = folderInvitations.map((i) => ({
+    type: "pendingFolder",
+    data: {
+      id: i.id,
+      organizationId: i.team.id,
+      name: `(${translate("shares:encrypted_content")})`,
+      description: `${i.team.name} - ${getShareTypeLabel(i.role)}`,
+      isAccepted: i.status === SharingStatus.ACCEPTED,
+    },
+    acceptedTime: 9999999999,
+  }))
 
   const sharedCollection: FolderItemType[] = collectionStore.collections
     .map((i) => {
@@ -128,7 +158,19 @@ export const useSharedWithYou = () => {
 
   // Sort each tab independently by the selected sort config
   const sharedItemsData = sortByConfig(allCiphers, sortConfig)
-  const collectionData = sortByConfig(sharedCollection, sortConfig)
+  const collectionData = sortByConfig<FolderItemType | PendingFolderItemType>(
+    [...pendingFolders, ...sharedCollection],
+    sortConfig
+  )
+
+  // Tab badges: actionable invitations only (ACCEPTED ones are waiting for the
+  // owner's confirmation), consistent with sharingInvitationsIgnoreAccept
+  const pendingItemCount = cipherInvitations.filter(
+    (i) => i.status !== SharingStatus.ACCEPTED
+  ).length
+  const pendingFolderCount = folderInvitations.filter(
+    (i) => i.status !== SharingStatus.ACCEPTED
+  ).length
 
   // ------------------------ METHODS ----------------------------
 
@@ -186,5 +228,12 @@ export const useSharedWithYou = () => {
     cipherStore.organizations,
   ])
 
-  return { sharedItemsData, collectionData, sortConfig, setSortConfig }
+  return {
+    sharedItemsData,
+    collectionData,
+    sortConfig,
+    setSortConfig,
+    pendingItemCount,
+    pendingFolderCount,
+  }
 }

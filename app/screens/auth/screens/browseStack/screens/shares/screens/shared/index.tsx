@@ -23,7 +23,14 @@ const routes = [
 
 export const SharedWithYouScreen: FC<ShareScreenProps<"sharedWithYouCipherList">> = observer(
   ({ navigation }) => {
-    const { sharedItemsData, collectionData, sortConfig, setSortConfig } = useSharedWithYou()
+    const {
+      sharedItemsData,
+      collectionData,
+      sortConfig,
+      setSortConfig,
+      pendingItemCount,
+      pendingFolderCount,
+    } = useSharedWithYou()
     const {
       theme: { colors },
     } = useAppTheme()
@@ -79,12 +86,14 @@ export const SharedWithYouScreen: FC<ShareScreenProps<"sharedWithYouCipherList">
             selected={index === 0}
             tx="shares:item"
             icon="lock-key"
+            badgeCount={pendingItemCount}
           />
           <Segment
             onPress={() => setIndex(1)}
             selected={index === 1}
             tx="common:folder"
             icon="folder-simple"
+            badgeCount={pendingFolderCount}
           />
         </View>
         <TabView
@@ -105,8 +114,9 @@ type SegmentProps = {
   selected: boolean
   tx: TxKeyPath
   icon: IconTypes
+  badgeCount?: number
 }
-const Segment = ({ onPress, selected, tx, icon }: SegmentProps) => {
+const Segment = ({ onPress, selected, tx, icon, badgeCount }: SegmentProps) => {
   const {
     theme: { colors },
   } = useAppTheme()
@@ -121,6 +131,15 @@ const Segment = ({ onPress, selected, tx, icon }: SegmentProps) => {
       >
         <Icon icon={icon} size={18} color={color} />
         <Text preset="bold" tx={tx} style={styles.segmentText} color={color} />
+        {!!badgeCount && (
+          <View style={[styles.noti, { backgroundColor: colors.error }]}>
+            <Text
+              text={badgeCount >= 100 ? "99+" : badgeCount.toString()}
+              size="xxs"
+              color={colors.white}
+            />
+          </View>
+        )}
       </View>
     </PressableScale>
   )
@@ -129,6 +148,15 @@ const Segment = ({ onPress, selected, tx, icon }: SegmentProps) => {
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
+  },
+  noti: {
+    alignItems: "center",
+    borderRadius: 20,
+    height: 17,
+    justifyContent: "center",
+    marginLeft: 6,
+    minWidth: 17,
+    paddingHorizontal: 3,
   },
   segment: {
     alignItems: "center",

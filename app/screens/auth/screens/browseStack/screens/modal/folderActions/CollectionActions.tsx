@@ -7,7 +7,6 @@ import { NewActionSheetItem } from "app/components/utils"
 import { useStores } from "app/models"
 import { useFolder } from "app/services/hook"
 import { AccountRole, FolderActionsModal } from "app/static/types"
-import { getTeam } from "app/utils/cipherHelper"
 import { CollectionView } from "core/models/view/collectionView"
 
 import { useAppLocale } from "@/i18n/useLanguage"
@@ -39,17 +38,23 @@ export const CollectionActions = ({ acceptedTime, collection, setNextModal, onCl
 
   // Computed
   const organizations = cipherStore.organizations
-  const shareRole = getTeam(organizations, organizationId).type
+  const org = organizations.find((o) => o.id === organizationId)
+  const shareRole = org?.type || (AccountRole.OWNER as AccountRole)
   const isOwner = shareRole === AccountRole.OWNER
   const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
   const editable =
     !organizationId || shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER
 
+  const shareTime = org?.acceptedTime
+    ? translate("shares:accepted_at", {
+        time: getRelativeTime(org.acceptedTime * 1000, true),
+      })
+    : ""
   const acceptTime = acceptedTime
     ? translate("shares:accepted_at", {
         time: getRelativeTime(acceptedTime * 1000, true),
       })
-    : ""
+    : shareTime
 
   // ---------------- METHODS -----------------
 
@@ -84,7 +89,15 @@ export const CollectionActions = ({ acceptedTime, collection, setNextModal, onCl
         <ImageIcon icon={"folder-share"} size={30} />
         <View style={styles.name}>
           <Text preset="bold" text={collection.name} ellipsizeMode="tail" numberOfLines={1} />
-          <Text preset="label" size="sm" text={acceptTime} ellipsizeMode="tail" numberOfLines={2} />
+          {!!acceptTime && (
+            <Text
+              preset="label"
+              size="sm"
+              text={acceptTime}
+              ellipsizeMode="tail"
+              numberOfLines={2}
+            />
+          )}
         </View>
       </View>
 
