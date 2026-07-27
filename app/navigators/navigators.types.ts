@@ -19,6 +19,7 @@ import {
   MarketingContent,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
+  PendingSharedFolderType,
   RelayAddress,
   ScamLookupResult,
   SharedGroupType,
@@ -207,6 +208,9 @@ export type AuthRoute = {
      * Permanent delete, only use in Trash screen
      */
     isDeleted?: boolean
+
+    // shared with you cipher
+    acceptedTime?: number
   }
 
   updateEncryption: undefined
@@ -284,6 +288,9 @@ export type ShareRoute = {
   pendingSharedCipherModal: {
     cipher: SharedWithYouType
   }
+  pendingSharedFolderModal: {
+    folder: PendingSharedFolderType
+  }
   quickSharesActionsModal: {
     cipher: SendView
   }
@@ -312,9 +319,11 @@ export type ShareRoute = {
     cipher: CipherAppView
   }
   editShareMemberPermissionModal: {
+    isHaveLoginItem: boolean
     id: string
     value: string
     role: AccountRoleText
+    hidePasswords: boolean
   }
 
   folderShare: {
@@ -337,6 +346,8 @@ export type BrowseRoute = {
 
     folder?: FolderView
     collection?: CollectionView
+
+    acceptedTime?: number
   }
 
   cipherEditHelperModal: {
@@ -576,6 +587,7 @@ export type SettingsRoute = {
   autofillService: undefined
   import: undefined
   export: undefined
+  verifyMasterPassword: undefined
   emergencyStack: NavigatorScreenParams<EmergencyAccessRoute>
   notiConfigStack: NavigatorScreenParams<NotificationSettingsRoute>
 }

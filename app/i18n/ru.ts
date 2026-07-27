@@ -11,6 +11,9 @@ const ru: Translations = {
     add_new_field: "Добавить новое поле",
     and: "и",
     biometric_unlocking: "Разблокировка с помощью Face ID/Touch ID",
+    unlock_locker: "Используйте код, чтобы разблокировать Locker",
+    unlock_with_device_passcode: "Разблокировать кодом устройства",
+    use_device_passcode: "Использовать код устройства",
     browse: "Просматривать",
     calculating: "Подсчёт",
     cancel: "Отменить",
@@ -152,6 +155,7 @@ const ru: Translations = {
     from: "От",
     shareWith: "Поделиться с:",
     createdAt: "Создано в ",
+    wrong_key: "(Не удаётся расшифровать элемент)",
   },
   navigator: {
     is_offline: "В настоящее время Locker находится в офлайн режиме.",
@@ -177,9 +181,13 @@ const ru: Translations = {
     not_supported: "Не поддерживается",
     not_valid_for_biometric:
       "Войдите в систему, используя мастер-пароль, чтобы повторно включить FaceID/TouchID",
+    not_valid_for_device_passcode:
+      "Войдите с мастер-паролем, чтобы повторно включить разблокировку кодом устройства",
     biometric_not_enable: "Разблокировка Face ID/Touch ID не включена",
+    device_passcode_not_enable: "Разблокировка кодом устройства не включена",
     biometric_not_support: "Разблокировка Face ID/Touch ID не поддерживается",
     biometric_unlock_failed: "Проверка Face ID/Touch ID не удалась",
+    device_passcode_unlock_failed: "Проверка кода устройства не удалась",
     required_data: "Эти данные являются обязательными",
     session_login_failed: "Сессия входа не удалась! Попробуйте еще раз",
     login_failed: "Не удалось войти! Попробуйте еще раз",
@@ -318,6 +326,7 @@ const ru: Translations = {
     master_password_updated: "Мастер-пароль обновлён",
     locker_password_updated: "Пароль Locker обновлён",
     biometric_enabled: "Включена разблокировка по Face ID/Touch ID",
+    device_passcode_enabled: "Включена разблокировка кодом устройства",
     cipher_created: "Новый элемент создан!",
     cipher_deleted: "Элемент удалён!",
     cipher_restored: "Элемент восстановлен!",
@@ -605,9 +614,13 @@ const ru: Translations = {
   },
   biometric_intro: {
     title: "Разблокируйте свое хранилище с помощью Face ID/Touch ID",
+    title_passcode: "Разблокируйте хранилище кодом устройства",
     desc: "Используйте распознавание лиц или отпечатков пальцев для защиты своих паролей",
+    desc_passcode: "Используйте PIN-код или пароль устройства для быстрой разблокировки хранилища",
     suggest: "Используйте Face ID/Touch ID для легкой разблокировки хранилища",
+    suggest_passcode: "Используйте код устройства для быстрой разблокировки хранилища",
     use_btn: "Используйте Face ID/Touch ID",
+    use_btn_passcode: "Использовать код устройства",
     later_btn: "Я сделаю это позже",
   },
   card: {
@@ -727,7 +740,15 @@ const ru: Translations = {
     share_items: "Ваш общий доступ",
     shared_items: "Доступ со мной",
     shared_folder: "Папка общего доступа",
+    item: "Элемент",
     encrypted_content: "Зашифрованный контент",
+    sort: {
+      accepted_time: "Время принятия",
+      accepted_newest: "Время принятия (сначала новые)",
+      accepted_oldest: "Время принятия (сначала старые)",
+    },
+    accepted_at: "Принято {{time}}",
+    last_updated_at: "Последнее обновление {{time}}",
     share_folder: {
       detail: "Просмотреть элементы",
       error_share_item:
@@ -738,6 +759,8 @@ const ru: Translations = {
       add_email: "Добавьте адрес электронной почты, чтобы поделиться",
       viewer: "Просмотр",
       editor: "Редактирование",
+      fill_only: "Скрыть пароль",
+      fill_only_per: "(Применяется только к данным для входа)",
       viewer_per: "Может только просматривать",
       editor_per: "Организуйте, добавляйте и редактируйте",
       remove: "Удалить из папки",
@@ -963,6 +986,8 @@ const ru: Translations = {
     import_export: "Импорт и экспорт",
     import: "Импорт данных",
     export: "Экспорт данных",
+    export_note:
+      "Примечание: Записи, к которым вам предоставлен общий доступ без разрешения на просмотр пароля, не будут экспортированы.",
     sync_now: "Синхронизировать данные",
     theme: "Тема",
     dark_theme: "Тёмная",
@@ -1021,6 +1046,8 @@ const ru: Translations = {
   },
   export: {
     success: "Данные экспортированы!",
+    verify: "Подтвердить",
+    verify_desc: "Введите ваш Master Password для подтверждения",
   },
   import: {
     format: "Формат",

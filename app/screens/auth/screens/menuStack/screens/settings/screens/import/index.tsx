@@ -64,11 +64,18 @@ export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navig
 
       let content: string
 
+      let readPath = file.uri
+      try {
+        readPath = decodeURIComponent(file.uri)
+      } catch {
+        // malformed escape — fall back to raw uri
+      }
+
       if (format === "1password1pux") {
-        const b64 = await RNFS.readFile(file.uri, "base64")
+        const b64 = await RNFS.readFile(readPath, "base64")
         content = await extract1PuxContent(b64)
       } else {
-        content = await RNFS.readFile(file.uri)
+        content = await RNFS.readFile(readPath)
       }
 
       if (format === "lastpasscsv" && file.type === "text/html") {
@@ -174,6 +181,7 @@ export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navig
   return (
     <Screen
       safeAreaEdges={["bottom"]}
+      preset="scroll"
       header={
         <Header leftIcon="arrow-left" onLeftPress={navigation.goBack} titleTx={"settings:import"} />
       }

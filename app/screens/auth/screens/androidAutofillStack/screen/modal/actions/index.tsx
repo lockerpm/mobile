@@ -7,7 +7,9 @@ import { debounce } from "app/utils/utils"
 
 import { CipherActionsByType, CipherIconImage } from "@/components/ciphers"
 import { NewActionSheetItem } from "@/components/utils"
-import { getCipherDescription } from "@/utils/cipherHelper"
+import { useStores } from "@/models"
+import { AccountRole } from "@/static/types"
+import { getCipherDescription, getTeam } from "@/utils/cipherHelper"
 
 import { useActionsNavigate } from "./useActionsNavigate"
 
@@ -19,6 +21,7 @@ export const AndroidAutofillCipherActionsModalScreen: FC<
     params: { item },
   },
 }) => {
+  const { cipherStore } = useStores()
   const onClose = debounce(navigation.goBack, 400)
   const cipherDescription = getCipherDescription(item)
 
@@ -26,6 +29,13 @@ export const AndroidAutofillCipherActionsModalScreen: FC<
     item,
     onClose
   )
+
+  const organizations = cipherStore.organizations
+
+  // Share role and editable status
+  const shareRole = getTeam(organizations, item.organizationId).type
+  const editable =
+    !item.organizationId || shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER
 
   return (
     <View style={styles.flex}>
@@ -56,7 +66,7 @@ export const AndroidAutofillCipherActionsModalScreen: FC<
 
         <NewActionSheetItem
           bottomBorder
-          hide={!item.passwordHistory || item.passwordHistory?.length === 0}
+          hide={!editable || !item.passwordHistory || item.passwordHistory?.length === 0}
           tx="password_history:view"
           icon="clock-clockwise"
           onPress={navigateHistory}
@@ -68,6 +78,7 @@ export const AndroidAutofillCipherActionsModalScreen: FC<
           onPress={navigateCipherDetail}
         />
         <NewActionSheetItem
+          hide={!editable}
           bottomBorder
           tx="common:edit"
           icon="edit"

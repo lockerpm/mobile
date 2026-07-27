@@ -2,12 +2,7 @@ import { Platform } from "react-native"
 import chunk from "lodash/chunk"
 
 import { useStores } from "app/models"
-import {
-  FREE_PLAN_LIMIT,
-  IMPORT_BATCH_SIZE,
-  MAX_MULTIPLE_SHARE_COUNT,
-  TEMP_PREFIX,
-} from "app/static/constants"
+import { FREE_PLAN_LIMIT, IMPORT_BATCH_SIZE, TEMP_PREFIX } from "app/static/constants"
 import { GetCiphersParams } from "app/static/types"
 import { AccountRoleText, EmergencyAccessType } from "app/static/types/enum"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
@@ -16,8 +11,7 @@ import { AppEventType, EventBus } from "app/utils/eventBus"
 import { SyncQueue } from "app/utils/queue"
 import { CipherType } from "core/enums"
 import { CipherData, FolderData } from "core/models/data"
-import { OrganizationData } from "core/models/data/organizationData"
-import { Cipher, EncString, SymmetricCryptoKey } from "core/models/domain"
+import { Cipher, SymmetricCryptoKey } from "core/models/domain"
 import { ImportResult } from "core/models/domain/importResult"
 import { CipherRequest, FolderRequest } from "core/models/request"
 import { CollectionRequest } from "core/models/request/collectionRequest"
@@ -367,6 +361,7 @@ export function useCipherData() {
         password: c.login.password || "",
         otp: c.login.totp || "",
         isOwner: !c.organizationId,
+        hidePassword: !c.viewPassword,
         fido2:
           c.login.fido2Credentials?.map((f) => ({
             credentialId: f.credentialId,
@@ -607,34 +602,6 @@ export function useCipherData() {
           }
         })
       )
-
-      // Add unassigned
-      const unassignedTeamCiphers = await getEncryptedCiphers({
-        deleted: false,
-        searchText: "",
-        filters: [
-          (c: CipherView) =>
-            !c.collectionIds?.length && !!getTeam(user.teams, c.organizationId).name,
-        ],
-      })
-      unassignedTeamCiphers.forEach((item) => {
-        const target = collections.find(
-          (f) => f.id === null && f.organizationId === item.organizationId
-        )
-        if (target) {
-          target.cipherCount += 1
-        } else {
-          collections.push({
-            cipherCount: 1,
-            hidePasswords: false,
-            id: "",
-            name: "",
-            organizationId: item.organizationId,
-            externalId: "",
-            readOnly: false,
-          })
-        }
-      })
 
       collectionStore.setCollections(collections)
       collectionStore.setLastUpdate()
@@ -1342,76 +1309,6 @@ export function useCipherData() {
     )
   }
 
-  // Share cipher
-  const shareCipher = async (
-    cipher: CipherView,
-    emails: string[],
-    role: AccountRoleText,
-    autofillOnly: boolean,
-    groups?: { id: string; name: string }[]
-  ) => {
-    try {
-      // Prepare org key
-      let orgKey: SymmetricCryptoKey = null
-      let shareKey: [EncString, SymmetricCryptoKey] = null
-      if (cipher.organizationId) {
-        orgKey = await cryptoService.getOrgKey(cipher.organizationId)
-      } else {
-        shareKey = await cryptoService.makeShareKey()
-        orgKey = shareKey[1]
-      }
-
-      // Prepare cipher
-      const cipherEnc = await cipherService.encrypt(cipher, orgKey)
-
-      const data = new CipherRequest(cipherEnc)
-
-      // Get public keys
-      const members = await Promise.all(
-        emails.map(async (email) => {
-          const publicKeyRes = await cipherStore.getSharingPublicKey(email)
-          let publicKey = ""
-          if (publicKeyRes.kind === "ok") {
-            publicKey = publicKeyRes.data.public_key
-          }
-          return {
-            username: email,
-            role,
-            hide_passwords: autofillOnly,
-            key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
-          }
-        })
-      )
-
-      // prepare for share to groups
-      let groupsPayload = []
-      if (groups) {
-        groupsPayload = await _shareFolderToGroups(orgKey, groups)
-      }
-      // Send API
-      const res = await cipherStore.shareCipher({
-        members,
-        cipher: {
-          id: cipher.id,
-          ...data,
-        },
-        sharing_key: shareKey ? shareKey[0].encryptedString : null,
-        groups: groupsPayload,
-      })
-      if (res.kind === "ok") {
-        notifyTx("success", "success:cipher_shared")
-        logFirebaseEvent(AnalyticEvents.SHARE_ITENS, user.email)
-      } else {
-        notifyApiError(res)
-      }
-      return res
-    } catch (e) {
-      notifyTx("error", "error:something_went_wrong")
-      Logger.error("shareCipher: " + e)
-      return { kind: "unknown" }
-    }
-  }
-
   const _generateMemberKey = async (publicKey: string, orgKey: SymmetricCryptoKey) => {
     const pk = Base64.fromB64ToArray(publicKey)
     const key = await cryptoService.rsaEncrypt(orgKey.key, pk.buffer)
@@ -1419,121 +1316,6 @@ export function useCipherData() {
   }
 
   // -------------------------------------------------------
-
-  // Share multiple ciphers
-  const shareMultipleCiphers = async (
-    ids: string[],
-    emails: string[],
-    role: AccountRoleText,
-    autofillOnly: boolean,
-    groups?: { id: string; name: string }[]
-  ) => {
-    if (!ids.length) {
-      return { kind: "ok" }
-    }
-    const ciphers =
-      (await getCiphers({
-        deleted: false,
-        searchText: "",
-        filters: [(c: CipherView) => ids.includes(c.id)],
-      })) || []
-    if (!ciphers.length || ciphers.length > MAX_MULTIPLE_SHARE_COUNT) {
-      return { kind: "ok" }
-    }
-
-    try {
-      const sharedCiphers: {
-        cipher: CipherRequest & { id: string }
-        members: {
-          username: string
-          role: AccountRoleText
-          key: string
-          hide_passwords: boolean
-        }[]
-        groups?: {
-          id: string
-          role: string
-          members: {
-            username: string
-            key: string
-          }[]
-        }[]
-      }[] = []
-
-      // Prepare org key
-      const shareKey: [EncString, SymmetricCryptoKey] = await cryptoService.makeShareKey()
-      const orgKey: SymmetricCryptoKey = shareKey[1]
-
-      // Get public keys
-      const members = await Promise.all(
-        emails.map(async (email) => {
-          const publicKeyRes = await cipherStore.getSharingPublicKey(email)
-          let publicKey = ""
-          if (publicKeyRes.kind === "ok") {
-            publicKey = publicKeyRes.data.public_key
-          }
-          return {
-            email,
-            publicKey,
-            username: email,
-            role,
-            hide_passwords: autofillOnly,
-            key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
-          }
-        })
-      )
-      // Prepare cipher
-      const prepareCipher = async (c: CipherView) => {
-        let _orgKey = orgKey
-        if (c.organizationId) {
-          _orgKey = await cryptoService.getOrgKey(c.organizationId)
-        }
-        const cipherEnc = await cipherService.encrypt(c, _orgKey)
-        const data = new CipherRequest(cipherEnc)
-        const mem = await Promise.all(
-          members.map(async (m) => {
-            return {
-              username: m.email,
-              role,
-              hide_passwords: autofillOnly,
-              key: m.publicKey ? await _generateMemberKey(m.publicKey, _orgKey) : null,
-            }
-          })
-        )
-        // prepare for share to groups
-        let groupsPayload = []
-        if (groups) {
-          groupsPayload = await _shareFolderToGroups(_orgKey, groups)
-        }
-
-        sharedCiphers.push({
-          cipher: {
-            id: c.id,
-            ...data,
-          },
-          members: mem,
-          groups: groupsPayload,
-        })
-      }
-      await Promise.all(ciphers.map(prepareCipher))
-      // Send API
-      const res = await cipherStore.shareMultipleCiphers({
-        ciphers: sharedCiphers,
-        sharing_key: shareKey ? shareKey[0].encryptedString : null,
-      })
-      if (res.kind === "ok") {
-        notifyTx("success", "success:cipher_shared")
-        logFirebaseEvent(AnalyticEvents.SHARE_ITENS, user.email)
-      } else {
-        notifyApiError(res)
-      }
-      return res
-    } catch (e) {
-      notifyTx("error", "error:something_went_wrong")
-      Logger.error("shareMultipleCiphers: " + e)
-      return { kind: "unknown" }
-    }
-  }
 
   // Confirm share cipher
   const confirmShareCipher = async (
@@ -1643,7 +1425,7 @@ export function useCipherData() {
     organizationId: string,
     itemId: string,
     role: AccountRoleText,
-    onlyFill: boolean,
+    hidePasswords: boolean,
     isGroup?: boolean
   ) => {
     try {
@@ -1652,11 +1434,12 @@ export function useCipherData() {
       if (!isGroup) {
         res = await cipherStore.editShareCipher(organizationId, itemId, {
           role,
-          hide_passwords: onlyFill,
+          hide_passwords: hidePasswords,
         })
       } else {
         res = await enterpriseStore.editShareCipher(organizationId, itemId, {
           role,
+          hide_passwords: hidePasswords,
         })
       }
 
@@ -1670,14 +1453,15 @@ export function useCipherData() {
             for (const member of share.members) {
               if (member.id === itemId) {
                 member.role = role
-                member.hide_passwords = onlyFill
+                member.hide_passwords = hidePasswords
               }
             }
-            // for (const group of share.groups) {
-            //   if (group.id === itemId) {
-            //     group.role = role
-            //   }
-            // }
+            for (const group of share.groups) {
+              if (group.id === itemId) {
+                group.role = role
+                group.hide_passwords = hidePasswords
+              }
+            }
           }
         }
         cipherStore.setMyShares(myShares)
@@ -2206,35 +1990,6 @@ export function useCipherData() {
     })
   }
 
-  // Sync single organization
-  // TODO: not used
-  const syncSingleOrganization = async (id: string) => {
-    const userId = await userService.getUserId()
-    const key = `organizations_${userId}`
-    const res = (await storageService.get(key)) || {}
-
-    const orgRes = await cipherStore.getOrganization(id)
-    if (orgRes.kind !== "ok") {
-      if (orgRes.kind === "not-found" || orgRes.kind === "forbidden") {
-        delete res[id]
-      } else {
-        notifyApiError(orgRes)
-        return orgRes
-      }
-    } else {
-      const org = orgRes.data
-      const orgData = new OrganizationData(org)
-
-      // Update organization
-      res[org.id] = {
-        ...orgData,
-      }
-    }
-
-    await storageService.save(key, res)
-    return orgRes
-  }
-
   // Sync profile (nested use only --> no need to add to queue)
   const syncProfile = async () => {
     const res = await cipherStore.getProfile()
@@ -2284,8 +2039,6 @@ export function useCipherData() {
 
     getEncKeyFromDecryptedKey,
     inviteEA,
-    shareCipher,
-    shareMultipleCiphers,
     confirmShareCipher,
     stopShareCipher,
     stopShareCipherForGroup,
@@ -2304,7 +2057,6 @@ export function useCipherData() {
 
     syncSingleCipher,
     syncSingleFolder,
-    syncSingleOrganization,
     syncProfile,
 
     createRandomPasswords,

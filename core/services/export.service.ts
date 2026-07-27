@@ -1,32 +1,26 @@
-import * as papa from 'papaparse'
+import * as papa from "papaparse"
 
-import { CipherType } from '../enums/cipherType'
-
-import { ApiService } from '../abstractions/api.service'
-import { CipherService } from '../abstractions/cipher.service'
-import { CryptoService } from '../abstractions/crypto.service'
-import { ExportService as ExportServiceAbstraction } from '../abstractions/export.service'
-import { FolderService } from '../abstractions/folder.service'
-
-import { CipherView } from '../models/view/cipherView'
-import { CollectionView } from '../models/view/collectionView'
-import { FolderView } from '../models/view/folderView'
-
-import { Cipher } from '../models/domain/cipher'
-import { Collection } from '../models/domain/collection'
-import { Folder } from '../models/domain/folder'
-
-import { CipherData } from '../models/data/cipherData'
-import { CollectionData } from '../models/data/collectionData'
-import { CollectionDetailsResponse } from '../models/response/collectionResponse'
-
-import { CipherWithIds as CipherExport } from '../models/export/cipherWithIds'
-import { CollectionWithId as CollectionExport } from '../models/export/collectionWithId'
-import { Event } from '../models/export/event'
-import { FolderWithId as FolderExport } from '../models/export/folderWithId'
-import { EventView } from '../models/view/eventView'
-
-import { Utils } from '../misc/utils'
+import { ApiService } from "../abstractions/api.service"
+import { CipherService } from "../abstractions/cipher.service"
+import { CryptoService } from "../abstractions/crypto.service"
+import { ExportService as ExportServiceAbstraction } from "../abstractions/export.service"
+import { FolderService } from "../abstractions/folder.service"
+import { CipherType } from "../enums/cipherType"
+import { Utils } from "../misc/utils"
+import { CipherData } from "../models/data/cipherData"
+import { Collection } from "../models/domain/collection"
+import { CollectionData } from "../models/data/collectionData"
+import { Cipher } from "../models/domain/cipher"
+import { Folder } from "../models/domain/folder"
+import { CollectionDetailsResponse } from "../models/response/collectionResponse"
+import { CipherWithIds as CipherExport } from "../models/export/cipherWithIds"
+import { CollectionWithId as CollectionExport } from "../models/export/collectionWithId"
+import { Event } from "../models/export/event"
+import { FolderWithId as FolderExport } from "../models/export/folderWithId"
+import { CipherView } from "../models/view/cipherView"
+import { CollectionView } from "../models/view/collectionView"
+import { EventView } from "../models/view/eventView"
+import { FolderView } from "../models/view/folderView"
 
 export class ExportService implements ExportServiceAbstraction {
   constructor(
@@ -36,8 +30,8 @@ export class ExportService implements ExportServiceAbstraction {
     private cryptoService: CryptoService
   ) {}
 
-  async getExport(format: 'csv' | 'json' | 'encrypted_json' = 'csv'): Promise<string> {
-    if (format === 'encrypted_json') {
+  async getExport(format: "csv" | "json" | "encrypted_json" = "csv"): Promise<string> {
+    if (format === "encrypted_json") {
       return this.getEncryptedExport()
     } else {
       return this.getDecryptedExport(format)
@@ -46,9 +40,9 @@ export class ExportService implements ExportServiceAbstraction {
 
   async getOrganizationExport(
     organizationId: string,
-    format: 'csv' | 'json' | 'encrypted_json' = 'csv'
+    format: "csv" | "json" | "encrypted_json" = "csv"
   ): Promise<string> {
-    if (format === 'encrypted_json') {
+    if (format === "encrypted_json") {
       return this.getOrganizationEncryptedExport(organizationId)
     } else {
       return this.getOrganizationDecryptedExport(organizationId, format)
@@ -59,23 +53,23 @@ export class ExportService implements ExportServiceAbstraction {
     return papa.unparse(events.map((e) => new Event(e)))
   }
 
-  getFileName(prefix: string = null, extension = 'csv'): string {
+  getFileName(prefix: string = null, extension = "csv"): string {
     const now = new Date()
     const dateString =
       now.getFullYear() +
-      '' +
+      "" +
       this.padNumber(now.getMonth() + 1, 2) +
-      '' +
+      "" +
       this.padNumber(now.getDate(), 2) +
       this.padNumber(now.getHours(), 2) +
-      '' +
+      "" +
       this.padNumber(now.getMinutes(), 2) +
       this.padNumber(now.getSeconds(), 2)
 
-    return 'locker' + (prefix ? '_' + prefix : '') + '_export_' + dateString + '.' + extension
+    return "locker" + (prefix ? "_" + prefix : "") + "_export_" + dateString + "." + extension
   }
 
-  private async getDecryptedExport(format: 'json' | 'csv'): Promise<string> {
+  private async getDecryptedExport(format: "json" | "csv"): Promise<string> {
     let decFolders: FolderView[] = []
     let decCiphers: CipherView[] = []
     const promises = []
@@ -96,7 +90,7 @@ export class ExportService implements ExportServiceAbstraction {
 
     await Promise.all(promises)
 
-    if (format === 'csv') {
+    if (format === "csv") {
       const foldersMap = new Map<string, FolderView>()
       decFolders.forEach((f) => {
         if (f.id != null) {
@@ -106,6 +100,9 @@ export class ExportService implements ExportServiceAbstraction {
 
       const exportCiphers: any[] = []
       decCiphers.forEach((c) => {
+        if (c.viewPassword === false) {
+          return
+        }
         // only export logins and secure notes
         // if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
         //     return;
@@ -141,6 +138,9 @@ export class ExportService implements ExportServiceAbstraction {
       })
 
       decCiphers.forEach((c) => {
+        if (c.viewPassword === false) {
+          return
+        }
         if (c.organizationId != null) {
           c.organizationId = null
           // return;
@@ -151,7 +151,7 @@ export class ExportService implements ExportServiceAbstraction {
         jsonDoc.items.push(cipher)
       })
 
-      return JSON.stringify(jsonDoc, null, '  ')
+      return JSON.stringify(jsonDoc, null, "  ")
     }
   }
 
@@ -202,12 +202,12 @@ export class ExportService implements ExportServiceAbstraction {
       jsonDoc.items.push(cipher)
     })
 
-    return JSON.stringify(jsonDoc, null, '  ')
+    return JSON.stringify(jsonDoc, null, "  ")
   }
 
   private async getOrganizationDecryptedExport(
     organizationId: string,
-    format: 'json' | 'csv'
+    format: "json" | "csv"
   ): Promise<string> {
     const decCollections: CollectionView[] = []
     const decCiphers: CipherView[] = []
@@ -251,7 +251,7 @@ export class ExportService implements ExportServiceAbstraction {
 
     await Promise.all(promises)
 
-    if (format === 'csv') {
+    if (format === "csv") {
       const collectionsMap = new Map<string, CollectionView>()
       decCollections.forEach((c) => {
         collectionsMap.set(c.id, c)
@@ -294,7 +294,7 @@ export class ExportService implements ExportServiceAbstraction {
         cipher.build(c)
         jsonDoc.items.push(cipher)
       })
-      return JSON.stringify(jsonDoc, null, '  ')
+      return JSON.stringify(jsonDoc, null, "  ")
     }
   }
 
@@ -354,10 +354,10 @@ export class ExportService implements ExportServiceAbstraction {
       cipher.build(c)
       jsonDoc.items.push(cipher)
     })
-    return JSON.stringify(jsonDoc, null, '  ')
+    return JSON.stringify(jsonDoc, null, "  ")
   }
 
-  private padNumber(num: number, width: number, padCharacter = '0'): string {
+  private padNumber(num: number, width: number, padCharacter = "0"): string {
     const numString = num.toString()
     return numString.length >= width
       ? numString
@@ -379,18 +379,18 @@ export class ExportService implements ExportServiceAbstraction {
     if (c.fields) {
       c.fields.forEach((f: any) => {
         if (!cipher.fields) {
-          cipher.fields = ''
+          cipher.fields = ""
         } else {
-          cipher.fields += '\n'
+          cipher.fields += "\n"
         }
 
-        cipher.fields += (f.name || '') + ': ' + f.value
+        cipher.fields += (f.name || "") + ": " + f.value
       })
     }
 
     switch (c.type) {
       case CipherType.Login:
-        cipher.type = 'login'
+        cipher.type = "login"
         cipher.login_username = c.login.username
         cipher.login_password = c.login.password
         cipher.login_totp = c.login.totp
@@ -403,22 +403,22 @@ export class ExportService implements ExportServiceAbstraction {
         }
         break
       case CipherType.SecureNote:
-        cipher.type = 'note'
+        cipher.type = "note"
         break
       case CipherType.CryptoWallet:
-        cipher.type = 'crypto-wallet'
+        cipher.type = "crypto-wallet"
         break
       case CipherType.TOTP:
-        cipher.type = 'totp'
+        cipher.type = "totp"
         break
       case CipherType.Card:
-        cipher.type = 'card'
+        cipher.type = "card"
         const cardPayload = {
           notes: c.notes,
         }
         Object.getOwnPropertyNames(c.card).forEach((key) => {
-          if (key.startsWith('_')) {
-            if (key !== '_subTitle') {
+          if (key.startsWith("_")) {
+            if (key !== "_subTitle") {
               cardPayload[key.slice(1)] = c.card[key]
             }
           } else {
@@ -428,13 +428,13 @@ export class ExportService implements ExportServiceAbstraction {
         cipher.notes = JSON.stringify(cardPayload)
         break
       case CipherType.Identity:
-        cipher.type = 'identity'
+        cipher.type = "identity"
         const identityPayload = {
           notes: c.notes,
         }
         Object.getOwnPropertyNames(c.identity).forEach((key) => {
-          if (key.startsWith('_')) {
-            if (key !== '_subTitle') {
+          if (key.startsWith("_")) {
+            if (key !== "_subTitle") {
               identityPayload[key.slice(1)] = c.identity[key]
             }
           } else {

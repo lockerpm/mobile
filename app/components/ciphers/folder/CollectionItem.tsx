@@ -6,10 +6,11 @@ import { CollectionView } from "core/models/view/collectionView"
 import { useAppLocale } from "@/i18n"
 
 type Props = {
+  acceptedTime?: number
   isYourSharedScreen?: boolean
   item: CollectionView
   openCollectionCipher: (collectionId: string, orgId: string, name: string) => void
-  openAction: (item: CollectionView) => void
+  openAction: (item: CollectionView, acceptedTime?: number) => void
 }
 
 export const CollectionItem = ({
@@ -17,13 +18,14 @@ export const CollectionItem = ({
   openCollectionCipher,
   openAction,
   isYourSharedScreen,
+  acceptedTime,
 }: Props) => {
   const { translate } = useAppLocale()
   return (
     <PressableScale
       onPress={() => {
         if (!!item.id && isYourSharedScreen) {
-          openAction(item)
+          openAction(item, acceptedTime)
           return
         }
         openCollectionCipher(item.id, item.organizationId, item.name)

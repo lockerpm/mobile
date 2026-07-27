@@ -20,7 +20,6 @@ import {
 } from "app/components/ciphers"
 import { Header, Screen, TextInput, Text, Icon } from "app/components/cores"
 import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/utils"
-import { useStores } from "app/models"
 import { BrowseScreenProps } from "app/navigators"
 import { useCipherData, useCipherHelper, useFolder } from "app/services/hook"
 import { CipherAppView, CipherEditHelperModal, CipherEditMode } from "app/static/types"
@@ -74,8 +73,7 @@ export const PasswordEdit = observer(
     const { translate } = useAppLocale()
     const { shareFolderAddItem } = useFolder()
     const { createCipher, updateCipher } = useCipherData()
-    const { getPasswordStrength, checkPasswordPolicy } = useCipherHelper()
-    const { user } = useStores()
+    const { getPasswordStrength } = useCipherHelper()
 
     // ----------------- COMPUTED ------------------
     const onSaveFillService = !!saveData
@@ -205,23 +203,6 @@ export const PasswordEdit = observer(
       payload.login = data
       payload.organizationId = organizationId as string
       const passwordStrength = getPasswordStrength(password).score
-
-      // Violate team's policy
-      if (isOwner) {
-        setIsLoading(true)
-        const violatedItems = await checkPasswordPolicy(password)
-        if (violatedItems.length) {
-          setViolationsConfig({
-            violations: violatedItems,
-            pendingPayload: {
-              item: payload,
-              strength: passwordStrength,
-            },
-          })
-          setIsLoading(false)
-          return
-        }
-      }
 
       // Ok
       handleSave(payload, passwordStrength)
@@ -435,7 +416,7 @@ export const PasswordEdit = observer(
             setViolationsConfig(null)
           }}
           violations={violationsConfig?.violations ?? []}
-          teamName={user.teams.length > 0 ? user.teams[0]?.name : ""}
+          teamName={""}
           onConfirm={async () => {
             if (violationsConfig) {
               await handleSave(

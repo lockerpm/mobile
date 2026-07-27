@@ -1,18 +1,21 @@
-import { useAppLocale } from "@/i18n"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { useState } from "react"
+import { StyleProp, View, ViewStyle, Image, StyleSheet } from "react-native"
+import filter from "lodash/filter"
+import find from "lodash/find"
+
 import { TextInput, Text, ImageIcon } from "app/components/cores"
 import { useStores } from "app/models"
 import { CipherAppView, SharedMemberType } from "app/static/types"
 import { getTeam } from "app/utils/cipherHelper"
 import { FieldType } from "core/enums"
 import { CollectionView } from "core/models/view/collectionView"
-import filter from "lodash/filter"
-import find from "lodash/find"
-import { useState } from "react"
-import { StyleProp, View, ViewStyle, Image, StyleSheet } from "react-native"
-import { PasswordOtp } from "../passwordOtp/PasswordOtp"
-import { CipherEditActionField } from "../cipherEditActionField"
+
+import { useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { CipherEditActionField } from "../cipherEditActionField"
+import { PasswordOtp } from "../passwordOtp/PasswordOtp"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
@@ -83,9 +86,7 @@ export const CiphelBaseInfo = (props: CipherInfoCommonProps) => {
         editable={false}
         labelTx={"common:owned_by"}
         value={
-          getTeam(user.teams, cipher.organizationId).name ||
-          getTeam(cipherStore.organizations, cipher.organizationId).name ||
-          translate("common:me")
+          getTeam(cipherStore.organizations, cipher.organizationId).name || translate("common:me")
         }
       />
 
@@ -104,9 +105,7 @@ export const CiphelBaseInfo = (props: CipherInfoCommonProps) => {
                 <Text text={c.name || translate("folder:unassigned")} style={styles.text} />
               </View>
             ))
-          : (!cipher.organizationId ||
-              !!folder.name ||
-              getTeam(user.teams, cipher.organizationId)) && (
+          : (!cipher.organizationId || !!folder.name) && (
               <View style={styles.collection}>
                 <ImageIcon icon="folder" size={30} />
                 <Text

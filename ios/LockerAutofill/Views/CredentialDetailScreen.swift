@@ -122,7 +122,8 @@ struct CredentialDetailScreen: View {
         readOnlyField(
           label: i.translate("item.password"),
           value: password,
-          isPassword: true
+          isPassword: true,
+          hidePassword: item.login.hidePassword
         )
       }
       
@@ -146,31 +147,31 @@ struct CredentialDetailScreen: View {
   // MARK: - Components
   
   // Non-editable, tappable field with floating top-left label and optional eye toggle for password
-  private func readOnlyField(label: String, value: String, isPassword: Bool) -> some View {
+  private func readOnlyField(label: String, value: String, isPassword: Bool, hidePassword: Bool = false) -> some View {
     ZStack(alignment: .topLeading) {
       // Bordered container
       RoundedRectangle(cornerRadius: 8)
         .stroke(AppColors.border, lineWidth: 1)
-      
+
       // Content HStack
       HStack(spacing: 8) {
         let displayText: String = {
-          if isPassword && !showPassword {
+          if isPassword && (!showPassword || hidePassword) {
             return String(repeating: "•", count: max(4, min(12, value.count)))
           }
           return value
         }()
-        
+
         Text(displayText)
           .foregroundStyle(AppColors.title)
           .lineLimit(1)
           .truncationMode(.middle)
           .padding(.vertical, 10)
           .padding(.horizontal, 12)
-        
+
         Spacer()
-        
-        if isPassword {
+
+        if isPassword && !hidePassword {
           Button {
             withAnimation(.easeInOut(duration: 0.15)) {
               showPassword.toggle()
@@ -182,7 +183,7 @@ struct CredentialDetailScreen: View {
           }
         }
       }
-      
+
       // Floating label pinned to top-left
       Text(label)
         .font(.subheadline)
@@ -195,7 +196,9 @@ struct CredentialDetailScreen: View {
     .padding(.vertical, 12) // add space between fields
     .contentShape(Rectangle()) // make the whole area tappable
     .onTapGesture {
-      // Tapping anywhere triggers action (except the eye button which handles its own tap)
+      // Tapping anywhere triggers action (except the eye button which handles its own tap).
+      // When hidePassword is set, suppress tap-to-copy / tap-to-fillText so plaintext can't leak.
+      if isPassword && hidePassword { return }
       handleTapAction(value: value)
     }
   }

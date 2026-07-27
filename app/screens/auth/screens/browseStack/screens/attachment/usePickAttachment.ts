@@ -39,7 +39,8 @@ export const usePickAttachment = () => {
 
   const pickFile = async (): Promise<AttachmentType | null> => {
     try {
-      // (Android) Cannot directly read msf:// and content:// file -> need copy to cache
+      // Cannot directly read msf:// / content:// (Android) or security-scoped
+      // (iOS) picker URIs -> copy into the cache dir first.
       const [file1] = await pick()
       const [localCopy] = await keepLocalCopy({
         files: [
@@ -51,22 +52,21 @@ export const usePickAttachment = () => {
         destination: "cachesDirectory",
       })
 
-      const file: AttachmentType = IS_ANDROID
-        ? {
-            id: Date.now().toString(),
-            fileName: file1.name ?? "",
-            size: file1.size ?? 0,
-            url: "",
-            key: null,
-          }
-        : {
-            id: Date.now().toString(),
-            fileName: file1.name ?? "",
-            size: file1.size ?? 0,
-            url: file1.uri,
-            key: null,
-          }
-      if (IS_ANDROID && localCopy.status === "success" && localCopy.localUri) {
+      const file: AttachmentType = {
+        id: Date.now().toString(),
+        fileName: file1.name ?? "",
+        size: file1.size ?? 0,
+        // iOS fallback to the picker URI; overwritten by the local copy below.
+        url: IS_ANDROID ? "" : file1.uri,
+        key: null,
+      }
+
+      // Always prefer the sandbox-local copy. Reading the raw picker URI
+      // directly is unreliable: Android content:// / msf:// URIs and iOS
+      // security-scoped URLs (iCloud / other providers) can't be read by the
+      // native encryptor, which silently produces an empty (header-only)
+      // upload. The local copy lives in cachesDirectory and is always readable.
+      if (localCopy.status === "success" && localCopy.localUri) {
         file.url = localCopy.localUri
       }
 

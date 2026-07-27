@@ -21,6 +21,14 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
     ...config,
     ios: {
       ...config.ios,
+      infoPlist: {
+        ...config.ios?.infoPlist,
+        // Required so iOS shows the "Local Network" prompt and lets the dev client
+        // reach the Metro bundler on a LAN IP when debugging on a real device.
+        NSLocalNetworkUsageDescription:
+          "Allow Locker to connect to the local development server over your network.",
+        NSBonjourServices: ["_expo._tcp", "_exp._tcp"],
+      },
       // This privacyManifests is to get you started.
       // See Expo's guide on apple privacy manifests here:
       // https://docs.expo.dev/guides/apple-privacy/

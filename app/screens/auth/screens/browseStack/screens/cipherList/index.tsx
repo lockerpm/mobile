@@ -1,22 +1,25 @@
 import { useState, FC, useCallback, useRef, useMemo, useEffect } from "react"
-import { MAX_CIPHER_SELECTION } from "app/static/constants"
-import { Screen } from "app/components/cores"
+import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-import { BrowseScreenProps } from "app/navigators"
+
 import {
   CipherList,
   CipherListHeader,
   SortActionConfigModal,
   SortConfigType,
 } from "app/components/ciphers"
-import { StyleSheet } from "react-native"
-import { AccountRole, CipherActionsModal, CipherAppView } from "app/static/types"
-import { CipherListEmpty } from "./CipherListEmpty"
-import { CipherType } from "core/enums"
+import { Screen } from "app/components/cores"
 import { useStores } from "app/models"
+import { BrowseScreenProps } from "app/navigators"
 import { useCipherData } from "app/services/hook"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { AccountRole, CipherActionsModal, CipherAppView } from "app/static/types"
+import { CipherType } from "core/enums"
+
 import { getTeam } from "@/utils/cipherHelper"
 import { AppEventType, EventBus } from "@/utils/eventBus"
+
+import { CipherListEmpty } from "./CipherListEmpty"
 
 const allTypes = [
   CipherType.Card,
@@ -128,7 +131,7 @@ export const CipherListScreen: FC<BrowseScreenProps<"cipherList">> = observer(
       navigation.navigate("shareStack", {
         screen: "normalShare",
         params: {
-          ciphers: selectedCiphers,
+          ciphers: selectedCiphers.map((e) => ({ ...e, revisionDate: null })),
         },
       })
       clearSelect()

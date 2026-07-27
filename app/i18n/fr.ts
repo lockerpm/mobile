@@ -11,6 +11,9 @@ const fr: Translations = {
     add_new_field: "Ajouter un nouveau champ",
     and: "et",
     biometric_unlocking: "Déverrouiller avec Face ID/Touch ID",
+    unlock_locker: "Utilisez le code pour déverrouiller Locker",
+    unlock_with_device_passcode: "Déverrouiller avec le code de l'appareil",
+    use_device_passcode: "Utiliser le code de l'appareil",
     browse: "Parcourir",
     calculating: "Calcul en cours",
     cancel: "Annuler",
@@ -152,6 +155,7 @@ const fr: Translations = {
     from: "De",
     shareWith: "Partager avec :",
     createdAt: "Créé à ",
+    wrong_key: "(Impossible de déchiffrer l'élément)",
   },
   navigator: {
     is_offline: "Locker est actuellement en mode hors ligne.",
@@ -176,9 +180,13 @@ const fr: Translations = {
     not_supported: "Non pris en charge",
     not_valid_for_biometric:
       "Se connecter avec le mot de passe maître pour réactiver FaceID/TouchID",
+    not_valid_for_device_passcode:
+      "Connectez-vous avec le mot de passe maître pour réactiver le déverrouillage par code de l'appareil",
     biometric_not_enable: "Le déverrouillage Face ID/Touch ID n’est pas activé",
+    device_passcode_not_enable: "Le déverrouillage par code de l'appareil n'est pas activé",
     biometric_not_support: "Le déverrouillage Face ID/Touch ID n’est pas pris en charge",
     biometric_unlock_failed: "La vérification de Face ID/Touch ID a échoué",
+    device_passcode_unlock_failed: "La vérification du code de l'appareil a échoué",
     required_data: "Cette donnée est obligatoire",
     session_login_failed: "Échec de la connexion à la session ! Veuillez réessayer",
     login_failed: "Échec de la connexion ! Veuillez réessayer",
@@ -325,6 +333,7 @@ const fr: Translations = {
     master_password_updated: "Mot de passe maître mis à jour",
     locker_password_updated: "Mot de passe Locker mis à jour",
     biometric_enabled: "Le déverrouillage Face ID/Touch ID est activé",
+    device_passcode_enabled: "Le déverrouillage par code de l'appareil est activé",
     cipher_created: "Nouvel élément créé !",
     cipher_deleted: "Élément supprimé !",
     cipher_restored: "Élément restauré !",
@@ -576,9 +585,14 @@ const fr: Translations = {
   },
   biometric_intro: {
     title: "Débloquez votre coffre avec Face ID/Touch ID",
+    title_passcode: "Déverrouillez votre coffre avec le code de l'appareil",
     desc: "Utiliser la reconnaissance faciale ou l’empreinte digitale pour protéger vos mots de passe",
+    desc_passcode:
+      "Utilisez le code PIN ou le mot de passe de votre appareil pour déverrouiller rapidement votre coffre",
     suggest: "Utiliser Face ID/Touch ID pour déverrouiller facilement votre coffre",
+    suggest_passcode: "Utilisez le code de l'appareil pour déverrouiller votre coffre rapidement",
     use_btn: "Utiliser Face ID/Touch ID",
+    use_btn_passcode: "Utiliser le code de l'appareil",
     later_btn: "Je le ferai plus tard",
   },
   card: {
@@ -698,7 +712,15 @@ const fr: Translations = {
     share_items: "Vos partages",
     shared_items: "Partagés avec moi",
     shared_folder: "Dossier partagé",
+    item: "Élément",
     encrypted_content: "Contenu chiffré",
+    sort: {
+      accepted_time: "Date d'acceptation",
+      accepted_newest: "Date d'acceptation (plus récentes)",
+      accepted_oldest: "Date d'acceptation (plus anciennes)",
+    },
+    accepted_at: "Accepté {{time}}",
+    last_updated_at: "Dernière mise à jour le {{time}}",
     share_folder: {
       detail: "Voir les éléments",
       error_share_item:
@@ -709,6 +731,8 @@ const fr: Translations = {
       add_email: "Ajouter un e-mail pour partager",
       viewer: "Lecteur",
       editor: "Éditeur",
+      fill_only: "Masquer le mot de passe",
+      fill_only_per: "(S’applique uniquement aux éléments de connexion)",
       viewer_per: "Peut seulement voir",
       editor_per: "Organiser, ajouter et modifier",
       remove: "Supprimer du dossier",
@@ -934,6 +958,8 @@ const fr: Translations = {
     import_export: "Import et export",
     import: "Import de données",
     export: "Export de données",
+    export_note:
+      "Remarque : Les éléments partagés avec vous sans autorisation d'afficher leur mot de passe ne seront pas exportés.",
     sync_now: "Synchroniser les données",
     theme: "Thème",
     dark_theme: "Sombre",
@@ -994,6 +1020,8 @@ const fr: Translations = {
   },
   export: {
     success: "Données exportées !",
+    verify: "Vérifier",
+    verify_desc: "Saisissez votre Master Password pour vérifier",
   },
   import: {
     format: "Format",

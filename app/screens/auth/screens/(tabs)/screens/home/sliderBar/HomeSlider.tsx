@@ -9,7 +9,7 @@ import Animated, {
 
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
-import { useBiometricType } from "app/services/utils"
+import { getDeviceAuthCapabilities } from "app/services/utils"
 
 import { useAppLocale } from "@/i18n"
 import { ThemedStyle } from "@/theme"
@@ -32,6 +32,7 @@ type SliderDataType = {
   id: SliderEnum
   isShow: boolean
   onClose: () => void
+  hasBiometric?: boolean
 }
 const WIDTH = Dimensions.get("window").width
 
@@ -40,8 +41,6 @@ export const HomeSlider = observer(() => {
   const { themed } = useAppTheme()
   const { lang } = useAppLocale()
   const { cryptoService } = useCoreService()
-  const { isBiometricAvailable } = useBiometricType()
-
   // -------------- PARAMS ------------------
 
   const scrollRef = useRef(null)
@@ -85,19 +84,18 @@ export const HomeSlider = observer(() => {
   }, [])
 
   const handleShowFaceIDSuggest = async () => {
-    if (!user.isBiometricUnlock) {
-      const available = await isBiometricAvailable()
-      if (available) {
-        setData((prev) => [
-          ...prev,
-          {
-            id: SliderEnum.SuggestEnableFaceID,
-            isShow: true,
-            onClose: closeFaceid,
-          },
-        ])
-      }
-    }
+    if (user.isBiometricUnlock) return
+    const { hasBiometric, hasDevicePasscode } = await getDeviceAuthCapabilities()
+    if (!hasBiometric && !hasDevicePasscode) return
+    setData((prev) => [
+      ...prev,
+      {
+        id: SliderEnum.SuggestEnableFaceID,
+        isShow: true,
+        onClose: closeFaceid,
+        hasBiometric,
+      },
+    ])
   }
 
   const syncAutofillUserInfo = async () => {
@@ -176,7 +174,13 @@ export const HomeSlider = observer(() => {
         renderItem={({ item }) => {
           switch (item.id) {
             case SliderEnum.SuggestEnableFaceID:
-              return <SuggestEnableFaceID style={themed($itemContainer)} onClose={item.onClose} />
+              return (
+                <SuggestEnableFaceID
+                  style={themed($itemContainer)}
+                  onClose={item.onClose}
+                  hasBiometric={item.hasBiometric ?? false}
+                />
+              )
             case SliderEnum.SuggestEnableAutofill:
               return <SuggestEnableAutofill style={themed($itemContainer)} onClose={item.onClose} />
             case SliderEnum.ConfirmShare:

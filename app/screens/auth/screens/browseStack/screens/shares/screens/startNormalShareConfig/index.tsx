@@ -3,7 +3,8 @@ import { View, StyleSheet, ScrollView } from "react-native"
 import { observer } from "mobx-react-lite"
 
 import { Header, PressableText, Screen, Text } from "app/components/cores"
-import { AccountRoleText, CipherAppView } from "app/static/types"
+import { AccountRoleText, CipherAppView, ShareGroups, ShareMembers } from "app/static/types"
+import { CipherType } from "core/enums"
 
 import { ShareScreenProps } from "@/navigators"
 import { AppEventType, EventBus } from "@/utils/eventBus"
@@ -30,39 +31,48 @@ export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
     // --------------- PARAMS ----------------
     const [isSharing, setIsSharing] = useState(false)
     const [shareCiphers, setShareCiphers] = useState<CipherAppView[]>(ciphers)
-    const [emails, setEmails] = useState<{ email: string; role: AccountRoleText }[]>([])
-    const [groups, setGroups] = useState<{ name: string; id: string; role: AccountRoleText }[]>([])
+    const [emails, setEmails] = useState<ShareMembers[]>([])
+    const [groups, setGroups] = useState<ShareGroups[]>([])
     // --------------- COMPUTED ----------------
 
     const cipherIds = shareCiphers.map((c) => c.id)
     const selectedCipher = shareCiphers.length > 0 ? shareCiphers[0] : null
-
+    const isHaveLoginItem = shareCiphers.some((e) => e.type === CipherType.Login)
     const showManageShare = !!selectedCipher?.organizationId
 
     // --------------- METHODS ----------------
 
-    const removeShareCipher = (item: CipherAppView) => {
-      const newShareCipher = shareCiphers.filter((c) => c.id !== item.id)
-      if (newShareCipher.length < 1) {
-        navigation.goBack()
-        return
-      }
-      setShareCiphers(shareCiphers.filter((c) => c.id !== item.id))
-    }
+    const removeShareCipher = useCallback(
+      (item: CipherAppView) => {
+        const newShareCipher = shareCiphers.filter((c) => c.id !== item.id)
+        if (newShareCipher.length < 1) {
+          navigation.goBack()
+          return
+        }
+        setShareCiphers(shareCiphers.filter((c) => c.id !== item.id))
+      },
+      [navigation, shareCiphers]
+    )
 
-    const removeEmail = (val: string) => {
-      setEmails(emails.filter((e) => e.email !== val))
-    }
+    const removeEmail = useCallback(
+      (val: string) => {
+        setEmails(emails.filter((e) => e.email !== val))
+      },
+      [emails]
+    )
 
-    const removeGroup = (id: string) => {
-      setGroups(groups.filter((group) => group.id !== id))
-    }
+    const removeGroup = useCallback(
+      (id: string) => {
+        setGroups(groups.filter((group) => group.id !== id))
+      },
+      [groups]
+    )
 
     // Share single/multiple
     const handleShare = async () => {
       setIsSharing(true)
 
-      const res = await shareMultipleCiphers(cipherIds, emails, groups, false)
+      const res = await shareMultipleCiphers(cipherIds, emails, groups)
       if (res.kind === "ok" || res.kind === "unauthorized") {
         EventBus.emit(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, null)
         navigation.goBack()
@@ -71,33 +81,35 @@ export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
     }
 
     const changeEmailRole = useCallback(
-      (email: string, role: AccountRoleText) => {
+      (email: string, role: AccountRoleText, hidePasswords: boolean) => {
         if (!email) {
           return
         }
         const temp = [...emails]
         const index = temp.findIndex((e) => e.email === email)
 
-        if (index === -1 || temp[index].role === role) {
+        if (index === -1) {
           return
         }
         temp[index].role = role
+        temp[index].hidePasswords = hidePasswords
         setEmails(temp)
       },
       [emails]
     )
 
     const changeGroupRole = useCallback(
-      (id: string, role: AccountRoleText) => {
+      (id: string, role: AccountRoleText, hidePasswords: boolean) => {
         if (!id) {
           return
         }
         const temp = [...groups]
         const index = temp.findIndex((e) => e.id === id)
-        if (index === -1 || temp[index].role === role) {
+        if (index === -1) {
           return
         }
         temp[index].role = role
+        temp[index].hidePasswords = hidePasswords
         setGroups(temp)
       },
       [groups]
@@ -113,14 +125,16 @@ export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
     }, [navigation, selectedCipher])
 
     const navigateToEditMember = useCallback(
-      (id: string, val: string, role: AccountRoleText) => {
+      (id: string, val: string, role: AccountRoleText, hidePasswords: boolean) => {
         navigation.navigate("editShareMemberPermissionModal", {
+          isHaveLoginItem,
           id,
           value: val,
           role,
+          hidePasswords,
         })
       },
-      [navigation]
+      [navigation, isHaveLoginItem]
     )
 
     // --------------------------EFFECT----------------------------
@@ -128,8 +142,8 @@ export const NormalSharesScreen: FC<ShareScreenProps<"normalShare">> = observer(
     useEffect(() => {
       const listener1 = EventBus.createListener(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, (data) => {
         if (data) {
-          changeEmailRole(data?.id, data?.role)
-          changeGroupRole(data?.id, data?.role)
+          changeEmailRole(data?.id, data?.role, data?.hidePasswords)
+          changeGroupRole(data?.id, data?.role, data?.hidePasswords)
         }
       })
 

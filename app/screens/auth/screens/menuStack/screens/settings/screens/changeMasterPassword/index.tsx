@@ -4,11 +4,10 @@ import { CommonActions } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 
 import { Screen, Header, TextInput, Button } from "app/components/cores"
-import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/utils"
-import { useStores } from "app/models"
+import { PasswordStrength } from "app/components/utils"
 import { SettingsScreenProps } from "app/navigators"
 import { useAuthentication, useCipherHelper, useHelper } from "app/services/hook"
-import { MPEncodeConfig, PolicyType } from "app/static/types"
+import { MPEncodeConfig } from "app/static/types"
 
 import { useAppLocale } from "@/i18n"
 import { useCoreService } from "@/services/coreService"
@@ -17,9 +16,8 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
   ({ navigation }) => {
     const { translate } = useAppLocale()
     const { validateMasterPassword } = useHelper()
-    const { getPasswordStrength, checkPasswordPolicy } = useCipherHelper()
+    const { getPasswordStrength } = useCipherHelper()
     const { changeMasterPassword } = useAuthentication()
-    const { user } = useStores()
 
     const { userService } = useCoreService()
 
@@ -40,9 +38,6 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
     const [confirm, setConfirm] = useState("")
     const [hint, setHint] = useState("")
 
-    const [showViolationModal, setShowViolationModal] = useState(false)
-    const [violations, setViolations] = useState<string[]>([])
-
     // -------------- COMPUTED --------------
 
     const isError = !!newPass && !!confirm && newPass !== confirm
@@ -54,13 +49,6 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
 
     const preparePassword = async () => {
       setIsLoading(true)
-      const violatedItems = await checkPasswordPolicy(newPass, PolicyType.MASTER_PASSWORD_REQ)
-      if (violatedItems.length) {
-        setViolations(violatedItems)
-        setShowViolationModal(true)
-        setIsLoading(false)
-        return
-      }
       handleChangePassword()
     }
 
@@ -149,19 +137,6 @@ export const ChangeMasterPasswordScreen: FC<SettingsScreenProps<"changeMasterPas
             numberOfLines={4}
             style={styles.mt30}
             containerStyle={styles.mv20}
-          />
-
-          <PasswordPolicyViolationsModal
-            isOpen={showViolationModal}
-            onClose={() => {
-              setShowViolationModal(false)
-            }}
-            violations={violations}
-            teamName={(user.teams.length && user.teams[0]?.name) || ""}
-            onConfirm={() => {
-              setShowViolationModal(false)
-            }}
-            confirmText="Okay..."
           />
         </View>
       </Screen>

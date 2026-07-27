@@ -1,8 +1,5 @@
 import extractDomain from "extract-domain"
 
-import { useStores } from "app/models"
-import { MasterPasswordPolicy, PasswordPolicy } from "app/static/types"
-import { PolicyType } from "app/static/types/enum"
 import { CipherType, FieldType, SecureNoteType } from "core/enums"
 import {
   CardView,
@@ -21,7 +18,6 @@ import { useCoreService } from "../coreService"
 export function useCipherHelper() {
   const { translate } = useAppLocale()
   const { passwordGenerationService } = useCoreService()
-  const { user, uiStore } = useStores()
 
   // ------------------ METHODS ---------------------------
 
@@ -97,68 +93,10 @@ export function useCipherHelper() {
     return res
   }
 
-  // Check password policy
-  const checkPasswordPolicy = async (
-    password: string,
-    policyType: PolicyType = PolicyType.PASSWORD_REQ
-  ) => {
-    const violations: string[] = []
-    if (!user.teams.length || uiStore.isOffline) {
-      return violations
-    }
-    const res = await user.getTeamPolicy(user.teams[0].id, policyType)
-    if (res.kind !== "ok") {
-      return violations
-    }
-    const policy = (() => {
-      if (policyType === PolicyType.MASTER_PASSWORD_REQ) {
-        return res.data as MasterPasswordPolicy
-      }
-      return res.data as PasswordPolicy
-    })()
-    if (policy && policy.enabled) {
-      if (policy.config.min_length && password.length < policy.config.min_length) {
-        violations.push(
-          translate("policy:min_password_length", { length: policy.config.min_length })
-        )
-      }
-      if (policy.config.require_special_character) {
-        const reg = /(?=.*[!@#$%^&*])/
-        const check = reg.test(password)
-        if (!check) {
-          violations.push(translate("policy:requires_special"))
-        }
-      }
-      if (policy.config.require_lower_case) {
-        const reg = /[a-z]/
-        const check = reg.test(password)
-        if (!check) {
-          violations.push(translate("policy:requires_lowercase"))
-        }
-      }
-      if (policy.config.require_upper_case) {
-        const reg = /[A-Z]/
-        const check = reg.test(password)
-        if (!check) {
-          violations.push(translate("policy:requires_uppercase"))
-        }
-      }
-      if (policy.config.require_digit) {
-        const reg = /[1-9]/
-        const check = reg.test(password)
-        if (!check) {
-          violations.push(translate("policy:requires_number"))
-        }
-      }
-    }
-    return violations
-  }
-
   return {
     newCipher,
     getPasswordStrength,
     getCustomFieldDataFromType,
-    checkPasswordPolicy,
     getWebsiteLogo,
   }
 }

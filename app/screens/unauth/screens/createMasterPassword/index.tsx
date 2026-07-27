@@ -6,12 +6,12 @@ import { observer } from "mobx-react-lite"
 import Animated, { FadeInUp } from "react-native-reanimated"
 
 import { Button, Logo, PressableText, Screen, Text, TextInput } from "app/components/cores"
-import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components/utils"
+import { PasswordStrength } from "app/components/utils"
 import { useStores } from "app/models"
 import { UnAuthScreenProps } from "app/navigators"
 import { useAuthentication, useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { useBiometricType } from "app/services/utils"
-import { LockType, MPEncodeConfig, PolicyType } from "app/static/types"
+import { LockType, MPEncodeConfig } from "app/static/types"
 import { logCreateMasterPwEvent } from "app/utils/analytics"
 import { KdfType } from "core/enums/kdfType"
 
@@ -24,7 +24,7 @@ import { ConfirmCreateMPModal } from "./ConfirmCreateMpModal"
 export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassword">> = observer(
   ({ navigation }) => {
     const { user, uiStore } = useStores()
-    const { getPasswordStrength, checkPasswordPolicy } = useCipherHelper()
+    const { getPasswordStrength } = useCipherHelper()
     const { logout, registerLocker, sessionLogin } = useAuthentication()
     const { validateMasterPassword } = useHelper()
     const { isBiometricAvailable } = useBiometricType()
@@ -51,9 +51,7 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
     const [passwordStrength, setPasswordStrength] = useState(-1)
     const [isCreating, setIsCreating] = useState(false)
 
-    const [showViolationModal, setShowViolationModal] = useState(false)
     const [showConfirmCreateModal, setShowConfirmCreateModal] = useState<boolean>(false)
-    const [violations, setViolations] = useState<string[]>([])
 
     // -------------- COMPUTED ------------------
 
@@ -83,26 +81,9 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
       )
     }, [logout, navigation])
 
-    // Load teams to check master password policy
-    const loadUserTeams = useCallback(async () => {
-      await user.loadTeams()
-    }, [user])
-
     // Prepare to create master pass
     const prepareToCreate = async () => {
       setIsCreating(true)
-
-      const violatedItems = await checkPasswordPolicy(
-        masterPassword,
-        PolicyType.MASTER_PASSWORD_REQ
-      )
-      if (violatedItems.length) {
-        setViolations(violatedItems)
-        setShowViolationModal(true)
-        setIsCreating(false)
-        return
-      }
-
       handleCreate()
     }
 
@@ -167,12 +148,6 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
     }
 
     // -------------- EFFECT ------------------
-
-    // Mounted
-    useEffect(() => {
-      loadUserTeams()
-    }, [loadUserTeams])
-
     // Back handler
     useEffect(() => {
       const handleBack = (e: any) => {
@@ -302,21 +277,6 @@ export const CreateMasterPasswordScreen: FC<UnAuthScreenProps<"createMasterPassw
             onClose={() => setShowConfirmCreateModal(false)}
             onNext={() => prepareToCreate()}
           />
-
-          {/* Violations modal */}
-          <PasswordPolicyViolationsModal
-            isOpen={showViolationModal}
-            onClose={() => {
-              setShowViolationModal(false)
-            }}
-            violations={violations}
-            teamName={user.teams?.length > 0 ? user.teams[0]?.name : ""}
-            onConfirm={() => {
-              setShowViolationModal(false)
-            }}
-            confirmText="OK"
-          />
-          {/* Violations modal end */}
         </View>
       </Screen>
     )

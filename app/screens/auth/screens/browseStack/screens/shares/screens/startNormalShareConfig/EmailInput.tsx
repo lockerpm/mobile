@@ -1,19 +1,26 @@
+import { useEffect, useState } from "react"
+import { StyleSheet, TouchableOpacity, View, ViewStyle, Image } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { PressableIcon, TextInput, Text } from "@/components/cores"
 import { useStores } from "@/models"
 import { useToast } from "@/services/utils"
-import { AccountRoleText, GroupData, GroupMemberData } from "@/static/types"
+import {
+  AccountRoleText,
+  GroupData,
+  GroupMemberData,
+  ShareGroups,
+  ShareMembers,
+} from "@/static/types"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { validateEmail } from "@/utils/utils"
-import { observer } from "mobx-react-lite"
-import { useEffect, useState } from "react"
-import { StyleSheet, TouchableOpacity, View, ViewStyle, Image } from "react-native"
 
 interface Props {
-  emails: { email: string; role: AccountRoleText }[]
-  setEmails: (emails: { email: string; role: AccountRoleText }[]) => void
-  groups: { name: string; id: string; role: AccountRoleText }[]
-  setGroups: (groups: { name: string; id: string; role: AccountRoleText }[]) => void
+  emails: ShareMembers[]
+  setEmails: (emails: ShareMembers[]) => void
+  groups: ShareGroups[]
+  setGroups: (groups: ShareGroups[]) => void
 }
 
 const SHARE_GROUP = require("assets/images/icons/group.png")
@@ -41,7 +48,7 @@ export const EmailInput = observer(({ setEmails, emails, setGroups, groups }: Pr
       return
     }
     if (!!e && !emails.map((e) => e.email).includes(e)) {
-      setEmails([...emails, { email: e, role: AccountRoleText.MEMBER }])
+      setEmails([...emails, { email: e, role: AccountRoleText.MEMBER, hidePasswords: false }])
     }
     setEmail("")
     setSuggestions(null)
@@ -56,6 +63,7 @@ export const EmailInput = observer(({ setEmails, emails, setGroups, groups }: Pr
         name: e.name,
         id: e.id,
         role: AccountRoleText.MEMBER, // Default role for group members
+        hidePasswords: false,
       },
     ])
     setEmail("")

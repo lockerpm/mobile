@@ -9,7 +9,9 @@ import { AccountRole, CipherActionsModal, CipherAppView, MyShareType } from "app
 import { getCipherDescription, getTeam } from "app/utils/cipherHelper"
 import { CipherType } from "core/enums"
 
+import { useAppLocale } from "@/i18n"
 import { useCipherData } from "@/services/hook"
+import { getRelativeTime } from "@/utils/formatDate"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 import { useActionsNavigate } from "./useActionsNavigate"
@@ -19,19 +21,30 @@ interface Props {
   item: CipherAppView
   setNextModal: (action: CipherActionsModal) => void
   onClose: () => void
+  acceptedTime?: number
 }
 
-export const Actions = ({ isDeleted, item, setNextModal, onClose }: Props) => {
+export const Actions = ({ isDeleted, item, setNextModal, onClose, acceptedTime }: Props) => {
   const {
     theme: { colors },
   } = useAppTheme()
+  const { translate } = useAppLocale()
   const { cipherStore } = useStores()
   const { deleteCiphers, restoreCiphers } = useCipherData()
 
   // ------------------------COMPUTED------------------------
 
   const organizations = cipherStore.organizations
-  const cipherDescription = getCipherDescription(item)
+  // acceptedTime is a Unix timestamp in seconds (API `AcceptedTime`) -> convert to ms for relative time
+  const cipherDescription = acceptedTime
+    ? translate("shares:accepted_at", {
+        time: getRelativeTime(acceptedTime * 1000, true),
+      })
+    : item.revisionDate
+      ? translate("shares:last_updated_at", {
+          time: getRelativeTime(item.revisionDate.getTime(), true),
+        })
+      : getCipherDescription(item)
   const lockerMasterPassword = item.type === CipherType.MasterPassword
 
   // Share role and editable status
@@ -70,7 +83,7 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose }: Props) => {
               preset="label"
               size="sm"
               text={cipherDescription}
-              numberOfLines={1}
+              numberOfLines={2}
               ellipsizeMode="tail"
             />
           )}
@@ -115,7 +128,7 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose }: Props) => {
       />
       <NewActionSheetItem
         bottomBorder
-        hide={isDeleted || lockerMasterPassword || isShared || !editable}
+        hide={isDeleted || lockerMasterPassword || (isShared && !editable)}
         tx="file_attachment:title"
         icon="file-arrow-up"
         onPress={() => {

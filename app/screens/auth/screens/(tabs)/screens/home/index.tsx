@@ -17,7 +17,6 @@ import { HomeHeader } from "./HomeHeader"
 import { HomeSlider } from "./sliderBar/HomeSlider"
 import { useFetchMarketingContent } from "./useFetchMarketingContent"
 import { useHomeBackHandler } from "./useHomeBackHandler"
-import { useShowRecommendEncryption } from "./useShowRecommendEncryption"
 
 const allCipherType = [
   CipherType.Card,
@@ -120,7 +119,7 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
       params: {
         screen: "normalShare",
         params: {
-          ciphers: selectedCiphers,
+          ciphers: selectedCiphers.map((e) => ({ ...e, revisionDate: null })),
         },
       },
     })
@@ -138,7 +137,6 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
     (item: CipherAppView) => {
       const data: CipherAppView = {
         ...item,
-        revisionDate: null,
       }
       navigation.navigate("cipherActionsModal", {
         mode: CipherActionsModal.DEFAULT,
@@ -161,7 +159,6 @@ export const HomeScreen: FC<TabsScreenProps<"homeTab">> = observer(({ navigation
 
   useFetchMarketingContent()
   useHomeBackHandler()
-  useShowRecommendEncryption()
 
   useEffect(() => {
     const listener1 = EventBus.createListener(AppEventType.UNSELECT_ALL, () => {

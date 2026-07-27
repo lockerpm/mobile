@@ -215,6 +215,7 @@ class ProtobufDecoder {
         var isOwner = true
         var otp = ""
         var fido2: [PasskeyItem] = []
+        var hidePassword = false
         
         while offset < messageEnd {
           guard let subTag = readVarint(data, offset: &offset) else {
@@ -244,6 +245,8 @@ class ProtobufDecoder {
             if let fidoItem = decodeFido2Item(data: data, offset: &offset) {
               fido2.append(fidoItem)
             }
+          case 9:
+            hidePassword = readBool(data, offset: &offset) ?? false
           default:
             skipField(wireType: subWireType, data: data, offset: &offset)
           }
@@ -251,7 +254,8 @@ class ProtobufDecoder {
         
         items.append(PasswordItem(id: id, name: name, uri: uri,
                                   username: username, password: password,
-                                  isOwner: isOwner, otp: otp, fido2: fido2))
+                                  isOwner: isOwner, otp: otp, fido2: fido2,
+                                  hidePassword: hidePassword))
       } else {
         skipField(wireType: wireType, data: data, offset: &offset)
       }

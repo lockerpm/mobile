@@ -39,6 +39,16 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
     setIsAddOpen(false)
   }, [])
 
+  // On iOS a native modal (the action sheet) cannot be dismissed while a new
+  // view controller (the document / image picker) is being presented in the
+  // same tick — iOS drops the presentation and the picker promise never
+  // resolves. Close the sheet, then wait for its dismiss animation to finish
+  // before presenting the picker.
+  const closeModalAndWait = useCallback(async () => {
+    closeModal()
+    await new Promise((resolve) => setTimeout(resolve, 400))
+  }, [closeModal])
+
   const options: { id: string; icon: IconTypes; label: string; onPress: () => void }[] = useMemo(
     () => [
       {
@@ -58,7 +68,7 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
         icon: "image",
         label: translate("file_attachment:upload_photo"),
         onPress: async () => {
-          closeModal()
+          await closeModalAndWait()
           const res = await pickMedia()
           if (res) {
             setLocalFile(res)
@@ -70,7 +80,7 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
         icon: "file-arrow-up",
         label: translate("file_attachment:upload_file"),
         onPress: async () => {
-          closeModal()
+          await closeModalAndWait()
           const res = await pickFile()
           if (res) {
             setLocalFile(res)
@@ -78,7 +88,7 @@ export const AttachmentSelectIcon = ({ isAddOpen, setIsAddOpen, isFree, setLocal
         },
       },
     ],
-    [closeModal, setLocalFile]
+    [closeModal, closeModalAndWait, setLocalFile]
   )
 
   return (

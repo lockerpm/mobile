@@ -17,6 +17,7 @@ import {
   ManageShareMemberModalScreen,
   ConfirmYourShareScreen,
   PendingSharedCipherModalScreen,
+  PendingSharedFolderModalScreen,
   FolderSharesScreen,
   ManageFolderSharedMemberScreen,
   ManageFolderShareMemberModalScreen,
@@ -34,6 +35,7 @@ export const ShareStack = observer(() => {
     >
       <Stack.Group screenOptions={modalScreenOptions}>
         <Stack.Screen name="pendingSharedCipherModal" component={PendingSharedCipherModalScreen} />
+        <Stack.Screen name="pendingSharedFolderModal" component={PendingSharedFolderModalScreen} />
 
         <Stack.Screen name="quickSharesActionsModal" component={QuickSharesActionsModalScreen} />
         <Stack.Screen name="manageSharedMemberModal" component={ManageShareMemberModalScreen} />

@@ -1,23 +1,26 @@
 import { FC } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
-import { debounce } from "app/utils/utils"
-import { ShareScreenProps } from "app/navigators"
+
 import {
   BottomModalContainer,
   Icon,
   Text,
   ModalBackdrop,
   PressableScale,
-  IconTypes,
+  Switch,
 } from "app/components/cores"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { AccountRoleText } from "@/static/types"
+import { ShareScreenProps } from "app/navigators"
+import { debounce } from "app/utils/utils"
+import { CipherType } from "core/enums"
+
 import { useCipherData } from "@/services/hook"
-import { TxKeyPath } from "@/i18n"
-import { SharedGroup } from "../../manageSharedMember/SharedGroup"
-import { SharedMember } from "../../manageSharedMember/SharedMember"
+import { AccountRoleText } from "@/static/types"
 import { ThemedStyle } from "@/theme"
 import { AppEventType, EventBus } from "@/utils/eventBus"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { SharedGroup } from "../../manageSharedMember/SharedGroup"
+import { SharedMember } from "../../manageSharedMember/SharedMember"
 
 export const ManageShareMemberModalScreen: FC<ShareScreenProps<"manageSharedMemberModal">> = ({
   navigation,
@@ -36,23 +39,25 @@ export const ManageShareMemberModalScreen: FC<ShareScreenProps<"manageSharedMemb
 
   const id = member?.id || group?.id || ""
   const isEditable = member?.role === "admin" || group?.role === "admin"
+  const isHidePassword = member?.hide_passwords || group?.hide_passwords || false
+  const showHidePasswordOption = cipher.type === CipherType.Login
+
+  const currentRole = member?.role || group?.role || AccountRoleText.MEMBER
+
   const onReload = () => {
     EventBus.emit(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, null)
     onClose()
   }
 
-  const onEditRole = async (shareType: "only_fill" | "edit") => {
-    let role = AccountRoleText.MEMBER
-    let autofillOnly = false
-    switch (shareType) {
-      case "only_fill":
-        autofillOnly = true
-        break
-      case "edit":
-        role = AccountRoleText.ADMIN
-        break
+  const onEditRole = async (shareType: "view" | "edit", hidePassword: boolean) => {
+    const role = shareType === "edit" ? AccountRoleText.ADMIN : AccountRoleText.MEMBER
+
+    if (role === currentRole && hidePassword === isHidePassword) {
+      onReload()
+      return
     }
-    const res = await editShareCipher(cipher.organizationId ?? "", id, role, autofillOnly, !!group)
+
+    const res = await editShareCipher(cipher.organizationId ?? "", id, role, hidePassword, !!group)
     if (res.kind === "ok" || res.kind === "unauthorized") {
       onReload()
     }
@@ -75,29 +80,6 @@ export const ManageShareMemberModalScreen: FC<ShareScreenProps<"manageSharedMemb
     }
   }
 
-  const permissions: {
-    icon: IconTypes
-    value: boolean
-    title: TxKeyPath
-    decs: TxKeyPath
-    onPress: () => void
-  }[] = [
-    {
-      icon: "eye",
-      value: !isEditable,
-      title: "shares:share_folder.viewer",
-      decs: "shares:share_folder.viewer_per",
-      onPress: () => onEditRole("only_fill"),
-    },
-    {
-      icon: "edit",
-      value: isEditable,
-      title: "shares:share_folder.editor",
-      decs: "shares:share_folder.editor_per",
-      onPress: () => onEditRole("edit"),
-    },
-  ]
-
   return (
     <View style={styles.flex}>
       <ModalBackdrop onPress={onClose} />
@@ -108,21 +90,48 @@ export const ManageShareMemberModalScreen: FC<ShareScreenProps<"manageSharedMemb
           {group && <SharedGroup item={group} />}
         </View>
 
-        {permissions.map((item, index) => (
-          <PressableScale key={index} onPress={item.onPress}>
-            <View style={themed($item)}>
-              <View style={styles.row}>
-                <Icon icon={item.icon} containerStyle={styles.icon} />
-                <View>
-                  <Text preset="bold" tx={item.title} />
-                  <Text preset="label" tx={item.decs} />
+        <PressableScale onPress={() => onEditRole("view", isHidePassword)}>
+          <View style={themed([$item, !isEditable && $select])}>
+            <View style={styles.row}>
+              <Icon icon={"eye"} containerStyle={styles.icon} />
+
+              <View style={styles.text}>
+                <View style={styles.row}>
+                  <View style={styles.text}>
+                    <Text preset="bold" tx={"shares:share_folder.viewer"} />
+                    <Text preset="label" tx={"shares:share_folder.viewer_per"} />
+                  </View>
                 </View>
               </View>
-
-              {item.value && <Icon icon="check-bold" size={24} color={colors.primary} />}
             </View>
-          </PressableScale>
-        ))}
+
+            {showHidePasswordOption && (
+              <View style={[styles.row, styles.hidePassword]}>
+                <View style={styles.text}>
+                  <Text weight="medium" tx={"shares:share_folder.fill_only"} />
+                  <Text preset="label" size="xs" tx={"shares:share_folder.fill_only_per"} />
+                </View>
+
+                <Switch
+                  value={isHidePassword}
+                  onValueChange={(value) => onEditRole("view", value)}
+                />
+              </View>
+            )}
+          </View>
+        </PressableScale>
+        <PressableScale onPress={() => onEditRole("edit", false)}>
+          <View style={themed([$item, isEditable && $select])}>
+            <View style={styles.row}>
+              <Icon icon={"edit"} containerStyle={styles.icon} />
+              <View>
+                <Text preset="bold" tx={"shares:share_folder.editor"} />
+                <Text preset="label" tx={"shares:share_folder.editor_per"} />
+              </View>
+            </View>
+          </View>
+        </PressableScale>
+
         <PressableScale onPress={onRemove}>
           <View style={themed($item)}>
             <View style={styles.row}>
@@ -136,13 +145,14 @@ export const ManageShareMemberModalScreen: FC<ShareScreenProps<"manageSharedMemb
   )
 }
 
+const $select: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  borderColor: colors.primary,
+})
+
 const $item: ThemedStyle<ViewStyle> = ({ colors }) => ({
   borderColor: colors.border,
-  alignItems: "center",
   borderRadius: 12,
   borderWidth: 1,
-  flexDirection: "row",
-  justifyContent: "space-between",
   marginHorizontal: 16,
   marginVertical: 8,
   paddingHorizontal: 16,
@@ -158,12 +168,20 @@ const styles = StyleSheet.create({
     marginTop: -6,
     paddingHorizontal: 16,
   },
+  hidePassword: {
+    marginLeft: 36,
+    marginTop: 4,
+  },
   icon: {
     marginRight: 12,
   },
   row: {
     alignItems: "center",
     flexDirection: "row",
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  text: {
     flexGrow: 1,
     flexShrink: 1,
   },
