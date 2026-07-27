@@ -30,7 +30,6 @@ export const useSocket = ({ isAndroidService }: { isAndroidService: boolean }) =
   // Sync
   const handleSync = useCallback(async () => {
     if (!isAndroidService) {
-      user.loadTeams()
       user.loadPlan()
 
       // Sync offline data

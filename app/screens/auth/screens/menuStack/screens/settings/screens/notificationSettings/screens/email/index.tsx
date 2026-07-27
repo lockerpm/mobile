@@ -124,42 +124,72 @@ export const PushEmailSettingsScreen: FC<NotificationSettingsScreenProps<"emailN
             onPress={() => {
               update(NotificationCategory.ITEM_SHARE, !settings.item_sharing)
             }}
-            RightAccessory={<Switch value={settings.item_sharing} />}
+            RightAccessory={
+              <Switch
+                value={settings.item_sharing}
+                onValueChange={(nextValue) => update(NotificationCategory.ITEM_SHARE, nextValue)}
+              />
+            }
           />
           <SettingsItem
             textTx={"noti_setting:emergency"}
             onPress={() => {
               update(NotificationCategory.EMERGENCY, !settings.emergency_access)
             }}
-            RightAccessory={<Switch value={settings.emergency_access} />}
+            RightAccessory={
+              <Switch
+                value={settings.emergency_access}
+                onValueChange={(nextValue) => update(NotificationCategory.EMERGENCY, nextValue)}
+              />
+            }
           />
           <SettingsItem
             textTx={"noti_setting:breach_scan"}
             onPress={() => {
               update(NotificationCategory.DATA_BREACH, !settings.data_breach)
             }}
-            RightAccessory={<Switch value={settings.data_breach} />}
+            RightAccessory={
+              <Switch
+                value={settings.data_breach}
+                onValueChange={(nextValue) => update(NotificationCategory.DATA_BREACH, nextValue)}
+              />
+            }
           />
           <SettingsItem
             textTx={"noti_setting:tips"}
             onPress={() => {
               update(NotificationCategory.PW_TIPS, !settings.password_tip_trick)
             }}
-            RightAccessory={<Switch value={settings.password_tip_trick} />}
+            RightAccessory={
+              <Switch
+                value={settings.password_tip_trick}
+                onValueChange={(nextValue) => update(NotificationCategory.PW_TIPS, nextValue)}
+              />
+            }
           />
           <SettingsItem
             textTx={"noti_setting:marketing"}
             onPress={() => {
               update(NotificationCategory.MARKETING, !settings.marketing)
             }}
-            RightAccessory={<Switch value={settings.marketing} />}
+            RightAccessory={
+              <Switch
+                value={settings.marketing}
+                onValueChange={(nextValue) => update(NotificationCategory.MARKETING, nextValue)}
+              />
+            }
           />
           <SettingsItem
             textTx={"common:other"}
             onPress={() => {
               update(NotificationCategory.OTHER, !settings.other)
             }}
-            RightAccessory={<Switch value={settings.other} />}
+            RightAccessory={
+              <Switch
+                value={settings.other}
+                onValueChange={(nextValue) => update(NotificationCategory.OTHER, nextValue)}
+              />
+            }
           />
         </MenuItemContainer>
       </Screen>

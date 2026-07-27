@@ -75,25 +75,6 @@ export type QuickShareCipherData = {
   require_otp: boolean
 }
 
-export type ShareCipherData = {
-  cipher: CipherRequest & { id: string }
-  sharing_key: string
-  members: {
-    username: string
-    role: AccountRoleText
-    key: string
-    hide_passwords: boolean
-  }[]
-  groups?: {
-    id: string
-    role: string
-    members: {
-      username: string
-      key: string
-    }[]
-  }[]
-}
-
 export type ShareMultipleCiphersMembers = {
   username: string
   role: AccountRoleText
@@ -101,9 +82,23 @@ export type ShareMultipleCiphersMembers = {
   hide_passwords: boolean
 }[]
 
+export type ShareMembers = {
+  email: string
+  role: AccountRoleText
+  hidePasswords: boolean
+}
+
+export type ShareGroups = {
+  name: string
+  id: string
+  role: AccountRoleText
+  hidePasswords: boolean
+}
+
 export type ShareMultipleCiphersGroups = {
   id: string
   role: string
+  hide_passwords: boolean
   members: {
     username: string
     key: string | null
@@ -131,7 +126,7 @@ export type SharingInvitationType = {
   access_time: number
   cipher_type: number
   id: string
-  item_type: string
+  item_type: "folder" | "cipher"
   owner: {
     email: string
     full_name: string
@@ -176,6 +171,7 @@ export type SharedGroupType = {
   name: string
   role: AccountRoleText
   share_type: SharingType
+  hide_passwords: boolean
 }
 
 export type GetCiphersParams = {
@@ -249,6 +245,15 @@ export type SharedWithYouType = CipherAppView & {
   isShared?: boolean
   description?: string
   isAccepted?: boolean
+}
+
+export type PendingSharedFolderType = {
+  // invitation id — used for accept/reject
+  id: string
+  organizationId: string
+  name: string
+  description: string
+  isAccepted: boolean
 }
 
 export interface FileData {

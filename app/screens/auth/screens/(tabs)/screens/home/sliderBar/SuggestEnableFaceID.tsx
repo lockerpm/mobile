@@ -1,11 +1,10 @@
 import { View, Image, StyleProp, ViewStyle, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-import ReactNativeBiometrics from "react-native-biometrics"
 
 import { PressableIcon, Text, PressableText } from "app/components/cores"
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
-import { useToast } from "app/services/utils"
+import { promptDeviceAuth, useToast } from "app/services/utils"
 
 import { useAppLocale } from "@/i18n"
 import { autofillKeyChain } from "@/utils/autofill.ios"
@@ -16,31 +15,40 @@ const FACEID = require("assets/images/intro/faceid.png")
 interface Props {
   onClose: () => void
   style: StyleProp<ViewStyle>
+  hasBiometric: boolean
 }
 
-const rnBiometrics = new ReactNativeBiometrics()
-
-export const SuggestEnableFaceID = observer(({ onClose, style }: Props) => {
+export const SuggestEnableFaceID = observer(({ onClose, style, hasBiometric }: Props) => {
   const { cryptoService } = useCoreService()
   const { notifyTx } = useToast()
-  const { lang } = useAppLocale()
+  const { lang, translate } = useAppLocale()
   const {
     theme: { colors },
   } = useAppTheme()
   const { user } = useStores()
 
   const handleUseBiometric = async () => {
-    const { success } = await rnBiometrics.simplePrompt({
-      promptMessage: "Verify FaceID/TouchID",
+    const { success, error } = await promptDeviceAuth({
+      promptMessage: translate("common:unlock_locker"),
+      allowDeviceCredential: true,
+      fallbackLabel: translate("common:use_device_passcode"),
     })
     if (!success) {
-      notifyTx("error", "error:biometric_unlock_failed")
+      if (error !== "user_cancel" && error !== "system_cancel") {
+        notifyTx(
+          "error",
+          hasBiometric ? "error:biometric_unlock_failed" : "error:device_passcode_unlock_failed"
+        )
+      }
       onClose()
       return
     }
 
     await _updateAutofillFaceIdSetting()
-    notifyTx("success", "success:biometric_enabled")
+    notifyTx(
+      "success",
+      hasBiometric ? "success:biometric_enabled" : "success:device_passcode_enabled"
+    )
     user.setBiometricIntroShown(true)
     onClose()
   }
@@ -64,7 +72,7 @@ export const SuggestEnableFaceID = observer(({ onClose, style }: Props) => {
     <View style={style}>
       <Image source={FACEID} resizeMode="contain" style={styles.image} />
       <View style={styles.content}>
-        <Text tx={"biometric_intro:suggest"} />
+        <Text tx={hasBiometric ? "biometric_intro:suggest" : "biometric_intro:suggest_passcode"} />
         <PressableText
           preset="bold"
           tx={"common:enable"}

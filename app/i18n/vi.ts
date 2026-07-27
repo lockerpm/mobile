@@ -11,6 +11,9 @@ const vi: Translations = {
     add_new_field: "Thêm trường mới",
     and: "và",
     biometric_unlocking: "Mở khóa bằng Face ID/Touch ID",
+    unlock_locker: "Dùng mã thiết bị để mở khoá Locker",
+    unlock_with_device_passcode: "Mở khoá bằng mã thiết bị",
+    use_device_passcode: "Dùng mã thiết bị",
     browse: "Kho",
     calculating: "Đang kiểm tra",
     cancel: "Hủy",
@@ -152,6 +155,7 @@ const vi: Translations = {
     from: "Từ",
     shareWith: "Chia sẻ với:",
     createdAt: "Tạo lúc ",
+    wrong_key: "(Không thể giải mã mục)",
   },
   navigator: {
     is_offline: "Locker hiện đang ở chế độ ngoại tuyến.",
@@ -176,9 +180,13 @@ const vi: Translations = {
     master_password: "Không thể tự động tạo Siêu Mật Khẩu tự động",
     not_supported: "Không hỗ trợ",
     not_valid_for_biometric: "Bạn cần nhập lại Master Password để kích hoạt lại FaceID/TouchID",
+    not_valid_for_device_passcode:
+      "Bạn cần nhập lại Master Password để kích hoạt lại mở khoá bằng mã thiết bị",
     biometric_not_enable: "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
-    biometric_not_support: "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
+    device_passcode_not_enable: "Mở khoá bằng mã thiết bị chưa được kích hoạt",
+    biometric_not_support: "Thiết bị không hỗ trợ mở khoá bằng sinh trắc học hoặc mã thiết bị",
     biometric_unlock_failed: "Xác thực bằng Face ID/Touch ID không thành công",
+    device_passcode_unlock_failed: "Xác thực bằng mã thiết bị không thành công",
     required_data: "Không được để trống thông tin này",
     session_login_failed: "Đăng nhập phiên không thành công! Vui lòng thử lại",
     login_failed: "Đăng nhập không thành công! Vui lòng thử lại",
@@ -308,6 +316,7 @@ const vi: Translations = {
     master_password_updated: "Master Password đã được cập nhật",
     locker_password_updated: "Mật khẩu Locker đã được cập nhật",
     biometric_enabled: "Mở khóa bằng Face ID/Touch ID đã được kích hoạt",
+    device_passcode_enabled: "Mở khoá bằng mã thiết bị đã được kích hoạt",
     cipher_created: "Thêm mới thành công",
     cipher_deleted: "Xóa thành công",
     cipher_restored: "Khôi phục thành công",
@@ -593,9 +602,13 @@ const vi: Translations = {
   },
   biometric_intro: {
     title: "Mở khóa Locker bằng Face ID/Touch ID",
+    title_passcode: "Mở khoá Locker bằng mã thiết bị",
     desc: "Sử dụng nhận dạng khuôn mặt hoặc vân tay để bảo vệ mật khẩu của bạn",
+    desc_passcode: "Dùng mã PIN hoặc mật khẩu thiết bị để mở khoá kho lưu trữ nhanh chóng",
     suggest: "Bật FaceID/TouchID để mở khóa vault dễ dàng.",
+    suggest_passcode: "Dùng mã thiết bị để mở khoá kho lưu trữ nhanh chóng",
     use_btn: "Sử dụng Face ID/Touch ID",
+    use_btn_passcode: "Dùng mã thiết bị",
     later_btn: "Để sau",
   },
   card: {
@@ -712,10 +725,18 @@ const vi: Translations = {
   },
   shares: {
     shares: "Chia sẻ",
-    share_items: "Bạn đã chia sẻ",
+    share_items: "Tôi đã chia sẻ",
     shared_items: "Được chia sẻ với tôi",
     shared_folder: "Thư mục chia sẻ",
+    item: "Mục",
     encrypted_content: "Nội dung mã hoá",
+    sort: {
+      accepted_time: "Thời gian chấp nhận",
+      accepted_newest: "Thời gian chấp nhận (mới nhất)",
+      accepted_oldest: "Thời gian chấp nhận (cũ nhất)",
+    },
+    accepted_at: "Chấp nhận {{time}}",
+    last_updated_at: "Cập nhật lần cuối {{time}}",
     share_folder: {
       detail: "Xem các mục",
       error_share_item:
@@ -726,6 +747,8 @@ const vi: Translations = {
       add_email: "Thêm email thành viên",
       viewer: "Chỉ xem",
       editor: "Chỉnh sửa",
+      fill_only: "Ẩn mật khẩu",
+      fill_only_per: "(Chỉ áp dụng cho mục đăng nhập)",
       viewer_per: "Chỉ được quyền xem thông tin",
       editor_per: "Có quyền thanh đổi, sửa dữ liệu",
       remove: "Xoá khỏi thư mục",
@@ -948,6 +971,8 @@ const vi: Translations = {
     import_export: "Nhập và xuất dữ liệu",
     import: "Nhập dữ liệu",
     export: "Xuất dữ liệu",
+    export_note:
+      "Lưu ý: Bạn không thể xuất các mục được chia sẻ bởi người khác nhưng bị ẩn mật khẩu.",
     sync_now: "Đồng bộ dữ liệu",
     theme: "Chủ đề",
     dark_theme: "Tối",
@@ -1006,6 +1031,8 @@ const vi: Translations = {
   },
   export: {
     success: "Dữ liệu đã được xuất!",
+    verify: "Xác thực",
+    verify_desc: "Nhập Master Password của bạn để xác thực",
   },
   import: {
     format: "Định dạng",

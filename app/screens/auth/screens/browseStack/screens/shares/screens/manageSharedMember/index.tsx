@@ -1,19 +1,21 @@
-import { Button, Header, Screen } from "@/components/cores"
-import { ShareScreenProps } from "@/navigators"
-import { useAppTheme } from "@/utils/useAppTheme"
 import { FC, useCallback, useEffect, useState } from "react"
 import { ActivityIndicator, FlatList, StyleSheet, View, ViewStyle } from "react-native"
+import { observer } from "mobx-react-lite"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+
+import { Button, Header, Screen } from "@/components/cores"
 import { Text } from "@/components/cores"
+import { useStores } from "@/models"
+import { ShareScreenProps } from "@/navigators"
+import { useCipherData } from "@/services/hook"
+import { useToast } from "@/services/utils"
 import { SharedGroupType, SharedMemberType } from "@/static/types"
+import { ThemedStyle } from "@/theme"
+import { AppEventType, EventBus } from "@/utils/eventBus"
+import { useAppTheme } from "@/utils/useAppTheme"
+
 import { SharedGroup } from "./SharedGroup"
 import { SharedMember } from "./SharedMember"
-import { observer } from "mobx-react-lite"
-import { useStores } from "@/models"
-import { useToast } from "@/services/utils"
-import { ThemedStyle } from "@/theme"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { AppEventType, EventBus } from "@/utils/eventBus"
-import { useCipherData } from "@/services/hook"
 
 type MemberType =
   | {
@@ -72,7 +74,7 @@ export const ManageSharedMemberScreen: FC<ShareScreenProps<"manageSharedMember">
         return
       }
       navigation.navigate("normalShare", {
-        ciphers: [cipher],
+        ciphers: [{ ...cipher, revisionDate: null }],
       })
     }, [navigation, cipher, isFromShare])
 

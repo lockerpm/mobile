@@ -16,7 +16,7 @@ import { ShareOptions } from "./ShareOptions"
 export const CipherActionsModalScreen: FC<AuthScreenProps<"cipherActionsModal">> = ({
   navigation,
   route: {
-    params: { mode, item, deleteIds, isDeleted = false },
+    params: { mode, item, deleteIds, isDeleted = false, acceptedTime },
   },
 }) => {
   const [targetModal, setTargetModal] = useState(mode)
@@ -37,6 +37,7 @@ export const CipherActionsModalScreen: FC<AuthScreenProps<"cipherActionsModal">>
           item={item}
           setNextModal={setTargetModal}
           onClose={onClose}
+          acceptedTime={acceptedTime}
         />
       )}
 

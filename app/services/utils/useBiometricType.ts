@@ -1,44 +1,32 @@
-import { BiometricsType } from "app/static/types"
 import { useEffect, useState } from "react"
-import ReactNativeBiometrics, { BiometryTypes } from "react-native-biometrics"
 
-const rnBiometrics = new ReactNativeBiometrics()
+import { BiometricsType } from "app/static/types"
+
+import { getDeviceAuthCapabilities } from "./useDeviceAuthentication"
 
 export const useBiometricType = () => {
   const [biometryType, setBiometryType] = useState<BiometricsType>(BiometricsType.None)
+  const [hasDevicePasscode, setHasDevicePasscode] = useState<boolean>(false)
 
-  // Detect biometric type
-  const detectbiometryType = async () => {
-    const { biometryType } = await rnBiometrics.isSensorAvailable()
-
-    if (biometryType === BiometryTypes.TouchID) {
-      setBiometryType(BiometricsType.TouchID)
-      return
-    }
-
-    if (biometryType === BiometryTypes.FaceID) {
-      setBiometryType(BiometricsType.FaceID)
-      return
-    }
-
-    if (biometryType === BiometryTypes.Biometrics) {
-      setBiometryType(BiometricsType.Biometrics)
-    }
+  const refresh = async () => {
+    const caps = await getDeviceAuthCapabilities()
+    setBiometryType(caps.biometryType)
+    setHasDevicePasscode(caps.hasDevicePasscode)
   }
 
-  const isSensorAvailable = async () => {
-    const { available } = await rnBiometrics.isSensorAvailable()
-
-    return available
+  const isBiometricAvailable = async () => {
+    const caps = await getDeviceAuthCapabilities()
+    return caps.hasBiometric
   }
 
-  // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-    detectbiometryType()
+    refresh()
   }, [])
 
   return {
     biometryType,
-    isBiometricAvailable: isSensorAvailable,
+    hasDevicePasscode,
+    isBiometricAvailable,
+    refresh,
   }
 }

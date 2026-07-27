@@ -1,13 +1,16 @@
-import { ModalBackdrop } from "app/components/cores"
-import { ShareScreenProps } from "app/navigators"
-import { debounce } from "app/utils/utils"
 import { FC, useState } from "react"
 import { View, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
+
+import { ModalBackdrop } from "app/components/cores"
 import { BottomModalContainer } from "app/components/cores"
 import { NewActionSheetItem } from "app/components/utils"
-import { ShareWithYouItem } from "../../shared/ShareWithYouItem"
+import { ShareScreenProps } from "app/navigators"
+import { debounce } from "app/utils/utils"
+
 import { useCipherData } from "@/services/hook"
+
+import { ShareWithYouItem } from "../../shared/ShareWithYouItem"
 
 export const PendingSharedCipherModalScreen: FC<ShareScreenProps<"pendingSharedCipherModal">> =
   observer(

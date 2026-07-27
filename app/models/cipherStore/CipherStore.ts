@@ -9,7 +9,6 @@ import {
   ImportFolderData,
   MoveFolderData,
   MyShareType,
-  ShareCipherData,
   ShareMultipleCiphersData,
   SharingInvitationType,
   SharingStatus,
@@ -280,11 +279,6 @@ export const CipherStoreModel = types
 
     getSharingPublicKey: async (email: string) => {
       const res = await cipherApi.getSharingPublicKey(self.apiToken, { email })
-      return res
-    },
-
-    shareCipher: async (payload: ShareCipherData) => {
-      const res = await cipherApi.shareCipher(self.apiToken, payload)
       return res
     },
 

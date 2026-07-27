@@ -44,8 +44,8 @@ export const formatDate = (date: string | number, dateFormat?: string, options?:
   return format(parsedDate, dateFormat ?? "MMM dd, yyyy", dateOptions)
 }
 
-export const getRelativeTime = (date: string | number) => {
+export const getRelativeTime = (date: string | number, addSuffix = false) => {
   // Kiểm tra nếu date là dạng timestamp (number)
   const parsedDate = typeof date === "number" ? new Date(date) : parseISO(date)
-  return formatDistanceToNow(parsedDate, { locale: dateFnsLocale })
+  return formatDistanceToNow(parsedDate, { locale: dateFnsLocale, addSuffix })
 }

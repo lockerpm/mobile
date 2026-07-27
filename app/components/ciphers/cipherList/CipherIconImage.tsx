@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ImageProps, Image, ImageStyle, View } from "react-native"
 
 import { VAULT_LOGO } from "app/static/vault"
@@ -37,7 +37,16 @@ export const CipherIconImage = ({
   ...otherProps
 }: ImageProps & { cipherType: CipherType; isHaveKey?: boolean }) => {
   const { themed } = useAppTheme()
-  const [imageSource, setImageSource] = useState(source)
+  // Derive the shown image from the current `source` prop instead of snapshotting
+  // it once: when this instance is reused for another item (e.g. list reorder),
+  // `source` changes and the fallback must reset so the new logo is shown.
+  const [hasError, setHasError] = useState(false)
+
+  useEffect(() => {
+    setHasError(false)
+  }, [source])
+
+  const imageSource = hasError ? getDefaultLogo(cipherType) : source
 
   return (
     <View style={[style, $center]}>
@@ -45,7 +54,7 @@ export const CipherIconImage = ({
         source={imageSource}
         resizeMode="contain"
         onError={() => {
-          setImageSource(getDefaultLogo(cipherType))
+          setHasError(true)
         }}
         style={$imageStyle}
         {...otherProps}

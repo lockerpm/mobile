@@ -1,45 +1,65 @@
+import { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import ReactNativeBiometrics from "react-native-biometrics"
 
 import { Switch } from "app/components/cores"
 import { SettingsItem } from "app/components/utils"
 import { useStores } from "app/models"
 import { useCoreService } from "app/services/coreService"
-import { useBiometricType, useToast } from "app/services/utils"
+import {
+  DeviceAuthCapabilities,
+  getDeviceAuthCapabilities,
+  promptDeviceAuth,
+  useToast,
+} from "app/services/utils"
 
 import { useAppLocale } from "@/i18n"
 import { autofillKeyChain } from "@/utils/autofill.ios"
-
-const rn = new ReactNativeBiometrics()
 
 export const EnableUnlockWithBiometric = observer(() => {
   const { user } = useStores()
   const { cryptoService } = useCoreService()
   const { notifyTx } = useToast()
-  const { lang } = useAppLocale()
-  const { isBiometricAvailable } = useBiometricType()
+  const { lang, translate } = useAppLocale()
+
+  const [caps, setCaps] = useState<DeviceAuthCapabilities | null>(null)
+
+  useEffect(() => {
+    getDeviceAuthCapabilities().then(setCaps)
+  }, [])
 
   const enableBiometric = async () => {
-    const available = await isBiometricAvailable()
+    const fresh = await getDeviceAuthCapabilities()
+    setCaps(fresh)
 
-    if (!available) {
+    if (!fresh.hasBiometric && !fresh.hasDevicePasscode) {
       notifyTx("error", "error:biometric_not_support")
       return
     }
 
-    const { success } = await rn.simplePrompt({
-      promptMessage: "Verify FaceID/TouchID",
+    const { success, error } = await promptDeviceAuth({
+      promptMessage: translate("common:unlock_locker"),
+      allowDeviceCredential: true,
+      fallbackLabel: translate("common:use_device_passcode"),
     })
 
     if (!success) {
-      notifyTx("error", "error:biometric_unlock_failed")
+      if (error !== "user_cancel" && error !== "system_cancel") {
+        notifyTx(
+          "error",
+          fresh.hasBiometric
+            ? "error:biometric_unlock_failed"
+            : "error:device_passcode_unlock_failed"
+        )
+      }
       return
     }
 
-    // Update autofill settings
     await updateAutofillFaceIdSetting(true)
 
-    notifyTx("success", "success:biometric_enabled")
+    notifyTx(
+      "success",
+      fresh.hasBiometric ? "success:biometric_enabled" : "success:device_passcode_enabled"
+    )
   }
 
   const updateAutofillFaceIdSetting = async (enabled: boolean) => {
@@ -64,9 +84,15 @@ export const EnableUnlockWithBiometric = observer(() => {
       updateAutofillFaceIdSetting(false)
     }
   }
+
+  if (caps === null) return null
+  if (!caps.hasBiometric && !caps.hasDevicePasscode) return null
+
   return (
     <SettingsItem
-      textTx={"common:biometric_unlocking"}
+      textTx={
+        caps.hasBiometric ? "common:biometric_unlocking" : "common:unlock_with_device_passcode"
+      }
       onPress={() => onChage(!user.isBiometricUnlock)}
       RightAccessory={
         <Switch onPress={() => onChage(!user.isBiometricUnlock)} value={user.isBiometricUnlock} />

@@ -1,6 +1,7 @@
 import { View, Image, StyleSheet } from "react-native"
-import { SharedGroupType } from "app/static/types"
+
 import { PressableScale, Text } from "app/components/cores"
+import { SharedGroupType } from "app/static/types"
 
 interface Props {
   item: SharedGroupType

@@ -44,6 +44,7 @@ interface Props {
   lockConfig: MPEncodeConfig
   setIsUnlocking: (val: boolean) => void
   biometryType: BiometricsType
+  hasDevicePasscode: boolean
 }
 
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -52,6 +53,7 @@ export const LockByMasterPassword = ({
   fido2,
   isUnlocking,
   biometryType,
+  hasDevicePasscode,
   lockConfig,
   setIsUnlocking,
   handleLogout,
@@ -153,13 +155,20 @@ export const LockByMasterPassword = ({
   }, [])
 
   const handleUnlockBiometric = async () => {
+    const hasBiometric = biometryType !== BiometricsType.None
     if (!user.isBiometricUnlock) {
-      notifyTx("error", "error:biometric_not_enable")
+      notifyTx(
+        "error",
+        hasBiometric ? "error:biometric_not_enable" : "error:device_passcode_not_enable"
+      )
       return
     }
     const key = await cryptoService.getKey()
     if (!key) {
-      notifyTx("info", "error:not_valid_for_biometric")
+      notifyTx(
+        "info",
+        hasBiometric ? "error:not_valid_for_biometric" : "error:not_valid_for_device_passcode"
+      )
       return
     }
 
@@ -277,18 +286,30 @@ export const LockByMasterPassword = ({
         preset="primary"
       />
 
-      {biometryType !== BiometricsType.None && (
+      {(biometryType !== BiometricsType.None || hasDevicePasscode) && (
         <TouchableOpacity
           disabled={isUnlocking}
           onPress={handleUnlockBiometric}
           style={styles.faceIdContainer}
         >
           <View style={styles.faceId}>
-            <Icon icon={biometryType === BiometricsType.FaceID ? "face-id" : "fingerprint"} />
+            <Icon
+              icon={
+                biometryType === BiometricsType.FaceID
+                  ? "face-id"
+                  : biometryType !== BiometricsType.None
+                    ? "fingerprint"
+                    : "lock-key"
+              }
+            />
 
             <Text
-              // @ts-ignore
-              text={"  " + translate(`common:${biometryType}_unlocking`)}
+              text={
+                biometryType !== BiometricsType.None
+                  ? // @ts-ignore
+                    "  " + translate(`common:${biometryType}_unlocking`)
+                  : "  " + translate("common:unlock_with_device_passcode")
+              }
             />
           </View>
         </TouchableOpacity>

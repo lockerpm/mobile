@@ -1,19 +1,21 @@
-import { Button, Header, Screen } from "@/components/cores"
-import { ShareScreenProps } from "@/navigators"
-import { useAppTheme } from "@/utils/useAppTheme"
 import { FC, useCallback, useEffect, useState } from "react"
 import { ActivityIndicator, FlatList, StyleSheet, View, ViewStyle } from "react-native"
-import { Text } from "@/components/cores"
-import { SharedGroupType, SharedMemberType } from "@/static/types"
 import { observer } from "mobx-react-lite"
-import { useStores } from "@/models"
-import { useToast } from "@/services/utils"
-import { ThemedStyle } from "@/theme"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { AppEventType, EventBus } from "@/utils/eventBus"
+
+import { Text } from "@/components/cores"
+import { Button, Header, Screen } from "@/components/cores"
+import { useStores } from "@/models"
+import { ShareScreenProps } from "@/navigators"
 import { useFolder } from "@/services/hook"
-import { SharedMember } from "../manageSharedMember/SharedMember"
+import { useToast } from "@/services/utils"
+import { SharedGroupType, SharedMemberType } from "@/static/types"
+import { ThemedStyle } from "@/theme"
+import { AppEventType, EventBus } from "@/utils/eventBus"
+import { useAppTheme } from "@/utils/useAppTheme"
+
 import { SharedGroup } from "../manageSharedMember/SharedGroup"
+import { SharedMember } from "../manageSharedMember/SharedMember"
 
 type MemberType =
   | {

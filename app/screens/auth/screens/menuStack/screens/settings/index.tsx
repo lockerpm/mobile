@@ -10,6 +10,7 @@ import {
   ImportScreen,
   NotificationSettingsStack,
   SettingsScreen,
+  VerifyMasterPasswordScreen,
 } from "./screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "./screens/autofillService/AutofillServiceScreen"
@@ -33,7 +34,7 @@ export const SettingsStack = observer(() => {
       <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
       <Stack.Screen name="export" component={ExportScreen} />
       <Stack.Screen name="encryptionKey" component={EncryptionKeyScreen} />
-      {/* <Stack.Screen name="emergencyStack" component={EmergencyAccessStack} /> */}
+      <Stack.Screen name="verifyMasterPassword" component={VerifyMasterPasswordScreen} />
     </Stack.Navigator>
   )
 })

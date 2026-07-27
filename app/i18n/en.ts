@@ -10,6 +10,9 @@ const en = {
     add_new_field: "Add new field",
     and: "and",
     biometric_unlocking: "Unlock with Face ID/Touch ID",
+    unlock_locker: "Use passcode to unlock Locker",
+    unlock_with_device_passcode: "Unlock with device passcode",
+    use_device_passcode: "Use device passcode",
     browse: "Browse",
     calculating: "Calculating",
     cancel: "Cancel",
@@ -151,6 +154,7 @@ const en = {
     from: "From",
     shareWith: "Share with:",
     createdAt: "Created at ",
+    wrong_key: "(Can not decrypt item)",
   },
   navigator: {
     is_offline: "Locker is currently in offline mode.",
@@ -175,9 +179,13 @@ const en = {
     master_password: "Cannot auto create Master Password item",
     not_supported: "Not supported",
     not_valid_for_biometric: "Log in with Master Password to re-enable FaceID/TouchID",
+    not_valid_for_device_passcode:
+      "Log in with Master Password to re-enable device passcode unlock",
     biometric_not_enable: "Face ID/Touch ID unlocking is not enabled",
-    biometric_not_support: "Face ID/Touch ID unlocking is not supported",
+    device_passcode_not_enable: "Device passcode unlocking is not enabled",
+    biometric_not_support: "Biometric or device passcode unlocking is not available on this device",
     biometric_unlock_failed: "Face ID/Touch ID verification failed",
+    device_passcode_unlock_failed: "Device passcode verification failed",
     required_data: "This data is mandatory",
     session_login_failed: "Session login failed! Please try again",
     login_failed: "Login failed! Please try again",
@@ -310,6 +318,7 @@ const en = {
     master_password_updated: "Master password is updated",
     locker_password_updated: "Locker password is updated",
     biometric_enabled: "Face ID/Touch ID unlocking is enabled",
+    device_passcode_enabled: "Device passcode unlocking is enabled",
     cipher_created: "New item created!",
     cipher_deleted: "Item deleted!",
     cipher_restored: "Item restored!",
@@ -595,9 +604,13 @@ const en = {
   },
   biometric_intro: {
     title: "Unlock your vault with Face ID/Touch ID",
+    title_passcode: "Unlock your vault with device passcode",
     desc: "Use face recognition or fingerprint to protect your passwords",
+    desc_passcode: "Use your device PIN or passcode to quickly unlock your vault",
     suggest: "Use Face ID/Touch ID to easy unlock your vault",
+    suggest_passcode: "Use your device passcode to easily unlock your vault",
     use_btn: "Use Face ID/Touch ID",
+    use_btn_passcode: "Use device passcode",
     later_btn: "I'll do it later",
   },
   card: {
@@ -718,7 +731,15 @@ const en = {
     share_items: "Your Shares",
     shared_items: "Shared with me",
     shared_folder: "Shared folder",
+    item: "Item",
     encrypted_content: "Encrypted Content",
+    sort: {
+      accepted_time: "Accepted time",
+      accepted_newest: "Accepted time (newest)",
+      accepted_oldest: "Accepted time (oldest)",
+    },
+    accepted_at: "Accepted {{time}}",
+    last_updated_at: "Last updated {{time}}",
     share_folder: {
       detail: "View items",
       error_share_item:
@@ -729,6 +750,8 @@ const en = {
       add_email: "Add email to share",
       viewer: "Viewer",
       editor: "Editor",
+      fill_only: "Hide password",
+      fill_only_per: "(Login items only)",
       viewer_per: "Only can View",
       editor_per: "Organize, add, and edit",
       remove: "Remove from folder",
@@ -952,6 +975,8 @@ const en = {
     import_export: "Import and Export",
     import: "Import Data",
     export: "Export Data",
+    export_note:
+      "Note: Items shared with you without permission to view their passwords will not be exported.",
     sync_now: "Synchronize Data",
     theme: "Theme",
     dark_theme: "Dark",
@@ -1010,6 +1035,8 @@ const en = {
   },
   export: {
     success: "Data exported!",
+    verify: "Verify",
+    verify_desc: "Enter your Master Password to verify",
   },
   import: {
     format: "Format",

@@ -78,6 +78,7 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
    * Copy button
    */
   isCopyable?: boolean
+  isCanViewPassword?: boolean
   /**
    * A style modifier for different input states.
    */
@@ -157,6 +158,7 @@ export const TextInput = forwardRef(function TextField(
     isDisabled,
     isPassword,
     isCopyable,
+    isCanViewPassword = true,
     animated,
     multiline,
     placeholder,
@@ -357,7 +359,7 @@ export const TextInput = forwardRef(function TextField(
           style={$inputStyles}
         />
 
-        {isPassword && !!value && (
+        {isPassword && isCanViewPassword && !!value && (
           <PressableIcon
             onPress={() => {
               setIsShowText(!isShowText)

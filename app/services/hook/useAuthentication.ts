@@ -1,5 +1,4 @@
 import moment from "moment"
-import ReactNativeBiometrics from "react-native-biometrics"
 import DeviceInfo from "react-native-device-info"
 
 import { useStores } from "app/models"
@@ -19,9 +18,7 @@ import { Logger } from "@/utils/logger"
 import { useHelper } from "./useHelper"
 import { useSocialLogout } from "./useSocialLogin"
 import { useCoreService } from "../coreService"
-import { useToast } from "../utils"
-
-const rnBiometrics = new ReactNativeBiometrics()
+import { getDeviceAuthCapabilities, promptDeviceAuth, useToast } from "../utils"
 
 export function useAuthentication() {
   const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore, enterpriseStore } =
@@ -411,18 +408,25 @@ export function useAuthentication() {
   const biometricLogin = async (encodeConfig: MPEncodeConfig): Promise<{ kind: string }> => {
     try {
       await delay(100)
-      const { available } = await rnBiometrics.isSensorAvailable()
-      if (!available) {
+      const { hasBiometric, hasDevicePasscode } = await getDeviceAuthCapabilities()
+      if (!hasBiometric && !hasDevicePasscode) {
         notifyTx("error", "error:biometric_not_support")
         return { kind: "bad-data" }
       }
 
-      // Validate biometric
-      const { success } = await rnBiometrics.simplePrompt({
-        promptMessage: "Unlock Locker",
+      // Validate biometric (or device passcode fallback)
+      const { success, error } = await promptDeviceAuth({
+        promptMessage: translate("common:unlock_locker"),
+        allowDeviceCredential: true,
+        fallbackLabel: translate("common:use_device_passcode"),
       })
       if (!success) {
-        notifyTx("error", "error:biometric_unlock_failed")
+        if (error !== "user_cancel" && error !== "system_cancel") {
+          notifyTx(
+            "error",
+            hasBiometric ? "error:biometric_unlock_failed" : "error:device_passcode_unlock_failed"
+          )
+        }
         return { kind: "bad-data" }
       }
       // Offline login

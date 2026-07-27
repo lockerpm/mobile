@@ -1,17 +1,20 @@
-import { useAppTheme } from "@/utils/useAppTheme"
 import { StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+
 import { Icon, PressableIcon, Text } from "app/components/cores"
-import { AccountRoleText } from "@/static/types"
+
+import { AccountRoleText, ShareGroups } from "@/static/types"
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 type GroupProps = {
-  group: {
-    id: string
-    name: string
-    role: AccountRoleText
-  }
+  group: ShareGroups
   removeGroup: (id: string) => void
-  navigateToEditGroup: (id: string, value: string, role: AccountRoleText) => void
+  navigateToEditGroup: (
+    id: string,
+    value: string,
+    role: AccountRoleText,
+    hidePassword: boolean
+  ) => void
 }
 
 export const Group = ({ group, removeGroup, navigateToEditGroup }: GroupProps) => {
@@ -23,12 +26,12 @@ export const Group = ({ group, removeGroup, navigateToEditGroup }: GroupProps) =
   return (
     <TouchableOpacity
       style={themed($shareMember)}
-      onPress={() => navigateToEditGroup(group.id, group.name, group.role)}
+      onPress={() => navigateToEditGroup(group.id, group.name, group.role, group.hidePasswords)}
     >
       <Text text={group.name} style={styles.email} />
       <TouchableOpacity
         style={styles.row}
-        onPress={() => navigateToEditGroup(group.id, group.name, group.role)}
+        onPress={() => navigateToEditGroup(group.id, group.name, group.role, group.hidePasswords)}
       >
         <Text
           size="xs"

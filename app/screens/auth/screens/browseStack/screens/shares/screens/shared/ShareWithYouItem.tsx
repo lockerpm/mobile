@@ -11,15 +11,16 @@ import { useAppTheme } from "@/utils/useAppTheme"
 
 type Prop = {
   item: SharedWithYouType
-  openActionMenu?: (item: SharedWithYouType) => void
+  openActionMenu?: (item: SharedWithYouType, acceptedTime?: number) => void
   org?: {
     type: AccountRole
     name: string
   }
+  acceptedTime?: number
 }
 
 export const ShareWithYouItem = memo((props: Prop) => {
-  const { item, openActionMenu, org } = props
+  const { item, openActionMenu, org, acceptedTime } = props
   const {
     themed,
     theme: { colors },
@@ -46,13 +47,14 @@ export const ShareWithYouItem = memo((props: Prop) => {
   }
 
   const description = getDescription(item)
+  const name = item.name || translate("common:wrong_key")
 
   return (
     <PressableScale
-      disabled={!openActionMenu || item.isAccepted}
+      disabled={!openActionMenu || item.isAccepted || !item.name}
       onPress={() => {
         if (openActionMenu) {
-          openActionMenu(item)
+          openActionMenu(item, acceptedTime)
         }
       }}
       style={styles.container}
@@ -67,7 +69,7 @@ export const ShareWithYouItem = memo((props: Prop) => {
         <View style={styles.content}>
           <View style={styles.row}>
             <View style={styles.name}>
-              <Text preset="bold" text={item.name} numberOfLines={1} />
+              <Text preset="bold" text={name} numberOfLines={1} />
             </View>
 
             {/* Pending status */}
@@ -89,16 +91,6 @@ export const ShareWithYouItem = memo((props: Prop) => {
               size="sm"
               preset="label"
               text={description}
-              style={styles.mt3}
-              numberOfLines={1}
-            />
-          )}
-
-          {!!item.login.username && (
-            <Text
-              size="sm"
-              preset="label"
-              text={item.login.username}
               style={styles.mt3}
               numberOfLines={1}
             />

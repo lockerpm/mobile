@@ -35,6 +35,7 @@ export type IosAutofillPassword = {
   password: string
   isOwner: boolean
   otp?: string
+  hidePassword?: boolean
   fido2?: Fido2SimpleView[]
 }[]
 

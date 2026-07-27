@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ASCredentialProviderExtensionCapabilities</key>
+	<dict>
+		<key>ProvidesPasskeys</key>
+		<true/>
+	</dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -46,8 +51,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>12.0</string>
 	<key>FacebookAppID</key>
 	<string>1260309664112849</string>
 	<key>FacebookClientToken</key>
@@ -60,6 +63,8 @@
 	<array>
 		<string>itms-apps</string>
 	</array>
+	<key>LSMinimumSystemVersion</key>
+	<string>12.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -69,23 +74,30 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_expo._tcp</string>
+		<string>_exp._tcp</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Scan QR code</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Authentication</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need access to your photo library to save images.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We need access to your photo library to save images</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Allow Locker to connect to the local development server over your network.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Crash tracking</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to your photo library to save images</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to save images.</string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
 		<string>fetch</string>
 	</array>
-	<key>RCTNewArchEnabled</key>
-	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -112,10 +124,5 @@
 	<string>Automatic</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>ASCredentialProviderExtensionCapabilities</key>
-	<dict>
-		<key>ProvidesPasskeys</key>
-		<true/>
-	</dict>
 </dict>
 </plist>

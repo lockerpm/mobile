@@ -89,6 +89,7 @@ export class PushNotifier {
       async (message: FirebaseMessagingTypes.RemoteMessage) => {
         Logger.debug("Firebase: BACKGROUND HANDLER")
         Logger.debug(message.data)
+
         if (!message.data) {
           return
         }

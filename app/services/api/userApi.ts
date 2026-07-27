@@ -15,7 +15,6 @@ import {
   TeamPolicies,
   TrustedContact,
   UserPlan,
-  UserTeam,
   ChangePasswordRequest,
   FeedbackRequest,
   RegisterLockerRequest,
@@ -371,29 +370,6 @@ class UserApi {
       return { kind: "ok" }
     } catch (e) {
       Logger.error("changeMasterPassword", e)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Get teams
-  async getTeams(token: string): Promise<{ kind: "ok"; teams: UserTeam[] } | GeneralApiProblem> {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/v3/cystack_platform/pm/teams"
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const teams = response.data
-
-      return { kind: "ok", teams }
-    } catch (e) {
-      Logger.error("getTeams", e)
       return { kind: "bad-data" }
     }
   }

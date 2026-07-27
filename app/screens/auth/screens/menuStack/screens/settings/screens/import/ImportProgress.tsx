@@ -1,7 +1,9 @@
 import { StyleSheet, View } from "react-native"
-import { Icon, Text } from "app/components/cores"
-import { useAppTheme } from "@/utils/useAppTheme"
 import { Bar } from "react-native-progress"
+
+import { Icon, Text } from "app/components/cores"
+
+import { useAppTheme } from "@/utils/useAppTheme"
 
 interface ImportProgressProps {
   imported: number

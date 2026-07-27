@@ -1,70 +1,60 @@
-import { FC } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import { StyleSheet, View, ViewStyle } from "react-native"
-import { debounce } from "app/utils/utils"
-import { ShareScreenProps } from "app/navigators"
+
 import {
   BottomModalContainer,
   Icon,
   Text,
   ModalBackdrop,
   PressableScale,
-  IconTypes,
+  Switch,
 } from "app/components/cores"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { ShareScreenProps } from "app/navigators"
+import { debounce } from "app/utils/utils"
+
 import { AccountRoleText } from "@/static/types"
-import { TxKeyPath } from "@/i18n"
 import { ThemedStyle } from "@/theme"
+import { delay } from "@/utils/delay"
 import { AppEventType, EventBus } from "@/utils/eventBus"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 export const EditShareMemberPermissionModalScreen: FC<
   ShareScreenProps<"editShareMemberPermissionModal">
 > = ({
   navigation,
   route: {
-    params: { id, value, role },
+    params: { id, value, role, hidePasswords, isHaveLoginItem },
   },
 }) => {
-  const {
-    themed,
-    theme: { colors },
-  } = useAppTheme()
+  const { themed } = useAppTheme()
+
+  const [hidePasswordState, setHidePasswordState] = useState(hidePasswords)
 
   const onClose = debounce(navigation.goBack, 400)
 
   const isEditable = role === "admin"
 
-  const onEditRole = async (shareType: "only_fill" | "edit") => {
-    const role = shareType === "only_fill" ? AccountRoleText.MEMBER : AccountRoleText.ADMIN
+  const onEditRole = useCallback(
+    async (shareType: "only_fill" | "edit", hidePasswords: boolean) => {
+      const role = shareType === "only_fill" ? AccountRoleText.MEMBER : AccountRoleText.ADMIN
 
-    EventBus.emit(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, {
-      id,
-      role,
-    })
-    onClose()
-  }
+      EventBus.emit(AppEventType.MANAGE_SHARE_MEMBER_UPDATE, {
+        id,
+        role,
+        hidePasswords,
+      })
+      onClose()
+    },
+    [id, onClose]
+  )
 
-  const permissions: {
-    icon: IconTypes
-    value: boolean
-    title: TxKeyPath
-    decs: TxKeyPath
-    onPress: () => void
-  }[] = [
-    {
-      icon: "eye",
-      value: !isEditable,
-      title: "shares:share_folder.viewer",
-      decs: "shares:share_folder.viewer_per",
-      onPress: () => onEditRole("only_fill"),
-    },
-    {
-      icon: "edit",
-      value: isEditable,
-      title: "shares:share_folder.editor",
-      decs: "shares:share_folder.editor_per",
-      onPress: () => onEditRole("edit"),
-    },
-  ]
+  useEffect(() => {
+    if (hidePasswords !== hidePasswordState) {
+      delay(300).then(() => {
+        onEditRole("only_fill", hidePasswordState)
+      })
+    }
+  }, [hidePasswordState, onEditRole, hidePasswords])
 
   return (
     <View style={styles.flex}>
@@ -73,21 +63,50 @@ export const EditShareMemberPermissionModalScreen: FC<
       <BottomModalContainer>
         <Text weight="medium" text={value} style={styles.header} />
 
-        {permissions.map((item, index) => (
-          <PressableScale key={index} onPress={item.onPress}>
-            <View style={themed($item)}>
-              <View style={styles.row}>
-                <Icon icon={item.icon} containerStyle={styles.icon} />
-                <View>
-                  <Text preset="bold" tx={item.title} />
-                  <Text preset="label" tx={item.decs} />
+        <PressableScale onPress={() => onEditRole("only_fill", hidePasswords)}>
+          <View style={themed([$item, !isEditable && $select])}>
+            <View style={styles.row}>
+              <Icon icon={"eye"} containerStyle={styles.icon} />
+
+              <View style={styles.text}>
+                <View style={styles.row}>
+                  <View style={styles.text}>
+                    <Text preset="bold" tx={"shares:share_folder.viewer"} />
+                    <Text preset="label" tx={"shares:share_folder.viewer_per"} />
+                  </View>
                 </View>
               </View>
-
-              {item.value && <Icon icon="check-bold" size={24} color={colors.primary} />}
             </View>
-          </PressableScale>
-        ))}
+
+            {isHaveLoginItem && (
+              <View style={[styles.row, styles.hidePassword]}>
+                <View style={styles.text}>
+                  <Text weight="medium" tx={"shares:share_folder.fill_only"} />
+                  <Text preset="label" size="xs" tx={"shares:share_folder.fill_only_per"} />
+                </View>
+
+                <Switch
+                  value={hidePasswordState}
+                  onValueChange={(value) => {
+                    setHidePasswordState(value)
+                    //
+                  }}
+                />
+              </View>
+            )}
+          </View>
+        </PressableScale>
+        <PressableScale onPress={() => onEditRole("edit", false)}>
+          <View style={themed([$item, isEditable && $select])}>
+            <View style={styles.row}>
+              <Icon icon={"edit"} containerStyle={styles.icon} />
+              <View>
+                <Text preset="bold" tx={"shares:share_folder.editor"} />
+                <Text preset="label" tx={"shares:share_folder.editor_per"} />
+              </View>
+            </View>
+          </View>
+        </PressableScale>
       </BottomModalContainer>
     </View>
   )
@@ -95,15 +114,16 @@ export const EditShareMemberPermissionModalScreen: FC<
 
 const $item: ThemedStyle<ViewStyle> = ({ colors }) => ({
   borderColor: colors.border,
-  alignItems: "center",
   borderRadius: 12,
   borderWidth: 1,
-  flexDirection: "row",
-  justifyContent: "space-between",
   marginHorizontal: 16,
   marginVertical: 8,
   paddingHorizontal: 16,
   paddingVertical: 12,
+})
+
+const $select: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  borderColor: colors.primary,
 })
 
 const styles = StyleSheet.create({
@@ -115,12 +135,20 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     textAlign: "center",
   },
+  hidePassword: {
+    marginLeft: 36,
+    marginTop: 4,
+  },
   icon: {
     marginRight: 12,
   },
   row: {
     alignItems: "center",
     flexDirection: "row",
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  text: {
     flexGrow: 1,
     flexShrink: 1,
   },

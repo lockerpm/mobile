@@ -1,12 +1,14 @@
 import { StyleSheet, View } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+
 import { Text, BottomModalContainer, BottomModalHeader, PressableScale } from "app/components/cores"
+import { PremiumTag } from "app/components/utils"
 import { useStores } from "app/models"
 import { CipherActionsModal, CipherAppView } from "app/static/types"
-import { PremiumTag } from "app/components/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { useNavigation } from "@react-navigation/native"
+
 import { AuthScreenProps } from "@/navigators"
 import { delay } from "@/utils/delay"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 interface Props {
   onClose: () => void
@@ -51,7 +53,7 @@ export const ShareOptions = ({ cipher, onClose, setNextModal }: Props) => {
           params: {
             screen: "normalShare",
             params: {
-              ciphers: [cipher],
+              ciphers: [{ ...cipher, revisionDate: null }],
             },
           },
         })
