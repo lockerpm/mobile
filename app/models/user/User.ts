@@ -549,7 +549,7 @@ export const UserModel = types
     },
     updateFCM: async (token: string) => {
       const res = await userApi.updateFCM(self.apiToken, {
-        fcm_id: token,
+        fcm_id: token ?? null,
         device_identifier: await DeviceInfo.getUniqueId(),
       })
       return res

@@ -90,6 +90,7 @@
     "react-native": "0.81.4",
     "react-native-background-upload": "^6.6.0",
     "react-native-biometrics": "^3.0.1",
+    "react-native-blob-util": "^0.24.10",
     "react-native-config": "1.5.5",
     "react-native-countdown-circle-timer": "^3.2.1",
     "react-native-device-info": "^14.1.1",

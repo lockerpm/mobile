@@ -15,7 +15,6 @@ import {
   TeamPolicies,
   TrustedContact,
   UserPlan,
-  UserTeam,
   ChangePasswordRequest,
   FeedbackRequest,
   RegisterLockerRequest,

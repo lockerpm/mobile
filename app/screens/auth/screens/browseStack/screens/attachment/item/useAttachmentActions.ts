@@ -1,6 +1,7 @@
 /* eslint-disable react-native/split-platform-components */
 import { Platform } from "react-native"
 import { CameraRoll } from "@react-native-camera-roll/camera-roll"
+import ReactNativeBlobUtil from "react-native-blob-util"
 import RNFS from "react-native-fs"
 import Share, { ShareOptions } from "react-native-share"
 
@@ -15,7 +16,10 @@ import { AttachmentType } from "../usePickAttachment"
 const DOWNLOAD_PATH =
   Platform.OS === "android"
     ? Platform.Version >= 30
-      ? RNFS.DocumentDirectoryPath
+      ? // Scoped storage: we can't write to public Downloads directly. Decrypt
+        // into the cache dir first, then copy into the Downloads MediaStore
+        // collection via react-native-blob-util.
+        RNFS.CachesDirectoryPath
       : RNFS.DownloadDirectoryPath
     : RNFS.DocumentDirectoryPath
 
@@ -75,25 +79,42 @@ export const useAttachmentActions = (
       }
 
       if (getFileType(attachment.fileName) === "file") {
-        if (Platform.OS === "android") {
-          if (Platform.Version >= 30) {
-            const options: ShareOptions = {
-              title: "Save File",
-              url: `file://${filePath}`,
-              saveToFiles: true,
-            }
+        if (Platform.OS === "ios") {
+          // iOS: present the share sheet so the user can Save to Files / share.
+          const options: ShareOptions = {
+            title: "Save File",
+            url: `file://${filePath}`,
+            saveToFiles: true,
+          }
 
-            try {
-              await Share.open(options)
-            } catch (error: any) {
-              if (error.message === "User did not share") {
-                // "User canceled sharing"
-              } else {
-                console.error("Error sharing:", error)
-              }
+          try {
+            await Share.open(options)
+          } catch (error: any) {
+            // User dismissing the share sheet is not an error.
+            if (error?.message !== "User did not share") {
+              console.error("Error sharing:", error)
             }
           }
+        } else if (Number(Platform.Version) >= 30) {
+          // Android 10+ (scoped storage): copy the decrypted file from our
+          // private cache into the public Downloads collection via MediaStore.
+          await ReactNativeBlobUtil.MediaCollection.copyToMediaStore(
+            {
+              name: attachment.fileName,
+              parentFolder: "",
+              mimeType: getMimeType(attachment.fileName),
+            },
+            "Download",
+            filePath
+          )
+          // Don't leave the decrypted plaintext lingering in the cache dir.
+          if (await RNFS.exists(filePath)) {
+            await RNFS.unlink(filePath)
+          }
+          notifyTx("success", "file_attachment:download_success")
         } else {
+          // Legacy Android (<10): the file was written straight to the public
+          // Downloads directory.
           notifyTx("success", "file_attachment:download_success")
         }
       } else {
@@ -133,6 +154,29 @@ export const useAttachmentActions = (
   }
 
   return { onDownloadAttachment, onDeleteAttachment }
+}
+
+const getMimeType = (fileName: string): string => {
+  const ext = fileName.split(".").pop()?.toLowerCase()
+  const map: Record<string, string> = {
+    pdf: "application/pdf",
+    doc: "application/msword",
+    docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    xls: "application/vnd.ms-excel",
+    xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ppt: "application/vnd.ms-powerpoint",
+    pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    txt: "text/plain",
+    csv: "text/csv",
+    json: "application/json",
+    xml: "application/xml",
+    zip: "application/zip",
+    rar: "application/vnd.rar",
+    "7z": "application/x-7z-compressed",
+    mp3: "audio/mpeg",
+    wav: "audio/wav",
+  }
+  return (ext && map[ext]) || "application/octet-stream"
 }
 
 const getFileType = (fileName: string): "image" | "video" | "file" => {

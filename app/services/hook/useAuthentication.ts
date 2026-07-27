@@ -424,7 +424,7 @@ export function useAuthentication() {
         if (error !== "user_cancel" && error !== "system_cancel") {
           notifyTx(
             "error",
-            hasBiometric ? "error:biometric_unlock_failed" : "error:device_passcode_unlock_failed",
+            hasBiometric ? "error:biometric_unlock_failed" : "error:device_passcode_unlock_failed"
           )
         }
         return { kind: "bad-data" }
