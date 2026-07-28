@@ -1,7 +1,9 @@
 import { useState } from "react"
 import { View, ViewStyle } from "react-native"
+
 import { Text, BottomModal } from "app/components/cores"
 import { SettingsItem } from "app/components/utils"
+
 import { FormatList } from "./FormatList"
 
 interface Props {

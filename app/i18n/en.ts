@@ -1054,6 +1054,7 @@ const en = {
     imported: "Succesfully Imported",
     result_btn: "Back to home",
     progress: "Importing your backup data",
+    duplicate_skipped: "{{count}} duplicate item(s) skipped",
   },
   crypto_asset: {
     wallet_name: "Wallet Name",

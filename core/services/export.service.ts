@@ -8,15 +8,15 @@ import { FolderService } from "../abstractions/folder.service"
 import { CipherType } from "../enums/cipherType"
 import { Utils } from "../misc/utils"
 import { CipherData } from "../models/data/cipherData"
-import { Collection } from "../models/domain/collection"
 import { CollectionData } from "../models/data/collectionData"
 import { Cipher } from "../models/domain/cipher"
+import { Collection } from "../models/domain/collection"
 import { Folder } from "../models/domain/folder"
-import { CollectionDetailsResponse } from "../models/response/collectionResponse"
 import { CipherWithIds as CipherExport } from "../models/export/cipherWithIds"
 import { CollectionWithId as CollectionExport } from "../models/export/collectionWithId"
 import { Event } from "../models/export/event"
 import { FolderWithId as FolderExport } from "../models/export/folderWithId"
+import { CollectionDetailsResponse } from "../models/response/collectionResponse"
 import { CipherView } from "../models/view/cipherView"
 import { CollectionView } from "../models/view/collectionView"
 import { EventView } from "../models/view/eventView"
@@ -83,7 +83,12 @@ export class ExportService implements ExportServiceAbstraction {
     promises.push(
       this.cipherService.getAllDecrypted().then((ciphers) => {
         decCiphers = ciphers
-          ? ciphers.filter((f) => f.deletedDate == null || f.type !== CipherType.MasterPassword)
+          ? ciphers.filter((f) => {
+              if (f.type === CipherType.MasterPassword) {
+                return false
+              }
+              return f.deletedDate == null
+            })
           : []
       })
     )

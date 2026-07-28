@@ -1050,6 +1050,7 @@ const vi: Translations = {
     imported: "Nhập dữ liệu thành công",
     result_btn: "Quay về trang chủ",
     progress: "Đang tiến hành nhập dữ liệu..",
+    duplicate_skipped: "Đã bỏ qua {{count}} mục trùng lặp",
   },
   crypto_asset: {
     wallet_name: "Tên ví",
