@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, useWindowDimensions, View } from "react-native"
 import { Bar } from "react-native-progress"
 
 import { Icon, Text } from "app/components/cores"
@@ -15,6 +15,8 @@ export const ImportProgress = (props: ImportProgressProps) => {
   const {
     theme: { colors },
   } = useAppTheme()
+
+  const { width } = useWindowDimensions()
   return (
     <View>
       <View style={styles.container}>
@@ -34,7 +36,7 @@ export const ImportProgress = (props: ImportProgressProps) => {
         borderRadius={4}
         unfilledColor={colors.block}
         height={6}
-        width={350}
+        width={width - 76}
         color={colors.primary}
         progress={props.imported / props.total}
       />

@@ -1,8 +1,9 @@
-import { View, Image, StyleSheet, ImageSourcePropType } from "react-native"
-import { Button, Text } from "app/components/cores"
-import { CipherType } from "core/enums"
-import { TxKeyPath } from "app/i18n"
 import { memo } from "react"
+import { View, Image, StyleSheet, ImageSourcePropType } from "react-native"
+
+import { Button, Text } from "app/components/cores"
+import { TxKeyPath } from "app/i18n"
+import { CipherType } from "core/enums"
 
 interface EmptyCipherListProps {
   onAdd: () => void
@@ -17,12 +18,12 @@ type EmptyCipherListType = {
   image: ImageSourcePropType
 }
 
-const HOME_EMPTY = require("assets/images/emptyCipherList/home-empty-cipher.png")
-const CRYPTO_EMPTY = require("assets/images/emptyCipherList/crypto-empty-img.png")
 const CARD_EMPTY = require("assets/images/emptyCipherList/card-empty-img.png")
+const CRYPTO_EMPTY = require("assets/images/emptyCipherList/crypto-empty-img.png")
+const HOME_EMPTY = require("assets/images/emptyCipherList/home-empty-cipher.png")
 const IDENTITIES_EMPTY = require("assets/images/emptyCipherList/identity-empty-img.png")
-const PASSWORD_EMPTY = require("assets/images/emptyCipherList/password-empty-img.png")
 const NOTE_EMPTY = require("assets/images/emptyCipherList/note-empty-img.png")
+const PASSWORD_EMPTY = require("assets/images/emptyCipherList/password-empty-img.png")
 const TRASH_EMPTY = require("assets/images/emptyCipherList/trash-empty-img.png")
 
 const emptyTypeContent: Record<number, EmptyCipherListType> = {

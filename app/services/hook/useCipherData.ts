@@ -768,7 +768,11 @@ export function useCipherData() {
       const folderRelationship = request.folderRelationships.find((item) => item.key === index)
       return {
         ...cipher,
-        folderId: folderRelationship ? folderIds[folderRelationship.value] : null,
+        // Fall back to any pre-assigned folderId (e.g. relate-to-existing-folder from
+        // the import duplicate check) instead of clearing it.
+        folderId: folderRelationship
+          ? folderIds[folderRelationship.value]
+          : (cipher.folderId ?? null),
       }
     })
     let importedCipherCount = 0

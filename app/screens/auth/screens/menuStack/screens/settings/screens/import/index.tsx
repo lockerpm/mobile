@@ -21,6 +21,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { ImportProgress } from "./ImportProgress"
 import { ImportResult } from "./ImportResult"
 import { PickFile } from "./PickFile"
+import { useCheckDuplicateImport } from "./useCheckDuplicateImport"
 
 const DOMParser = require("react-native-html-parser").DOMParser
 
@@ -38,6 +39,7 @@ export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navig
   } = useAppTheme()
   const { notifyTx } = useToast()
   const { importCiphers } = useCipherData()
+  const { checkDuplicateImport } = useCheckDuplicateImport()
   const { importService } = useCoreService()
   const { user } = useStores()
 
@@ -50,6 +52,7 @@ export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navig
   const [file, setFile] = useState<FileData>(fileData)
   const [importedCount, setImportedCount] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
+  const [skippedCount, setSkippedCount] = useState(0)
   const [isLimited, setIsLimited] = useState(false)
 
   // -------------------- COMPUTED --------------------
@@ -122,8 +125,11 @@ export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navig
           }
         }
         try {
+          // Exclude items already in the vault (or duplicated within the file) before upload.
+          const { cleanedResult, skippedCount: skipped } = await checkDuplicateImport(importResult)
+          setSkippedCount(skipped)
           await importCiphers({
-            importResult,
+            importResult: cleanedResult,
             setImportedCount,
             setTotalCount,
             setIsLimited,
@@ -206,6 +212,7 @@ export const ImportScreen: FC<SettingsScreenProps<"import">> = observer(({ navig
           <ImportResult
             imported={importedCount}
             total={totalCount}
+            skipped={skippedCount}
             isLimited={isLimited}
             setIsLimited={setIsLimited}
           />

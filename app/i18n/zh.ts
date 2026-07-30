@@ -1021,6 +1021,7 @@ const zh: Translations = {
     imported: "已成功匯入",
     result_btn: "回到首頁",
     progress: "正在匯入您的備份資料",
+    duplicate_skipped: "已略過 {{count}} 個重複項目",
   },
   crypto_asset: {
     wallet_name: "錢包名稱",
