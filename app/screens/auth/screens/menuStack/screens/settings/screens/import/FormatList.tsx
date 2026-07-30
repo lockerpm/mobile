@@ -1,9 +1,11 @@
 import { useState } from "react"
 import { View, FlatList, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+
 import { Text, Icon } from "app/components/cores"
 import { SearchBar } from "app/components/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 interface Format {
   label: string

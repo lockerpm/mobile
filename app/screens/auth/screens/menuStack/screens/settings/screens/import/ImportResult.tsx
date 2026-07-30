@@ -1,16 +1,19 @@
 import { useState } from "react"
 import { View, TouchableOpacity, Image, StyleSheet, ViewStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { useStores } from "app/models"
+
 import { BottomModal, Button, Icon, Text } from "app/components/cores"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { useStores } from "app/models"
+
 import { useAppLocale } from "@/i18n"
 import { SettingsScreenProps } from "@/navigators"
 import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 interface Props {
   imported: number
   total: number
+  skipped?: number
   isLimited?: boolean
   setIsLimited: (val: boolean) => void
 }
@@ -25,7 +28,7 @@ export const ImportResult = (props: Props) => {
   } = useAppTheme()
   const { translate } = useAppLocale()
   const { user } = useStores()
-  const { imported, total, isLimited = false, setIsLimited } = props
+  const { imported, total, skipped = 0, isLimited = false, setIsLimited } = props
   const isFreeAccount = user.isFreePlan
   const isAllImported = imported === total
   const [isFree, setIsFree] = useState(true)
@@ -49,6 +52,12 @@ export const ImportResult = (props: Props) => {
             style={styles.ml10}
           />
         </View>
+        {skipped > 0 && (
+          <Text
+            text={translate("import:duplicate_skipped", { count: skipped })}
+            style={styles.skipped}
+          />
+        )}
         {isAllImported && (
           <Button
             tx={"import:result_btn"}
@@ -155,5 +164,9 @@ const styles = StyleSheet.create({
   row: {
     alignItems: "center",
     flexDirection: "row",
+  },
+  skipped: {
+    marginTop: 8,
+    textAlign: "center",
   },
 })

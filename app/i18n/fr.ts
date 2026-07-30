@@ -1039,6 +1039,7 @@ const fr: Translations = {
     imported: "Importé avec succès",
     result_btn: "Retour à l’accueil",
     progress: "Importation de votre sauvegarde de données en cours",
+    duplicate_skipped: "{{count}} élément(s) en double ignoré(s)",
   },
   crypto_asset: {
     wallet_name: "Nom du portefeuille",

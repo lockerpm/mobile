@@ -1065,6 +1065,7 @@ const ru: Translations = {
     imported: "Успешно импортировано",
     result_btn: "Вернуться на главную",
     progress: "Импорт резервных данных",
+    duplicate_skipped: "Пропущено дубликатов: {{count}}",
   },
   crypto_asset: {
     wallet_name: "Название кошелька",
