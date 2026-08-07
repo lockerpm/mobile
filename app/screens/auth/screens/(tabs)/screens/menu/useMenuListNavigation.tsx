@@ -64,7 +64,7 @@ export const useMenuListNavigation = () => {
   }
 
   const navigateToLogoutScreen = async () => {
-    await logout()
+    logout()
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
