@@ -1,10 +1,25 @@
 import { useEffect } from "react"
 import { Linking } from "react-native"
 import { FirebaseMessagingTypes } from "@react-native-firebase/messaging"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 import Toast from "react-native-toast-message"
 
-import { navigate } from "@/navigators"
+import { navigate, navigationRef } from "@/navigators"
 import { NotifeeNotificationData, PushEvent, PushNotifier } from "@/utils/pushNotification"
+
+/**
+ * True only when the active top-level stack is the authenticated app. The user
+ * must pass the lock screen every session, so we suppress the foreground toast
+ * while on lock/splash/login (not unlocked or not signed in). Reads the FIRST
+ * level of the root state — getActiveRouteName/getCurrentRoute recurse to the
+ * leaf screen and never return "authStack".
+ */
+const isInAuthStack = () => {
+  if (!navigationRef.isReady()) return false
+  const rootState = navigationRef.getRootState()
+  const topLevel = rootState?.routes[rootState.index ?? 0]?.name
+  return topLevel === "authStack"
+}
 
 /**
  * Navigate straight to the screen a push event targets. Used for foreground
@@ -49,6 +64,9 @@ const navigateFromPushEvent = (data: NotifeeNotificationData) => {
 }
 
 const showForegroundToast = (message: FirebaseMessagingTypes.RemoteMessage) => {
+  // Only show while the user is inside the unlocked app; skip on lock/login.
+  if (!isInAuthStack()) return
+
   const body = message.notification?.body
   if (!body) return
 
@@ -59,6 +77,7 @@ const showForegroundToast = (message: FirebaseMessagingTypes.RemoteMessage) => {
     text2: body,
     position: "top",
     autoHide: true,
+    topOffset: StaticSafeAreaInsets.safeAreaInsetsTop + 10,
     visibilityTime: 4000,
     onPress: () => {
       Toast.hide()

@@ -171,7 +171,6 @@ export const UserModel = types
     setBiometricIntroShown: (val: boolean) => {
       self.biometricIntroShown = val
     },
-
     // User settings
     setDeviceId: (id: string) => {
       self.deviceId = id
@@ -254,6 +253,10 @@ export const UserModel = types
 
     resetPasswordWithCode: async (username: string, code: string) => {
       const res = await idApi.resetPasswordWithCode({ username, code })
+      return res
+    },
+    changeLanguage: async (language: string) => {
+      const res = await userApi.setUserLanguage(self.apiToken, language)
       return res
     },
 
