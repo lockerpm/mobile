@@ -1,0 +1,112 @@
+{
+  "new_share_item": {
+    "vi": {
+      "title": "Locker",
+      "body": "Bạn đã được chia sẻ một {{typeName}}"
+    },
+    "en": {
+      "title": "Locker",
+      "body": "You have a new shared {{typeName}}"
+    }
+  },
+  "confirm_share_item": {
+    "vi": {
+      "title": "Locker",
+      "body": "Vui lòng xác nhận yêu cầu chia sẻ của bạn"
+    },
+    "en": {
+      "title": "Locker",
+      "body": "Please confirm your sharing request"
+    }
+  },
+  "accept_share_item": {
+    "vi": {
+      "title": "Locker",
+      "body": "{{recipient_name}} đã chấp nhận {{typeName}} bạn chia sẻ"
+    },
+    "en": {
+      "title": "Locker",
+      "body": "{{recipient_name}} has accepted the {{typeName}} you share"
+    }
+  },
+  "reject_share_item": {
+    "vi": {
+      "title": "Locker",
+      "body": "{{recipient_name}} đã từ chối {{typeName}} bạn chia sẻ"
+    },
+    "en": {
+      "title": "Locker",
+      "body": "{{recipient_name}} has rejected the {{typeName}} you share"
+    }
+  },
+  "emergency_invite": {
+    "vi": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} đã thêm bạn làm Liên hệ khẩn cấp"
+    },
+    "en": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} has invited you to be emergency access contact"
+    }
+  },
+  "emergency_accept_invitation": {
+    "vi": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} đã chấp nhận trở thành Liên hệ khẩn cấp của bạn"
+    },
+    "en": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} has accepted your emergency access invitation"
+    }
+  },
+  "emergency_reject_invitation": {
+    "vi": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} đã từ chối trở thành Liên hệ khẩn cấp của bạn"
+    },
+    "en": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} has rejected your emergency access invitation"
+    }
+  },
+  "emergency_access_initiate": {
+    "vi": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} đã yêu cầu {{type}} tài khoản Locker của bạn"
+    },
+    "en": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} has requested to {{type}} your Locker account"
+    }
+  },
+  "emergency_access_approve_request": {
+    "vi": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} đã chấp nhận yêu cầu {{type}} tài khoản Locker của bạn"
+    },
+    "en": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} approved your request to {{type}} their Locker account"
+    }
+  },
+  "emergency_access_reject_request": {
+    "vi": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} đã từ chối yêu cầu {{type}} tài khoản Locker của bạn"
+    },
+    "en": {
+      "title": "Locker",
+      "body": "{{grantee_name || grantor_name}} has rejected your request to {{type}} their Locker account"
+    }
+  },
+  "password_tip_trick": {
+    "vi": {
+      "title": "Locker",
+      "body": "{{data.title}}"
+    },
+    "en": {
+      "title": "Locker",
+      "body": "{{data.title}}"
+    }
+  }
+}

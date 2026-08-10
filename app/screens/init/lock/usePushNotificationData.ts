@@ -1,3 +1,4 @@
+import { Linking } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
 import { AppScreenProps } from "@/navigators"
@@ -49,6 +50,36 @@ export const usePushNotifionData = () => {
               },
             },
           })
+          result = true
+          break
+        case PushEvent.EMERGENCY_INVITE:
+        case PushEvent.EMERGENCY_ACCEPT_INVITATION:
+        case PushEvent.EMERGENCY_REJECT_INVITATION:
+        case PushEvent.EMERGENCY_INITIATE:
+        case PushEvent.EMERGENCY_APPROVE_REQUEST:
+        case PushEvent.EMERGENCY_REJECT_REQUEST:
+          navigation.replace("authStack", {
+            screen: "mainTab",
+            params: {
+              screen: "homeTab",
+            },
+          })
+          result = true
+          break
+        case PushEvent.TIP_TRICK:
+          navigation.replace("authStack", {
+            screen: "mainTab",
+            params: {
+              screen: "homeTab",
+            },
+          })
+          if (data.url) {
+            Linking.canOpenURL(data.url).then((canOpen) => {
+              if (canOpen && data.url) {
+                Linking.openURL(data.url)
+              }
+            })
+          }
           result = true
           break
       }

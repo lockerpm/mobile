@@ -5,9 +5,6 @@ import "react-native-get-random-values"
 import { registerRootComponent } from "expo"
 
 import App from "@/app"
-import { PushNotifier } from "@/utils/pushNotification"
-
-PushNotifier.setupBackgroundHandler()
 
 // install()
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);

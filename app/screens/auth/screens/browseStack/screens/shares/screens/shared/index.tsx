@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { FC, useEffect, useState } from "react"
+import { FC, useState } from "react"
 import { StyleSheet, useWindowDimensions, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { TabView } from "react-native-tab-view"
@@ -8,7 +8,6 @@ import { Header, Icon, IconTypes, PressableScale, Screen, Text } from "app/compo
 import { ShareScreenProps } from "app/navigators"
 
 import { TxKeyPath } from "@/i18n"
-import { PushNotifier } from "@/utils/pushNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 import { SharedCollectionList } from "./collections"
@@ -40,13 +39,6 @@ export const SharedWithYouScreen: FC<ShareScreenProps<"sharedWithYouCipherList">
     const layout = useWindowDimensions()
     const [index, setIndex] = useState(0)
     const [isSortOpen, setIsSortOpen] = useState(false)
-
-    // ------------------------ EFFECTS -------------------------
-
-    // Clear noti
-    useEffect(() => {
-      PushNotifier.cancelNotification("share_new")
-    }, [navigation])
 
     // ------------------------ RENDER -------------------------
 
