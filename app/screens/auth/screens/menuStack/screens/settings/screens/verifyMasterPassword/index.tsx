@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 
 import { useStores } from "app/models"
@@ -35,6 +35,8 @@ export const VerifyMasterPasswordScreen: FC<SettingsScreenProps<"verifyMasterPas
     })
     const { biometryType, hasDevicePasscode } = useBiometricType()
     const [isUnlocking, setIsUnlocking] = useState(false)
+    // Guards the direct (already-focused) biometric trigger against effect re-runs
+    const autoPromptedRef = useRef(false)
 
     // ---------------------- COMPUTED -------------------------
 
@@ -84,19 +86,28 @@ export const VerifyMasterPasswordScreen: FC<SettingsScreenProps<"verifyMasterPas
     // // Handle back press
     useEffect(() => {
       if (lockConfig.isLoading) return undefined
-      const focusHandler = navigation.addListener("focus", () => {
+
+      const tryUnlockBiometric = () => {
         if (user.isBiometricUnlock && (biometryType !== BiometricsType.None || hasDevicePasscode)) {
           handleUnlockBiometric({
             kdf: lockConfig.kdf,
             kdf_iterations: lockConfig.kdf_iterations,
           })
         }
-      })
+      }
+
+      // The mount-time "focus" event fires while lockConfig is still loading,
+      // before this listener attaches — so trigger directly if already focused.
+      if (navigation.isFocused() && !autoPromptedRef.current) {
+        autoPromptedRef.current = true
+        tryUnlockBiometric()
+      }
+      const focusHandler = navigation.addListener("focus", tryUnlockBiometric)
 
       return () => {
         focusHandler()
       }
-    }, [navigation, lockConfig])
+    }, [navigation, lockConfig, user.isBiometricUnlock, biometryType, hasDevicePasscode])
 
     // ---------------------- RENDER -------------------------
     const commonProps = {

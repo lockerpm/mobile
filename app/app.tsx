@@ -24,6 +24,7 @@ import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-c
 import { initI18n, LanguageSupportType, LocaleContextProvider } from "./i18n"
 import { useInitialRootStore } from "./models"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
+import { usePushMessageHandlers } from "./services/hook/usePushMessageHandlers"
 import { customFontsToLoad } from "./theme"
 import { setAndroidAutofillServiceData, AndroidAppProps } from "./utils/autofill.android"
 import { initCrashReporting } from "./utils/crashReporting"
@@ -41,6 +42,8 @@ const App: FC<AppProps> = (props) => {
 
   const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
   const [isI18nInitialized, setIsI18nInitialized] = useState<null | string>(null)
+
+  usePushMessageHandlers()
 
   useEffect(() => {
     initI18n()

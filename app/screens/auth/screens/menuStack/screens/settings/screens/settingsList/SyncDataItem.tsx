@@ -1,8 +1,9 @@
+import { observer } from "mobx-react-lite"
+
 import { SettingsItem } from "app/components/utils"
 import { useStores } from "app/models"
 import { useCipherData } from "app/services/hook"
 import { useToast } from "app/services/utils"
-import { observer } from "mobx-react-lite"
 
 export const SyncDataItem = observer(() => {
   const { uiStore, cipherStore } = useStores()
