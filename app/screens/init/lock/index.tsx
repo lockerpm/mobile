@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useCallback, useEffect, useRef, useState } from "react"
 import { Alert, BackHandler, Platform } from "react-native"
 import NetInfo from "@react-native-community/netinfo"
 import { CommonActions } from "@react-navigation/native"
@@ -114,7 +114,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       )
     }
 
-    const handleBack = () => {
+    const handleBack = useCallback(() => {
       if (!IS_IOS && isAndroidService) {
         BackHandler.exitApp()
         return false
@@ -132,11 +132,10 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       ])
 
       return true
-    }
+    }, [])
 
     const refreshFCM = async () => {
       const token = await boostrapPushNotifier()
-      console.log("refreshFCM token", token)
       if (token) {
         user.updateFCM(token)
       }
