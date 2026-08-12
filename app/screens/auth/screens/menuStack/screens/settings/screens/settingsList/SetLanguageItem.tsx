@@ -64,6 +64,7 @@ export const SetlanguageItem = observer(() => {
     setLocalLanguage(lang)
     updateAutofillLanguage(lang)
     setIsLanguageSelect(false)
+    user.changeLanguage(lang)
   }
 
   return (

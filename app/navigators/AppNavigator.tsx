@@ -14,6 +14,7 @@ import Toast, { BaseToastProps } from "react-native-toast-message"
 
 import { ErrorToast, InfoToast, SuccessToast } from "app/components/cores"
 
+import { ForegroundToast } from "@/components/cores/toast/ForegoundToast"
 import { useStores } from "@/models"
 import * as Screens from "@/screens"
 import { AndroidAppProps } from "@/utils/autofill.android"
@@ -125,6 +126,7 @@ export const AppNavigator = observer(function AppNavigator(props: NavigationProp
       success: (props: BaseToastProps) => <SuccessToast {...props} />,
       error: (props: BaseToastProps) => <ErrorToast {...props} />,
       info: (props: BaseToastProps) => <InfoToast {...props} />,
+      notification: (props: BaseToastProps) => <ForegroundToast {...props} />,
     }),
     []
   )

@@ -1,8 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Dimensions, Platform, StyleSheet, View } from "react-native"
 import { BaseToast, BaseToastProps } from "react-native-toast-message"
-import { Icon, IconTypes } from "../icon/Icon"
+
 import { useAppTheme } from "@/utils/useAppTheme"
+
+import { Icon, IconTypes } from "../icon/Icon"
 
 type ToastProps = BaseToastProps & {
   icon: IconTypes
@@ -37,6 +39,7 @@ const Toast = ({ icon, iconColor, ...props }: ToastProps) => {
     />
   )
 }
+
 export const InfoToast = (props: BaseToastProps) => {
   const {
     theme: { colors },

@@ -1,19 +1,22 @@
 import { useState, useEffect, useCallback, useMemo } from "react"
 import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native"
+import { observer } from "mobx-react-lite"
+import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
+
+import { Text } from "app/components/cores"
+import { SearchBar } from "app/components/utils"
 import { useStores } from "app/models"
 import { useCipherData } from "app/services/hook"
 import { AccountRole, CipherAppView } from "app/static/types"
-import { Text } from "app/components/cores"
+import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
 import { CipherType } from "core/enums"
 import { CipherView } from "core/models/view"
-import { observer } from "mobx-react-lite"
-import { SearchBar } from "app/components/utils"
-import { getCipherLogo, getTeam } from "app/utils/cipherHelper"
-import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { useAppLocale } from "@/i18n"
-import { CipherListEmpty } from "../../../cipherList/CipherListEmpty"
+
 import { CipherListItem } from "@/components/ciphers"
+import { useAppLocale } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { CipherListEmpty } from "../../../cipherList/CipherListEmpty"
 
 const allTypes = [
   CipherType.Card,
@@ -124,7 +127,7 @@ export const CipherList = observer(({ openActionsMenu, openAdd }: CipherListProp
     setCiphers(res)
     setIsLoadingDone(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSync])
+  }, [isSync, searchText])
 
   // ------------------------ EFFECTS ----------------------------
 
@@ -207,6 +210,7 @@ export const CipherList = observer(({ openActionsMenu, openAdd }: CipherListProp
 
 const styles = StyleSheet.create({
   centerText: {
+    marginTop: 20,
     textAlign: "center",
   },
   divider: {

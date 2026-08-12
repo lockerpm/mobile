@@ -1,9 +1,11 @@
 import { FC, useCallback } from "react"
-import { Header, Screen } from "app/components/cores"
-import { observer } from "mobx-react-lite"
-import { ShareScreenProps } from "app/navigators"
 import { StyleSheet } from "react-native"
+import { observer } from "mobx-react-lite"
+
+import { Header, Screen } from "app/components/cores"
+import { ShareScreenProps } from "app/navigators"
 import { CipherAppView } from "app/static/types"
+
 import { CipherList } from "./CipherList"
 
 /**

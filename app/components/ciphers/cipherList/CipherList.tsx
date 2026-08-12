@@ -1,7 +1,16 @@
-import { useState, useEffect, useCallback, useMemo, ReactElement } from "react"
-import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native"
+import { useState, useEffect, useCallback, useMemo, useRef, ReactElement } from "react"
+import {
+  View,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+  RefreshControl,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from "react-native"
 import orderBy from "lodash/orderBy"
 import { observer } from "mobx-react-lite"
+import { useSharedValue } from "react-native-reanimated"
 import StaticSafeAreaInsets from "react-native-static-safe-area-insets"
 
 import { SearchBar } from "app/components/utils"
@@ -18,6 +27,7 @@ import { useAppLocale } from "@/i18n"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 import { CipherListItem } from "./CipherListItem"
+import { PullRefreshIndicator, PullRefreshState } from "./PullRefreshIndicator"
 import { useSearchCipher } from "./useSearchCipher"
 import { Text } from "../../cores"
 
@@ -97,18 +107,24 @@ export const CipherList = observer(
     setAllItems,
     openActionsMenu,
   }: CipherListProps) => {
-    const { cipherStore } = useStores()
+    const { cipherStore, uiStore } = useStores()
     const {
       theme: { colors },
     } = useAppTheme()
     const { translate } = useAppLocale()
     const { notifyTx } = useToast()
-    const { getCiphersFromCache } = useCipherData()
+    const { getCiphersFromCache, startSyncProcess } = useCipherData()
 
     // ------------------------ PARAMS ----------------------------
 
     const [ciphers, setCiphers] = useState<CipherAppView[]>([])
     const [isLoadingDone, setIsLoadingDone] = useState(false)
+    const [refreshState, setRefreshState] = useState<PullRefreshState>("idle")
+    const refreshInFlightRef = useRef(false)
+    const dragStartedAtTopRef = useRef(false)
+    const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const isMountedRef = useRef(true)
+    const pullProgress = useSharedValue(0)
 
     const { searchText, onChangeText, filteredCiphers } = useSearchCipher(ciphers)
 
@@ -255,6 +271,39 @@ export const CipherList = observer(
       [collectionId, isSelecting, notifyTx, selectedCiphers, setIsSelecting, setSelectedCiphers]
     )
 
+    // Trigger a manual sync from the pull-to-refresh gesture
+    const onRefresh = useCallback(async () => {
+      if (refreshInFlightRef.current || uiStore.isOffline || cipherStore.isSynching) return
+
+      refreshInFlightRef.current = true
+      setRefreshState("refreshing")
+      await startSyncProcess(Date.now())
+      refreshInFlightRef.current = false
+
+      if (!isMountedRef.current) return
+      setRefreshState("success")
+      successTimerRef.current = setTimeout(() => {
+        if (!isMountedRef.current) return
+        setRefreshState("idle")
+        pullProgress.value = 0
+      }, 1000)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [uiStore.isOffline, cipherStore.isSynching, pullProgress])
+
+    const onScroll = useCallback(
+      (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        if (refreshState !== "idle") return
+        if (!dragStartedAtTopRef.current) return
+        const y = e.nativeEvent.contentOffset.y
+        pullProgress.value = y < 0 ? Math.min(-y / 80, 1.2) : 0
+      },
+      [pullProgress, refreshState]
+    )
+
+    const onScrollBeginDrag = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      dragStartedAtTopRef.current = e.nativeEvent.contentOffset.y <= 0
+    }, [])
+
     // ------------------------ EFFECTS ----------------------------
 
     useEffect(() => {
@@ -263,6 +312,14 @@ export const CipherList = observer(
       }, 150)
       return () => clearTimeout(timeOut)
     }, [lastSync, lastCacheUpdate, notSynchedCiphers, loadData])
+
+    useEffect(() => {
+      isMountedRef.current = true
+      return () => {
+        isMountedRef.current = false
+        if (successTimerRef.current) clearTimeout(successTimerRef.current)
+      }
+    }, [])
 
     // ------------------------ RENDER ----------------------------
     const $listContent = useMemo(
@@ -303,6 +360,20 @@ export const CipherList = observer(
           maxToRenderPerBatch={15}
           data={otherData}
           keyExtractor={(item) => item.id}
+          onScrollBeginDrag={onScrollBeginDrag}
+          onScroll={onScroll}
+          scrollEventThrottle={16}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshState === "refreshing"}
+              onRefresh={onRefresh}
+              tintColor={colors.primary} // iOS spinner color
+              colors={[colors.primary]} // Android shifting spinner colors
+              progressBackgroundColor={colors.block} // Android background circle color
+              title="Loading data..." // iOS subtitle string
+              titleColor={colors.text}
+            />
+          }
           renderItem={({ item }) => {
             return (
               <CipherListItem
@@ -343,6 +414,7 @@ export const CipherList = observer(
             index,
           })}
         />
+        <PullRefreshIndicator pullProgress={pullProgress} state={refreshState} topOffset={-32} />
       </View>
     )
   }

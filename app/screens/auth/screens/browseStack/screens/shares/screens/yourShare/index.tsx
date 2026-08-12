@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { FC, useCallback, useEffect, useState } from "react"
+import { FC, useCallback, useState } from "react"
 import { StyleSheet, useWindowDimensions, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { TabView } from "react-native-tab-view"
@@ -18,7 +18,6 @@ import {
 import { CollectionView } from "core/models/view/collectionView"
 
 import { TxKeyPath } from "@/i18n"
-import { PushNotifier } from "@/utils/pushNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 import { YourShareCollectionList } from "./collections"
@@ -95,13 +94,6 @@ export const YourShareScreen: FC<ShareScreenProps<"yourShareCipherList">> = obse
       },
       [navigation]
     )
-
-    // --------------------- EFFECTS -------------------------
-
-    // Clear noti
-    useEffect(() => {
-      PushNotifier.cancelNotification("share_confirm")
-    }, [])
 
     // --------------------- RENDER -------------------------
 
