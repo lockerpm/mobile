@@ -18,7 +18,6 @@ import {
   SessionOtpLoginRequest,
   SocialLoginRequest,
   UserIDType,
-  UserInvitations,
   UserLockerType,
   UserPlan,
 } from "app/static/types"
@@ -73,7 +72,6 @@ export const UserModel = types
         max_number: 0,
       })
     ),
-    invitations: types.array(types.frozen<UserInvitations>()),
     biometricIntroShown: types.maybeNull(types.boolean),
 
     // On premise user
@@ -165,9 +163,6 @@ export const UserModel = types
     setPlan: (plan: UserPlan) => {
       self.plan = cast(plan)
     },
-    setInvitations: (invitations: any[]) => {
-      self.invitations = cast(invitations)
-    },
     setBiometricIntroShown: (val: boolean) => {
       self.biometricIntroShown = val
     },
@@ -214,7 +209,6 @@ export const UserModel = types
       self.is_pwd_manager = false
       self.hide_master_password = false
       self.enterprise = null
-      self.invitations = cast([])
       self.plan = null
       self.fingerprint = ""
       self.onPremiseUser = false
@@ -449,19 +443,6 @@ export const UserModel = types
       return res
     },
 
-    getInvitations: async () => {
-      const res = await userApi.getInvitations(self.apiToken)
-      if (res.kind === "ok") {
-        self.setInvitations(res.data)
-      }
-      return res
-    },
-
-    invitationRespond: async (id: string, status: "accept" | "reject") => {
-      const res = await userApi.invitationRespond(self.apiToken, id, status)
-      return res
-    },
-
     getUserPw: async () => {
       const res = await userApi.getUserPw(self.apiToken)
       if (res.kind === "ok") {
@@ -541,13 +522,6 @@ export const UserModel = types
     },
     getTeamPolicy: async (organizationId: string, policyType: PolicyType) => {
       const res = await userApi.getTeamPolicy(self.apiToken, organizationId, policyType)
-      return res
-    },
-    feedback: async (description: string) => {
-      const res = await userApi.sendFeedback(self.apiToken, {
-        type: "feedback",
-        description,
-      })
       return res
     },
     updateFCM: async (token: string) => {
@@ -700,7 +674,6 @@ export const createUserStoreDefaultModel = () =>
     // Others data
     plan: null,
     enterprise: null,
-    invitations: [],
     biometricIntroShown: false,
 
     // On premise user

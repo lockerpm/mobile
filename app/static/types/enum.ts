@@ -91,12 +91,6 @@ export enum PlanTypeDuration {
   YEARLY = "yearly",
 }
 
-export enum InvitationStatus {
-  INVITED = "invited",
-  REJECTED = "rejected",
-  CONFIRMED = "confirmed",
-}
-
 export enum NotificationCategory {
   ITEM_SHARE = "item_sharing",
   EMERGENCY = "emergency_access",

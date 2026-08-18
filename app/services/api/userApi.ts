@@ -21,7 +21,6 @@ import {
   SessionLoginRequest,
   SessionOtpLoginRequest,
   UpdateFCMRequest,
-  UserInvitations,
   NotificationSettingData,
   MarketingContent,
   ChatWootUser,
@@ -398,64 +397,6 @@ class UserApi {
       return { kind: "ok", data }
     } catch (e) {
       Logger.error("getPlan", e)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Get invitations
-  async getInvitations(token: string): Promise<
-    | {
-        kind: "ok"
-        data: UserInvitations[]
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/v3/cystack_platform/pm/users/invitations"
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const data = response.data
-
-      return { kind: "ok", data }
-    } catch (e) {
-      Logger.error("getInvitations", e)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Respond to an invitation
-  async invitationRespond(
-    token: string,
-    id: string,
-    status: string
-  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/v3/cystack_platform/pm/users/invitations/${id}`,
-        {
-          status,
-        }
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error("invitationRespond", e)
       return { kind: "bad-data" }
     }
   }

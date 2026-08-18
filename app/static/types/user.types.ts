@@ -8,7 +8,6 @@ import {
   AccountRoleText,
   EmergencyAccessStatus,
   EmergencyAccessType,
-  InvitationStatus,
   LoginMethod,
   NotificationCategory,
   PlanType,
@@ -113,18 +112,6 @@ export type UserTeam = {
   is_business: boolean
   locker: boolean
   organization_id: string
-}
-
-export type UserInvitations = {
-  access_time: number
-  id: string
-  role: AccountRoleText
-  status: InvitationStatus
-  team: {
-    id: string
-    name: string
-    organization_id: string
-  }
 }
 
 export type PasswordPolicy = {

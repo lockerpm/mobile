@@ -1,4 +1,6 @@
 import { FC } from "react"
+import { ViewStyle } from "react-native"
+
 import { Screen, Header } from "app/components/cores"
 import { MenuItemContainer, SettingsItem } from "app/components/utils"
 import { TxKeyPath } from "app/i18n"
@@ -9,8 +11,8 @@ import {
   openReportVuln,
   openTerms,
 } from "app/utils/openLinkInBrowser"
+
 import { useAppTheme } from "@/utils/useAppTheme"
-import { ViewStyle } from "react-native"
 
 type Item = {
   name: TxKeyPath

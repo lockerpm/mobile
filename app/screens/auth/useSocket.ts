@@ -19,11 +19,7 @@ export const useSocket = ({ isAndroidService }: { isAndroidService: boolean }) =
   // Check invitation
   const handleUserDataSync = useCallback(() => {
     if (!isAndroidService) {
-      Promise.all([
-        user.getInvitations(),
-        cipherStore.loadSharingInvitations(),
-        cipherStore.loadMyShares(),
-      ])
+      Promise.all([cipherStore.loadSharingInvitations(), cipherStore.loadMyShares()])
     }
   }, [cipherStore, user, isAndroidService])
 
