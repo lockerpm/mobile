@@ -1,18 +1,21 @@
-import { useCipherData, useDeleteCipher } from "app/services/hook"
 import { useState } from "react"
 import { Image, StyleSheet } from "react-native"
+
 import { Text, Button, BottomModalContainer } from "app/components/cores"
+import { useCipherData, useDeleteCipher } from "app/services/hook"
+
 import { AppEventType, EventBus } from "@/utils/eventBus"
 
 interface Props {
   onClose: () => void
+  onDeleteSuccess?: () => void
   deleteIds: string[]
   isDeleted: boolean // permanent delete or move to trash
 }
 
 const TRASH = require("assets/images/intro/trash.png")
 
-export const Delete = ({ deleteIds, isDeleted, onClose }: Props) => {
+export const Delete = ({ deleteIds, isDeleted, onClose, onDeleteSuccess }: Props) => {
   const { toTrashCiphers } = useDeleteCipher()
   const { deleteCiphers } = useCipherData()
 
@@ -30,7 +33,11 @@ export const Delete = ({ deleteIds, isDeleted, onClose }: Props) => {
       await toTrashCiphers(deleteIds)
     }
     setIsLoading(false)
-    onClose()
+    if (onDeleteSuccess) {
+      onDeleteSuccess()
+    } else {
+      onClose()
+    }
     EventBus.emit(AppEventType.UNSELECT_ALL, null)
   }
 

@@ -1,18 +1,22 @@
 import { FC, useCallback } from "react"
-import { observer } from "mobx-react-lite"
 import { StyleSheet, View } from "react-native"
-import { Text, Screen, Header, Icon } from "app/components/cores"
+import { observer } from "mobx-react-lite"
+
+import { CiphelBaseInfo, CipherIconImage } from "app/components/ciphers"
+import { Text, Screen, Header, Icon, PressableIcon } from "app/components/cores"
 import { useStores } from "app/models"
+import { BrowseScreenProps } from "app/navigators"
+import { CipherActionsModal } from "app/static/types"
 import { CipherType } from "core/enums"
 
-import { BrowseScreenProps } from "app/navigators"
-import { CiphelBaseInfo, CipherIconImage } from "app/components/ciphers"
-import { CipherActionsModal, CipherAppView } from "app/static/types"
-import { PasswordInfo } from "./PasswordInfo"
+import { getCipherActionPermissions } from "@/utils/cipherActionPermissions"
+import { useAppTheme } from "@/utils/useAppTheme"
+
 import { CardInfo } from "./CardInfo"
+import { CryptoWalletInfo } from "./cryptoInfo"
 import { IdentityInfo } from "./IdentityInfo"
 import { NoteInfo } from "./NoteInfo"
-import { CryptoWalletInfo } from "./cryptoInfo"
+import { PasswordInfo } from "./PasswordInfo"
 
 export const CipherDetailScreen: FC<BrowseScreenProps<"cipherDetail">> = observer(
   ({
@@ -22,26 +26,49 @@ export const CipherDetailScreen: FC<BrowseScreenProps<"cipherDetail">> = observe
     },
   }) => {
     const { cipherStore } = useStores()
+    const {
+      theme: { colors },
+    } = useAppTheme()
 
     // ------------------ COMPUTED --------------------
 
-    const lockerMasterPassword = cipher?.type === CipherType.MasterPassword
+    const { canEdit, canStandardAttachment, canSharedAttachment, canDelete, editable, isShared } =
+      getCipherActionPermissions({ item: cipher, organizations: cipherStore.organizations })
+    const lockerMasterPassword = cipher.type === CipherType.MasterPassword
     const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
       cipher.id
     )
+    const showActions = !lockerMasterPassword && !quickShare
+    const canAttach = canStandardAttachment || canSharedAttachment
+    const attachmentIsShared = isShared && !editable
 
     // ------------------ METHODs --------------------
-    const navigateToCipherActions = useCallback(() => {
-      const data: CipherAppView = {
-        ...cipher,
-        revisionDate: null,
-      }
-      navigation.navigate("cipherActionsModal", {
-        mode: CipherActionsModal.DEFAULT,
-        item: data,
-        deleteIds: [cipher.id],
+    const navigateToEdit = useCallback(() => {
+      navigation.replace("cipherEdit", {
+        mode: "edit",
+        cipherType: cipher.type,
+        cipher,
       })
-    }, [cipher])
+    }, [cipher, navigation])
+
+    const navigateToAttachment = useCallback(() => {
+      navigation.navigate("attachment", {
+        cipher,
+        isShared: attachmentIsShared,
+      })
+    }, [attachmentIsShared, cipher, navigation])
+
+    const navigateToDelete = useCallback(() => {
+      const browseState = navigation.getState()
+      navigation.navigate("cipherActionsModal", {
+        mode: CipherActionsModal.DELETE,
+        deleteIds: [cipher.id],
+        deleteReturnContext: {
+          browseNavigatorKey: browseState.key,
+          removeBrowseStack: browseState.index === 0,
+        },
+      })
+    }, [cipher.id, navigation])
 
     // ------------------ RENDER --------------------
 
@@ -68,14 +95,7 @@ export const CipherDetailScreen: FC<BrowseScreenProps<"cipherDetail">> = observe
       <Screen
         preset="auto"
         safeAreaEdges={["bottom"]}
-        header={
-          <Header
-            leftIcon="arrow-left"
-            onLeftPress={navigation.goBack}
-            rightIcon={!lockerMasterPassword && !quickShare ? "dots-three" : undefined}
-            onRightPress={navigateToCipherActions}
-          />
-        }
+        header={<Header leftIcon="arrow-left" onLeftPress={navigation.goBack} />}
         contentContainerStyle={styles.container}
       >
         <CipherIconImage
@@ -85,6 +105,16 @@ export const CipherDetailScreen: FC<BrowseScreenProps<"cipherDetail">> = observe
           source={cipher.imgLogo}
           style={styles.logo}
         />
+
+        {showActions && (canEdit || canAttach || canDelete) && (
+          <View style={styles.actions}>
+            {canEdit && <PressableIcon icon="edit" onPress={navigateToEdit} />}
+            {canAttach && <PressableIcon icon="file-arrow-up" onPress={navigateToAttachment} />}
+            {canDelete && (
+              <PressableIcon icon="trash" color={colors.error} onPress={navigateToDelete} />
+            )}
+          </View>
+        )}
 
         <View style={styles.title}>
           <Text preset="bold" size="xxl" text={cipher.name} style={styles.name} />
@@ -101,6 +131,13 @@ export const CipherDetailScreen: FC<BrowseScreenProps<"cipherDetail">> = observe
 )
 
 const styles = StyleSheet.create({
+  actions: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 24,
+    justifyContent: "center",
+    marginTop: 16,
+  },
   container: {
     paddingHorizontal: 16,
   },

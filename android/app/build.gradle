@@ -96,8 +96,8 @@ android {
         applicationId 'com.cystack.locker'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 42083
-        versionName "2.16"
+        versionCode 42084
+        versionName "2.17"
 
         buildConfigField "String", "REACT_NATIVE_RELEASE_LEVEL", "\"${findProperty('reactNativeReleaseLevel') ?: 'stable'}\""
     }

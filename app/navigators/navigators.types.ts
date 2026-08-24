@@ -211,6 +211,14 @@ export type AuthRoute = {
 
     // shared with you cipher
     acceptedTime?: number
+
+    /**
+     * When deletion begins from a cipher detail screen, remove that screen after success.
+     */
+    deleteReturnContext?: {
+      browseNavigatorKey: string
+      removeBrowseStack: boolean
+    }
   }
 
   updateEncryption: undefined

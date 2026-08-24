@@ -5,12 +5,12 @@ import { CipherActionsByType, CipherIconImage } from "app/components/ciphers"
 import { BottomModalContainer, Text } from "app/components/cores"
 import { NewActionSheetItem } from "app/components/utils"
 import { useStores } from "app/models"
-import { AccountRole, CipherActionsModal, CipherAppView, MyShareType } from "app/static/types"
-import { getCipherDescription, getTeam } from "app/utils/cipherHelper"
-import { CipherType } from "core/enums"
+import { CipherActionsModal, CipherAppView, MyShareType } from "app/static/types"
+import { getCipherDescription } from "app/utils/cipherHelper"
 
 import { useAppLocale } from "@/i18n"
 import { useCipherData } from "@/services/hook"
+import { getCipherActionPermissions } from "@/utils/cipherActionPermissions"
 import { getRelativeTime } from "@/utils/formatDate"
 import { useAppTheme } from "@/utils/useAppTheme"
 
@@ -45,14 +45,16 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose, acceptedTime }
           time: getRelativeTime(item.revisionDate.getTime(), true),
         })
       : getCipherDescription(item)
-  const lockerMasterPassword = item.type === CipherType.MasterPassword
-
-  // Share role and editable status
-  const shareRole = getTeam(organizations, item.organizationId).type
-  const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
+  const {
+    lockerMasterPassword,
+    isShared,
+    editable,
+    canEdit,
+    canStandardAttachment,
+    canSharedAttachment,
+    canDelete,
+  } = getCipherActionPermissions({ item, organizations, isDeleted })
   const isInFolderShare = item.collectionIds?.length > 0
-  const editable =
-    !item.organizationId || shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER
 
   // -----------------------METHODS-----------------------
 
@@ -107,7 +109,7 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose, acceptedTime }
       />
       <NewActionSheetItem
         bottomBorder
-        hide={isDeleted || lockerMasterPassword || !editable}
+        hide={!canEdit}
         tx="common:clone"
         icon="copy"
         onPress={navigateCipherClone}
@@ -128,7 +130,7 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose, acceptedTime }
       />
       <NewActionSheetItem
         bottomBorder
-        hide={isDeleted || lockerMasterPassword || (isShared && !editable)}
+        hide={!canStandardAttachment}
         tx="file_attachment:title"
         icon="file-arrow-up"
         onPress={() => {
@@ -167,7 +169,7 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose, acceptedTime }
       />
       <NewActionSheetItem
         bottomBorder
-        hide={isDeleted || !isShared}
+        hide={!canSharedAttachment}
         tx="file_attachment:title"
         icon="file-arrow-up"
         onPress={() => {
@@ -201,7 +203,7 @@ export const Actions = ({ isDeleted, item, setNextModal, onClose, acceptedTime }
       />
       <NewActionSheetItem
         bottomBorder
-        hide={isDeleted || lockerMasterPassword || !editable || isShared}
+        hide={!canDelete}
         tx="trash:to_trash"
         icon="trash"
         color={colors.error}

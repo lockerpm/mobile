@@ -3,10 +3,12 @@ import { View, Image, Dimensions, StyleSheet } from "react-native"
 import moment from "moment"
 import numeral from "numeral"
 import RenderHtml from "react-native-render-html"
+
 import { Text, Screen, Header } from "app/components/cores"
 import { DataBreachScannerScreenProps } from "app/navigators"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { useAppLocale } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
 
 const { width } = Dimensions.get("window")
 export const DataBreachDetailScreen: FC<DataBreachScannerScreenProps<"dataBreachDetail">> = ({
@@ -50,10 +52,12 @@ export const DataBreachDetailScreen: FC<DataBreachScannerScreenProps<"dataBreach
               <Text preset="default" text={"  " + moment(data.breach_date).format("DD/MM/YYYY")} />
             </Text>
 
-            <Text preset="bold" style={styles.mb20}>
-              {translate("data_breach_scanner:added_date")}:
-              <Text preset="default" text={"  " + moment(data.added_date).format("DD/MM/YYYY")} />
-            </Text>
+            {data.added_date && (
+              <Text preset="bold" style={styles.mb20}>
+                {translate("data_breach_scanner:added_date")}:
+                <Text preset="default" text={"  " + moment(data.added_date).format("DD/MM/YYYY")} />
+              </Text>
+            )}
           </View>
         </View>
 
