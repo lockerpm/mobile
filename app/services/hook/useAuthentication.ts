@@ -233,6 +233,7 @@ export function useAuthentication() {
 
       // Online session login
       const keyHash = await cryptoService.hashPassword(masterPassword, key)
+
       return _loginUsingApi(
         {
           key,
@@ -613,9 +614,9 @@ export function useAuthentication() {
   }
 
   // Logout
-  const logout = () => {
+  const logout = async () => {
     try {
-      Promise.all([user.updateFCM(""), user.logout(), clearAllData(), logoutAllServices()])
+      await Promise.all([user.updateFCM(""), user.logout(), clearAllData(), logoutAllServices()])
     } catch (e) {
       notifyTx("error", "error:something_went_wrong")
       Logger.error("logout: " + e)

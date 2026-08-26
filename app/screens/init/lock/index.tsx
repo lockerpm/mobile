@@ -210,11 +210,8 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
 
     // -------------- EFFECT ------------------
 
-    // Auto trigger face id / touch id + detect biometry type
     useEffect(() => {
-      if (!isAndroidService) {
-        fetchLockType()
-      }
+      fetchLockType()
     }, [])
 
     // // Handle back press
