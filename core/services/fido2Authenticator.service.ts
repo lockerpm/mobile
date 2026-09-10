@@ -1,6 +1,7 @@
 import { CipherService, LogService } from "../abstractions"
 import {
   Fido2AlgorithmIdentifier,
+  Fido2AuthenticatorExtensionOutputs,
   Fido2AuthenticatorError,
   Fido2AuthenticatorErrorCode,
   Fido2AuthenticatorGetAssertionParams,
@@ -22,6 +23,7 @@ import {
 } from "../misc/fido2/crypto"
 import { Fido2Utils } from "../misc/fido2/fido2-utils"
 import { guidToStandardFormat } from "../misc/fido2/guid-utils"
+import { evaluatePrf, generatePrfKey } from "../misc/fido2/prf"
 import { CipherView } from "../models/view"
 import { Fido2CredentialView } from "../models/view/fido2CredentialView"
 
@@ -70,9 +72,13 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.Unknown)
     }
 
+    if (params.extensions?.prf?.evalByCredential !== undefined) {
+      throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotSupported)
+    }
+
     checkForAbort(abortController)
 
-    // Check if there re any excluded credentials in the vault
+    // Check if there are any excluded credentials in the vault
     const existingCipherIds = await this.findExcludedCredentials(
       params.excludeCredentialDescriptorList || []
     )
@@ -88,6 +94,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     let userVerified = false
     let credentialId: string
     let pubKeyDer: ArrayBuffer
+    let extensionOutputs: Fido2AuthenticatorExtensionOutputs | undefined
 
     checkForAbort(abortController)
 
@@ -107,6 +114,20 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
 
       fido2Credential = await createKeyView(params, keyPair.privateKey)
       credentialId = fido2Credential.credentialId
+
+      if (params.extensions?.prf != null) {
+        extensionOutputs = {
+          prf: {
+            enabled: true,
+          },
+        }
+        if (params.extensions.prf.eval != null) {
+          extensionOutputs.prf!.results = await evaluatePrf(
+            Fido2Utils.stringToBuffer(fido2Credential.prfKey!),
+            params.extensions.prf.eval
+          )
+        }
+      }
     } catch (error) {
       this.logService.error(
         `[Fido2Authenticator] Aborting because of unknown error when creating credential: ${error}`
@@ -133,14 +154,19 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       })
     )
 
+    const response: Fido2AuthenticatorMakeCredentialResult = {
+      credentialId: parseCredentialId(credentialId)!,
+      attestationObject,
+      authData,
+      publicKey: pubKeyDer,
+      publicKeyAlgorithm: -7,
+    }
+    if (extensionOutputs != null) {
+      response.extensions = extensionOutputs
+    }
+
     return {
-      response: {
-        credentialId: parseCredentialId(credentialId)!,
-        attestationObject,
-        authData,
-        publicKey: pubKeyDer,
-        publicKeyAlgorithm: -7,
-      },
+      response,
       fido2Credential,
     }
   }
@@ -161,6 +187,8 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       )
       throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.Unknown)
     }
+
+    validateAssertionPrfInputs(params)
 
     // Get a list of matching credentials from the vault
     let cipherOptions: CipherView[] = []
@@ -216,6 +244,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     try {
       const selectedFido2Credential: Fido2CredentialView = credentials[0]
       const selectedCredentialId = selectedFido2Credential.credentialId!
+      const selectedCredentialBuffer = parseCredentialId(selectedCredentialId)!
 
       if (selectedFido2Credential.counter! > 0) {
         ++selectedFido2Credential.counter!
@@ -225,7 +254,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
 
       const authenticatorData = await generateAuthData({
         rpId: selectedFido2Credential.rpId!,
-        credentialId: parseCredentialId(selectedCredentialId)!,
+        credentialId: selectedCredentialBuffer,
         counter: selectedFido2Credential.counter!,
         userPresence: true,
         userVerification: userVerified,
@@ -237,14 +266,25 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         privateKey: await getPrivateKeyFromFido2Credential(selectedFido2Credential),
       })
 
-      return {
+      const extensionOutputs = await getAssertionPrfOutputs(
+        params,
+        selectedFido2Credential,
+        selectedCredentialBuffer
+      )
+
+      const result: Fido2AuthenticatorGetAssertionResult = {
         authenticatorData,
         selectedCredential: {
-          id: parseCredentialId(selectedCredentialId)!,
+          id: selectedCredentialBuffer,
           userHandle: Fido2Utils.stringToBuffer(selectedFido2Credential.userHandle!)!,
         },
         signature,
       }
+      if (extensionOutputs != null) {
+        result.extensions = extensionOutputs
+      }
+
+      return result
     } catch (error) {
       this.logService.error(
         `[Fido2Authenticator] Aborting because of unknown error when asserting credential: ${error}`
@@ -384,6 +424,9 @@ async function createKeyView(
   fido2Credential.keyAlgorithm = "ECDSA"
   fido2Credential.keyCurve = "P-256"
   fido2Credential.keyValue = Fido2Utils.bufferToString(pkcs8Key)
+  if (params.extensions?.prf != null) {
+    fido2Credential.prfKey = Fido2Utils.bufferToString(generatePrfKey())
+  }
   fido2Credential.rpId = params.rpEntity.id!
   fido2Credential.userHandle = Fido2Utils.bufferToString(params.userEntity.id)
   fido2Credential.userName = params.userEntity.name!
@@ -394,4 +437,70 @@ async function createKeyView(
   fido2Credential.creationDate = new Date()
 
   return fido2Credential
+}
+
+function validateAssertionPrfInputs(params: Fido2AuthenticatorGetAssertionParams): void {
+  const evalByCredential = params.extensions?.prf?.evalByCredential
+  if (!evalByCredential) {
+    return
+  }
+
+  const credentialIds = Object.keys(evalByCredential)
+  if (credentialIds.length === 0) {
+    return
+  }
+
+  if (!params.allowCredentialDescriptorList?.length) {
+    throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotSupported)
+  }
+
+  const allowedCredentialIds = new Set(
+    params.allowCredentialDescriptorList.map((credential) =>
+      Fido2Utils.bufferToString(credential.id)
+    )
+  )
+
+  for (const credentialId of credentialIds) {
+    if (!isValidBase64Url(credentialId) || !allowedCredentialIds.has(credentialId)) {
+      throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.Syntax)
+    }
+  }
+}
+
+async function getAssertionPrfOutputs(
+  params: Fido2AuthenticatorGetAssertionParams,
+  credential: Fido2CredentialView,
+  credentialId: BufferSource
+): Promise<Fido2AuthenticatorExtensionOutputs | undefined> {
+  const prfInputs = params.extensions?.prf
+  if (!prfInputs) {
+    return undefined
+  }
+
+  const outputs: Fido2AuthenticatorExtensionOutputs = {
+    prf: {},
+  }
+  if (!credential.prfKey) {
+    return outputs
+  }
+
+  const encodedCredentialId = Fido2Utils.bufferToString(credentialId)
+  const values = prfInputs.evalByCredential?.[encodedCredentialId] || prfInputs.eval
+  if (values != null) {
+    outputs.prf!.results = await evaluatePrf(Fido2Utils.stringToBuffer(credential.prfKey), values)
+  }
+
+  return outputs
+}
+
+function isValidBase64Url(value: string): boolean {
+  if (value.length === 0 || !/^[A-Za-z0-9_-]+$/.test(value)) {
+    return false
+  }
+
+  try {
+    return Fido2Utils.bufferToString(Fido2Utils.stringToBuffer(value)) === value
+  } catch {
+    return false
+  }
 }

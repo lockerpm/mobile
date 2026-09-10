@@ -1,5 +1,5 @@
-import { Fido2Credential as Fido2CredentialDomain } from "../domain/fido2Credential"
 import { EncString } from "../domain/encString"
+import { Fido2Credential as Fido2CredentialDomain } from "../domain/fido2Credential"
 import { Fido2CredentialView } from "../view/fido2CredentialView"
 
 export class Fido2Credential {
@@ -10,6 +10,7 @@ export class Fido2Credential {
     req.keyAlgorithm = "keyAlgorithm"
     req.keyCurve = "keyCurve"
     req.keyValue = "keyValue"
+    req.prfKey = "prfKey"
     req.rpId = "rpId"
     req.userHandle = "userHandle"
     req.userName = "userName"
@@ -27,6 +28,7 @@ export class Fido2Credential {
     view.keyAlgorithm = req.keyAlgorithm
     view.keyCurve = req.keyCurve
     view.keyValue = req.keyValue
+    view.prfKey = req.prfKey
     view.rpId = req.rpId
     view.userHandle = req.userHandle
     view.userName = req.userName
@@ -44,6 +46,7 @@ export class Fido2Credential {
     domain.keyAlgorithm = req.keyAlgorithm != null ? new EncString(req.keyAlgorithm) : null
     domain.keyCurve = req.keyCurve != null ? new EncString(req.keyCurve) : null
     domain.keyValue = req.keyValue != null ? new EncString(req.keyValue) : null
+    domain.prfKey = req.prfKey != null ? new EncString(req.prfKey) : null
     domain.rpId = req.rpId != null ? new EncString(req.rpId) : null
     domain.userHandle = req.userHandle != null ? new EncString(req.userHandle) : null
     domain.userName = req.userName != null ? new EncString(req.userName) : null
@@ -60,6 +63,7 @@ export class Fido2Credential {
   keyAlgorithm: string
   keyCurve: string
   keyValue: string
+  prfKey: string
   rpId: string
   userHandle: string
   userName: string
@@ -79,6 +83,7 @@ export class Fido2Credential {
     this.keyAlgorithm = safeGetString(o.keyAlgorithm)
     this.keyCurve = safeGetString(o.keyCurve)
     this.keyValue = safeGetString(o.keyValue)
+    this.prfKey = safeGetString(o.prfKey)
     this.rpId = safeGetString(o.rpId)
     this.userHandle = safeGetString(o.userHandle)
     this.userName = safeGetString(o.userName)

@@ -6,6 +6,7 @@ export class Fido2CredentialApi extends BaseResponse {
   keyAlgorithm: string
   keyCurve: string
   keyValue: string
+  prfKey: string
   rpId: string
   userHandle: string
   userName: string
@@ -26,6 +27,7 @@ export class Fido2CredentialApi extends BaseResponse {
     this.keyAlgorithm = this.getResponseProperty("KeyAlgorithm")
     this.keyCurve = this.getResponseProperty("KeyCurve")
     this.keyValue = this.getResponseProperty("keyValue")
+    this.prfKey = this.getResponseProperty("PrfKey")
     this.rpId = this.getResponseProperty("RpId")
     this.userHandle = this.getResponseProperty("UserHandle")
     this.userName = this.getResponseProperty("UserName")

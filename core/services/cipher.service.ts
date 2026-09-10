@@ -1,4 +1,20 @@
 /* eslint-disable no-useless-constructor */
+import _ from "lodash"
+
+import {
+  BACKGROUND_DECRYPT_BATCH_SIZE,
+  BACKGROUND_DECRYPT_FIRST_BATCH_SIZE,
+  BACKGROUND_DECRYPT_REINDEX_EVERY,
+} from "app/static/constants"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+
+import { ConstantsService } from "./constants.service"
+import { ApiService } from "../abstractions/api.service"
+import { CipherService as CipherServiceAbstraction } from "../abstractions/cipher.service"
+import { CryptoService } from "../abstractions/crypto.service"
+import { FileUploadService } from "../abstractions/fileUpload.service"
+import { I18nService } from "../abstractions/i18n.service"
+import { SearchService } from "../abstractions/search.service"
 import { CipherType } from "../enums/cipherType"
 import { FieldType } from "../enums/fieldType"
 import { UriMatchType } from "../enums/uriMatchType"
@@ -41,27 +57,11 @@ import { View } from "../models/view/view"
 
 import { SortedCiphersCache } from "../models/domain/sortedCiphersCache"
 
-import { ApiService } from "../abstractions/api.service"
-import { CipherService as CipherServiceAbstraction } from "../abstractions/cipher.service"
-import { CryptoService } from "../abstractions/crypto.service"
-import { FileUploadService } from "../abstractions/fileUpload.service"
-import { I18nService } from "../abstractions/i18n.service"
-import { SearchService } from "../abstractions/search.service"
 import { SettingsService } from "../abstractions/settings.service"
 import { StorageService } from "../abstractions/storage.service"
 import { UserService } from "../abstractions/user.service"
-
-import { ConstantsService } from "./constants.service"
-
 import { sequentialize } from "../misc/sequentialize"
 import { Utils } from "../misc/utils"
-import _ from "lodash"
-import {
-  BACKGROUND_DECRYPT_BATCH_SIZE,
-  BACKGROUND_DECRYPT_FIRST_BATCH_SIZE,
-  BACKGROUND_DECRYPT_REINDEX_EVERY,
-} from "app/static/constants"
-import { AppEventType, EventBus } from "app/utils/eventBus"
 
 const Keys = {
   ciphersPrefix: "ciphers_",
@@ -1335,6 +1335,7 @@ export class CipherService implements CipherServiceAbstraction {
                 keyAlgorithm: null,
                 keyCurve: null,
                 keyValue: null,
+                prfKey: null,
                 rpId: null,
                 userHandle: null,
                 userName: null,

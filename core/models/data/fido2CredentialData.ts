@@ -6,6 +6,7 @@ export class Fido2CredentialData {
   keyAlgorithm: string
   keyCurve: string
   keyValue: string
+  prfKey: string
   rpId: string
   userHandle: string
   userName: string
@@ -25,6 +26,7 @@ export class Fido2CredentialData {
     this.keyAlgorithm = data.keyAlgorithm
     this.keyCurve = data.keyCurve
     this.keyValue = data.keyValue
+    this.prfKey = data.prfKey
     this.rpId = data.rpId
     this.userHandle = data.userHandle
     this.userName = data.userName

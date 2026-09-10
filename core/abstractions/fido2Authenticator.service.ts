@@ -65,6 +65,7 @@ export enum Fido2AlgorithmIdentifier {
 export enum Fido2AuthenticatorErrorCode {
   Unknown = "UnknownError",
   NotSupported = "NotSupportedError",
+  Syntax = "SyntaxError",
   InvalidState = "InvalidStateError",
   NotAllowed = "NotAllowedError",
   Constraint = "ConstraintError",
@@ -82,6 +83,40 @@ export interface PublicKeyCredentialDescriptor {
   id: Uint8Array<ArrayBuffer>
   transports?: ("ble" | "hybrid" | "internal" | "nfc" | "usb")[]
   type: "public-key"
+}
+
+export interface Fido2PrfValues {
+  first: BufferSource
+  second?: BufferSource
+}
+
+export interface Fido2PrfInputs {
+  eval?: Fido2PrfValues
+  evalByCredential?: Record<string, Fido2PrfValues>
+}
+
+export interface Fido2PrfResults {
+  first: Uint8Array
+  second?: Uint8Array
+}
+
+export interface Fido2PrfOutputs {
+  enabled?: boolean
+  results?: Fido2PrfResults
+}
+
+export interface Fido2AuthenticatorExtensions {
+  appid?: string
+  appidExclude?: string
+  credProps?: boolean
+  uvm?: boolean
+  prf?: Fido2PrfInputs
+  [extension: string]: unknown
+}
+
+export interface Fido2AuthenticatorExtensionOutputs {
+  prf?: Fido2PrfOutputs
+  [extension: string]: unknown
 }
 
 /**
@@ -112,13 +147,8 @@ export interface Fido2AuthenticatorMakeCredentialsParams {
   }[]
   /** An OPTIONAL list of PublicKeyCredentialDescriptor objects provided by the Relying Party with the intention that, if any of these are known to the authenticator, it SHOULD NOT create a new credential. excludeCredentialDescriptorList contains a list of known credentials. */
   excludeCredentialDescriptorList?: PublicKeyCredentialDescriptor[]
-  /** A map from extension identifiers to their authenticator extension inputs, created by the client based on the extensions requested by the Relying Party, if any. */
-  extensions?: {
-    appid?: string
-    appidExclude?: string
-    credProps?: boolean
-    uvm?: boolean
-  }
+  /** A map from extension identifiers to the client extension inputs requested by the Relying Party, if any. */
+  extensions?: Fido2AuthenticatorExtensions
   /** A Boolean value that indicates that individually-identifying attestation MAY be returned by the authenticator. */
   enterpriseAttestationPossible?: boolean // Ignored at the moment
   /** The effective resident key requirement for credential creation, a Boolean value determined by the client. Resident is synonymous with discoverable. */
@@ -136,6 +166,7 @@ export interface Fido2AuthenticatorMakeCredentialResult {
   authData: BufferSource
   publicKey: BufferSource
   publicKeyAlgorithm: number
+  extensions?: Fido2AuthenticatorExtensionOutputs
 }
 
 /**
@@ -154,7 +185,7 @@ export interface Fido2AuthenticatorGetAssertionParams {
   requireUserVerification: boolean
   /** The constant Boolean value true. It is included here as a pseudo-parameter to simplify applying this abstract authenticator model to implementations that may wish to make a test of user presence optional although WebAuthn does not. */
   // requireUserPresence: boolean; // Always required
-  extensions: unknown
+  extensions?: Fido2AuthenticatorExtensions
   /** Forwarded to user interface */
   fallbackSupported: boolean
 
@@ -169,4 +200,5 @@ export interface Fido2AuthenticatorGetAssertionResult {
   }
   authenticatorData: Uint8Array<ArrayBuffer>
   signature: Uint8Array<ArrayBuffer>
+  extensions?: Fido2AuthenticatorExtensionOutputs
 }
