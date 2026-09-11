@@ -6,7 +6,7 @@ export class Fido2CredentialData {
   keyAlgorithm: string
   keyCurve: string
   keyValue: string
-  prfKey: string
+  prfKey: string | null
   rpId: string
   userHandle: string
   userName: string

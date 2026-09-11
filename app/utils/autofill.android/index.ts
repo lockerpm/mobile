@@ -4,7 +4,17 @@ import { Fido2Utils } from "core/misc/fido2/fido2-utils"
 import { guidToRawFormat } from "core/misc/fido2/guid-utils"
 import { Fido2CredentialView } from "core/models/view/fido2CredentialView"
 
+import { AndroidClientExtensionResults, getPrfClientExtensionResults } from "./fido2"
+
 const { RNAutofillServiceIos, RNAutofillServiceAndroid } = NativeModules
+const PRF_LOG_TAG = "[PasskeyPRF]"
+
+const summarizeClientExtensionResults = (results: AndroidClientExtensionResults) => ({
+  hasPrf: results.prf != null,
+  enabled: results.prf?.enabled === true,
+  hasResults: results.prf?.results != null,
+  hasSecond: results.prf?.results?.second != null,
+})
 
 export enum AndroidASType {
   FILL_PASSWORD = 1,
@@ -72,39 +82,73 @@ export const openChromeAutofillSettings = async () => {
   return RNAutofillServiceAndroid.openChromeAutofillSettings()
 }
 
-export const handleCreatePasskeyResponse = async (credentialId: string, publicKey: string) => {
+export const handleCreatePasskeyResponse = async (
+  credentialId: string,
+  publicKey: string,
+  clientExtensionResults: AndroidClientExtensionResults
+) => {
   if (androidAutofillServiceData?.type === AndroidASType.CREATE_PASSKEY) {
     const { requestJson, origin, packageName } =
       androidAutofillServiceData as AndroidAFCreatePasskey
 
     const realCredentialID = Fido2Utils.bufferToString(guidToRawFormat(credentialId))
-    RNAutofillServiceAndroid.handleCreatePasskeyResponse(
+    console.log(
+      PRF_LOG_TAG,
+      "create.bridge.sending",
+      summarizeClientExtensionResults(clientExtensionResults)
+    )
+    await RNAutofillServiceAndroid.handleCreatePasskeyResponse(
       requestJson,
       realCredentialID,
       publicKey,
       origin,
-      packageName
+      packageName,
+      JSON.stringify(clientExtensionResults)
     )
   }
 }
 
 export const handleGetPasskeyResponse = async (item: Fido2CredentialView) => {
   if (androidAutofillServiceData?.type === AndroidASType.GET_PASSKEY) {
-    const { requestJson, origin, packageName, clientDataHash } =
-      androidAutofillServiceData as AndroidAFGetPasskey
+    try {
+      const { requestJson, origin, packageName, clientDataHash } =
+        androidAutofillServiceData as AndroidAFGetPasskey
 
-    const realCredentialID = Fido2Utils.bufferToString(guidToRawFormat(item.credentialId))
-    await RNAutofillServiceAndroid.handleGetPasskeyResponse(
-      requestJson,
-      realCredentialID,
-      item.userHandle,
-      item.keyValue,
-      0,
-      origin,
-      packageName,
-      clientDataHash || ""
-    )
+      const realCredentialID = Fido2Utils.bufferToString(guidToRawFormat(item.credentialId))
+      const clientExtensionResults = await getPrfClientExtensionResults(
+        requestJson,
+        item,
+        realCredentialID
+      )
+      console.log(
+        PRF_LOG_TAG,
+        "get.bridge.sending",
+        summarizeClientExtensionResults(clientExtensionResults)
+      )
+      await RNAutofillServiceAndroid.handleGetPasskeyResponse(
+        requestJson,
+        realCredentialID,
+        item.userHandle,
+        item.keyValue,
+        0,
+        origin,
+        packageName,
+        clientDataHash || "",
+        JSON.stringify(clientExtensionResults)
+      )
+    } catch (error) {
+      await handlePasskeyError(AndroidASType.GET_PASSKEY, error)
+    }
   }
+}
+
+export const handlePasskeyError = async (
+  type: AndroidASType.CREATE_PASSKEY | AndroidASType.GET_PASSKEY,
+  error: unknown
+) => {
+  const message = error instanceof Error ? error.message : String(error)
+  console.error(PRF_LOG_TAG, "request.failed", { type, message })
+  await RNAutofillServiceAndroid.handlePasskeyError(type, message)
 }
 
 export const parseSearchText: (bundle: string) => string[] = (bundle) => {

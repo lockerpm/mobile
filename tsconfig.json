@@ -30,6 +30,6 @@
       "module": "commonjs"
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.test.ts"],
   "exclude": ["node_modules", "test/**/*"]
 }

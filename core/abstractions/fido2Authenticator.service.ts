@@ -96,8 +96,8 @@ export interface Fido2PrfInputs {
 }
 
 export interface Fido2PrfResults {
-  first: Uint8Array
-  second?: Uint8Array
+  first: Uint8Array<ArrayBuffer>
+  second?: Uint8Array<ArrayBuffer>
 }
 
 export interface Fido2PrfOutputs {

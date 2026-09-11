@@ -63,7 +63,7 @@ export class Fido2Credential {
   keyAlgorithm: string
   keyCurve: string
   keyValue: string
-  prfKey: string
+  prfKey: string | null
   rpId: string
   userHandle: string
   userName: string
@@ -95,7 +95,7 @@ export class Fido2Credential {
   }
 }
 
-function safeGetString(value: string | EncString) {
+function safeGetString(value: string | EncString | null) {
   if (value == null) {
     return null
   }

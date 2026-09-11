@@ -23,7 +23,12 @@ import {
 } from "../misc/fido2/crypto"
 import { Fido2Utils } from "../misc/fido2/fido2-utils"
 import { guidToStandardFormat } from "../misc/fido2/guid-utils"
-import { evaluatePrf, generatePrfKey } from "../misc/fido2/prf"
+import {
+  evaluatePrf,
+  generatePrfKey,
+  getPrfValuesForCredential,
+  validatePrfEvalByCredential,
+} from "../misc/fido2/prf"
 import { CipherView } from "../models/view"
 import { Fido2CredentialView } from "../models/view/fido2CredentialView"
 
@@ -188,7 +193,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.Unknown)
     }
 
-    validateAssertionPrfInputs(params)
+    validatePrfEvalByCredential(params.extensions?.prf, params.allowCredentialDescriptorList)
 
     // Get a list of matching credentials from the vault
     let cipherOptions: CipherView[] = []
@@ -210,17 +215,15 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       }
     })
 
-    if (params.allowCredentialDescriptorList) {
+    if (params.allowCredentialDescriptorList?.length) {
       // Filter credentials based on the allowCredentialDescriptorList
       const filteredCredentials = credentials.filter((cred) =>
         params.allowCredentialDescriptorList.some(
           (desc) => guidToStandardFormat(desc.id) === cred.credentialId
         )
       )
-      if (filteredCredentials.length > 0) {
-        credentials.length = 0
-        credentials.push(...filteredCredentials)
-      }
+      credentials.length = 0
+      credentials.push(...filteredCredentials)
     }
 
     // If no credentials are found, abort the assertion
@@ -439,34 +442,6 @@ async function createKeyView(
   return fido2Credential
 }
 
-function validateAssertionPrfInputs(params: Fido2AuthenticatorGetAssertionParams): void {
-  const evalByCredential = params.extensions?.prf?.evalByCredential
-  if (!evalByCredential) {
-    return
-  }
-
-  const credentialIds = Object.keys(evalByCredential)
-  if (credentialIds.length === 0) {
-    return
-  }
-
-  if (!params.allowCredentialDescriptorList?.length) {
-    throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotSupported)
-  }
-
-  const allowedCredentialIds = new Set(
-    params.allowCredentialDescriptorList.map((credential) =>
-      Fido2Utils.bufferToString(credential.id)
-    )
-  )
-
-  for (const credentialId of credentialIds) {
-    if (!isValidBase64Url(credentialId) || !allowedCredentialIds.has(credentialId)) {
-      throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.Syntax)
-    }
-  }
-}
-
 async function getAssertionPrfOutputs(
   params: Fido2AuthenticatorGetAssertionParams,
   credential: Fido2CredentialView,
@@ -484,23 +459,10 @@ async function getAssertionPrfOutputs(
     return outputs
   }
 
-  const encodedCredentialId = Fido2Utils.bufferToString(credentialId)
-  const values = prfInputs.evalByCredential?.[encodedCredentialId] || prfInputs.eval
+  const values = getPrfValuesForCredential(prfInputs, credentialId)
   if (values != null) {
     outputs.prf!.results = await evaluatePrf(Fido2Utils.stringToBuffer(credential.prfKey), values)
   }
 
   return outputs
-}
-
-function isValidBase64Url(value: string): boolean {
-  if (value.length === 0 || !/^[A-Za-z0-9_-]+$/.test(value)) {
-    return false
-  }
-
-  try {
-    return Fido2Utils.bufferToString(Fido2Utils.stringToBuffer(value)) === value
-  } catch {
-    return false
-  }
 }

@@ -17,11 +17,14 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnable
 import java.security.MessageDigest
 
 import com.cystack.locker.autofill.passkey.PasskeyUtils
+import org.json.JSONObject
 
 open class CustomReactActivityDelegate(
     private val activity: ReactActivity,
     mainComponentName: String,
 ) : DefaultReactActivityDelegate(activity, mainComponentName, fabricEnabled) {
+    private val prfLogTag = "PasskeyPRF"
+
     override fun getLaunchOptions(): Bundle? {
         var launchOptions = Bundle()
         val intent = activity.intent ?: return launchOptions
@@ -30,6 +33,7 @@ open class CustomReactActivityDelegate(
         if (getRequest != null && getRequest?.credentialOptions?.first() is GetPublicKeyCredentialOption) {
             val publicKeyRequest = getRequest?.credentialOptions?.first() as GetPublicKeyCredentialOption
 
+            logPrfRequest("activity.get.launch", publicKeyRequest.requestJson)
             launchOptions.putString("requestJson", publicKeyRequest.requestJson)
 
             val callingAppInfo = getRequest.callingAppInfo
@@ -48,6 +52,7 @@ open class CustomReactActivityDelegate(
         if (createRrequest != null && createRrequest.callingRequest is CreatePublicKeyCredentialRequest) {
             val publicKeyRequest: CreatePublicKeyCredentialRequest = createRrequest.callingRequest as CreatePublicKeyCredentialRequest
 
+            logPrfRequest("activity.create.launch", publicKeyRequest.requestJson)
             launchOptions.putString("requestJson", publicKeyRequest.requestJson)
 
             val callingAppInfo = createRrequest.callingAppInfo
@@ -79,6 +84,25 @@ open class CustomReactActivityDelegate(
         }
 
         return launchOptions
+    }
+
+    private fun logPrfRequest(event: String, requestJson: String) {
+        try {
+            val request = JSONObject(requestJson)
+            val extensions = request.optJSONObject("extensions")
+            val prf = extensions?.optJSONObject("prf")
+                ?: extensions?.optJSONObject("prfAlreadyHashed")
+            Log.d(
+                prfLogTag,
+                "$event hasExtensions=${extensions != null} hasPrf=${extensions?.has("prf") == true} " +
+                    "hasPrfAlreadyHashed=${extensions?.has("prfAlreadyHashed") == true} " +
+                    "extensionKeys=${extensions?.keys()?.asSequence()?.toList() ?: emptyList<String>()} " +
+                    "hasEval=${prf?.has("eval") == true} " +
+                    "hasEvalByCredential=${prf?.has("evalByCredential") == true}"
+            )
+        } catch (e: Exception) {
+            Log.e(prfLogTag, "$event invalid request JSON", e)
+        }
     }
 
     @RequiresApi(VERSION_CODES.P)

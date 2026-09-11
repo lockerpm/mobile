@@ -6,7 +6,7 @@ export class Fido2CredentialApi extends BaseResponse {
   keyAlgorithm: string
   keyCurve: string
   keyValue: string
-  prfKey: string
+  prfKey: string | null
   rpId: string
   userHandle: string
   userName: string
