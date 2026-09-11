@@ -193,8 +193,5 @@
         "react-native-worklets"
       ]
     }
-  },
-  "patchedDependencies": {
-    "react-native-keychain@10.0.0": "patches/react-native-keychain@10.0.0.patch"
   }
 }

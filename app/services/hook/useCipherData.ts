@@ -6,7 +6,6 @@ import { FREE_PLAN_LIMIT, IMPORT_BATCH_SIZE, TEMP_PREFIX } from "app/static/cons
 import { GetCiphersParams } from "app/static/types"
 import { AccountRoleText, EmergencyAccessType } from "app/static/types/enum"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
-import { getTeam } from "app/utils/cipherHelper"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { SyncQueue } from "app/utils/queue"
 import { CipherType } from "core/enums"
@@ -366,6 +365,7 @@ export function useCipherData() {
           c.login.fido2Credentials?.map((f) => ({
             credentialId: f.credentialId,
             keyValue: f.keyValue,
+            prfKey: f.prfKey,
             rpId: f.rpId,
             userHandle: f.userHandle,
             userName: f.userName,
@@ -373,6 +373,14 @@ export function useCipherData() {
             creationDate: f.creationDate?.toISOString() || "",
           })) || [],
       }))
+    Logger.debug("[PasskeyPRF] ios.sync.snapshot.saving", {
+      passkeyCount: passwordData.reduce((count, item) => count + (item.fido2?.length ?? 0), 0),
+      prfKeyCount: passwordData.reduce(
+        (count, item) =>
+          count + (item.fido2?.filter((passkey) => Boolean(passkey.prfKey)).length ?? 0),
+        0
+      ),
+    })
     await autofillKeyChain.savePassword(passwordData)
 
     const otpData: IosAutofillOTP = passwordRes
@@ -444,6 +452,7 @@ export function useCipherData() {
         const fido2 = new Fido2CredentialView()
         fido2.credentialId = cipher.credentialId
         fido2.keyValue = cipher.keyValue
+        fido2.prfKey = cipher.prfKey
         fido2.rpId = cipher.rpId
         fido2.userHandle = cipher.userHandle
         fido2.userName = cipher.userName
@@ -468,17 +477,16 @@ export function useCipherData() {
         const fido2 = new Fido2CredentialView()
         fido2.credentialId = cipher.credentialId
         fido2.keyValue = cipher.keyValue
+        fido2.prfKey = cipher.prfKey
         fido2.rpId = cipher.rpId
         fido2.userHandle = cipher.userHandle
         fido2.userName = cipher.userName
         fido2.userDisplayName = cipher.userName
         fido2.creationDate = new Date(cipher.creationDate)
 
-        if (database[cipher.id]) {
-          database[cipher.id].push(fido2)
-        } else {
-          database[cipher.id] = [fido2]
-        }
+        // A cipher stores exactly one passkey. If an older temporary payload
+        // contains duplicates, the last (newest) entry wins.
+        database[cipher.id] = [fido2]
       }
     }
 
@@ -517,11 +525,16 @@ export function useCipherData() {
       // sync tempPasskeys
       const tempPasskeys = await autofillKeyChain.getTempPasskey()
       if (tempPasskeys && Array.isArray(tempPasskeys)) {
+        Logger.debug("[PasskeyPRF] ios.sync.tempPasskeys.importing", {
+          passkeyCount: tempPasskeys.length,
+          prfKeyCount: tempPasskeys.filter((passkey) => Boolean(passkey.prfKey)).length,
+        })
         await createOrUpdateCipherBaseIosAutofillTempPasskey(tempPasskeys)
       }
 
       await autofillKeyChain.resetTempPassword()
       await autofillKeyChain.resetTempPasskey()
+      Logger.debug("[PasskeyPRF] ios.sync.temporaryData.reset")
       await _updateAutofillData()
     } catch (e) {
       Logger.error("syncAutofillData: " + e)

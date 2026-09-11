@@ -434,12 +434,21 @@ extension CredentialProviderController {
           clientDataHash: request.clientDataHash
         )
       }
+
+      if #available(iOSApplicationExtension 18.0, *) {
+        try addPrfExtensionOutput(
+          to: assertion,
+          item: item,
+          input: assertionPrfInput(from: request)
+        )
+      }
       
       extensionContext.completeAssertionRequest(
         using: assertion
       )
       return
     } catch {
+      passkeyPrfLogger.error("auth.quickBar.failed error=\(String(describing: error), privacy: .public)")
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
   }
@@ -463,7 +472,8 @@ extension CredentialProviderController {
       logger.log("Thinhnn. rp: \(credential.relyingParty, privacy: .public) user: \(metadata.userName, privacy: .public)")
 
       let saveItem = PasskeyItem(id: id, data: metadata)
-      user.saveTempPasskey(saveItem)
+      try user.saveTempPasskey(saveItem)
+      passkeyPrfLogger.debug("create.tempPasskeySaved hasPrfKey=\(saveItem.prfKey != nil)")
       quickTypeBar.replacePasskeyCredentialIdentities(saveItem)
 
       extensionContext.completeRegistrationRequest(
@@ -472,6 +482,7 @@ extension CredentialProviderController {
       logger.log("Done \(credential.credentialID, privacy: .public) ")
       return
     } catch {
+      passkeyPrfLogger.error("create.failed error=\(String(describing: error), privacy: .public)")
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
   }
@@ -495,12 +506,21 @@ extension CredentialProviderController {
           clientDataHash: requestParameters.clientDataHash
         )
       }
+
+      if #available(iOSApplicationExtension 18.0, *) {
+        try addPrfExtensionOutput(
+          to: assertion,
+          item: item,
+          input: requestParameters.extensionInput?.prf
+        )
+      }
       
       extensionContext.completeAssertionRequest(
         using: assertion
       )
       return
     } catch {
+      passkeyPrfLogger.error("auth.list.failed error=\(String(describing: error), privacy: .public)")
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
   }

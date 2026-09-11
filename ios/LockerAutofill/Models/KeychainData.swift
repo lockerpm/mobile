@@ -29,14 +29,16 @@ struct PasskeyItem: Hashable, Codable {
   let credentialId: String // Base64URL
   var id: String! // login id
   let keyValue: String // Base64URL
+  let prfKey: String? // Base64URL
   let rpId: String
   let userHandle: String // Base64URL
   let userName: String
   let creationDate: String
   
-  init(credentialId: String, keyValue: String, rpId: String, userHandle: String, userName: String) {
+  init(credentialId: String, keyValue: String, prfKey: String? = nil, rpId: String, userHandle: String, userName: String) {
     self.credentialId = credentialId
     self.keyValue = keyValue
+    self.prfKey = prfKey
     self.rpId = rpId
     self.userHandle = userHandle
     self.userName = userName
@@ -49,6 +51,7 @@ struct PasskeyItem: Hashable, Codable {
     
     self.credentialId = data.credentialId
     self.keyValue = data.keyValue
+    self.prfKey = data.prfKey
     self.rpId = data.rpId
     self.userHandle = data.userHandle
     self.userName = data.userName

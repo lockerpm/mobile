@@ -250,6 +250,9 @@ class ProtobufEncoder {
           fidoBytes.push(...this.writeString(4, fido.userHandle))
           fidoBytes.push(...this.writeString(5, fido.userName))
           fidoBytes.push(...this.writeString(6, fido.creationDate))
+          if (fido.prfKey) {
+            fidoBytes.push(...this.writeString(7, fido.prfKey))
+          }
           itemBytes.push(...this.writeMessage(8, fidoBytes))
         })
       }
@@ -334,10 +337,14 @@ class ProtobufEncoder {
                   case 6:
                     fido.creationDate = this.readString(bytes, offset)
                     break
+                  case 7:
+                    fido.prfKey = this.readString(bytes, offset)
+                    break
                   default:
                     this.skipField(fidoWireType, bytes, offset)
                 }
               }
+              fido.prfKey ??= null
               item.fido2.push(fido)
               break
             default:
@@ -366,6 +373,9 @@ class ProtobufEncoder {
       itemBytes.push(...this.writeString(5, item.userHandle))
       itemBytes.push(...this.writeString(6, item.userName))
       itemBytes.push(...this.writeString(7, item.creationDate))
+      if (item.prfKey) {
+        itemBytes.push(...this.writeString(8, item.prfKey))
+      }
       bytes.push(...this.writeMessage(1, itemBytes))
     })
 
@@ -414,10 +424,14 @@ class ProtobufEncoder {
             case 7:
               item.creationDate = this.readString(bytes, offset)
               break
+            case 8:
+              item.prfKey = this.readString(bytes, offset)
+              break
             default:
               this.skipField(subWireType, bytes, offset)
           }
         }
+        item.prfKey ??= null
         result.push(item)
       } else {
         this.skipField(wireType, bytes, offset)
@@ -592,7 +606,7 @@ export class KeychainProtobufService {
   public async resetTempPassword() {
     if (!IS_IOS) return
 
-    ReactNativeKeychain.resetGenericPassword({
+    await ReactNativeKeychain.resetGenericPassword({
       service: AutofillStorekey.TEMP_PASSWORD.service,
       accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
     })
@@ -632,7 +646,7 @@ export class KeychainProtobufService {
   public async resetTempPasskey() {
     if (!IS_IOS) return
 
-    ReactNativeKeychain.resetGenericPassword({
+    await ReactNativeKeychain.resetGenericPassword({
       service: AutofillStorekey.TEMP_PASSKEY.service,
       accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
     })
@@ -690,42 +704,29 @@ export class KeychainProtobufService {
 
   // Reset all protobuf data
   public async resetAll() {
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.USER_INFO.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.PASSWORD.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.TEMP_PASSWORD.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.TEMP_PASSKEY.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.OTP.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.TEMP_OTP.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
+    await Promise.all(
+      [
+        AutofillStorekey.USER_INFO,
+        AutofillStorekey.PASSWORD,
+        AutofillStorekey.TEMP_PASSWORD,
+        AutofillStorekey.TEMP_PASSKEY,
+        AutofillStorekey.OTP,
+        AutofillStorekey.TEMP_OTP,
+      ].map(({ service }) =>
+        ReactNativeKeychain.resetGenericPassword({
+          service,
+          accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
+        })
+      )
+    )
   }
 
   // Private helper methods
   private async saveShared(service: string, username: string, password: string) {
-    try {
-      await ReactNativeKeychain.setGenericPassword(username, password, {
-        service,
-        accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-      })
-    } catch (e) {
-      Logger.error(`saveShared ${username}: ` + e)
-    }
+    await ReactNativeKeychain.setGenericPassword(username, password, {
+      service,
+      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
+    })
   }
 
   private async loadShared(service: string) {

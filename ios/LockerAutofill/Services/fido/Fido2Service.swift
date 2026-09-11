@@ -8,6 +8,7 @@ import CryptoKit
 import SwiftCBOR
 import Foundation
 import AuthenticationServices
+import os
 
 
 @available(iOSApplicationExtension 17.0, *)
@@ -80,12 +81,41 @@ func createPasskeyRegistrationCredential(
     credentialID: credentialId,
     attestationObject: attestationCBOR
   )
+
+  var prfKey: String?
+  if #available(iOSApplicationExtension 18.0, *),
+     let prfInput = registrationPrfInput(from: passkeyReq) {
+    let generatedPrfKey = try PasskeyPrfService.generateKey()
+    prfKey = generatedPrfKey
+
+    let prfOutput: ASAuthorizationPublicKeyCredentialPRFRegistrationOutput
+    if let inputValues = prfInput.inputValues {
+      let results = try PasskeyPrfService.evaluate(
+        prfKey: generatedPrfKey,
+        inputValues: inputValues
+      )
+      prfOutput = ASAuthorizationPublicKeyCredentialPRFRegistrationOutput(
+        first: results.first,
+        second: results.second
+      )
+      passkeyPrfLogger.debug("create.resultReady hasResults=true hasSecond=\(results.second != nil)")
+    } else {
+      prfOutput = .supported
+      passkeyPrfLogger.debug("create.resultReady hasResults=false")
+    }
+
+    credential.extensionOutput = ASPasskeyRegistrationCredentialExtensionOutput(prf: prfOutput)
+    passkeyPrfLogger.debug("create.keyGenerated keyByteLength=32")
+  } else {
+    passkeyPrfLogger.debug("create.notRequestedOrUnavailable")
+  }
   
   let pkcs8Key = exportP256ToPKCS8(privateKey)
   
   let metadata = PasskeyItem(
     credentialId: guid,
     keyValue: pkcs8Key.base64URLEncodedString(),
+    prfKey: prfKey,
     rpId: relyingParty,
     userHandle: userId.base64URLEncodedString(),
     userName: userName

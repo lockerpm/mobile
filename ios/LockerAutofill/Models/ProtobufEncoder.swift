@@ -92,6 +92,9 @@ class ProtobufEncoder {
       itemBytes.append(contentsOf: writeString(fieldNumber: 5, value: item.userHandle))
       itemBytes.append(contentsOf: writeString(fieldNumber: 6, value: item.userName))
       itemBytes.append(contentsOf: writeString(fieldNumber: 7, value: item.creationDate))
+      if let prfKey = item.prfKey, !prfKey.isEmpty {
+        itemBytes.append(contentsOf: writeString(fieldNumber: 8, value: prfKey))
+      }
       
       bytes.append(contentsOf: writeMessage(fieldNumber: 1, messageBytes: itemBytes))
     }
@@ -130,6 +133,9 @@ class ProtobufEncoder {
           fidoBytes.append(contentsOf: writeString(fieldNumber: 4, value: fido.userHandle))
           fidoBytes.append(contentsOf: writeString(fieldNumber: 5, value: fido.userName))
           fidoBytes.append(contentsOf: writeString(fieldNumber: 6, value: fido.creationDate))
+          if let prfKey = fido.prfKey, !prfKey.isEmpty {
+            fidoBytes.append(contentsOf: writeString(fieldNumber: 7, value: prfKey))
+          }
           
           itemBytes.append(contentsOf: writeMessage(fieldNumber: 8, messageBytes: fidoBytes))
         }

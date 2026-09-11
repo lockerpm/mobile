@@ -276,6 +276,7 @@ class ProtobufDecoder {
     var userHandle = ""
     var userName = ""
     var creationDate = ""
+    var prfKey: String?
     
     while offset < messageEnd {
       guard let subTag = readVarint(data, offset: &offset) else {
@@ -298,12 +299,14 @@ class ProtobufDecoder {
         userName = readString(data, offset: &offset) ?? ""
       case 6:
         creationDate = readString(data, offset: &offset) ?? ""
+      case 7:
+        prfKey = readString(data, offset: &offset)
       default:
         skipField(wireType: subWireType, data: data, offset: &offset)
       }
     }
     
-    return PasskeyItem(credentialId: credentialId, keyValue: keyValue,
+    return PasskeyItem(credentialId: credentialId, keyValue: keyValue, prfKey: prfKey,
                        rpId: rpId, userHandle: userHandle, userName: userName)
   }
   
@@ -336,6 +339,7 @@ class ProtobufDecoder {
         var userHandle = ""
         var userName = ""
         var creationDate = ""
+        var prfKey: String?
         
         while offset < messageEnd {
           guard let subTag = readVarint(data, offset: &offset) else {
@@ -360,12 +364,14 @@ class ProtobufDecoder {
             userName = readString(data, offset: &offset) ?? ""
           case 7:
             creationDate = readString(data, offset: &offset) ?? ""
+          case 8:
+            prfKey = readString(data, offset: &offset)
           default:
             skipField(wireType: subWireType, data: data, offset: &offset)
           }
         }
         
-        let item = PasskeyItem(credentialId: credentialId, keyValue: keyValue,
+        let item = PasskeyItem(credentialId: credentialId, keyValue: keyValue, prfKey: prfKey,
                                rpId: rpId, userHandle: userHandle, userName: userName)
         items.append(PasskeyItem(id: id, data: item))
       } else {
