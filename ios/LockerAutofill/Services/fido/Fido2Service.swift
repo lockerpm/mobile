@@ -8,7 +8,6 @@ import CryptoKit
 import SwiftCBOR
 import Foundation
 import AuthenticationServices
-import os
 
 
 @available(iOSApplicationExtension 17.0, *)
@@ -20,8 +19,11 @@ func createPasskeyRegistrationCredential(
   let clientDataHash = passkeyReq.clientDataHash // hashed clientData JSON (challenge)
   let userId = passkeyId.userHandle
   let userName = passkeyId.userName
-  
-  let flags: UInt8 = 0x41 | 0x08 | 0x10 | 0x80 | 0x04 // AT + UP + ED + BE + BS + UV
+
+  // Registration authenticator data contains attested credential data, but no
+  // authenticator extension output. PRF is returned separately through
+  // ASPasskeyRegistrationCredential.extensionOutput.
+  let flags: UInt8 = 0x01 | 0x04 | 0x08 | 0x10 | 0x40 // UP + UV + BE + BS + AT
   
   
   // Generate keypair depending on algorithm
@@ -57,16 +59,6 @@ func createPasskeyRegistrationCredential(
   authData.append(credentialId)
   authData.append(coseKeyCBOR)
   
-  // Add extensions (credProps)
-  let extMap: [CBOR: CBOR] = [
-    CBOR.utf8String("credProps"): CBOR.map([
-      CBOR.utf8String("rk"): CBOR.boolean(true)
-    ])
-  ]
-  let extBytesArray =  CBOR.encode(CBOR.map(extMap))(options: CBOROptions())
-  let extBytes = Data(extBytesArray)
-  authData.append(extBytes) // append whole extension map after COSE key
-  
   
   let attestationObject: [CBOR: CBOR] = [
     CBOR.utf8String("fmt"): CBOR.utf8String("none"),
@@ -98,16 +90,11 @@ func createPasskeyRegistrationCredential(
         first: results.first,
         second: results.second
       )
-      passkeyPrfLogger.debug("create.resultReady hasResults=true hasSecond=\(results.second != nil)")
     } else {
       prfOutput = .supported
-      passkeyPrfLogger.debug("create.resultReady hasResults=false")
     }
 
     credential.extensionOutput = ASPasskeyRegistrationCredentialExtensionOutput(prf: prfOutput)
-    passkeyPrfLogger.debug("create.keyGenerated keyByteLength=32")
-  } else {
-    passkeyPrfLogger.debug("create.notRequestedOrUnavailable")
   }
   
   let pkcs8Key = exportP256ToPKCS8(privateKey)
@@ -120,7 +107,7 @@ func createPasskeyRegistrationCredential(
     userHandle: userId.base64URLEncodedString(),
     userName: userName
   )
-  
+
   return (credential, metadata)
 }
 

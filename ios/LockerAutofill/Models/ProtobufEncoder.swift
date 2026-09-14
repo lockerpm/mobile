@@ -49,6 +49,11 @@ class ProtobufEncoder {
     
     return bytes
   }
+
+  private static func writeUInt(fieldNumber: Int, value: UInt64) -> [UInt8] {
+    let tag = UInt64((fieldNumber << 3) | 0) // Wire type 0 (varint)
+    return writeVarint(tag) + writeVarint(value)
+  }
   
   private static func writeMessage(fieldNumber: Int, messageBytes: [UInt8]) -> [UInt8] {
     var bytes: [UInt8] = []
@@ -176,6 +181,11 @@ class ProtobufEncoder {
     bytes.append(contentsOf: writeString(fieldNumber: 5, value: userInfo.language))
     bytes.append(contentsOf: writeBool(fieldNumber: 6, value: userInfo.faceIdEnabled))
     bytes.append(contentsOf: writeBool(fieldNumber: 7, value: userInfo.isFree))
+    bytes.append(contentsOf: writeUInt(fieldNumber: 8, value: userInfo.mpEncodeConfig.kdf.rawValue))
+    bytes.append(contentsOf: writeUInt(fieldNumber: 9, value: UInt64(userInfo.mpEncodeConfig.iterations)))
+    bytes.append(contentsOf: writeUInt(fieldNumber: 10, value: UInt64(userInfo.mpEncodeConfig.memory)))
+    bytes.append(contentsOf: writeUInt(fieldNumber: 11, value: UInt64(userInfo.mpEncodeConfig.parallelism)))
+    bytes.append(contentsOf: writeUInt(fieldNumber: 12, value: UInt64(userInfo.mpEncodeConfig.version)))
     
     return Data(bytes)
   }

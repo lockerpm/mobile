@@ -32,12 +32,7 @@ export const useCreatePasskeyCipher = (props: AndroidAFCreatePasskey) => {
       payload.name = fido2View.rpId
       payload.login = data
 
-      console.log("[PasskeyPRF]", "create.cipher.saving", {
-        hasPrfKey: Boolean(fido2View.prfKey),
-        prfEnabled: clientExtensionResults.prf?.enabled === true,
-      })
       await createCipher(payload, 5, [])
-      console.log("[PasskeyPRF]", "create.cipher.saved")
 
       await handleCreatePasskeyResponse(fido2View.credentialId, publicKey, clientExtensionResults)
     } catch (error) {
@@ -56,12 +51,7 @@ export const useCreatePasskeyCipher = (props: AndroidAFCreatePasskey) => {
         ...cipher,
       }
       payload.login.fido2Credentials = [fido2View]
-      console.log("[PasskeyPRF]", "create.cipher.updating", {
-        hasPrfKey: Boolean(fido2View.prfKey),
-        prfEnabled: clientExtensionResults.prf?.enabled === true,
-      })
       await updateCipher(payload.id, payload, 5, payload.collectionIds || [])
-      console.log("[PasskeyPRF]", "create.cipher.updated")
 
       await handleCreatePasskeyResponse(fido2View.credentialId, publicKey, clientExtensionResults)
     } catch (error) {

@@ -31,12 +31,6 @@ export type AndroidClientExtensionResults = {
   }
 }
 
-const PRF_LOG_TAG = "[PasskeyPRF]"
-
-function logPrf(event: string, details: Record<string, unknown> = {}) {
-  console.log(PRF_LOG_TAG, event, details)
-}
-
 export const createFido2SimpleView = async (
   requestJson: string
 ): Promise<{
@@ -45,15 +39,6 @@ export const createFido2SimpleView = async (
   clientExtensionResults: AndroidClientExtensionResults
 }> => {
   const params: PublicKeyCredentialCreationOptionsJSON = JSON.parse(requestJson)
-  const rawExtensions = params.extensions
-  logPrf("create.request.parsed", {
-    hasExtensions: isRecord(rawExtensions),
-    hasPrf: isRecord(rawExtensions) && Object.prototype.hasOwnProperty.call(rawExtensions, "prf"),
-    hasPrfAlreadyHashed:
-      isRecord(rawExtensions) &&
-      Object.prototype.hasOwnProperty.call(rawExtensions, "prfAlreadyHashed"),
-    extensionKeys: isRecord(rawExtensions) ? Object.keys(rawExtensions) : [],
-  })
 
   // Generate a credential key pair
   const keyPair = (await crypto.subtle.generateKey(
@@ -108,25 +93,15 @@ export async function createPrfClientExtensionResults(
   const parsedPrf = parsePrfInputs(request.extensions)
   if (parsedPrf == null) {
     credential.prfKey = null
-    logPrf("create.extension.notRequested")
     return {}
   }
   const { inputs: prfInputs, inputsAreHashed } = parsedPrf
 
-  logPrf("create.extension.requested", {
-    inputFormat: inputsAreHashed ? "prfAlreadyHashed" : "prf",
-    hasEval: prfInputs.eval != null,
-    hasSecond: prfInputs.eval?.second != null,
-    hasEvalByCredential: prfInputs.evalByCredential !== undefined,
-  })
-
   if (prfInputs.evalByCredential !== undefined) {
-    logPrf("create.extension.rejected", { reason: "evalByCredentialNotSupported" })
     throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotSupported)
   }
 
   credential.prfKey = Fido2Utils.bufferToString(generatePrfKey())
-  logPrf("create.key.generated", { keyByteLength: 32 })
   const prfOutput: NonNullable<AndroidClientExtensionResults["prf"]> = {
     enabled: true,
   }
@@ -141,12 +116,6 @@ export async function createPrfClientExtensionResults(
     )
   }
 
-  logPrf("create.extension.resultReady", {
-    enabled: prfOutput.enabled === true,
-    hasResults: prfOutput.results != null,
-    hasSecond: prfOutput.results?.second != null,
-  })
-
   return { prf: prfOutput }
 }
 
@@ -158,54 +127,28 @@ export async function getPrfClientExtensionResults(
   const request = JSON.parse(requestJson) as PublicKeyCredentialRequestOptionsJSON
   const parsedPrf = parsePrfInputs(request.extensions)
   if (parsedPrf == null) {
-    logPrf("get.extension.notRequested")
     return {}
   }
   const { inputs: prfInputs, inputsAreHashed } = parsedPrf
 
   const allowCredentials = parseAllowCredentials(request.allowCredentials)
-  logPrf("get.extension.requested", {
-    inputFormat: inputsAreHashed ? "prfAlreadyHashed" : "prf",
-    allowCredentialCount: allowCredentials?.length ?? 0,
-    hasEval: prfInputs.eval != null,
-    hasEvalByCredential: prfInputs.evalByCredential !== undefined,
-    evalByCredentialCount: Object.keys(prfInputs.evalByCredential ?? {}).length,
-    credentialHasPrfKey: Boolean(credential.prfKey),
-  })
   validatePrfEvalByCredential(prfInputs, allowCredentials)
 
   if (!credential.prfKey) {
-    logPrf("get.extension.noStoredKey")
     return { prf: {} }
   }
 
   const credentialId = decodeBase64Url(rawCredentialId)
-  const encodedCredentialId = Fido2Utils.bufferToString(credentialId)
-  const hasCredentialSpecificInput = Object.prototype.hasOwnProperty.call(
-    prfInputs.evalByCredential ?? {},
-    encodedCredentialId
-  )
   const values = getPrfValuesForCredential(prfInputs, credentialId)
   if (values == null) {
-    logPrf("get.extension.noInput")
     return { prf: {} }
   }
-
-  logPrf("get.extension.inputSelected", {
-    source: hasCredentialSpecificInput ? "evalByCredential" : "eval",
-    hasSecond: values.second != null,
-    credentialIdByteLength: credentialId.byteLength,
-  })
 
   const results = await evaluateAndroidPrf(
     Fido2Utils.stringToBuffer(credential.prfKey),
     values,
     inputsAreHashed
   )
-  logPrf("get.extension.resultReady", {
-    hasFirst: results.first.byteLength > 0,
-    hasSecond: results.second != null,
-  })
   return { prf: { results: encodePrfResults(results) } }
 }
 

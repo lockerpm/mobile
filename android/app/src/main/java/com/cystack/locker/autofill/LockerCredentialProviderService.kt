@@ -32,16 +32,8 @@ import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.CredentialProviderService
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
 
-import android.util.Log
-import org.json.JSONObject
-
-
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class LockerCredentialProviderService: CredentialProviderService() {
-    companion object {
-        private const val PRF_LOG_TAG = "PasskeyPRF"
-    }
-
     override fun onClearCredentialStateRequest(
         request: ProviderClearCredentialStateRequest,
         cancellationSignal: CancellationSignal,
@@ -93,7 +85,6 @@ class LockerCredentialProviderService: CredentialProviderService() {
         option: BeginGetPublicKeyCredentialOption
     ): List<CredentialEntry> {
         val passkeyEntries: MutableList<CredentialEntry> = mutableListOf()
-        logPrfRequest("provider.get.request", option.requestJson)
         val request = PublicKeyCredentialRequestOptions(option.requestJson)
 
         // Get your credentials from database where you saved during creation flow
@@ -142,8 +133,6 @@ class LockerCredentialProviderService: CredentialProviderService() {
             .candidateQueryData
             .getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
         if (requestJson.isNullOrEmpty()) return null
-        logPrfRequest("provider.create.request", requestJson)
-
         return BeginCreateCredentialResponse(
             createEntries = mutableListOf(
                 CreateEntry(
@@ -153,22 +142,4 @@ class LockerCredentialProviderService: CredentialProviderService() {
         )
     }
 
-    private fun logPrfRequest(event: String, requestJson: String) {
-        try {
-            val request = JSONObject(requestJson)
-            val extensions = request.optJSONObject("extensions")
-            val prf = extensions?.optJSONObject("prf")
-                ?: extensions?.optJSONObject("prfAlreadyHashed")
-            Log.d(
-                PRF_LOG_TAG,
-                "$event hasExtensions=${extensions != null} hasPrf=${extensions?.has("prf") == true} " +
-                    "hasPrfAlreadyHashed=${extensions?.has("prfAlreadyHashed") == true} " +
-                    "extensionKeys=${extensions?.keys()?.asSequence()?.toList() ?: emptyList<String>()} " +
-                    "hasEval=${prf?.has("eval") == true} " +
-                    "hasEvalByCredential=${prf?.has("evalByCredential") == true}"
-            )
-        } catch (e: Exception) {
-            Log.e(PRF_LOG_TAG, "$event invalid request JSON", e)
-        }
-    }
 }

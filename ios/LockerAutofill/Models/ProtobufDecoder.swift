@@ -91,6 +91,11 @@ class ProtobufDecoder {
     var language = ""
     var faceIdEnabled = false
     var isFree = false
+    var kdf: UInt64?
+    var kdfIterations: UInt64?
+    var kdfMemory: UInt64?
+    var kdfParallelism: UInt64?
+    var kdfVersion: UInt64?
     
     while offset < data.count {
       guard let tag = readVarint(data, offset: &offset) else {
@@ -115,14 +120,55 @@ class ProtobufDecoder {
         faceIdEnabled = readBool(data, offset: &offset) ?? false
       case 7:
         isFree = readBool(data, offset: &offset) ?? false
+      case 8:
+        kdf = readVarint(data, offset: &offset)
+      case 9:
+        kdfIterations = readVarint(data, offset: &offset)
+      case 10:
+        kdfMemory = readVarint(data, offset: &offset)
+      case 11:
+        kdfParallelism = readVarint(data, offset: &offset)
+      case 12:
+        kdfVersion = readVarint(data, offset: &offset)
       default:
         skipField(wireType: wireType, data: data, offset: &offset)
       }
     }
+
+    let encodedConfig = [kdf, kdfIterations, kdfMemory, kdfParallelism, kdfVersion]
+    let mpEncodeConfig: MPEncodeConfig
+    if encodedConfig.allSatisfy({ $0 == nil }) {
+      mpEncodeConfig = .legacy
+    } else {
+      guard
+        let kdf,
+        let kdfIterations,
+        let kdfMemory,
+        let kdfParallelism,
+        let kdfVersion,
+        let kdfType = MasterPasswordKdf(rawValue: kdf),
+        let iterations = Int(exactly: kdfIterations),
+        let memory = Int(exactly: kdfMemory),
+        let parallelism = Int(exactly: kdfParallelism),
+        let version = Int(exactly: kdfVersion)
+      else {
+        return nil
+      }
+
+      mpEncodeConfig = MPEncodeConfig(
+        kdf: kdfType,
+        iterations: iterations,
+        memory: memory,
+        parallelism: parallelism,
+        version: version
+      )
+      guard mpEncodeConfig.isValid else { return nil }
+    }
     
     return UserInfo(email: email, hashPass: hashPass, avatar: avatar,
                     language: language, token: token,
-                    faceIdEnabled: faceIdEnabled, isFree: isFree)
+                    faceIdEnabled: faceIdEnabled, isFree: isFree,
+                    mpEncodeConfig: mpEncodeConfig)
   }
   
   static func decodeTempPasswords(from base64String: String) -> [TempPasswordItem] {

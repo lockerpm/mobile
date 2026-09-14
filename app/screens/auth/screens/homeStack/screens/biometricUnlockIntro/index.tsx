@@ -15,7 +15,7 @@ const FACEID = require("assets/images/intro/faceid.png")
 
 export const BiometricUnlockIntroScreen: FC<HomeScreenProps<"biometricUnlockIntro">> = observer(
   ({ navigation }) => {
-    const { cryptoService } = useCoreService()
+    const { cryptoService, userService } = useCoreService()
     const { user } = useStores()
     const { notifyTx } = useToast()
     const { lang, translate } = useAppLocale()
@@ -81,6 +81,11 @@ export const BiometricUnlockIntroScreen: FC<HomeScreenProps<"biometricUnlockIntr
 
         faceIdEnabled: true,
         isFree: user.isFreePlan,
+        kdf: userService.getKdf(),
+        kdf_iterations: userService.getKdfIterations(),
+        kdf_memory: userService.getKdfMemory(),
+        kdf_parallelism: userService.getKdfParallelism(),
+        kdf_version: userService.getKdfVersion(),
       })
     }
 

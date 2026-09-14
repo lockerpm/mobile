@@ -7,9 +7,6 @@ import AuthenticationServices
 import CryptoKit
 import Foundation
 import Security
-import os
-
-let passkeyPrfLogger = Logger(subsystem: "com.cystack.lockerapp", category: "PasskeyPRF")
 
 enum PasskeyPrfError: Error {
   case randomGenerationFailed(OSStatus)
@@ -103,11 +100,9 @@ func addPrfExtensionOutput(
   input: ASAuthorizationPublicKeyCredentialPRFAssertionInput?
 ) throws {
   guard let input else {
-    passkeyPrfLogger.debug("auth.notRequested")
     return
   }
   guard let prfKey = item.prfKey else {
-    passkeyPrfLogger.debug("auth.noStoredKey")
     return
   }
   try PasskeyPrfService.validateStoredKey(prfKey)
@@ -123,7 +118,6 @@ func addPrfExtensionOutput(
 
   let credentialSpecificValues = input.perCredentialInputValues?[credentialId]
   guard let inputValues = credentialSpecificValues ?? input.inputValues else {
-    passkeyPrfLogger.debug("auth.noInput")
     return
   }
 
@@ -133,7 +127,4 @@ func addPrfExtensionOutput(
     second: results.second
   )
   assertion.extensionOutput = ASPasskeyAssertionCredentialExtensionOutput(prf: prfOutput)
-  passkeyPrfLogger.debug(
-    "auth.resultReady source=\(credentialSpecificValues == nil ? "eval" : "evalByCredential", privacy: .public) firstInputByteLength=\(inputValues.saltInput1.count) secondInputByteLength=\(inputValues.saltInput2?.count ?? 0) hasSecond=\(results.second != nil)"
-  )
 }

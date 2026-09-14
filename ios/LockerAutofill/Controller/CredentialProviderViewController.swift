@@ -187,7 +187,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   @available(iOSApplicationExtension 17.0, *)
   override func prepareInterface(forPasskeyRegistration registrationRequest: any ASCredentialRequest) {
-
     guard
       let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest,
       let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity
@@ -448,7 +447,6 @@ extension CredentialProviderController {
       )
       return
     } catch {
-      passkeyPrfLogger.error("auth.quickBar.failed error=\(String(describing: error), privacy: .public)")
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
   }
@@ -469,20 +467,16 @@ extension CredentialProviderController {
         passkeyReq: passkeyReq,
         passkeyId: identity
       )
-      logger.log("Thinhnn. rp: \(credential.relyingParty, privacy: .public) user: \(metadata.userName, privacy: .public)")
 
       let saveItem = PasskeyItem(id: id, data: metadata)
       try user.saveTempPasskey(saveItem)
-      passkeyPrfLogger.debug("create.tempPasskeySaved hasPrfKey=\(saveItem.prfKey != nil)")
       quickTypeBar.replacePasskeyCredentialIdentities(saveItem)
 
       extensionContext.completeRegistrationRequest(
         using: credential
       )
-      logger.log("Done \(credential.credentialID, privacy: .public) ")
       return
     } catch {
-      passkeyPrfLogger.error("create.failed error=\(String(describing: error), privacy: .public)")
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
   }
@@ -520,7 +514,6 @@ extension CredentialProviderController {
       )
       return
     } catch {
-      passkeyPrfLogger.error("auth.list.failed error=\(String(describing: error), privacy: .public)")
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
     }
   }

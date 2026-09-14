@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
 import android.service.autofill.Dataset;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
@@ -29,10 +28,8 @@ import com.facebook.react.bridge.ReactMethod;
 import java.util.Random;
 import java.util.ArrayList;
 import android.app.Activity;
-import org.json.JSONObject;
 
 public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
-    private static final String PRF_LOG_TAG = "PasskeyPRF";
     public static final int FILL_PASSWORD = 1;
     public static final int QUICK_BAR_PASSWORD = 2;
     public static final int SAVE_PASSWORD = 3;
@@ -123,7 +120,6 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
     // --------------------------------PASSKEY---------------------------
     @ReactMethod
     public void handleCreatePasskeyResponse(String requestJson, String credentialId, String publicKey, String origin, String packageName, String clientExtensionResultsJson, Promise promise) {
-        logClientExtensionResults("bridge.create.received", clientExtensionResultsJson);
         Activity activity = getCurrentActivity();
         if (activity == null) {
             promise.reject("ACTIVITY_NOT_FOUND", "Activity doesn't exist");
@@ -147,7 +143,6 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
         String clientExtensionResultsJson,
         Promise promise
     ) {
-        logClientExtensionResults("bridge.get.received", clientExtensionResultsJson);
         Activity activity = getCurrentActivity();
         if (activity == null) {
             promise.reject("ACTIVITY_NOT_FOUND", "Activity doesn't exist");
@@ -168,22 +163,6 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
                 clientExtensionResultsJson
         );
         promise.resolve(true);
-    }
-
-    private void logClientExtensionResults(String event, String resultsJson) {
-        try {
-            JSONObject results = new JSONObject(resultsJson);
-            JSONObject prf = results.optJSONObject("prf");
-            Log.d(
-                    PRF_LOG_TAG,
-                    event
-                            + " hasPrf=" + (prf != null)
-                            + " enabled=" + (prf != null && prf.optBoolean("enabled", false))
-                            + " hasResults=" + (prf != null && prf.has("results"))
-            );
-        } catch (Exception e) {
-            Log.e(PRF_LOG_TAG, event + " invalid clientExtensionResults JSON", e);
-        }
     }
 
     @ReactMethod

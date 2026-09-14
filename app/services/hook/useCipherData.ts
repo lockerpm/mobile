@@ -373,14 +373,6 @@ export function useCipherData() {
             creationDate: f.creationDate?.toISOString() || "",
           })) || [],
       }))
-    Logger.debug("[PasskeyPRF] ios.sync.snapshot.saving", {
-      passkeyCount: passwordData.reduce((count, item) => count + (item.fido2?.length ?? 0), 0),
-      prfKeyCount: passwordData.reduce(
-        (count, item) =>
-          count + (item.fido2?.filter((passkey) => Boolean(passkey.prfKey)).length ?? 0),
-        0
-      ),
-    })
     await autofillKeyChain.savePassword(passwordData)
 
     const otpData: IosAutofillOTP = passwordRes
@@ -525,16 +517,11 @@ export function useCipherData() {
       // sync tempPasskeys
       const tempPasskeys = await autofillKeyChain.getTempPasskey()
       if (tempPasskeys && Array.isArray(tempPasskeys)) {
-        Logger.debug("[PasskeyPRF] ios.sync.tempPasskeys.importing", {
-          passkeyCount: tempPasskeys.length,
-          prfKeyCount: tempPasskeys.filter((passkey) => Boolean(passkey.prfKey)).length,
-        })
         await createOrUpdateCipherBaseIosAutofillTempPasskey(tempPasskeys)
       }
 
       await autofillKeyChain.resetTempPassword()
       await autofillKeyChain.resetTempPasskey()
-      Logger.debug("[PasskeyPRF] ios.sync.temporaryData.reset")
       await _updateAutofillData()
     } catch (e) {
       Logger.error("syncAutofillData: " + e)
