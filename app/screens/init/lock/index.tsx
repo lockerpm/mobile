@@ -220,10 +220,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
 
       const tryUnlockBiometric = () => {
         if (user.isBiometricUnlock && (biometryType !== BiometricsType.None || hasDevicePasscode)) {
-          handleUnlockBiometric({
-            kdf: lockConfig.kdf,
-            kdf_iterations: lockConfig.kdf_iterations,
-          })
+          handleUnlockBiometric(lockConfig)
         }
       }
 

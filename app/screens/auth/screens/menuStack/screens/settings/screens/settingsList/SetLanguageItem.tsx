@@ -15,7 +15,7 @@ import { openLanguageSupport } from "@/utils/openLinkInBrowser"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 export const SetlanguageItem = observer(() => {
-  const { cryptoService } = useCoreService()
+  const { cryptoService, userService } = useCoreService()
   const {
     theme: { colors },
   } = useAppTheme()
@@ -57,6 +57,11 @@ export const SetlanguageItem = observer(() => {
 
       faceIdEnabled: user.isBiometricUnlock,
       isFree: user.isFreePlan,
+      kdf: userService.getKdf(),
+      kdf_iterations: userService.getKdfIterations(),
+      kdf_memory: userService.getKdfMemory(),
+      kdf_parallelism: userService.getKdfParallelism(),
+      kdf_version: userService.getKdfVersion(),
     })
   }
 

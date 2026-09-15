@@ -2,7 +2,6 @@ package com.cystack.locker
 
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
-import android.util.Log
 import android.util.Base64
 
 import androidx.annotation.RequiresApi

@@ -119,14 +119,14 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
 
     // --------------------------------PASSKEY---------------------------
     @ReactMethod
-    public void handleCreatePasskeyResponse(String requestJson, String credentialId, String publicKey, String origin, String packageName, Promise promise) {
+    public void handleCreatePasskeyResponse(String requestJson, String credentialId, String publicKey, String origin, String packageName, String clientExtensionResultsJson, Promise promise) {
         Activity activity = getCurrentActivity();
         if (activity == null) {
             promise.reject("ACTIVITY_NOT_FOUND", "Activity doesn't exist");
             return;
         }
         Fid2Service fido2 = new Fid2Service();
-        fido2.createPasskey(activity, requestJson, credentialId, publicKey, origin, packageName);
+        fido2.createPasskey(activity, requestJson, credentialId, publicKey, origin, packageName, clientExtensionResultsJson);
         promise.resolve(true);
     }
 
@@ -140,6 +140,7 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
         String origin,
         String packageName,
         String clientDataHash,
+        String clientExtensionResultsJson,
         Promise promise
     ) {
         Activity activity = getCurrentActivity();
@@ -158,8 +159,29 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
                 signatureCounter,
                 origin,
                 packageName,
-                clientDataHash
+                clientDataHash,
+                clientExtensionResultsJson
         );
+        promise.resolve(true);
+    }
+
+    @ReactMethod
+    public void handlePasskeyError(int type, String message, Promise promise) {
+        Activity activity = getCurrentActivity();
+        if (activity == null) {
+            promise.reject("ACTIVITY_NOT_FOUND", "Activity doesn't exist");
+            return;
+        }
+
+        Fid2Service fido2 = new Fid2Service();
+        if (type == CREATE_PASSKEY) {
+            fido2.failCreatePasskey(activity, message);
+        } else if (type == GET_PASSKEY) {
+            fido2.failGetPasskey(activity, message);
+        } else {
+            promise.reject("INVALID_PASSKEY_TYPE", "Unsupported passkey request type");
+            return;
+        }
         promise.resolve(true);
     }
 
@@ -247,4 +269,3 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
 
     }
 }
-

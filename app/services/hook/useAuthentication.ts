@@ -226,6 +226,11 @@ export function useAuthentication() {
 
             // Fake set key
             await cryptoService.setKey(key)
+            const autofillHashedPassword = await cryptoService.hashPasswordAutofill(
+              masterPassword,
+              key.keyB64
+            )
+            await cryptoService.setAutofillKeyHash(autofillHashedPassword)
             return { kind: "ok" }
           }
         }
@@ -282,7 +287,7 @@ export function useAuthentication() {
         () => null,
         onPremise
       )
-    } catch (e) {
+    } catch {
       notifyTx("error", "error:session_login_failed")
       return { kind: "bad-data" }
     }
@@ -452,7 +457,7 @@ export function useAuthentication() {
         keyHash: keyHash!,
         ...encodeConfig,
       })
-    } catch (e) {
+    } catch {
       return { kind: "bad-data" }
     }
   }

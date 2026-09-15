@@ -19,7 +19,7 @@ interface Props {
 }
 
 export const SuggestEnableFaceID = observer(({ onClose, style, hasBiometric }: Props) => {
-  const { cryptoService } = useCoreService()
+  const { cryptoService, userService } = useCoreService()
   const { notifyTx } = useToast()
   const { lang, translate } = useAppLocale()
   const {
@@ -65,6 +65,11 @@ export const SuggestEnableFaceID = observer(({ onClose, style, hasBiometric }: P
 
       faceIdEnabled: true,
       isFree: user.isFreePlan,
+      kdf: userService.getKdf(),
+      kdf_iterations: userService.getKdfIterations(),
+      kdf_memory: userService.getKdfMemory(),
+      kdf_parallelism: userService.getKdfParallelism(),
+      kdf_version: userService.getKdfVersion(),
     })
   }
 

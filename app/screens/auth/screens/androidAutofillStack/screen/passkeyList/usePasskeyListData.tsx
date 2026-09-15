@@ -18,6 +18,7 @@ export const usePasskeyListData = (requestObj: PublicKeyCredentialRequestOptions
   const [isLoading, setIsLoading] = useState(true)
 
   const allowCredentialIds = requestObj.allowCredentials?.map((cred) => cred.id) || []
+  const hasAllowCredentials = allowCredentialIds.length > 0
 
   const allowPasskeys = loginPasskeys.filter((cipher) => {
     const fido2Creds = cipher.login.fido2Credentials || []
@@ -66,6 +67,6 @@ export const usePasskeyListData = (requestObj: PublicKeyCredentialRequestOptions
 
   return {
     isLoading,
-    loginPasskeys: allowPasskeys.length > 0 ? allowPasskeys : loginPasskeys,
+    loginPasskeys: hasAllowCredentials ? allowPasskeys : loginPasskeys,
   }
 }
