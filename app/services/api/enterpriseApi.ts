@@ -8,10 +8,12 @@ class EnterpriseApi {
   private api: Api = api
 
   async getListUserGroups(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: GroupData[] } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -30,11 +32,13 @@ class EnterpriseApi {
   }
 
   async getListGroupMembers(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     groupId: string
   ): Promise<{ kind: "ok"; data: GroupData & { members: GroupMemberData[] } } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -53,7 +57,8 @@ class EnterpriseApi {
   }
 
   async searchGroupOrMember(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     enterpriseId: string,
     query: string
   ): Promise<
@@ -67,7 +72,8 @@ class EnterpriseApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -89,7 +95,10 @@ class EnterpriseApi {
 
   // Join enterprise invitations
   // Get list invitations
-  async invitations(token: string): Promise<
+  async invitations(
+    apiToken: string,
+    vaultToken: string
+  ): Promise<
     | {
         kind: "ok"
         data: EnterpriseInvitation[]
@@ -97,7 +106,8 @@ class EnterpriseApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -116,12 +126,14 @@ class EnterpriseApi {
   }
 
   async invitationsActions(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     status: "confirmed" | "reject"
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(

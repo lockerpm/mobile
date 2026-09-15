@@ -16,6 +16,7 @@ export const CollectionStoreModel = types
   .model("CollectionStore")
   .props({
     apiToken: types.string,
+    vaultToken: types.string,
     collections: types.array(types.frozen()),
     lastUpdate: types.number,
     notSynchedCollections: types.array(types.string), // Offline
@@ -26,6 +27,9 @@ export const CollectionStoreModel = types
   .actions((self) => ({
     setApiToken: (token: string) => {
       self.apiToken = token
+    },
+    setVaultToken: (token: string) => {
+      self.vaultToken = token
     },
 
     setCollections: (collections: CollectionView[]) => {
@@ -39,6 +43,7 @@ export const CollectionStoreModel = types
     clearStore: (dataOnly?: boolean) => {
       if (!dataOnly) {
         self.apiToken = ""
+        self.vaultToken = ""
       }
 
       self.lastUpdate = Date.now()
@@ -85,22 +90,28 @@ export const CollectionStoreModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     createCollection: async (teamId: string, data: CollectionRequest) => {
-      const res = await folderApi.postCollection(self.apiToken, teamId, data)
+      const res = await folderApi.postCollection(self.apiToken, self.vaultToken, teamId, data)
       return res
     },
 
     updateCollection: async (id: string, teamId: string, data: CollectionRequest) => {
-      const res = await folderApi.putCollection(self.apiToken, id, teamId, data)
+      const res = await folderApi.putCollection(self.apiToken, self.vaultToken, id, teamId, data)
       return res
     },
 
     deleteCollection: async (id: string, teamId: string, payload: CollectionActionData) => {
-      const res = await folderApi.deleteCollection(self.apiToken, id, teamId, payload)
+      const res = await folderApi.deleteCollection(
+        self.apiToken,
+        self.vaultToken,
+        id,
+        teamId,
+        payload
+      )
       return res
     },
 
     stopShare: async (id: string, teamId: string, payload: CollectionActionData) => {
-      const res = await folderApi.stopShare(self.apiToken, id, teamId, payload)
+      const res = await folderApi.stopShare(self.apiToken, self.vaultToken, id, teamId, payload)
       return res
     },
 
@@ -112,6 +123,7 @@ export const CollectionStoreModel = types
     ) => {
       const res = await folderApi.removeShareMember(
         self.apiToken,
+        self.vaultToken,
         memberId,
         teamId,
         payload,
@@ -129,7 +141,7 @@ export const CollectionStoreModel = types
         hide_passwords: boolean
       }[]
     ) => {
-      const res = await folderApi.addShareMember(self.apiToken, teamId, members)
+      const res = await folderApi.addShareMember(self.apiToken, self.vaultToken, teamId, members)
       return res
     },
 
@@ -138,7 +150,13 @@ export const CollectionStoreModel = types
       teamId: string,
       payload: { cipher: CipherRequest & { id: string } }
     ) => {
-      const res = await folderApi.updateShareItem(self.apiToken, id, teamId, payload)
+      const res = await folderApi.updateShareItem(
+        self.apiToken,
+        self.vaultToken,
+        id,
+        teamId,
+        payload
+      )
       return res
     },
 
@@ -147,7 +165,13 @@ export const CollectionStoreModel = types
       teamId: string,
       payload: { cipher: CipherRequest & { id: string } }
     ) => {
-      const res = await folderApi.removeShareItem(self.apiToken, id, teamId, payload)
+      const res = await folderApi.removeShareItem(
+        self.apiToken,
+        self.vaultToken,
+        id,
+        teamId,
+        payload
+      )
       return res
     },
   }))
@@ -158,6 +182,7 @@ export interface CollectionStoreSnapshotIn extends SnapshotIn<typeof CollectionS
 export const createCollectionStoreDefaultModel = () =>
   types.optional(CollectionStoreModel, {
     apiToken: "",
+    vaultToken: "",
     collections: [],
     lastUpdate: 0,
     notSynchedCollections: [], // Offline

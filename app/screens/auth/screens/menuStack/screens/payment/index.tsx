@@ -45,7 +45,7 @@ export const PaymentScreen: FC<MenuScreenProps<"payment">> = ({
     onPurchaseSuccess: async (purchase) => {
       try {
         // setOwnedSubscriptions((prev) => [...prev, currentPurchase?.productId])
-        const res = await userApi.purchaseValidationV2(user.apiToken, purchase)
+        const res = await userApi.purchaseValidationV2(user.apiToken, user.vaultToken, purchase)
         if (res.kind === "ok") {
           if (res.data.success) {
             navigation.navigate("welcomePremium")

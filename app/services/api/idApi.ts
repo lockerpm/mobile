@@ -41,6 +41,7 @@ class IdApi {
   ): Promise<{ kind: "ok"; data: { token: string } } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -66,6 +67,7 @@ class IdApi {
   ): Promise<{ kind: "ok"; data: UseLoginMethod } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(`/v3/sso/auth/method`, {
@@ -93,6 +95,7 @@ class IdApi {
   ): Promise<{ kind: "ok"; data: LoginResult } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
       this.api.apisauce.setHeader("device-id", deviceId)
 
       // make the api call
@@ -121,6 +124,7 @@ class IdApi {
   ): Promise<{ kind: "ok"; data: SocialLogin } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
       this.api.apisauce.setHeader("device-id", deviceId)
 
       // make the api call
@@ -153,6 +157,7 @@ class IdApi {
   > {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -184,6 +189,7 @@ class IdApi {
   > {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
       this.api.apisauce.setHeader("device-id", deviceId || "")
 
       // make the api call
@@ -209,6 +215,7 @@ class IdApi {
   async register(payload: RegisterRequest): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post("/v3/sso/users", payload)
@@ -235,6 +242,7 @@ class IdApi {
   > {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -262,6 +270,7 @@ class IdApi {
   > {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -289,6 +298,7 @@ class IdApi {
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post("/v3/sso/auth/code/send", {
         username: email,
@@ -365,6 +375,7 @@ class IdApi {
   ): Promise<{ kind: "ok"; success: boolean } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -393,6 +404,7 @@ class IdApi {
   > {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -417,6 +429,7 @@ class IdApi {
   ): Promise<{ kind: "ok"; success: boolean } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -447,6 +460,7 @@ class IdApi {
   > {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -472,6 +486,7 @@ class IdApi {
   }): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -499,6 +514,7 @@ class IdApi {
   > {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -518,7 +534,8 @@ class IdApi {
   }
 
   async webAuthListCredentials(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     paging: number
   ): Promise<
     | {
@@ -528,7 +545,8 @@ class IdApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -549,14 +567,22 @@ class IdApi {
   }
 
   // Logout
-  async logout(token: string): Promise<
+  async logout(
+    apiToken: string,
+    vaultToken?: string
+  ): Promise<
     | {
         kind: "ok"
       }
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      if (vaultToken) {
+        this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
+      } else {
+        this.api.apisauce.deleteHeader("Locker-Session-Token")
+      }
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post("/v3/users/logout")
@@ -569,6 +595,9 @@ class IdApi {
     } catch (e) {
       Logger.error("logout", e)
       return { kind: "rejected" }
+    } finally {
+      this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
     }
   }
 

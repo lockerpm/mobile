@@ -40,20 +40,24 @@ export const AnonumousReport = () => {
   const [isAnonumous, setIsAnonymous] = useState(true)
 
   const fetchAnonymousSetting = useCallback(async () => {
-    const res = await toolApi.scamCheckAnonymous(toolStore.apiToken)
+    const res = await toolApi.scamCheckAnonymous(toolStore.apiToken, toolStore.vaultToken)
     if (res.kind === "ok") {
       setIsAnonymous(res.isAnonymous)
     }
-  }, [toolStore.apiToken])
+  }, [toolStore.apiToken, toolStore.vaultToken])
 
   const updateAnonymousSetting = useCallback(async () => {
-    const res = await toolApi.scamUpdateAnonymous(toolStore.apiToken, !isAnonumous)
+    const res = await toolApi.scamUpdateAnonymous(
+      toolStore.apiToken,
+      toolStore.vaultToken,
+      !isAnonumous
+    )
     if (res.kind === "ok") {
       setIsAnonymous(!isAnonumous)
     } else {
       notifyApiError(res)
     }
-  }, [isAnonumous, toolStore.apiToken])
+  }, [isAnonumous, notifyApiError, toolStore.apiToken, toolStore.vaultToken])
 
   const openModal = useCallback(() => {
     if (isAnonumous) {
