@@ -101,7 +101,7 @@ class AutofillDataModelProtobuf {
       
       if !keychainData.isEmpty {
         let decoded = ProtobufDecoder.decodeTempPasskeys(from: keychainData)
-        self.currTempPasskeys.append(contentsOf: decoded)
+        self.currTempPasskeys = decoded
         return decoded
       }
       return []
@@ -127,19 +127,22 @@ class AutofillDataModelProtobuf {
     }
   }
   
-  func saveTempPasskey(_ tempItem: PasskeyItem) {
-    do {
-      var storedPKs = self.currTempPasskeys
-      storedPKs.append(tempItem)
-      
-      let data = ProtobufEncoder.encodeTempPasskeys(storedPKs)
-      let base64String = data.base64EncodedString()
-      
-      let keychain = Keychain(service: tempPasskeyProtoKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
-      try keychain.set(base64String, key: tempPasskeyProtoKey.username)
-    } catch {
-      print("Couldn't encode protobuf to saveTempPasskey: \(error)")
+  func saveTempPasskey(_ tempItem: PasskeyItem) throws {
+    let keychain = Keychain(service: tempPasskeyProtoKey.service, accessGroup: KEYCHAIN_ACCESS_GROUP)
+    let persistedData = try keychain.get(tempPasskeyProtoKey.username) ?? ""
+    var storedPasskeys = persistedData.isEmpty
+      ? []
+      : ProtobufDecoder.decodeTempPasskeys(from: persistedData)
+
+    let cipherId = tempItem.id ?? ""
+    if !cipherId.isEmpty {
+      storedPasskeys.removeAll(where: { ($0.id ?? "") == cipherId })
     }
+    storedPasskeys.append(tempItem)
+
+    let data = ProtobufEncoder.encodeTempPasskeys(storedPasskeys)
+    try keychain.set(data.base64EncodedString(), key: tempPasskeyProtoKey.username)
+    self.currTempPasskeys = storedPasskeys
   }
   
   // MARK: - Helper Methods

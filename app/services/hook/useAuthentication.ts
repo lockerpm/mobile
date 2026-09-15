@@ -226,6 +226,11 @@ export function useAuthentication() {
 
             // Fake set key
             await cryptoService.setKey(key)
+            const autofillHashedPassword = await cryptoService.hashPasswordAutofill(
+              masterPassword,
+              key.keyB64
+            )
+            await cryptoService.setAutofillKeyHash(autofillHashedPassword)
             return { kind: "ok" }
           }
         }
@@ -233,6 +238,7 @@ export function useAuthentication() {
 
       // Online session login
       const keyHash = await cryptoService.hashPassword(masterPassword, key)
+
       return _loginUsingApi(
         {
           key,
@@ -281,7 +287,7 @@ export function useAuthentication() {
         () => null,
         onPremise
       )
-    } catch (e) {
+    } catch {
       notifyTx("error", "error:session_login_failed")
       return { kind: "bad-data" }
     }
@@ -451,7 +457,7 @@ export function useAuthentication() {
         keyHash: keyHash!,
         ...encodeConfig,
       })
-    } catch (e) {
+    } catch {
       return { kind: "bad-data" }
     }
   }
@@ -613,9 +619,9 @@ export function useAuthentication() {
   }
 
   // Logout
-  const logout = () => {
+  const logout = async () => {
     try {
-      Promise.all([user.updateFCM(""), user.logout(), clearAllData(), logoutAllServices()])
+      await Promise.all([user.updateFCM(""), user.logout(), clearAllData(), logoutAllServices()])
     } catch (e) {
       notifyTx("error", "error:something_went_wrong")
       Logger.error("logout: " + e)

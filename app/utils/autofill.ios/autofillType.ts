@@ -1,3 +1,5 @@
+import { KdfType } from "core/enums/kdfType"
+
 import Config from "@/config"
 import { Fido2SimpleView } from "@/static/types"
 
@@ -10,6 +12,12 @@ export type AutofillUserInfo = {
 
   faceIdEnabled: boolean
   isFree: boolean
+
+  kdf: KdfType
+  kdf_iterations: number
+  kdf_memory: number
+  kdf_parallelism: number
+  kdf_version: number
 }
 
 export type IosAutofillTemporaryPassword = {

@@ -7,6 +7,7 @@ struct LockScreen<TargetView: View>: View {
   
   @State private var masterPassword: String = ""
   @State private var isShowTarget = false
+  @State private var isUnlocking = false
   
   var body: some View {
     NavigationView {
@@ -29,7 +30,9 @@ struct LockScreen<TargetView: View>: View {
         
         NavigationLink(destination: target, isActive: $isShowTarget) {
           Button {
-            unlockWithMasterPassword()
+            Task {
+              await unlockWithMasterPassword()
+            }
           } label: {
             Text(i.translate("lock.btn"))
               .frame(maxWidth: .infinity)
@@ -37,9 +40,9 @@ struct LockScreen<TargetView: View>: View {
           }
           .padding(.vertical, 10)
           .background(RoundedRectangle(cornerRadius: 12).fill(AppColors.primary))
-          .opacity(masterPassword.isEmpty ? 0.5 : 1)
+          .opacity(masterPassword.isEmpty || isUnlocking ? 0.5 : 1)
         }
-        .disabled(masterPassword.isEmpty)
+        .disabled(masterPassword.isEmpty || isUnlocking)
         
         if self.userInfo.faceIdEnabled{
           Button {
@@ -65,11 +68,24 @@ struct LockScreen<TargetView: View>: View {
     .background(AppColors.background)
   }
   
-  private func unlockWithMasterPassword() {
-    let hash = authenService.makeKeyHash(masterPassword: masterPassword, email: self.userInfo.email)
-    if hash == self.userInfo.hashPass {
-      authenSuccess()
-    } else {
+  @MainActor
+  private func unlockWithMasterPassword() async {
+    guard !isUnlocking else { return }
+    isUnlocking = true
+    defer { isUnlocking = false }
+
+    do {
+      let hash = try await authenService.makeKeyHash(
+        masterPassword: masterPassword,
+        email: self.userInfo.email,
+        config: self.userInfo.mpEncodeConfig
+      )
+      if hash == self.userInfo.hashPass {
+        authenSuccess()
+      } else {
+        afd.cancel()
+      }
+    } catch {
       afd.cancel()
     }
   }
@@ -89,5 +105,4 @@ struct LockScreen<TargetView: View>: View {
     }
   }
 }
-
 

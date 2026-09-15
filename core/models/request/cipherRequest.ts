@@ -1,18 +1,15 @@
+import { AttachmentRequest } from "./attachmentRequest"
+import { PasswordHistoryRequest } from "./passwordHistoryRequest"
 import { CipherRepromptType } from "../../enums/cipherRepromptType"
 import { CipherType } from "../../enums/cipherType"
-
-import { Cipher } from "../domain/cipher"
-
 import { CardApi } from "../api/cardApi"
+import { Fido2CredentialApi } from "../api/fido2CredentialApi"
 import { FieldApi } from "../api/fieldApi"
 import { IdentityApi } from "../api/identityApi"
 import { LoginApi } from "../api/loginApi"
 import { LoginUriApi } from "../api/loginUriApi"
-import { Fido2CredentialApi } from "../api/fido2CredentialApi"
 import { SecureNoteApi } from "../api/secureNoteApi"
-
-import { AttachmentRequest } from "./attachmentRequest"
-import { PasswordHistoryRequest } from "./passwordHistoryRequest"
+import { Cipher } from "../domain/cipher"
 
 export class CipherRequest {
   type: CipherType
@@ -72,6 +69,7 @@ export class CipherRequest {
             cred.keyAlgorithm = c.keyAlgorithm != null ? c.keyAlgorithm.encryptedString : null
             cred.keyCurve = c.keyCurve != null ? c.keyCurve.encryptedString : null
             cred.keyValue = c.keyValue != null ? c.keyValue.encryptedString : null
+            cred.prfKey = c.prfKey != null ? c.prfKey.encryptedString : null
             cred.rpId = c.rpId != null ? c.rpId.encryptedString : null
             cred.userHandle = c.userHandle != null ? c.userHandle.encryptedString : null
             cred.userName = c.userName != null ? c.userName.encryptedString : null

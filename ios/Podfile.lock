@@ -471,7 +471,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - NitroModules (0.31.6):
+  - NitroModules (0.33.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -503,6 +503,36 @@ PODS:
   - openiap (1.3.0)
   - OpenSSL-Universal (3.3.3001)
   - PromisesObjC (2.4.0)
+  - QuickCrypto (1.1.7):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - NitroModules
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-callinvoker
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -2530,21 +2560,17 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-quick-base64 (2.2.2):
-    - React-Core
-  - react-native-quick-crypto (0.7.17):
+  - react-native-quick-base64 (3.0.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - OpenSSL-Universal
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
     - RCTTypeSafety
-    - React
     - React-Core
     - React-debug
     - React-Fabric
@@ -3842,6 +3868,8 @@ DEPENDENCIES:
   - jail-monkey (from `../node_modules/jail-monkey`)
   - NitroIap (from `../node_modules/react-native-iap`)
   - NitroModules (from `../node_modules/react-native-nitro-modules`)
+  - OpenSSL-Universal (= 3.3.3001)
+  - QuickCrypto (from `../node_modules/react-native-quick-crypto`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
   - RCTRequired (from `../node_modules/react-native/Libraries/Required`)
@@ -3894,7 +3922,6 @@ DEPENDENCIES:
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-passkey (from `../node_modules/react-native-passkey`)
   - react-native-quick-base64 (from `../node_modules/react-native-quick-base64`)
-  - react-native-quick-crypto (from `../node_modules/react-native-quick-crypto`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -4058,6 +4085,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-iap"
   NitroModules:
     :path: "../node_modules/react-native-nitro-modules"
+  QuickCrypto:
+    :path: "../node_modules/react-native-quick-crypto"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -4160,8 +4189,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-passkey"
   react-native-quick-base64:
     :path: "../node_modules/react-native-quick-base64"
-  react-native-quick-crypto:
-    :path: "../node_modules/react-native-quick-crypto"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
   react-native-render-html:
@@ -4337,10 +4364,11 @@ SPEC CHECKSUMS:
   jail-monkey: e057abe7b37f84e1763491eb72113efd334a6de0
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   NitroIap: 3cdcc66d47bbf0a585e3572af2c4bdb94286dc19
-  NitroModules: edf2d33c02fd8cbb0021e031d380d286b17f527b
+  NitroModules: 29aad76ab8199771bd18cc0fdc807735f75b07a0
   openiap: b8ae35279df4060abf7dc2fed33e325022eecdf5
   OpenSSL-Universal: 6082b0bf950e5636fe0d78def171184e2b3899c2
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+  QuickCrypto: 5379dfb56ba66f50ab837724aae6afae3c74853c
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: c0ed3249a97243002615517dff789bf4666cf585
   RCTRequired: 58719f5124f9267b5f9649c08bf23d9aea845b23
@@ -4391,8 +4419,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-pager-view: c62ab82db28e2d11e7809c59085e2984a45979c5
   react-native-passkey: 5ba85d5ca46808c93360b2e5717b863d5c67643d
-  react-native-quick-base64: 6568199bb2ac8e72ecdfdc73a230fbc5c1d3aac4
-  react-native-quick-crypto: 2c53f72c27485924b444dda124639ee363cf1d69
+  react-native-quick-base64: df5b9d92d45f1b62825b713fc5aa507d85f70c62
   react-native-randombytes: 4eeddad82d1fd57adda1cd5beffe67d041c9d6de
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 4e673529158bdc17e8af4da63b3eaf99486d8c73
@@ -4456,6 +4483,6 @@ SPEC CHECKSUMS:
   VisionCamera: 7187b3dac1ff3071234ead959ce311875748e14f
   Yoga: 9b30b783a17681321b52ac507a37219d7d795ace
 
-PODFILE CHECKSUM: fe53b9b28bae50b5af35e7567cf059908a0b7829
+PODFILE CHECKSUM: 672578f8de339fac75e47eb0a95421bd11bacf73
 
 COCOAPODS: 1.16.2

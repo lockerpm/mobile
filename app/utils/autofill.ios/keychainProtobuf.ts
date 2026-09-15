@@ -16,7 +16,7 @@ import { Logger } from "../logger"
 const IS_IOS = Platform.OS === "ios"
 
 // Manual Protobuf encoder/decoder without google-protobuf library
-class ProtobufEncoder {
+export class ProtobufEncoder {
   // Helper: Write varint
   private static writeVarint(value: number): number[] {
     const bytes: number[] = []
@@ -63,6 +63,12 @@ class ProtobufEncoder {
     bytes.push(...this.writeVarint(tag))
     bytes.push(value ? 1 : 0)
     return bytes
+  }
+
+  // Helper: Write unsigned integer
+  private static writeUInt(fieldNumber: number, value: number): number[] {
+    const tag = (fieldNumber << 3) | 0 // Wire type 0 (varint)
+    return [...this.writeVarint(tag), ...this.writeVarint(value)]
   }
 
   // Helper: Write message
@@ -117,6 +123,11 @@ class ProtobufEncoder {
     bytes.push(...this.writeString(5, data.language))
     bytes.push(...this.writeBool(6, data.faceIdEnabled))
     bytes.push(...this.writeBool(7, data.isFree))
+    bytes.push(...this.writeUInt(8, data.kdf))
+    bytes.push(...this.writeUInt(9, data.kdf_iterations))
+    bytes.push(...this.writeUInt(10, data.kdf_memory))
+    bytes.push(...this.writeUInt(11, data.kdf_parallelism))
+    bytes.push(...this.writeUInt(12, data.kdf_version))
     return new Uint8Array(bytes)
   }
 
@@ -124,6 +135,7 @@ class ProtobufEncoder {
   static decodeUserInfo(bytes: Uint8Array): AutofillUserInfo {
     const offset = { value: 0 }
     const result: any = {}
+    const configFields = new Set<number>()
 
     while (offset.value < bytes.length) {
       const tag = this.readVarint(bytes, offset)
@@ -152,9 +164,49 @@ class ProtobufEncoder {
         case 7:
           result.isFree = this.readBool(bytes, offset)
           break
+        case 8:
+          result.kdf = this.readVarint(bytes, offset)
+          configFields.add(fieldNumber)
+          break
+        case 9:
+          result.kdf_iterations = this.readVarint(bytes, offset)
+          configFields.add(fieldNumber)
+          break
+        case 10:
+          result.kdf_memory = this.readVarint(bytes, offset)
+          configFields.add(fieldNumber)
+          break
+        case 11:
+          result.kdf_parallelism = this.readVarint(bytes, offset)
+          configFields.add(fieldNumber)
+          break
+        case 12:
+          result.kdf_version = this.readVarint(bytes, offset)
+          configFields.add(fieldNumber)
+          break
         default:
           this.skipField(wireType, bytes, offset)
       }
+    }
+
+    if (configFields.size === 0) {
+      result.kdf = 0
+      result.kdf_iterations = 100000
+      result.kdf_memory = 0
+      result.kdf_parallelism = 0
+      result.kdf_version = 0
+    } else if ([8, 9, 10, 11, 12].some((field) => !configFields.has(field))) {
+      throw new Error("Incomplete master password encode config")
+    }
+
+    const isValidPbkdf2 = result.kdf === 0 && result.kdf_iterations >= 5000
+    const isValidArgon2 =
+      result.kdf === 1 &&
+      result.kdf_iterations > 0 &&
+      result.kdf_memory > 0 &&
+      result.kdf_parallelism > 0
+    if ((!isValidPbkdf2 && !isValidArgon2) || result.kdf_version < 0) {
+      throw new Error("Invalid master password encode config")
     }
 
     return result as AutofillUserInfo
@@ -250,6 +302,9 @@ class ProtobufEncoder {
           fidoBytes.push(...this.writeString(4, fido.userHandle))
           fidoBytes.push(...this.writeString(5, fido.userName))
           fidoBytes.push(...this.writeString(6, fido.creationDate))
+          if (fido.prfKey) {
+            fidoBytes.push(...this.writeString(7, fido.prfKey))
+          }
           itemBytes.push(...this.writeMessage(8, fidoBytes))
         })
       }
@@ -334,10 +389,14 @@ class ProtobufEncoder {
                   case 6:
                     fido.creationDate = this.readString(bytes, offset)
                     break
+                  case 7:
+                    fido.prfKey = this.readString(bytes, offset)
+                    break
                   default:
                     this.skipField(fidoWireType, bytes, offset)
                 }
               }
+              fido.prfKey ??= null
               item.fido2.push(fido)
               break
             default:
@@ -366,6 +425,9 @@ class ProtobufEncoder {
       itemBytes.push(...this.writeString(5, item.userHandle))
       itemBytes.push(...this.writeString(6, item.userName))
       itemBytes.push(...this.writeString(7, item.creationDate))
+      if (item.prfKey) {
+        itemBytes.push(...this.writeString(8, item.prfKey))
+      }
       bytes.push(...this.writeMessage(1, itemBytes))
     })
 
@@ -414,10 +476,14 @@ class ProtobufEncoder {
             case 7:
               item.creationDate = this.readString(bytes, offset)
               break
+            case 8:
+              item.prfKey = this.readString(bytes, offset)
+              break
             default:
               this.skipField(subWireType, bytes, offset)
           }
         }
+        item.prfKey ??= null
         result.push(item)
       } else {
         this.skipField(wireType, bytes, offset)
@@ -493,6 +559,11 @@ class ProtobufEncoder {
 export class KeychainProtobufService {
   // User Info methods
   public async saveUserInfo(data: AutofillUserInfo) {
+    if (!data.hashPass) {
+      Logger.error("saveUserInfo skipped: autofill key hash is unavailable")
+      return
+    }
+
     const platformData = Platform.select({
       ios: data,
       android: {
@@ -592,7 +663,7 @@ export class KeychainProtobufService {
   public async resetTempPassword() {
     if (!IS_IOS) return
 
-    ReactNativeKeychain.resetGenericPassword({
+    await ReactNativeKeychain.resetGenericPassword({
       service: AutofillStorekey.TEMP_PASSWORD.service,
       accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
     })
@@ -632,7 +703,7 @@ export class KeychainProtobufService {
   public async resetTempPasskey() {
     if (!IS_IOS) return
 
-    ReactNativeKeychain.resetGenericPassword({
+    await ReactNativeKeychain.resetGenericPassword({
       service: AutofillStorekey.TEMP_PASSKEY.service,
       accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
     })
@@ -690,42 +761,29 @@ export class KeychainProtobufService {
 
   // Reset all protobuf data
   public async resetAll() {
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.USER_INFO.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.PASSWORD.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.TEMP_PASSWORD.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.TEMP_PASSKEY.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.OTP.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
-    ReactNativeKeychain.resetGenericPassword({
-      service: AutofillStorekey.TEMP_OTP.service,
-      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-    })
+    await Promise.all(
+      [
+        AutofillStorekey.USER_INFO,
+        AutofillStorekey.PASSWORD,
+        AutofillStorekey.TEMP_PASSWORD,
+        AutofillStorekey.TEMP_PASSKEY,
+        AutofillStorekey.OTP,
+        AutofillStorekey.TEMP_OTP,
+      ].map(({ service }) =>
+        ReactNativeKeychain.resetGenericPassword({
+          service,
+          accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
+        })
+      )
+    )
   }
 
   // Private helper methods
   private async saveShared(service: string, username: string, password: string) {
-    try {
-      await ReactNativeKeychain.setGenericPassword(username, password, {
-        service,
-        accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
-      })
-    } catch (e) {
-      Logger.error(`saveShared ${username}: ` + e)
-    }
+    await ReactNativeKeychain.setGenericPassword(username, password, {
+      service,
+      accessGroup: Config.SHARED_KEYCHAIN_ACCESS_GROUP,
+    })
   }
 
   private async loadShared(service: string) {

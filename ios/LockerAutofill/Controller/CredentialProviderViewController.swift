@@ -187,7 +187,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
    */
   @available(iOSApplicationExtension 17.0, *)
   override func prepareInterface(forPasskeyRegistration registrationRequest: any ASCredentialRequest) {
-
     guard
       let passkeyReq = registrationRequest as? ASPasskeyCredentialRequest,
       let identity = passkeyReq.credentialIdentity as? ASPasskeyCredentialIdentity
@@ -434,6 +433,14 @@ extension CredentialProviderController {
           clientDataHash: request.clientDataHash
         )
       }
+
+      if #available(iOSApplicationExtension 18.0, *) {
+        try addPrfExtensionOutput(
+          to: assertion,
+          item: item,
+          input: assertionPrfInput(from: request)
+        )
+      }
       
       extensionContext.completeAssertionRequest(
         using: assertion
@@ -460,16 +467,14 @@ extension CredentialProviderController {
         passkeyReq: passkeyReq,
         passkeyId: identity
       )
-      logger.log("Thinhnn. rp: \(credential.relyingParty, privacy: .public) user: \(metadata.userName, privacy: .public)")
 
       let saveItem = PasskeyItem(id: id, data: metadata)
-      user.saveTempPasskey(saveItem)
+      try user.saveTempPasskey(saveItem)
       quickTypeBar.replacePasskeyCredentialIdentities(saveItem)
 
       extensionContext.completeRegistrationRequest(
         using: credential
       )
-      logger.log("Done \(credential.credentialID, privacy: .public) ")
       return
     } catch {
       extensionContext.cancelRequest(withError: ASExtensionError(.failed))
@@ -493,6 +498,14 @@ extension CredentialProviderController {
           item: item,
           rpId: requestParameters.relyingPartyIdentifier,
           clientDataHash: requestParameters.clientDataHash
+        )
+      }
+
+      if #available(iOSApplicationExtension 18.0, *) {
+        try addPrfExtensionOutput(
+          to: assertion,
+          item: item,
+          input: requestParameters.extensionInput?.prf
         )
       }
       

@@ -1,7 +1,7 @@
-diff --git a/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt b/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt
+diff --git a/node_modules/react-native-keychain/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt b/node_modules/react-native-keychain/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt
 index 70912a95a36d1e1b2998916cb3f9604eda435bbd..300925a0fd48daa7decfe7a158ed7bd282eb75b9 100644
---- a/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt
-+++ b/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt
+--- a/node_modules/react-native-keychain/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt
++++ b/node_modules/react-native-keychain/android/src/main/java/com/oblador/keychain/DataStorePrefsStorage.kt
 @@ -9,7 +9,6 @@ import androidx.datastore.preferences.core.Preferences
  import androidx.datastore.preferences.core.edit
  import androidx.datastore.preferences.core.stringPreferencesKey
@@ -54,10 +54,10 @@ index 70912a95a36d1e1b2998916cb3f9604eda435bbd..300925a0fd48daa7decfe7a158ed7bd2
 +    }
 +  }
  }
-diff --git a/android/src/main/java/com/oblador/keychain/KeychainModule.kt b/android/src/main/java/com/oblador/keychain/KeychainModule.kt
+diff --git a/node_modules/react-native-keychain/android/src/main/java/com/oblador/keychain/KeychainModule.kt b/node_modules/react-native-keychain/android/src/main/java/com/oblador/keychain/KeychainModule.kt
 index 722a5ed990c2a1baa15546351d36928ec2b6d268..bb65e1fe07802e72145d3c250478bdf340be6b3f 100644
---- a/android/src/main/java/com/oblador/keychain/KeychainModule.kt
-+++ b/android/src/main/java/com/oblador/keychain/KeychainModule.kt
+--- a/node_modules/react-native-keychain/android/src/main/java/com/oblador/keychain/KeychainModule.kt
++++ b/node_modules/react-native-keychain/android/src/main/java/com/oblador/keychain/KeychainModule.kt
 @@ -126,10 +126,10 @@ class KeychainModule(reactContext: ReactApplicationContext) :
    private val cipherStorageMap: MutableMap<String, CipherStorage> = HashMap()
  

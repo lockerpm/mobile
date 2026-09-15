@@ -40,7 +40,7 @@ export const HomeSlider = observer(() => {
   const { user } = useStores()
   const { themed } = useAppTheme()
   const { lang } = useAppLocale()
-  const { cryptoService } = useCoreService()
+  const { cryptoService, userService } = useCoreService()
   // -------------- PARAMS ------------------
 
   const scrollRef = useRef(null)
@@ -110,6 +110,11 @@ export const HomeSlider = observer(() => {
 
       faceIdEnabled: user.isBiometricUnlock,
       isFree: user.isFreePlan,
+      kdf: userService.getKdf(),
+      kdf_iterations: userService.getKdfIterations(),
+      kdf_memory: userService.getKdfMemory(),
+      kdf_parallelism: userService.getKdfParallelism(),
+      kdf_version: userService.getKdfVersion(),
     })
   }
 
