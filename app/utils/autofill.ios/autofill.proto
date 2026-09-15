@@ -12,6 +12,11 @@ message AutofillUserInfo {
   string language = 5;
   bool face_id_enabled = 6;
   bool is_free = 7;
+  uint32 kdf = 8;
+  uint32 kdf_iterations = 9;
+  uint32 kdf_memory = 10;
+  uint32 kdf_parallelism = 11;
+  uint32 kdf_version = 12;
 }
 
 // Temporary password item

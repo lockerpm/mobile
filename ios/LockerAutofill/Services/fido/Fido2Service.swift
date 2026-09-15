@@ -19,8 +19,11 @@ func createPasskeyRegistrationCredential(
   let clientDataHash = passkeyReq.clientDataHash // hashed clientData JSON (challenge)
   let userId = passkeyId.userHandle
   let userName = passkeyId.userName
-  
-  let flags: UInt8 = 0x41 | 0x08 | 0x10 | 0x80 | 0x04 // AT + UP + ED + BE + BS + UV
+
+  // Registration authenticator data contains attested credential data, but no
+  // authenticator extension output. PRF is returned separately through
+  // ASPasskeyRegistrationCredential.extensionOutput.
+  let flags: UInt8 = 0x01 | 0x04 | 0x08 | 0x10 | 0x40 // UP + UV + BE + BS + AT
   
   
   // Generate keypair depending on algorithm
@@ -56,16 +59,6 @@ func createPasskeyRegistrationCredential(
   authData.append(credentialId)
   authData.append(coseKeyCBOR)
   
-  // Add extensions (credProps)
-  let extMap: [CBOR: CBOR] = [
-    CBOR.utf8String("credProps"): CBOR.map([
-      CBOR.utf8String("rk"): CBOR.boolean(true)
-    ])
-  ]
-  let extBytesArray =  CBOR.encode(CBOR.map(extMap))(options: CBOROptions())
-  let extBytes = Data(extBytesArray)
-  authData.append(extBytes) // append whole extension map after COSE key
-  
   
   let attestationObject: [CBOR: CBOR] = [
     CBOR.utf8String("fmt"): CBOR.utf8String("none"),
@@ -80,17 +73,41 @@ func createPasskeyRegistrationCredential(
     credentialID: credentialId,
     attestationObject: attestationCBOR
   )
+
+  var prfKey: String?
+  if #available(iOSApplicationExtension 18.0, *),
+     let prfInput = registrationPrfInput(from: passkeyReq) {
+    let generatedPrfKey = try PasskeyPrfService.generateKey()
+    prfKey = generatedPrfKey
+
+    let prfOutput: ASAuthorizationPublicKeyCredentialPRFRegistrationOutput
+    if let inputValues = prfInput.inputValues {
+      let results = try PasskeyPrfService.evaluate(
+        prfKey: generatedPrfKey,
+        inputValues: inputValues
+      )
+      prfOutput = ASAuthorizationPublicKeyCredentialPRFRegistrationOutput(
+        first: results.first,
+        second: results.second
+      )
+    } else {
+      prfOutput = .supported
+    }
+
+    credential.extensionOutput = ASPasskeyRegistrationCredentialExtensionOutput(prf: prfOutput)
+  }
   
   let pkcs8Key = exportP256ToPKCS8(privateKey)
   
   let metadata = PasskeyItem(
     credentialId: guid,
     keyValue: pkcs8Key.base64URLEncodedString(),
+    prfKey: prfKey,
     rpId: relyingParty,
     userHandle: userId.base64URLEncodedString(),
     userName: userName
   )
-  
+
   return (credential, metadata)
 }
 

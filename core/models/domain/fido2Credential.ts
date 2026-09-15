@@ -1,8 +1,8 @@
-import { Fido2CredentialData } from "../data/fido2CredentialData"
-import { Fido2CredentialView } from "../view/fido2CredentialView"
 import Domain from "./domainBase"
 import { EncString } from "./encString"
 import { SymmetricCryptoKey } from "./symmetricCryptoKey"
+import { Fido2CredentialData } from "../data/fido2CredentialData"
+import { Fido2CredentialView } from "../view/fido2CredentialView"
 
 export class Fido2Credential extends Domain {
   credentialId: EncString | null = null
@@ -10,6 +10,7 @@ export class Fido2Credential extends Domain {
   keyAlgorithm: EncString
   keyCurve: EncString
   keyValue: EncString
+  prfKey: EncString | null = null
   rpId: EncString
   userHandle: EncString
   userName: EncString
@@ -35,6 +36,7 @@ export class Fido2Credential extends Domain {
         keyAlgorithm: null,
         keyCurve: null,
         keyValue: null,
+        prfKey: null,
         rpId: null,
         userHandle: null,
         userName: null,
@@ -59,6 +61,7 @@ export class Fido2Credential extends Domain {
         keyAlgorithm: null,
         keyCurve: null,
         keyValue: null,
+        prfKey: null,
         rpId: null,
         userHandle: null,
         userName: null,
@@ -84,6 +87,7 @@ export class Fido2Credential extends Domain {
         keyAlgorithm: null,
         keyCurve: null,
         keyValue: null,
+        prfKey: null,
         rpId: null,
         userHandle: null,
         userName: null,

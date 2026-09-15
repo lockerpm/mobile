@@ -270,6 +270,7 @@ export type CipherRequestWithId = CipherRequest & {
 export type Fido2SimpleView = {
   credentialId: string // Base64URL
   keyValue: string // Base64URL
+  prfKey: string | null // Base64URL
   rpId: string
   userHandle: string // Base64URL
   userName: string

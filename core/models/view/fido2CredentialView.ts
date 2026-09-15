@@ -6,6 +6,7 @@ export class Fido2CredentialView implements View {
   keyAlgorithm: string = "ECDSA"
   keyCurve: string = "P-256"
   keyValue: string
+  prfKey: string | null = null
   rpId: string
   userHandle: string
   userName: string
@@ -22,6 +23,7 @@ export class Fido2CredentialView implements View {
       keyAlgorithm: this.keyAlgorithm,
       keyCurve: this.keyCurve,
       keyValue: this.keyValue,
+      prfKey: this.prfKey,
       rpId: this.rpId,
       userHandle: this.userHandle,
       userName: this.userName,

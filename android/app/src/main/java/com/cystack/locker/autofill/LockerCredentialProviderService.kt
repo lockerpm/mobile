@@ -32,9 +32,6 @@ import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.CredentialProviderService
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
 
-import android.util.Log
-
-
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class LockerCredentialProviderService: CredentialProviderService() {
     override fun onClearCredentialStateRequest(
@@ -136,7 +133,6 @@ class LockerCredentialProviderService: CredentialProviderService() {
             .candidateQueryData
             .getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
         if (requestJson.isNullOrEmpty()) return null
-
         return BeginCreateCredentialResponse(
             createEntries = mutableListOf(
                 CreateEntry(
@@ -145,4 +141,5 @@ class LockerCredentialProviderService: CredentialProviderService() {
             ))
         )
     }
+
 }

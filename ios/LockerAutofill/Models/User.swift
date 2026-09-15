@@ -49,11 +49,14 @@ class User {
     
   }
   
-  func saveTempPasskey(_ item: PasskeyItem) {
-    self.afPasskeys.append(item)
+  func saveTempPasskey(_ item: PasskeyItem) throws {
+    try self.model.saveTempPasskey(item)
 
-    self.model.saveTempPasskey(item)
-    
+    let cipherId = item.id ?? ""
+    if !cipherId.isEmpty {
+      self.afPasskeys.removeAll(where: { ($0.id ?? "") == cipherId })
+    }
+    self.afPasskeys.append(item)
   }
   
   func getPasswordItemById(id: String?) -> AFPasswordItem? {

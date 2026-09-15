@@ -29,14 +29,16 @@ struct PasskeyItem: Hashable, Codable {
   let credentialId: String // Base64URL
   var id: String! // login id
   let keyValue: String // Base64URL
+  let prfKey: String? // Base64URL
   let rpId: String
   let userHandle: String // Base64URL
   let userName: String
   let creationDate: String
   
-  init(credentialId: String, keyValue: String, rpId: String, userHandle: String, userName: String) {
+  init(credentialId: String, keyValue: String, prfKey: String? = nil, rpId: String, userHandle: String, userName: String) {
     self.credentialId = credentialId
     self.keyValue = keyValue
+    self.prfKey = prfKey
     self.rpId = rpId
     self.userHandle = userHandle
     self.userName = userName
@@ -49,6 +51,7 @@ struct PasskeyItem: Hashable, Codable {
     
     self.credentialId = data.credentialId
     self.keyValue = data.keyValue
+    self.prfKey = data.prfKey
     self.rpId = data.rpId
     self.userHandle = data.userHandle
     self.userName = data.userName
@@ -85,6 +88,41 @@ struct TempPasswordItem: Hashable, Codable {
   var uri: String
 }
 
+enum MasterPasswordKdf: UInt64, Hashable, Codable {
+  case pbkdf2SHA256 = 0
+  case argon2id = 1
+}
+
+struct MPEncodeConfig: Hashable, Codable {
+  let kdf: MasterPasswordKdf
+  let iterations: Int
+  let memory: Int
+  let parallelism: Int
+  let version: Int
+
+  static let legacy = MPEncodeConfig(
+    kdf: .pbkdf2SHA256,
+    iterations: 100_000,
+    memory: 0,
+    parallelism: 0,
+    version: 0
+  )
+
+  var isValid: Bool {
+    let valuesFitUInt32 = [iterations, memory, parallelism, version].allSatisfy {
+      $0 >= 0 && UInt64($0) <= UInt64(UInt32.max)
+    }
+    guard valuesFitUInt32 else { return false }
+
+    switch kdf {
+    case .pbkdf2SHA256:
+      return iterations >= 5_000
+    case .argon2id:
+      return iterations > 0 && memory > 0 && parallelism > 0
+    }
+  }
+}
+
 
 struct UserInfo: Hashable, Codable {
   var email: String
@@ -95,6 +133,7 @@ struct UserInfo: Hashable, Codable {
   
   var faceIdEnabled: Bool
   var isFree: Bool
+  var mpEncodeConfig: MPEncodeConfig
 }
 
 

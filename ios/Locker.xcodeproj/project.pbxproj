@@ -12,6 +12,7 @@
 		61E19FD18FE247F5828FB015 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7917C30583F8490CBFBA78CA /* PrivacyInfo.xcprivacy */; };
 		67497C155BC99B73DC757762 /* Pods_Locker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D587EA5ADDA4297ACDDC2C /* Pods_Locker.framework */; };
 		7C4132B42F98B0D000C57CE6 /* Argon2Swift in Frameworks */ = {isa = PBXBuildFile; productRef = 7C4132B32F98B0D000C57CE6 /* Argon2Swift */; };
+		7C4132B62F98B0D000C57CE6 /* Argon2Swift in Frameworks */ = {isa = PBXBuildFile; productRef = 7C4132B52F98B0D000C57CE6 /* Argon2Swift */; };
 		7C47A39B2EB9DE3D0017315B /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C47A39A2EB9DE3D0017315B /* AuthenticationServices.framework */; };
 		7C47A3A62EB9DE3D0017315B /* LockerAutofill.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7C47A3992EB9DE3D0017315B /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7C47A3B72EB9DE660017315B /* LockerLiveCallerLookup.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = 7C47A3B02EB9DE660017315B /* LockerLiveCallerLookup.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -148,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C47A39B2EB9DE3D0017315B /* AuthenticationServices.framework in Frameworks */,
+				7C4132B62F98B0D000C57CE6 /* Argon2Swift in Frameworks */,
 				7C47A4352EB9E0A20017315B /* CachedAsyncImage in Frameworks */,
 				7C47A4412EB9E7400017315B /* KeychainAccess in Frameworks */,
 				7C47A43E2EB9E7290017315B /* SwiftCBOR in Frameworks */,
@@ -345,6 +347,7 @@
 			);
 			name = LockerAutofill;
 			packageProductDependencies = (
+				7C4132B52F98B0D000C57CE6 /* Argon2Swift */,
 				7C47A4342EB9E0A20017315B /* CachedAsyncImage */,
 				7C47A43D2EB9E7290017315B /* SwiftCBOR */,
 				7C47A4402EB9E7400017315B /* KeychainAccess */,
@@ -706,7 +709,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 85;
+				CURRENT_PROJECT_VERSION = 86;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -720,7 +723,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.17;
+				MARKETING_VERSION = 2.18;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -745,7 +748,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 85;
+				CURRENT_PROJECT_VERSION = 86;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				INFOPLIST_FILE = Locker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -754,7 +757,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.17;
+				MARKETING_VERSION = 2.18;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1198,6 +1201,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		7C4132B32F98B0D000C57CE6 /* Argon2Swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C4132B22F98B0D000C57CE6 /* XCRemoteSwiftPackageReference "Argon2Swift" */;
+			productName = Argon2Swift;
+		};
+		7C4132B52F98B0D000C57CE6 /* Argon2Swift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7C4132B22F98B0D000C57CE6 /* XCRemoteSwiftPackageReference "Argon2Swift" */;
 			productName = Argon2Swift;
