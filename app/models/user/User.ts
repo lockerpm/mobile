@@ -15,7 +15,6 @@ import {
   RegisterPasskeyRequest,
   RegisterRequest,
   SessionLoginRequest,
-  SessionOtpLoginRequest,
   SocialLoginRequest,
   UserIDType,
   UserLockerType,
@@ -41,6 +40,7 @@ export const UserModel = types
   .model("User")
   .props({
     apiToken: types.string,
+    vaultToken: types.string,
     deviceId: types.string,
 
     // ID
@@ -116,6 +116,9 @@ export const UserModel = types
   .actions((self) => ({
     setApiToken: (token: string) => {
       self.apiToken = token
+    },
+    setVaultToken: (token: string) => {
+      self.vaultToken = token
     },
     setOnPremaiseEmail: (email: string) => {
       self.email = email
@@ -194,6 +197,7 @@ export const UserModel = types
     },
     clearUser: () => {
       self.apiToken = ""
+      self.vaultToken = ""
 
       // ID
       self.isLoggedIn = false
@@ -250,12 +254,12 @@ export const UserModel = types
       return res
     },
     changeLanguage: async (language: string) => {
-      const res = await userApi.setUserLanguage(self.apiToken, language)
+      const res = await userApi.setUserLanguage(self.apiToken, self.vaultToken, language)
       return res
     },
 
     webAuthListCredentials: async (paging: number) => {
-      const res = await idApi.webAuthListCredentials(self.apiToken, paging)
+      const res = await idApi.webAuthListCredentials(self.apiToken, self.vaultToken, paging)
       return res
     },
 
@@ -416,24 +420,24 @@ export const UserModel = types
     },
 
     logout: async () => {
-      const res = await idApi.logout(self.apiToken)
+      const res = await idApi.logout(self.apiToken, self.vaultToken)
       self.clearUser()
       self.clearSettings()
       return res
     },
 
     deauthorizeSessions: async (hashedPassword: string) => {
-      const res = await userApi.deauthorizeSessions(self.apiToken, hashedPassword)
+      const res = await userApi.deauthorizeSessions(self.apiToken, self.vaultToken, hashedPassword)
       return res
     },
 
     purgeAccount: async (hashedPassword: string) => {
-      const res = await userApi.purgeAccount(self.apiToken, hashedPassword)
+      const res = await userApi.purgeAccount(self.apiToken, self.vaultToken, hashedPassword)
       return res
     },
 
     deleteAccount: async (hashedPassword: string) => {
-      const res = await userApi.deleteAccount(self.apiToken, hashedPassword)
+      const res = await userApi.deleteAccount(self.apiToken, self.vaultToken, hashedPassword)
       return res
     },
 
@@ -464,7 +468,7 @@ export const UserModel = types
     },
 
     hideUserMassterPassword: async (hide: boolean) => {
-      const res = await userApi.hideUserMassterPassword(self.apiToken, hide)
+      const res = await userApi.hideUserMassterPassword(self.apiToken, self.vaultToken, hide)
       if (res.kind === "ok") {
         self.setHideMasterPassword(hide)
       }
@@ -477,20 +481,13 @@ export const UserModel = types
       }
       return res
     },
-    sessionOtpLogin: async (payload: SessionOtpLoginRequest) => {
-      const res = await userApi.sessionOtpLogin(self.apiToken, payload)
-      if (res.kind === "ok") {
-        self.setLoggedInPw(true)
-      }
-      return res
-    },
     registerLocker: async (payload: RegisterLockerRequest) => {
       const res = await userApi.registerLocker(self.apiToken, payload)
       return res
     },
 
     changeMasterPassword: async (payload: ChangePasswordRequest) => {
-      const res = await userApi.changeMasterPassword(self.apiToken, payload)
+      const res = await userApi.changeMasterPassword(self.apiToken, self.vaultToken, payload)
       return res
     },
     lock: () => {
@@ -510,113 +507,124 @@ export const UserModel = types
         })
         return null
       }
-      const res = await userApi.getPlan(self.apiToken)
+      const res = await userApi.getPlan(self.apiToken, self.vaultToken)
       if (res.kind === "ok") {
         self.setPlan(res.data)
       }
       return res
     },
     getTeamPolicies: async (organizationId: string) => {
-      const res = await userApi.getTeamPolicies(self.apiToken, organizationId)
+      const res = await userApi.getTeamPolicies(self.apiToken, self.vaultToken, organizationId)
       return res
     },
     getTeamPolicy: async (organizationId: string, policyType: PolicyType) => {
-      const res = await userApi.getTeamPolicy(self.apiToken, organizationId, policyType)
+      const res = await userApi.getTeamPolicy(
+        self.apiToken,
+        self.vaultToken,
+        organizationId,
+        policyType
+      )
       return res
     },
     updateFCM: async (token: string) => {
-      const res = await userApi.updateFCM(self.apiToken, {
+      const res = await userApi.updateFCM(self.apiToken, self.vaultToken, {
         fcm_id: token ?? null,
         device_identifier: await DeviceInfo.getUniqueId(),
       })
       return res
     },
     getBillingDocuments: async (page: number) => {
-      const res = await userApi.getBillingDocuments(self.apiToken, page)
+      const res = await userApi.getBillingDocuments(self.apiToken, self.vaultToken, page)
       return res
     },
     getFamilyMember: async () => {
-      const res = await userApi.getFamilyMember(self.apiToken)
+      const res = await userApi.getFamilyMember(self.apiToken, self.vaultToken)
       return res
     },
     addFamilyMember: async (memberEmails: string[]) => {
-      const res = await userApi.addFamilyMember(self.apiToken, memberEmails)
+      const res = await userApi.addFamilyMember(self.apiToken, self.vaultToken, memberEmails)
       return res
     },
     removeFamilyMember: async (memberID: string) => {
-      const res = await userApi.removeFamilyMember(self.apiToken, memberID)
+      const res = await userApi.removeFamilyMember(self.apiToken, self.vaultToken, memberID)
       return res
     },
     getReferLink: async () => {
-      const res = await userApi.getReferLink(self.apiToken)
+      const res = await userApi.getReferLink(self.apiToken, self.vaultToken)
       return res
     },
     getTrialEligible: async () => {
-      const res = await userApi.getTrialEligible(self.apiToken)
+      const res = await userApi.getTrialEligible(self.apiToken, self.vaultToken)
       return res
     },
     // NOTIFICATION SETTING
     getNotificationSettings: async () => {
-      const res = await userApi.getNotificationSettings(self.apiToken)
+      const res = await userApi.getNotificationSettings(self.apiToken, self.vaultToken)
       return res
     },
     updateNotiSettings: async (categoryId: string, mail: boolean, notification: boolean) => {
-      const res = await userApi.updateNotiSettings(self.apiToken, categoryId, mail, notification)
+      const res = await userApi.updateNotiSettings(
+        self.apiToken,
+        self.vaultToken,
+        categoryId,
+        mail,
+        notification
+      )
       return res
     },
     fetchInAppNoti: async () => {
-      const res = await toolApi.fetchInAppNoti(self.apiToken)
+      const res = await toolApi.fetchInAppNoti(self.apiToken, self.vaultToken)
       return res
     },
     markReadInAppNoti: async (id: string) => {
-      const res = await toolApi.markReadInappNoti(self.apiToken, id)
+      const res = await toolApi.markReadInappNoti(self.apiToken, self.vaultToken, id)
       return res
     },
     // EMERGENCY ACCESS
     inviteEA: async (email: string, key: string, type: EmergencyAccessType, waitTime: number) => {
-      const res = await userApi.EAInvite(self.apiToken, email, key, type, waitTime)
+      const res = await userApi.EAInvite(self.apiToken, self.vaultToken, email, key, type, waitTime)
       return res
     },
     trustedEA: async () => {
-      const res = await userApi.EATrusted(self.apiToken)
+      const res = await userApi.EATrusted(self.apiToken, self.vaultToken)
       return res
     },
     grantedEA: async () => {
-      const res = await userApi.EAGranted(self.apiToken)
+      const res = await userApi.EAGranted(self.apiToken, self.vaultToken)
       return res
     },
     yourTrustedActionEA: async (id: string, action: "reject" | "approve" | "reinvite") => {
-      const res = await userApi.EAyourTrustedAction(self.apiToken, id, action)
+      const res = await userApi.EAyourTrustedAction(self.apiToken, self.vaultToken, id, action)
       if (res.kind === "ok") {
         return true
       }
       return false
     },
     trustedYouActionEA: async (id: string, action: "accept" | "initiate") => {
-      const res = await userApi.EATrustedYouAction(self.apiToken, id, action)
+      const res = await userApi.EATrustedYouAction(self.apiToken, self.vaultToken, id, action)
       if (res.kind === "ok") {
         return true
       }
       return false
     },
     takeoverEA: async (id: string) => {
-      const res = await userApi.EATakeover(self.apiToken, id)
+      const res = await userApi.EATakeover(self.apiToken, self.vaultToken, id)
       return res
     },
     passwordEA: async (id: string, payload: any) => {
-      const res = await userApi.EAPassword(self.apiToken, id, payload)
+      const res = await userApi.EAPassword(self.apiToken, self.vaultToken, id, payload)
       return res
     },
     lockerPasswordEA: async (id: string, newPass: string) => {
-      const res = await userApi.EALockerPassword(self.apiToken, id, newPass)
+      const res = await userApi.EALockerPassword(self.apiToken, self.vaultToken, id, newPass)
       return res
     },
     viewEA: async (id: string) => {
-      const res = await userApi.EAView(self.apiToken, id)
+      const res = await userApi.EAView(self.apiToken, self.vaultToken, id)
       return res
     },
     removeEA: async (id: string) => {
-      const res = await userApi.EARemove(self.apiToken, id)
+      const res = await userApi.EARemove(self.apiToken, self.vaultToken, id)
       if (res.kind === "ok") {
         return true
       }
@@ -633,11 +641,11 @@ export const UserModel = types
     },
     // Marketing
     fetchMarketingContent: async (language: string) => {
-      const res = await userApi.fetchMarketingContent(self.apiToken, language)
+      const res = await userApi.fetchMarketingContent(self.apiToken, self.vaultToken, language)
       return res
     },
     getChatWootIdHash: async () => {
-      const res = await userApi.getChatWootIdHash(self.apiToken)
+      const res = await userApi.getChatWootIdHash(self.apiToken, self.vaultToken)
       return res
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -654,6 +662,7 @@ export const createUserStoreDefaultModel = () =>
   types.optional(UserModel, {
     // Data
     apiToken: "",
+    vaultToken: "",
     deviceId: "",
 
     // ID

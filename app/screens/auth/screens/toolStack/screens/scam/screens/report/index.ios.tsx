@@ -31,7 +31,7 @@ export const ScamReportScreen: FC<ScamScreenProps<"report">> = observer(
       const formatPhone = formatVietnamesePhoneNumber(phoneNumber)
 
       setIsLoading(true)
-      const res = await toolApi.scamReport(user.apiToken, {
+      const res = await toolApi.scamReport(user.apiToken, user.vaultToken, {
         type: ScamType.Phone,
         value: formatPhone,
         description: description || "",

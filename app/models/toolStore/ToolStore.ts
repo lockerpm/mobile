@@ -1,7 +1,9 @@
 import { Instance, SnapshotIn, SnapshotOut, cast, types } from "mobx-state-tree"
-import { withSetPropAction } from "../helpers/withSetPropAction"
+
 import { toolApi } from "app/services/api/toolApi"
 import { CipherView } from "core/models/view"
+
+import { withSetPropAction } from "../helpers/withSetPropAction"
 /**
  * Model description here for TypeScript hints.
  */
@@ -9,6 +11,7 @@ export const ToolStoreModel = types
   .model("ToolStore")
   .props({
     apiToken: types.string,
+    vaultToken: types.string,
 
     // Password health
     isDataLoading: types.boolean, // is data synchronizing or decrypting
@@ -29,6 +32,9 @@ export const ToolStoreModel = types
   .actions((self) => ({
     setApiToken: (token: string) => {
       self.apiToken = token
+    },
+    setVaultToken: (token: string) => {
+      self.vaultToken = token
     },
 
     // ----------------- DATA -------------------
@@ -75,6 +81,7 @@ export const ToolStoreModel = types
     clearStore: (dataOnly?: boolean) => {
       if (!dataOnly) {
         self.apiToken = ""
+        self.vaultToken = ""
       }
       self.isLoadingHealth = false
       self.lastHealthCheck = 0
@@ -102,22 +109,27 @@ export const ToolStoreModel = types
 
     // PRIVATE RELAY
     fetchRelayListAddresses: async (page?: number) => {
-      const res = await toolApi.fetchRelayListAddresses(self.apiToken, page)
+      const res = await toolApi.fetchRelayListAddresses(self.apiToken, self.vaultToken, page)
       return res
     },
 
     generateRelayNewAddress: async () => {
-      const res = await toolApi.generateRelayNewAddress(self.apiToken)
+      const res = await toolApi.generateRelayNewAddress(self.apiToken, self.vaultToken)
       return res
     },
 
     updateRelayAddress: async (addressId: number, address: string) => {
-      const res = await toolApi.updateRelayAddress(self.apiToken, addressId, address)
+      const res = await toolApi.updateRelayAddress(
+        self.apiToken,
+        self.vaultToken,
+        addressId,
+        address
+      )
       return res
     },
 
     deleteRelayAddress: async (addressId: number) => {
-      const res = await toolApi.deleteRelayAddress(self.apiToken, addressId)
+      const res = await toolApi.deleteRelayAddress(self.apiToken, self.vaultToken, addressId)
       return res
     },
 
@@ -127,37 +139,44 @@ export const ToolStoreModel = types
       enabled: boolean,
       blockSpam: boolean
     ) => {
-      const res = await toolApi.configRelayAddress(self.apiToken, id, address, enabled, blockSpam)
+      const res = await toolApi.configRelayAddress(
+        self.apiToken,
+        self.vaultToken,
+        id,
+        address,
+        enabled,
+        blockSpam
+      )
       return res
     },
 
     fetchSubdomain: async () => {
-      const res = await toolApi.fetchSubdomain(self.apiToken)
+      const res = await toolApi.fetchSubdomain(self.apiToken, self.vaultToken)
       return res
     },
 
     createSubdomain: async (subdomain: string) => {
-      const res = await toolApi.createSubdomain(self.apiToken, subdomain)
+      const res = await toolApi.createSubdomain(self.apiToken, self.vaultToken, subdomain)
       return res
     },
 
     editSubdomain: async (id: number, subdomain: string) => {
-      const res = await toolApi.editSubdomain(self.apiToken, id, subdomain)
+      const res = await toolApi.editSubdomain(self.apiToken, self.vaultToken, id, subdomain)
       return res
     },
 
     useSubdomain: async (useSubdomain: boolean) => {
-      const res = await toolApi.useSubdomain(self.apiToken, useSubdomain)
+      const res = await toolApi.useSubdomain(self.apiToken, self.vaultToken, useSubdomain)
       return res
     },
 
     fetchUseSubdomain: async () => {
-      const res = await toolApi.fetchUseSubdomain(self.apiToken)
+      const res = await toolApi.fetchUseSubdomain(self.apiToken, self.vaultToken)
       return res
     },
 
     checkBreaches: async (email: string) => {
-      const res = await toolApi.checkBreaches(self.apiToken, email)
+      const res = await toolApi.checkBreaches(self.apiToken, self.vaultToken, email)
       return res
     },
 
@@ -183,7 +202,7 @@ export interface ToolStoreSnapshotIn extends SnapshotIn<typeof ToolStoreModel> {
 export const createToolStoreDefaultModel = () =>
   types.optional(ToolStoreModel, {
     apiToken: "",
-
+    vaultToken: "",
     // Password health
     isDataLoading: false, // is data synchronizing or decrypting
     isLoadingHealth: false,

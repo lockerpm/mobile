@@ -30,6 +30,7 @@ export const CipherStoreModel = types
   .model("CipherStore")
   .props({
     apiToken: types.string,
+    vaultToken: types.string,
 
     // Status
     isSynching: types.boolean,
@@ -66,6 +67,9 @@ export const CipherStoreModel = types
   .actions((self) => ({
     setApiToken: (token: string) => {
       self.apiToken = token
+    },
+    setVaultToken: (token: string) => {
+      self.vaultToken = token
     },
 
     // ----------------- CACHE -------------------
@@ -153,6 +157,7 @@ export const CipherStoreModel = types
     clearStore: (dataOnly?: boolean) => {
       if (!dataOnly) {
         self.apiToken = ""
+        self.vaultToken = ""
       }
 
       // Status
@@ -198,37 +203,43 @@ export const CipherStoreModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     syncData: async (page?: number, size?: number) => {
-      const res = await cipherApi.syncData(self.apiToken, page, size)
+      const res = await cipherApi.syncData(self.apiToken, self.vaultToken, page, size)
       return res
     },
 
     getCipher: async (id: string) => {
-      const res = await cipherApi.getCipher(self.apiToken, id)
+      const res = await cipherApi.getCipher(self.apiToken, self.vaultToken, id)
       return res
     },
 
     createCipher: async (data: CipherRequest, score: number, collectionIds: string[]) => {
-      const res = await cipherApi.postCipher(self.apiToken, data, score, collectionIds)
+      const res = await cipherApi.postCipher(
+        self.apiToken,
+        self.vaultToken,
+        data,
+        score,
+        collectionIds
+      )
       return res
     },
 
     importCipherWithFolder: async (data: ImportCipherWithFolderData) => {
-      const res = await cipherApi.importCipherWithFolder(self.apiToken, data)
+      const res = await cipherApi.importCipherWithFolder(self.apiToken, self.vaultToken, data)
       return res
     },
 
     importFolders: async (data: ImportFolderData) => {
-      const res = await cipherApi.importFolders(self.apiToken, data)
+      const res = await cipherApi.importFolders(self.apiToken, self.vaultToken, data)
       return res
     },
 
     importCiphers: async (data: ImportCipherData) => {
-      const res = await cipherApi.importCiphers(self.apiToken, data)
+      const res = await cipherApi.importCiphers(self.apiToken, self.vaultToken, data)
       return res
     },
 
     offlineSyncCipher: async (data: ImportCipherWithFolderData) => {
-      const res = await cipherApi.offlineSyncCipher(self.apiToken, data)
+      const res = await cipherApi.offlineSyncCipher(self.apiToken, self.vaultToken, data)
       return res
     },
 
@@ -238,7 +249,14 @@ export const CipherStoreModel = types
       score: number,
       collectionIds: string[]
     ) => {
-      const res = await cipherApi.putCipher(self.apiToken, id, data, score, collectionIds)
+      const res = await cipherApi.putCipher(
+        self.apiToken,
+        self.vaultToken,
+        id,
+        data,
+        score,
+        collectionIds
+      )
       return res
     },
 
@@ -248,42 +266,49 @@ export const CipherStoreModel = types
       score: number,
       collectionIds: string[]
     ) => {
-      const res = await cipherApi.shareCipherToTeam(self.apiToken, id, data, score, collectionIds)
+      const res = await cipherApi.shareCipherToTeam(
+        self.apiToken,
+        self.vaultToken,
+        id,
+        data,
+        score,
+        collectionIds
+      )
       return res
     },
 
     toTrashCiphers: async (ids: string[]) => {
-      const res = await cipherApi.toTrashCiphers(self.apiToken, ids)
+      const res = await cipherApi.toTrashCiphers(self.apiToken, self.vaultToken, ids)
       return res
     },
 
     deleteCiphers: async (ids: string[]) => {
-      const res = await cipherApi.deleteCiphers(self.apiToken, ids)
+      const res = await cipherApi.deleteCiphers(self.apiToken, self.vaultToken, ids)
       return res
     },
 
     restoreCiphers: async (ids: string[]) => {
-      const res = await cipherApi.restoresCiphers(self.apiToken, ids)
+      const res = await cipherApi.restoresCiphers(self.apiToken, self.vaultToken, ids)
       return res
     },
 
     moveToFolder: async (data: MoveFolderData) => {
-      const res = await cipherApi.moveToFolder(self.apiToken, data)
+      const res = await cipherApi.moveToFolder(self.apiToken, self.vaultToken, data)
       return res
     },
 
     getLastUpdate: async () => {
-      const res = await cipherApi.getLastUpdate(self.apiToken)
+      const res = await cipherApi.getLastUpdate(self.apiToken, self.vaultToken)
       return res
     },
 
     getSharingPublicKey: async (email: string) => {
-      const res = await cipherApi.getSharingPublicKey(self.apiToken, { email })
+      const res = await cipherApi.getSharingPublicKey(self.apiToken, self.vaultToken, { email })
       return res
     },
 
     shareMultipleCiphers: async (payload: ShareMultipleCiphersData) => {
-      const res = await cipherApi.shareMultipleCiphers(self.apiToken, payload)
+      const res = await cipherApi.shareMultipleCiphers(self.apiToken, self.vaultToken, payload)
       return res
     },
 
@@ -292,12 +317,23 @@ export const CipherStoreModel = types
       memberId: string,
       payload: StopShareCipherData
     ) => {
-      const res = await cipherApi.stopShareCipher(self.apiToken, organizationId, memberId, payload)
+      const res = await cipherApi.stopShareCipher(
+        self.apiToken,
+        self.vaultToken,
+        organizationId,
+        memberId,
+        payload
+      )
       return res
     },
 
     stopShareCipherForGroup: async (organizationId: string, payload: StopShareCipherData) => {
-      const res = await cipherApi.stopShareCipherForGroup(self.apiToken, organizationId, payload)
+      const res = await cipherApi.stopShareCipherForGroup(
+        self.apiToken,
+        self.vaultToken,
+        organizationId,
+        payload
+      )
       return res
     },
 
@@ -306,7 +342,13 @@ export const CipherStoreModel = types
       memberId: string,
       payload: EditShareCipherData
     ) => {
-      const res = await cipherApi.editShareCipher(self.apiToken, organizationId, memberId, payload)
+      const res = await cipherApi.editShareCipher(
+        self.apiToken,
+        self.vaultToken,
+        organizationId,
+        memberId,
+        payload
+      )
       return res
     },
 
@@ -317,6 +359,7 @@ export const CipherStoreModel = types
     ) => {
       const res = await cipherApi.confirmShareCipher(
         self.apiToken,
+        self.vaultToken,
         organizationId,
         memberId,
         payload
@@ -325,7 +368,7 @@ export const CipherStoreModel = types
     },
 
     loadSharingInvitations: async () => {
-      const res = await cipherApi.getSharingInvitations(self.apiToken)
+      const res = await cipherApi.getSharingInvitations(self.apiToken, self.vaultToken)
       if (res.kind === "ok") {
         self.setSharingInvitations(res.data)
       }
@@ -333,7 +376,7 @@ export const CipherStoreModel = types
     },
 
     loadMyShares: async () => {
-      const res = await cipherApi.getMyShares(self.apiToken)
+      const res = await cipherApi.getMyShares(self.apiToken, self.vaultToken)
       if (res.kind === "ok") {
         self.setMyShares(res.data)
       }
@@ -341,35 +384,35 @@ export const CipherStoreModel = types
     },
 
     leaveShare: async (organizationId: string) => {
-      const res = await cipherApi.leaveShare(self.apiToken, organizationId)
+      const res = await cipherApi.leaveShare(self.apiToken, self.vaultToken, organizationId)
       return res
     },
 
     respondShare: async (id: string, accepted: boolean) => {
-      const res = await cipherApi.respondShareInvitation(self.apiToken, id, {
+      const res = await cipherApi.respondShareInvitation(self.apiToken, self.vaultToken, id, {
         status: accepted ? "accept" : "reject",
       })
       return res
     },
 
     getProfile: async () => {
-      const res = await cipherApi.getPMProfile(self.apiToken)
+      const res = await cipherApi.getPMProfile(self.apiToken, self.vaultToken)
       return res
     },
 
     getOrganization: async (id: string) => {
-      const res = await cipherApi.getOrganization(self.apiToken, id)
+      const res = await cipherApi.getOrganization(self.apiToken, self.vaultToken, id)
       return res
     },
 
     // ----------QUICK SHARE--------------------
 
     quickShare: async (sendRequest: SendRequest) => {
-      const res = await cipherApi.quickShare(self.apiToken, sendRequest)
+      const res = await cipherApi.quickShare(self.apiToken, self.vaultToken, sendRequest)
       return res
     },
     syncQuickShares: async (page: number) => {
-      const res = await cipherApi.syncQuickShares(self.apiToken, page)
+      const res = await cipherApi.syncQuickShares(self.apiToken, self.vaultToken, page)
       if (res.kind === "ok") {
         return res.data
       }
@@ -381,7 +424,7 @@ export const CipherStoreModel = types
     },
 
     stopQuickSharing: async (send: any) => {
-      const res = await cipherApi.stopQuickSharing(self.apiToken, send.id)
+      const res = await cipherApi.stopQuickSharing(self.apiToken, self.vaultToken, send.id)
       return res
     },
     // ---------------------QUICK SHARE----------------------------
@@ -406,6 +449,7 @@ export interface CipherStoreSnapshotIn extends SnapshotIn<typeof CipherStoreMode
 export const createCipherStoreDefaultModel = () =>
   types.optional(CipherStoreModel, {
     apiToken: "",
+    vaultToken: "",
 
     // Status
     isSynching: false,

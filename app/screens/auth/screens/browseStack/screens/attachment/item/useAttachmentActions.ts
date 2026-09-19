@@ -52,7 +52,11 @@ export const useAttachmentActions = (
       }
 
       // download attachment
-      const res = await attachmentApi.getAttachmentUrl(cipherStore.apiToken, attachment.url)
+      const res = await attachmentApi.getAttachmentUrl(
+        cipherStore.apiToken,
+        cipherStore.vaultToken,
+        attachment.url
+      )
       if (res.kind !== "ok") {
         notifyApiError(res)
         return
@@ -143,7 +147,9 @@ export const useAttachmentActions = (
   const onDeleteAttachment = async () => {
     if (!attachment.key) return
     setIsLoading(true)
-    const res = await attachmentApi.deleteAttachment(cipherStore.apiToken, [attachment.url])
+    const res = await attachmentApi.deleteAttachment(cipherStore.apiToken, cipherStore.vaultToken, [
+      attachment.url,
+    ])
     if (res.kind !== "ok") {
       notifyApiError(res)
       return

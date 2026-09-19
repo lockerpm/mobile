@@ -24,10 +24,12 @@ class ToolApi {
   private api: Api = api
 
   async fetchInAppNoti(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: AppNotification } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `/v3/notifications?scope=pwdmanager`
       )
@@ -45,9 +47,14 @@ class ToolApi {
     }
   }
 
-  async markReadInappNoti(token: string, id: string): Promise<{ kind: "ok" } | GeneralApiProblem> {
+  async markReadInappNoti(
+    apiToken: string,
+    vaultToken: string,
+    id: string
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.put(`/v3/notifications/${id}`, {
         read: true,
       })
@@ -67,7 +74,8 @@ class ToolApi {
 
   // Check email breaches
   async checkBreaches(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     email: string
   ): Promise<
     | {
@@ -77,7 +85,8 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -99,7 +108,8 @@ class ToolApi {
   // ---------------------- PRIVATE RELAY ----------------------
 
   async fetchRelayListAddresses(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     page?: number
   ): Promise<
     | {
@@ -114,7 +124,8 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -134,10 +145,12 @@ class ToolApi {
   }
 
   async generateRelayNewAddress(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: RelayAddress } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -156,12 +169,14 @@ class ToolApi {
   }
 
   async updateRelayAddress(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: number,
     address: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -180,9 +195,14 @@ class ToolApi {
     }
   }
 
-  async deleteRelayAddress(token: string, id: number): Promise<{ kind: "ok" } | GeneralApiProblem> {
+  async deleteRelayAddress(
+    apiToken: string,
+    vaultToken: string,
+    id: number
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(
@@ -201,11 +221,13 @@ class ToolApi {
   }
 
   async useSubdomain(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     useSubdomain: boolean
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -227,10 +249,12 @@ class ToolApi {
   }
 
   async fetchUseSubdomain(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: boolean } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -249,14 +273,16 @@ class ToolApi {
   }
 
   async configRelayAddress(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: number,
     address: string,
     enabled: boolean,
     blockSpam: boolean
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -280,7 +306,8 @@ class ToolApi {
   }
 
   async createSubdomain(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     subdomain: string
   ): Promise<
     | {
@@ -290,7 +317,8 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -312,7 +340,8 @@ class ToolApi {
   }
 
   async editSubdomain(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: number,
     subdomain: string
   ): Promise<
@@ -322,7 +351,8 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -343,7 +373,10 @@ class ToolApi {
     }
   }
 
-  async fetchSubdomain(token: string): Promise<
+  async fetchSubdomain(
+    apiToken: string,
+    vaultToken: string
+  ): Promise<
     | {
         kind: "ok"
         data: {
@@ -356,7 +389,8 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -432,7 +466,8 @@ class ToolApi {
   }
 
   async scamReport(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     data: ScamMyReportParams
   ): Promise<
     | {
@@ -444,7 +479,8 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/locker_scam_detector/v1/reports`,
@@ -462,7 +498,10 @@ class ToolApi {
     }
   }
 
-  async scamMyListReport(token: string): Promise<
+  async scamMyListReport(
+    apiToken: string,
+    vaultToken: string
+  ): Promise<
     | {
         kind: "ok"
         data: {
@@ -475,7 +514,8 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `/locker_scam_detector/v1/reports`
@@ -493,7 +533,8 @@ class ToolApi {
   }
 
   async scamDeleteMyReport(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string
   ): Promise<
     | {
@@ -502,7 +543,8 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(
         `/locker_scam_detector/v1/reports/${id}`
@@ -520,7 +562,8 @@ class ToolApi {
   }
 
   async scamSyncPhones(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     param: ScamSyncPhonesParams
   ): Promise<
     | {
@@ -535,7 +578,8 @@ class ToolApi {
       const response = await fetch(url, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${apiToken}`,
+          "Locker-Session-Token": `Bearer ${vaultToken}`,
           "Accept-Encoding": "gzip", // Yêu cầu gzip nếu có
         },
       })
@@ -568,7 +612,10 @@ class ToolApi {
     }
   }
 
-  async scamCheckAnonymous(token: string): Promise<
+  async scamCheckAnonymous(
+    apiToken: string,
+    vaultToken: string
+  ): Promise<
     | {
         kind: "ok"
         isAnonymous: boolean
@@ -576,7 +623,8 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `/locker_scam_detector/v1/reports/is_anonymous`
@@ -594,7 +642,8 @@ class ToolApi {
   }
 
   async scamUpdateAnonymous(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     isAnonymous: boolean
   ): Promise<
     | {
@@ -603,7 +652,8 @@ class ToolApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
         `/locker_scam_detector/v1/reports/is_anonymous`,

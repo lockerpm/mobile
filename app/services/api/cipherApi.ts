@@ -31,15 +31,16 @@ class CipherApi {
 
   // Sync
   async syncData(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     page?: number,
     size?: number
   ): Promise<
     { kind: "ok"; data: SyncResponse & { count?: { ciphers: number } } } | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
         "/v3/cystack_platform/pm/sync",
@@ -64,12 +65,14 @@ class CipherApi {
 
   // Get single cipher
   async getCipher(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string
   ): Promise<{ kind: "ok"; data: CipherResponse } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -90,14 +93,16 @@ class CipherApi {
 
   // Create cipher
   async postCipher(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     data: CipherRequest,
     score: number,
     collectionIds: string[]
   ): Promise<{ kind: "ok"; data: { id: string } } | GeneralApiProblem> {
     try {
       detectTempId(collectionIds)
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/v3/cystack_platform/pm/ciphers/vaults",
@@ -121,11 +126,13 @@ class CipherApi {
 
   // Import ciphers + folders + relationships
   async importCipherWithFolder(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     data: ImportCipherWithFolderData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -146,11 +153,13 @@ class CipherApi {
 
   // Import folders
   async importFolders(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     data: ImportFolderData
   ): Promise<{ kind: "ok"; data: { ids: string[] } } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -171,11 +180,13 @@ class CipherApi {
 
   // Import ciphers
   async importCiphers(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     data: ImportCipherData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -196,11 +207,13 @@ class CipherApi {
 
   // Offline sync cipher
   async offlineSyncCipher(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     data: ImportCipherWithFolderData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -221,7 +234,8 @@ class CipherApi {
 
   // Update cipher
   async putCipher(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     data: CipherRequest,
     score: number,
@@ -229,7 +243,8 @@ class CipherApi {
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id, ...collectionIds])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -254,7 +269,8 @@ class CipherApi {
 
   // Share cipher to team
   async shareCipherToTeam(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     data: CipherRequest,
     score: number,
@@ -262,7 +278,8 @@ class CipherApi {
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id, ...collectionIds])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -286,10 +303,15 @@ class CipherApi {
   }
 
   // Permanent delete ciphers
-  async deleteCiphers(token: string, ids: string[]): Promise<{ kind: "ok" } | GeneralApiProblem> {
+  async deleteCiphers(
+    apiToken: string,
+    vaultToken: string,
+    ids: string[]
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId(ids)
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -309,10 +331,15 @@ class CipherApi {
   }
 
   // Move to trash ciphers
-  async toTrashCiphers(token: string, ids: string[]): Promise<{ kind: "ok" } | GeneralApiProblem> {
+  async toTrashCiphers(
+    apiToken: string,
+    vaultToken: string,
+    ids: string[]
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId(ids)
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -332,10 +359,15 @@ class CipherApi {
   }
 
   // Restore ciphers
-  async restoresCiphers(token: string, ids: string[]): Promise<{ kind: "ok" } | GeneralApiProblem> {
+  async restoresCiphers(
+    apiToken: string,
+    vaultToken: string,
+    ids: string[]
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId(ids)
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -356,12 +388,14 @@ class CipherApi {
 
   // Move to folder
   async moveToFolder(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     data: MoveFolderData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([data.folderId || "", ...data.ids])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -382,10 +416,12 @@ class CipherApi {
 
   // Get last update time
   async getLastUpdate(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: { revision_date: number } } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -406,13 +442,15 @@ class CipherApi {
 
   // Get sharing public key
   async getSharingPublicKey(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     payload: {
       email: string
     }
   ): Promise<{ kind: "ok"; data: { public_key: string } } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -435,7 +473,8 @@ class CipherApi {
 
   // QUICK SHARES
   async quickShareCipher(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     payload: QuickShareCipherData
   ): Promise<
     | {
@@ -449,7 +488,8 @@ class CipherApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -472,11 +512,13 @@ class CipherApi {
 
   // Share multiple ciphers
   async shareMultipleCiphers(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     payload: ShareMultipleCiphersData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -498,14 +540,16 @@ class CipherApi {
 
   // Stop share cipher
   async stopShareCipher(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     organizationId: string,
     memberId: string,
     payload: StopShareCipherData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([organizationId, memberId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -527,12 +571,14 @@ class CipherApi {
 
   // Stop share cipher for groups member business
   async stopShareCipherForGroup(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     organizationId: string,
     payload: StopShareCipherData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -554,14 +600,16 @@ class CipherApi {
 
   // Edit share cipher
   async editShareCipher(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     organizationId: string,
     memberId: string,
     payload: EditShareCipherData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([organizationId, memberId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -583,14 +631,16 @@ class CipherApi {
 
   // Confirm share cipher
   async confirmShareCipher(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     organizationId: string,
     memberId: string,
     payload: ConfirmShareCipherData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([organizationId, memberId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -612,10 +662,12 @@ class CipherApi {
 
   // Get sharing invitations
   async getSharingInvitations(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: SharingInvitationType[] } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -637,10 +689,12 @@ class CipherApi {
 
   // Get my shares
   async getMyShares(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: MyShareType[] } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -661,12 +715,14 @@ class CipherApi {
 
   // Leave share
   async leaveShare(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     organizationId: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([organizationId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -688,7 +744,8 @@ class CipherApi {
 
   // Respond to share invitation
   async respondShareInvitation(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     payload: {
       status: "accept" | "reject"
@@ -696,7 +753,8 @@ class CipherApi {
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -718,10 +776,12 @@ class CipherApi {
 
   // Get profile
   async getPMProfile(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: ProfileResponse } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -743,12 +803,14 @@ class CipherApi {
 
   // Get single organization
   async getOrganization(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string
   ): Promise<{ kind: "ok"; data: ProfileOrganizationResponse } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -770,7 +832,8 @@ class CipherApi {
   // ------------------QUICK SHARE--------------------------------------
 
   async quickShare(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     sendRequest: SendRequest
   ): Promise<
     | {
@@ -784,7 +847,8 @@ class CipherApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -805,9 +869,14 @@ class CipherApi {
   }
 
   // Get single organization
-  async stopQuickSharing(token: string, id: string): Promise<{ kind: "ok" } | GeneralApiProblem> {
+  async stopQuickSharing(
+    apiToken: string,
+    vaultToken: string,
+    id: string
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(
@@ -828,11 +897,13 @@ class CipherApi {
 
   // Get single organization
   async syncQuickShares(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     page: number
   ): Promise<{ kind: "ok"; data: any[] } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
