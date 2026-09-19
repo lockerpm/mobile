@@ -1,18 +1,23 @@
 import { ApiResponse } from "apisauce"
-import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
-import { api, Api } from "./api"
+
 import { GetAttachmentUrlResult, GetUploadFormData, GetUploadFormResult } from "app/static/types"
+
 import { Logger } from "@/utils/logger"
+
+import { api, Api } from "./api"
+import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
 
 class AttachmentApi {
   private api: Api = api
 
   public async getAttachmentUrl(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     path: string
   ): Promise<{ kind: "ok"; data: GetAttachmentUrlResult } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/v3/cystack_platform/pm/attachments/url`,
@@ -33,11 +38,13 @@ class AttachmentApi {
   }
 
   public async getUploadForm(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     payload: GetUploadFormData
   ): Promise<{ kind: "ok"; data: GetUploadFormResult } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/v3/cystack_platform/pm/attachments",
@@ -56,11 +63,13 @@ class AttachmentApi {
   }
 
   public async deleteAttachment(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     paths: string[]
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/v3/cystack_platform/pm/attachments/multiple_delete",

@@ -15,13 +15,15 @@ class FolderApi {
 
   // Edit share cipher
   async editShareCipher(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     organizationId: string,
     groupID: string,
     payload: EditShareCipherData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -42,12 +44,14 @@ class FolderApi {
 
   // Get single folder
   async getFolder(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string
   ): Promise<{ kind: "ok"; data: FolderResponse } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -69,11 +73,13 @@ class FolderApi {
 
   // Create folder
   async postFolder(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     data: FolderRequest
   ): Promise<{ kind: "ok"; data: FolderResponse } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -95,13 +101,15 @@ class FolderApi {
 
   // Update folder
   async putFolder(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     data: FolderRequest
   ): Promise<{ kind: "ok"; data: FolderResponse } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -122,10 +130,15 @@ class FolderApi {
   }
 
   // Delete folder
-  async deleteFolder(token: string, id: string): Promise<{ kind: "ok" } | GeneralApiProblem> {
+  async deleteFolder(
+    apiToken: string,
+    vaultToken: string,
+    id: string
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(
@@ -145,11 +158,13 @@ class FolderApi {
 
   // Share Folder
   async shareFolder(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     payload: ShareFolderData
   ): Promise<{ kind: "ok"; data: { id: string } } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -174,13 +189,15 @@ class FolderApi {
 
   // Create collection
   async postCollection(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     teamId: string,
     data: CollectionRequest
   ): Promise<{ kind: "ok"; data: CollectionResponse } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -202,14 +219,16 @@ class FolderApi {
 
   // Update collection
   async putCollection(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     teamId: string,
     data: CollectionRequest
   ): Promise<{ kind: "ok"; data: CollectionResponse } | GeneralApiProblem> {
     try {
       detectTempId([id, teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -231,14 +250,16 @@ class FolderApi {
 
   // Delete collection
   async deleteCollection(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     teamId: string,
     payload: CollectionActionData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id, teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -259,14 +280,16 @@ class FolderApi {
 
   // stopShare collection
   async stopShare(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     teamId: string,
     payload: CollectionActionData
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id, teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -287,7 +310,8 @@ class FolderApi {
 
   // remove member collection
   async removeShareMember(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     memberId: string,
     teamId: string,
     payload: CollectionActionData,
@@ -295,7 +319,8 @@ class FolderApi {
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       let response: ApiResponse<any>
@@ -325,13 +350,15 @@ class FolderApi {
   }
 
   async addShareMember(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     teamId: string,
     members: any[]
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -351,14 +378,16 @@ class FolderApi {
   }
 
   async updateShareItem(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     teamId: string,
     payload: { cipher: CipherRequest & { id: string } }
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -379,14 +408,16 @@ class FolderApi {
 
   // remove shared item in folder
   async removeShareItem(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     teamId: string,
     payload: { cipher: CipherRequest & { id: string } }
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(

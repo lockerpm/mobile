@@ -35,7 +35,7 @@ export function useAuthentication() {
     tokenService,
   } = useCoreService()
   const { translate } = useAppLocale()
-  const { setApiTokens } = useHelper()
+  const { setApiTokens, setVaultTokens } = useHelper()
   const { notify, notifyTx, notifyApiError } = useToast()
   const { logoutAllServices } = useSocialLogout()
 
@@ -92,6 +92,8 @@ export function useAuthentication() {
       return res
     }
 
+    setVaultTokens(res.data?.access_token ?? "")
+
     if (onPremiseData) {
       setApiTokens(res.data?.access_token)
     }
@@ -128,72 +130,6 @@ export function useAuthentication() {
       await createMasterPasswordItem()
       uiStore.setHasNoMasterPwItem(true)
     }
-    return { kind: "ok" }
-  }
-
-  // Login vault using API
-  const _loginOnPremiseSessionOtp = async (
-    keyConfig: {
-      key: SymmetricCryptoKey
-      keyHash: string
-    } & MPEncodeConfig,
-    masterPassword: string,
-    method: string,
-    otp: string,
-    save_device: boolean
-  ) => {
-    // Session login API
-    const res = await user.sessionOtpLogin({
-      client_id: "mobile",
-      password: keyConfig.keyHash, // keyHash,
-      device_name: platformUtilsService.getDeviceString(),
-      device_type: platformUtilsService.getDevice(),
-      // device_identifier: await storageService.get('device_id') || randomString(),
-      device_identifier: await DeviceInfo.getUniqueId(),
-      email: user.email,
-      method,
-      otp,
-      save_device,
-    })
-    if (res.kind === "unauthorized") {
-      notifyTx("error", "error:token_expired")
-      return { kind: "unauthorized" }
-    }
-    if (res.kind !== "ok") {
-      notifyTx("error", "error:session_login_failed")
-      return res
-    }
-
-    setApiTokens(res.data?.access_token)
-    await Promise.all([user.getUser(), user.getUserPw()])
-
-    // Setup service
-    messagingService.send("loggedIn")
-
-    await tokenService.setTokens(res.data.access_token, res.data.refresh_token)
-    await userService.setInformation(
-      tokenService.getUserId(),
-      user.email,
-      keyConfig.kdf,
-      keyConfig.kdf_version ?? 0,
-      keyConfig.kdf_iterations,
-      keyConfig.kdf_memory ?? 0,
-      keyConfig.kdf_parallelism ?? 0
-    )
-    await cryptoService.setKey(keyConfig.key)
-    await cryptoService.setKeyHash(keyConfig.keyHash)
-    await cryptoService.setEncKey(res.data.key)
-    await cryptoService.setEncPrivateKey(res.data.private_key)
-    // setup service offline
-    if (masterPassword) {
-      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(
-        masterPassword,
-        keyConfig.key.keyB64
-      )
-      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
-      // await syncAutofillData();
-    }
-
     return { kind: "ok" }
   }
 
@@ -321,90 +257,6 @@ export function useAuthentication() {
       })
     } catch (e) {
       Logger.error("sessionBusinessQrLogin: ", e)
-      notifyTx("error", "error:session_login_failed")
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Session login
-  const sessionOtpLoginWithHashPassword = async (
-    encodeConfig: MPEncodeConfig,
-    masterPasswordHash: string,
-    key: SymmetricCryptoKey,
-    method: string,
-    otp: string,
-    save_device: boolean
-  ): Promise<{ kind: string }> => {
-    try {
-      await delay(100)
-      return _loginOnPremiseSessionOtp(
-        {
-          key,
-          keyHash: masterPasswordHash,
-          ...encodeConfig,
-        },
-        "",
-        method,
-        otp,
-        save_device
-      )
-    } catch (e) {
-      Logger.error("sessionOtpLoginWithHashPassword: ", e)
-      notifyTx("error", "error:session_login_failed")
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Session login
-  const sessionOtpLogin = async (
-    encodeConfig: MPEncodeConfig,
-    masterPassword: string,
-    method: string,
-    otp: string,
-    save_device: boolean
-  ): Promise<{ kind: string }> => {
-    try {
-      await delay(100)
-
-      const key = await cryptoService.makeKey(
-        masterPassword,
-        user.email,
-        encodeConfig.kdf,
-        encodeConfig.kdf_iterations,
-        encodeConfig.kdf_memory,
-        encodeConfig.kdf_parallelism
-      )
-
-      // Offline compare
-      if (uiStore.isOffline) {
-        const storedKeyHash = await cryptoService.getKeyHash()
-        if (storedKeyHash) {
-          const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
-          if (passwordValid) {
-            messagingService.send("loggedIn")
-
-            // Fake set key
-            await cryptoService.setKey(key)
-            return { kind: "ok" }
-          }
-        }
-      }
-
-      // Online session login
-      const keyHash = await cryptoService.hashPassword(masterPassword, key)
-      return _loginOnPremiseSessionOtp(
-        {
-          key,
-          keyHash,
-          ...encodeConfig,
-        },
-        masterPassword,
-        method,
-        otp,
-        save_device
-      )
-    } catch (e) {
-      Logger.error("sessionOtpLogin: ", e)
       notifyTx("error", "error:session_login_failed")
       return { kind: "bad-data" }
     }
@@ -679,10 +531,8 @@ export function useAuthentication() {
 
   return {
     sessionLogin,
-    sessionOtpLogin,
     biometricLogin,
     sessionQrLogin,
-    sessionOtpLoginWithHashPassword,
     sessionBusinessQrLogin,
 
     logout,

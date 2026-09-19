@@ -1,9 +1,11 @@
 import { Instance, SnapshotIn, SnapshotOut, cast, types } from "mobx-state-tree"
-import { withSetPropAction } from "../helpers/withSetPropAction"
+
 import { folderApi } from "app/services/api/folderApi"
-import { FolderView } from "core/models/view/folderView"
-import { FolderRequest } from "core/models/request/folderRequest"
 import { ShareFolderData } from "app/static/types"
+import { FolderRequest } from "core/models/request/folderRequest"
+import { FolderView } from "core/models/view/folderView"
+
+import { withSetPropAction } from "../helpers/withSetPropAction"
 
 /**
  * Model description here for TypeScript hints.
@@ -12,6 +14,7 @@ export const FolderStoreModel = types
   .model("FolderStore")
   .props({
     apiToken: types.string,
+    vaultToken: types.string,
     folders: types.array(types.frozen()),
     lastUpdate: types.number,
     notSynchedFolders: types.array(types.string), // Create in offline mode
@@ -22,6 +25,9 @@ export const FolderStoreModel = types
   .actions((self) => ({
     setApiToken: (token: string) => {
       self.apiToken = token
+    },
+    setVaultToken: (token: string) => {
+      self.vaultToken = token
     },
 
     // ----------------- DATA -------------------
@@ -37,6 +43,7 @@ export const FolderStoreModel = types
     clearStore: (dataOnly?: boolean) => {
       if (!dataOnly) {
         self.apiToken = ""
+        self.vaultToken = ""
       }
       self.folders = cast([])
       self.lastUpdate = 0
@@ -82,26 +89,26 @@ export const FolderStoreModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     getFolder: async (id: string) => {
-      const res = await folderApi.getFolder(self.apiToken, id)
+      const res = await folderApi.getFolder(self.apiToken, self.vaultToken, id)
       return res
     },
 
     createFolder: async (data: FolderRequest) => {
-      const res = await folderApi.postFolder(self.apiToken, data)
+      const res = await folderApi.postFolder(self.apiToken, self.vaultToken, data)
       return res
     },
 
     updateFolder: async (id: string, data: FolderRequest) => {
-      const res = await folderApi.putFolder(self.apiToken, id, data)
+      const res = await folderApi.putFolder(self.apiToken, self.vaultToken, id, data)
       return res
     },
 
     deleteFolder: async (id: string) => {
-      const res = await folderApi.deleteFolder(self.apiToken, id)
+      const res = await folderApi.deleteFolder(self.apiToken, self.vaultToken, id)
       return res
     },
     shareFolder: async (payload: ShareFolderData) => {
-      const res = await folderApi.shareFolder(self.apiToken, payload)
+      const res = await folderApi.shareFolder(self.apiToken, self.vaultToken, payload)
       return res
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -112,6 +119,7 @@ export interface FolderStoreSnapshotIn extends SnapshotIn<typeof FolderStoreMode
 export const createFolderStoreDefaultModel = () =>
   types.optional(FolderStoreModel, {
     apiToken: "",
+    vaultToken: "",
     folders: [],
     lastUpdate: 0,
     notSynchedFolders: [], // Create in offline mode

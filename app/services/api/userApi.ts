@@ -19,7 +19,6 @@ import {
   FeedbackRequest,
   RegisterLockerRequest,
   SessionLoginRequest,
-  SessionOtpLoginRequest,
   UpdateFCMRequest,
   NotificationSettingData,
   MarketingContent,
@@ -48,6 +47,7 @@ class UserApi {
   async getUser(token: string): Promise<{ kind: "ok"; user: UserIDType } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get("/v3/me")
@@ -88,6 +88,7 @@ class UserApi {
   > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
       this.api.apisauce.setHeader("device-id", deviceId)
 
       // make the api call
@@ -116,6 +117,7 @@ class UserApi {
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -140,6 +142,7 @@ class UserApi {
   ): Promise<{ kind: "ok"; user: UserLockerType } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -161,11 +164,13 @@ class UserApi {
   }
 
   async hideUserMassterPassword(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     hide: boolean
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
@@ -193,6 +198,7 @@ class UserApi {
   ): Promise<{ kind: "ok"; data: Enterprise[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -213,11 +219,13 @@ class UserApi {
   }
 
   async setUserLanguage(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     language: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put("/v3/me", {
@@ -253,6 +261,7 @@ class UserApi {
   > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `/v3/cystack_platform/pm/users/me/prelogin`
       )
@@ -276,6 +285,7 @@ class UserApi {
   ): Promise<{ kind: "ok"; data: SessionSnapshot } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -295,32 +305,6 @@ class UserApi {
     }
   }
 
-  // Session login
-  async sessionOtpLogin(
-    token: string,
-    payload: SessionOtpLoginRequest
-  ): Promise<{ kind: "ok"; data: SessionSnapshot } | GeneralApiProblem> {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/v3/cystack_platform/pm/users/session/otp",
-        payload
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const data = response.data
-      return { kind: "ok", data }
-    } catch (e) {
-      Logger.error("sessionOtpLogin", e)
-      return { kind: "bad-data" }
-    }
-  }
-
   // Create new master password
   async registerLocker(
     token: string,
@@ -328,6 +312,7 @@ class UserApi {
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.deleteHeader("Locker-Session-Token")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -349,11 +334,13 @@ class UserApi {
 
   // Change master password
   async changeMasterPassword(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     payload: ChangePasswordRequest
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -374,7 +361,10 @@ class UserApi {
   }
 
   // Get plan
-  async getPlan(token: string): Promise<
+  async getPlan(
+    apiToken: string,
+    vaultToken: string
+  ): Promise<
     | {
         kind: "ok"
         data: UserPlan
@@ -382,7 +372,8 @@ class UserApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
         "/v3/cystack_platform/pm/payments/plan"
@@ -403,11 +394,13 @@ class UserApi {
 
   // Deauthorize all sessions
   async deauthorizeSessions(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     hashedPassword: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -431,11 +424,13 @@ class UserApi {
 
   // Purge account
   async purgeAccount(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     hashedPassword: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -458,10 +453,12 @@ class UserApi {
   }
 
   async getReferLink(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: { referral_link: string } } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
         "/v3/cystack_platform/pm/referrals"
       )
@@ -480,10 +477,12 @@ class UserApi {
   }
 
   async getNotificationSettings(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: NotificationSettingData[] } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
         "/v3/cystack_platform/pm/notification/settings",
         { type: "notification" }
@@ -503,13 +502,15 @@ class UserApi {
   }
 
   async updateNotiSettings(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     categoryId: string,
     mail: boolean,
     notification: boolean
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.put(
         `/v3/cystack_platform/pm/notification/settings/${categoryId}`,
         { mail, notification }
@@ -530,11 +531,13 @@ class UserApi {
 
   // Delete account
   async deleteAccount(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     hashedPassword: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -558,11 +561,13 @@ class UserApi {
 
   // Get all policies
   async getTeamPolicies(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     organizationId: string
   ): Promise<{ kind: "ok"; data: TeamPolicies } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -584,7 +589,8 @@ class UserApi {
 
   // Get a specific policy
   async getTeamPolicy(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     organizationId: string,
     policyType: PolicyType
   ): Promise<
@@ -595,7 +601,8 @@ class UserApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -617,11 +624,13 @@ class UserApi {
 
   // Send feedback
   async sendFeedback(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     payload: FeedbackRequest
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -643,11 +652,13 @@ class UserApi {
 
   // Update FCM
   async updateFCM(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     payload: UpdateFCMRequest
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/v3/cystack_platform/pm/users/me/fcm_id",
@@ -668,7 +679,8 @@ class UserApi {
 
   // Get Billing Documents
   async getBillingDocuments(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     page: number
   ): Promise<
     | {
@@ -678,7 +690,8 @@ class UserApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -700,7 +713,8 @@ class UserApi {
 
   // Get Billing Documents
   async purchaseValidation(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     receipt?: string,
     subscriptionId?: string,
     originalTransactionIdentifierIOS?: string
@@ -715,7 +729,8 @@ class UserApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       let response: ApiResponse<any>
       // make the api call
       if (IS_IOS) {
@@ -745,7 +760,8 @@ class UserApi {
   }
 
   async purchaseValidationV2(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     purchase: Purchase
   ): Promise<
     | {
@@ -758,7 +774,8 @@ class UserApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       let response: ApiResponse<any>
       // make the api call
       if (IS_IOS) {
@@ -791,7 +808,10 @@ class UserApi {
     }
   }
 
-  async getFamilyMember(token: string): Promise<
+  async getFamilyMember(
+    apiToken: string,
+    vaultToken: string
+  ): Promise<
     | {
         kind: "ok"
         data: FamilyMember[]
@@ -799,7 +819,8 @@ class UserApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
         "/v3/cystack_platform/pm/family/members"
       )
@@ -817,11 +838,13 @@ class UserApi {
   }
 
   async addFamilyMember(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     emailMembers: string[]
   ): Promise<{ kind: "ok"; data: any } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/v3/cystack_platform/pm/family/members",
         { family_members: emailMembers }
@@ -841,11 +864,13 @@ class UserApi {
   }
 
   async removeFamilyMember(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     memberId: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.delete(
         "/v3/cystack_platform/pm/family/members/" + memberId
       )
@@ -863,7 +888,10 @@ class UserApi {
     }
   }
 
-  async getTrialEligible(token: string): Promise<
+  async getTrialEligible(
+    apiToken: string,
+    vaultToken: string
+  ): Promise<
     | {
         kind: "ok"
         data: {
@@ -873,7 +901,8 @@ class UserApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/v3/payments/webhook/trial",
         {
@@ -897,14 +926,16 @@ class UserApi {
   // ---------------- EMERGENCY ACCESS ------------------------
 
   async EAInvite(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     email: string,
     key: string,
     type: string,
     wait_time_days: number
   ): Promise<{ kind: "ok"; data: { is: string } } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/v3/cystack_platform/pm/emergency_access/invite`,
         { email, key, type, wait_time_days }
@@ -924,10 +955,12 @@ class UserApi {
   }
 
   async EATrusted(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: TrustedContact[] } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `/v3/cystack_platform/pm/emergency_access/trusted`
       )
@@ -946,10 +979,12 @@ class UserApi {
   }
 
   async EAGranted(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: TrustedContact[] } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `/v3/cystack_platform/pm/emergency_access/granted`
       )
@@ -968,12 +1003,14 @@ class UserApi {
   }
 
   async EATrustedYouAction(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     action: "accept" | "initiate"
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/v3/cystack_platform/pm/emergency_access/${id}/${action}`
       )
@@ -992,7 +1029,8 @@ class UserApi {
   }
 
   async EATakeover(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string
   ): Promise<
     | {
@@ -1006,7 +1044,8 @@ class UserApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/v3/cystack_platform/pm/emergency_access/${id}/takeover`
       )
@@ -1025,7 +1064,8 @@ class UserApi {
   }
 
   async EAView(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string
   ): Promise<
     | {
@@ -1038,7 +1078,8 @@ class UserApi {
     | GeneralApiProblem
   > {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/v3/cystack_platform/pm/emergency_access/${id}/view`
       )
@@ -1057,12 +1098,14 @@ class UserApi {
   }
 
   async EAyourTrustedAction(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     action: "reject" | "approve" | "reinvite"
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/v3/cystack_platform/pm/emergency_access/${id}/${action}`
       )
@@ -1081,12 +1124,14 @@ class UserApi {
   }
 
   async EAPassword(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     payload: any
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/v3/cystack_platform/pm/emergency_access/${id}/password`,
         payload
@@ -1106,12 +1151,14 @@ class UserApi {
   }
 
   async EALockerPassword(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     id: string,
     newPass: string
   ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/v3/cystack_platform/pm/emergency_access/${id}/id_password`,
         {
@@ -1132,9 +1179,14 @@ class UserApi {
     }
   }
 
-  async EARemove(token: string, id: string): Promise<{ kind: "ok" } | GeneralApiProblem> {
+  async EARemove(
+    apiToken: string,
+    vaultToken: string,
+    id: string
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.delete(
         `/v3/cystack_platform/pm/emergency_access/${id}`
       )
@@ -1154,11 +1206,13 @@ class UserApi {
 
   // marketing
   async fetchMarketingContent(
-    token: string,
+    apiToken: string,
+    vaultToken: string,
     language: string
   ): Promise<{ kind: "ok"; data: MarketingContent } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `/v3/cystack_platform/pm/marketing/banner?language=${language}`
       )
@@ -1177,10 +1231,12 @@ class UserApi {
   }
 
   async getChatWootIdHash(
-    token: string
+    apiToken: string,
+    vaultToken: string
   ): Promise<{ kind: "ok"; data: ChatWootUser } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `/v3/cystack_platform/pm/users/me/chatwoot`
       )

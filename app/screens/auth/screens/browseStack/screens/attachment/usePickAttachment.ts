@@ -200,12 +200,16 @@ export const usePickAttachment = () => {
     const tempEncFile = `${RNFS.CachesDirectoryPath}/${Date.now()}${file.fileName}`
     try {
       onStatus(UploadStatus.ENCRYPTING)
-      const uploadFormRes = await attachmentApi.getUploadForm(cipherStore.apiToken, {
-        file_name: file.fileName,
-        metadata: {
-          cipher_id: cipherId,
-        },
-      })
+      const uploadFormRes = await attachmentApi.getUploadForm(
+        cipherStore.apiToken,
+        cipherStore.vaultToken,
+        {
+          file_name: file.fileName,
+          metadata: {
+            cipher_id: cipherId,
+          },
+        }
+      )
 
       if (uploadFormRes.kind !== "ok") {
         notifyApiError(uploadFormRes)

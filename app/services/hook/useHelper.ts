@@ -28,6 +28,15 @@ export function useHelper() {
     enterpriseStore.setApiToken(token)
   }
 
+  const setVaultTokens = (token: string) => {
+    user.setVaultToken(token)
+    cipherStore.setVaultToken(token)
+    collectionStore.setVaultToken(token)
+    folderStore.setVaultToken(token)
+    toolStore.setVaultToken(token)
+    enterpriseStore.setVaultToken(token)
+  }
+
   // Get all org
   const getAllOrganizations = () => {
     return userService.getAllOrganizations()
@@ -50,6 +59,7 @@ export function useHelper() {
   }
 
   return {
+    setVaultTokens,
     setApiTokens,
     randomString,
     getAllOrganizations,

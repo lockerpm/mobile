@@ -22,7 +22,7 @@ export const ScamMyReportListScreen: FC<ScamScreenProps<"myReportList">> = obser
 
     const fetchMyReportList = async () => {
       setIsFirstLoad(true)
-      const res = await toolApi.scamMyListReport(user.apiToken)
+      const res = await toolApi.scamMyListReport(user.apiToken, user.vaultToken)
       if (res.kind === "ok") {
         if (!!res.data.results && res.data.results.length > 0) {
           setData(res.data.results.filter((item) => item.type === ScamType.Phone))
@@ -35,14 +35,14 @@ export const ScamMyReportListScreen: FC<ScamScreenProps<"myReportList">> = obser
 
     const deleteReport = useCallback(
       async (id: string) => {
-        const res = await toolApi.scamDeleteMyReport(user.apiToken, id)
+        const res = await toolApi.scamDeleteMyReport(user.apiToken, user.vaultToken, id)
         if (res.kind === "ok") {
           setData((prev) => prev.filter((item) => item.id !== id))
         } else {
           notifyApiError(res)
         }
       },
-      [user.apiToken]
+      [notifyApiError, user.apiToken, user.vaultToken]
     )
 
     // ------------------EFFECTS-------------------

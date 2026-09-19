@@ -100,7 +100,7 @@ export const useCallerIDData = () => {
       setIsUpdateLocalDatabase(true)
 
       while (syncCount === SYNC_PAGE_SIZE) {
-        const res = await toolApi.scamSyncPhones(toolStore.apiToken, {
+        const res = await toolApi.scamSyncPhones(toolStore.apiToken, toolStore.vaultToken, {
           cursor: lastSyncCursor,
         })
         if (res.kind !== "ok") {
