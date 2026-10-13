@@ -508,6 +508,14 @@ const en = {
     title: "Welcome Back!",
     desc: "Enter your Master Password to Unlock",
     get_hint: "Get Master Password hint",
+    or_unlock_with: "or unlock with",
+    your_passkey: "Your passkey",
+    passkey: {
+      desc: "Unlock with a passkey",
+      no_passkey:
+        "This account has no passkey yet. Unlock with your master password, then add one in Settings > Passkeys.",
+      failed: "Couldn't unlock with passkey. Please try again.",
+    },
   },
   onBoarding: {
     no_account: "Don't have an account?",
@@ -1037,6 +1045,8 @@ const en = {
     success: "Data exported!",
     verify: "Verify",
     verify_desc: "Enter your Master Password to verify",
+    or_verify_with: "or verify with",
+    verify_passkey_desc: "Verify with a passkey to export your vault",
   },
   import: {
     format: "Format",

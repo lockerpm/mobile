@@ -10,8 +10,10 @@ import {
   buildPrfCreateRequest,
   buildPrfGetRequest,
   decodeAnyB64,
+  findPasskeyByCredentialId,
   getPasskeyKdfConfig,
   getPreviousPrfRandom,
+  getPrfUnlockCandidates,
   isPrfPasskeySupported,
   parsePrfCreateResult,
   parsePrfGetResult,
@@ -241,6 +243,44 @@ describe("toPasskeyItems", () => {
     const items = toPasskeyItems(credentialResponse({ backup_keys: [backupKey("a", "r")] }))
     expect(items).toHaveLength(1)
     expect(items[0].isPrimary).toBe(false)
+  })
+})
+
+describe("getPrfUnlockCandidates", () => {
+  it("puts the primary PRF credential first and keeps each key's kdf config", () => {
+    const candidates = getPrfUnlockCandidates(
+      credentialResponse({
+        type: "prf",
+        credential_id: "primary-cred",
+        random: "primary-random",
+        kdf: KdfType.PBKDF2_SHA256,
+        kdf_iterations: 100000,
+        kdf_memory: null,
+        kdf_parallelism: null,
+        backup_keys: [backupKey("a", "r"), backupKey("b", "r", "hmac")],
+      })
+    )
+
+    expect(candidates.map((c) => c.id)).toEqual(["", "a"])
+    expect(candidates[0]).toMatchObject({ kdf: KdfType.PBKDF2_SHA256, kdfIterations: 100000 })
+    expect(candidates[1]).toMatchObject({
+      kdf: KdfType.ARGON2ID,
+      kdfIterations: 3,
+      kdfMemory: 65536,
+      kdfParallelism: 4,
+    })
+  })
+})
+
+describe("findPasskeyByCredentialId", () => {
+  it("matches a base64url credential id against the stored base64 id", () => {
+    const items = toPasskeyItems(
+      credentialResponse({
+        backup_keys: [{ ...backupKey("a", "r"), credential_id: b64(CREDENTIAL_ID) }],
+      })
+    )
+    expect(findPasskeyByCredentialId(items, b64Url(CREDENTIAL_ID))?.id).toBe("a")
+    expect(findPasskeyByCredentialId(items, b64Url(bytes(20, 1)))).toBeUndefined()
   })
 })
 

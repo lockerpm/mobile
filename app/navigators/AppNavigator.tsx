@@ -97,6 +97,7 @@ const AppStack = observer(function AppStack(props: AppProps) {
         }}
       />
       <Stack.Screen name="lock" component={Screens.LockScreen} />
+      <Stack.Screen name="passkeyUnlock" component={Screens.PasskeyUnlockScreen} />
       <Stack.Screen
         name="authStack"
         component={Screens.AuthStack}

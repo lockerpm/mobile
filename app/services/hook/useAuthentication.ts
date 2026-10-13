@@ -9,7 +9,7 @@ import { CipherRequest } from "core/models/request"
 import { CipherView, LoginUriView, LoginView } from "core/models/view"
 
 import { useAppLocale } from "@/i18n"
-import { MPEncodeConfig } from "@/static/types/user.types"
+import { MPEncodeConfig, SessionSnapshot } from "@/static/types/user.types"
 import { autofillKeyChain } from "@/utils/autofill.ios"
 import { Base64 } from "@/utils/base64"
 import { delay } from "@/utils/delay"
@@ -49,7 +49,8 @@ export function useAuthentication() {
     } & MPEncodeConfig,
     masterPassword?: string,
     createMasterPasswordItem?: () => Promise<void>,
-    onPremiseData?: boolean
+    onPremiseData?: boolean,
+    validateSession?: (data: SessionSnapshot) => Promise<boolean>
   ) => {
     // Session login API
     const res = await user.sessionLogin({
@@ -90,6 +91,11 @@ export function useAuthentication() {
       }
       notifyTx("error", "error:session_login_failed")
       return res
+    }
+
+    if (validateSession && !(await validateSession(res.data))) {
+      notifyTx("error", "error:session_login_failed")
+      return { kind: "bad-data" }
     }
 
     setVaultTokens(res.data?.access_token ?? "")
@@ -191,6 +197,29 @@ export function useAuthentication() {
       return { kind: "bad-data" }
     }
   }
+
+  // Passkey (PRF) login, the key derived from the passkey is used in place of the master key
+  const passkeyLogin = async (
+    encodeConfig: MPEncodeConfig,
+    passkeyKey: { key: SymmetricCryptoKey; keyHash: string }
+  ): Promise<{ kind: string }> => {
+    try {
+      return await _loginUsingApi(
+        { ...encodeConfig, ...passkeyKey },
+        undefined,
+        undefined,
+        undefined,
+        // The returned vault key must be protected by this passkey before anything is stored
+        async (data) =>
+          (await cryptoService.decryptEncKey(data.key, passkeyKey.key).catch(() => null)) != null
+      )
+    } catch (e) {
+      Logger.error("passkeyLogin: " + e)
+      notifyTx("error", "error:session_login_failed")
+      return { kind: "bad-data" }
+    }
+  }
+
   // password less qr login
   const sessionQrLogin = async (
     encodeConfig: MPEncodeConfig,
@@ -440,7 +469,16 @@ export function useAuthentication() {
         encKey = await cryptoService.remakeEncKey(key)
       }
 
-      const oldKeyHash = await cryptoService.hashPassword(oldPassword, null)
+      // Derive from the old password, the stored key comes from a passkey after a passkey unlock
+      const oldKey = await cryptoService.makeKey(
+        oldPassword,
+        user.email,
+        userService.getKdf(),
+        userService.getKdfIterations(),
+        userService.getKdfMemory(),
+        userService.getKdfParallelism()
+      )
+      const oldKeyHash = await cryptoService.hashPassword(oldPassword, oldKey)
       // Send API
       const res = await user.changeMasterPassword({
         key: encKey[1].encryptedString,
@@ -532,6 +570,7 @@ export function useAuthentication() {
   return {
     sessionLogin,
     biometricLogin,
+    passkeyLogin,
     sessionQrLogin,
     sessionBusinessQrLogin,
 

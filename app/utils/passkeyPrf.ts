@@ -7,7 +7,12 @@ import {
   PasskeyGetResult,
 } from "react-native-passkey"
 
-import { MPEncodeConfig, PasskeyItem, PasswordlessCredentialResponse } from "app/static/types"
+import {
+  MPEncodeConfig,
+  PasskeyItem,
+  PasswordlessBackupKey,
+  PasswordlessCredentialResponse,
+} from "app/static/types"
 import { KdfType } from "core/enums/kdfType"
 import { Utils } from "core/misc/utils"
 
@@ -102,6 +107,14 @@ export const isPasskeyCancelledError = (error: any) =>
  */
 export const toPasskeyItems = (data: PasswordlessCredentialResponse): PasskeyItem[] => {
   const { backup_keys: backupKeys = [], ...primary } = data
+  const toKdf = (k: PasswordlessCredentialResponse | PasswordlessBackupKey) => ({
+    kdfVersion: k.kdf_version,
+    kdf: k.kdf,
+    kdfIterations: k.kdf_iterations,
+    kdfMemory: k.kdf_memory,
+    kdfParallelism: k.kdf_parallelism,
+  })
+
   const items: PasskeyItem[] = backupKeys
     .filter((k) => k.type === "prf")
     .map((k) => ({
@@ -113,6 +126,7 @@ export const toPasskeyItems = (data: PasswordlessCredentialResponse): PasskeyIte
       creationDate: k.creation_date,
       lastUseDate: k.last_use_date,
       isPrimary: false,
+      ...toKdf(k),
     }))
 
   if (primary.type === "prf" && primary.credential_id && primary.random) {
@@ -125,9 +139,26 @@ export const toPasskeyItems = (data: PasswordlessCredentialResponse): PasskeyIte
       creationDate: primary.creation_date,
       lastUseDate: primary.last_use_date,
       isPrimary: true,
+      ...toKdf(data),
     })
   }
   return items
+}
+
+/**
+ * Same as `getPasswordlessUsingPasskeys` of the web service: primary credential first, then backup keys
+ */
+export const getPrfUnlockCandidates = (data: PasswordlessCredentialResponse): PasskeyItem[] => {
+  const items = toPasskeyItems(data).filter((i) => i.credentialId && i.random)
+  return [...items.filter((i) => i.isPrimary), ...items.filter((i) => !i.isPrimary)]
+}
+
+/**
+ * Credential ids are stored as base64 by the server, compare them on their bytes
+ */
+export const findPasskeyByCredentialId = (items: PasskeyItem[], credentialId: string) => {
+  const target = toUrlB64(decodeAnyB64(credentialId))
+  return items.find((i) => toUrlB64(decodeAnyB64(i.credentialId)) === target)
 }
 
 /**

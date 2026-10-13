@@ -18,6 +18,7 @@ import { useAppLocale } from "@/i18n"
 import { usePushNotifier } from "@/services/hook/usePushnotifier"
 import { MPEncodeConfig } from "@/static/types"
 import { isAndroidAutofillService } from "@/utils/autofill.android"
+import { isPrfPasskeySupported } from "@/utils/passkeyPrf"
 
 import { BusinessLockByPasswordless } from "./business"
 import { LockByMasterPassword } from "./normal"
@@ -59,11 +60,14 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     // Guards the direct (already-focused) biometric trigger: the effect re-runs
     // on every render since its function deps are recreated each render.
     const autoPromptedRef = useRef(false)
+    // Coming back from the passkey unlock screen must not prompt biometric again
+    const skipBiometricOnFocusRef = useRef(false)
 
     // ---------------------- COMPUTED -------------------------
 
     const fido2 = "fido2" in params ? params.fido2 : undefined
     const otpauthLabel = params.label
+    const passkeyUnlockedAt = "passkeyUnlockedAt" in params ? params.passkeyUnlockedAt : undefined
     const isAndroidService = isAndroidAutofillService(fido2)
     // ---------------------- METHODS -------------------------
 
@@ -197,6 +201,19 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       }
     }
 
+    const navigateToPasskeyUnlock = () => {
+      skipBiometricOnFocusRef.current = true
+      navigation.navigate("passkeyUnlock", {
+        lockConfig: {
+          kdf: lockConfig.kdf,
+          kdf_iterations: lockConfig.kdf_iterations,
+          kdf_memory: lockConfig.kdf_memory,
+          kdf_parallelism: lockConfig.kdf_parallelism,
+          kdf_version: lockConfig.kdf_version,
+        },
+      })
+    }
+
     const handleUnlockBiometric = async (lockConfig: MPEncodeConfig) => {
       const key = await cryptoService.getKey()
       if (!key) return
@@ -214,11 +231,21 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       fetchLockType()
     }, [])
 
+    useEffect(() => {
+      if (passkeyUnlockedAt) {
+        handleUnlock()
+      }
+    }, [passkeyUnlockedAt])
+
     // // Handle back press
     useEffect(() => {
       if (lockConfig.isLoading) return undefined
 
       const tryUnlockBiometric = () => {
+        if (skipBiometricOnFocusRef.current) {
+          skipBiometricOnFocusRef.current = false
+          return
+        }
         if (user.isBiometricUnlock && (biometryType !== BiometricsType.None || hasDevicePasscode)) {
           handleUnlockBiometric(lockConfig)
         }
@@ -271,6 +298,14 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
       return <BusinessLockByPasswordless {...commonProps} />
     }
 
-    return <LockByMasterPassword fido2={fido2} {...commonProps} />
+    return (
+      <LockByMasterPassword
+        fido2={fido2}
+        onUnlockWithPasskey={
+          !isAndroidService && isPrfPasskeySupported() ? navigateToPasskeyUnlock : undefined
+        }
+        {...commonProps}
+      />
+    )
   }
 )

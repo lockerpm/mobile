@@ -21,6 +21,7 @@ import {
   PressableText,
   Icon,
 } from "app/components/cores"
+import { PasskeyUnlockOption } from "app/components/utils"
 import { useStores } from "app/models"
 import { AppScreenProps } from "app/navigators/navigators.types"
 import { useAuthentication, useCipherData, useCipherHelper } from "app/services/hook"
@@ -45,6 +46,7 @@ interface Props {
   setIsUnlocking: (val: boolean) => void
   biometryType: BiometricsType
   hasDevicePasscode: boolean
+  onUnlockWithPasskey?: () => void
 }
 
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -58,6 +60,7 @@ export const LockByMasterPassword = ({
   setIsUnlocking,
   handleLogout,
   handleUnlock,
+  onUnlockWithPasskey,
 }: Props) => {
   const navigation = useNavigation<AppScreenProps<"lock">["navigation"]>()
   const { user, enterpriseStore } = useStores()
@@ -285,6 +288,14 @@ export const LockByMasterPassword = ({
         style={styles.mgTop20}
         preset="primary"
       />
+
+      {!!onUnlockWithPasskey && (
+        <PasskeyUnlockOption
+          labelTx="lock:or_unlock_with"
+          disabled={isUnlocking}
+          onPress={onUnlockWithPasskey}
+        />
+      )}
 
       {(biometryType !== BiometricsType.None || hasDevicePasscode) && (
         <TouchableOpacity

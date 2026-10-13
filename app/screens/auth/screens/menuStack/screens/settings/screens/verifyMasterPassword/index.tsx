@@ -10,12 +10,13 @@ import { BiometricsType, LoginMethod } from "app/static/types/enum"
 import { KdfType } from "core/enums/kdfType"
 
 import { MPEncodeConfig } from "@/static/types"
+import { isPrfPasskeySupported } from "@/utils/passkeyPrf"
 
 import { BusinessLockByPasswordless } from "./business"
 import { LockByMasterPassword } from "./normal"
 
 export const VerifyMasterPasswordScreen: FC<SettingsScreenProps<"verifyMasterPassword">> = observer(
-  ({ navigation }) => {
+  ({ navigation, route: { params } }) => {
     const { user } = useStores()
     const { cryptoService } = useCoreService()
     const { biometricLogin } = useAuthentication()
@@ -37,8 +38,12 @@ export const VerifyMasterPasswordScreen: FC<SettingsScreenProps<"verifyMasterPas
     const [isUnlocking, setIsUnlocking] = useState(false)
     // Guards the direct (already-focused) biometric trigger against effect re-runs
     const autoPromptedRef = useRef(false)
+    // Coming back from the passkey screen must not prompt biometric again
+    const skipBiometricOnFocusRef = useRef(false)
 
     // ---------------------- COMPUTED -------------------------
+
+    const passkeyVerifiedAt = params?.passkeyVerifiedAt
 
     // ---------------------- METHODS -------------------------
 
@@ -65,6 +70,19 @@ export const VerifyMasterPasswordScreen: FC<SettingsScreenProps<"verifyMasterPas
       navigation.replace("export")
     }
 
+    const navigateToVerifyPasskey = () => {
+      skipBiometricOnFocusRef.current = true
+      navigation.navigate("verifyPasskey", {
+        lockConfig: {
+          kdf: lockConfig.kdf,
+          kdf_iterations: lockConfig.kdf_iterations,
+          kdf_memory: lockConfig.kdf_memory,
+          kdf_parallelism: lockConfig.kdf_parallelism,
+          kdf_version: lockConfig.kdf_version,
+        },
+      })
+    }
+
     const handleUnlockBiometric = async (lockConfig: MPEncodeConfig) => {
       const key = await cryptoService.getKey()
       if (!key) return
@@ -83,11 +101,21 @@ export const VerifyMasterPasswordScreen: FC<SettingsScreenProps<"verifyMasterPas
       fetchLockType()
     }, [])
 
+    useEffect(() => {
+      if (passkeyVerifiedAt) {
+        handleUnlock()
+      }
+    }, [passkeyVerifiedAt])
+
     // // Handle back press
     useEffect(() => {
       if (lockConfig.isLoading) return undefined
 
       const tryUnlockBiometric = () => {
+        if (skipBiometricOnFocusRef.current) {
+          skipBiometricOnFocusRef.current = false
+          return
+        }
         if (user.isBiometricUnlock && (biometryType !== BiometricsType.None || hasDevicePasscode)) {
           handleUnlockBiometric({
             kdf: lockConfig.kdf,
@@ -124,6 +152,11 @@ export const VerifyMasterPasswordScreen: FC<SettingsScreenProps<"verifyMasterPas
       return <BusinessLockByPasswordless {...commonProps} />
     }
 
-    return <LockByMasterPassword {...commonProps} />
+    return (
+      <LockByMasterPassword
+        onVerifyWithPasskey={isPrfPasskeySupported() ? navigateToVerifyPasskey : undefined}
+        {...commonProps}
+      />
+    )
   }
 )

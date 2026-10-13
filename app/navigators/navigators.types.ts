@@ -17,6 +17,7 @@ import {
   LockType,
   LoginOptions,
   MarketingContent,
+  MPEncodeConfig,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
   PendingSharedFolderType,
@@ -54,6 +55,9 @@ export type AppRoute = {
 
         // otpauth uri label from deeplink
         label?: string
+
+        // set by passkeyUnlock screen when the vault is unlocked
+        passkeyUnlockedAt?: number
       }
     | {
         temporaryLock?: boolean
@@ -64,6 +68,9 @@ export type AppRoute = {
         // otpauth uri label from deeplink
         label?: string
       }
+  passkeyUnlock: {
+    lockConfig: MPEncodeConfig
+  }
   unAuthStack: NavigatorScreenParams<UnAuthRoute>
   authStack: NavigatorScreenParams<AuthRoute> & {
     fido2?: AndroidAppProps
@@ -595,7 +602,15 @@ export type SettingsRoute = {
   autofillService: undefined
   import: undefined
   export: undefined
-  verifyMasterPassword: undefined
+  verifyMasterPassword:
+    | {
+        // set by verifyPasskey screen when the passkey is verified
+        passkeyVerifiedAt?: number
+      }
+    | undefined
+  verifyPasskey: {
+    lockConfig: MPEncodeConfig
+  }
   unlockPasskeys: undefined
   unlockPasskeyCreate: undefined
   unlockPasskeyDelete: { id: string; name: string; isPrimary: boolean }

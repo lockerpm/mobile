@@ -5,6 +5,7 @@ import { useCoreService } from "app/services/coreService"
 import { useToast } from "app/services/utils"
 import { PasskeyItem } from "app/static/types"
 import { Utils } from "core/misc/utils"
+import { SymmetricCryptoKey } from "core/models/domain"
 
 import { Logger } from "@/utils/logger"
 import {
@@ -14,8 +15,10 @@ import {
   PasskeyPrfErrorCode,
   buildPrfCreateRequest,
   buildPrfGetRequest,
+  findPasskeyByCredentialId,
   getPasskeyKdfConfig,
   getPreviousPrfRandom,
+  getPrfUnlockCandidates,
   isPasskeyCancelledError,
   isPrfPasskeySupported,
   parsePrfCreateResult,
@@ -23,14 +26,18 @@ import {
   toPasskeyItems,
 } from "@/utils/passkeyPrf"
 
+import { useAuthentication } from "./useAuthentication"
+
 /**
  * Passkeys (WebAuthn PRF) used as a backup way to unlock the vault instead of the master password.
- * Mirrors `setBackupPasswordlessUsingPasskey` of `@lockerpm/client-service`.
+ * Mirrors `setBackupPasswordlessUsingPasskey` and `getPasswordlessUsingPasskeys`
+ * of `@lockerpm/client-service`.
  */
 export const usePasskeyBackup = () => {
   const { user } = useStores()
   const { cryptoService, cryptoFunctionService, userService } = useCoreService()
   const { notifyTx, notifyApiError } = useToast()
+  const { sessionLogin } = useAuthentication()
 
   const randomBytes = async (length: number) =>
     new Uint8Array(await cryptoFunctionService.randomBytes(length))
@@ -53,19 +60,103 @@ export const usePasskeyBackup = () => {
   // ----------------------- VERIFY -----------------------
 
   const verifyMasterPassword = async (masterPassword: string) => {
+    const encodeConfig = {
+      kdf: userService.getKdf(),
+      kdf_iterations: userService.getKdfIterations(),
+      kdf_memory: userService.getKdfMemory(),
+      kdf_parallelism: userService.getKdfParallelism(),
+      kdf_version: userService.getKdfVersion(),
+    }
     try {
       const key = await cryptoService.makeKey(
         masterPassword,
         user.email,
-        userService.getKdf(),
-        userService.getKdfIterations(),
-        userService.getKdfMemory(),
-        userService.getKdfParallelism()
+        encodeConfig.kdf,
+        encodeConfig.kdf_iterations,
+        encodeConfig.kdf_memory,
+        encodeConfig.kdf_parallelism
       )
-      return await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
+      if (await cryptoService.compareAndUpdateKeyHash(masterPassword, key)) {
+        return true
+      }
     } catch (e: any) {
       Logger.error("usePasskeyBackup", "verifyMasterPassword", e?.message)
       return false
+    }
+    // After a passkey unlock the stored key hash belongs to the passkey, verify online instead
+    const res = await sessionLogin(encodeConfig, masterPassword)
+    return res.kind === "ok"
+  }
+
+  // ----------------------- UNLOCK -----------------------
+
+  /**
+   * Authenticate with one of the account PRF passkeys and derive the key protecting the vault key,
+   * the same way a master key is derived from the master password
+   */
+  const getPasskeyUnlockKey = async (): Promise<{
+    key: SymmetricCryptoKey
+    keyHash: string
+  } | null> => {
+    try {
+      if (!isPrfPasskeySupported()) {
+        throw new PasskeyPrfError(PasskeyPrfErrorCode.NOT_SUPPORTED)
+      }
+
+      const res = await user.getPasswordlessCredentials()
+      if (res.kind !== "ok" && res.kind !== "not-found") {
+        notifyApiError(res)
+        return null
+      }
+      const candidates = res.kind === "ok" ? getPrfUnlockCandidates(res.data) : []
+      if (!candidates.length) {
+        notifyTx("error", "lock:passkey.no_passkey")
+        return null
+      }
+
+      const request = buildPrfGetRequest({
+        challenge: await randomBytes(PASSKEY_CHALLENGE_LENGTH),
+        // All PRF passkeys of an account share the same salt
+        salt: Utils.fromB64ToArray(candidates[0].random),
+        allowCredentials: candidates.map((c) => ({
+          idUrl: Utils.fromB64toUrlB64(c.credentialId),
+          transports: c.transports,
+        })),
+      })
+      const { credentialId, secret } = parsePrfGetResult(await Passkey.getPlatformKey(request))
+      if (!secret) {
+        throw new PasskeyPrfError(PasskeyPrfErrorCode.NO_PRF_SECRET)
+      }
+      const usedKey = findPasskeyByCredentialId(candidates, credentialId)
+      if (!usedKey) {
+        throw new Error("Unknown passkey")
+      }
+
+      const key = await cryptoService.makeKey(
+        secret,
+        user.email,
+        usedKey.kdf,
+        usedKey.kdfIterations,
+        usedKey.kdfMemory ?? undefined,
+        usedKey.kdfParallelism ?? undefined
+      )
+      const keyHash = await cryptoService.hashPassword(secret, key)
+      return { key, keyHash }
+    } catch (e: any) {
+      if (isPasskeyCancelledError(e)) {
+        return null
+      }
+      if (
+        e?.code === PasskeyPrfErrorCode.NOT_SUPPORTED ||
+        e?.code === PasskeyPrfErrorCode.NO_PRF_SECRET
+      ) {
+        notifyTx("error", "passkey:unlock.prf_unsupported")
+        return null
+      }
+      // Only log the error code, the error may come from crypto operations
+      Logger.error("usePasskeyBackup", "getPasskeyUnlockKey", e?.code ?? e?.error ?? e?.message)
+      notifyTx("error", "lock:passkey.failed")
+      return null
     }
   }
 
@@ -200,6 +291,7 @@ export const usePasskeyBackup = () => {
   return {
     getPasskeys,
     verifyMasterPassword,
+    getPasskeyUnlockKey,
     createPasskey,
     deletePasskey,
   }

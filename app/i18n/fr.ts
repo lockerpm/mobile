@@ -527,6 +527,14 @@ const fr: Translations = {
     title: "Heureux de vous revoir !",
     desc: "Entrez votre mot de passe maître pour vous connecter",
     get_hint: "Obtenir l’indice du mot de passe maître",
+    or_unlock_with: "ou déverrouiller avec",
+    your_passkey: "Votre clé d’accès",
+    passkey: {
+      desc: "Déverrouiller avec une clé d’accès",
+      no_passkey:
+        "Ce compte n’a pas encore de clé d’accès. Déverrouillez avec votre mot de passe maître, puis ajoutez-en une dans Paramètres > Clés d’accès.",
+      failed: "Impossible de déverrouiller avec la clé d’accès. Veuillez réessayer.",
+    },
   },
   onBoarding: {
     no_account: "Vous n’avez pas de compte ?",
@@ -1022,6 +1030,8 @@ const fr: Translations = {
     success: "Données exportées !",
     verify: "Vérifier",
     verify_desc: "Saisissez votre Master Password pour vérifier",
+    or_verify_with: "ou vérifier avec",
+    verify_passkey_desc: "Vérifiez avec une clé d’accès pour exporter votre coffre",
   },
   import: {
     format: "Format",

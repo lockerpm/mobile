@@ -507,6 +507,14 @@ const vi: Translations = {
     title: "Chào mừng trở lại!",
     desc: "Nhập Master Password của bạn để đăng nhập",
     get_hint: "Nhận gợi ý",
+    or_unlock_with: "hoặc mở khoá bằng",
+    your_passkey: "Passkey của bạn",
+    passkey: {
+      desc: "Mở khoá bằng passkey",
+      no_passkey:
+        "Tài khoản chưa có passkey. Hãy mở khoá bằng Master Password rồi thêm passkey trong Cài đặt > Passkeys.",
+      failed: "Không thể mở khoá bằng passkey. Vui lòng thử lại.",
+    },
   },
   onBoarding: {
     no_account: "Chưa có tài khoản?",
@@ -1033,6 +1041,8 @@ const vi: Translations = {
     success: "Dữ liệu đã được xuất!",
     verify: "Xác thực",
     verify_desc: "Nhập Master Password của bạn để xác thực",
+    or_verify_with: "hoặc xác thực bằng",
+    verify_passkey_desc: "Xác thực bằng passkey để xuất dữ liệu",
   },
   import: {
     format: "Định dạng",

@@ -490,6 +490,13 @@ const zh: Translations = {
     title: "歡迎回來！",
     desc: "輸入您的主密碼以登入",
     get_hint: "取得主密碼提示",
+    or_unlock_with: "或使用以下方式解鎖",
+    your_passkey: "您的 Passkey",
+    passkey: {
+      desc: "使用 Passkey 解鎖",
+      no_passkey: "此帳戶尚無 Passkey。請先使用主密碼解鎖，再到「設定 > Passkey」新增。",
+      failed: "無法使用 Passkey 解鎖，請再試一次。",
+    },
   },
   onBoarding: {
     no_account: "沒有帳戶？",
@@ -1004,6 +1011,8 @@ const zh: Translations = {
     success: "資料已匯出！",
     verify: "驗證",
     verify_desc: "輸入您的 Master Password 以驗證",
+    or_verify_with: "或使用以下方式驗證",
+    verify_passkey_desc: "使用 Passkey 驗證以匯出您的資料庫",
   },
   import: {
     format: "格式",

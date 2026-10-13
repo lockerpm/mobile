@@ -43,6 +43,11 @@ export type PasskeyItem = {
   creationDate: number | null
   lastUseDate: number | null
   isPrimary: boolean
+  kdfVersion: number
+  kdf: KdfType
+  kdfIterations: number
+  kdfMemory: number | null
+  kdfParallelism: number | null
 }
 
 // POST /v3/cystack_platform/pm/users/backup_credentials

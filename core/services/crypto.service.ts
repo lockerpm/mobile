@@ -195,6 +195,18 @@ export class CryptoService implements CryptoServiceAbstraction {
       return null
     }
 
+    const decEncKey = await this.decryptEncKey(encKey, key)
+    if (decEncKey == null) {
+      return null
+    }
+    this.encKey = decEncKey
+    return this.encKey
+  }
+
+  /**
+   * Decrypt a protected user key with a master key, without storing anything
+   */
+  async decryptEncKey(encKey: string, key: SymmetricCryptoKey): Promise<SymmetricCryptoKey | null> {
     let decEncKey: ArrayBuffer | null
     const encKeyCipher = new EncString(encKey)
     if (encKeyCipher.encryptionType === EncryptionType.AesCbc256_B64) {
@@ -209,8 +221,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     if (decEncKey == null) {
       return null
     }
-    this.encKey = new SymmetricCryptoKey(decEncKey)
-    return this.encKey
+    return new SymmetricCryptoKey(decEncKey)
   }
 
   async getPublicKey(): Promise<ArrayBuffer | null> {

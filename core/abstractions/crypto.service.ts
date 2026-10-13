@@ -13,6 +13,10 @@ export abstract class CryptoService {
   abstract getKey: () => Promise<SymmetricCryptoKey | null>
   abstract getKeyHash: () => Promise<string | null>
   abstract getEncKey: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey | null>
+  abstract decryptEncKey: (
+    encKey: string,
+    key: SymmetricCryptoKey
+  ) => Promise<SymmetricCryptoKey | null>
   abstract getPublicKey: () => Promise<ArrayBuffer | null>
   abstract getPrivateKey: () => Promise<ArrayBuffer | null>
   abstract getFingerprint: (userId: string, publicKey?: ArrayBuffer) => Promise<string[]>
