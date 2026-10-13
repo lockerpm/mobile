@@ -41,6 +41,7 @@ export const SettingsScreen: FC<SettingsScreenProps<"settings">> = observer(({ n
     navigateToImport,
     navigateToExport,
     navigateToEncryptionKey,
+    navigateToPasskeyList,
   } = useSettingListNavigation()
 
   // ----------------------- RENDER --------------------
@@ -72,6 +73,7 @@ export const SettingsScreen: FC<SettingsScreenProps<"settings">> = observer(({ n
           onPress={navigateToEnableAutofillService}
         />
         <SettingsItem textTx={"passkey:login_passkey_setting"} onPress={openPasskeySettingUrl} />
+        <SettingsItem textTx={"passkey:unlock.title"} onPress={navigateToPasskeyList} />
 
         {userService.getKdfVersion() >= 1 && (
           <SettingsItem textTx={"encryption_key:title"} onPress={navigateToEncryptionKey} />

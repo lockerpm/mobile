@@ -1346,6 +1346,25 @@ const zh: Translations = {
     login_passkey_setting: "使用 Passkey 登入",
     login_passkey: "使用 Passkey 登入",
     login_passkey_options: "選擇您儲存 Locker Passkey 的方式",
+    unlock: {
+      title: "Passkey",
+      description:
+        "使用儲存在裝置上的 Passkey 解鎖 Locker，而不需輸入主密碼。Passkey 必須支援 PRF 擴充功能。",
+      add: "新增 Passkey",
+      empty: "您尚未新增任何 Passkey",
+      unnamed: "未命名的 Passkey",
+      primary: "主要",
+      create_desc:
+        "輸入主密碼以確認。請將 Passkey 儲存在裝置的密碼管理工具（iCloud 鑰匙圈、Google 密碼管理工具...）中，而不是 Locker，才能用它解鎖 Locker。",
+      name: "Passkey 名稱",
+      prf_unsupported: "此裝置或 Passkey 提供者不支援 PRF 擴充功能",
+      create_failed: "無法建立 Passkey，請再試一次。",
+      create_success: "已新增 Passkey",
+      delete_title: "刪除 {{name}}？",
+      delete_desc: "您將無法再使用此 Passkey 解鎖 Locker。",
+      delete_primary_warning: "這是您帳戶的主要無密碼憑證。",
+      delete_success: "已刪除 Passkey",
+    },
   },
   sso: {
     id: {

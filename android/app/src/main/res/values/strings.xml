@@ -21,6 +21,8 @@
   <string name="asset_statements" translatable="false">
     [{
         \"include\": \"https://locker.io/.well-known/assetlinks.json\"
+    }, {
+        \"include\": \"https://passwords.locker.io/.well-known/assetlinks.json\"
     }]
     </string>
   <string name="fake_police">Giả mạo công an / dịch vụ công</string>

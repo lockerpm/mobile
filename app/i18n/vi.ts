@@ -1379,6 +1379,25 @@ const vi: Translations = {
     login_passkey_setting: "Đăng nhập với passkeys",
     login_passkey: "Đăng nhập bằng passkey",
     login_passkey_options: "Chọn một nơi mà bạn đã lưu trữ passkey cho Locker",
+    unlock: {
+      title: "Passkeys",
+      description:
+        "Dùng passkey lưu trên thiết bị để mở khoá Locker thay cho Master Password. Passkey cần hỗ trợ tiện ích mở rộng PRF.",
+      add: "Thêm passkey",
+      empty: "Bạn chưa thêm passkey nào",
+      unnamed: "Passkey chưa đặt tên",
+      primary: "Chính",
+      create_desc:
+        "Nhập Master Password để xác nhận. Hãy lưu passkey vào trình quản lý mật khẩu của thiết bị (iCloud Keychain, Google Password Manager...), không lưu vào Locker, để có thể dùng nó mở khoá Locker.",
+      name: "Tên passkey",
+      prf_unsupported: "Thiết bị hoặc trình quản lý passkey không hỗ trợ tiện ích mở rộng PRF",
+      create_failed: "Không thể tạo passkey. Vui lòng thử lại.",
+      create_success: "Đã thêm passkey",
+      delete_title: "Xoá {{name}}?",
+      delete_desc: "Bạn sẽ không thể dùng passkey này để mở khoá Locker nữa.",
+      delete_primary_warning: "Đây là thông tin xác thực passwordless chính của tài khoản.",
+      delete_success: "Đã xoá passkey",
+    },
   },
   sso: {
     id: {

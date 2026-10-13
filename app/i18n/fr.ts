@@ -1373,6 +1373,27 @@ const fr: Translations = {
     login_passkey: "Se connecter avec une clé d’accès (passkey)",
     login_passkey_options:
       "Choisissez une option où vous avez stocké votre clé d’accès pour Locker",
+    unlock: {
+      title: "Clés d’accès (passkeys)",
+      description:
+        "Utilisez une clé d’accès enregistrée sur votre appareil pour déverrouiller Locker au lieu de votre mot de passe maître. La clé d’accès doit prendre en charge l’extension PRF.",
+      add: "Ajouter une clé d’accès",
+      empty: "Vous n’avez encore ajouté aucune clé d’accès",
+      unnamed: "Clé d’accès sans nom",
+      primary: "Principale",
+      create_desc:
+        "Saisissez votre mot de passe maître pour confirmer. Enregistrez la clé d’accès dans le gestionnaire de mots de passe de votre appareil (Trousseau iCloud, Gestionnaire de mots de passe de Google...), et non dans Locker, afin de pouvoir l’utiliser pour déverrouiller Locker.",
+      name: "Nom de la clé d’accès",
+      prf_unsupported:
+        "Cet appareil ou ce fournisseur de clés d’accès ne prend pas en charge l’extension PRF",
+      create_failed: "Impossible de créer la clé d’accès. Veuillez réessayer.",
+      create_success: "Clé d’accès ajoutée",
+      delete_title: "Supprimer {{name}} ?",
+      delete_desc: "Vous ne pourrez plus déverrouiller Locker avec cette clé d’accès.",
+      delete_primary_warning:
+        "Il s’agit de l’identifiant sans mot de passe principal de votre compte.",
+      delete_success: "Clé d’accès supprimée",
+    },
     login: "Connexion",
   },
   sso: {

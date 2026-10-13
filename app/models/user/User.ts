@@ -2,11 +2,13 @@ import { cast, types } from "mobx-state-tree"
 import DeviceInfo from "react-native-device-info"
 
 import { idApi } from "app/services/api/idApi"
+import { passwordlessApi } from "app/services/api/passwordlessApi"
 import { toolApi } from "app/services/api/toolApi"
 import { userApi } from "app/services/api/userApi"
 import {
   AuthPasskeyRequest,
   ChangePasswordRequest,
+  CreateBackupCredentialRequest,
   Enterprise,
   LoginData,
   LoginPinCodeData,
@@ -637,6 +639,30 @@ export const UserModel = types
     },
     preLogin: async () => {
       const res = await userApi.preLogin(self.apiToken)
+      return res
+    },
+    // Passwordless (passkey PRF)
+    getPasswordlessCredentials: async () => {
+      const res = await passwordlessApi.getPasswordlessCredentials(self.email)
+      return res
+    },
+    createBackupCredential: async (payload: CreateBackupCredentialRequest) => {
+      const res = await passwordlessApi.createBackupCredential(
+        self.apiToken,
+        self.vaultToken,
+        payload
+      )
+      return res
+    },
+    deleteBackupCredential: async (id: string) => {
+      const res = await passwordlessApi.deleteBackupCredential(self.apiToken, self.vaultToken, id)
+      return res
+    },
+    deletePrimaryPasswordlessCredential: async () => {
+      const res = await passwordlessApi.deletePrimaryPasswordlessCredential(
+        self.apiToken,
+        self.vaultToken
+      )
       return res
     },
     // Marketing

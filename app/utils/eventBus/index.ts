@@ -24,6 +24,11 @@ export enum AppEventType {
   INVITE_TO_FAMILY_MEMBER_UPDATE = "INVITE_TO_FAMILY_MEMBER_UPDATE",
 
   /**
+   * Unlock passkeys
+   */
+  PASSKEY_LIST_UPDATE = "PASSKEY_LIST_UPDATE",
+
+  /**
    * Cipher edit screens
    */
   CIPHER_EDIT_HIDE_EMAIL = "CIPHER_EDIT_HIDE_EMAIL",

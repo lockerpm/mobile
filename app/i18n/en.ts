@@ -1383,6 +1383,25 @@ const en = {
     login_passkey_setting: "Login with passkeys",
     login_passkey: "Log in with passkey",
     login_passkey_options: "Choose an option in which you've stored your passkey for Locker",
+    unlock: {
+      title: "Passkeys",
+      description:
+        "Use a passkey saved on your device to unlock Locker instead of your master password. The passkey must support the PRF extension.",
+      add: "Add passkey",
+      empty: "You haven't added any passkeys yet",
+      unnamed: "Unnamed passkey",
+      primary: "Primary",
+      create_desc:
+        "Enter your master password to confirm. Save the passkey to your device's password manager (iCloud Keychain, Google Password Manager...), not to Locker, so you can use it to unlock Locker.",
+      name: "Passkey name",
+      prf_unsupported: "This device or passkey provider doesn't support the PRF extension",
+      create_failed: "Failed to create passkey. Please try again.",
+      create_success: "Passkey added",
+      delete_title: "Delete {{name}}?",
+      delete_desc: "You will no longer be able to unlock Locker with this passkey.",
+      delete_primary_warning: "This is the primary passwordless credential of your account.",
+      delete_success: "Passkey deleted",
+    },
   },
   sso: {
     id: {

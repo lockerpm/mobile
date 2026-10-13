@@ -596,6 +596,9 @@ export type SettingsRoute = {
   import: undefined
   export: undefined
   verifyMasterPassword: undefined
+  unlockPasskeys: undefined
+  unlockPasskeyCreate: undefined
+  unlockPasskeyDelete: { id: string; name: string; isPrimary: boolean }
   emergencyStack: NavigatorScreenParams<EmergencyAccessRoute>
   notiConfigStack: NavigatorScreenParams<NotificationSettingsRoute>
 }

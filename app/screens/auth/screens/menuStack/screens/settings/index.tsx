@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
 
-import { SettingsRoute } from "app/navigators"
+import { SettingsRoute, modalScreenOptions } from "app/navigators"
 
 import {
   ChangeMasterPasswordScreen,
@@ -9,6 +9,9 @@ import {
   ExportScreen,
   ImportScreen,
   NotificationSettingsStack,
+  PasskeyCreateModalScreen,
+  PasskeyDeleteModalScreen,
+  PasskeyListScreen,
   SettingsScreen,
   VerifyMasterPasswordScreen,
 } from "./screens"
@@ -35,6 +38,11 @@ export const SettingsStack = observer(() => {
       <Stack.Screen name="export" component={ExportScreen} />
       <Stack.Screen name="encryptionKey" component={EncryptionKeyScreen} />
       <Stack.Screen name="verifyMasterPassword" component={VerifyMasterPasswordScreen} />
+      <Stack.Screen name="unlockPasskeys" component={PasskeyListScreen} />
+      <Stack.Group screenOptions={modalScreenOptions}>
+        <Stack.Screen name="unlockPasskeyCreate" component={PasskeyCreateModalScreen} />
+        <Stack.Screen name="unlockPasskeyDelete" component={PasskeyDeleteModalScreen} />
+      </Stack.Group>
     </Stack.Navigator>
   )
 })

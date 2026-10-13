@@ -16,6 +16,9 @@ export const useSettingListNavigation = () => {
   const navigateToEncryptionKey = () => {
     navigation.navigate("encryptionKey")
   }
+  const navigateToPasskeyList = () => {
+    navigation.navigate("unlockPasskeys")
+  }
 
   const navigateToEnableAutofillService = () => {
     navigation.navigate("autofillService")
@@ -35,5 +38,6 @@ export const useSettingListNavigation = () => {
     navigateToImport,
     navigateToExport,
     navigateToEncryptionKey,
+    navigateToPasskeyList,
   }
 }
