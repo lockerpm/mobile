@@ -513,7 +513,7 @@ const en = {
     passkey: {
       desc: "Unlock with a passkey",
       no_passkey:
-        "This account has no passkey yet. Unlock with your master password, then add one in Settings > Passkeys.",
+        "This account has no passkey yet. Unlock with your master password, then add one in Settings > Unlock with passkeys.",
       failed: "Couldn't unlock with passkey. Please try again.",
     },
   },
@@ -1394,7 +1394,7 @@ const en = {
     login_passkey: "Log in with passkey",
     login_passkey_options: "Choose an option in which you've stored your passkey for Locker",
     unlock: {
-      title: "Passkeys",
+      title: "Unlock with passkeys",
       description:
         "Use a passkey saved on your device to unlock Locker instead of your master password. The passkey must support the PRF extension.",
       add: "Add passkey",

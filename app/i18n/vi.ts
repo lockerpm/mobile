@@ -512,7 +512,7 @@ const vi: Translations = {
     passkey: {
       desc: "Mở khoá bằng passkey",
       no_passkey:
-        "Tài khoản chưa có passkey. Hãy mở khoá bằng Master Password rồi thêm passkey trong Cài đặt > Passkeys.",
+        "Tài khoản chưa có passkey. Hãy mở khoá bằng Master Password rồi thêm passkey trong Cài đặt > Mở khoá bằng passkey.",
       failed: "Không thể mở khoá bằng passkey. Vui lòng thử lại.",
     },
   },
@@ -1390,7 +1390,7 @@ const vi: Translations = {
     login_passkey: "Đăng nhập bằng passkey",
     login_passkey_options: "Chọn một nơi mà bạn đã lưu trữ passkey cho Locker",
     unlock: {
-      title: "Passkeys",
+      title: "Mở khoá bằng passkey",
       description:
         "Dùng passkey lưu trên thiết bị để mở khoá Locker thay cho Master Password. Passkey cần hỗ trợ tiện ích mở rộng PRF.",
       add: "Thêm passkey",

@@ -532,7 +532,7 @@ const fr: Translations = {
     passkey: {
       desc: "Déverrouiller avec une clé d’accès",
       no_passkey:
-        "Ce compte n’a pas encore de clé d’accès. Déverrouillez avec votre mot de passe maître, puis ajoutez-en une dans Paramètres > Clés d’accès.",
+        "Ce compte n’a pas encore de clé d’accès. Déverrouillez avec votre mot de passe maître, puis ajoutez-en une dans Paramètres > Déverrouiller avec des clés d’accès.",
       failed: "Impossible de déverrouiller avec la clé d’accès. Veuillez réessayer.",
     },
   },
@@ -1384,7 +1384,7 @@ const fr: Translations = {
     login_passkey_options:
       "Choisissez une option où vous avez stocké votre clé d’accès pour Locker",
     unlock: {
-      title: "Clés d’accès (passkeys)",
+      title: "Déverrouiller avec des clés d’accès",
       description:
         "Utilisez une clé d’accès enregistrée sur votre appareil pour déverrouiller Locker au lieu de votre mot de passe maître. La clé d’accès doit prendre en charge l’extension PRF.",
       add: "Ajouter une clé d’accès",

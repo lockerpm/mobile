@@ -494,7 +494,7 @@ const zh: Translations = {
     your_passkey: "您的 Passkey",
     passkey: {
       desc: "使用 Passkey 解鎖",
-      no_passkey: "此帳戶尚無 Passkey。請先使用主密碼解鎖，再到「設定 > Passkey」新增。",
+      no_passkey: "此帳戶尚無 Passkey。請先使用主密碼解鎖，再到「設定 > 使用 Passkey 解鎖」新增。",
       failed: "無法使用 Passkey 解鎖，請再試一次。",
     },
   },
@@ -1356,7 +1356,7 @@ const zh: Translations = {
     login_passkey: "使用 Passkey 登入",
     login_passkey_options: "選擇您儲存 Locker Passkey 的方式",
     unlock: {
-      title: "Passkey",
+      title: "使用 Passkey 解鎖",
       description:
         "使用儲存在裝置上的 Passkey 解鎖 Locker，而不需輸入主密碼。Passkey 必須支援 PRF 擴充功能。",
       add: "新增 Passkey",

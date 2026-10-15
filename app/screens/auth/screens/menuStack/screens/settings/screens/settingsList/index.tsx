@@ -60,6 +60,7 @@ export const SettingsScreen: FC<SettingsScreenProps<"settings">> = observer(({ n
         {!user.isPasswordlessLogin && (
           <SettingsItem textTx={"settings:change_master_pass"} onPress={navigateToChangePassword} />
         )}
+        <SettingsItem textTx={"passkey:login_passkey_setting"} onPress={openPasskeySettingUrl} />
         <SettingsItem textTx={"common:notifications"} onPress={navigateToNotificationSettings} />
 
         <SetlanguageItem />
@@ -72,7 +73,6 @@ export const SettingsScreen: FC<SettingsScreenProps<"settings">> = observer(({ n
           textTx={"settings:autofill_service"}
           onPress={navigateToEnableAutofillService}
         />
-        <SettingsItem textTx={"passkey:login_passkey_setting"} onPress={openPasskeySettingUrl} />
         <SettingsItem textTx={"passkey:unlock.title"} onPress={navigateToPasskeyList} />
 
         {userService.getKdfVersion() >= 1 && (
