@@ -1,18 +1,21 @@
-/* eslint-disable react-native/no-inline-styles */
-import { View, StyleSheet } from "react-native"
-import { BottomModalContainer, Text } from "app/components/cores"
-import moment from "moment"
-import { RelayAddress } from "app/static/types"
-import { useStores } from "app/models"
-import { debounce } from "app/utils/utils"
-import { AppEventType, EventBus } from "app/utils/eventBus"
-import { useClipboard, useToast } from "app/services/utils"
+import { View, StyleSheet, ViewStyle } from "react-native"
+
+import { BottomModalContainer, PressableIcon, Text } from "app/components/cores"
 import { NewActionSheetItem } from "app/components/utils"
+import { useStores } from "app/models"
+import { useClipboard, useToast } from "app/services/utils"
+import { RelayAddress } from "app/static/types"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+import { debounce } from "app/utils/utils"
+
+import { ThemedStyle } from "@/theme"
+import { formatDate } from "@/utils/formatDate"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 export enum RelayActionType {
   DEFAULT = "default",
   EDIT = "edit",
+  EDIT_DESCRIPTION = "edit_description",
   CONFIG = "config",
 }
 
@@ -35,10 +38,13 @@ export const Actions = ({
 }: Props) => {
   const { toolStore } = useStores()
   const {
+    themed,
     theme: { colors },
   } = useAppTheme()
   const { notifyApiError } = useToast()
   const { copyToClipboard } = useClipboard()
+
+  const description = item.description?.trim()
 
   const handleRemove = async () => {
     onClose()
@@ -52,14 +58,23 @@ export const Actions = ({
 
   return (
     <BottomModalContainer>
-      <View style={styles.headerContainer}>
-        <View style={styles.row}>
-          <View>
-            <Text preset="bold" text={item.full_address} style={{ marginBottom: 4 }} />
-            <Text text={moment.unix(item.created_time).format("DD/MM/YYYY")} />
-          </View>
+      <View style={styles.header}>
+        <View style={styles.headerText}>
+          <Text preset="bold" size="lg" text={item.full_address} style={styles.mb4} />
+          <Text
+            preset="label"
+            size="sm"
+            text={formatDate(item.created_time * 1000, "dd/MM/yyyy")}
+          />
         </View>
+        <PressableIcon icon="x" onPress={onClose} />
       </View>
+
+      {!!description && (
+        <View style={themed($description)}>
+          <Text size="sm" text={description} />
+        </View>
+      )}
 
       <NewActionSheetItem
         bottomBorder
@@ -80,6 +95,14 @@ export const Actions = ({
           }}
         />
       )}
+      <NewActionSheetItem
+        bottomBorder
+        tx="private_relay:edit_description"
+        icon="list-bullets"
+        onPress={() => {
+          setNextAction(RelayActionType.EDIT_DESCRIPTION)
+        }}
+      />
       {!freeAccount && (
         <>
           <NewActionSheetItem
@@ -111,13 +134,24 @@ export const Actions = ({
   )
 }
 
+const $description: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  backgroundColor: colors.block,
+  borderRadius: 12,
+  marginBottom: 8,
+  marginHorizontal: 16,
+  padding: 12,
+})
+
 const styles = StyleSheet.create({
-  headerContainer: {
-    paddingHorizontal: 16,
-    width: "100%",
-  },
-  row: {
-    alignItems: "center",
+  header: {
+    alignItems: "flex-start",
     flexDirection: "row",
+    paddingBottom: 12,
+    paddingHorizontal: 16,
   },
+  headerText: {
+    flex: 1,
+    marginRight: 12,
+  },
+  mb4: { marginBottom: 4 },
 })

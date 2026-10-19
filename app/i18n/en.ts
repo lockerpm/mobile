@@ -348,6 +348,12 @@ const en = {
     },
     copy: "Copy alias",
     edit: "Edit alias address",
+    edit_description: "Edit description",
+    description_modal: {
+      title: "Edit Description",
+      label: "Description",
+      placeholder: "What do you use this alias for?",
+    },
     editable: "Editable email alias",
     random: "Random email alias {{number}}",
     edit_modal: {

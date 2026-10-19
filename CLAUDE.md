@@ -87,7 +87,7 @@ Don't import Node's `crypto` directly anywhere — use the alias or `expo-crypto
 
 ### i18n
 
-Supported languages are `en` and `vi` (`app/i18n/en.ts`, `app/i18n/vi.ts`). Add new strings to both.
+Locale files: `app/i18n/en.ts` (source of truth, exports the `Translations` type), `vi.ts`, `fr.ts`, `ru.ts`, `zh.ts` (Traditional Chinese). Every locale is typed as `Translations`, so a key added to `en.ts` must also be added — translated, at the same position — to **all** other locale files (`vi`, `fr`, `ru`, `zh`), otherwise `tsc` fails.
 
 ### Patched dependencies
 

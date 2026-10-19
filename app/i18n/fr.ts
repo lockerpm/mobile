@@ -364,6 +364,12 @@ const fr: Translations = {
     },
     copy: "Copier l’alias",
     edit: "Éditer l’adresse d’alias",
+    edit_description: "Modifier la description",
+    description_modal: {
+      title: "Modifier la description",
+      label: "Description",
+      placeholder: "À quoi sert cet alias ?",
+    },
     edit_modal: {
       titel: "Éditer l’adresse d’alias",
       current: "Adresse actuelle",

@@ -195,6 +195,33 @@ class ToolApi {
     }
   }
 
+  async updateRelayDescription(
+    apiToken: string,
+    vaultToken: string,
+    id: number,
+    description: string
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${apiToken}`)
+      this.api.apisauce.setHeader("Locker-Session-Token", `${vaultToken}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(
+        `/v3/cystack_platform/relay/addresses/${id}`,
+        { description }
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error("updateRelayDescription", e)
+      return { kind: "bad-data" }
+    }
+  }
+
   async deleteRelayAddress(
     apiToken: string,
     vaultToken: string,

@@ -346,6 +346,12 @@ const vi: Translations = {
     },
     copy: "Sao chép email",
     edit: "Sửa địa chỉ email",
+    edit_description: "Sửa mô tả",
+    description_modal: {
+      title: "Sửa mô tả",
+      label: "Mô tả",
+      placeholder: "Bạn dùng địa chỉ email này để làm gì?",
+    },
     editable: "Địa chỉ email có thể chỉnh sửa",
     random: "Địa chỉ email được tạo ngẫu nhiên {{number}}",
     edit_modal: {

@@ -331,6 +331,12 @@ const zh: Translations = {
     },
     copy: "複製別名",
     edit: "編輯別名地址",
+    edit_description: "編輯描述",
+    description_modal: {
+      title: "編輯描述",
+      label: "描述",
+      placeholder: "您使用此別名做什麼？",
+    },
     editable: "可編輯電子郵件別名",
     random: "隨機電子郵件別名 {{number}}",
     edit_modal: {

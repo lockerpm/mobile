@@ -1,9 +1,13 @@
-/* eslint-disable react-native/no-inline-styles */
 import { memo } from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, View, ViewStyle } from "react-native"
+
 import { Text, PressableScale, Icon } from "app/components/cores"
 import { colorTransparency } from "app/theme"
+
+import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
+
+import { SectionHeader } from "./SectionHeader"
 
 interface ItemProps {
   email: string
@@ -12,63 +16,52 @@ interface ItemProps {
 
 export const RootEmailInfo = memo(({ onPress, email }: ItemProps) => {
   const {
+    themed,
     theme: { colors },
   } = useAppTheme()
 
   return (
-    <PressableScale onPress={onPress}>
-      <View
-        style={[
-          styles.container,
-          {
-            borderColor: colors.border,
-          },
-        ]}
-      >
+    <View>
+      <SectionHeader tx="private_relay:root_email" />
+      <PressableScale onPress={onPress} style={themed($card)}>
         <View style={styles.content}>
-          <View style={styles.email}>
-            <Icon
-              icon={"mailbox-fill"}
-              size={24}
-              color={colors.primary}
-              containerStyle={{
-                backgroundColor: colorTransparency(colors.primary, 20),
-                borderRadius: 24,
-                padding: 8,
-              }}
-            />
-            <View style={styles.ml8}>
-              <Text tx={"private_relay:root_email"} />
-              <Text preset="bold" text={email} />
-            </View>
-          </View>
-          <Icon icon={"info"} size={24} color={colorTransparency(colors.link, 50)} />
+          <Icon
+            icon="mailbox-fill"
+            size={24}
+            color={colors.primary}
+            containerStyle={themed($iconContainer)}
+          />
+          <Text preset="bold" text={email} style={styles.text} />
+          <Icon icon="info" size={24} color={colorTransparency(colors.link, 50)} />
         </View>
-      </View>
-    </PressableScale>
+      </PressableScale>
+    </View>
   )
 })
 
 RootEmailInfo.displayName = "RootEmailInfo"
 
+export const $card: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  backgroundColor: colors.background,
+  borderRadius: 16,
+  marginHorizontal: 16,
+  paddingHorizontal: 16,
+  paddingVertical: 12,
+})
+
+export const $iconContainer: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  backgroundColor: colorTransparency(colors.primary, 20),
+  borderRadius: 24,
+  padding: 8,
+})
+
 const styles = StyleSheet.create({
-  container: {
-    borderRadius: 16,
-    borderWidth: 1,
-    marginVertical: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
   content: {
     alignItems: "center",
     flexDirection: "row",
-    justifyContent: "space-between",
   },
-  email: {
-    alignItems: "center",
-    flexDirection: "row",
-    flexGrow: 1,
-    flexShrink: 1,
+  text: {
+    flex: 1,
+    marginHorizontal: 12,
   },
-  ml8: { marginLeft: 8 },
 })

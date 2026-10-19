@@ -528,7 +528,7 @@ export const UserModel = types
       )
       return res
     },
-    updateFCM: async (token: string) => {
+    updateFCM: async (token: string | null) => {
       const res = await userApi.updateFCM(self.apiToken, self.vaultToken, {
         fcm_id: token ?? null,
         device_identifier: await DeviceInfo.getUniqueId(),
