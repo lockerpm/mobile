@@ -200,6 +200,7 @@ const en = {
       "There's no account associated with this email or username. Try another or create a new account.",
     invalid_authorization_code: "The authorization code is not valid",
     invalid_data: "Invalid data",
+    too_many_requests: "Too many requests. Please try again later.",
     invalid_password: "Invalid password",
     no_results_found: "No results found for",
     forbidden: "Your account doesn't have permission to perform this action",
@@ -371,6 +372,7 @@ const en = {
       taken: "This address is already taken",
       minimum: "Ensure this field has at least 6 characters",
       not_valid: "This address is not valid",
+      daily_limit: "You've reached the daily limit of generated aliases ({{limit}}/{{limit}}). Try again tomorrow.",
     },
     edit_warning:
       "Once you delete this alias, it cannot be recovered. Locker Relay will no longer forward messages sent to {{alias}}, including messages that allow you to reset lost passwords. If you use this email alias to log in to sites, you should update your login with a different email address before you delete this one.",

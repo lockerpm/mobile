@@ -13,6 +13,8 @@ export const BACKGROUND_DECRYPT_BATCH_SIZE = 500
 export const BACKGROUND_DECRYPT_REINDEX_EVERY = 2
 export const MAX_CIPHER_SELECTION = 10000
 export const MASTER_PW_MIN_LENGTH = 8
+// Server throttles alias generation (HTTP 429) after this many aliases per day
+export const RELAY_DAILY_ALIAS_LIMIT = 5
 
 // FREE
 export const FREE_PLAN_LIMIT = {

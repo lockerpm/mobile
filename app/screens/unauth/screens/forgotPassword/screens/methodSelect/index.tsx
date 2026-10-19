@@ -1,13 +1,15 @@
 /* eslint-disable no-restricted-imports */
 import { FC, useCallback, useRef, useState } from "react"
-import { Button, Header, Screen, TextInput, Text } from "app/components/cores"
-import Animated, { FadeInUp } from "react-native-reanimated"
 import { StyleSheet, TextInput as RNInput } from "react-native"
-import { AccountRecovery } from "app/static/types"
-import { useToast } from "app/services/utils"
-import { MethodSelection } from "./MethodSelection"
+import Animated, { FadeInUp } from "react-native-reanimated"
+
+import { Button, Header, Screen, TextInput, Text } from "app/components/cores"
 import { ForgotPasswordScreenProps } from "app/navigators"
 import { idApi } from "app/services/api"
+import { useToast } from "app/services/utils"
+import { AccountRecovery } from "app/static/types"
+
+import { MethodSelection } from "./MethodSelection"
 
 export const ForgotMethodSelectScreen: FC<ForgotPasswordScreenProps<"methodSelect">> = ({
   navigation,
@@ -28,7 +30,7 @@ export const ForgotMethodSelectScreen: FC<ForgotPasswordScreenProps<"methodSelec
     const res = await idApi.recoverAccount({ username })
     setIsLoading(false)
     if (res.kind !== "ok") {
-      if (res.kind === "rejected") {
+      if (res.kind === "rejected" || res.kind === "too-many-requests") {
         notifyApiError(res)
         return
       }

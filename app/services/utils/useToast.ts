@@ -61,6 +61,9 @@ export const useToast = () => {
       case "timeout":
         errorMessage = translate("error:network_timeout")
         break
+      case "too-many-requests":
+        errorMessage = translate("error:too_many_requests")
+        break
 
       case "server":
         errorMessage = translate("error:server_error")

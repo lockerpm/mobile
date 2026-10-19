@@ -5,7 +5,6 @@ import { Icon, PressableIcon, PressableScale, Text } from "app/components/cores"
 import { RelayAddress } from "app/static/types"
 
 import { ThemedStyle } from "@/theme"
-import { formatDate } from "@/utils/formatDate"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 interface Props {
@@ -19,7 +18,7 @@ interface Props {
 
 export const AliasItem = memo(({ item, isEditable, isFirst, isLast, onPress, onEdit }: Props) => {
   const { themed } = useAppTheme()
-  const subtitle = item.description?.trim() || formatDate(item.created_time * 1000, "dd/MM/yyyy")
+  const description = item.description?.trim()
 
   return (
     <PressableScale onPress={() => onPress(item, isEditable)}>
@@ -27,8 +26,13 @@ export const AliasItem = memo(({ item, isEditable, isFirst, isLast, onPress, onE
         style={[themed($container), isFirst && styles.topRadius, isLast && styles.bottomRadius]}
       >
         <View style={styles.content}>
-          <Text numberOfLines={1} preset="bold" text={item.full_address} style={styles.mb4} />
-          <Text preset="label" size="xs" numberOfLines={1} text={subtitle} />
+          <Text
+            numberOfLines={1}
+            preset="bold"
+            text={item.full_address}
+            style={!!description && styles.mb4}
+          />
+          {!!description && <Text preset="label" size="xs" numberOfLines={1} text={description} />}
         </View>
         {isEditable && (
           <PressableIcon icon="edit" size={24} style={styles.mr12} onPress={() => onEdit(item)} />
@@ -55,10 +59,13 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
   },
+  // Same height with or without description so the alias name stays vertically centered
   content: {
     flexGrow: 1,
     flexShrink: 1,
+    justifyContent: "center",
     marginRight: 12,
+    minHeight: 49, // bold sm line (24) + mb4 + xs line (21)
   },
   mb4: { marginBottom: 4 },
   mr12: { marginRight: 12 },

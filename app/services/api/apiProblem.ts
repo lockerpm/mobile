@@ -41,6 +41,10 @@ export type GeneralApiProblem =
    * The data we received is not in the expected format.
    */
   | { kind: "bad-data"; data?: any }
+  /**
+   * The request was throttled (HTTP 429).
+   */
+  | { kind: "too-many-requests" }
 
 /**
  * Attempts to get a common cause of problems from an api response.
@@ -69,6 +73,8 @@ export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProb
           return { kind: "forbidden" }
         case 404:
           return { kind: "not-found" }
+        case 429:
+          return { kind: "too-many-requests" }
         default:
           return { kind: "rejected" }
       }

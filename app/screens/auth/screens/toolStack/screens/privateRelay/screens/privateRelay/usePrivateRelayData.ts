@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import { useStores } from "app/models"
+import { RELAY_DAILY_ALIAS_LIMIT } from "app/static/constants"
 import { RelayAddress, SubdomainData } from "app/static/types"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
 import { AppEventType, EventBus } from "app/utils/eventBus"
@@ -26,7 +27,7 @@ const mergeAliases = (prev: RelayAddress[], next: RelayAddress[]) => {
 
 export const usePrivateRelayData = () => {
   const { toolStore, user } = useStores()
-  const { notifyApiError } = useToast()
+  const toast = useToast()
   const { translate } = useAppLocale()
 
   const userEmail = user.email || ""
@@ -42,9 +43,9 @@ export const usePrivateRelayData = () => {
   const nextPageRef = useRef(1)
   const hasMoreRef = useRef(true)
   const loadingRef = useRef(false)
-  // useToast returns a new function every render; keep the latest in a ref so callbacks stay stable
-  const notifyApiErrorRef = useRef(notifyApiError)
-  notifyApiErrorRef.current = notifyApiError
+  // useToast returns new functions every render; keep the latest in a ref so callbacks stay stable
+  const toastRef = useRef(toast)
+  toastRef.current = toast
 
   // ----------------------------METHODS----------------------------
 
@@ -68,7 +69,7 @@ export const usePrivateRelayData = () => {
         nextPageRef.current = page + 1
         hasMoreRef.current = !!next
       } else {
-        notifyApiErrorRef.current(res)
+        toastRef.current.notifyApiError(res)
       }
 
       loadingRef.current = false
@@ -99,8 +100,12 @@ export const usePrivateRelayData = () => {
           setAliases((prev) =>
             prev.length === 0 ? [res.data] : mergeAliases([prev[0], res.data], prev.slice(1))
           )
+        } else if (res.kind === "too-many-requests") {
+          toastRef.current.notifyTx("error", "private_relay:error.daily_limit", {
+            limit: RELAY_DAILY_ALIAS_LIMIT,
+          })
         } else {
-          notifyApiErrorRef.current(res)
+          toastRef.current.notifyApiError(res)
         }
         setIsCreating(false)
       }, 400),

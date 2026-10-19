@@ -199,6 +199,7 @@ const zh: Translations = {
       "此電子郵件或使用者名稱沒有相關聯的帳戶。請嘗試其他方式或建立一個新帳戶。",
     invalid_authorization_code: "授權碼無效",
     invalid_data: "無料資料",
+    too_many_requests: "請求過多，請稍後再試。",
     invalid_password: "無效密碼",
     no_results_found: "找不到符合的結果",
     forbidden: "您的帳戶沒有權限執行此操作",
@@ -353,6 +354,7 @@ const zh: Translations = {
       taken: "此地址已被使用",
       minimum: "確保此欄位至少有 6 個字元",
       not_valid: "此地址無效",
+      daily_limit: "您已達到每日產生別名的上限（{{limit}}/{{limit}}）。請明天再試。",
     },
     edit_warning:
       "別名刪除後即無法恢復。 Locker Relay 將不再轉寄發送到 {{alias}} 的訊息，包括可讓您重置遺失密碼的訊息。如果您使用這個電子郵件別名登入網站，請在刪除此電子郵件地址之前使用不同的電子郵件地址更新您的帳戶資料。",
