@@ -8,7 +8,7 @@ import { useStores } from "app/models"
 import { AppScreenProps } from "app/navigators/navigators.types"
 import { api } from "app/services/api"
 import { useCoreService } from "app/services/coreService"
-import { useAuthentication } from "app/services/hook"
+import { useAuthentication, usePasskeyBackup } from "app/services/hook"
 import { useBiometricType } from "app/services/utils"
 import { BiometricsType, LockType, LoginMethod } from "app/static/types/enum"
 import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
@@ -18,7 +18,6 @@ import { useAppLocale } from "@/i18n"
 import { usePushNotifier } from "@/services/hook/usePushnotifier"
 import { MPEncodeConfig } from "@/static/types"
 import { isAndroidAutofillService } from "@/utils/autofill.android"
-import { isPrfPasskeySupported } from "@/utils/passkeyPrf"
 
 import { BusinessLockByPasswordless } from "./business"
 import { LockByMasterPassword } from "./normal"
@@ -36,6 +35,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     const { boostrapPushNotifier } = usePushNotifier()
     const { parsePushNotiDataAndNavigateToTargetScreen } = usePushNotifionData()
     const { logout, biometricLogin } = useAuthentication()
+    const { hasPasskeyUnlock } = usePasskeyBackup()
     const {
       navigateToIntroIfNeeded,
       navigateToAndroidAutofillSetupIfNeeded,
@@ -57,6 +57,8 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     })
     const { biometryType, hasDevicePasscode } = useBiometricType()
     const [isUnlocking, setIsUnlocking] = useState(false)
+    // Only offer passkey unlock once the account is known to have a PRF passkey
+    const [hasPasskey, setHasPasskey] = useState(false)
     // Guards the direct (already-focused) biometric trigger: the effect re-runs
     // on every render since its function deps are recreated each render.
     const autoPromptedRef = useRef(false)
@@ -232,6 +234,11 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     }, [])
 
     useEffect(() => {
+      if (params.type !== LockType.Individual || isAndroidService) return
+      hasPasskeyUnlock().then(setHasPasskey)
+    }, [])
+
+    useEffect(() => {
       if (passkeyUnlockedAt) {
         handleUnlock()
       }
@@ -301,9 +308,7 @@ export const LockScreen: FC<AppScreenProps<"lock">> = observer(
     return (
       <LockByMasterPassword
         fido2={fido2}
-        onUnlockWithPasskey={
-          !isAndroidService && isPrfPasskeySupported() ? navigateToPasskeyUnlock : undefined
-        }
+        onUnlockWithPasskey={hasPasskey ? navigateToPasskeyUnlock : undefined}
         {...commonProps}
       />
     )
