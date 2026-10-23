@@ -2,12 +2,14 @@
 import { useEffect, useRef, useState } from "react"
 // eslint-disable-next-line no-restricted-imports
 import { Platform, StyleSheet, TextInput, View } from "react-native"
-import { useStores } from "app/models"
-import { RelayAddress } from "app/static/types"
-import { Text, Button, BottomModalContainer, BottomModalHeader } from "app/components/cores"
 import Animated, { FadeInDown } from "react-native-reanimated"
-import { AppEventType, EventBus } from "app/utils/eventBus"
+
+import { Text, Button, BottomModalContainer, BottomModalHeader } from "app/components/cores"
+import { useStores } from "app/models"
 import { useToast } from "app/services/utils"
+import { RelayAddress } from "app/static/types"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+
 import { useAppTheme } from "@/utils/useAppTheme"
 
 interface Props {

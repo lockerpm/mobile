@@ -398,7 +398,7 @@ export type FeedbackRequest = {
 }
 
 export type UpdateFCMRequest = {
-  fcm_id: string
+  fcm_id: string | null
   device_identifier: string
 }
 

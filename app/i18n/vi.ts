@@ -201,6 +201,7 @@ const vi: Translations = {
       "Không có tài khoản nào sử dụng email hoặc tên người dùng này. Vui lòng thử lại hoặc tạo tài khoản mới.",
     invalid_authorization_code: "Mã xác nhận không hợp lệ",
     invalid_data: "Dữ liệu không hợp lệ",
+    too_many_requests: "Quá nhiều yêu cầu. Vui lòng thử lại sau.",
     invalid_password: "Mật khẩu không hợp lệ",
     no_results_found: "Không tìm thấy kết quả cho",
     forbidden: "Tài khoản của bạn không đủ quyền để thực hiện hành động này",
@@ -346,6 +347,12 @@ const vi: Translations = {
     },
     copy: "Sao chép email",
     edit: "Sửa địa chỉ email",
+    edit_description: "Sửa mô tả",
+    description_modal: {
+      title: "Sửa mô tả",
+      label: "Mô tả",
+      placeholder: "Bạn dùng địa chỉ email này để làm gì?",
+    },
     editable: "Địa chỉ email có thể chỉnh sửa",
     random: "Địa chỉ email được tạo ngẫu nhiên {{number}}",
     edit_modal: {
@@ -363,6 +370,8 @@ const vi: Translations = {
       taken: "Địa chỉ email này đã tồn tại",
       minimum: "Địa chỉ email yêu cầu ít nhất 6 ký tự",
       not_valid: "Địa chỉ email này không hợp lệ",
+      daily_limit:
+        "Bạn đã đạt giới hạn tạo alias trong ngày ({{limit}}/{{limit}}). Vui lòng thử lại vào ngày mai.",
     },
     edit_warning:
       "Địa chỉ Email ẩn danh sẽ không thể khôi phục sau khi bị xóa. Locker sẽ không chuyển tiếp email tới {{alias}}, bao gồm cả các email đặt lại mật khẩu cho các tài khoản trực tuyến của bạn. Nếu bạn đã dùng địa chỉ email ẩn danh này để đăng ký các tài khoản trực tuyến, hãy cập nhật thông tin tài khoản đó trước khi xóa địa chỉ email ẩn danh này",

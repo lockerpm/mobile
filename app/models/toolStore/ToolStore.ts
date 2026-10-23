@@ -128,6 +128,16 @@ export const ToolStoreModel = types
       return res
     },
 
+    updateRelayDescription: async (addressId: number, description: string) => {
+      const res = await toolApi.updateRelayDescription(
+        self.apiToken,
+        self.vaultToken,
+        addressId,
+        description
+      )
+      return res
+    },
+
     deleteRelayAddress: async (addressId: number) => {
       const res = await toolApi.deleteRelayAddress(self.apiToken, self.vaultToken, addressId)
       return res

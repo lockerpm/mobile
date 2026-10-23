@@ -4,13 +4,12 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "app/models"
 import { SettingsScreenProps } from "app/navigators/navigators.types"
 import { useCoreService } from "app/services/coreService"
-import { useAuthentication } from "app/services/hook"
+import { useAuthentication, usePasskeyBackup } from "app/services/hook"
 import { useBiometricType } from "app/services/utils"
 import { BiometricsType, LoginMethod } from "app/static/types/enum"
 import { KdfType } from "core/enums/kdfType"
 
 import { MPEncodeConfig } from "@/static/types"
-import { isPrfPasskeySupported } from "@/utils/passkeyPrf"
 
 import { BusinessLockByPasswordless } from "./business"
 import { LockByMasterPassword } from "./normal"
@@ -20,6 +19,7 @@ export const VerifyMasterPasswordScreen: FC<SettingsScreenProps<"verifyMasterPas
     const { user } = useStores()
     const { cryptoService } = useCoreService()
     const { biometricLogin } = useAuthentication()
+    const { hasPasskeyUnlock } = usePasskeyBackup()
 
     // ---------------------- PARAMS -------------------------
 
@@ -36,6 +36,8 @@ export const VerifyMasterPasswordScreen: FC<SettingsScreenProps<"verifyMasterPas
     })
     const { biometryType, hasDevicePasscode } = useBiometricType()
     const [isUnlocking, setIsUnlocking] = useState(false)
+    // Only offer passkey verification once the account is known to have a PRF passkey
+    const [hasPasskey, setHasPasskey] = useState(false)
     // Guards the direct (already-focused) biometric trigger against effect re-runs
     const autoPromptedRef = useRef(false)
     // Coming back from the passkey screen must not prompt biometric again
@@ -99,6 +101,7 @@ export const VerifyMasterPasswordScreen: FC<SettingsScreenProps<"verifyMasterPas
     // Auto trigger face id / touch id + detect biometry type
     useEffect(() => {
       fetchLockType()
+      hasPasskeyUnlock().then(setHasPasskey)
     }, [])
 
     useEffect(() => {
@@ -154,7 +157,7 @@ export const VerifyMasterPasswordScreen: FC<SettingsScreenProps<"verifyMasterPas
 
     return (
       <LockByMasterPassword
-        onVerifyWithPasskey={isPrfPasskeySupported() ? navigateToVerifyPasskey : undefined}
+        onVerifyWithPasskey={hasPasskey ? navigateToVerifyPasskey : undefined}
         {...commonProps}
       />
     )

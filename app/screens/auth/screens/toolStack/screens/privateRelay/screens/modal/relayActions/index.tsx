@@ -1,12 +1,16 @@
 import { FC, useCallback, useState } from "react"
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native"
-import { debounce } from "app/utils/utils"
-import { Actions, RelayActionType } from "./Actions"
-import { EditAlias } from "./EditAlias"
-import { ConfigAlias } from "./ConfigAlias"
-import { PrivateRelayScreenProps } from "app/navigators"
+
 import { ModalBackdrop } from "app/components/cores"
+import { PrivateRelayScreenProps } from "app/navigators"
+import { debounce } from "app/utils/utils"
+
 import { delay } from "@/utils/delay"
+
+import { Actions, RelayActionType } from "./Actions"
+import { ConfigAlias } from "./ConfigAlias"
+import { EditAlias } from "./EditAlias"
+import { EditDescription } from "./EditDescription"
 
 export const RelayActionScreen: FC<PrivateRelayScreenProps<"relayAction">> = ({
   navigation,
@@ -53,6 +57,9 @@ export const RelayActionScreen: FC<PrivateRelayScreenProps<"relayAction">> = ({
           />
         )}
         {nextAction === RelayActionType.EDIT && <EditAlias item={item} onClose={onClose} />}
+        {nextAction === RelayActionType.EDIT_DESCRIPTION && (
+          <EditDescription item={item} onClose={onClose} />
+        )}
         {nextAction === RelayActionType.CONFIG && <ConfigAlias item={item} onClose={onClose} />}
       </View>
     </KeyboardAvoidingView>
