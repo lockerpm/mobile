@@ -8,7 +8,7 @@ Locker Mobile — a cross-platform password manager built with React Native + Ex
 
 ## Common commands
 
-Package manager is **yarn** (Node `>=20`). A `bun.lock` exists but the scripts and the `patch-package` postinstall assume yarn.
+Package manager is **yarn** (Node `>=22.23.4`, pinned in `.nvmrc`). A `bun.lock` exists but the scripts and the `patch-package` postinstall assume yarn.
 
 - `yarn` — install deps (runs `patch-package` via `postinstall`)
 - `yarn start` — Metro dev server (`expo start --dev-client`)
