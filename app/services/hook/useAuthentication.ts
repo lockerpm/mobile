@@ -511,7 +511,7 @@ export function useAuthentication() {
   // Logout
   const logout = async () => {
     try {
-      await Promise.all([user.updateFCM(""), user.logout(), clearAllData(), logoutAllServices()])
+      await Promise.all([user.updateFCM(null), user.logout(), clearAllData(), logoutAllServices()])
     } catch (e) {
       notifyTx("error", "error:something_went_wrong")
       Logger.error("logout: " + e)

@@ -200,6 +200,7 @@ const fr: Translations = {
       "Il n’y a pas de compte associé à cet e-mail ou à ce nom d’utilisateur. Essayez avec un autre compte ou créez un nouveau compte.",
     invalid_authorization_code: "Le code d’autorisation est invalide",
     invalid_data: "Données invalides",
+    too_many_requests: "Trop de requêtes. Veuillez réessayer plus tard.",
     invalid_password: "Mot de passe invalide",
     no_results_found: "Aucun résultat trouvé pour",
     forbidden: "Votre compte n’a pas la permission d’effectuer cette action",
@@ -364,6 +365,12 @@ const fr: Translations = {
     },
     copy: "Copier l’alias",
     edit: "Éditer l’adresse d’alias",
+    edit_description: "Modifier la description",
+    description_modal: {
+      title: "Modifier la description",
+      label: "Description",
+      placeholder: "À quoi sert cet alias ?",
+    },
     edit_modal: {
       titel: "Éditer l’adresse d’alias",
       current: "Adresse actuelle",
@@ -379,6 +386,8 @@ const fr: Translations = {
       taken: "Cette adresse est déjà prise",
       minimum: "Assurez-vous que ce champ a au moins 6 caractères",
       not_valid: "Cette adresse n’est pas valide",
+      daily_limit:
+        "Vous avez atteint la limite quotidienne d’alias générés ({{limit}}/{{limit}}). Réessayez demain.",
     },
     edit_warning:
       "Une fois que vous supprimez cet alias, il ne peut pas être récupéré. Le Relais Locker ne transférera plus les messages envoyés à {{alias}}, y compris les messages qui vous permettent de réinitialiser les mots de passe perdus. Si vous utilisez cet alias d’e-mail pour vous connecter aux sites, vous devriez mettre à jour votre login avec une adresse e-mail différente avant de supprimer celle-ci.",

@@ -1,81 +1,76 @@
-import { StyleSheet, View } from "react-native"
-import moment from "moment"
-import { RelayAddress } from "app/static/types"
+import { memo } from "react"
+import { StyleSheet, View, ViewStyle } from "react-native"
+
 import { Icon, PressableIcon, PressableScale, Text } from "app/components/cores"
-import Animated, { FadeInUp } from "react-native-reanimated"
+import { RelayAddress } from "app/static/types"
+
+import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 interface Props {
-  isFreeAccount: boolean
   item: RelayAddress
   isEditable: boolean
-  openActions: (
-    item: RelayAddress,
-    isEditable: boolean,
-    freeAccount: boolean,
-    edit?: boolean
-  ) => void
+  isFirst?: boolean
+  isLast?: boolean
+  onPress: (item: RelayAddress, isEditable: boolean) => void
+  onEdit: (item: RelayAddress) => void
 }
 
-export const AliasItem = ({ isFreeAccount, item, isEditable, openActions }: Props) => {
-  const {
-    theme: { colors },
-  } = useAppTheme()
-  return (
-    <PressableScale
-      onPress={() => {
-        openActions(item, isEditable, isFreeAccount)
-      }}
-    >
-      <Animated.View
-        entering={FadeInUp}
-        style={[
-          styles.container,
-          {
-            borderColor: colors.border,
-          },
-        ]}
-      >
-        <View style={styles.row}>
-          <View style={styles.flexGrow}>
-            <Text numberOfLines={1} preset="bold" text={item.full_address} style={styles.mb4} />
-            <Text size="sm" text={moment.unix(item.created_time).format("DD/MM/YYYY")} />
-          </View>
-          {isEditable && (
-            <PressableIcon
-              icon="edit"
-              size={24}
-              style={styles.mr12}
-              onPress={() => {
-                openActions(item, isEditable, isFreeAccount, true)
-              }}
-            />
-          )}
+export const AliasItem = memo(({ item, isEditable, isFirst, isLast, onPress, onEdit }: Props) => {
+  const { themed } = useAppTheme()
+  const description = item.description?.trim()
 
-          <Icon icon="dots-three-vertical" size={24} />
+  return (
+    <PressableScale onPress={() => onPress(item, isEditable)}>
+      <View
+        style={[themed($container), isFirst && styles.topRadius, isLast && styles.bottomRadius]}
+      >
+        <View style={styles.content}>
+          <Text
+            numberOfLines={1}
+            preset="bold"
+            text={item.full_address}
+            style={!!description && styles.mb4}
+          />
+          {!!description && <Text preset="label" size="xs" numberOfLines={1} text={description} />}
         </View>
-      </Animated.View>
+        {isEditable && (
+          <PressableIcon icon="edit" size={24} style={styles.mr12} onPress={() => onEdit(item)} />
+        )}
+        <Icon icon="dots-three-vertical" size={24} />
+      </View>
     </PressableScale>
   )
-}
+})
+
+AliasItem.displayName = "AliasItem"
+
+const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  alignItems: "center",
+  backgroundColor: colors.background,
+  flexDirection: "row",
+  marginHorizontal: 16,
+  paddingHorizontal: 16,
+  paddingVertical: 12,
+})
 
 const styles = StyleSheet.create({
-  container: {
-    borderRadius: 16,
-    borderWidth: 1,
-    marginVertical: 8,
-    padding: 12,
-    paddingVertical: 8,
+  bottomRadius: {
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
   },
-  flexGrow: {
+  // Same height with or without description so the alias name stays vertically centered
+  content: {
     flexGrow: 1,
     flexShrink: 1,
+    justifyContent: "center",
+    marginRight: 12,
+    minHeight: 49, // bold sm line (24) + mb4 + xs line (21)
   },
   mb4: { marginBottom: 4 },
   mr12: { marginRight: 12 },
-  row: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
+  topRadius: {
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
   },
 })

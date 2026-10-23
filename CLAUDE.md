@@ -8,7 +8,7 @@ Locker Mobile — a cross-platform password manager built with React Native + Ex
 
 ## Common commands
 
-Package manager is **yarn** (Node `>=20`). A `bun.lock` exists but the scripts and the `patch-package` postinstall assume yarn.
+Package manager is **yarn** (Node `>=22.23.4`, pinned in `.nvmrc`). A `bun.lock` exists but the scripts and the `patch-package` postinstall assume yarn.
 
 - `yarn` — install deps (runs `patch-package` via `postinstall`)
 - `yarn start` — Metro dev server (`expo start --dev-client`)
@@ -87,7 +87,7 @@ Don't import Node's `crypto` directly anywhere — use the alias or `expo-crypto
 
 ### i18n
 
-Supported languages are `en` and `vi` (`app/i18n/en.ts`, `app/i18n/vi.ts`). Add new strings to both.
+Locale files: `app/i18n/en.ts` (source of truth, exports the `Translations` type), `vi.ts`, `fr.ts`, `ru.ts`, `zh.ts` (Traditional Chinese). Every locale is typed as `Translations`, so a key added to `en.ts` must also be added — translated, at the same position — to **all** other locale files (`vi`, `fr`, `ru`, `zh`), otherwise `tsc` fails.
 
 ### Patched dependencies
 

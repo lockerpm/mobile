@@ -1,67 +1,49 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react"
-import { ActivityIndicator, SectionList, StyleSheet } from "react-native"
-import { useStores } from "app/models"
-import { RelayAddress, SubdomainData } from "app/static/types"
-import { Screen, Header, Text } from "app/components/cores"
+import { FC, useCallback } from "react"
+import {
+  ActivityIndicator,
+  RefreshControl,
+  SectionList,
+  SectionListRenderItem,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from "react-native"
 import { observer } from "mobx-react-lite"
-import { AnalyticEvents, logFirebaseEvent } from "app/utils/analytics"
-import { RootEmailInfo } from "./RootEmailInfo"
-import { SubdomainInfo } from "./SubdomainInfo"
-import { AliasItem } from "./PrivateRelayItem"
-import { useRelayNavigation } from "./useRelayNavigation"
-import { AppEventType, EventBus } from "app/utils/eventBus"
-import { debounce } from "app/utils/utils"
+
+import { Screen, Header } from "app/components/cores"
 import { PrivateRelayScreenProps } from "app/navigators"
-import { useAppLocale } from "@/i18n"
-import { Logger } from "@/utils/logger"
-import { useToast } from "@/services/utils"
+import { RelayAddress } from "app/static/types"
+
+import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 
-const FREE_PLAM_ALIAS_LIMIT = 1
-const PAGE_SIZE = 10
+import { AliasItem } from "./PrivateRelayItem"
+import { RootEmailInfo } from "./RootEmailInfo"
+import { SectionHeader } from "./SectionHeader"
+import { SubdomainInfo } from "./SubdomainInfo"
+import { AliasSection, usePrivateRelayData } from "./usePrivateRelayData"
+import { useRelayNavigation } from "./useRelayNavigation"
 
 export const PrivateRelay: FC<PrivateRelayScreenProps<"relay">> = observer(({ navigation }) => {
-  const { notifyApiError } = useToast()
-  const { toolStore, user } = useStores()
-  const { translate } = useAppLocale()
   const {
+    themed,
     theme: { colors },
   } = useAppTheme()
 
-  const [alias, setAlias] = useState<RelayAddress[]>([])
-  const [page, setPage] = useState(1)
-  const [isEndReached, setIsEndReached] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [isCreateLoading, setIsCreateLoading] = useState(false)
-  // subdomain
-  const [subdomain, setSubdomain] = useState<SubdomainData | null>(null)
+  const {
+    userEmail,
+    isFreeAccount,
+    isReachLimit,
+    sections,
+    subdomain,
+    isLoading,
+    isRefreshing,
+    isCreating,
+    loadMore,
+    refresh,
+    createAlias,
+  } = usePrivateRelayData()
 
-  const userEmail = user.email || "" // Ensure email is defined
-
-  // ----------------------------CONPUTED----------------------------
-
-  const isFreeAccount = user.isFreePlan
-  const isReachLimit = isFreeAccount && alias.length >= FREE_PLAM_ALIAS_LIMIT
-  const ramdomEmailAlias = alias.slice(1).reverse() || []
-  const suffixitle = isFreeAccount
-    ? ` (${ramdomEmailAlias.length}/4)`
-    : ` (${ramdomEmailAlias.length})`
-  const data =
-    alias.length > 0
-      ? [
-          {
-            title: translate("private_relay:editable"),
-            data: [alias[0]],
-            edited: true,
-          },
-          {
-            title: isFreeAccount ? "" : translate("private_relay:random", { number: suffixitle }),
-            data: ramdomEmailAlias,
-            edited: false,
-          },
-        ]
-      : []
-  // ----------------------------METHODS----------------------------
   const {
     navigateCreateSubdomain,
     navigateRootEmailInfo,
@@ -71,192 +53,114 @@ export const PrivateRelay: FC<PrivateRelayScreenProps<"relay">> = observer(({ na
     openRelayActions,
   } = useRelayNavigation(isFreeAccount, userEmail, subdomain, navigation)
 
-  const fetchRelayDomain = useCallback(async () => {
-    const res = await toolStore.fetchSubdomain()
-    if (res.kind === "ok") {
-      if (res.data.results.length === 0) {
-        setSubdomain(null)
-      } else {
-        setSubdomain(res.data.results[0])
-      }
-    }
-  }, [])
+  // ----------------------------METHODS----------------------------
 
-  const generateRelayNewAddress = useCallback(async () => {
-    setIsCreateLoading(true)
-    const res = await toolStore.generateRelayNewAddress()
-    if (res.kind === "ok") {
-      logFirebaseEvent(AnalyticEvents.CREATE_PRIVATE_EMAIL, userEmail)
-      setAlias((prev) => [...prev, res.data])
-    } else {
-      notifyApiError(res)
-    }
-    setIsCreateLoading(false)
-  }, [userEmail])
+  const onPressAlias = useCallback(
+    (item: RelayAddress, isEditable: boolean) => openRelayActions(item, isEditable, isFreeAccount),
+    [openRelayActions, isFreeAccount]
+  )
 
-  const loadData = async () => {
-    if (loading || isEndReached) return
-
-    setLoading(true)
-
-    // Simulate fetching data
-    setTimeout(async () => {
-      const res = await toolStore.fetchRelayListAddresses(page)
-      if (res.kind === "ok") {
-        if (res.data.results.length < PAGE_SIZE) {
-          setIsEndReached(true) // No more data to load
-        }
-        setAlias((prev) => [...prev, ...res.data.results])
-      }
-
-      setLoading(false)
-    }, 300)
-  }
-
-  const handleLoadMore = () => {
-    if (!loading && !isEndReached) {
-      setPage((prev) => prev + 1)
-    }
-  }
-
-  const deleteRelayAddress = (id: number) => {
-    const newList = alias.filter((a) => a.id !== id)
-    setAlias(newList)
-  }
-
-  const editRelayAddress = (item: RelayAddress) => {
-    const newList = [...alias]
-    newList[0] = item
-    setAlias(newList)
-  }
-
-  const updateSubdomain = (domain: string) => {
-    if (!subdomain) return
-    setSubdomain({
-      ...subdomain,
-      subdomain: domain,
-    })
-  }
-
-  // ----------------------------EFFECTS----------------------------
-  useEffect(() => {
-    loadData()
-  }, [page])
-
-  useEffect(() => {
-    fetchRelayDomain()
-  }, [fetchRelayDomain])
-
-  useEffect(() => {
-    const listener1 = EventBus.createListener(AppEventType.PRIVATE_RELAY_DELETE, (id: number) => {
-      Logger.debug("PRIVATE_RELAY_DELETE", id)
-      deleteRelayAddress(id)
-    })
-
-    const listener2 = EventBus.createListener(
-      AppEventType.PRIVATE_RELAY_UPDATE,
-      (data: RelayAddress) => {
-        Logger.debug("PRIVATE_RELAY_UPDATE")
-        editRelayAddress(data)
-      }
-    )
-
-    const listener3 = EventBus.createListener(
-      AppEventType.PRIVATE_RELAY_DOMAIN_EDIT,
-      (data: string) => {
-        Logger.debug("PRIVATE_RELAY_DOMAIN")
-        updateSubdomain(data)
-      }
-    )
-
-    const listener4 = EventBus.createListener(
-      AppEventType.PRIVATE_RELAY_DOMAIN_CREATE,
-      (data: SubdomainData) => {
-        Logger.debug("PRIVATE_RELAY_DOMAIN_CREATE")
-        setSubdomain(data)
-      }
-    )
-
-    return () => {
-      EventBus.removeListener(listener1)
-      EventBus.removeListener(listener2)
-      EventBus.removeListener(listener3)
-      EventBus.removeListener(listener4)
-    }
-  }, [deleteRelayAddress, editRelayAddress])
-
-  const renderFooter = () => {
-    if (!loading) return null
-    // eslint-disable-next-line react-native/no-inline-styles
-    return <ActivityIndicator style={{ margin: 10 }} />
-  }
+  const onEditAlias = useCallback(
+    (item: RelayAddress) => openRelayActions(item, true, isFreeAccount, true),
+    [openRelayActions, isFreeAccount]
+  )
 
   // ----------------------------RENDER----------------------------
-  const listHeader = useMemo(
-    () => (
-      <>
-        <RootEmailInfo email={userEmail} onPress={navigateRootEmailInfo} />
-        {!isFreeAccount && (
-          <SubdomainInfo
-            subdomain={subdomain}
-            onPressInfo={navigateSubdomainInfo}
-            onCreate={navigateCreateSubdomain}
-            onManage={navigateManageSubdomain}
-            onEdit={navigateEditSubdomain}
-          />
-        )}
-      </>
+
+  const renderItem: SectionListRenderItem<RelayAddress, AliasSection> = useCallback(
+    ({ item, index, section }) => (
+      <AliasItem
+        item={item}
+        isEditable={section.isEditable}
+        isFirst={index === 0}
+        isLast={index === section.data.length - 1}
+        onPress={onPressAlias}
+        onEdit={onEditAlias}
+      />
     ),
-    [isFreeAccount, userEmail, subdomain]
+    [onPressAlias, onEditAlias]
   )
+
+  const renderSectionHeader = useCallback(
+    ({ section }: { section: AliasSection }) => <SectionHeader text={section.title} />,
+    []
+  )
+
+  const renderSeparator = useCallback(() => <View style={themed($divider)} />, [themed])
+
   return (
     <Screen
       safeAreaEdges={["bottom"]}
       preset="fixed"
       header={
         <Header
-          titleTx={"private_relay:title"}
+          titleTx="private_relay:title"
           leftIcon="arrow-left"
           onLeftPress={navigation.goBack}
           titleMode="center"
-          rightLoading={isCreateLoading}
+          rightLoading={isCreating}
           rightIcon="plus"
           rightIconColor={colors.primary}
           rightDisabled={isReachLimit}
-          onRightPress={debounce(generateRelayNewAddress, 400)}
+          onRightPress={createAlias}
         />
       }
+      backgroundColor={colors.block}
       contentContainerStyle={styles.container}
     >
       <SectionList
-        bounces={false}
+        sections={sections}
         stickySectionHeadersEnabled={false}
-        sections={data}
-        ListHeaderComponent={listHeader}
-        contentContainerStyle={styles.listContainer}
-        keyExtractor={(item) => item.address}
-        renderItem={({ item, section }) => (
-          <AliasItem
-            isFreeAccount={isFreeAccount}
-            isEditable={section.edited}
-            item={item}
-            openActions={openRelayActions}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={renderItem}
+        renderSectionHeader={renderSectionHeader}
+        ItemSeparatorComponent={renderSeparator}
+        ListHeaderComponent={
+          <>
+            <RootEmailInfo email={userEmail} onPress={navigateRootEmailInfo} />
+            {!isFreeAccount && (
+              <SubdomainInfo
+                subdomain={subdomain}
+                onPressInfo={navigateSubdomainInfo}
+                onCreate={navigateCreateSubdomain}
+                onManage={navigateManageSubdomain}
+                onEdit={navigateEditSubdomain}
+              />
+            )}
+          </>
+        }
+        ListFooterComponent={
+          isLoading && !isRefreshing ? <ActivityIndicator style={styles.loader} /> : null
+        }
+        contentContainerStyle={styles.listContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={refresh}
+            tintColor={colors.primary}
           />
-        )}
-        renderSectionHeader={({ section: { title } }) => <Text preset="label">{title}</Text>}
-        onEndReached={handleLoadMore}
-        ListFooterComponent={renderFooter}
+        }
+        onEndReached={loadMore}
         onEndReachedThreshold={0.5}
       />
     </Screen>
   )
 })
 
+const $divider: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  backgroundColor: colors.border,
+  height: 1,
+  marginHorizontal: 16,
+})
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  listContainer: {
-    paddingHorizontal: 16,
+  listContent: {
+    paddingBottom: 24,
+  },
+  loader: {
+    margin: 12,
   },
 })

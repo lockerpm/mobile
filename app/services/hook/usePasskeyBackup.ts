@@ -90,6 +90,15 @@ export const usePasskeyBackup = () => {
 
   // ----------------------- UNLOCK -----------------------
 
+  // Whether the account has a PRF passkey usable for unlock. Silent: false on any failure
+  const hasPasskeyUnlock = async (): Promise<boolean> => {
+    if (!isPrfPasskeySupported()) {
+      return false
+    }
+    const res = await user.getPasswordlessCredentials()
+    return res.kind === "ok" && getPrfUnlockCandidates(res.data).length > 0
+  }
+
   /**
    * Authenticate with one of the account PRF passkeys and derive the key protecting the vault key,
    * the same way a master key is derived from the master password
@@ -291,6 +300,7 @@ export const usePasskeyBackup = () => {
   return {
     getPasskeys,
     verifyMasterPassword,
+    hasPasskeyUnlock,
     getPasskeyUnlockKey,
     createPasskey,
     deletePasskey,

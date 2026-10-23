@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native"
 import { useStores } from "app/models"
+import { RELAY_DAILY_ALIAS_LIMIT } from "app/static/constants"
 import { CipherEditHelperModal, RelayAddress, SubdomainData } from "app/static/types"
 import { BottomModalContainer, PressableIcon, Switch, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
@@ -31,7 +32,7 @@ type Props = {
 }
 
 export const HideEmail = observer(({ setNexModal, onClose }: Props) => {
-  const { notifyApiError } = useToast()
+  const { notifyApiError, notifyTx } = useToast()
   const { toolStore, user } = useStores()
   const {
     theme: { colors },
@@ -94,6 +95,8 @@ export const HideEmail = observer(({ setNexModal, onClose }: Props) => {
     if (res.kind === "ok") {
       logFirebaseEvent(AnalyticEvents.CREATE_PRIVATE_EMAIL, userEmail)
       setAlias((prev) => [res.data, ...prev])
+    } else if (res.kind === "too-many-requests") {
+      notifyTx("error", "private_relay:error.daily_limit", { limit: RELAY_DAILY_ALIAS_LIMIT })
     } else {
       notifyApiError(res)
     }
