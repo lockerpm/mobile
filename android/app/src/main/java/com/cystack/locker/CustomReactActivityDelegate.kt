@@ -15,6 +15,7 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import java.security.MessageDigest
 
+import com.cystack.locker.autofill.InternalLaunchToken
 import com.cystack.locker.autofill.passkey.PasskeyUtils
 
 open class CustomReactActivityDelegate(
@@ -24,6 +25,12 @@ open class CustomReactActivityDelegate(
     override fun getLaunchOptions(): Bundle? {
         var launchOptions = Bundle()
         val intent = activity.intent ?: return launchOptions
+
+        // MainActivity is exported (launcher + deep links). Autofill / passkey requests are only
+        // honored when the intent was built by Locker itself; anything else is a normal launch.
+        if (!InternalLaunchToken.isValid(activity, intent)) {
+            return launchOptions
+        }
 
         val getRequest = PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
         if (getRequest != null && getRequest?.credentialOptions?.first() is GetPublicKeyCredentialOption) {
@@ -54,7 +61,7 @@ open class CustomReactActivityDelegate(
             launchOptions.putString("packageName", callingAppInfo.packageName)
         }
 
-        val intentExtras = activity.intent?.extras
+        val intentExtras = intent.extras
         intentExtras?.let { bundle ->
             when {
                 bundle.containsKey("type") -> {

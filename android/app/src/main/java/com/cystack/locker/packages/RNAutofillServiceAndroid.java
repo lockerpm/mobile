@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 
 import com.cystack.locker.MainActivity;
 import com.cystack.locker.R;
+import com.cystack.locker.autofill.InternalLaunchToken;
 import com.cystack.locker.autofill.password.AutofillItem;
 import com.cystack.locker.autofill.password.Field;
 import com.cystack.locker.autofill.password.PasswordUtils;
@@ -49,6 +50,7 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("type", FILL_PASSWORD); //start app by autofill service
         intent.putExtra("url", url);
+        InternalLaunchToken.attach(context, intent);
         return PendingIntent.getActivity(context, 1001, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
@@ -60,6 +62,7 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("type", QUICK_BAR_PASSWORD); //start app by autofill service
         intent.putExtra("id", id);
+        InternalLaunchToken.attach(context, intent);
         return PendingIntent.getActivity(context, 1002, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
@@ -67,6 +70,7 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
     public static PendingIntent intentForCreateCredential(@NonNull Context context) {
         Intent intent = new Intent(CREATE_PASSKEY_ACTION).setPackage(context.getPackageName());
         intent.putExtra("type", CREATE_PASSKEY);
+        InternalLaunchToken.attach(context, intent);
 
         int requestCode = new Random().nextInt();
         return PendingIntent.getActivity(
@@ -79,6 +83,7 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
     public static PendingIntent intentForGetCredential(@NonNull Context context) {
         Intent intent = new Intent(GET_PASSKEY_ACTION).setPackage(context.getPackageName());
         intent.putExtra("type", GET_PASSKEY);
+        InternalLaunchToken.attach(context, intent);
 
         int requestCode = new Random().nextInt();
         return PendingIntent.getActivity(
@@ -104,6 +109,7 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
                 intent.putExtra("username", field.text);
             }
         }
+        InternalLaunchToken.attach(context, intent);
         return intent;
     }
 
