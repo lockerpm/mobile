@@ -84,6 +84,7 @@ export enum PlanType {
   LIFETIME_PREMIUM = "pm_lifetime_premium",
   LIFETIME_FAMILY = "pm_lifetime_family",
   LIFETIME_FAMILY_TEAM = "pm_lifetime_team",
+  LIFETIME_COUPLE = "pm_lifetime_couple",
 }
 
 export enum PlanTypeDuration {
