@@ -105,6 +105,9 @@ export const UserModel = types
     get isLifeTimeTeamFamilyPlan() {
       return self.plan?.alias === PlanType.LIFETIME_FAMILY_TEAM
     },
+    get isLifeTimeCouplePlan() {
+      return self.plan?.alias === PlanType.LIFETIME_COUPLE
+    },
     get isPremiumPlan() {
       return self.plan?.alias === PlanType.PREMIUM
     },
