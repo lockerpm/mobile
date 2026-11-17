@@ -1,16 +1,21 @@
 import { useState, useEffect, FC, useCallback } from "react"
 import { View, TouchableOpacity, StyleSheet, ViewStyle } from "react-native"
+import { observer } from "mobx-react-lite"
+
 import { Screen, Text, Header, ListView } from "app/components/cores"
 import { useStores } from "app/models"
-import { observer } from "mobx-react-lite"
 import { InviteToFamilyScreenProps } from "app/navigators"
 import { useToast } from "app/services/utils"
-import { useAppTheme } from "@/utils/useAppTheme"
+
 import { useAppLocale } from "@/i18n"
-import { Member } from "./Member"
 import { FamilyMember } from "@/static/types"
 import { ThemedStyle } from "@/theme"
 import { AppEventType, EventBus } from "@/utils/eventBus"
+import { useAppTheme } from "@/utils/useAppTheme"
+
+import { Member } from "./Member"
+
+const COUPLE_PLAN_LIMIT = 2
 
 export const ManageMemberScreen: FC<InviteToFamilyScreenProps<"manageMember">> = observer(
   ({ navigation }) => {
@@ -26,9 +31,13 @@ export const ManageMemberScreen: FC<InviteToFamilyScreenProps<"manageMember">> =
     const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([])
 
     const isFamilyAccount =
-      user.isFamilyPlan || user.isLifeTimeFamilyPlan || user.isLifeTimeTeamFamilyPlan
+      user.isFamilyPlan ||
+      user.isLifeTimeFamilyPlan ||
+      user.isLifeTimeTeamFamilyPlan ||
+      user.isLifeTimeCouplePlan
 
-    const LIMIT = user.plan?.max_number || 6
+    // Couple plan: owner + 1 member, regardless of backend max_number
+    const LIMIT = user.isLifeTimeCouplePlan ? COUPLE_PLAN_LIMIT : user.plan?.max_number || 6
 
     // ----------------------- METHODS -----------------------
 
@@ -109,7 +118,6 @@ export const ManageMemberScreen: FC<InviteToFamilyScreenProps<"manageMember">> =
           renderItem={({ item }) => <Member member={item} onActions={navigateDeleteMemeber} />}
           contentContainerStyle={styles.content}
           ItemSeparatorComponent={() => <View style={themed($divider)} />}
-          estimatedItemSize={52}
         />
       </Screen>
     )

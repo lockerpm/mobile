@@ -66,7 +66,7 @@ export const MenuListScreen: FC<TabsScreenProps<"menuTab">> = observer(() => {
 
   const items: MenuItemProps[] = [
     {
-      family: user.plan ? [(PlanType.FREE, PlanType.PREMIUM)].includes(user.plan?.alias) : false,
+      family: user.plan ? [PlanType.FREE, PlanType.PREMIUM].includes(user.plan?.alias) : false,
       icon: "invite",
       name: translate("menu:invite"),
       onPress: () => {
@@ -86,7 +86,8 @@ export const MenuListScreen: FC<TabsScreenProps<"menuTab">> = observer(() => {
         user.pwd_user_type === "enterprise" ||
         user.isLifeTimePremiumPlan ||
         user.isLifeTimeFamilyPlan ||
-        user.isLifeTimeTeamFamilyPlan,
+        user.isLifeTimeTeamFamilyPlan ||
+        user.isLifeTimeCouplePlan,
     },
     {
       icon: "gear",

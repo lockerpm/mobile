@@ -25,6 +25,7 @@ export const useFetchMarketingContent = () => {
     if (
       !uiStore.isShowedPopupMarketing &&
       !user.isLifeTimeFamilyPlan &&
+      !user.isLifeTimeCouplePlan &&
       !user.isLifeTimePremiumPlan &&
       user.pwd_user_type !== "enterprise"
     ) {

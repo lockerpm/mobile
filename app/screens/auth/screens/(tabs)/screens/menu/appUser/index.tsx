@@ -29,6 +29,9 @@ export const AppUser = observer(() => {
     pm_lifetime_team: {
       node: <Text text="LIFETIME TEAM" style={$planName} color={colors.primary} />,
     },
+    pm_lifetime_couple: {
+      node: <Text text="LIFETIME COUPLE" style={$planName} color={colors.primary} />,
+    },
 
     pm_lifetime_premium: {
       node: <Text text="LIFETIME PREMIUM" style={$planName} color={colors.primary} />,
